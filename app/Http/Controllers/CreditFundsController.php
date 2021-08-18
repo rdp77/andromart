@@ -3,9 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\Member;
-use App\Models\Department;
-use App\Models\CreditFunds;
+use App\Models\Service;
+use App\Models\ServiceDetailModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -36,7 +35,7 @@ class CreditFundsController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = CreditFunds::get();
+        $data = Service::get();
         
             return Datatables::of($data)
                 ->addIndexColumn()
@@ -48,10 +47,13 @@ class CreditFundsController extends Controller
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>';
                     $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('users.edit', $row->id) . '">Edit</a>';
+                            <a class="dropdown-item" href="' . route('creditFunds.edit', $row->id) . '">Edit</a>';
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
+                })
+                ->addColumn('totalValue', function ($row) {
+                    return number_format($row->total,2,".",",");
                 })
                 ->rawColumns(['action'])
                 ->make(true);
@@ -75,10 +77,12 @@ class CreditFundsController extends Controller
     {
         
         // return $req->all();
-        CreditFunds::create([
+        $id = Service::max('id')+1;
+        Service::create([
+            'id'         => $id,
             'sales_id'   => $req->salesId,
             'liquid_date'=> date('Y-m-d',strtotime($req->liquidDate)),
-            'total'      => $req->total,
+            'total'      => str_replace(",", '',$req->total),
             'created_by' => Auth::user()->name,
             'updated_by' => '',
             'accepted'   => 'no',
@@ -99,30 +103,41 @@ class CreditFundsController extends Controller
 
     public function edit($id)
     {
-        $user = User::find($id);
-        return view('pages.backend.transaction.creditFunds.updateCreditFunds', ['user' => $user]);
+        $CreditFunds = Service::find($id);
+        $department = Department::where('name','like','%Sales%')->get();
+        $departmentSales = [];
+        for ($i=0; $i <count($department) ; $i++) { 
+            $departmentSales[] = $department[$i]->id;
+        }
+        // return [$departmentSales];
+        $member = Member::whereIn('department',$departmentSales)->get();
+        return view('pages.backend.transaction.creditFunds.updateCreditFunds', ['CreditFunds' => $CreditFunds,'member'=>$member]);
     }
 
     public function update($id, Request $req)
     {
-        User::where('id', $id)
+        
+        Service::where('id', $id)
             ->update([
-                'name' => $req->name,
-                'username' => $req->username
-            ]);
+            'sales_id'   => $req->salesId,
+            'liquid_date'=> date('Y-m-d',strtotime($req->liquidDate)),
+            'total'      => str_replace(",", '',$req->total),
+            'updated_by' => Auth::user()->name,
+            'updated_at' => date('Y-m-d h:i:s'),
+        ]);
 
-        $user = User::find($id);
+        $CreditFunds = Service::find($id);
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Mengubah user ' . User::find($id)->name
+            'Mengubah CreditFunds ' . Service::find($id)->name
         );
 
-        $user->save();
+        $CreditFunds->save();
 
-        return Redirect::route('users.index')
+        return Redirect::route('creditFunds.index')
             ->with([
-                'status' => 'Berhasil merubah user',
+                'status' => 'Berhasil merubah Dana Kredit',
                 'type' => 'success'
             ]);
     }
@@ -135,64 +150,8 @@ class CreditFundsController extends Controller
             'Menghapus Data Kredit'
         );
 
-        CreditFunds::destroy($id);
+        Service::destroy($id);
 
         return Response::json(['status' => 'success']);
-
-        // return Redirect::route('users.index')
-        //     ->with([
-        //         'status' => 'Berhasil menghapus user',
-        //         'type' => 'success'
-        //     ]);
-    }
-
-    function reset($id, Request $req)
-    {
-        User::where('id', $id)
-            ->update([
-                'password' => Hash::make(1234567890),
-            ]);
-
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Reset password user ' . User::find($id)->name
-        );
-
-        return Redirect::route('users.index')
-            ->with([
-                'status' => 'Password untuk user ' . User::find($id)->name . ' telah diganti menjadi \'1234567890\'',
-                'type' => 'success'
-            ]);
-    }
-
-    public function changeName(Request $req)
-    {
-        $this->validate($req, [
-            'name' => ['required', 'string', 'max:255']
-        ]);
-
-        $user = User::find(Auth::user()->id);
-
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Mengganti nama ' . $user->name . ' menjadi ' . $req->name
-        );
-
-        $oldName = $user->name;
-        $user->name = $req->name;
-        $user->save();
-
-        return Redirect::route('dashboard')
-            ->with([
-                'status' => 'Nama berhasil diganti dari ' . $oldName . ' menjadi ' . $req->name,
-                'type' => 'success'
-            ]);
-    }
-
-    public function changePassword()
-    {
-        return view('auth.forgot-password');
     }
 }

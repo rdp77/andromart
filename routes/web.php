@@ -27,6 +27,8 @@ Route::get('/log', [DashboardController::class, 'log'])
 
 require __DIR__ . '/auth.php';
 require __DIR__ . '/creditFunds.php';
+require __DIR__ . '/transaction/serviceRoute.php';
+require __DIR__ . '/content/notes.php';
 require __DIR__ . '/item.php';
 require __DIR__ . '/users.php';
 
