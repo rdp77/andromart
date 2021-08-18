@@ -15,11 +15,13 @@
             </li>
             <li class="menu-header">{{ __('Transaksi') }}</li>
             @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Service'])
+            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'service.index' ? 'active' :'',
+            'url'=>route('service.index'), 'title' => 'Service'])
             @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Selling'])
+            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Penjualan'])
             @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Purchasing'])
+            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Pembelian'])
+            
 {{--             @include('layouts.backend.components.sidebarMenu',
             ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'creditFunds.index' ? 'active' :'',
             'url'=>route('creditFunds.index'), 'title' => 'Credit Funds']) --}}

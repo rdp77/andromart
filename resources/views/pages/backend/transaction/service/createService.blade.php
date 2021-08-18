@@ -31,7 +31,7 @@
             </div>
             <div class="form-group">
                 <label for="total">{{ __('Total Pagu') }}<code>*</code></label>
-                <input id="total" type="text" class="form-control"
+                <input id="total" type="text" class="form-control numberFormatCleave"
                     name="total"  >
             </div>
 
@@ -44,25 +44,5 @@
 @endsection
 
 @section('script')
-
-<script type="text/javascript">
-    
-    function save(argument) {
-        $.ajax({
-            url: '{{ route('creditFunds.store') }}',
-            data: $(".form-data").serialize(),
-            type: 'post',
-            success: function(data) {
-                // Toast.fire({
-                    // type: 'success',
-                    // title: data.pesan
-                // })
-            },
-            error: function(data) {
-                // edit(id);
-            }
-        });
-    }
-</script>
-
+<script src="{{ asset('assets/pages/transaction/creditFunds.js') }}"></script>
 @endsection

@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
-class CreditFundsController extends Controller
+class ServiceController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -47,7 +47,7 @@ class CreditFundsController extends Controller
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>';
                     $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('creditFunds.edit', $row->id) . '">Edit</a>';
+                            <a class="dropdown-item" href="' . route('service.edit', $row->id) . '">Edit</a>';
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
@@ -58,19 +58,13 @@ class CreditFundsController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('pages.backend.transaction.creditFunds.indexCreditFunds');
+        return view('pages.backend.transaction.service.indexService');
     }
 
     public function create()
     {
-        $department = Department::where('name','like','%Sales%')->get();
-        $departmentSales = [];
-        for ($i=0; $i <count($department) ; $i++) { 
-            $departmentSales[] = $department[$i]->id;
-        }
-        // return [$departmentSales];
-        $member = Member::whereIn('department',$departmentSales)->get();
-        return view('pages.backend.transaction.creditFunds.createCreditFunds',compact('member'));
+        $member = User::get();
+        return view('pages.backend.transaction.service.createService',compact('member'));
     }
 
     public function store(Request $req)
@@ -103,15 +97,9 @@ class CreditFundsController extends Controller
 
     public function edit($id)
     {
-        $CreditFunds = Service::find($id);
-        $department = Department::where('name','like','%Sales%')->get();
-        $departmentSales = [];
-        for ($i=0; $i <count($department) ; $i++) { 
-            $departmentSales[] = $department[$i]->id;
-        }
-        // return [$departmentSales];
-        $member = Member::whereIn('department',$departmentSales)->get();
-        return view('pages.backend.transaction.creditFunds.updateCreditFunds', ['CreditFunds' => $CreditFunds,'member'=>$member]);
+        $Service = Service::find($id);
+        $member = User::get();
+        return view('pages.backend.transaction.service.editService', ['Service' => $Service,'member'=>$member]);
     }
 
     public function update($id, Request $req)
@@ -126,16 +114,16 @@ class CreditFundsController extends Controller
             'updated_at' => date('Y-m-d h:i:s'),
         ]);
 
-        $CreditFunds = Service::find($id);
+        $Service = Service::find($id);
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Mengubah CreditFunds ' . Service::find($id)->name
+            'Mengubah Service ' . Service::find($id)->name
         );
 
-        $CreditFunds->save();
+        $Service->save();
 
-        return Redirect::route('creditFunds.index')
+        return Redirect::route('service.index')
             ->with([
                 'status' => 'Berhasil merubah Dana Kredit',
                 'type' => 'success'
