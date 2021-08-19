@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'content'], function () {
     Route::group(['prefix' => 'notes'], function () {
+        Route::post('notes/save-notes', [NotesController::class, 'create'])->name('save notes');
+        Route::get('notes/detail', [NotesController::class, 'detail'])->name('detail notes');
         Route::resource('notes', NotesController::class)
             ->except([
                 'show',

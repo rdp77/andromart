@@ -34,37 +34,41 @@ class NotesController extends Controller
 
     public function index(Request $req)
     {
-        if ($req->ajax()) {
-        $data = Service::get();
+        // if ($req->ajax()) {
+        // $data = Service::get();
         
-            return Datatables::of($data)
-                ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-                    $actionBtn = '<div class="btn-group">';
-                    // $actionBtn .= '<a onclick="reset(' . $row->id . ')" class="btn btn-primary text-white" style="cursor:pointer;">Reset Password</a>';
-                    $actionBtn .= '<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                            data-toggle="dropdown">
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>';
-                    $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('service.edit', $row->id) . '">Edit</a>';
-                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
-                    $actionBtn .= '</div></div>';
-                    return $actionBtn;
-                })
-                ->addColumn('totalValue', function ($row) {
-                    return number_format($row->total,2,".",",");
-                })
-                ->rawColumns(['action'])
-                ->make(true);
-        }
-        return view('pages.backend.transaction.service.indexService');
+        //     return Datatables::of($data)
+        //         ->addIndexColumn()
+        //         ->addColumn('action', function ($row) {
+        //             $actionBtn = '<div class="btn-group">';
+        //             // $actionBtn .= '<a onclick="reset(' . $row->id . ')" class="btn btn-primary text-white" style="cursor:pointer;">Reset Password</a>';
+        //             $actionBtn .= '<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+        //                     data-toggle="dropdown">
+        //                     <span class="sr-only">Toggle Dropdown</span>
+        //                 </button>';
+        //             $actionBtn .= '<div class="dropdown-menu">
+        //                     <a class="dropdown-item" href="' . route('service.edit', $row->id) . '">Edit</a>';
+        //             $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
+        //             $actionBtn .= '</div></div>';
+        //             return $actionBtn;
+        //         })
+        //         ->addColumn('totalValue', function ($row) {
+        //             return number_format($row->total,2,".",",");
+        //         })
+        //         ->rawColumns(['action'])
+        //         ->make(true);
+        // }
+        return view('pages.backend.content.notes.indexNotes');
     }
 
-    public function create()
+    public function create(Request $req)
     {
         $member = User::get();
         return view('pages.backend.transaction.service.createService',compact('member'));
+    }
+    public function detail()
+    {
+        return view('pages.backend.content.notes.detailNotes');
     }
 
     public function store(Request $req)
