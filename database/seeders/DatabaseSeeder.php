@@ -17,6 +17,14 @@ class DatabaseSeeder extends Seeder
             User::class,
             ServiceSeeder::class,
             ServiceDetailSeeder::class,
+            EmployeeSeeder::class,
+            AreaSeeder::class,
+            BranchSeeder::class,
+            RoleSeeder::class,
+            CategorySeeder::class,
+            UnitSeeder::class,
+            SupplierSeeder::class,
+            ItemSeeder::class,
         ]);
     }
 }

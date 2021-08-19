@@ -5,23 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Item extends Model
+class Branch extends Model
 {
     use HasFactory;
-
-    public $timestamps = false;
-
     protected $fillable = [
+        'area_id',
         'name',
-        'category_id',
-        'branch_id',
-        'supplier_id',
-        'buy',
-        'sell',
-        'discount',
-        'image',
-        'status',
-        'keterangan',
+        'code',
+        'address',
         'created_at',
         'updated_at',
     ];

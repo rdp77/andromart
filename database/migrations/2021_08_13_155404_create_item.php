@@ -13,14 +13,19 @@ class CreateItem extends Migration
      */
     public function up()
     {
-        Schema::create('item', function (Blueprint $table) {
+        Schema::create('items', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('type', 50)->nullable();
-            $table->string('merk', 50)->nullable();
-            $table->double('price')->nullable();
-            $table->integer('total')->nullable();
-            $table->longText('info')->nullable();
+            $table->integer('category_id');
+            $table->integer('branch_id');
+            $table->integer('supplier_id');
+            $table->double('buy');
+            $table->double('sell');
+            $table->double('discount')->nullable();
+            $table->string('image')->nullable();
+            $table->boolean('status');
+            $table->string('keterangan')->nullable();
+            $table->timestamps();
         });
     }
 

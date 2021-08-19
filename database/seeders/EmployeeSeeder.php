@@ -3,10 +3,9 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
 
-class User extends Seeder
+class EmployeeSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,13 +14,16 @@ class User extends Seeder
      */
     public function run()
     {
-        DB::table('users')->insert([
+        DB::table('employees')->insert([
             [
                 'id' => '1',
-                'name' => 'Wreative',
-                'username' => 'admin',
-                'password' => Hash::make('admin'),
-                'role_id' => '1',
+                'user_id' => '1',
+                'branch_id' => '1',
+                'identity' => '1461800028',
+                'name' => 'admin',
+                'contact' => '082140644679',
+                'address' => 'Wonorejo,Surabaya',
+                'level' => 'teknisi',
                 'created_at' => date("Y-m-d h:i:s"),
                 'updated_at' => date("Y-m-d h:i:s"),
             ],
