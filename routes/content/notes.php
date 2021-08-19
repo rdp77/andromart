@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\NotesController;
 use Illuminate\Support\Facades\Route;
 
 /*

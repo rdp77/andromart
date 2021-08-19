@@ -19,6 +19,7 @@ class Service extends Model
     protected $fillable = [
         'id' ,
         'code',
+        'user_id',
         'customer_id',
         'customer_name',
         'customer_address',
@@ -33,6 +34,7 @@ class Service extends Model
         'total_service',
         'total_part',
         'total_downpayment',
+        'total_loss',
         'discount_price',
         'discount_percent',
         'total_price',
@@ -44,6 +46,7 @@ class Service extends Model
         'pickup_date',
         'warranty',
         'technician_id',
+        'technician_replacement_id',
         'created_by',
         'updated_by',
         'created_at' ,

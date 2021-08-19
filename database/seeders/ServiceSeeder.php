@@ -18,6 +18,7 @@ class ServiceSeeder extends Seeder
             [
                 'id' => '1',
                 'code'=> 'SRV-1808210001',
+                'user_id'=> '1',
                 'customer_id'=> '1',
                 'customer_name'=> 'Azriel',
                 'customer_address'=> 'Jl karah agung',
@@ -34,6 +35,7 @@ class ServiceSeeder extends Seeder
                 'total_downpayment'=> '0',
                 'discount_price'=> '0',
                 'discount_percent'=> '0',
+                'total_loss'=> '0',
                 'total_price'=> '700000',
                 'downpayment_date'=> '2021-07-19',
                 'payment_date'=> '2021-08-19',
@@ -43,6 +45,7 @@ class ServiceSeeder extends Seeder
                 'pickup_date'=> '2021-08-19',
                 'warranty'=> '3 Bulan',
                 'technician_id'=> '1',
+                'technician_replacement_id'=> '1',
                 'created_by'=> 'Azriel',
                 'updated_by'=> '',
                 'created_at' => date("Y-m-d h:i:s"),

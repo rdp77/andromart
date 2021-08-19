@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
+use Carbon\carbon;
 
 class ServiceController extends Controller
 {
@@ -52,10 +53,38 @@ class ServiceController extends Controller
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
-                ->addColumn('totalValue', function ($row) {
-                    return number_format($row->total,2,".",",");
+                ->addColumn('dataCustomer', function ($row) {
+                    $htmlAdd = '<p>'.$row->customer_name.'</p>';
+                    $htmlAdd .= '<p>'.$row->customer_address.'</p>';
+                    $htmlAdd .= '<p>'.$row->customer_phone.'</p>';
+                    
+                    return $htmlAdd;
                 })
-                ->rawColumns(['action'])
+                ->addColumn('dataItem', function ($row) {
+                    $htmlAdd = '<p>'.$row->brand.'</p>';
+                    $htmlAdd .= '<p>'.$row->series.'</p>';
+                    $htmlAdd .= '<p>'.$row->type.'</p>';
+                    $htmlAdd .= '<p>'.$row->no_imei.'</p>';
+                    $htmlAdd .= '<p>'.$row->damage.'</p>';
+
+                    return $htmlAdd;
+                })
+                ->addColumn('totalService', function ($row) {
+                    return number_format($row->total_service,2,".",",");
+                })
+                ->addColumn('totalPart', function ($row) {
+                    return number_format($row->total_part,2,".",",");
+                })
+                ->addColumn('totalLoss', function ($row) {
+                    return number_format($row->total_loss,2,".",",");
+                })
+                ->addColumn('discountPrice', function ($row) {
+                    return number_format($row->discount_price,2,".",",");
+                })
+                ->addColumn('totalPrice', function ($row) {
+                    return number_format($row->total_price,2,".",",");
+                })
+                ->rawColumns(['action','dataItem','dataCustomer'])
                 ->make(true);
         }
         return view('pages.backend.transaction.service.indexService');
@@ -64,7 +93,13 @@ class ServiceController extends Controller
     public function create()
     {
         $member = User::get();
-        return view('pages.backend.transaction.service.createService',compact('member'));
+        $month = Carbon::now()->format('m');
+        $year = Carbon::now()->format('y');
+        $index = Service::max('id')+1;
+
+        $index = str_pad($index, 3, '0', STR_PAD_LEFT);
+        $code = 'SRV-'.$year . $month . $index;
+        return view('pages.backend.transaction.service.createService',compact('member','code'));
     }
 
     public function store(Request $req)

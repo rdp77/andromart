@@ -18,6 +18,7 @@ class ServiceTable extends Migration
         Schema::create('service', function (Blueprint $table) {
             $table->id();
             $table->String('code');
+            $table->integer('user_id');
             $table->integer('customer_id');
             $table->String('customer_name');
             $table->String('customer_address');
@@ -35,6 +36,7 @@ class ServiceTable extends Migration
             $table->double('discount_percent');
             $table->double('total_downpayment');
             $table->double('total_price');
+            $table->double('total_loss');
             $table->date('payment_date');
             $table->String('work_status');
             $table->String('equipment');
@@ -43,6 +45,7 @@ class ServiceTable extends Migration
             $table->date('downpayment_date');
             $table->String('warranty');
             $table->integer('technician_id');
+            $table->integer('technician_replacement_id');
             $table->string('created_by');   
             $table->string('updated_by');
             $table->softDeletesTz($column = 'deleted_at', $precision = 0);
