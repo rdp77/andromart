@@ -27,6 +27,10 @@ class FrontendController extends Controller
     {
         return view('pages.frontend.contact.indexContact');
     }
+    public function login()
+    {
+        return view('home');
+    }
 
     /**
      * Display a listing of the resource.

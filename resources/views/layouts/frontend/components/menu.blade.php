@@ -57,6 +57,9 @@
 												<a class="nav-link" href="{{ route('frontendContact') }}">Contact</a>
 											@endif
 										</li>
+										<li>
+											<a class="nav-link" href="/login">Login</a>
+										</li>
 									</ul>
 								</nav>
 							</div>
