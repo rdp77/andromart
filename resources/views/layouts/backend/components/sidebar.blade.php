@@ -77,8 +77,8 @@
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Konten'])
             @include('layouts.backend.components.sidebarMenu',
             ['icon' => 'fa-fire',
-            'activeURL'=>Request::route()->getName() == 'notes.index' ? 'active' :'',
-            'url'=>route('notes.index'), 'title' => 'Notulen'])
+            'activeURL'=>Request::route()->getName() == 'notes.create' ? 'active' :'',
+            'url'=>route('notes.create'), 'title' => 'Notulen'])
 
             {{--  <li class="menu-header">{{ __('Laporan') }}</li>
             @include('layouts.backend.components.sidebarMenu',
@@ -107,4 +107,5 @@
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'SHU']) --}}
         </ul>
     </aside>
+    <div style="height: 25px;"></div>
 </div>

@@ -15,49 +15,47 @@
             <p class="section-lead">01 Januari 2020</p>
             <div class="row mt-sm-4">
               <div class="col-12">
-              	<div class="card" style="border: 1px #aaa solid;">
+              	<div class="card" style="border: 1px #aaa solid;" id="form-notes">
 		          <div class="card-header">
-		            <h4>Hasil Notulen</h4>
+		          	<h4>Create Note</h4>
+			        <a href="{{ route('notes.index') }}" class="btn btn-icon icon-left btn-success">
+			        	<i class="fas fa-poll-h"></i>{{ __(' Results') }}</a>
 		          </div>
-		          <div class="card-body p-0" id="hasil-notulen">
-                    <div class="table-responsive">
-                      <table class="table table-striped table-md">
-                        <tr>
-                          <th>#</th>
-                          <th>Nama</th>
-                          <th>Tanggal</th>
-                          <th>Judul</th>
-                          <th>Action</th>
-                        </tr>
-                        @php 
-                        	use Illuminate\Support\Facades\Auth;
-                        	$no = 1;
-                        	$this_users_id = Auth::user()->id;
-                        @endphp
-                        @foreach($models as $rows)
-	                        <tr>
-	                          <td>{{ $no++ }}</td>
-	                          <td>{{ $rows->name }}</td>
-	                          <td>{{ $rows->date }}</td>
-	                          <td>{{ $rows->title }}</td>
-	                          @if($this_users_id == $rows->users_id)
-		                          <td><a href="{{ route('notes.edit', $rows->notes_id) }}" class="btn btn-warning">Edit</a></td>
-		                          <td>
-                              <form action="{{ route('notes.destroy', $rows->notes_id) }}" method="POST">
-                                  <input type="hidden" name="_method" value="DELETE">
-                                  <input type="hidden" name="_token" value="{{ csrf_token() }}">
-                                  <button class="btn btn-danger m-1">Delete</button>
-                              </form>
-                              </td>
-		                      @endif
-	                          <td><a href="{{ route('notes.show', $rows->notes_id) }}" class="btn btn-primary">Detail</a></td>
-	                        </tr>
-                        @endforeach
-                      </table>
-                    </div>
-                  </div>
-		      	</div>
-		  	  </div>
+		          <form method="post" class="form-data" action="{{ route('notes.store') }}" enctype="multipart/form-data">
+		    	  @csrf
+		          <div class="card-body">
+		            <div class="form-group row mb-4">
+		              <label class="col-form-label text-md-right col-12 col-md-2 col-lg-1">Judul</label>
+		              <div class="col-sm-12 col-md-10 col-lg-11">
+		                <input type="text" class="form-control" name="title">
+		              </div>
+		            </div>
+		            <div class="form-group row mb-4">
+		              <label class="col-form-label text-md-right col-12 col-md-2 col-lg-1">Deskripsi</label>
+		              <div class="col-sm-12 col-md-10 col-lg-11">
+		                <textarea class="summernote" name="description"></textarea>
+		              </div>
+		            </div>
+		            <div class="form-group row mb-4">
+		              <label class="col-form-label text-md-right col-12 col-md-2 col-lg-1">Foto</label>
+		              <div class="col-sm-12 col-md-10 col-lg-11">
+		                <div class="custom-file">
+		                  <input type="file" class="custom-file-input" id="site-logo" name="photo[]" multiple>
+		                  <!-- <input type="file" name="photo" class="custom-file-input"> -->
+		                  <label class="custom-file-label">Pilih Foto</label>
+		                </div>
+			      	  </div>
+			        </div>
+		            <div class="form-group row mb-4">
+		              <label class="col-form-label text-md-right col-12 col-md-2 col-lg-1"></label>
+		              <div class="col-sm-12 col-md-10 col-lg-11">
+		                <input type="submit" class="btn btn-primary" value="Save">
+		              </div>
+		            </div>
+		          </div>
+		          </form>
+		        </div>
+              </div>
             </div>
           </div>
 @endsection
