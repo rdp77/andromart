@@ -67,8 +67,10 @@
                           <td>1</td>
                           <td>Irwansyah Saputra</td>
                           <td>2017-01-09</td>
-                          <td><div class="badge badge-success">Active</div></td>
-                          <td><a href="{{ route('detail notes') }}" class="btn btn-secondary">Detail</a></td>
+                          <td>Step Sis</td>
+                          <td><a href="{{ route('detail notes') }}" class="btn btn-warning">Edit</a></td>
+                          <td><a href="{{ route('detail notes') }}" class="btn btn-danger">Delete</a></td>
+                          <td><a href="{{ route('detail notes') }}" class="btn btn-primary">Detail</a></td>
                         </tr>
                       </table>
                     </div>
