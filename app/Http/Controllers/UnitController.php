@@ -4,82 +4,125 @@ namespace App\Http\Controllers;
 
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\DataTables;
+use Carbon\carbon;
 
 class UnitController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function __construct(DashboardController $DashboardController)
     {
-        //
+        $this->middleware('auth');
+        $this->DashboardController = $DashboardController;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function index(Request $req)
+    {
+        if ($req->ajax()) {
+            $data = Unit::all();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<div class="btn-group">';
+                    $actionBtn .= '<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                            data-toggle="dropdown">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>';
+                    $actionBtn .= '<div class="dropdown-menu">
+                            <a class="dropdown-item" href="' . route('unit.edit', $row->id) . '">Edit</a>';
+                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
+                    $actionBtn .= '</div></div>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('pages.backend.master.unit.indexUnit');
+    }
+
     public function create()
     {
-        //
+        return view('pages.backend.master.unit.createUnit');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(Request $req)
     {
-        //
+        Validator::make($req->all(), [
+            'code' => ['required', 'string', 'max:255', 'unique:units'],
+            'name' => ['required', 'string', 'max:255'],
+        ])->validate();
+
+        Unit::create([
+            'code' => $req->code,
+            'name' => $req->name,
+        ]);
+
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Membuat master satuan baru'
+        );
+
+        return Redirect::route('unit.index')
+            ->with([
+                'status' => 'Berhasil membuat master satuan baru',
+                'type' => 'success'
+            ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Unit  $unit
-     * @return \Illuminate\Http\Response
-     */
     public function show(Unit $unit)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Unit  $unit
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Unit $unit)
+    public function edit($id)
     {
-        //
+        $unit = Unit::find($id);
+        return view('pages.backend.master.unit.updateUnit', ['unit' => $unit]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Unit  $unit
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Unit $unit)
+    public function update(Request $req, $id)
     {
-        //
+        Validator::make($req->all(), [
+            'code' => ['required', 'string', 'max:255', 'unique:units'],
+            'name' => ['required', 'string', 'max:255'],
+        ])->validate();
+
+        Unit::where('id', $id)
+            ->update([
+            'code' => $req->code,
+            'name' => $req->name,
+            ]);
+
+        $unit = Unit::find($id);
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Mengubah master satuan ' . Unit::find($id)->name
+        );
+
+        $unit->save();
+
+        return Redirect::route('unit.index')
+            ->with([
+                'status' => 'Berhasil merubah master satuan ',
+                'type' => 'success'
+            ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Unit  $unit
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Unit $unit)
+    public function destroy(Request $req, $id)
     {
-        //
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Menghapus master satuan ' . Unit::find($id)->name
+        );
+
+        Unit::destroy($id);
+
+        return Response::json(['status' => 'success']);
     }
 }

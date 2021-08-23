@@ -4,82 +4,125 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\DataTables;
+use Carbon\carbon;
 
 class CategoryController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+    public function __construct(DashboardController $DashboardController)
     {
-        //
+        $this->middleware('auth');
+        $this->DashboardController = $DashboardController;
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function index(Request $req)
+    {
+        if ($req->ajax()) {
+            $data = Category::all();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<div class="btn-group">';
+                    $actionBtn .= '<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                            data-toggle="dropdown">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>';
+                    $actionBtn .= '<div class="dropdown-menu">
+                            <a class="dropdown-item" href="' . route('category.edit', $row->id) . '">Edit</a>';
+                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
+                    $actionBtn .= '</div></div>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('pages.backend.master.category.indexCategory');
+    }
+
     public function create()
     {
-        //
+        return view('pages.backend.master.category.createCategory');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(Request $req)
     {
-        //
+        Validator::make($req->all(), [
+            'code' => ['required', 'string', 'max:255', 'unique:categories'],
+            'name' => ['required', 'string', 'max:255'],
+        ])->validate();
+
+        Category::create([
+            'code' => $req->code,
+            'name' => $req->name,
+        ]);
+
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Membuat master kategori baru'
+        );
+
+        return Redirect::route('category.index')
+            ->with([
+                'status' => 'Berhasil membuat master kategori baru',
+                'type' => 'success'
+            ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
     public function show(Category $category)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Category $category)
+    public function edit($id)
     {
-        //
+        $category = Category::find($id);
+        return view('pages.backend.master.category.updateCategory', ['category' => $category]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Category $category)
+    public function update(Request $req, $id)
     {
-        //
+        Validator::make($req->all(), [
+            'code' => ['required', 'string', 'max:255', 'unique:categories'],
+            'name' => ['required', 'string', 'max:255'],
+        ])->validate();
+
+        Category::where('id', $id)
+            ->update([
+            'code' => $req->code,
+            'name' => $req->name,
+            ]);
+
+        $category = Category::find($id);
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Mengubah master kategori ' . Category::find($id)->name
+        );
+
+        $category->save();
+
+        return Redirect::route('category.index')
+            ->with([
+                'status' => 'Berhasil merubah master kategori ',
+                'type' => 'success'
+            ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Category  $category
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Category $category)
+    public function destroy(Request $req, $id)
     {
-        //
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Menghapus master kategori ' . Category::find($id)->name
+        );
+
+        Category::destroy($id);
+
+        return Response::json(['status' => 'success']);
     }
 }

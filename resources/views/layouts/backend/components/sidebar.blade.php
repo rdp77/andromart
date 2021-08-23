@@ -21,30 +21,36 @@
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Penjualan'])
             @include('layouts.backend.components.sidebarMenu',
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Pembelian'])
-            
+
 {{--             @include('layouts.backend.components.sidebarMenu',
             ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'creditFunds.index' ? 'active' :'',
             'url'=>route('creditFunds.index'), 'title' => 'Credit Funds']) --}}
-           
+
             <li class="menu-header">{{ __('Master Data') }}</li>
             @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Barang'])
+            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'area.index' ? 'active'    :'',
+            'url'=>route('area.index'), 'title' => 'Area'])
+            @include('layouts.backend.components.sidebarMenu',
+            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'branch.index' ? 'active'  :'',
+            'url'=>route('branch.index'), 'title' => 'Cabang'])
+            @include('layouts.backend.components.sidebarMenu',
+            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'category.index' ? 'active' :'',
+            'url'=>route('category.index'), 'title' => 'Kategori'])
+            @include('layouts.backend.components.sidebarMenu',
+            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'item.index' ? 'acive'       :'',
+            'url'=>route('item.index'), 'title' => 'Barang'])
             @include('layouts.backend.components.sidebarMenu',
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Hak Akses'])
             @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Cabang'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Kategori'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Supplier'])
+            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'supplier.index' ? 'active' :'',
+            'url'=>route('supplier.index'), 'title' => 'Supplier'])
             @include('layouts.backend.components.sidebarMenu',
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Biaya'])
             @include('layouts.backend.components.sidebarMenu',
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Kas'])
             @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Area'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Unit'])
+            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'unit.index' ? 'active'    :'',
+            'url'=>route('unit.index'), 'title' => 'Satuan'])
             @include('layouts.backend.components.sidebarMenu',
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Biaya Pengeluaran'])
            {{--  @include('layouts.backend.components.sidebarMenu',
@@ -108,4 +114,5 @@
         </ul>
     </aside>
     <div style="height: 25px;"></div>
+</div>
 </div>

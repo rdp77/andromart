@@ -33,7 +33,8 @@ class UsersController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = User::where('id', '!=', Auth::user()->id)->get();;
+            // $data = User::where('id', '!=', Auth::user()->id)->get();;
+            $data = User::all();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -99,7 +100,6 @@ class UsersController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'username' => ['required', 'string', 'max:255', 'unique:users'],
         ])->validate();
-
 
         User::where('id', $id)
             ->update([

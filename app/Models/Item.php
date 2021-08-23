@@ -21,8 +21,23 @@ class Item extends Model
         'discount',
         'image',
         'status',
-        'keterangan',
+        'description',
         'created_at',
         'updated_at',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo('App\Models\Category');
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo('App\Models\Branch');
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo('App\Models\Supplier');
+    }
 }

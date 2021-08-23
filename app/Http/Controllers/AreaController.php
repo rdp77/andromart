@@ -4,82 +4,136 @@ namespace App\Http\Controllers;
 
 use App\Models\Area;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
+use Yajra\DataTables\DataTables;
+use Carbon\carbon;
 
 class AreaController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Create a new controller instance.
      *
-     * @return \Illuminate\Http\Response
+     * @return void
      */
-    public function index()
+    public function __construct(DashboardController $DashboardController)
     {
-        //
+        $this->middleware('auth');
+        $this->DashboardController = $DashboardController;
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the application dashboard.
      *
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Contracts\Support\Renderable
      */
+
+    public function index(Request $req)
+    {
+        if ($req->ajax()) {
+            $data = Area::all();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<div class="btn-group">';
+                    $actionBtn .= '<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                            data-toggle="dropdown">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>';
+                    $actionBtn .= '<div class="dropdown-menu">
+                            <a class="dropdown-item" href="' . route('area.edit', $row->id) . '">Edit</a>';
+                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
+                    $actionBtn .= '</div></div>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('pages.backend.master.area.indexArea');
+    }
+
     public function create()
     {
-        //
+        return view('pages.backend.master.area.createArea');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(Request $req)
     {
-        //
+        Validator::make($req->all(), [
+            'code' => ['required', 'string', 'max:255', 'unique:areas'],
+            'name' => ['required', 'string', 'max:255'],
+        ])->validate();
+
+        Area::create([
+            'code' => $req->code,
+            'name' => $req->name,
+        ]);
+
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Membuat master area baru'
+        );
+
+        return Redirect::route('area.index')
+            ->with([
+                'status' => 'Berhasil membuat master area baru',
+                'type' => 'success'
+            ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Area  $area
-     * @return \Illuminate\Http\Response
-     */
     public function show(Area $area)
     {
         //
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Area  $area
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Area $area)
+    public function edit($id)
     {
-        //
+        $area = Area::find($id);
+        return view('pages.backend.master.area.updateArea', ['area' => $area]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Area  $area
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Area $area)
+    public function update(Request $req, $id)
     {
-        //
+        Validator::make($req->all(), [
+            'code' => ['required', 'string', 'max:255', 'unique:areas'],
+            'name' => ['required', 'string', 'max:255'],
+        ])->validate();
+
+        Area::where('id', $id)
+            ->update([
+                'code' => $req->code,
+                'name' => $req->name
+            ]);
+
+        $area = Area::find($id);
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Mengubah masrter area ' . Area::find($id)->name
+        );
+
+        $area->save();
+
+        return Redirect::route('area.index')
+            ->with([
+                'status' => 'Berhasil merubah master area ',
+                'type' => 'success'
+            ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Area  $area
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Area $area)
+    public function destroy(Request $req, $id)
     {
-        //
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Menghapus master area ' . Area::find($id)->name
+        );
+
+        Area::destroy($id);
+
+        return Response::json(['status' => 'success']);
     }
 }

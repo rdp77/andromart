@@ -14,4 +14,9 @@ class Category extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function item()
+    {
+        return $this->hasMany('App\Models\Item');
+    }
 }

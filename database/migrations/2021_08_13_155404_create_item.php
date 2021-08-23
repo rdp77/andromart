@@ -24,7 +24,7 @@ class CreateItem extends Migration
             $table->double('discount')->nullable();
             $table->string('image')->nullable();
             $table->boolean('status');
-            $table->string('keterangan')->nullable();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

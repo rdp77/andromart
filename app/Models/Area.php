@@ -15,4 +15,9 @@ class Area extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function branch()
+    {
+        return $this->hasMany('App\Models\Branch');
+    }
 }

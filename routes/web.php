@@ -16,7 +16,7 @@ use App\Http\Controllers\Frontend\FrontendController;
 */
 
 // Front End
-// Route::get('/', function () { 
+// Route::get('/', function () {
 // 	return view('pages.frontend.index');
 // });
 Route::get('/', [FrontendController::class, 'home'])->name('frontendHome');
@@ -37,7 +37,12 @@ Route::get('/log', [DashboardController::class, 'log'])
 
 
 require __DIR__ . '/auth.php';
+require __DIR__ . '/master/areaRoute.php';
+require __DIR__ . '/master/branchRoute.php';
+require __DIR__ . '/master/categoryRoute.php';
+require __DIR__ . '/master/unitRoute.php';
+require __DIR__ . '/master/supplierRoute.php';
+require __DIR__ . '/master/itemRoute.php';
 require __DIR__ . '/transaction/serviceRoute.php';
 require __DIR__ . '/content/notes.php';
-require __DIR__ . '/item.php';
 require __DIR__ . '/users.php';
