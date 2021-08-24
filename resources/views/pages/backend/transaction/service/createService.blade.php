@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-<form method="POST" class="form-data" action="{{ route('users.store') }}">
+<form method="POST" class="form-data">
     @csrf
     <div class="row">
         <div class="col-lg-8">
@@ -110,20 +110,20 @@
                     <div class="form-group col-12 col-md-6 col-lg-6">
                         <label for="series">{{ __('Member') }}<code>*</code></label>
                             <select class="select2" name="customerId">
-                            <option value="">- Select -</option>
-                            <option value="Deny">Deny</option>
-                            <option value="Rizal">Rizal</option>
-                            <option value="Alfian">Alfian</option>
-                        </select>
+                                <option value="">- Select -</option>
+                                <option value="Deny">Deny</option>
+                                <option value="Rizal">Rizal</option>
+                                <option value="Alfian">Alfian</option>
+                            </select>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-12 col-md-6 col-lg-6">
+                    <div class="form-group col-12 col-md-5 col-lg-5">
                         <label for="customerPhone">{{ __('No Tlp') }}<code>*</code></label>
                         <input id="customerPhone" type="text" class="form-control"
                             name="customerPhone"  >
                     </div>
-                    <div class="form-group col-12 col-md-6 col-lg-6">
+                    <div class="form-group col-12 col-md-7 col-lg-7">
                         <label for="customerAdress">{{ __('Alamat') }}<code>*</code></label>
                         <input id="customerAdress" type="text" class="form-control"
                             name="customerAdress"  >
@@ -137,6 +137,7 @@
           <div class="card">
             <div class="card-header">
               <h4>Harga</h4>
+              
             </div>
             <div class="card-body">
                 <div class="form-group">
@@ -184,30 +185,55 @@
     <div class="card">
         <div class="card-header">
             <h4>Data Detail</h4>
+            <div class="card-header-action">
+                <button onclick="addItem()" type="button" class="btn btn-warning">Tambah data <i class="fas fa-add"></i></button>
+            </div>
         </div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-striped">
-                  <tbody>
-                   <tr>
-                    <th>Barang / Jasa</th>
-                    <th>Harga</th>
-                    <th>qty</th>
-                    <th>Total</th>
-                    <th>Deskripsi</th>
-                    <th>tipe</th>
-                    <th>Action</th>
+                   <thead>
+                    <tr>
+                        <th>Barang / Jasa</th>
+                        <th>Harga</th>
+                        <th>qty</th>
+                        <th>Total</th>
+                        <th>Deskripsi</th>
+                        <th>tipe</th>
+                        <th>Action</th>
+                    </tr>
+                  </thead>
+                  <tbody >
+                    <tr>
+                    <td>
+                        <input readonly type="text" class="form-control "
+                        name="itemsDetail[]" value="Jasa">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control priceServiceDetail"
+                        name="priceDetail[]" >
+                    </td>
+                    <td>
+                        <input readonly type="text" class="form-control"
+                        name="qtyDetail[]" value="1">
+                    </td>
+                    <td>
+                        <input readonly type="text" class="form-control totalPriceServiceDetail"
+                        name="totalpriceDetail[]">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control"
+                        name="descriptionDetail[]">
+                    </td>
+                    <td>
+                        <input readonly type="text" class="form-control"
+                        name="typeDetail[]" value="Jasa">
+                    </td>
+                    <td><button href="#" type="button" class="btn btn-default">X</button></td>
                   </tr>
-                  <tr>
-                    <td>Jasa Service</td>
-                    <td>300.000</td>
-                    <td>1</td>
-                    <td>300.000</td>
-                    <td>Pemasangan dan penyolderan</td>
-                    <td>Jasa</td>
-                    <td>-</td>
-                  </tr>
-                  <tr>
+                  </tbody>
+                  <tbody class="dropHereItem" style="border: none !important">
+                  {{-- <tr>
                     <td>LCD 15 inch</td>
                     <td>700.000</td>
                     <td>1</td>
@@ -224,7 +250,7 @@
                     <td>Ga sengojo keplindes</td>
                     <td>Loss</td>
                     <td><a href="#" class="btn btn-danger">X</a></td>
-                  </tr>
+                  </tr> --}}
                 </tbody></table>
               </div>
         </div>
