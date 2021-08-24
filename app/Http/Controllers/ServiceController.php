@@ -53,38 +53,107 @@ class ServiceController extends Controller
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
+                ->addColumn('dataDateOperator', function ($row) {
+                    $htmlAdd = '<table>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<th>Tanggal</th>';
+                    $htmlAdd .=      '<th>'.Carbon::parse($row->date)->locale('id')->isoFormat('LL').'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<th>operator</th>';
+                    $htmlAdd .=      '<th>'.$row->created_by.'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .= '<table>';
+                    
+                    return $htmlAdd;
+                })
                 ->addColumn('dataCustomer', function ($row) {
-                    $htmlAdd = '<p>'.$row->customer_name.'</p>';
-                    $htmlAdd .= '<p>'.$row->customer_address.'</p>';
-                    $htmlAdd .= '<p>'.$row->customer_phone.'</p>';
+                    $htmlAdd = '<table>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<th>Nama</th>';
+                    $htmlAdd .=      '<th>'.$row->customer_name.'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<th>Alamat</th>';
+                    $htmlAdd .=      '<th>'.$row->customer_address.'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<th>Tlp</th>';
+                    $htmlAdd .=      '<th>'.$row->customer_phone.'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .= '<table>';
                     
                     return $htmlAdd;
                 })
                 ->addColumn('dataItem', function ($row) {
-                    $htmlAdd = '<p>'.$row->brand.'</p>';
-                    $htmlAdd .= '<p>'.$row->series.'</p>';
-                    $htmlAdd .= '<p>'.$row->type.'</p>';
-                    $htmlAdd .= '<p>'.$row->no_imei.'</p>';
-                    $htmlAdd .= '<p>'.$row->damage.'</p>';
+                    $htmlAdd = '<table>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<th>Merk</th>';
+                    $htmlAdd .=      '<th>'.$row->brand.'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<th>Sei</th>';
+                    $htmlAdd .=      '<th>'.$row->series.'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<th>tipe</th>';
+                    $htmlAdd .=      '<th>'.$row->type.'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<th>imei</th>';
+                    $htmlAdd .=      '<th>'.$row->no_imei.'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<th>rusak</th>';
+                    $htmlAdd .=      '<th>'.$row->damage.'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .= '<table>';
 
                     return $htmlAdd;
                 })
-                ->addColumn('totalService', function ($row) {
-                    return number_format($row->total_service,2,".",",");
+                ->addColumn('finance', function ($row) {
+                    $htmlAdd = '<table>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<th>Service</th>';
+                    $htmlAdd .=      '<th>'.number_format($row->total_service,0,".",",").'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<th>Part</th>';
+                    $htmlAdd .=      '<th>'.number_format($row->total_part,0,".",",").'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<th>Lalai</th>';
+                    $htmlAdd .=      '<th>'.number_format($row->total_loss,0,".",",").'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<th>Diskon</th>';
+                    $htmlAdd .=      '<th>'.number_format($row->discount_price,0,".",",").'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<th>Total</th>';
+                    $htmlAdd .=      '<th>'.number_format($row->total_price,0,".",",").'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .= '<table>';
+
+                    return $htmlAdd;
+
                 })
-                ->addColumn('totalPart', function ($row) {
-                    return number_format($row->total_part,2,".",",");
+                ->addColumn('sharingProfit', function ($row) {
+                    $htmlAdd = '<table>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<th>Toko</th>';
+                    $htmlAdd .=      '<th>'.number_format(60/100*$row->total_price,0,".",",").'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<th>Teknisi</th>';
+                    $htmlAdd .=      '<th>'.number_format(40/100*$row->total_price,0,".",",").'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .= '<table>';
+
+                    return $htmlAdd;
+
                 })
-                ->addColumn('totalLoss', function ($row) {
-                    return number_format($row->total_loss,2,".",",");
-                })
-                ->addColumn('discountPrice', function ($row) {
-                    return number_format($row->discount_price,2,".",",");
-                })
-                ->addColumn('totalPrice', function ($row) {
-                    return number_format($row->total_price,2,".",",");
-                })
-                ->rawColumns(['action','dataItem','dataCustomer'])
+                ->rawColumns(['action','dataItem','dataCustomer','finance','dataDateOperator','sharingProfit'])
                 ->make(true);
         }
         return view('pages.backend.transaction.service.indexService');
