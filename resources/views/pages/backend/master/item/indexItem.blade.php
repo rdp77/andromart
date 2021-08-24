@@ -22,8 +22,11 @@
                         {{ __('NO') }}
                     </th>
                     <th>{{ __('Kategori') }}</th>
-                    <th>{{ __('Cabang') }}</th>
                     <th>{{ __('Nama') }}</th>
+                    <th>{{ __('Kondisi') }}</th>
+                    <th>{{ __('Harga Beli') }}</th>
+                    <th>{{ __('Harga Jual') }}</th>
+                    <th>{{ __('Supplier') }}</th>
                     <th>{{ __('Keterangan') }}</th>
                     <th>{{ __('Aksi') }}</th>
                 </tr>

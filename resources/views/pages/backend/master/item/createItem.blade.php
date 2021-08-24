@@ -14,19 +14,6 @@
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-md-4 col-xs-12">
-                    <label for="branch_id">{{ __('Cabang') }}<code>*</code></label>
-                    <select name="branch_id" id="branch_id" class="form-control select2" required autocomplete="branch_id">
-                        @foreach ($branch as $branch)
-                        <option value="{{ $branch->id }}">{{ $branch->code }} - {{ $branch->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('branch_id')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                    @enderror
-                </div>
-                <div class="form-group col-md-4 col-xs-12">
                     <label for="supplier_id">{{ __('Supplier') }}<code>*</code></label>
                     <select name="supplier_id" id="supplier_id" class="form-control select2" required autocomplete="supplier_id">
                         @foreach ($supplier as $supplier)
@@ -39,8 +26,6 @@
                     </div>
                     @enderror
                 </div>
-            </div>
-            <div class="row">
                 <div class="form-group col-md-4 col-xs-12">
                     <label for="category_id">{{ __('Kategori') }}<code>*</code></label>
                     <select name="category_id" id="category_id" class="form-control select2" required autocomplete="category_id">
@@ -55,18 +40,18 @@
                     @enderror
                 </div>
                 <div class="form-group col-md-4 col-xs-12">
-                    <label for="status">{{ __('Kondisi') }}<code>*</code></label>
+                    <label for="condition">{{ __('Kondisi') }}<code>*</code></label>
                     <div class="selectgroup w-100">
                         <label class="selectgroup-item">
-                          <input type="radio" name="status" value="Bekas" class="selectgroup-input" checked="">
-                          <span class="selectgroup-button">Bekas</span>
-                        </label>
-                        <label class="selectgroup-item">
-                          <input type="radio" name="status" value="Baru" class="selectgroup-input">
+                          <input type="radio" name="condition" value="Baru" class="selectgroup-input" checked="">
                           <span class="selectgroup-button">Baru</span>
                         </label>
+                        <label class="selectgroup-item">
+                          <input type="radio" name="condition" value="Bekas" class="selectgroup-input">
+                          <span class="selectgroup-button">Bekas</span>
+                        </label>
                     </div>
-                    @error('status')
+                    @error('condition')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>
@@ -86,7 +71,7 @@
                     </div>
                     @enderror
                 </div>
-                <div class="form-group col-md-6 col-xs-12">
+                <div class="form-group col-md-4 col-xs-12">
                     <label for="description">{{ __('Keterangan') }}</label>
                     <input id="description" type="text" class="form-control @error('description') is-invalid @enderror"
                         name="description" value="{{ old('description') }}" autocomplete="description">
@@ -95,6 +80,13 @@
                         {{ $message }}
                     </div>
                     @enderror
+                </div>
+                <div class="form-group col-md-4 col-xs-12">
+                    <label for="image">{{ __('Gambar') }}</label>
+                    <div class="custom-file">
+                        <input type="file" class="custom-file-input" id="image" name="">
+                        <label class="custom-file-label" for="image">Pilih Gambar</label>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -156,9 +148,9 @@
                     </div>
                 </div>
             </div>
-            <div class="card-footer text-right">
-                <button class="btn btn-primary mr-1" type="submit">{{ __('Tambah') }}</button>
-            </div>
+        </div>
+        <div class="card-footer text-right">
+            <button class="btn btn-primary mr-1" type="submit">{{ __('Tambah') }}</button>
         </div>
     </form>
 </div>

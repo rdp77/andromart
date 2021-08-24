@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use App\Models\Category;
-use App\Models\Branch;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,7 +24,7 @@ class ItemController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Item::get();
+            $data = Item::with('category', 'supplier')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -35,7 +34,7 @@ class ItemController extends Controller
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>';
                     $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('area.edit', $row->id) . '">Edit</a>';
+                            <a class="dropdown-item" href="' . route('item.edit', $row->id) . '">Edit</a>';
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
@@ -48,10 +47,9 @@ class ItemController extends Controller
 
     public function create()
     {
-        $branch = Branch::all();
         $category = Category::all();
         $supplier = supplier::all();
-        return view('pages.backend.master.item.createItem', ['branch' => $branch, 'category' => $category, 'supplier' => $supplier]);
+        return view('pages.backend.master.item.createItem', ['category' => $category, 'supplier' => $supplier]);
     }
 
     public function store(Request $req)
@@ -59,25 +57,20 @@ class ItemController extends Controller
         Validator::make($req->all(), [
             'name' => ['required', 'string', 'max:255'],
             'category_id' => ['required', 'integer'],
-            'branch_id' => ['required', 'integer'],
             'supplier_id' => ['required', 'integer'],
             'buy' => ['required', 'string', 'max:255'],
             'sell' => ['required', 'string', 'max:255'],
-            // 'discount' => ['string', 'max:255'],
-            'status' => ['required', 'boolean'],
-            // 'description' => ['string', 'max:255'],
-            // 'image' => ['string', 'max:255'],
+            'condition' => ['required', 'string', 'max:10'],
         ])->validate();
 
         Item::create([
             'name' => $req->name,
-            'categoryid' => $req->category_id,
-            'branch_id' => $req->branch_id,
+            'category_id' => $req->category_id,
             'supplier_id' => $req->supplier_id,
             'buy' => $req->buy,
             'sell' => $req->sell,
             'discount' => $req->discount,
-            'status' => $req->status,
+            'condition' => $req->condition,
             'description' => $req->description,
             'image' => $req->image,
         ]);
@@ -97,16 +90,62 @@ class ItemController extends Controller
 
     public function edit($id)
     {
-
+        $item = Item::find($id);
+        $category = Category::where('id', '!=', Item::find($id)->category_id)->get();
+        $supplier = Supplier::where('id', '!=', Item::find($id)->supplier_id)->get();
+        return view('pages.backend.master.item.updateItem', ['item' => $item, 'category' => $category, 'supplier' => $supplier] );
     }
 
     public function update($id, Request $req)
     {
+        Validator::make($req->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'category_id' => ['required', 'integer'],
+            'supplier_id' => ['required', 'integer'],
+            'buy' => ['required', 'string', 'max:255'],
+            'sell' => ['required', 'string', 'max:255'],
+            'condition' => ['required', 'string', 'max:10'],
+        ])->validate();
 
+        Item::where('id', $id)
+            ->update([
+            'name' => $req->name,
+            'category_id' => $req->category_id,
+            'supplier_id' => $req->supplier_id,
+            'buy' => $req->buy,
+            'sell' => $req->sell,
+            'discount' => $req->discount,
+            'condition' => $req->condition,
+            'description' => $req->description,
+            'image' => $req->image,
+            ]);
+
+        $item = Item::find($id);
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Mengubah master barang ' . Item::find($id)->name
+        );
+
+        $item->save();
+
+        return Redirect::route('item.index')
+            ->with([
+                'status' => 'Berhasil merubah master barang ',
+                'type' => 'success'
+            ]);
     }
 
     public function destroy(Request $req, $id)
     {
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Menghapus master barang ' . Item::find($id)->name
+        );
 
+        Item::destroy($id);
+
+        return Response::json(['status' => 'success']);
     }
 }

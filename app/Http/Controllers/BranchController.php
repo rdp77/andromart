@@ -23,7 +23,7 @@ class BranchController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Branch::all();
+            $data = Branch::with('area')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
