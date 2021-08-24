@@ -158,7 +158,6 @@ $(document.body).on("change",".itemsDetail",function(){
     }else{
         $('.priceDetailLoss_'+index).val(itemPrice);
     }
-
     hitung();
 });
 
@@ -182,7 +181,6 @@ $(document.body).on("keyup",".qtyDetail",function(){
 $(document.body).on("keyup",".priceServiceDetail",function(){
     $('.totalPriceServiceDetail').val(this.value);
     $('#totalService').val(this.value);
-    
 });
 
 // fungsi hitung
