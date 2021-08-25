@@ -32,7 +32,6 @@
         </div>
     </div>
     @include('layouts.components.footer')
-    @include('layouts.backend.components.script')
     <script src="{{ asset('assets/pages/index.js') }}"></script>
     @yield('script')
 </body>
