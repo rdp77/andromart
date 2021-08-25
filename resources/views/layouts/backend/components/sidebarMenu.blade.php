@@ -1,5 +1,3 @@
-<li class="{{ $activeURL }}">
-    <a href="{{ $url }}" class="nav-link">
-        <i class="fas {{ $icon }}"></i><span>{{ $title }}</span>
-    </a>
+<li class="{{ $active }}">
+    <a class="nav-link" href="{{ $url }}">{{ $title }}</a>
 </li>

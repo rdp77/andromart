@@ -21,10 +21,4 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.7.6/min/dropzone.min.css"
         integrity="sha512-WvVX1YO12zmsvTpUQV8s7ZU98DnkaAokcciMZJfnNWyNzm7//QRV61t4aEr0WdIa4pe854QHLTV302vH92FSMw=="
         crossorigin="anonymous" />
-
-    {{-- Node --}}
-    <link rel="stylesheet" type="text/css" href="{{asset('node_modules/select2/dist/css/select2.css')}}">
-    <link rel="stylesheet" type="text/css" 
-    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-
 </head>
