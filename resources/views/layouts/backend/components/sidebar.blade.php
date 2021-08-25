@@ -13,110 +13,134 @@
                     <i class="fas fa-fire"></i><span>{{ __('pages.dashboard') }}</span>
                 </a>
             </li>
-            <li class="menu-header">{{ __('Transaksi') }}</li>
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'service.index' ? 'active' :'',
-            'url'=>route('service.index'), 'title' => 'Service'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Penjualan'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Pembelian'])
-<<<<<<< HEAD
-=======
-
-{{--             @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'creditFunds.index' ? 'active' :'',
-            'url'=>route('creditFunds.index'), 'title' => 'Credit Funds']) --}}
-
->>>>>>> 8677de3e12664cc3a3affe9aa8e0e7646f6394e0
-            <li class="menu-header">{{ __('Master Data') }}</li>
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'area.index' ? 'active'    :'',
-            'url'=>route('area.index'), 'title' => 'Area'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'branch.index' ? 'active'  :'',
-            'url'=>route('branch.index'), 'title' => 'Cabang'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'category.index' ? 'active' :'',
-            'url'=>route('category.index'), 'title' => 'Kategori'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'item.index' ? 'acive'       :'',
-            'url'=>route('item.index'), 'title' => 'Barang'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Hak Akses'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'supplier.index' ? 'active' :'',
-            'url'=>route('supplier.index'), 'title' => 'Supplier'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Biaya'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Kas'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'unit.index' ? 'active'    :'',
-            'url'=>route('unit.index'), 'title' => 'Satuan'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Biaya Pengeluaran'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Karyawan'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire',
-            'activeURL'=>Request::route()->getName() == 'users.index' ? 'active' :'',
-            'url'=>route('users.index'), 'title' => 'User'])
-
-            <li class="menu-header">{{ __('Gudang') }}</li>
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Stock'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Stock Masuk'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Stock Keluar'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Stock Opname'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Stock Mutasi'])
-
-            <li class="menu-header">{{ __('Konten') }}</li>
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Carousel'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Konten'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire',
-<<<<<<< HEAD
-            'activeURL'=>Request::route()->getName() == 'notes.index' ? 'active' :'',
-            'url'=>route('notes.index'), 'title' => 'Notulen'])
-=======
-            'activeURL'=>Request::route()->getName() == 'notes.create' ? 'active' :'',
-            'url'=>route('notes.create'), 'title' => 'Notulen'])
-
-            {{--  <li class="menu-header">{{ __('Laporan') }}</li>
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Data Anggota'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Kas Anggota'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Jatuh Tempo'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Kredit Macet'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Transaksi Kas'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Buku Besar'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Neraca Saldo'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Kas Simpanan'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Kas Pinjaman'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Saldo Kas'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Laba Rugi'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'SHU']) --}}
->>>>>>> 8677de3e12664cc3a3affe9aa8e0e7646f6394e0
+            {{-- Transaksi --}}
+            <li class="nav-item dropdown">
+                <a href="javascript:void(0)" class="nav-link has-dropdown" data-toggle="dropdown">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>{{ __('Transaksi') }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Service',
+                    'url'=>route('service.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Penjualan',
+                    'url'=>''])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Pembelian',
+                    'url'=>''])
+                </ul>
+            </li>
+            {{-- Master Data --}}
+            <li class="nav-item dropdown">
+                <a href="javascript:void(0)" class="nav-link has-dropdown" data-toggle="dropdown">
+                    <i class="fas fa-database"></i>
+                    <span>{{ __('Master Data') }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Area',
+                    'url'=>route('area.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Cabang',
+                    'url'=>route('branch.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Kategori',
+                    'url'=>route('category.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Barang',
+                    'url'=>route('item.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Hak Akses',
+                    'url'=>''])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Supplier',
+                    'url'=>route('supplier.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Biaya',
+                    'url'=>''])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Kas',
+                    'url'=>''])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Satuan',
+                    'url'=>route('unit.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Biaya Pengeluaran',
+                    'url'=>''])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Karyawan',
+                    'url'=>''])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'User',
+                    'url'=>route('users.index')])
+                </ul>
+            </li>
+            {{-- Gudang --}}
+            <li class="nav-item dropdown">
+                <a href="javascript:void(0)" class="nav-link has-dropdown" data-toggle="dropdown">
+                    <i class="fas fa-boxes"></i>
+                    <span>{{ __('Gudang') }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Stok',
+                    'url'=>''])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Stok Masuk',
+                    'url'=>''])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Stok Keluar',
+                    'url'=>''])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Stok Opname',
+                    'url'=>''])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Stok Mutasi',
+                    'url'=>''])
+                </ul>
+            </li>
+            {{-- Konten --}}
+            <li class="nav-item dropdown">
+                <a href="javascript:void(0)" class="nav-link has-dropdown" data-toggle="dropdown">
+                    <i class="fas fa-file-alt"></i>
+                    <span>{{ __('Konten') }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Carousel',
+                    'url'=>''])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Konten',
+                    'url'=>''])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Notulen',
+                    'url'=>route('notes.index')])
+                </ul>
+            </li>
         </ul>
     </aside>
-    <div style="height: 25px;"></div>
-</div>
 </div>
