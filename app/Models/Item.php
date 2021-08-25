@@ -14,15 +14,24 @@ class Item extends Model
     protected $fillable = [
         'name',
         'category_id',
-        'branch_id',
         'supplier_id',
         'buy',
         'sell',
         'discount',
         'image',
-        'status',
-        'keterangan',
+        'condition',
+        'description',
         'created_at',
         'updated_at',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo('App\Models\Category');
+    }
+
+    public function supplier()
+    {
+        return $this->belongsTo('App\Models\Supplier');
+    }
 }

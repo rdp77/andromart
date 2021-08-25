@@ -21,25 +21,39 @@
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Penjualan'])
             @include('layouts.backend.components.sidebarMenu',
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Pembelian'])
+<<<<<<< HEAD
+=======
+
+{{--             @include('layouts.backend.components.sidebarMenu',
+            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'creditFunds.index' ? 'active' :'',
+            'url'=>route('creditFunds.index'), 'title' => 'Credit Funds']) --}}
+
+>>>>>>> 8677de3e12664cc3a3affe9aa8e0e7646f6394e0
             <li class="menu-header">{{ __('Master Data') }}</li>
             @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Barang'])
+            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'area.index' ? 'active'    :'',
+            'url'=>route('area.index'), 'title' => 'Area'])
+            @include('layouts.backend.components.sidebarMenu',
+            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'branch.index' ? 'active'  :'',
+            'url'=>route('branch.index'), 'title' => 'Cabang'])
+            @include('layouts.backend.components.sidebarMenu',
+            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'category.index' ? 'active' :'',
+            'url'=>route('category.index'), 'title' => 'Kategori'])
+            @include('layouts.backend.components.sidebarMenu',
+            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'item.index' ? 'acive'       :'',
+            'url'=>route('item.index'), 'title' => 'Barang'])
             @include('layouts.backend.components.sidebarMenu',
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Hak Akses'])
             @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Cabang'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Kategori'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Supplier'])
+            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'supplier.index' ? 'active' :'',
+            'url'=>route('supplier.index'), 'title' => 'Supplier'])
             @include('layouts.backend.components.sidebarMenu',
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Biaya'])
             @include('layouts.backend.components.sidebarMenu',
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Kas'])
             @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Area'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Unit'])
+            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'unit.index' ? 'active'    :'',
+            'url'=>route('unit.index'), 'title' => 'Satuan'])
             @include('layouts.backend.components.sidebarMenu',
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Biaya Pengeluaran'])
             @include('layouts.backend.components.sidebarMenu',
@@ -68,8 +82,41 @@
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Konten'])
             @include('layouts.backend.components.sidebarMenu',
             ['icon' => 'fa-fire',
+<<<<<<< HEAD
             'activeURL'=>Request::route()->getName() == 'notes.index' ? 'active' :'',
             'url'=>route('notes.index'), 'title' => 'Notulen'])
+=======
+            'activeURL'=>Request::route()->getName() == 'notes.create' ? 'active' :'',
+            'url'=>route('notes.create'), 'title' => 'Notulen'])
+
+            {{--  <li class="menu-header">{{ __('Laporan') }}</li>
+            @include('layouts.backend.components.sidebarMenu',
+            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Data Anggota'])
+            @include('layouts.backend.components.sidebarMenu',
+            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Kas Anggota'])
+            @include('layouts.backend.components.sidebarMenu',
+            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Jatuh Tempo'])
+            @include('layouts.backend.components.sidebarMenu',
+            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Kredit Macet'])
+            @include('layouts.backend.components.sidebarMenu',
+            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Transaksi Kas'])
+            @include('layouts.backend.components.sidebarMenu',
+            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Buku Besar'])
+            @include('layouts.backend.components.sidebarMenu',
+            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Neraca Saldo'])
+            @include('layouts.backend.components.sidebarMenu',
+            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Kas Simpanan'])
+            @include('layouts.backend.components.sidebarMenu',
+            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Kas Pinjaman'])
+            @include('layouts.backend.components.sidebarMenu',
+            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Saldo Kas'])
+            @include('layouts.backend.components.sidebarMenu',
+            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Laba Rugi'])
+            @include('layouts.backend.components.sidebarMenu',
+            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'SHU']) --}}
+>>>>>>> 8677de3e12664cc3a3affe9aa8e0e7646f6394e0
         </ul>
     </aside>
+    <div style="height: 25px;"></div>
+</div>
 </div>

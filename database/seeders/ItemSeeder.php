@@ -17,19 +17,32 @@ class ItemSeeder extends Seeder
         DB::table('items')->insert([
             [
                 'id' => '1',
+                'name' => 'Jasa Service',
+                'category_id' => '1',
+                'supplier_id' => '1',
+                'buy' => '0',
+                'sell' => '0',
+                'discount' => '0',
+                'image' => ' ',
+                'condition' => 'Baru',
+                'keterangan' => 'Jasa Service',
+                'created_at' => date("Y-m-d h:i:s"),
+                'updated_at' => date("Y-m-d h:i:s"),
+            ],
+            [
+                'id' => '2',
                 'name' => 'LCD 16x2',
                 'category_id' => '1',
-                'branch_id' => '1',
                 'supplier_id' => '1',
                 'buy' => '135000',
                 'sell' => '170000',
                 'discount' => '1000',
                 'image' => ' ',
-                'status' => '1',
+                'condition' => 'Baru',
                 'keterangan' => 'LCD anti retak anti maling',
                 'created_at' => date("Y-m-d h:i:s"),
                 'updated_at' => date("Y-m-d h:i:s"),
-            ]
+            ],
             ]);
     }
 }

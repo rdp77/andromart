@@ -25,6 +25,8 @@ class DatabaseSeeder extends Seeder
             UnitSeeder::class,
             SupplierSeeder::class,
             ItemSeeder::class,
+            ContentType::class,
+            Content::class,
         ]);
     }
 }

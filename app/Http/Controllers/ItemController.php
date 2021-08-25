@@ -3,42 +3,38 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\Category;
+use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
+use Carbon\carbon;
 
 class ItemController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct(DashboardController $DashboardController)
     {
         $this->middleware('auth');
         $this->DashboardController = $DashboardController;
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Item::where('id', '!=', Auth::item()->id)->get();;
+            $data = Item::with('category', 'supplier')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $actionBtn = '<div class="btn-group">';
-                    $actionBtn .= '<a onclick="edit" href="' . route('item.edit', $row->id) . '">Edit</a>';
+                    $actionBtn .= '<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                            data-toggle="dropdown">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>';
+                    $actionBtn .= '<div class="dropdown-menu">
+                            <a class="dropdown-item" href="' . route('item.edit', $row->id) . '">Edit</a>';
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
@@ -46,32 +42,37 @@ class ItemController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('pages.backend.item.indexItem');
+        return view('pages.backend.master.item.indexItem');
     }
 
     public function create()
     {
-        return view('pages.backend.item.createItem');
+        $category = Category::all();
+        $supplier = supplier::all();
+        return view('pages.backend.master.item.createItem', ['category' => $category, 'supplier' => $supplier]);
     }
 
     public function store(Request $req)
     {
         Validator::make($req->all(), [
             'name' => ['required', 'string', 'max:255'],
-            'type' => ['required', 'string', 'max:255'],
-            'merk' => ['required', 'string', 'max:255'],
-            'price' => ['required', 'string', 'max:255'],
-            'total' => ['required', 'string', 'max:255'],
-            'info' => ['required', 'string', 'max:255'],
+            'category_id' => ['required', 'integer'],
+            'supplier_id' => ['required', 'integer'],
+            'buy' => ['required', 'string', 'max:255'],
+            'sell' => ['required', 'string', 'max:255'],
+            'condition' => ['required', 'string', 'max:10'],
         ])->validate();
 
         Item::create([
             'name' => $req->name,
-            'type' => $req->type,
-            'merk' => $req->merk,
-            'price' => $req->price,
-            'total' => $req->total,
-            'info' => $req->info,
+            'category_id' => $req->category_id,
+            'supplier_id' => $req->supplier_id,
+            'buy' => $req->buy,
+            'sell' => $req->sell,
+            'discount' => $req->discount,
+            'condition' => $req->condition,
+            'description' => $req->description,
+            'image' => $req->image,
         ]);
 
         $this->DashboardController->createLog(
@@ -89,36 +90,48 @@ class ItemController extends Controller
 
     public function edit($id)
     {
-        $user = User::find($id);
-        return view('pages.backend.users.updateUsers', ['user' => $user]);
+        $item = Item::find($id);
+        $category = Category::where('id', '!=', Item::find($id)->category_id)->get();
+        $supplier = Supplier::where('id', '!=', Item::find($id)->supplier_id)->get();
+        return view('pages.backend.master.item.updateItem', ['item' => $item, 'category' => $category, 'supplier' => $supplier] );
     }
 
     public function update($id, Request $req)
     {
         Validator::make($req->all(), [
             'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'category_id' => ['required', 'integer'],
+            'supplier_id' => ['required', 'integer'],
+            'buy' => ['required', 'string', 'max:255'],
+            'sell' => ['required', 'string', 'max:255'],
+            'condition' => ['required', 'string', 'max:10'],
         ])->validate();
 
-
-        User::where('id', $id)
+        Item::where('id', $id)
             ->update([
-                'name' => $req->name,
-                'username' => $req->username
+            'name' => $req->name,
+            'category_id' => $req->category_id,
+            'supplier_id' => $req->supplier_id,
+            'buy' => $req->buy,
+            'sell' => $req->sell,
+            'discount' => $req->discount,
+            'condition' => $req->condition,
+            'description' => $req->description,
+            'image' => $req->image,
             ]);
 
-        $user = User::find($id);
+        $item = Item::find($id);
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Mengubah user ' . User::find($id)->name
+            'Mengubah master barang ' . Item::find($id)->name
         );
 
-        $user->save();
+        $item->save();
 
-        return Redirect::route('users.index')
+        return Redirect::route('item.index')
             ->with([
-                'status' => 'Berhasil merubah user',
+                'status' => 'Berhasil merubah master barang ',
                 'type' => 'success'
             ]);
     }
@@ -128,67 +141,11 @@ class ItemController extends Controller
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Menghapus user ' . User::find($id)->name
+            'Menghapus master barang ' . Item::find($id)->name
         );
 
-        User::destroy($id);
+        Item::destroy($id);
 
         return Response::json(['status' => 'success']);
-
-        // return Redirect::route('users.index')
-        //     ->with([
-        //         'status' => 'Berhasil menghapus user',
-        //         'type' => 'success'
-        //     ]);
-    }
-
-    function reset($id, Request $req)
-    {
-        User::where('id', $id)
-            ->update([
-                'password' => Hash::make(1234567890),
-            ]);
-
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Reset password user ' . User::find($id)->name
-        );
-
-        return Redirect::route('users.index')
-            ->with([
-                'status' => 'Password untuk user ' . User::find($id)->name . ' telah diganti menjadi \'1234567890\'',
-                'type' => 'success'
-            ]);
-    }
-
-    public function changeName(Request $req)
-    {
-        $this->validate($req, [
-            'name' => ['required', 'string', 'max:255']
-        ]);
-
-        $user = User::find(Auth::user()->id);
-
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Mengganti nama ' . $user->name . ' menjadi ' . $req->name
-        );
-
-        $oldName = $user->name;
-        $user->name = $req->name;
-        $user->save();
-
-        return Redirect::route('dashboard')
-            ->with([
-                'status' => 'Nama berhasil diganti dari ' . $oldName . ' menjadi ' . $req->name,
-                'type' => 'success'
-            ]);
-    }
-
-    public function changePassword()
-    {
-        return view('auth.forgot-password');
     }
 }

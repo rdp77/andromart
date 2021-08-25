@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Branch extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'area_id',
         'name',
@@ -16,4 +17,14 @@ class Branch extends Model
         'created_at',
         'updated_at',
     ];
+
+    public function area()
+    {
+        return $this->belongsTo('App\Models\Area');
+    }
+
+    public function item()
+    {
+        return $this->hasMany('App\Models\Item');
+    }
 }

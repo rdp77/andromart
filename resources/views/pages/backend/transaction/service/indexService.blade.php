@@ -21,21 +21,20 @@
         <table class="table-striped table" id="table" width="100%">
             <thead>
                 <tr>
-                    <th class="text-center">
-                        {{ __('NO') }}
-                    </th>
-                    <th>
-                        {{ __('Tanggal') }}
-                    </th>
+                    
                     <th>{{ __('Faktur') }}</th>
-                    <th>{{ __('Operator') }}</th>
+                    <th>
+                        {{ __('Tanggal & operator') }}
+                    </th>
                     <th>{{ __('Pelanggan') }}</th>
                     <th>{{ __('Barang') }}</th>
-                    <th>{{ __('Jasa') }}</th>
+                    <th>{{ __('Biaya / Harga') }}</th>
+                    <th>{{ __('Sharing Profit') }}</th>
+                    {{-- <th>{{ __('Jasa') }}</th>
                     <th>{{ __('SparePart') }}</th>
                     <th>{{ __('Loss') }}</th>
                     <th>{{ __('Diskon') }}</th>
-                    <th>{{ __('Jumlah') }}</th>
+                    <th>{{ __('Jumlah') }}</th> --}}
                     <th>{{ __('Action') }}</th>
                 </tr>
             </thead>

@@ -13,4 +13,9 @@ class Supplier extends Model
         'contact',
         'address',
     ];
+
+    public function item()
+    {
+        return $this->hasOne('App\Models\Item');
+    }
 }

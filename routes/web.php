@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\Frontend\FrontendController;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +16,19 @@ use App\Http\Controllers\DashboardController;
 */
 
 // Front End
-Route::get('/', function () {
-    return view('home');
-});
+// Route::get('/', function () {
+// 	return view('pages.frontend.index');
+// });
+Route::get('/', [FrontendController::class, 'home'])->name('frontendHome');
+Route::get('/about', [FrontendController::class, 'about'])->name('frontendAbout');
+Route::get('/services', [FrontendController::class, 'services'])->name('frontendServices');
+Route::get('/work', [FrontendController::class, 'work'])->name('frontendWork');
+Route::get('/contact', [FrontendController::class, 'contact'])->name('frontendContact');
+Route::get('/login', [FrontendController::class, 'login'])->name('frontendLogin');
+// Route::get('/login', function () {
+//     return view('home');
+// });
+
 // Backend
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
@@ -26,8 +37,12 @@ Route::get('/log', [DashboardController::class, 'log'])
 
 
 require __DIR__ . '/auth.php';
+require __DIR__ . '/master/areaRoute.php';
+require __DIR__ . '/master/branchRoute.php';
+require __DIR__ . '/master/categoryRoute.php';
+require __DIR__ . '/master/unitRoute.php';
+require __DIR__ . '/master/supplierRoute.php';
+require __DIR__ . '/master/itemRoute.php';
 require __DIR__ . '/transaction/serviceRoute.php';
 require __DIR__ . '/content/notes.php';
-require __DIR__ . '/item.php';
 require __DIR__ . '/users.php';
-

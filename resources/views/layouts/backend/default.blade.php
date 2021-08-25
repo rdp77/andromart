@@ -1,5 +1,5 @@
 @include('layouts.components.header')
-
+@stack('custom-css')
 <body>
     <div id="app">
         <div class="main-wrapper">
@@ -34,6 +34,7 @@
     @include('layouts.components.footer')
     <script src="{{ asset('assets/pages/index.js') }}"></script>
     @yield('script')
+    @stack('custom-js')
 </body>
 
 </html>

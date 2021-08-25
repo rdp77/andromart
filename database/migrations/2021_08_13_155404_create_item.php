@@ -17,14 +17,13 @@ class CreateItem extends Migration
             $table->id();
             $table->string('name');
             $table->integer('category_id');
-            $table->integer('branch_id');
             $table->integer('supplier_id');
             $table->double('buy');
             $table->double('sell');
             $table->double('discount')->nullable();
             $table->string('image')->nullable();
-            $table->boolean('status');
-            $table->string('keterangan')->nullable();
+            $table->string('condition');
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }
