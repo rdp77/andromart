@@ -21,11 +21,6 @@
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Penjualan'])
             @include('layouts.backend.components.sidebarMenu',
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Pembelian'])
-            
-{{--             @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>Request::route()->getName() == 'creditFunds.index' ? 'active' :'',
-            'url'=>route('creditFunds.index'), 'title' => 'Credit Funds']) --}}
-           
             <li class="menu-header">{{ __('Master Data') }}</li>
             @include('layouts.backend.components.sidebarMenu',
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Barang'])
@@ -47,10 +42,6 @@
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Unit'])
             @include('layouts.backend.components.sidebarMenu',
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Biaya Pengeluaran'])
-           {{--  @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire'
-            ,'activeURL'=>Request::route()->getName() == 'item.index' ? 'active' :'',
-            'url'=>route('item.index'), 'title' => 'Data Barang']) --}}
             @include('layouts.backend.components.sidebarMenu',
             ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Karyawan'])
             @include('layouts.backend.components.sidebarMenu',
@@ -79,32 +70,6 @@
             ['icon' => 'fa-fire',
             'activeURL'=>Request::route()->getName() == 'notes.index' ? 'active' :'',
             'url'=>route('notes.index'), 'title' => 'Notulen'])
-
-            {{--  <li class="menu-header">{{ __('Laporan') }}</li>
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Data Anggota'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Kas Anggota'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Jatuh Tempo'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Kredit Macet'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Transaksi Kas'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Buku Besar'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Neraca Saldo'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Kas Simpanan'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Kas Pinjaman'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Saldo Kas'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'Laba Rugi'])
-            @include('layouts.backend.components.sidebarMenu',
-            ['icon' => 'fa-fire','activeURL'=>'','url'=>'javascript:void(0)', 'title' => 'SHU']) --}}
         </ul>
     </aside>
 </div>
