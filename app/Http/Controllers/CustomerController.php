@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cost;
+use App\Models\Branch;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -11,7 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 use Carbon\carbon;
 
-class CostController extends Controller
+class CustomerController extends Controller
 {
     public function __construct(DashboardController $DashboardController)
     {
@@ -22,7 +23,7 @@ class CostController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Cost::all();
+            $data = Customer::with('branch')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -32,7 +33,7 @@ class CostController extends Controller
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>';
                     $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('cost.edit', $row->id) . '">Edit</a>';
+                            <a class="dropdown-item" href="' . route('customer.edit', $row->id) . '">Edit</a>';
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
@@ -40,35 +41,42 @@ class CostController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('pages.backend.master.cost.indexCost');
+        return view('pages.backend.master.customer.indexCustomer');
     }
 
     public function create()
     {
-        return view('pages.backend.master.cost.createCost');
+        $branch = Branch::all();
+        return view('pages.backend.master.customer.createCustomer', ['branch' => $branch]);
     }
 
     public function store(Request $req)
     {
         Validator::make($req->all(), [
-            'code' => ['required', 'string', 'max:255', 'unique:costs'],
+            'branch_id' => ['required', 'integer'],
+            'identity' => ['required', 'string', 'max:255', 'unique:customers'],
             'name' => ['required', 'string', 'max:255'],
+            'contact' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],
         ])->validate();
 
-        Cost::create([
-            'code' => $req->code,
+        Customer::create([
+            'branch_id' => $req->branch_id,
+            'identity' => $req->identity,
             'name' => $req->name,
+            'contact' => $req->contact,
+            'address' => $req->address,
         ]);
 
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Membuat master biaya baru'
+            'Membuat master pelanggan baru'
         );
 
-        return Redirect::route('cost.index')
+        return Redirect::route('customer.index')
             ->with([
-                'status' => 'Berhasil membuat master biaya baru',
+                'status' => 'Berhasil membuat master pelanggan baru',
                 'type' => 'success'
             ]);
     }
@@ -80,35 +88,42 @@ class CostController extends Controller
 
     public function edit($id)
     {
-        $cost = Cost::find($id);
-        return view('pages.backend.master.cost.updateCost', ['cost' => $cost]);
+        $customer = Customer::find($id);
+        $branch = Branch::where('id', '!=', Customer::find($id)->branch_id)->get();
+        return view('pages.backend.master.customer.updateCustomer', ['branch' => $branch, 'customer' => $customer]);
     }
 
     public function update(Request $req, $id)
     {
         Validator::make($req->all(), [
-            'code' => ['required', 'string', 'max:255'],
+            'branch_id' => ['required', 'integer'],
+            'identity' => ['required', 'string', 'max:255', 'unique:customers'],
             'name' => ['required', 'string', 'max:255'],
+            'contact' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],
         ])->validate();
 
-        Cost::where('id', $id)
+        Customer::where('id', $id)
             ->update([
-            'code' => $req->code,
-            'name' => $req->name,
+                'branch_id' => $req->branch_id,
+                'identity' => $req->identity,
+                'name' => $req->name,
+                'contact' => $req->contact,
+                'address' => $req->address,
             ]);
 
-        $cost = Cost::find($id);
+        $customer = Customer::find($id);
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Mengubah master biaya ' . Cost::find($id)->name
+            'Mengubah master pelanggan ' . Customer::find($id)->name
         );
 
-        $cost->save();
+        $customer->save();
 
-        return Redirect::route('cost.index')
+        return Redirect::route('customer.index')
             ->with([
-                'status' => 'Berhasil merubah master biaya ',
+                'status' => 'Berhasil merubah master pelanggan ',
                 'type' => 'success'
             ]);
     }
@@ -118,10 +133,10 @@ class CostController extends Controller
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Menghapus master biaya ' . Cost::find($id)->name
+            'Menghapus master pelanggan ' . Customer::find($id)->name
         );
 
-        Cost::destroy($id);
+        Customer::destroy($id);
 
         return Response::json(['status' => 'success']);
     }

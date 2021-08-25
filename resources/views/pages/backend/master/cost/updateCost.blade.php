@@ -1,21 +1,24 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__(' | Tambah Master Satuan'))
-@section('titleContent', __('Tambah Master Satuan'))
+@section('title', __('pages.title').__(' | Edit Master Biaya'))
+@section('titleContent', __('Edit Master Biaya'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
-<div class="breadcrumb-item active">{{ __('Master Satuan') }}</div>
-<div class="breadcrumb-item active">{{ __('Tambah Master Satuan') }}</div>
+<div class="breadcrumb-item active">{{ __('Master Biaya') }}</div>
+<div class="breadcrumb-item active">{{ __('Edit Master Biaya') }}</div>
 @endsection
 
 @section('content')
 <div class="card">
-    <form method="POST" action="{{ route('unit.store') }}">
+    <form method="POST" action="{{ route('cost.update',$cost->id) }}">
         @csrf
+        @method('PUT')
         <div class="card-body">
             <div class="form-group col-md-2 col-xs-12">
-                <label for="code">{{ __('Kode') }}<code>*</code></label>
-                <input id="code" type="text" class="form-control @error('code') is-invalid @enderror"
-                    name="code" value="{{ old('code') }}" required autocomplete="code">
+                <div class="d-block">
+                    <label for="code" class="control-label">{{ __('Kode') }}<code>*</code></label>
+                </div>
+                <input id="code" type="text" class="form-control @error('code') is-invalid @enderror" name="code"
+                    value="{{ $cost->code }}" required autofocus>
                 @error('code')
                 <div class="invalid-feedback">
                     {{ $message }}
@@ -27,7 +30,7 @@
                     <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
                 </div>
                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                    required autofocus>
+                    value="{{ $cost->name }}" required autofocus>
                 @error('name')
                 <div class="invalid-feedback">
                     {{ $message }}
@@ -37,7 +40,7 @@
         </div>
         <div class="card-footer text-right">
             <a class="btn btn-outline" href="javascript:window.history.go(-1);">{{ __('Kembali') }}</a>
-            <button class="btn btn-primary mr-1" type="submit">{{ __('Tambah Data Master') }}</button>
+            <button class="btn btn-primary mr-1" type="submit">{{ __('pages.edit') }}</button>
         </div>
     </form>
 </div>

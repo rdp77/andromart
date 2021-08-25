@@ -1,15 +1,15 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__(' | Tambah Master Satuan'))
-@section('titleContent', __('Tambah Master Satuan'))
+@section('title', __('pages.title').__(' | Tambah Master Biaya'))
+@section('titleContent', __('Tambah Master Biaya'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
-<div class="breadcrumb-item active">{{ __('Master Satuan') }}</div>
-<div class="breadcrumb-item active">{{ __('Tambah Master Satuan') }}</div>
+<div class="breadcrumb-item active">{{ __('Master Biaya') }}</div>
+<div class="breadcrumb-item active">{{ __('Tambah Master Biaya') }}</div>
 @endsection
 
 @section('content')
 <div class="card">
-    <form method="POST" action="{{ route('unit.store') }}">
+    <form method="POST" action="{{ route('cost.store') }}">
         @csrf
         <div class="card-body">
             <div class="form-group col-md-2 col-xs-12">

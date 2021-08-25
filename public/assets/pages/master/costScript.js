@@ -10,19 +10,14 @@ var table = $("#table").DataTable({
         [10, 25, 50, "Semua"],
     ],
     ajax: {
-        url: "/master/item/item",
+        url: "/master/cost/cost",
         type: "GET",
     },
     dom: '<"html5buttons">lBrtip',
     columns: [
         { data: "DT_RowIndex", orderable: false, searchable: false },
-        { data: "category.name" },
+        { data: "code" },
         { data: "name" },
-        { data: "condition" },
-        { data: "buy" },
-        { data: "sell" },
-        { data: "supplier.name" },
-        { data: "description" },
         { data: "action", orderable: false, searchable: true },
     ],
     buttons: [
@@ -89,7 +84,7 @@ function del(id) {
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url: "/master/item/item/" + id,
+                url: "/master/cost/cost/" + id,
                 type: "DELETE",
                 success: function () {
                     swal("Data master berhasil dihapus", {

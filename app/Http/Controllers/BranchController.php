@@ -56,14 +56,24 @@ class BranchController extends Controller
             'area_id' => ['required', 'integer'],
             'code' => ['required', 'string', 'max:255', 'unique:branches'],
             'name' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'max:255'],
+            'latitude' => ['double', 'max:255'],
+            'longitude' => ['double', 'max:255'],
         ])->validate();
 
         Branch::create([
             'area_id' => $req->area_id,
             'code' => $req->code,
             'name' => $req->name,
+            'title' => $req->title,
             'address' => $req->address,
+            'phone' => $req->phone,
+            'email' => $req->email,
+            'latitude' => $req->latitude,
+            'longitude' => $req->longitude,
         ]);
 
         $this->DashboardController->createLog(
@@ -86,8 +96,8 @@ class BranchController extends Controller
 
     public function edit($id)
     {
-        $area = Area::all();
         $branch = Branch::find($id);
+        $area = Area::where('id', '!=', Branch::find($id)->area_id)->get();
         return view('pages.backend.master.branch.updateBranch', ['branch' => $branch, 'area' => $area]);
     }
 
@@ -95,9 +105,14 @@ class BranchController extends Controller
     {
         Validator::make($req->all(), [
             'area_id' => ['required', 'integer'],
-            'code' => ['required', 'string', 'max:255', 'unique:branches'],
+            'code' => ['required', 'string', 'max:255'],
             'name' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'max:255'],
+            'latitude' => ['double', 'max:255'],
+            'longitude' => ['double', 'max:255'],
         ])->validate();
 
         Branch::where('id', $id)
@@ -105,7 +120,12 @@ class BranchController extends Controller
             'area_id' => $req->area_id,
             'code' => $req->code,
             'name' => $req->name,
+            'title' => $req->title,
             'address' => $req->address,
+            'phone' => $req->phone,
+            'email' => $req->email,
+            'latitude' => $req->latitude,
+            'longitude' => $req->longitude,
             ]);
 
         $branch = Branch::find($id);

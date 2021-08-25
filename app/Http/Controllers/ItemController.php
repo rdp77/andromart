@@ -39,7 +39,24 @@ class ItemController extends Controller
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
-                ->rawColumns(['action'])
+                ->addColumn('buy', function ($row) {
+                    $htmlAdd  =      '<tr>';
+                    $htmlAdd .=         '<td>'.number_format($row->buy,0,".",",").'</td>';
+                    $htmlAdd .=      '<tr>';
+
+                    return $htmlAdd;
+
+                })
+
+                ->addColumn('sell', function ($row) {
+                    $htmlAdd  =      '<tr>';
+                    $htmlAdd .=         '<td>'.number_format($row->sell,0,".",",").'</td>';
+                    $htmlAdd .=      '<tr>';
+
+                    return $htmlAdd;
+
+                })
+                ->rawColumns(['action', 'buy', 'sell'])
                 ->make(true);
         }
         return view('pages.backend.master.item.indexItem');

@@ -1,9 +1,9 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__(' | Master Pengguna'))
-@section('titleContent', __('Pengguna'))
+@section('title', __('pages.title').__(' | Master Pelanggan'))
+@section('titleContent', __('Master Pelanggan'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
-<div class="breadcrumb-item active">{{ __('Pengguna') }}</div>
+<div class="breadcrumb-item active">{{ __('Master Pelanggan') }}</div>
 @endsection
 
 @section('content')
@@ -11,8 +11,8 @@
 @include('layouts.backend.components.notification')
 <div class="card">
     <div class="card-header">
-        <a href="{{ route('users.create') }}" class="btn btn-icon icon-left btn-primary">
-            <i class="far fa-edit"></i>{{ __(' Tambah Pengguna') }}</a>
+        <a href="{{ route('customer.create') }}" class="btn btn-icon icon-left btn-primary">
+            <i class="far fa-edit"></i>{{ __(' Tambah Pelanggan') }}</a>
     </div>
     <div class="card-body">
         <table class="table-striped table" id="table" width="100%">
@@ -21,10 +21,11 @@
                     <th class="text-center">
                         {{ __('NO') }}
                     </th>
-                    <th>
-                        {{ __('Username') }}
-                    </th>
+                    <th>{{ __('Cabang') }}</th>
+                    <th>{{ __('NIK') }}</th>
                     <th>{{ __('Nama') }}</th>
+                    <th>{{ __('Kontak') }}</th>
+                    <th>{{ __('Alamat') }}</th>
                     <th>{{ __('Aksi') }}</th>
                 </tr>
             </thead>
@@ -35,5 +36,5 @@
 </div>
 @endsection
 @section('script')
-<script src="{{ asset('assets/pages/users.js') }}"></script>
+<script src="{{ asset('assets/pages/master/customerScript.js') }}"></script>
 @endsection

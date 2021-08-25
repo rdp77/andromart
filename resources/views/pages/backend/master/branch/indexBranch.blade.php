@@ -29,6 +29,11 @@
                     </th>
                     <th>{{ __('Nama') }}</th>
                     <th>{{ __('Alamat') }}</th>
+                    <th>{{ __('Kontak') }}</th>
+                    <th>{{ __('Email') }}</th>
+                    <th>{{ __('Latitude') }}</th>
+                    <th>{{ __('Longitude') }}</th>
+                    <th>{{ __('Judul') }}</th>
                     <th>{{ __('Aksi') }}</th>
                 </tr>
             </thead>
