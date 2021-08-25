@@ -9,6 +9,7 @@ class Item extends Model
 {
     use HasFactory;
 
+    protected $table = 'items';
     public $timestamps = false;
 
     protected $fillable = [

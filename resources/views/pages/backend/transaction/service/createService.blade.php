@@ -34,6 +34,8 @@
                         <option value="">- Select -</option>
                         <option value="1">1 Minggu</option>
                         <option value="2">1 Bulan</option>
+                        <option value="3">3 Bulan</option>
+                        <option value="4">2 Minggu</option>
                         </select>
                     </div>
                 </div>
@@ -44,7 +46,7 @@
                             </div>
                             <select class="select2" name="technicianId">
                             <option value="">- Select -</option>
-                            @foreach ($member as $element)
+                            @foreach ($employee as $element)
                                 <option value="{{$element->id}}">{{$element->name}}</option>
                             @endforeach
                             </select>
@@ -92,7 +94,12 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-12 col-md-12 col-lg-12">
+                    <div class="form-group col-12 col-md-5 col-lg-5">
+                        <label for="noImei">{{ __('No Imei') }}<code>*</code></label>
+                        <input id="noImei" type="text" class="form-control"
+                            name="noImei"  >
+                    </div>
+                    <div class="form-group col-12 col-md-7 col-lg-7">
                         <label for="description">{{ __('Keterangan') }}<code>*</code></label>
                         <input id="description" type="text" class="form-control"
                             name="description"  >
@@ -141,41 +148,54 @@
             </div>
             <div class="card-body">
                 <div class="form-group">
+                <label class="form-label">Harga Perlu Dikonfirmasi Terlebih Dahulu</label>
+                    <div class="selectgroup w-100">
+                        <label class="selectgroup-item">
+                        <input type="radio" name="verificationPrice" value="Y" onchange="sumTotal()" class="selectgroup-input">
+                        <span class="selectgroup-button">Ya</span>
+                        </label>
+                        <label class="selectgroup-item">
+                        <input type="radio" name="verificationPrice" value="N" onchange="sumTotal()" checked class="selectgroup-input">
+                        <span class="selectgroup-button">Tidak</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
                     <label for="totalService">{{ __('Jasa') }}<code>*</code></label>
-                    <input readonly id="totalService" type="text" class="form-control"
+                    <input readonly id="totalService" onchange="sumTotal()" type="text" value="0" class="form-control"
                         name="totalService"  >
                 </div>
                 <div class="form-group">
                     <label for="totalSparePart">{{ __('Spare Part') }}<code>*</code></label>
-                    <input readonly id="totalSparePart" type="text" class="form-control"
+                    <input readonly id="totalSparePart" onchange="sumTotal()" type="text" value="0" class="form-control"
                         name="totalSparePart"  >
                 </div>
                 <div class="form-group">
                     <label for="totalLoss">{{ __('Total Loss') }}<code>*</code></label>
-                    <input readonly id="totalLoss" type="text" class="form-control"
+                    <input readonly id="totalLoss" onchange="sumTotal()" type="text" value="0" class="form-control"
                         name="totalLoss"  >
                 </div>
                 <div class="form-group">
                     <label for="totalDownPayment">{{ __('Down Payment (DP)') }}<code>*</code></label>
-                    <input id="totalDownPayment" type="text" class="form-control"
-                        name="totalDownPayment"  >
+                    <input id="totalDownPayment" type="text" value="0" class="form-control"
+                        name="totalDownPayment" onkeyup="sumTotal()" >
                 </div>
                 <div class="row">
                     <div class="form-group col-12 col-md-6 col-lg-6">
                         <label for="totalDiscountPercent">{{ __('Diskon %') }}<code>*</code></label>
-                        <input id="totalDiscountPercent" type="text" class="form-control"
-                            name="totalDiscountPercent"  >
+                        <input id="totalDiscountPercent" type="text" value="0" class="form-control"
+                            name="totalDiscountPercent" onkeyup="sumTotal(),sumDiscont()"   >
                     </div>
                     <div class="form-group col-12 col-md-6 col-lg-6">
                         <label for="totalDiscountValue">{{ __('Diskon') }}<code>*</code></label>
-                        <input id="totalDiscountValue" type="text" class="form-control"
-                            name="totalDiscountValue"  >
+                        <input id="totalDiscountValue" type="text" value="0" class="form-control"
+                            name="totalDiscountValue" onkeyup="sumTotal(),sumDiscont()" >
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="totalPrice">{{ __('Total Harga') }}<code>*</code></label>
-                    <input id="totalPrice" type="text" class="form-control"
-                        name="totalPrice"  >
+                    <input id="totalPrice" type="text" value="0" class="form-control"
+                        name="totalPrice" onchange="sumTotal()" >
                 </div>
             </div>
           </div>
@@ -190,13 +210,20 @@
             </div>
         </div>
         <div class="card-body">
+            @foreach ($items as $el)
+                <input class="itemsData" type="hidden" 
+                data-price="{{$el->sell}}" 
+                data-name="{{$el->name}}" 
+                value="{{$el->id}}">
+            @endforeach
+
             <div class="table-responsive">
                 <table class="table table-striped">
                    <thead>
                     <tr>
                         <th>Barang / Jasa</th>
                         <th>Harga</th>
-                        <th>qty</th>
+                        <th style="width: 10%">qty</th>
                         <th>Total</th>
                         <th>Deskripsi</th>
                         <th>tipe</th>
@@ -205,9 +232,14 @@
                   </thead>
                   <tbody >
                     <tr>
+                    <td style="display:none">
+                        <input type="text" class="form-control priceDetailSparePart" name="priceDetailSparePart[]" value="0">
+                        <input type="text" class="form-control priceDetailLoss" name="priceDetailLoss[]" value="0">
+                    </td>
                     <td>
-                        <input readonly type="text" class="form-control "
-                        name="itemsDetail[]" value="Jasa">
+                        <input readonly type="hidden" class="form-control "
+                        name="itemsDetail[]" value="1">
+                        Jasa
                     </td>
                     <td>
                         <input type="text" class="form-control priceServiceDetail"
@@ -219,7 +251,7 @@
                     </td>
                     <td>
                         <input readonly type="text" class="form-control totalPriceServiceDetail"
-                        name="totalpriceDetail[]">
+                        name="totalPriceDetail[]">
                     </td>
                     <td>
                         <input type="text" class="form-control"
