@@ -29,7 +29,7 @@
                     <th>{{ __('Pelanggan') }}</th>
                     <th>{{ __('Barang') }}</th>
                     <th>{{ __('Biaya / Harga') }}</th>
-                    <th>{{ __('Sharing Profit') }}</th>
+                    <th>{{ __('Status') }}</th>
                     {{-- <th>{{ __('Jasa') }}</th>
                     <th>{{ __('SparePart') }}</th>
                     <th>{{ __('Loss') }}</th>

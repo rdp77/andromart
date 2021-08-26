@@ -20,10 +20,20 @@ Route::group(['prefix' => 'transaction'], function () {
             ->except([
                 'show',
             ]);
-        // Users Password
-        // Route::post('/reset/{id}', [CreditFundsController::class, 'reset'])
-            // ->name('users.reset');
-        // Users Name
-        // Route::get('/change-name', [CreditFundsController::class, 'changeName']);
+
+        Route::get(
+            'service-form-update-status',
+            [ServiceController::class, 'serviceFormUpdateStatus']
+        )->name('service.serviceFormUpdateStatus');
+
+        Route::post(
+            'service-form-update-status-load-data',
+            [ServiceController::class, 'serviceFormUpdateStatusLoadData']
+        )->name('service.serviceFormUpdateStatusLoadData');
+
+        Route::post(
+            'service-form-update-status-save-data',
+            [ServiceController::class, 'serviceFormUpdateStatusSaveData']
+        )->name('service.serviceFormUpdateStatusSaveData');
     });
 });

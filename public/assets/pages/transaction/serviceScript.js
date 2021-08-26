@@ -20,7 +20,7 @@ var table = $("#table").DataTable({
         { data: "dataCustomer" },
         { data: "dataItem" },
         { data: "finance" },
-        { data: "sharingProfit" },
+        { data: "currentStatus" },
         { data: "action", orderable: false, searchable: true },
     ],
     buttons: [
@@ -116,11 +116,11 @@ function save() {
                 data: $(".form-data").serialize(),
                 type: 'POST',
                 success: function(data) {
-                    if (data.status == 'Success'){
+                    if (data.status == 'success'){
                         swal("Data Pengajuan Pinjaman Disimpan", {
                             icon: "success",
                         });
-                        // location.reload();
+                        location.reload();
                     }
                 },
                 error: function(data) {
@@ -318,4 +318,106 @@ function sumTotal() {
         var sumTotal = totalService+totalSparePart-totalDownPayment-totalDiscountValue;
     }
     $('#totalPrice').val(sumTotal); 
+}
+
+
+
+
+// fungsi update status
+
+function choseService() {
+    var serviceId = $('.serviceId').find(':selected').val();
+    $('.activities').empty();
+    $.ajax({
+        url: "/transaction/service/service-form-update-status-load-data",
+        data: {id:serviceId},
+        type: 'POST',
+        success: function(data) {
+
+            if (data.status == 'success'){
+                if(data.message == 'empty'){
+                    $(".hiddenFormUpdate").css("display", "none");
+                }else{
+                    if(data.result.work_status == 'Selesai'){
+                        $(".hiddenFormUpdate").css("display", "none");
+                    }else{
+                        $(".hiddenFormUpdate").css("display", "block");
+                    }
+                    $.each(data.result.service_status_mutation, function(index,value){
+                        $('.activities').append(
+                            '<div class="activity">'+
+                                '<div class="activity-icon bg-primary text-white shadow-primary">'+
+                                    '<i class="fas fa-archive"></i>'+
+                                '</div>'+
+                                '<div class="activity-detail">'+
+                                    '<div class="mb-2">'+
+                                        '<span class="text-job text-primary">'+moment(value.created_at).format('DD MMMM YYYY')+'</span>'+
+                                        '<span class="bullet"></span>'+
+                                        '<a class="text-job" href="#" type="button">[ '+value.status+' ]</a>'+
+                                        '</div>'+
+                                    '<p>'+value.description+'</p>'+
+                                '</div>'+
+                            '</div>'
+                        );
+                    });
+                }
+
+                
+                // location.reload();
+            }
+        },
+        error: function(data) {
+            // edit(id);
+        }
+    });
+}
+
+function updateStatusService() {
+    var serviceId = $('.serviceId').find(':selected').val();
+    var status = $('.status').find(':selected').val();
+    var description = $('.description').val();
+    swal({
+        title: "Apakah Anda Yakin?",
+        text: "Aksi ini tidak dapat dikembalikan, dan akan menyimpan data Anda.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willSave) => {
+        if (willSave) {
+            $.ajax({
+                url: "/transaction/service/service-form-update-status-save-data",
+                data: {id:serviceId,status:status,description:description},
+                type: 'POST',
+                success: function(data) {
+                    if (data.status == 'success'){
+                        swal("Data Telah Tersimpan", {
+                            icon: "success",
+                        });
+                        $('.activities').append(
+                            '<div class="activity">'+
+                                '<div class="activity-icon bg-primary text-white shadow-primary">'+
+                                    '<i class="fas fa-archive"></i>'+
+                                '</div>'+
+                                '<div class="activity-detail">'+
+                                    '<div class="mb-2">'+
+                                        '<span class="text-job text-primary">'+moment().format('DD MMMM YYYY')+'</span>'+
+                                        '<span class="bullet"></span>'+
+                                        '<a class="text-job" href="#" type="button">[ '+status+' ]</a>'+
+                                        '</div>'+
+                                    '<p>'+description+'</p>'+
+                                '</div>'+
+                            '</div>'
+                        );
+                        // location.reload();
+                    }
+                },
+                error: function(data) {
+                    // edit(id);
+                }
+            });
+            
+        } else {
+            swal("Data Dana Kredit PDL Berhasil Dihapus!");
+        }
+    });
 }

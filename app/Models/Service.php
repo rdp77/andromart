@@ -56,4 +56,13 @@ class Service extends Model
         'created_at' ,
         'updated_at' ,
     ];
+
+    public function ServiceDetail()
+    {
+        return $this->hasMany('App\Models\ServiceDetail', 'service_id', 'id');
+    }
+    public function ServiceStatusMutation()
+    {
+        return $this->hasMany('App\Models\ServiceStatusMutation', 'service_id', 'id');
+    }
 }
