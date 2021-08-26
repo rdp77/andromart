@@ -162,39 +162,39 @@
                 </div>
                 <div class="form-group">
                     <label for="totalService">{{ __('Jasa') }}<code>*</code></label>
-                    <input readonly id="totalService" onchange="sumTotal()" type="text" value="0" class="form-control cleaveNumeral"
+                    <input readonly id="totalService" onchange="sumTotal()" type="text" value="0" class="form-control cleaveNumeralSamePage"
                         name="totalService"  >
                 </div>
                 <div class="form-group">
                     <label for="totalSparePart">{{ __('Spare Part') }}<code>*</code></label>
-                    <input readonly id="totalSparePart" onchange="sumTotal()" type="text" value="0" class="form-control cleaveNumeral"
+                    <input readonly id="totalSparePart" onchange="sumTotal()" type="text" value="0" class="form-control cleaveNumeralSamePage"
                         name="totalSparePart"  >
                 </div>
                 <div class="form-group">
                     <label for="totalLoss">{{ __('Total Loss') }}<code>*</code></label>
-                    <input readonly id="totalLoss" onchange="sumTotal()" type="text" value="0" class="form-control cleaveNumeral"
+                    <input readonly id="totalLoss" onchange="sumTotal()" type="text" value="0" class="form-control cleaveNumeralSamePage"
                         name="totalLoss"  >
                 </div>
                 <div class="form-group">
                     <label for="totalDownPayment">{{ __('Down Payment (DP)') }}<code>*</code></label>
-                    <input id="totalDownPayment" type="text" value="0" class="form-control cleaveNumeral"
+                    <input id="totalDownPayment" type="text" value="0" class="form-control cleaveNumeralSamePage"
                         name="totalDownPayment" onkeyup="sumTotal()" >
                 </div>
                 <div class="row">
                     <div class="form-group col-12 col-md-6 col-lg-6">
                         <label for="totalDiscountPercent">{{ __('Diskon %') }}<code>*</code></label>
-                        <input id="totalDiscountPercent" type="text" value="0" class="form-control cleaveNumeral"
+                        <input id="totalDiscountPercent" type="text" value="0" class="form-control cleaveNumeralSamePage"
                             name="totalDiscountPercent" onkeyup="sumTotal(),sumDiscont()"   >
                     </div>
                     <div class="form-group col-12 col-md-6 col-lg-6">
                         <label for="totalDiscountValue">{{ __('Diskon') }}<code>*</code></label>
-                        <input id="totalDiscountValue" type="text" value="0" class="form-control cleaveNumeral"
+                        <input id="totalDiscountValue" type="text" value="0" class="form-control cleaveNumeralSamePage"
                             name="totalDiscountValue" onkeyup="sumTotal(),sumDiscont()" >
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="totalPrice">{{ __('Total Harga') }}<code>*</code></label>
-                    <input id="totalPrice" type="text" value="0" class="form-control cleaveNumeral"
+                    <input id="totalPrice" type="text" value="0" class="form-control cleaveNumeralSamePage"
                         name="totalPrice" onchange="sumTotal()" >
                 </div>
             </div>
@@ -233,8 +233,8 @@
                   <tbody >
                     <tr>
                     <td style="display:none">
-                        <input type="text" class="form-control priceDetailSparePart cleaveNumeral" name="priceDetailSparePart[]" value="0">
-                        <input type="text" class="form-control priceDetailLoss cleaveNumeral" name="priceDetailLoss[]" value="0">
+                        <input type="text" class="form-control priceDetailSparePart cleaveNumeralSamePage" name="priceDetailSparePart[]" value="0">
+                        <input type="text" class="form-control priceDetailLoss cleaveNumeralSamePage" name="priceDetailLoss[]" value="0">
                     </td>
                     <td>
                         <input readonly type="hidden" class="form-control "
@@ -242,7 +242,7 @@
                         Jasa
                     </td>
                     <td>
-                        <input type="text" class="form-control priceServiceDetail cleaveNumeral"
+                        <input type="text" class="form-control priceServiceDetail cleaveNumeralSamePage"
                         name="priceDetail[]" >
                     </td>
                     <td>
@@ -250,7 +250,7 @@
                         name="qtyDetail[]" value="1">
                     </td>
                     <td>
-                        <input readonly type="text" class="form-control totalPriceServiceDetail cleaveNumeral"
+                        <input readonly type="text" class="form-control totalPriceServiceDetail cleaveNumeralSamePage"
                         name="totalPriceDetail[]">
                     </td>
                     <td>
