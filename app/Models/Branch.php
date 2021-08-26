@@ -14,6 +14,11 @@ class Branch extends Model
         'name',
         'code',
         'address',
+        'phone',
+        'email',
+        'latitude',
+        'longitude',
+        'title',
         'created_at',
         'updated_at',
     ];
@@ -26,5 +31,10 @@ class Branch extends Model
     public function item()
     {
         return $this->hasMany('App\Models\Item');
+    }
+
+    public function customer()
+    {
+        return $this->hasMany('App\Models\Customer');
     }
 }

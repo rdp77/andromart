@@ -20,6 +20,11 @@ var table = $("#table").DataTable({
         { data: "code" },
         { data: "name" },
         { data: "address" },
+        { data: "phone" },
+        { data: "email" },
+        { data: "latitude" },
+        { data: "longitude" },
+        { data: "title" },
         { data: "action", orderable: false, searchable: true },
     ],
     buttons: [

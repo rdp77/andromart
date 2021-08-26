@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Cost;
+use App\Models\Warranty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 use Carbon\carbon;
 
-class CostController extends Controller
+class WarrantyController extends Controller
 {
     public function __construct(DashboardController $DashboardController)
     {
@@ -22,7 +22,7 @@ class CostController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Cost::all();
+            $data = Warranty::all();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -32,7 +32,7 @@ class CostController extends Controller
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>';
                     $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('cost.edit', $row->id) . '">Edit</a>';
+                            <a class="dropdown-item" href="' . route('warranty.edit', $row->id) . '">Edit</a>';
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
@@ -40,75 +40,75 @@ class CostController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('pages.backend.master.cost.indexCost');
+        return view('pages.backend.master.warranty.indexWarranty');
     }
 
     public function create()
     {
-        return view('pages.backend.master.cost.createCost');
+        return view('pages.backend.master.warranty.createWarranty');
     }
 
     public function store(Request $req)
     {
         Validator::make($req->all(), [
-            'code' => ['required', 'string', 'max:255', 'unique:costs'],
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:100'],
+            'periode' => ['required', 'integer', 'max:31'],
         ])->validate();
 
-        Cost::create([
-            'code' => $req->code,
+        Warranty::create([
             'name' => $req->name,
+            'periode' => $req->periode,
         ]);
 
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Membuat master biaya baru'
+            'Membuat master garansi baru'
         );
 
-        return Redirect::route('cost.index')
+        return Redirect::route('warranty.index')
             ->with([
-                'status' => 'Berhasil membuat master biaya baru',
+                'status' => 'Berhasil membuat master garansi baru',
                 'type' => 'success'
             ]);
     }
 
-    public function show($id)
+    public function show(Warranty $warranty)
     {
         //
     }
 
     public function edit($id)
     {
-        $cost = Cost::find($id);
-        return view('pages.backend.master.cost.updateCost', ['cost' => $cost]);
+        $warranty = Warranty::find($id);
+        return view('pages.backend.master.warranty.updateWarranty', ['warranty' => $warranty]);
     }
 
     public function update(Request $req, $id)
     {
         Validator::make($req->all(), [
-            'code' => ['required', 'string', 'max:255'],
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:100'],
+            'periode' => ['required', 'integer', 'max:31'],
         ])->validate();
 
-        Cost::where('id', $id)
+        Warranty::where('id', $id)
             ->update([
-            'code' => $req->code,
             'name' => $req->name,
-            ]);
+            'periode' => $req->periode,
+        ]);
 
-        $cost = Cost::find($id);
+        $warranty = Warranty::find($id);
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Mengubah master biaya ' . Cost::find($id)->name
+            'Mengubah master garansi ' . Warranty::find($id)->name
         );
 
-        $cost->save();
+        $warranty->save();
 
-        return Redirect::route('cost.index')
+        return Redirect::route('warranty.index')
             ->with([
-                'status' => 'Berhasil merubah master biaya ',
+                'status' => 'Berhasil merubah master garansi ',
                 'type' => 'success'
             ]);
     }
@@ -118,10 +118,10 @@ class CostController extends Controller
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Menghapus master biaya ' . Cost::find($id)->name
+            'Menghapus master garansi ' . Warranty::find($id)->name
         );
 
-        Cost::destroy($id);
+        Warranty::destroy($id);
 
         return Response::json(['status' => 'success']);
     }

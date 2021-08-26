@@ -72,11 +72,11 @@
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Biaya',
-                    'url'=>''])
+                    'url'=>route('cost.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Kas',
-                    'url'=>''])
+                    'url'=>route('cash.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Satuan',
@@ -93,6 +93,14 @@
                     'active'=>'',
                     'title'=>'User',
                     'url'=>route('users.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Pelanggan',
+                    'url'=>route('customer.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Warranty',
+                    'url'=>route('warranty.index')])
                 </ul>
             </li>
             {{-- Gudang --}}

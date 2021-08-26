@@ -12,41 +12,53 @@
     <form method="POST" action="{{ route('supplier.store') }}">
         @csrf
         <div class="card-body">
-            <div class="form-group">
-                <div class="d-block">
-                    <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
+            <div class="row">
+                <div class="form-group col-md-4">
+                    <div class="d-block">
+                        <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
+                    </div>
+                    <input id="name" type="text" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" name="name"
+                        required autofocus>
+                    @error('name')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                    @enderror
                 </div>
-                <input id="name" type="text" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" name="name"
-                    required autofocus>
-                @error('name')
-                <div class="invalid-feedback">
-                    {{ $message }}
+            </div>
+            <div class="row">
+                <div class="form-group col-md-4 col-xs-12">
+                    <label for="contact">{{ __('Kontak') }}<code>*</code></label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                          <div class="input-group-text">
+                            <i class="fas fa-phone"></i>
+                          </div>
+                        </div>
+                        <input id="contact" type="text" class="form-control @error('contact') is-invalid @enderror"
+                            name="contact" value="{{ old('contact') }}" required autocomplete="contact">
+                        @error('contact')
+                        <div class="invalid-feedback">
+                            {{ $message }}
+                        </div>
+                        @enderror
+                    </div>
                 </div>
-                @enderror
-            </div>
-            <div class="form-group">
-                <label for="address">{{ __('Alamat') }}<code>*</code></label>
-                <input id="address" type="text" class="form-control @error('address') is-invalid @enderror"
-                    name="address" value="{{ old('address') }}" required autocomplete="address">
-                @error('address')
-                <div class="invalid-feedback">
-                    {{ $message }}
+                <div class="form-group col-md-6 col-xs-12">
+                    <label for="address">{{ __('Alamat') }}<code>*</code></label>
+                    <input id="address" type="text" class="form-control @error('address') is-invalid @enderror"
+                        name="address" value="{{ old('address') }}" required autocomplete="address">
+                    @error('address')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                    @enderror
                 </div>
-                @enderror
             </div>
-            <div class="form-group">
-                <label for="contact">{{ __('Kontak') }}<code>*</code></label>
-                <input id="contact" type="text" class="form-control @error('contact') is-invalid @enderror"
-                    name="contact" value="{{ old('contact') }}" required autocomplete="contact">
-                @error('contact')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-                @enderror
-            </div>
-            <div class="card-footer text-right">
-                <button class="btn btn-primary mr-1" type="submit">{{ __('Tambah') }}</button>
-            </div>
+        </div>
+        <div class="card-footer text-right">
+            <a class="btn btn-outline" href="javascript:window.history.go(-1);">{{ __('Kembali') }}</a>
+            <button class="btn btn-primary mr-1" type="submit">{{ __('Tambah Data Master') }}</button>
         </div>
     </form>
 </div>
