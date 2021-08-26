@@ -12,7 +12,7 @@
     <form method="POST" action="{{ route('unit.store') }}">
         @csrf
         <div class="card-body">
-            <div class="form-group">
+            <div class="form-group col-md-2 col-xs-12">
                 <label for="code">{{ __('Kode') }}<code>*</code></label>
                 <input id="code" type="text" class="form-control @error('code') is-invalid @enderror"
                     name="code" value="{{ old('code') }}" required autocomplete="code">
@@ -22,7 +22,7 @@
                 </div>
                 @enderror
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-4 col-xs-12">
                 <div class="d-block">
                     <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
                 </div>
@@ -34,9 +34,10 @@
                 </div>
                 @enderror
             </div>
-            <div class="card-footer text-right">
-                <button class="btn btn-primary mr-1" type="submit">{{ __('Tambah') }}</button>
-            </div>
+        </div>
+        <div class="card-footer text-right">
+            <a class="btn btn-outline" href="javascript:window.history.go(-1);">{{ __('Kembali') }}</a>
+            <button class="btn btn-primary mr-1" type="submit">{{ __('Tambah Data Master') }}</button>
         </div>
     </form>
 </div>

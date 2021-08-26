@@ -17,8 +17,8 @@ var table = $("#table").DataTable({
     columns: [
         { data: "DT_RowIndex", orderable: false, searchable: false },
         { data: "category.name" },
-        { data: "condition" },
         { data: "name" },
+        { data: "condition" },
         { data: "buy" },
         { data: "sell" },
         { data: "supplier.name" },

@@ -52,7 +52,7 @@
                     autocomplete="new-password">
             </div>
             <div class="card-footer text-right">
-                <button class="btn btn-primary mr-1" type="submit">{{ __('Tambah') }}</button>
+                <button class="btn btn-primary mr-1" type="submit">{{ __('Tambah Data Master') }}</button>
             </div>
         </div>
     </form>

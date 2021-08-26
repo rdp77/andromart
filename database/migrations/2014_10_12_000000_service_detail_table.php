@@ -21,11 +21,14 @@ class ServiceDetailTable extends Migration
             $table->integer('item_id');
             $table->double('price');
             $table->double('qty');
-            $table->double('total_pice');
+            // $table->double('loss');
+            // $table->double('sparepart');
+            $table->double('total_price');
             $table->String('description');
             $table->String('type');
-            $table->string('created_by');   
-            $table->string('updated_by');
+            $table->string('created_by')->nullable();   
+            $table->string('updated_by')->nullable();
+            $table->string('deleted_by')->nullable();
             $table->softDeletesTz($column = 'deleted_at', $precision = 0);
             $table->timestamps();
         });

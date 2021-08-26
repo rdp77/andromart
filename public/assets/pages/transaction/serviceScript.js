@@ -102,9 +102,50 @@ $.ajaxSetup({
 //     });
 // }
 
+function save() {
+    swal({
+        title: "Apakah Anda Yakin?",
+        text: "Aksi ini tidak dapat dikembalikan, dan akan menyimpan data Anda.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willSave) => {
+        if (willSave) {
+            $.ajax({
+                url: "/transaction/service/service",
+                data: $(".form-data").serialize(),
+                type: 'POST',
+                success: function(data) {
+                    if (data.status == 'Success'){
+                        swal("Data Pengajuan Pinjaman Disimpan", {
+                            icon: "success",
+                        });
+                        // location.reload();
+                    }
+                },
+                error: function(data) {
+                    // edit(id);
+                }
+            });
+            
+        } else {
+            swal("Data Dana Kredit PDL Berhasil Dihapus!");
+        }
+    });
+    
+}
+
+
+
 function addItem() {
     var index = $('.priceDetail').length;
     var dataDetail = $('.dataDetail').length;
+
+    var dataItems = [];
+    $.each($('.itemsData'), function(){
+        dataItems += '<option data-index="'+(index+1)+'" data-price="'+$(this).data('price')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
+    });
+
     $('.dropHereItem').append(
         '<tr class="dataDetail dataDetail_'+(dataDetail+1)+'">'+
             '<td style="display:none">'+
@@ -114,18 +155,19 @@ function addItem() {
             '<td>'+
             '<select class="select2 itemsDetail" name="itemsDetail[]">'+
                 '<option value="">- Select -</option>'+
-                '<option data-index="'+(index+1)+'" data-price="10000" value="Lcd">Lcd</option>'+
-                '<option data-index="'+(index+1)+'" data-price="20000" value="Monitor">Monitor</option>'+
+                dataItems+
+                // '<option data-index="'+(index+1)+'" data-price="10000" value="Lcd">Lcd</option>'+
+                // '<option data-index="'+(index+1)+'" data-price="20000" value="Monitor">Monitor</option>'+
             '</select>'+
             '</td>'+
             '<td>'+
-                '<input type="text" class="form-control priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" value="0">'+
+                '<input type="text" class="form-control priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="0">'+
             '</td>'+
             '<td>'+
                 '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="1">'+
             '</td>'+
             '<td>'+
-                '<input type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="0">'+
+                '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="0">'+
             '</td>'+
             '<td>'+
                 '<input type="text" class="form-control" name="descriptionDetail[]">'+
@@ -142,7 +184,8 @@ function addItem() {
         '</tr>'
     );
     $('.select2').select2();
-    hitung();
+    sum();
+    sumTotal();
 }
 
 // mengganti item
@@ -155,36 +198,69 @@ $(document.body).on("change",".itemsDetail",function(){
     console.log(typeDetail);
     if(typeDetail == 'SparePart'){
         $('.priceDetailSparePart_'+index).val(itemPrice);
+        $('.priceDetailLoss_'+index).val(0);
     }else{
         $('.priceDetailLoss_'+index).val(itemPrice);
+        $('.priceDetailSparePart_'+index).val(0);
     }
-    hitung();
+    sum();
+    sumTotal();
 });
 
 // menghapus kolom
 $(document.body).on("click",".removeDataDetail",function(){
     $('.dataDetail_'+this.value).remove();
-    hitung();
+    sum();
+    sumTotal();
 });
 
 // merubah qty
 $(document.body).on("keyup",".qtyDetail",function(){
     var index = $(this).data('index');
+    var typeDetail = $('.typeDetail_'+index).find(':selected').val();
     var itemPrice = parseInt($('.priceDetail_'+index).val());
     var itemQty = parseInt(this.value);
     var totalItemPrice = itemPrice*itemQty;
     $('.totalPriceDetail_'+index).val(totalItemPrice);
-    hitung();
+    if(typeDetail == 'SparePart'){
+        $('.priceDetailSparePart_'+index).val(totalItemPrice);
+        $('.priceDetailLoss_'+index).val(0);
+    }else{
+        $('.priceDetailLoss_'+index).val(totalItemPrice);
+        $('.priceDetailSparePart_'+index).val(0);
+    }
+    sum();
+    sumTotal();
+});
+
+// merubah harga
+$(document.body).on("keyup",".priceDetail",function(){
+    var index = $(this).data('index');
+    var typeDetail = $('.typeDetail_'+index).find(':selected').val();
+    var itemQty = parseInt($('.qtyDetail_'+index).val());
+    var itemPrice = parseInt(this.value);
+    var totalItemPrice = itemPrice*itemQty;
+    $('.totalPriceDetail_'+index).val(totalItemPrice);
+    if(typeDetail == 'SparePart'){
+        $('.priceDetailSparePart_'+index).val(totalItemPrice);
+        $('.priceDetailLoss_'+index).val(0);
+    }else{
+        $('.priceDetailLoss_'+index).val(totalItemPrice);
+        $('.priceDetailSparePart_'+index).val(0);
+    }
+    sum();
+    sumTotal();
 });
 
 // merubah harga jasa
 $(document.body).on("keyup",".priceServiceDetail",function(){
     $('.totalPriceServiceDetail').val(this.value);
     $('#totalService').val(this.value);
+    sumTotal();
 });
 
-// fungsi hitung
-function hitung() {
+// fungsi sum
+function sum() {
     var priceDetailSparePart = 0;
     $('.priceDetailSparePart').each(function(){
         priceDetailSparePart += parseFloat(this.value);
@@ -197,7 +273,8 @@ function hitung() {
     });
     $('#totalLoss').val(priceDetailLoss); 
 }
-       
+
+// fungsi rubah tipe 
 $(document.body).on("change",".typeDetail",function(){
     var value = this.value;
     var index = $(this).find(':selected').data('index');
@@ -211,5 +288,34 @@ $(document.body).on("change",".typeDetail",function(){
         $('.priceDetailLoss_'+index).val(totalItemPrice);
         $('.priceDetailSparePart_'+index).val(0);
     }
-    hitung();
+    sum();
+    sumTotal();
 });
+
+function sumDiscont() {
+    var totalService =  parseInt($('#totalService').val());
+    var totalSparePart =  parseInt($('#totalSparePart').val());
+    var totalDownPayment =  parseInt($('#totalDownPayment').val());
+    var totalDiscountPercent =  parseInt($('#totalDiscountPercent').val());
+    if(totalDiscountPercent <= 100){
+        var sumTotalPrice = (totalDiscountPercent/100)*(totalService+totalSparePart+totalDownPayment);
+    }else{
+        var sumTotalPrice = (100/100)*(totalService+totalSparePart+totalDownPayment);
+    }
+    $('#totalDiscountValue').val(sumTotalPrice);
+    sumTotal();
+}
+
+function sumTotal() {
+    var checkVerificationPrice =  $('input[name="verificationPrice"]:checked').val();
+    var totalService =  parseInt($('#totalService').val());
+    var totalSparePart =  parseInt($('#totalSparePart').val());
+    var totalDownPayment =  parseInt($('#totalDownPayment').val());
+    var totalDiscountValue =  parseInt($('#totalDiscountValue').val());
+    if(checkVerificationPrice == 'Y'){
+        var sumTotal = 0;
+    }else{
+        var sumTotal = totalService+totalSparePart-totalDownPayment-totalDiscountValue;
+    }
+    $('#totalPrice').val(sumTotal); 
+}
