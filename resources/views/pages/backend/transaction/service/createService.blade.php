@@ -22,10 +22,9 @@
                             <label for="code">{{ __('Kode Faktur') }}<code>*</code></label>
                             <input id="code" type="text" class="form-control" readonly="" value="{{$code}}" name="code">
                         </div>
-                        <div class="form-group col-12 col-md-4 col-lg-4">
-                            <label for="date">{{ __('Tanggal') }}<code>*</code></label>
-                            <input id="date" type="text" class="form-control" readonly="" value="{{date('d F Y')}}"
-                                name="date">
+                        <div class="form-group col-12 col-md-6 col-lg-6">
+                            <label for="estimateDate">{{ __('Estimasi') }}<code>*</code></label>
+                            <input id="estimateDate" type="text" class="form-control datepicker" name="estimateDate">
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="warranty">{{ __('Garansi') }}<code>*</code></label>
@@ -152,66 +151,66 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4">
-                <div class="card">
-                    <div class="card-header">
-                        <h4>Harga</h4>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card">
+            <div class="card-header">
+                <h4>Harga</h4>
 
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label class="form-label">Harga Perlu Dikonfirmasi Terlebih Dahulu</label>
+                    <div class="selectgroup w-100">
+                        <label class="selectgroup-item">
+                            <input type="radio" name="verificationPrice" value="Y" onchange="sumTotal()"
+                                class="selectgroup-input">
+                            <span class="selectgroup-button">Ya</span>
+                        </label>
+                        <label class="selectgroup-item">
+                            <input type="radio" name="verificationPrice" value="N" onchange="sumTotal()" checked
+                                class="selectgroup-input">
+                            <span class="selectgroup-button">Tidak</span>
+                        </label>
                     </div>
-                    <div class="card-body">
-                        <div class="form-group">
-                            <label class="form-label">Harga Perlu Dikonfirmasi Terlebih Dahulu</label>
-                            <div class="selectgroup w-100">
-                                <label class="selectgroup-item">
-                                    <input type="radio" name="verificationPrice" value="Y" onchange="sumTotal()"
-                                        class="selectgroup-input">
-                                    <span class="selectgroup-button">Ya</span>
-                                </label>
-                                <label class="selectgroup-item">
-                                    <input type="radio" name="verificationPrice" value="N" onchange="sumTotal()" checked
-                                        class="selectgroup-input">
-                                    <span class="selectgroup-button">Tidak</span>
-                                </label>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="totalService">{{ __('Jasa') }}<code>*</code></label>
-                            <input readonly id="totalService" onchange="sumTotal()" type="text" value="0"
-                                class="form-control" name="totalService">
-                        </div>
-                        <div class="form-group">
-                            <label for="totalSparePart">{{ __('Spare Part') }}<code>*</code></label>
-                            <input readonly id="totalSparePart" onchange="sumTotal()" type="text" value="0"
-                                class="form-control" name="totalSparePart">
-                        </div>
-                        <div class="form-group">
-                            <label for="totalLoss">{{ __('Total Loss') }}<code>*</code></label>
-                            <input readonly id="totalLoss" onchange="sumTotal()" type="text" value="0"
-                                class="form-control" name="totalLoss">
-                        </div>
-                        <div class="form-group">
-                            <label for="totalDownPayment">{{ __('Down Payment (DP)') }}<code>*</code></label>
-                            <input id="totalDownPayment" type="text" value="0" class="form-control cleaveNumeral"
-                                name="totalDownPayment" onkeyup="sumTotal()">
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-12 col-md-6 col-lg-6">
-                                <label for="totalDiscountPercent">{{ __('Diskon %') }}<code>*</code></label>
-                                <input id="totalDiscountPercent" type="text" value="0" class="form-control"
-                                    name="totalDiscountPercent" onkeyup="sumTotal(),sumDiscont()">
-                            </div>
-                            <div class="form-group col-12 col-md-6 col-lg-6">
-                                <label for="totalDiscountValue">{{ __('Diskon') }}<code>*</code></label>
-                                <input id="totalDiscountValue" type="text" value="0" class="form-control"
-                                    name="totalDiscountValue" onkeyup="sumTotal(),sumDiscont()">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="totalPrice">{{ __('Total Harga') }}<code>*</code></label>
-                            <input id="totalPrice" type="text" value="0" class="form-control" name="totalPrice"
-                                onchange="sumTotal()">
-                        </div>
+                </div>
+                <div class="form-group">
+                    <label for="totalService">{{ __('Jasa') }}<code>*</code></label>
+                    <input readonly id="totalService" onchange="sumTotal()" type="text" value="0"
+                        class="form-control cleaveNumeral" name="totalService">
+                </div>
+                <div class="form-group">
+                    <label for="totalSparePart">{{ __('Spare Part') }}<code>*</code></label>
+                    <input readonly id="totalSparePart" onchange="sumTotal()" type="text" value="0"
+                        class="form-control cleaveNumeral" name="totalSparePart">
+                </div>
+                <div class="form-group">
+                    <label for="totalLoss">{{ __('Total Loss') }}<code>*</code></label>
+                    <input readonly id="totalLoss" onchange="sumTotal()" type="text" value="0"
+                        class="form-control cleaveNumeral" name="totalLoss">
+                </div>
+                <div class="form-group">
+                    <label for="totalDownPayment">{{ __('Down Payment (DP)') }}<code>*</code></label>
+                    <input id="totalDownPayment" type="text" value="0" class="form-control cleaveNumeral"
+                        name="totalDownPayment" onkeyup="sumTotal()">
+                </div>
+                <div class="row">
+                    <div class="form-group col-12 col-md-6 col-lg-6">
+                        <label for="totalDiscountPercent">{{ __('Diskon %') }}<code>*</code></label>
+                        <input id="totalDiscountPercent" type="text" value="0" class="form-control cleaveNumeral"
+                            name="totalDiscountPercent" onkeyup="sumTotal(),sumDiscont()">
                     </div>
+                    <div class="form-group col-12 col-md-6 col-lg-6">
+                        <label for="totalDiscountValue">{{ __('Diskon') }}<code>*</code></label>
+                        <input id="totalDiscountValue" type="text" value="0" class="form-control cleaveNumeral"
+                            name="totalDiscountValue" onkeyup="sumTotal(),sumDiscont()">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="totalPrice">{{ __('Total Harga') }}<code>*</code></label>
+                    <input id="totalPrice" type="text" value="0" class="form-control cleaveNumeral" name="totalPrice"
+                        onchange="sumTotal()">
                 </div>
             </div>
 
@@ -245,10 +244,10 @@
                             <tbody>
                                 <tr>
                                     <td style="display:none">
-                                        <input type="text" class="form-control priceDetailSparePart"
+                                        <input type="text" class="form-control priceDetailSparePart cleaveNumeral"
                                             name="priceDetailSparePart[]" value="0">
-                                        <input type="text" class="form-control priceDetailLoss" name="priceDetailLoss[]"
-                                            value="0">
+                                        <input type="text" class="form-control priceDetailLoss cleaveNumeral"
+                                            name="priceDetailLoss[]" value="0">
                                     </td>
                                     <td>
                                         <input readonly type="hidden" class="form-control " name="itemsDetail[]"
@@ -256,13 +255,15 @@
                                         Jasa
                                     </td>
                                     <td>
-                                        <input type="text" class="form-control priceServiceDetail" name="priceDetail[]">
+                                        <input type="text" class="form-control priceServiceDetail cleaveNumeral"
+                                            name="priceDetail[]">
                                     </td>
                                     <td>
                                         <input readonly type="text" class="form-control" name="qtyDetail[]" value="1">
                                     </td>
                                     <td>
-                                        <input readonly type="text" class="form-control totalPriceServiceDetail"
+                                        <input readonly type="text"
+                                            class="form-control totalPriceServiceDetail cleaveNumeral"
                                             name="totalPriceDetail[]">
                                     </td>
                                     <td>

@@ -25,6 +25,10 @@
                     'title'=>'Service',
                     'url'=>route('service.index')])
                     @include('layouts.backend.components.sidebarMenu',[
+                        'active'=>'',
+                        'title'=>'Update WO Service',
+                        'url'=>route('service.serviceFormUpdateStatus')])
+                    @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Penjualan',
                     'url'=>''])
