@@ -768,8 +768,12 @@ $(function () {
     });
 
     // Cleave
-    var cleave = new Cleave(".cleaveNumeral", {
-        numeral: true,
-        numeralThousandsGroupStyle: "thousand",
-    });
+    $(".cleaveNumeral")
+        .toArray()
+        .forEach(function (field) {
+            new Cleave(field, {
+                numeral: true,
+                numeralThousandsGroupStyle: "thousand",
+            });
+        });
 });
