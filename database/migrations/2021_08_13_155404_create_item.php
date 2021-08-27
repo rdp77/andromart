@@ -24,6 +24,10 @@ class CreateItem extends Migration
             $table->string('image')->nullable();
             $table->string('condition');
             $table->string('description')->nullable();
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
+            $table->string('deleted_by')->nullable();
+            $table->softDeletesTz($column = 'deleted_at', $precision = 0);
             $table->timestamps();
         });
     }

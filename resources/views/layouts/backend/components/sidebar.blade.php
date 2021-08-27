@@ -31,7 +31,7 @@
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Penjualan',
-                    'url'=>''])
+                    'url'=>route('sale.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Pembelian',

@@ -24,7 +24,10 @@ class CreateBranchesTable extends Migration
             $table->double('latitude')->nullable();
             $table->double('longitude')->nullable();
             $table->string('title', 255)->nullable();
-
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
+            $table->string('deleted_by')->nullable();
+            $table->softDeletesTz($column = 'deleted_at', $precision = 0);
             $table->timestamps();
         });
     }

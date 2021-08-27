@@ -17,6 +17,10 @@ class CreateAreasTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('code');
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
+            $table->string('deleted_by')->nullable();
+            $table->softDeletesTz($column = 'deleted_at', $precision = 0);
             $table->timestamps();
         });
     }
