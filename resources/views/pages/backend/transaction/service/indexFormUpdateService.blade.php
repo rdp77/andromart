@@ -9,6 +9,7 @@
 @section('content')
 {{-- @include('pages.backend.components.filterSearch') --}}
 @include('layouts.backend.components.notification')
+@csrf
 <section class="section">
     <div class="section-body">
       <div class="row">
@@ -18,7 +19,7 @@
                 <div class="card-body">
                     <div class="form-group col-12 col-md-12 col-lg-12">
                         <div class="d-block">
-                            <label for="serviceId" class="control-label">{{ __('Teknisi') }}<code>*</code></label>
+                            <label for="serviceId" class="control-label">{{ __('Service Code') }}<code>*</code></label>
                         </div>
                         <select class="select2 serviceId" name="serviceId" onchange="choseService()">
                         <option value="">- Select -</option>
@@ -35,12 +36,23 @@
                             <div class="d-block">
                                 <label for="status" class="control-label">{{ __('Status') }}<code>*</code></label>
                             </div>
-                            <select class="select2 status" name="status">
-                            <option selected value="">- Select -</option>
-                            <option value="Proses">Proses</option>
-                            <option value="Mutasi">Mutasi</option>
-                            <option value="Selesai">Selesai</option>
-                            <option value="Batal">Batal</option>
+                            <select class="select2 status" name="status" onchange="changeStatusService()">
+                                <option selected value="">- Select -</option>
+                                <option value="Proses">Proses</option>
+                                <option value="Mutasi">Mutasi</option>
+                                <option value="Selesai">Selesai</option>
+                                <option value="Batal">Batal</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-12 col-md-12 col-lg-12 technicianFields" style="display: none">
+                            <div class="d-block">
+                                <label for="technicianId" class="control-label">{{ __('Teknisi') }}<code>*</code></label>
+                            </div>
+                            <select class="select2 technicianId" name="technicianId" >
+                            <option value="">- Select -</option>
+                            @foreach ($employee as $element)
+                                <option value="{{$element->id}}">{{$element->name}}</option>
+                            @endforeach
                             </select>
                         </div>
                         <div class="form-group col-12 col-md-12 col-lg-12">

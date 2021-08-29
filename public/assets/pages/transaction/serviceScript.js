@@ -77,30 +77,30 @@ $.ajaxSetup({
     },
 });
 
-// function del(id) {
-//     swal({
-//         title: "Apakah Anda Yakin?",
-//         text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus data pengguna Anda.",
-//         icon: "warning",
-//         buttons: true,
-//         dangerMode: true,
-//     }).then((willDelete) => {
-//         if (willDelete) {
-//             $.ajax({
-//                 url: "/users/" + id,
-//                 type: "DELETE",
-//                 success: function () {
-//                     swal("Data pengguna berhasil dihapus", {
-//                         icon: "success",
-//                     });
-//                     table.draw();
-//                 },
-//             });
-//         } else {
-//             swal("Data pengguna Anda tidak jadi dihapus!");
-//         }
-//     });
-// }
+function del(id) {
+    swal({
+        title: "Apakah Anda Yakin?",
+        text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus data pengguna Anda.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                url: "/transaction/service/service/" + id,
+                type: "DELETE",
+                success: function () {
+                    swal("Data pengguna berhasil dihapus", {
+                        icon: "success",
+                    });
+                    table.draw();
+                },
+            });
+        } else {
+            swal("Data pengguna Anda tidak jadi dihapus!");
+        }
+    });
+}
 
 function save() {
     swal({
@@ -135,8 +135,6 @@ function save() {
     
 }
 
-
-
 function addItem() {
     var index = $('.priceDetail').length;
     var dataDetail = $('.dataDetail').length;
@@ -156,18 +154,16 @@ function addItem() {
             '<select class="select2 itemsDetail" name="itemsDetail[]">'+
                 '<option value="">- Select -</option>'+
                 dataItems+
-                // '<option data-index="'+(index+1)+'" data-price="10000" value="Lcd">Lcd</option>'+
-                // '<option data-index="'+(index+1)+'" data-price="20000" value="Monitor">Monitor</option>'+
             '</select>'+
             '</td>'+
             '<td>'+
-                '<input type="text" class="form-control priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="0">'+
+                '<input type="text" class="form-control cleaveNumeral priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
             '</td>'+
             '<td>'+
-                '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="1">'+
+                '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="1" style="text-align: right">'+
             '</td>'+
             '<td>'+
-                '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="0">'+
+                '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="0" style="text-align: right">'+
             '</td>'+
             '<td>'+
                 '<input type="text" class="form-control" name="descriptionDetail[]">'+
@@ -184,27 +180,42 @@ function addItem() {
         '</tr>'
     );
     $('.select2').select2();
+    $(".cleaveNumeral")
+    .toArray()
+    .forEach(function (field) {
+        new Cleave(field, {
+            numeral: true,
+            numeralThousandsGroupStyle: "thousand",
+        });
+    });
     sum();
     sumTotal();
+    sumDiscont();
 }
 
 // mengganti item
 $(document.body).on("change",".itemsDetail",function(){
     var index = $(this).find(':selected').data('index');
     var typeDetail = $('.typeDetail_'+index).find(':selected').val();
-    var itemPrice = parseInt($(this).find(':selected').data('price'));
-    $('.priceDetail_'+index).val(itemPrice);
-    $('.totalPriceDetail_'+index).val(itemPrice);
-    console.log(typeDetail);
+    if(isNaN(parseInt($(this).find(':selected').data('price')))){
+        var itemPrice =  0; }else{
+        var itemPrice = $(this).find(':selected').data('price');}
+    if(isNaN(parseInt($('.qtyDetail_'+index).val()))){
+        var itemQty =  0; }else{
+        var itemQty = $('.qtyDetail_'+index).val().replace(/,/g, ''),asANumber = +itemQty;}
+    $('.priceDetail_'+index).val(parseInt(itemPrice).toLocaleString());
+    var totalItemPrice = itemPrice*itemQty;
+    $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString());
     if(typeDetail == 'SparePart'){
-        $('.priceDetailSparePart_'+index).val(itemPrice);
+        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString());
         $('.priceDetailLoss_'+index).val(0);
     }else{
-        $('.priceDetailLoss_'+index).val(itemPrice);
+        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString());
         $('.priceDetailSparePart_'+index).val(0);
     }
     sum();
     sumTotal();
+    sumDiscont();
 });
 
 // menghapus kolom
@@ -212,44 +223,55 @@ $(document.body).on("click",".removeDataDetail",function(){
     $('.dataDetail_'+this.value).remove();
     sum();
     sumTotal();
+    sumDiscont();
 });
 
 // merubah qty
 $(document.body).on("keyup",".qtyDetail",function(){
     var index = $(this).data('index');
     var typeDetail = $('.typeDetail_'+index).find(':selected').val();
-    var itemPrice = parseInt($('.priceDetail_'+index).val());
-    var itemQty = parseInt(this.value);
+    if(isNaN(parseInt($('.priceDetail_'+index).val()))){
+        var itemPrice =  0; }else{
+        var itemPrice = $('.priceDetail_'+index).val().replace(/,/g, ''),asANumber = +itemPrice;}
+    if(isNaN(parseInt(this.value))){
+        var itemQty =  0; }else{
+        var itemQty = this.value.replace(/,/g, ''),asANumber = +itemQty;}
     var totalItemPrice = itemPrice*itemQty;
-    $('.totalPriceDetail_'+index).val(totalItemPrice);
+    $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString());
     if(typeDetail == 'SparePart'){
-        $('.priceDetailSparePart_'+index).val(totalItemPrice);
+        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString());
         $('.priceDetailLoss_'+index).val(0);
     }else{
-        $('.priceDetailLoss_'+index).val(totalItemPrice);
+        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString());
         $('.priceDetailSparePart_'+index).val(0);
     }
     sum();
     sumTotal();
+    sumDiscont();
 });
 
 // merubah harga
 $(document.body).on("keyup",".priceDetail",function(){
     var index = $(this).data('index');
     var typeDetail = $('.typeDetail_'+index).find(':selected').val();
-    var itemQty = parseInt($('.qtyDetail_'+index).val());
-    var itemPrice = parseInt(this.value);
+    if(isNaN(parseInt(this.value))){
+        var itemPrice =  0; }else{
+        var itemPrice = this.value.replace(/,/g, ''),asANumber = +itemPrice;}
+    if(isNaN(parseInt($('.qtyDetail_'+index).val()))){
+        var itemQty =  0; }else{
+        var itemQty = $('.qtyDetail_'+index).val().replace(/,/g, ''),asANumber = +itemQty;}
     var totalItemPrice = itemPrice*itemQty;
-    $('.totalPriceDetail_'+index).val(totalItemPrice);
+    $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString());
     if(typeDetail == 'SparePart'){
-        $('.priceDetailSparePart_'+index).val(totalItemPrice);
+        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString());
         $('.priceDetailLoss_'+index).val(0);
     }else{
-        $('.priceDetailLoss_'+index).val(totalItemPrice);
+        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString());
         $('.priceDetailSparePart_'+index).val(0);
     }
     sum();
     sumTotal();
+    sumDiscont();
 });
 
 // merubah harga jasa
@@ -257,74 +279,99 @@ $(document.body).on("keyup",".priceServiceDetail",function(){
     $('.totalPriceServiceDetail').val(this.value);
     $('#totalService').val(this.value);
     sumTotal();
+    sumDiscont();
 });
 
 // fungsi sum
 function sum() {
     var priceDetailSparePart = 0;
     $('.priceDetailSparePart').each(function(){
-        priceDetailSparePart += parseFloat(this.value);
+        priceDetailSparePart += parseInt(this.value.replace(/,/g, ""));
     });
-    $('#totalSparePart').val(priceDetailSparePart); 
-
+    $('#totalSparePart').val(parseInt(priceDetailSparePart).toLocaleString()); 
     var priceDetailLoss = 0;
     $('.priceDetailLoss').each(function(){
-        priceDetailLoss += parseFloat(this.value);
+        priceDetailLoss += parseInt(this.value.replace(/,/g, ""))
     });
-    $('#totalLoss').val(priceDetailLoss); 
+    $('#totalLoss').val(parseInt(priceDetailLoss).toLocaleString()); 
 }
 
 // fungsi rubah tipe 
 $(document.body).on("change",".typeDetail",function(){
     var value = this.value;
     var index = $(this).find(':selected').data('index');
-    var itemPrice = parseInt($('.priceDetail_'+index).val());
-    var itemQty = parseInt($('.qtyDetail_'+index).val());
+    if(isNaN(parseInt($('.priceDetail_'+index).val()))){
+        var itemPrice =  0; }else{
+        var itemPrice = $('.priceDetail_'+index).val().replace(/,/g, ''),asANumber = +itemPrice;}
+    if(isNaN(parseInt($('.qtyDetail_'+index).val()))){
+        var itemQty =  0; }else{
+        var itemQty = $('.qtyDetail_'+index).val().replace(/,/g, ''),asANumber = +itemQty;}
     var totalItemPrice = itemPrice*itemQty;
     if(value == 'SparePart'){
-        $('.priceDetailSparePart_'+index).val(totalItemPrice);
+        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString());
         $('.priceDetailLoss_'+index).val(0);
     }else{
-        $('.priceDetailLoss_'+index).val(totalItemPrice);
+        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString());
         $('.priceDetailSparePart_'+index).val(0);
     }
     sum();
     sumTotal();
+    sumDiscont();
 });
 
 function sumDiscont() {
-    var totalService =  parseInt($('#totalService').val());
-    var totalSparePart =  parseInt($('#totalSparePart').val());
-    var totalDownPayment =  parseInt($('#totalDownPayment').val());
-    var totalDiscountPercent =  parseInt($('#totalDiscountPercent').val());
-    if(totalDiscountPercent <= 100){
-        var sumTotalPrice = (totalDiscountPercent/100)*(totalService+totalSparePart+totalDownPayment);
+    if(isNaN(parseInt($('#totalSparePart').val()))){
+        var totalSparePart =  0;
     }else{
-        var sumTotalPrice = (100/100)*(totalService+totalSparePart+totalDownPayment);
-    }
-    $('#totalDiscountValue').val(sumTotalPrice);
+        var totalSparePart = $('#totalSparePart').val().replace(/,/g, ''),asANumber = +totalSparePart;}
+    if(isNaN(parseInt($('#totalService').val()))){
+        var totalService =  0;
+    }else{
+        var totalService = $('#totalService').val().replace(/,/g, ''),asANumber = +totalService;}
+    if(isNaN(parseInt($('#totalDownPayment').val()))){
+        var totalDownPayment =  0;
+    }else{
+        var totalDownPayment = $('#totalDownPayment').val().replace(/,/g, ''),asANumber = +totalDownPayment;}
+    if(isNaN(parseInt($('#totalDiscountPercent').val()))){
+        var totalDiscountPercent =  0;
+    }else{
+        var totalDiscountPercent = $('#totalDiscountPercent').val().replace(/,/g, ''),asANumber = +totalDiscountPercent;}
+    if(totalDiscountPercent <= 100){
+        var sumTotalPrice = (parseInt(totalDiscountPercent)/100)*(parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDownPayment));
+    }else{
+        var sumTotalPrice = (100/100)*(parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDownPayment));}
+    $('#totalDiscountValue').val(parseInt(sumTotalPrice).toLocaleString());
     sumTotal();
 }
 
 function sumTotal() {
     var checkVerificationPrice =  $('input[name="verificationPrice"]:checked').val();
-    var totalService =  parseInt($('#totalService').val());
-    var totalSparePart =  parseInt($('#totalSparePart').val());
-    var totalDownPayment =  parseInt($('#totalDownPayment').val());
-    var totalDiscountValue =  parseInt($('#totalDiscountValue').val());
+    if(isNaN(parseInt($('#totalSparePart').val()))){
+        var totalSparePart =  0;
+    }else{
+        var totalSparePart = $('#totalSparePart').val().replace(/,/g, ''),asANumber = +totalSparePart;}
+    if(isNaN(parseInt($('#totalService').val()))){
+        var totalService =  0;
+    }else{
+        var totalService = $('#totalService').val().replace(/,/g, ''),asANumber = +totalService;}
+    if(isNaN(parseInt($('#totalDownPayment').val()))){
+        var totalDownPayment =  0;
+    }else{
+        var totalDownPayment = $('#totalDownPayment').val().replace(/,/g, ''),asANumber = +totalDownPayment;}
+    if(isNaN(parseInt($('#totalDiscountValue').val()))){
+        var totalDiscountValue =  0;
+    }else{
+        var totalDiscountValue = $('#totalDiscountValue').val().replace(/,/g, ''),asANumber = +totalDiscountValue;}
     if(checkVerificationPrice == 'Y'){
         var sumTotal = 0;
     }else{
-        var sumTotal = totalService+totalSparePart-totalDownPayment-totalDiscountValue;
-    }
-    $('#totalPrice').val(sumTotal); 
+        var sumTotal = parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDownPayment)-parseInt(totalDiscountValue);}
+    $('#totalPrice').val(parseInt(sumTotal).toLocaleString()); 
 }
 
 
 
-
 // fungsi update status
-
 function choseService() {
     var serviceId = $('.serviceId').find(':selected').val();
     $('.activities').empty();
@@ -333,7 +380,6 @@ function choseService() {
         data: {id:serviceId},
         type: 'POST',
         success: function(data) {
-
             if (data.status == 'success'){
                 if(data.message == 'empty'){
                     $(".hiddenFormUpdate").css("display", "none");
@@ -361,20 +407,26 @@ function choseService() {
                         );
                     });
                 }
-
-                
-                // location.reload();
             }
         },
         error: function(data) {
-            // edit(id);
         }
     });
+}
+function changeStatusService() {
+
+    var value = $('.status').find(':selected').val();
+    if(value == 'Mutasi'){
+        $('.technicianFields').css('display','block');
+    }else{
+        $('.technicianFields').css('display','none');
+    }
 }
 
 function updateStatusService() {
     var serviceId = $('.serviceId').find(':selected').val();
     var status = $('.status').find(':selected').val();
+    var technicianId = $('.technicianId').find(':selected').val();
     var description = $('.description').val();
     swal({
         title: "Apakah Anda Yakin?",
@@ -386,7 +438,7 @@ function updateStatusService() {
         if (willSave) {
             $.ajax({
                 url: "/transaction/service/service-form-update-status-save-data",
-                data: {id:serviceId,status:status,description:description},
+                data: {id:serviceId,status:status,description:description,technicianId:technicianId},
                 type: 'POST',
                 success: function(data) {
                     if (data.status == 'success'){
@@ -408,14 +460,11 @@ function updateStatusService() {
                                 '</div>'+
                             '</div>'
                         );
-                        // location.reload();
                     }
                 },
                 error: function(data) {
-                    // edit(id);
                 }
             });
-            
         } else {
             swal("Data Dana Kredit PDL Berhasil Dihapus!");
         }

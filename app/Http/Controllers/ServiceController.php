@@ -128,6 +128,10 @@ class ServiceController extends Controller
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Lalai</td>';
                     $htmlAdd .=      '<th>'.number_format($row->total_loss,0,".",",").'</th>';
+                    if($row->technician_replacement_id != null){
+                        $htmlAdd .=      '<td>S.P Teknisi 2</td>';
+                        $htmlAdd .=      '<th>'.number_format(40/100*$row->total_price,0,".",",").'</th>';
+                    }
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Diskon</td>';
@@ -205,13 +209,13 @@ class ServiceController extends Controller
             'no_imei'=>$req->noImei,
             'complaint'=>$req->complaint,
             'clock'=>date('h:i'),
-            'total_service'=>$req->totalService,
-            'total_part'=>$req->totalSparePart,
-            'total_downpayment'=>$req->totalDownPayment,
-            'total_loss'=>$req->totalLoss,
-            'discount_price'=>$req->totalDiscountValue,
-            'discount_percent'=>$req->totalDiscountPercent,
-            'total_price'=>$req->totalPrice,
+            'total_service'=>str_replace(",", '',$req->totalService),
+            'total_part'=>str_replace(",", '',$req->totalSparePart),
+            'total_downpayment'=>str_replace(",", '',$req->totalDownPayment),
+            'total_loss'=>str_replace(",", '',$req->totalLoss),
+            'discount_price'=>str_replace(",", '',$req->totalDiscountValue),
+            'discount_percent'=>str_replace(",", '',$req->totalDiscountPercent),
+            'total_price'=>str_replace(",", '',$req->totalPrice),
             'downpayment_date'=>$downpaymentDate,
             'work_status'=>'Manifest',
             'equipment'=>$req->equipment,
@@ -229,10 +233,10 @@ class ServiceController extends Controller
             ServiceDetail::create([
                 'service_id'=>$id, 
                 'item_id'=>$req->itemsDetail[$i],
-                'price'=>$req->priceDetail[$i],
+                'price'=>str_replace(",", '',$req->priceDetail[$i]),
                 'qty'=>$req->qtyDetail[$i],
-                'total_price'=>$req->totalPriceDetail[$i],
-                'description' =>$req->descriptionDetail[$i],
+                'total_price'=>str_replace(",", '',$req->totalPriceDetail[$i]),
+                'description' =>str_replace(",", '',$req->descriptionDetail[$i]),
                 'type' =>$req->typeDetail[$i],
                 'created_by'=>Auth::user()->name,
                 'created_at'=>date('Y-m-d h:i:s'),
@@ -269,33 +273,33 @@ class ServiceController extends Controller
         return view('pages.backend.transaction.service.editService', ['Service' => $Service,'member'=>$member]);
     }
 
-    public function update($id, Request $req)
-    {
+    // public function update($id, Request $req)
+    // {
         
-        Service::where('id', $id)
-            ->update([
-            'sales_id'   => $req->salesId,
-            'liquid_date'=> date('Y-m-d',strtotime($req->liquidDate)),
-            'total'      => str_replace(",", '',$req->total),
-            'updated_by' => Auth::user()->name,
-            'updated_at' => date('Y-m-d h:i:s'),
-        ]);
+    //     Service::where('id', $id)
+    //         ->update([
+    //         'sales_id'   => $req->salesId,
+    //         'liquid_date'=> date('Y-m-d',strtotime($req->liquidDate)),
+    //         'total'      => str_replace(",", '',$req->total),
+    //         'updated_by' => Auth::user()->name,
+    //         'updated_at' => date('Y-m-d h:i:s'),
+    //     ]);
 
-        $Service = Service::find($id);
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Mengubah Service ' . Service::find($id)->name
-        );
+    //     $Service = Service::find($id);
+    //     $this->DashboardController->createLog(
+    //         $req->header('user-agent'),
+    //         $req->ip(),
+    //         'Mengubah Service ' . Service::find($id)->name
+    //     );
 
-        $Service->save();
+    //     $Service->save();
 
-        return Redirect::route('service.index')
-            ->with([
-                'status' => 'Berhasil merubah Dana Kredit',
-                'type' => 'success'
-            ]);
-    }
+    //     return Redirect::route('service.index')
+    //         ->with([
+    //             'status' => 'Berhasil merubah Dana Kredit',
+    //             'type' => 'success'
+    //         ]);
+    // }
 
     public function destroy(Request $req, $id)
     {
@@ -304,15 +308,15 @@ class ServiceController extends Controller
             $req->ip(),
             'Menghapus Data Kredit'
         );
-
         Service::destroy($id);
-
+        ServiceDetail::where('service_id',$id)->destroy($id);
         return Response::json(['status' => 'success']);
     }
     public function serviceFormUpdateStatus()
     {
         $data = Service::where('technician_id',Auth::user()->id)->get();
-        return view('pages.backend.transaction.service.indexFormUpdateService',compact('data'));
+        $employee = Employee::get();
+        return view('pages.backend.transaction.service.indexFormUpdateService',compact('data','employee'));
     }
     public function serviceFormUpdateStatusLoadData(Request $req)
     {
@@ -331,9 +335,14 @@ class ServiceController extends Controller
         try {
             // return $req->all();
             $index = ServiceStatusMutation::where('service_id', $req->id)->count()+1;
-
+            if($req->status == 'Mutasi'){
+                $technician_replacement_id = $req->technicianId;
+            }else{
+                $technician_replacement_id = null;
+            }
             Service::where('id', $req->id)->update([
                 'work_status'=>$req->status,
+                'technician_replacement_id'=>$technician_replacement_id,
             ]);
             ServiceStatusMutation::create([
                 'service_id'=>$req->id, 
@@ -346,9 +355,7 @@ class ServiceController extends Controller
             ]);
             return Response::json(['status' => 'success','message'=>'Sukses Menyimpan Data']);
         } catch (\Throwable $th) {
-                //throw $th;
             return Response::json(['status' => 'error','message'=>$th]);
         }
-        
     }
 }

@@ -155,39 +155,39 @@
                     <div class="form-group">
                         <label for="totalService">{{ __('Jasa') }}<code>*</code></label>
                         <input readonly id="totalService" onchange="sumTotal()" type="text" value="0"
-                            class="form-control cleaveNumeral" name="totalService">
+                            class="form-control cleaveNumeral" name="totalService" style="text-align: right">
                     </div>
                     <div class="form-group">
                         <label for="totalSparePart">{{ __('Spare Part') }}<code>*</code></label>
                         <input readonly id="totalSparePart" onchange="sumTotal()" type="text" value="0"
-                            class="form-control cleaveNumeral" name="totalSparePart">
+                            class="form-control cleaveNumeral" name="totalSparePart" style="text-align: right">
                     </div>
                     <div class="form-group">
                         <label for="totalLoss">{{ __('Total Loss') }}<code>*</code></label>
                         <input readonly id="totalLoss" onchange="sumTotal()" type="text" value="0"
-                            class="form-control cleaveNumeral" name="totalLoss">
+                            class="form-control cleaveNumeral" name="totalLoss" style="text-align: right">
                     </div>
                     <div class="form-group">
                         <label for="totalDownPayment">{{ __('Down Payment (DP)') }}<code>*</code></label>
                         <input id="totalDownPayment" type="text" value="0" class="form-control cleaveNumeral"
-                            name="totalDownPayment" onkeyup="sumTotal()">
+                            name="totalDownPayment" onkeyup="sumTotal()" style="text-align: right">
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="totalDiscountPercent">{{ __('Diskon %') }}<code>*</code></label>
                             <input id="totalDiscountPercent" type="text" value="0" class="form-control cleaveNumeral"
-                                name="totalDiscountPercent" onkeyup="sumTotal(),sumDiscont()">
+                                name="totalDiscountPercent" onkeyup="sumTotal(),sumDiscont()" style="text-align: right">
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="totalDiscountValue">{{ __('Diskon') }}<code>*</code></label>
                             <input id="totalDiscountValue" type="text" value="0" class="form-control cleaveNumeral"
-                                name="totalDiscountValue" onkeyup="sumTotal(),sumDiscont()">
+                                name="totalDiscountValue" onkeyup="sumTotal(),sumDiscont()" style="text-align: right">
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="totalPrice">{{ __('Total Harga') }}<code>*</code></label>
                         <input id="totalPrice" type="text" value="0" class="form-control cleaveNumeral"
-                            name="totalPrice" onchange="sumTotal()">
+                            name="totalPrice" onchange="sumTotal()" style="text-align: right">
                     </div>
                 </div>
             </div>
@@ -212,12 +212,12 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th>Barang / Jasa</th>
+                            <th style="width: 20%">Barang / Jasa</th>
                             <th>Harga</th>
-                            <th style="width: 10%">qty</th>
+                            <th style="width: 9%">qty</th>
                             <th>Total</th>
                             <th>Deskripsi</th>
-                            <th>tipe</th>
+                            <th style="width: 15%">tipe</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -235,14 +235,14 @@
                             </td>
                             <td>
                                 <input type="text" class="form-control priceServiceDetail cleaveNumeral"
-                                    name="priceDetail[]">
+                                    name="priceDetail[]" style="text-align: right" value="0">
                             </td>
                             <td>
-                                <input readonly type="text" class="form-control" name="qtyDetail[]" value="1">
+                                <input readonly type="text" class="form-control" name="qtyDetail[]" value="1" style="text-align: right">
                             </td>
                             <td>
                                 <input readonly type="text" class="form-control totalPriceServiceDetail cleaveNumeral"
-                                    name="totalPriceDetail[]">
+                                    name="totalPriceDetail[]" style="text-align: right" value="0">
                             </td>
                             <td>
                                 <input type="text" class="form-control" name="descriptionDetail[]">
