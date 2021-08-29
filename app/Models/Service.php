@@ -65,4 +65,8 @@ class Service extends Model
     {
         return $this->hasMany('App\Models\ServiceStatusMutation', 'service_id', 'id');
     }
+    public function user()
+    {
+        return $this->hasOne('App\Models\User');
+    }
 }

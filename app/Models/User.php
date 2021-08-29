@@ -21,6 +21,10 @@ class User extends Authenticatable
         'username',
         'password',
         'role_id',
+        'deleted_at',
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     /**
@@ -41,4 +45,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function service()
+    {
+        return $this->belongsTo('App\Models\Service');
+    }
+
+    public function sale()
+    {
+        return $this->belongsTo('App\Models\Sale');
+    }
 }

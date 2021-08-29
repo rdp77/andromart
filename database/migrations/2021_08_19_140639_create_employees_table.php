@@ -22,6 +22,10 @@ class CreateEmployeesTable extends Migration
             $table->string('contact');
             $table->string('address');
             $table->string('level');
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
+            $table->string('deleted_by')->nullable();
+            $table->softDeletesTz($column = 'deleted_at', $precision = 0);
             $table->timestamps();
         });
     }

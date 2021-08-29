@@ -12,6 +12,10 @@ class Cost extends Model
         'name',
         'code',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'deleted_at',
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 }
