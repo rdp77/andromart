@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ContentType;
 use Illuminate\Database\Seeder;
 
 class ContentTypeSeeder extends Seeder
@@ -13,50 +14,36 @@ class ContentTypeSeeder extends Seeder
      */
     public function run()
     {
-//         address/branch : city, address, phone, email, latitude, longitude
-// messages : name, email, subject, message
-
-// content_type : type, status, column_1, column_2, column_3, column_4, column_5, column_6, column_7, column_8
-// content : 
-// 1title, 
-// 2subtitle, 
-// 3description, 
-// 4image, 
-// 5icon, 
-// 6url, 
-// 7class, 
-// 8position, content_type_id
-
-// carousel_home, true, 12348
-// carousel_about, false, 134
-// carousel_services, false, 134
-// carousel_work, false, 134
-// home_tab, true, 1367
-// home_about_us, false, 1236
-// home_hire_us, true, 15
-// home_testimonial_title, false, 12
-// home_testimonial, true, 123
-// home_achievement, true, 1235
-// home_vendor, true, 4
-// about_vision, false, 13
-// about_mission, false, 13
-// about_image, true, 4
-// about_motivation, true, 13
-// about_achievement, true, 123
-// about_leadership_title, false, 12
-// about_leadership, true, 124
-// about_clients_title, false, 12
-// about_clients, true, 4
-// services_title, false, 1
-// services_help_title, false, 12
-// services_help, true, 135
-// services_action, true, 135
-// service_inovation, false, 12346
-// work_activity_1, true, 4
-// work_activity_2, true, 4
-// work_activity_3, true, 4
-// work_activity_4, true, 4
-// contacts_title, false, 12
-// contacts_message_title, false, 12
+        ContentType::create(['type' => 'carousel_home', 'status' => true, 'column_1' => true, 'column_2' => true, 'column_3' => true, 'column_4' => true, 'column_8' => true]);
+        ContentType::create(['type' => 'carousel_about', 'status' => false, 'column_1'=> true, 'column_3'=> true, 'column_4' => true]);
+        ContentType::create(['type' => 'carousel_services', 'status' => false, 'column_1'=> true, 'column_3'=> true, 'column_4' => true]);
+        ContentType::create(['type' => 'carousel_work', 'status' => false, 'column_1'=> true, 'column_3'=> true, 'column_4' => true]);
+        ContentType::create(['type' => 'home_tab', 'status' => true, 'column_1'=> true, 'column_3'=> true, 'column_6'=> true, 'column_7' => true]);
+        ContentType::create(['type' => 'home_about_us', 'status' => false, 'column_1'=> true, 'column_2'=> true, 'column_3'=> true, 'column_6' => true]);
+        ContentType::create(['type' => 'home_hire_us', 'status' => true, 'column_1'=> true, 'column_5' => true]);
+        ContentType::create(['type' => 'home_testimonial_title', 'status' => false, 'column_1'=> true, 'column_2' => true]);
+        ContentType::create(['type' => 'home_testimonial', 'status' => true, 'column_1'=> true, 'column_2'=> true, 'column_3' => true]);
+        ContentType::create(['type' => 'home_achievement', 'status' => true, 'column_1'=> true, 'column_2'=> true, 'column_3'=> true, 'column_5' => true]);
+        ContentType::create(['type' => 'home_vendor', 'status' => true, 'column_4' => true]);
+        ContentType::create(['type' => 'about_vision', 'status' => false, 'column_1'=> true, 'column_3' => true]);
+        ContentType::create(['type' => 'about_mission', 'status' => false, 'column_1'=> true, 'column_3' => true]);
+        ContentType::create(['type' => 'about_image', 'status' => true, 'column_4' => true]);
+        ContentType::create(['type' => 'about_motivation', 'status' => true, 'column_1'=> true, 'column_3' => true]);
+        ContentType::create(['type' => 'about_achievement', 'status' => true, 'column_1'=> true, 'column_2'=> true, 'column_3' => true]);
+        ContentType::create(['type' => 'about_leadership_title', 'status' => false, 'column_1'=> true, 'column_2' => true]);
+        ContentType::create(['type' => 'about_leadership', 'status' => true, 'column_1'=> true, 'column_2'=> true, 'column_4' => true]);
+        ContentType::create(['type' => 'about_clients_title', 'status' => false, 'column_1'=> true, 'column_2' => true]);
+        ContentType::create(['type' => 'about_clients', 'status' => true, 'column_4' => true]);
+        ContentType::create(['type' => 'services_title', 'status' => false, 'column_1' => true]);
+        ContentType::create(['type' => 'services_help_title', 'status' => false, 'column_1'=> true, 'column_2' => true]);
+        ContentType::create(['type' => 'services_help', 'status' => true, 'column_1'=> true, 'column_3'=> true, 'column_5' => true]);
+        ContentType::create(['type' => 'services_action', 'status' => true, 'column_1'=> true, 'column_3'=> true, 'column_5' => true]);
+        ContentType::create(['type' => 'service_inovation', 'status' => false, 'column_1'=> true, 'column_2'=> true, 'column_3'=> true, 'column_4'=> true, 'column_6' => true]);
+        ContentType::create(['type' => 'work_activity_1', 'status' => true, 'column_4' => true]);
+        ContentType::create(['type' => 'work_activity_2', 'status' => true, 'column_4' => true]);
+        ContentType::create(['type' => 'work_activity_3', 'status' => true, 'column_4' => true]);
+        ContentType::create(['type' => 'work_activity_4', 'status' => true, 'column_4' => true]);
+        ContentType::create(['type' => 'contacts_title', 'status' => false, 'column_1'=> true, 'column_2' => true]);
+        ContentType::create(['type' => 'contacts_message_title', 'status' => false, 'column_1'=> true, 'column_2' => true]);
     }
 }

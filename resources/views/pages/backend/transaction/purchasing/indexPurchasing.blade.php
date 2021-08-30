@@ -1,0 +1,1 @@
+indexPurchasing.blade.php

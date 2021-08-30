@@ -16,7 +16,7 @@ class ItemSeeder extends Seeder
     {
         DB::table('items')->insert([
             [
-                'id' => '1',
+                // 'id' => '1',
                 'name' => 'Jasa Service',
                 'category_id' => '1',
                 'supplier_id' => '1',
@@ -30,7 +30,7 @@ class ItemSeeder extends Seeder
                 'updated_at' => date("Y-m-d h:i:s"),
             ],
             [
-                'id' => '2',
+                // 'id' => '2',
                 'name' => 'LCD 16x2',
                 'category_id' => '1',
                 'supplier_id' => '1',

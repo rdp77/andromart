@@ -15,6 +15,7 @@ class CreateContentTypesTable extends Migration
     {
         Schema::create('content_types', function (Blueprint $table) {
             $table->id();
+            
             $table->string('type', 100)->nullable();
             $table->boolean('status')->default(0);
             $table->boolean('column_1')->default(0);
@@ -25,6 +26,12 @@ class CreateContentTypesTable extends Migration
             $table->boolean('column_6')->default(0);
             $table->boolean('column_7')->default(0);
             $table->boolean('column_8')->default(0);
+
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
+            $table->string('deleted_by')->nullable();
+            $table->softDeletesTz($column = 'deleted_at', $precision = 0);
+
             $table->timestamps();
         });
     }

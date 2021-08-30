@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNotesTable extends Migration
+class CreateRegulationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,21 @@ class CreateNotesTable extends Migration
      */
     public function up()
     {
-        Schema::create('notes', function (Blueprint $table) {
+        Schema::create('regulations', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('users_id');
+            $table->unsignedBigInteger('types_id');
 
-            $table->datetime('date')->nullable();
-            $table->string('title', 255)->nullable();
+            // user_id date    title   description
+            $table->datetime('date');
+            $table->string('title', 255);
             $table->mediumText('description')->nullable();
+
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();
             $table->softDeletesTz($column = 'deleted_at', $precision = 0);
             
-            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('types_id')->references('id')->on('regulation_types')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -37,6 +39,6 @@ class CreateNotesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notes');
+        Schema::dropIfExists('regulations');
     }
 }
