@@ -41,4 +41,9 @@ class Branch extends Model
     {
         return $this->hasMany('App\Models\Customer');
     }
+
+    public function employee()
+    {
+        return $this->hasMany('App\Models\Employee');
+    }
 }

@@ -11,11 +11,6 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = [
         'name',
         'username',
@@ -27,21 +22,11 @@ class User extends Authenticatable
         'deleted_by',
     ];
 
-    /**
-     * The attributes that should be hidden for arrays.
-     *
-     * @var array
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast to native types.
-     *
-     * @var array
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
@@ -54,5 +39,10 @@ class User extends Authenticatable
     public function sale()
     {
         return $this->belongsTo('App\Models\Sale');
+    }
+
+    public function employee()
+    {
+        return $this->belongsTo('App\Models\Employee');
     }
 }

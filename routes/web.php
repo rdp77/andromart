@@ -43,6 +43,7 @@ require __DIR__ . '/master/cashRoute.php';
 require __DIR__ . '/master/categoryRoute.php';
 require __DIR__ . '/master/costRoute.php';
 require __DIR__ . '/master/customerRoute.php';
+require __DIR__ . '/master/employeeRoute.php';
 require __DIR__ . '/master/unitRoute.php';
 require __DIR__ . '/master/supplierRoute.php';
 require __DIR__ . '/master/itemRoute.php';

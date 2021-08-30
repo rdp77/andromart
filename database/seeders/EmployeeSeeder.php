@@ -24,6 +24,7 @@ class EmployeeSeeder extends Seeder
                 'contact' => '082140644679',
                 'address' => 'Wonorejo,Surabaya',
                 'level' => 'teknisi',
+                'gender' => 'L',
                 'created_at' => date("Y-m-d h:i:s"),
                 'updated_at' => date("Y-m-d h:i:s"),
             ],

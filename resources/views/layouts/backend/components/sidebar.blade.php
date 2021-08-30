@@ -88,7 +88,7 @@
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Karyawan',
-                    'url'=>''])
+                    'url'=>route('employee.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'User',
