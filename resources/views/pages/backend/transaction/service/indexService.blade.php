@@ -22,9 +22,9 @@
             <thead>
                 <tr>
                     
-                    <th>{{ __('Faktur') }}</th>
+                    {{-- <th>{{ __('Faktur') }}</th> --}}
                     <th>
-                        {{ __('Tanggal & operator') }}
+                        {{ __('Informasi') }}
                     </th>
                     <th>{{ __('Pelanggan') }}</th>
                     <th>{{ __('Barang') }}</th>

@@ -66,4 +66,41 @@ class DashboardController extends Controller
             'added_at' => date("Y-m-d H:i:s"),
         ]);
     }
+    public function changeMonthIdToEn($dateLocale)
+    {
+        $separateString = explode(' ',$dateLocale);
+        $day    = $separateString[0];
+        $monthLocale  = $separateString[1];
+        $year   = $separateString[2];
+
+
+        if ($monthLocale == 'Januari') {
+            $month = 1;
+        } elseif ($monthLocale == 'Februari') {
+            $month = 2;
+        } elseif ($monthLocale == 'Maret') {
+            $month = 3;
+        } elseif ($monthLocale == 'April') {
+            $month = 4;
+        } elseif ($monthLocale == 'Mei') {
+            $month = 5;
+        } elseif ($monthLocale == 'Juni') {
+            $month = 6;
+        } elseif ($monthLocale == 'Juli') {
+            $month = 7;
+        } elseif ($monthLocale == 'Agustus') {
+            $month = 8;
+        } elseif ($monthLocale == 'September') {
+            $month = 9;
+        } elseif ($monthLocale == 'Oktober') {
+            $month = 10;
+        } elseif ($monthLocale == 'November') {
+            $month = 11;
+        } elseif ($monthLocale == 'Desember') {
+            $month = 12;
+        }
+
+        return $date = $year.'-'.$month.'-'.$day;
+
+    }
 }

@@ -21,21 +21,25 @@
                 </a>
                 <ul class="dropdown-menu">
                     @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
-                    'title'=>'Service',
-                    'url'=>route('service.index')])
+                        'active'=>'',
+                        'title'=>'Service',
+                        'url'=>route('service.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                         'active'=>'',
                         'title'=>'Update WO Service',
                         'url'=>route('service.serviceFormUpdateStatus')])
                     @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
-                    'title'=>'Penjualan',
-                    'url'=>route('sale.index')])
+                        'active'=>'',
+                        'title'=>'Pelunasan Service',
+                        'url'=>route('service-payment.index')])
                     @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
-                    'title'=>'Pembelian',
-                    'url'=>''])
+                        'active'=>'',
+                        'title'=>'Penjualan',
+                        'url'=>route('sale.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                        'active'=>'',
+                        'title'=>'Pembelian',
+                        'url'=>''])
                 </ul>
             </li>
             {{-- Master Data --}}

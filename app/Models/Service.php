@@ -20,6 +20,7 @@ class Service extends Model
         'id' ,
         'code',
         'user_id',
+        'branch_id',
         'customer_id',
         'customer_name',
         'customer_address',
@@ -33,24 +34,28 @@ class Service extends Model
         'clock',
         'total_service',
         'total_part',
-        'total_downpayment',
         'total_loss',
         'discount_price',
         'discount_percent',
         'total_price',
+        'total_downpayment',
+        'total_payment',
         'downpayment_date',
         'payment_date',
         'work_status',
         'equipment',
-        'done',
+        'payment_status',
         'pickup_date',
         'warranty_id',
         'technician_id',
         'technician_replacement_id',
         'estimate_date',
         'description',
-        'warranty_id',
         'verification_price',
+        'sharing_profit_store',
+        'sharing_profit_technician_1',
+        'sharing_profit_technician_2',
+        'total_price',
         'created_by',
         'updated_by',
         'created_at' ,
@@ -61,9 +66,25 @@ class Service extends Model
     {
         return $this->hasMany('App\Models\ServiceDetail', 'service_id', 'id');
     }
+    public function ServicePayment()
+    {
+        return $this->hasMany('App\Models\ServicePayment', 'service_id', 'id');
+    }
     public function ServiceStatusMutation()
     {
         return $this->hasMany('App\Models\ServiceStatusMutation', 'service_id', 'id');
+    }
+    public function Employee1()
+    {
+        return $this->belongsTo('App\Models\Employee', 'technician_id', 'id');
+    }
+    public function Employee2()
+    {
+        return $this->belongsTo('App\Models\Employee', 'technician_replacement_id', 'id');
+    }
+    public function CreatedByUser()
+    {
+        return $this->belongsTo('App\Models\User', 'user_id', 'id');
     }
     public function user()
     {

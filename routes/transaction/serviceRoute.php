@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\ServicePaymentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,5 +36,8 @@ Route::group(['prefix' => 'transaction'], function () {
             'service-form-update-status-save-data',
             [ServiceController::class, 'serviceFormUpdateStatusSaveData']
         )->name('service.serviceFormUpdateStatusSaveData');
+
+        Route::resource('service-payment', ServicePaymentController::class);
+
     });
 });

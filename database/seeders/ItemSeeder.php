@@ -14,6 +14,7 @@ class ItemSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('items')->truncate();
         DB::table('items')->insert([
             [
                 'id' => '1',

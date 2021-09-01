@@ -40,7 +40,7 @@ class ServiceController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-        $data = Service::get();
+        $data = Service::with(['Employee1','Employee2','CreatedByUser'])->get();
         
             return Datatables::of($data)
                 ->addIndexColumn()
@@ -50,22 +50,41 @@ class ServiceController extends Controller
                     $actionBtn .= '<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
                             data-toggle="dropdown">
                             <span class="sr-only">Toggle Dropdown</span>
-                        </button>';
-                    $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('service.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
+                        </button><div class="dropdown-menu">';
+                    if($row->payment_status == null){
+                        $actionBtn .= '<a class="dropdown-item" href="' . route('service.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
+                        $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
+                    }
+                    
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
-                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
+                    
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
-                ->addColumn('dataDateOperator', function ($row) {
+                ->addColumn('Informasi', function ($row) {
                     $htmlAdd = '<table>';
                     $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<td>Kode</td>';
+                    $htmlAdd .=      '<th>'.$row->code.'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<td>Tgl Dibuat</td>';
                     $htmlAdd .=      '<th>'.Carbon::parse($row->date)->locale('id')->isoFormat('LL').'</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<td>Di Input </td>';
                     $htmlAdd .=      '<th>'.$row->created_by.'</th>';
                     $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<td>Teknisi 1</td>';
+                    $htmlAdd .=      '<th>'.$row->Employee1->name.'</th>';
+                    $htmlAdd .=   '</tr>';
+                    if($row->technician_replacement_id != null){
+                        $htmlAdd .=   '<tr>';
+                        $htmlAdd .=      '<td>Teknisi 2</td>';
+                        $htmlAdd .=      '<th>'.$row->Employee2->name.'</th>';
+                        $htmlAdd .=   '</tr>';
+                    }
                     $htmlAdd .= '<table>';
                     
                     return $htmlAdd;
@@ -75,9 +94,9 @@ class ServiceController extends Controller
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<th>'.$row->customer_name.'</th>';
                     $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<th>'.$row->customer_address.'</th>';
-                    $htmlAdd .=   '</tr>';
+                    // $htmlAdd .=   '<tr>';
+                    // $htmlAdd .=      '<th>'.$row->customer_address.'</th>';
+                    // $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<th>'.$row->customer_phone.'</th>';
                     $htmlAdd .=   '</tr>';
@@ -148,19 +167,44 @@ class ServiceController extends Controller
                 })
                 ->addColumn('currentStatus', function ($row) {
                     if($row->work_status == 'Proses'){
-                        return '<div class="badge badge-warning">Proses Pengerjaan</div>';
+                        $workStatus = '<div class="badge badge-warning">Proses Pengerjaan</div>';
                     }elseif($row->work_status == 'Mutasi'){
-                        return '<div class="badge badge-warning">Perpindahan Teknisi</div>';
+                        $workStatus = '<div class="badge badge-warning">Perpindahan Teknisi</div>';
                     }elseif($row->work_status == 'Selesai'){
-                        return '<div class="badge badge-success">Selesai</div>';
+                        $workStatus = '<div class="badge badge-success">Selesai</div>';
                     }elseif($row->work_status == 'Batal'){
-                        return '<div class="badge badge-danger">Service Batal</div>';
+                        $workStatus = '<div class="badge badge-danger">Service Batal</div>';
                     }elseif($row->work_status == 'Manifest'){
-                        return '<div class="badge badge-primary">Barang Diterima</div>';
+                        $workStatus = '<div class="badge badge-primary">Barang Diterima</div>';
                     }
+
+                    if($row->payment_status == 'Lunas'){
+                        $paymentStatus = '<div class="badge badge-success">Lunas</div>';
+                    }elseif($row->payment_status == 'DownPayment'){
+                        $paymentStatus = '<div class="badge badge-warning">Bayar DP</div>';
+                    }elseif($row->payment_status == null){
+                        $paymentStatus = '<div class="badge badge-danger">Belum Bayar</div>';
+                    }
+                    $htmlAdd = '<table>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<td>Status Pekerjaan</td>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<th>'.$workStatus.'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<td>Status Pembayaran</td>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<th>'.$paymentStatus.'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .= '<table>';
+
+                    return $htmlAdd;
+                    
                 })
 
-                ->rawColumns(['action','dataItem','dataCustomer','finance','dataDateOperator','currentStatus'])
+                ->rawColumns(['action','dataItem','dataCustomer','finance','Informasi','currentStatus'])
                 ->make(true);
         }
         return view('pages.backend.transaction.service.indexService');
@@ -185,24 +229,31 @@ class ServiceController extends Controller
 
     public function store(Request $req)
     {
+        $tech1 = Service::where('technician_id',$req->technicianId)->where('work_status','!=','Selesai')->count();
+        $tech2 = Service::where('technician_replacement_id',$req->technicianId)->where('work_status','!=','Selesai')->count();
+        if($tech1+$tech2 >= 10){
+            return Response::json(['status' => 'fail','message'=>'Teknisi Memiliki 10 Pekerjaan Belum Selesai']);
+        }
+
+        $getEmployee =  Employee::where('user_id',Auth::user()->id)->first();
         
         // return $req->all();
         $id = DB::table('service')->max('id')+1;
-        if($req->totalDownPayment == 0){
-            $downpaymentDate = null;
-        }else{
-            $downpaymentDate = date('Y-m-d');
-        }
+        $sharing_profit_store = (str_replace(",", '',$req->totalPrice)/100)*60;
+        $sharing_profit_technician_1 = (str_replace(",", '',$req->totalPrice)/100)*40;
+        $estimateDate = $this->DashboardController->changeMonthIdToEn($req->estimateDate);
+
         Service::create([
             'id' =>$id,
             'code' =>$this->code('SRV-'),
             'user_id'=>Auth::user()->id,
+            'branch_id'=>$getEmployee->branch_id,
             'customer_id'=>$req->customerId,
             'customer_name'=>$req->customerName,
             'customer_address'=>$req->customerAdress,
             'customer_phone'=>$req->customerPhone,
             'date'=>date('Y-m-d'),
-            'estimate_date'=>date('Y-m-d',strtotime($req->estimateDate)),
+            'estimate_date'=>$estimateDate,
             'brand'=>$req->brand,
             'series'=>$req->series,
             'type'=>$req->type,
@@ -211,19 +262,21 @@ class ServiceController extends Controller
             'clock'=>date('h:i'),
             'total_service'=>str_replace(",", '',$req->totalService),
             'total_part'=>str_replace(",", '',$req->totalSparePart),
-            'total_downpayment'=>str_replace(",", '',$req->totalDownPayment),
+            'total_payment'=>0,
+            'total_downpayment'=>0,
             'total_loss'=>str_replace(",", '',$req->totalLoss),
             'discount_price'=>str_replace(",", '',$req->totalDiscountValue),
             'discount_percent'=>str_replace(",", '',$req->totalDiscountPercent),
             'total_price'=>str_replace(",", '',$req->totalPrice),
-            'downpayment_date'=>$downpaymentDate,
             'work_status'=>'Manifest',
             'equipment'=>$req->equipment,
             'description'=>$req->description,
-            'done'=>'Belum',
             'warranty_id'=>$req->warranty,
             'verification_price'=>$req->verificationPrice,
             'technician_id'=>$req->technicianId,
+            'sharing_profit_store'=>str_replace(",", '',$sharing_profit_store),
+            'sharing_profit_technician_1'=>str_replace(",", '',$sharing_profit_technician_1),
+            'sharing_profit_technician_2'=>str_replace(",", '',0),
             'created_at' =>date('Y-m-d h:i:s'),
             'created_by' => Auth::user()->name,
             'created_at' => date('Y-m-d h:i:s'),
@@ -253,16 +306,16 @@ class ServiceController extends Controller
             'created_at'=>date('Y-m-d h:i:s'),
         ]);
 
-        if($req->verificationPrice == 'N'){
-            echo 'menjurnal';
+        // if($req->verificationPrice == 'N'){
+        //     echo 'menjurnal';
 
-        }
+        // }
         // $this->DashboardController->createLog(
         //     $req->header('user-agent'),
         //     $req->ip(),
         //     'Membuat Dana Kredit Pagu per PDL'
         // );
-        return Response::json(['status' => 'success']);
+        return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
 
     }
 
@@ -308,7 +361,6 @@ class ServiceController extends Controller
             $req->ip(),
             'Menghapus Data Kredit'
         );
-        Service::destroy($id);
         ServiceDetail::where('service_id',$id)->destroy($id);
         return Response::json(['status' => 'success']);
     }
@@ -320,13 +372,14 @@ class ServiceController extends Controller
     }
     public function serviceFormUpdateStatusLoadData(Request $req)
     {
-        $data = Service::with(['ServiceDetail','ServiceStatusMutation','ServiceStatusMutation.Technician'])
-                        ->where('id',$req->id)->first();
+        $data = Service::with(['ServiceDetail','ServiceDetail.Items','ServiceStatusMutation','ServiceStatusMutation.Technician'])->where('id',$req->id)->first();
+
         if($data == null){
             $message = 'empty';
         }else{
             $message = 'exist';
         }
+
         return Response::json(['status' => 'success','result'=>$data,'message'=>$message]);
     }
 
@@ -340,6 +393,8 @@ class ServiceController extends Controller
             }else{
                 $technician_replacement_id = null;
             }
+            
+            
             Service::where('id', $req->id)->update([
                 'work_status'=>$req->status,
                 'technician_replacement_id'=>$technician_replacement_id,

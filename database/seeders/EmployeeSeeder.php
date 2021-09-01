@@ -27,6 +27,30 @@ class EmployeeSeeder extends Seeder
                 'created_at' => date("Y-m-d h:i:s"),
                 'updated_at' => date("Y-m-d h:i:s"),
             ],
+            [
+                'id' => '2',
+                'user_id' => '2',
+                'branch_id' => '1',
+                'identity' => '1461800028',
+                'name' => 'Rio',
+                'contact' => '082140644679',
+                'address' => 'Wonorejo,Surabaya',
+                'level' => 'teknisi',
+                'created_at' => date("Y-m-d h:i:s"),
+                'updated_at' => date("Y-m-d h:i:s"),
+            ],
+            [
+                'id' => '3',
+                'user_id' => '3',
+                'branch_id' => '1',
+                'identity' => '1461800028',
+                'name' => 'Asep',
+                'contact' => '082140644679',
+                'address' => 'Wonorejo,Surabaya',
+                'level' => 'teknisi',
+                'created_at' => date("Y-m-d h:i:s"),
+                'updated_at' => date("Y-m-d h:i:s"),
+            ],
         ]);
     }
 }

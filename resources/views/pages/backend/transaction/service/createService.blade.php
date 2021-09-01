@@ -167,10 +167,10 @@
                         <input readonly id="totalLoss" onchange="sumTotal()" type="text" value="0"
                             class="form-control cleaveNumeral" name="totalLoss" style="text-align: right">
                     </div>
-                    <div class="form-group">
+                    <div class="form-group" style="display: none">
                         <label for="totalDownPayment">{{ __('Down Payment (DP)') }}<code>*</code></label>
                         <input id="totalDownPayment" type="text" value="0" class="form-control cleaveNumeral"
-                            name="totalDownPayment" onkeyup="sumTotal()" style="text-align: right">
+                            name="totalDownPayment" style="text-align: right">
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">

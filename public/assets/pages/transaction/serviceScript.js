@@ -15,8 +15,8 @@ var table = $("#table").DataTable({
     },
     dom: '<"html5buttons">lBrtip',
     columns: [
-        { data: "code" },
-        { data: "dataDateOperator" },
+        // { data: "code" },
+        { data: "Informasi" },
         { data: "dataCustomer" },
         { data: "dataItem" },
         { data: "finance" },
@@ -117,7 +117,7 @@ function save() {
                 type: 'POST',
                 success: function(data) {
                     if (data.status == 'success'){
-                        swal("Data Pengajuan Pinjaman Disimpan", {
+                        swal(data.message, {
                             icon: "success",
                         });
                         location.reload();
