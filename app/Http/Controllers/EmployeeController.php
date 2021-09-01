@@ -108,14 +108,56 @@ class EmployeeController extends Controller
         //
     }
 
-    public function edit(Employee $employee)
+    public function edit($id)
     {
-        //
+        $branch = Branch::where('id', '!=', Employee::find($id)->branch_id)->get();
+        $employee = Employee::find($id);
+        return view('pages.backend.master.employee.updateEmployee', ['employee' => $employee, 'branch' => $branch]);
     }
 
-    public function update(Request $request, Employee $employee)
+    public function update(Request $req, $id)
     {
-        //
+        Validator::make($req->all(), [
+            'username' => ['required', 'string', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'min:6',],
+            'identity' => ['required', 'string', 'max:255', 'unique:employees'],
+            'name' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255',],
+            'contact' => ['required', 'string', 'max:13',],
+        ])->validate();
+
+        Employee::where('id', $id)
+            ->update([
+                'branch_id' => $req->branch_id,
+                'level' => $req->level,
+                'identity' => $req->identity,
+                'name' => $req->name,
+                'birthday' => $req->birthday,
+                'contact' => $req->contact,
+                'gender' => $req->gender,
+                'address' => $req->address,
+            ]);
+
+        User::where('id', Employee::find($id)->user_id)
+            ->update([
+                'username' => $req->username,
+                'name' => $req->name,
+            ]);
+
+        $employee = Employee::find($id);
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Mengubah master karyawan ' . Employee::find($id)->name
+        );
+
+        $employee->save();
+
+        return Redirect::route('employee.index')
+            ->with([
+                'status' => 'Berhasil merubah master karyawan ',
+                'type' => 'success'
+            ]);
     }
 
     public function destroy(Employee $employee)

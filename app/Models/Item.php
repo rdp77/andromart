@@ -39,4 +39,9 @@ class Item extends Model
     {
         return $this->belongsTo('App\Models\Supplier');
     }
+
+    public function stock()
+    {
+        return $this->hasOne('App\Models\Stock');
+    }
 }

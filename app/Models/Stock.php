@@ -5,12 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Unit extends Model
+class Stock extends Model
 {
     use HasFactory;
+
     protected $fillable = [
-        'code',
-        'name',
+        'item_id',
+        'unit_id',
+        'stock',
+        'min_stock',
+        'description',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -19,8 +23,13 @@ class Unit extends Model
         'deleted_by',
     ];
 
-    public function stock()
+    public function item()
     {
-        return $this->hasOne('App\Models\Stock');
+        return $this->belongsTo('App\Models\Item');
+    }
+
+    public function unit()
+    {
+        return $this->belongsTo('App\Models\Unit');
     }
 }
