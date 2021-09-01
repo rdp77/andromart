@@ -16,6 +16,8 @@ class Employee extends Model
         'contact',
         'address',
         'level',
+        'gender',
+        'avatar',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -23,4 +25,14 @@ class Employee extends Model
         'updated_by',
         'deleted_by',
     ];
+
+    public function user()
+    {
+        return $this->hasOne('App\Models\User');
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo('App\Models\Branch');
+    }
 }

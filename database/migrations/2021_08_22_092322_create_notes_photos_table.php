@@ -19,6 +19,10 @@ class CreateNotesPhotosTable extends Migration
 
             $table->string('photo', 255)->nullable();
             $table->mediumText('description')->nullable();
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
+            $table->string('deleted_by')->nullable();
+            $table->softDeletesTz($column = 'deleted_at', $precision = 0);
             
             $table->foreign('notes_id')->references('id')->on('notes')->onDelete('cascade');
             $table->timestamps();

@@ -10,13 +10,14 @@ use App\Models\ServiceDetail;
 use App\Models\ServiceStatusMutation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 use Carbon\carbon;
-use DB;
+// use DB;
 
 class ServiceController extends Controller
 {
@@ -86,7 +87,7 @@ class ServiceController extends Controller
                         $htmlAdd .=   '</tr>';
                     }
                     $htmlAdd .= '<table>';
-                    
+
                     return $htmlAdd;
                 })
                 ->addColumn('dataCustomer', function ($row) {
@@ -101,7 +102,7 @@ class ServiceController extends Controller
                     $htmlAdd .=      '<th>'.$row->customer_phone.'</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .= '<table>';
-                    
+
                     return $htmlAdd;
                 })
                 ->addColumn('dataItem', function ($row) {
@@ -282,9 +283,9 @@ class ServiceController extends Controller
             'created_at' => date('Y-m-d h:i:s'),
         ]);
 
-        for ($i=0; $i <count($req->itemsDetail) ; $i++) { 
+        for ($i=0; $i <count($req->itemsDetail) ; $i++) {
             ServiceDetail::create([
-                'service_id'=>$id, 
+                'service_id'=>$id,
                 'item_id'=>$req->itemsDetail[$i],
                 'price'=>str_replace(",", '',$req->priceDetail[$i]),
                 'qty'=>$req->qtyDetail[$i],
@@ -297,7 +298,7 @@ class ServiceController extends Controller
         }
 
         ServiceStatusMutation::create([
-            'service_id'=>$id, 
+            'service_id'=>$id,
             'technician_id'=>$req->technicianId,
             'index'=>1,
             'status'=>'Manifest',
@@ -328,7 +329,7 @@ class ServiceController extends Controller
 
     // public function update($id, Request $req)
     // {
-        
+
     //     Service::where('id', $id)
     //         ->update([
     //         'sales_id'   => $req->salesId,
@@ -400,7 +401,7 @@ class ServiceController extends Controller
                 'technician_replacement_id'=>$technician_replacement_id,
             ]);
             ServiceStatusMutation::create([
-                'service_id'=>$req->id, 
+                'service_id'=>$req->id,
                 'technician_id'=>Auth::user()->id,
                 'index'=>$index,
                 'status'=>$req->status,

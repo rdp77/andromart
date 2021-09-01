@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateNotesTable extends Migration
+class CreatePurchasingDetailsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,19 +13,25 @@ class CreateNotesTable extends Migration
      */
     public function up()
     {
-        Schema::create('notes', function (Blueprint $table) {
+        Schema::create('purchasing_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('users_id');
 
-            $table->datetime('date')->nullable();
-            $table->string('title', 255)->nullable();
+            $table->unsignedBigInteger('purchasing_id');
+            $table->unsignedBigInteger('item_id');
+
+            $table->integer('price')->default(0);
+            $table->integer('qty')->default(0);
+            $table->integer('total')->default(0);
             $table->mediumText('description')->nullable();
+
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();
             $table->softDeletesTz($column = 'deleted_at', $precision = 0);
             
-            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('purchasing_id')->references('id')->on('purchasings')->onDelete('cascade');
+            $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
+
             $table->timestamps();
         });
     }
@@ -37,6 +43,6 @@ class CreateNotesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notes');
+        Schema::dropIfExists('purchasing_details');
     }
 }

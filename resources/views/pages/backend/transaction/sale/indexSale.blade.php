@@ -11,8 +11,8 @@
 @include('layouts.backend.components.notification')
 <div class="card">
     <div class="card-header">
-        <a href="{{ route('service.create') }}" class="btn btn-icon icon-left btn-primary">
-            <i class="far fa-edit"></i>{{ __(' Create Service') }}</a>
+        <a href="{{ route('sale.create') }}" class="btn btn-icon icon-left btn-primary">
+            <i class="far fa-edit"></i>{{ __(' Tambah Penjualan') }}</a>
 
         <a href="#" onclick="" class="btn btn-icon icon-left btn-danger">
                 <i class="far fa-trash-alt"></i>{{ __('Recycle Bin') }}</a>
@@ -27,9 +27,9 @@
                         {{ __('Tanggal & operator') }}
                     </th>
                     <th>{{ __('Pelanggan') }}</th>
-                    <th>{{ __('Barang') }}</th>
-                    <th>{{ __('Biaya / Harga') }}</th>
-                    <th>{{ __('Status') }}</th>
+                    <th>{{ __('Barang / QTY') }}</th>
+                    <th>{{ __('Harga') }}</th>
+                    <th>{{ __('Total') }}</th>
                     {{-- <th>{{ __('Jasa') }}</th>
                     <th>{{ __('SparePart') }}</th>
                     <th>{{ __('Loss') }}</th>
@@ -45,5 +45,5 @@
 </div>
 @endsection
 @section('script')
-<script src="{{ asset('assets/pages/transaction/serviceScript.js') }}"></script>
+<script src="{{ asset('assets/pages/transaction/saleScript.js') }}"></script>
 @endsection
