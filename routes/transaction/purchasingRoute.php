@@ -16,8 +16,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'transaction'], function () {
-    Route::group(['prefix' => 'Purchasing'], function () {
-        Route::resource('Purchasing', PurchasingController::class);
-        Route::resource('PurchasingDetail', PurchasingDetailController::class);
+    Route::group(['prefix' => 'purchasing'], function () {
+        Route::resource('purchasing', PurchasingController::class);
+        // Route::resource('purchasingDetail', PurchasingDetailController::class);
     });
 });

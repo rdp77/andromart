@@ -2,8 +2,8 @@
 	<div class="container">
 		<div class="row justify-content-center">
 			<div class="col-lg-8 mt-5">
-				<h1 class="mt-5 font-weight-semibold">Say Hello</h1>
-				<p class="mb-0 text-4 opacity-7">Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Nulla consequat massa quis enim.</p>
+				<h1 class="mt-5 font-weight-semibold">{{ $contactsTitle->title }}</h1>
+				<p class="mb-0 text-4 opacity-7">{{ $contactsTitle->subtitle }}</p>
 			</div>
 		</div>
 		<div class="row justify-content-center mt-4">
@@ -43,8 +43,8 @@
 					<hr>
 				</div>
 
-				<h2 class="mb-0 mt-4 font-weight-semibold">Send us a Message.</h2>
-				<p class="text-4 mb-0 opacity-7">Pellentesque pellentesque eget tempor tellus. </p>
+				<h2 class="mb-0 mt-4 font-weight-semibold">{{ $contactsMessageTitle->title }}</h2>
+				<p class="text-4 mb-0 opacity-7">{{ $contactsMessageTitle->subtitle }}</p>
 
 				<div class="divider divider-style-4 divider-primary divider-top-section-custom taller">
 					<i class="fas fa-chevron-down"></i>

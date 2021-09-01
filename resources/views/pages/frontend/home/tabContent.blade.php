@@ -1,87 +1,45 @@
+@if($contents['home_tab'] == true)
 <div class="container py-4 my-5">
     <div class="row justify-content-center mb-4">
         <div class="col-md-12 col-lg-10">
-
             <div class="tabs tabs-bottom tabs-center tabs-simple custom-tabs-style-1 mt-2 mb-3">
                 <ul class="nav nav-tabs mb-3">
+                    @foreach($homeTab as $row)
+                    <!-- active -->
                     <li class="nav-item active">
-                        <a class="nav-link" href="#tabsNavigationSimpleIcons1" data-toggle="tab">
+                        <a class="nav-link" href="#{{ $row->class }}" data-toggle="tab">
                             <span class="featured-boxes featured-boxes-style-6 p-0 m-0">
                                 <span class="featured-box featured-box-primary featured-box-effect-6 p-0 m-0">
                                     <span class="box-content p-0 m-0">
                                         <i class="icon-featured icon-bulb icons"></i>
                                     </span>
                                 </span>
-                            </span>                                 
-                            <p class="text-color-dark font-weight-bold mb-0 pt-2 text-2 pb-0">Strategy</p>
+                            </span>
+                            <p class="text-color-dark font-weight-bold mb-0 pt-2 text-2 pb-0">{{ $row->title }}</p>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#tabsNavigationSimpleIcons2" data-toggle="tab">
-                            <span class="featured-boxes featured-boxes-style-6 p-0 m-0">
-                                <span class="featured-box featured-box-primary featured-box-effect-6 p-0 m-0">
-                                    <span class="box-content p-0 m-0">
-                                        <i class="icon-featured icon-mustache icons"></i>
-                                    </span>
-                                </span>
-                            </span>                                 
-                            <p class="text-color-dark font-weight-bold mb-0 pt-2 text-2 pb-0">Creative</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#tabsNavigationSimpleIcons3" data-toggle="tab">
-                            <span class="featured-boxes featured-boxes-style-6 p-0 m-0">
-                                <span class="featured-box featured-box-primary featured-box-effect-6 p-0 m-0">
-                                    <span class="box-content p-0 m-0">
-                                        <i class="icon-featured icon-puzzle icons"></i>
-                                    </span>
-                                </span>
-                            </span>                                 
-                            <p class="text-color-dark font-weight-bold mb-0 pt-2 text-2 pb-0">Development</p>
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#tabsNavigationSimpleIcons4" data-toggle="tab">
-                            <span class="featured-boxes featured-boxes-style-6 p-0 m-0">
-                                <span class="featured-box featured-box-primary featured-box-effect-6 p-0 m-0">
-                                    <span class="box-content p-0 m-0">
-                                        <i class="icon-featured icon-rocket icons"></i>
-                                    </span>
-                                </span>
-                            </span>                                 
-                            <p class="text-color-dark font-weight-bold mb-0 pt-2 text-2 pb-0">Marketing</p>
-                        </a>
-                    </li>
+                    @endforeach
                 </ul>
                 <div class="tab-content">
-                    <div class="tab-pane active" id="tabsNavigationSimpleIcons1">
+                    <!-- active -->
+                    @foreach($homeTab as $row)
+                    <div class="tab-pane active" id="{{ $row->class }}">
                         <div class="text-center">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pellentesque neque eget diam posuere porta. Quisque ut nulla at nunc <a href="#">vehicula</a> lacinia. Proin adipiscing porta tellus, ut feugiat nibh adipiscing sit amet. In eu justo a felis faucibus ornare vel id metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</p>
+                            {{ $row->description }}
                         </div>
                     </div>
-                    <div class="tab-pane" id="tabsNavigationSimpleIcons2">
-                        <div class="text-center">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pellentesque neque eget diam posuere porta. Quisque ut nulla at nunc <a href="#">vehicula</a> lacinia. Proin adipiscing porta tellus, ut feugiat nibh adipiscing sit amet. In eu justo a felis faucibus ornare vel id metus. Proin adipiscing porta tellus, ut feugiat nibh adipiscing sit amet. In eu justo a felis faucibus ornare vel id metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</p>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="tabsNavigationSimpleIcons3">
-                        <div class="text-center">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pellentesque neque eget diam posuere porta. Quisque ut nulla at nunc <a href="#">vehicula</a> lacinia. Proin adipiscing porta tellus, ut feugiat nibh adipiscing sit amet. In eu justo a felis faucibus ornare vel id metus.Proin adipiscing porta tellus, ut feugiat nibh adipiscing sit amet. In eu justo a felis faucibus ornare vel id metus. Proin adipiscing porta tellus, ut feugiat nibh adipiscing sit amet. In eu justo a felis faucibus ornare vel id metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</p>
-                        </div>
-                    </div>
-                    <div class="tab-pane" id="tabsNavigationSimpleIcons4">
-                        <div class="text-center">
-                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur pellentesque neque eget diam posuere porta. Quisque ut nulla at nunc <a href="#">vehicula</a> lacinia. In eu justo a felis faucibus ornare vel id metus. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae;</p>
-                        </div>
-                    </div>
+                    @endforeach
                 </div>
             </div>
             
         </div>
     </div>
     <div class="row">
+        @foreach($homeTab as $row)
         <div class="col text-center">
-            <a class="btn btn-outline btn-primary text-1 font-weight-semibold text-uppercase px-5 btn-py-2 mb-3" href="demo-digital-agency-services.html">Learn More</a>
+            <a class="btn btn-outline btn-primary text-1 font-weight-semibold text-uppercase px-5 btn-py-2 mb-3" href="{{ $row->url }}">Learn More</a>
         </div>
+        @endforeach
     </div>
 </div>
+@endif

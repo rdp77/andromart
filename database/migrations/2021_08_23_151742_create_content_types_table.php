@@ -16,7 +16,9 @@ class CreateContentTypesTable extends Migration
         Schema::create('content_types', function (Blueprint $table) {
             $table->id();
             
+            $table->string('name', 100)->nullable();
             $table->string('type', 100)->nullable();
+            $table->boolean('active')->default(1);
             $table->boolean('status')->default(0);
             $table->boolean('column_1')->default(0);
             $table->boolean('column_2')->default(0);

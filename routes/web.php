@@ -51,5 +51,6 @@ require __DIR__ . '/transaction/serviceRoute.php';
 require __DIR__ . '/transaction/saleRoute.php';
 require __DIR__ . '/transaction/purchasingRoute.php';
 require __DIR__ . '/content/notes.php';
+require __DIR__ . '/content/contents.php';
 require __DIR__ . '/users.php';
 require __DIR__ . '/warehouse/stockRoute.php';
