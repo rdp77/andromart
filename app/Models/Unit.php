@@ -18,4 +18,9 @@ class Unit extends Model
         'updated_by',
         'deleted_by',
     ];
+
+    public function stock()
+    {
+        return $this->hasOne('App\Models\Stock');
+    }
 }

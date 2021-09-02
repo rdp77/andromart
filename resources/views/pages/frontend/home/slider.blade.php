@@ -2,8 +2,7 @@
     <div id="revolutionSlider" class="slider rev_slider" data-version="5.4.8" data-plugin-revolution-slider data-plugin-options="{'delay': 9000, 'gridwidth': 1110, 'gridheight': [750,750,750,1250], 'responsiveLevels': [4096,1200,992,500]}">
         <ul>
             <li class="slide-overlay slide-overlay-level-7" data-transition="fade">
-
-                <img src="assetsfrontend/img/demos/digital-agency/slides/slide-digital-agency-2.jpg"  
+                <img src="assetsfrontend/image/slides/slide-digital-agency-2.jpg"  
                     alt=""
                     data-bgposition="center center" 
                     data-bgfit="cover" 
@@ -54,35 +53,9 @@
                     data-width="['690','690','690','800']"
                     data-fontsize="['18','18','18','35']"
                     data-lineheight="['29','29','29','40']">We create amazing solutins for our clients, contact us to learn how we can help.</div>
-
-
-                <!-- <a class="tp-caption btn btn-outline btn-primary font-weight-bold"
-                    href="#"
-                    data-frames='[{"delay":3000,"speed":2000,"frame":"0","from":"y:50%;opacity:0;","to":"y:0;o:1;","ease":"Power3.easeInOut"},{"delay":"wait","speed":300,"frame":"999","to":"opacity:0;fb:0;","ease":"Power3.easeInOut"}]'
-                    data-x="left" data-hoffset="['0','30','30','30']"
-                    data-y="center" data-voffset="['140','140','140','245']"
-                    data-paddingtop="['15','15','15','30']"
-                    data-paddingbottom="['15','15','15','30']"
-                    data-paddingleft="['40','40','40','50']"
-                    data-paddingright="['40','40','40','50']"
-                    data-fontsize="['13','13','13','25']"
-                    data-lineheight="['20','20','20','25']">LEARN MORE</a> -->
-
-                <!-- <a class="tp-caption btn btn-primary font-weight-bold"
-                    href="#"
-                    data-frames='[{"delay":3000,"speed":2000,"frame":"0","from":"y:50%;opacity:0;","to":"y:0;o:1;","ease":"Power3.easeInOut"},{"delay":"wait","speed":300,"frame":"999","to":"opacity:0;fb:0;","ease":"Power3.easeInOut"}]'
-                    data-x="left" data-hoffset="['185','185','220','340']"
-                    data-y="center" data-voffset="['140','140','140','245']"
-                    data-paddingtop="['16','16','16','31']"
-                    data-paddingbottom="['16','16','16','31']"
-                    data-paddingleft="['40','40','40','50']"
-                    data-paddingright="['40','40','40','50']"
-                    data-fontsize="['13','13','13','25']"
-                    data-lineheight="['20','20','20','25']">GET STARTED NOW <i class="fas fa-arrow-right ml-1"></i></a> -->
-
             </li>
             <li class="slide-overlay slide-overlay-level-7" data-transition="fade">
-                <img src="assetsfrontend/img/demos/digital-agency/slides/slide-digital-agency-3.jpg"  
+                <img src="assetsfrontend/image/slides/slide-digital-agency-3.jpg"  
                     alt=""
                     data-bgposition="center center" 
                     data-bgfit="cover" 

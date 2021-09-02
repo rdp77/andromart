@@ -2,84 +2,172 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Area;
 use App\Models\Content;
+use App\Models\ContentType;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Crypt;
+use Yajra\DataTables\DataTables;
+use Carbon\carbon;
 
 class ContentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+    public function __construct(DashboardController $DashboardController)
+    {
+        $this->middleware('auth');
+        $this->DashboardController = $DashboardController;
+    }
+
     public function index()
     {
-        //
+        // Request $req
+        // if ($req->ajax()) {
+        //     $data = Content::get();
+        //     return Datatables::of($data)
+        //         ->addIndexColumn()
+        //         ->addColumn('action', function ($row) {
+        //             $actionBtn = '<div class="btn-group">';
+        //             $actionBtn .= '<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+        //                     data-toggle="dropdown">
+        //                     <span class="sr-only">Toggle Dropdown</span>
+        //                 </button>';
+        //             $actionBtn .= '<div class="dropdown-menu">
+        //                     <a class="dropdown-item" href="' . route('branch.edit', $row->id) . '">Edit</a>';
+        //             $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
+        //             $actionBtn .= '</div></div>';
+        //             return $actionBtn;
+        //         })
+        //         ->rawColumns(['action'])
+        //         ->make(true);
+        // }
+        $content = ContentType::get();
+        return view('pages.backend.content.contents.indexContents')->with('content', $content);
+        // return view('pages.backend.master.branch.indexBranch');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
+        $area = Area::all();
+        return view('pages.backend.master.branch.createBranch', ['area' => $area]);
+    }
+    public function showContent($id)
+    {
+        $id = Crypt::decryptString($id);
+        $contentType = ContentType::where('id', $id)->first();
+        $content = Content::where('content_types_id', $id)->get();
+        // dd($content);
+        return view('pages.backend.content.contents.indexShowContents')->with('content', $content)->with('contentType', $contentType);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
+    public function store(Request $req)
+    {
+        Validator::make($req->all(), [
+            'area_id' => ['required', 'integer'],
+            'code' => ['required', 'string', 'max:255', 'unique:branches'],
+            'name' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'max:255'],
+            'latitude' => ['double', 'max:255'],
+            'longitude' => ['double', 'max:255'],
+        ])->validate();
+
+        Branch::create([
+            'area_id' => $req->area_id,
+            'code' => $req->code,
+            'name' => $req->name,
+            'title' => $req->title,
+            'address' => $req->address,
+            'phone' => $req->phone,
+            'email' => $req->email,
+            'latitude' => $req->latitude,
+            'longitude' => $req->longitude,
+        ]);
+
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Membuat master cabang baru'
+        );
+
+        return Redirect::route('branch.index')
+            ->with([
+                'status' => 'Berhasil membuat master cabang baru',
+                'type' => 'success'
+            ]);
+    }
+
+    public function show($id)
     {
         //
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Content  $content
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Content $content)
+    public function edit($id)
     {
-        //
+        $branch = Branch::find($id);
+        $area = Area::where('id', '!=', Branch::find($id)->area_id)->get();
+        return view('pages.backend.master.branch.updateBranch', ['branch' => $branch, 'area' => $area]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Content  $content
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Content $content)
+    public function update(Request $req, $id)
     {
-        //
+        Validator::make($req->all(), [
+            'area_id' => ['required', 'integer'],
+            'code' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255'],
+            'title' => ['required', 'string', 'max:255'],
+            'address' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'max:255'],
+            'latitude' => ['double', 'max:255'],
+            'longitude' => ['double', 'max:255'],
+        ])->validate();
+
+        Branch::where('id', $id)
+            ->update([
+            'area_id' => $req->area_id,
+            'code' => $req->code,
+            'name' => $req->name,
+            'title' => $req->title,
+            'address' => $req->address,
+            'phone' => $req->phone,
+            'email' => $req->email,
+            'latitude' => $req->latitude,
+            'longitude' => $req->longitude,
+            ]);
+
+        $branch = Branch::find($id);
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Mengubah master cabang ' . Branch::find($id)->name
+        );
+
+        $branch->save();
+
+        return Redirect::route('branch.index')
+            ->with([
+                'status' => 'Berhasil merubah master cabang ',
+                'type' => 'success'
+            ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Content  $content
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Content $content)
+    public function destroy(Request $req, $id)
     {
-        //
-    }
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Menghapus master cabang ' . Branch::find($id)->name
+        );
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Content  $content
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Content $content)
-    {
-        //
+        Branch::destroy($id);
+
+        return Response::json(['status' => 'success']);
     }
 }

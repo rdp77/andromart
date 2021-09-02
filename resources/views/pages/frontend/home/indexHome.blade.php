@@ -10,6 +10,6 @@
     @include('pages.frontend.home.achievement')
     <hr class="opacity-6">
     @include('pages.frontend.home.vendors')
-    @include('pages.frontend.home.porto')
+    <!-- @include('pages.frontend.home.porto') -->
 </div>
 @endsection

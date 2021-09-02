@@ -95,10 +95,6 @@
                     'url'=>route('employee.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
-                    'title'=>'User',
-                    'url'=>route('users.index')])
-                    @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
                     'title'=>'Pelanggan',
                     'url'=>route('customer.index')])
                     @include('layouts.backend.components.sidebarMenu',[
@@ -117,7 +113,7 @@
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Stok',
-                    'url'=>''])
+                    'url'=>route('stock.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Stok Masuk',

@@ -9,9 +9,39 @@
             </li>
         </ul>
     </form>
+    <?php
+        $alert = DB::select('select * from stocks where stock < min_stock');
+        $blink = count($alert) > 0;
+    ?>
     <ul class="navbar-nav navbar-right">
         <li class="dropdown dropdown-list-toggle">
+            @if ($blink)
             <a href="javascript:void(0)" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg beep">
+                <i class="far fa-bell"></i>
+            </a>
+            <div class="dropdown-menu dropdown-list dropdown-menu-right">
+                <div class="dropdown-header">
+                    {{ __('Notifikasi') }}
+                </div>
+                <div class="dropdown-list-content dropdown-list-icons">
+                    <a href="#" class="dropdown-item dropdown-item-unread">
+                        <div class="dropdown-item-icon bg-info text-white">
+                            <i class="fas fa-info"></i>
+                        </div>
+                        @foreach ( $alert as $alert )
+                        <div class="dropdown-item-desc">
+                            {{ $alert->item_id }}
+                            <div class="time text-primary">{{ $alert->stock }}</div>
+                        </div>
+                        @endforeach
+                    </a>
+                </div>
+                <div class="dropdown-footer text-center">
+                    {{ __('Footer') }}
+                </div>
+            </div>
+            @else
+            <a href="javascript:void(0)" data-toggle="dropdown" class="nav-link notification-toggle nav-link-lg">
                 <i class="far fa-bell"></i>
             </a>
             <div class="dropdown-menu dropdown-list dropdown-menu-right">
@@ -33,6 +63,28 @@
                     {{ __('Footer') }}
                 </div>
             </div>
+            @endif
+
+            {{-- <div class="dropdown-menu dropdown-list dropdown-menu-right">
+                <div class="dropdown-header">
+                    {{ __('Notifikasi') }}
+                </div>
+                <div class="dropdown-list-content dropdown-list-icons">
+                    <a href="#" class="dropdown-item dropdown-item-unread">
+                        <div class="dropdown-item-icon bg-info text-white">
+                            <i class="fas fa-info"></i>
+                        </div>
+                        <div class="dropdown-item-desc">
+                            {{ __('Kyaaaa') }}
+                            <div class="time text-primary">{{ __('sadsadsadas') }}</div>
+                        </div>
+                    </a>
+                </div>
+                <div class="dropdown-footer text-center">
+                    {{ __('Footer') }}
+                </div>
+            </div> --}}
+
         </li>
         <li class="dropdown">
             <a href="javascript:void(0)" data-toggle="dropdown"

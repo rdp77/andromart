@@ -11,7 +11,7 @@
 <form method="POST" action="{{ route('employee.store') }}">
     @csrf
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="card">
                 <div class="card-header">
                     <h4>Form Pengguna</h4>
@@ -59,7 +59,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6">
+        <div class="col-md-7">
             <div class="card">
                 <div class="card-header">
                     <h4>Form Data Karyawan</h4>
@@ -111,17 +111,22 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-md-6 col-xs-6">
+                        <div class="form-group col-md-4 col-xs-6">
                             <label for="birthday">{{ __('Tanggal Lahir') }}<code>*</code></label>
-                            <input id="birthday" type="text" class="form-control datepicker" name="birthday">
+                            <input id="birthday" type="date" class="form-control" name="birthday">
                         </div>
                         <div class="form-group col-md-4 col-xs-6">
                             <label for="gender">{{ __('Jenis Kelamin') }}<code>*</code></label>
-                            <select name="gender" id="gender" class="form-control select2" required autocomplete="gender">
-                                <option value=""> - Select - </option>
-                                <option value="L"> Laki - laki </option>
-                                <option value="P">  Perempuan </option>
-                            </select>
+                            <div class="selectgroup w-100">
+                                <label class="selectgroup-item">
+                                    <input type="radio" name="gender" value="L" class="selectgroup-input" checked="">
+                                    <span class="selectgroup-button selectgroup-button-icon"><i class="fas fa-male"></i></span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input type="radio" name="gender" value="P" class="selectgroup-input">
+                                    <span class="selectgroup-button selectgroup-button-icon"><i class="fas fa-female"></i></span>
+                                </label>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
@@ -154,11 +159,12 @@
                         </div>
                     </div>
                 </div>
+                <div class="card-footer text-right">
+                    <a class="btn btn-outline" href="javascript:window.history.go(-1);">{{ __('Kembali') }}</a>
+                    <button class="btn btn-primary mr-1" type="submit">{{ __('Tambah Data Master') }}</button>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="card-footer text-right">
-        <button class="btn btn-primary mr-1" type="submit">{{ __('Tambah Data Master') }}</button>
     </div>
 </form>
 @endsection
