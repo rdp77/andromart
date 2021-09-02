@@ -16,6 +16,7 @@ class CreateMasterMerkTable extends Migration
         Schema::create('merk', function (Blueprint $table) {
             $table->id();
             $table->String('name');
+            $table->String('type');
             $table->timestamps();
         });
     }
