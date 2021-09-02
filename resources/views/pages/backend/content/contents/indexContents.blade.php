@@ -32,7 +32,7 @@
                 <tr>
                     <td class="text-center">{{ $i++ }}</td>
                     <td>{{ $row->name }}</td>
-                    <td><a class="dropdown-item" href="{{ route('contentShow', Crypt::encryptString($row->id)) }}">Lihat</a></td>
+                    <td><a class="dropdown-item" href="{{ route('contents.show', Crypt::encryptString($row->id)) }}">Lihat</a></td>
                 </tr>
                 @endforeach
             </tbody>

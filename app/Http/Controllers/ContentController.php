@@ -50,10 +50,19 @@ class ContentController extends Controller
         // return view('pages.backend.master.branch.indexBranch');
     }
 
+    public function creates($id)
+    {
+        $id = Crypt::decryptString($id);
+        $contentType = ContentType::where('id', $id)->first();
+        $content = Content::where('content_types_id', $id)->get();
+        return view('pages.backend.content.contents.createContents')->with('content', $content)->with('contentType', $contentType);
+        // return view('pages.backend.master.branch.createBranch', ['area' => $area]);
+    }
     public function create()
     {
-        $area = Area::all();
-        return view('pages.backend.master.branch.createBranch', ['area' => $area]);
+        $content = ContentType::get();
+        return view('pages.backend.content.contents.createContents')->with('content', $content);
+        // return view('pages.backend.master.branch.createBranch', ['area' => $area]);
     }
     public function showContent($id)
     {
@@ -66,92 +75,98 @@ class ContentController extends Controller
 
     public function store(Request $req)
     {
+        $id = Crypt::decryptString($id);
+        // dd($id);
         Validator::make($req->all(), [
-            'area_id' => ['required', 'integer'],
-            'code' => ['required', 'string', 'max:255', 'unique:branches'],
-            'name' => ['required', 'string', 'max:255'],
-            'title' => ['required', 'string', 'max:255'],
-            'address' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'max:255'],
-            'latitude' => ['double', 'max:255'],
-            'longitude' => ['double', 'max:255'],
+            'title' => ['string', 'max:255'],
+            'subtitle' => ['string', 'max:255'],
+            'description' => ['string'],
+            // 'image' => ['string', 'max:255'],
+            'icon' => ['string', 'max:255'],
+            'url' => ['string', 'max:255'],
+            'class' => ['string', 'max:255'],
+            'position' => ['string', 'max:255'],
         ])->validate();
 
-        Branch::create([
-            'area_id' => $req->area_id,
-            'code' => $req->code,
-            'name' => $req->name,
+        Content::create([
             'title' => $req->title,
-            'address' => $req->address,
-            'phone' => $req->phone,
-            'email' => $req->email,
-            'latitude' => $req->latitude,
-            'longitude' => $req->longitude,
-        ]);
+            'subtitle' => $req->subtitle,
+            'description' => $req->description,
+            'image' => $req->image,
+            'icon' => $req->icon,
+            'url' => $req->url,
+            'class' => $req->class,
+            'position' => $req->position,
+            ]);
 
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Membuat master cabang baru'
-        );
+        // $branch = Branch::find($id);
+        // $this->DashboardController->createLog(
+        //     $req->header('user-agent'),
+        //     $req->ip(),
+        //     'Mengubah master cabang ' . Branch::find($id)->name
+        // );
+        // $branch->save();
 
-        return Redirect::route('branch.index')
+        return Redirect::route('contents.index')
             ->with([
-                'status' => 'Berhasil membuat master cabang baru',
+                'status' => 'Berhasil merubah master cabang ',
                 'type' => 'success'
             ]);
     }
 
     public function show($id)
     {
-        //
+        $id = Crypt::decryptString($id);
+        $contentType = ContentType::where('id', $id)->first();
+        $content = Content::where('content_types_id', $id)->get();
+        // dd($content);
+        return view('pages.backend.content.contents.indexShowContents')->with('content', $content)->with('contentType', $contentType);
     }
 
     public function edit($id)
     {
-        $branch = Branch::find($id);
-        $area = Area::where('id', '!=', Branch::find($id)->area_id)->get();
-        return view('pages.backend.master.branch.updateBranch', ['branch' => $branch, 'area' => $area]);
+        $id = Crypt::decryptString($id);
+        $content = Content::where('id', $id)->first();
+        $contentType = ContentType::where('id', $content->content_types_id)->first();
+        return view('pages.backend.content.contents.editContents')->with('content', $content)->with('contentType', $contentType);
     }
 
     public function update(Request $req, $id)
     {
+        $id = Crypt::decryptString($id);
+        // dd($id);
         Validator::make($req->all(), [
-            'area_id' => ['required', 'integer'],
-            'code' => ['required', 'string', 'max:255'],
-            'name' => ['required', 'string', 'max:255'],
-            'title' => ['required', 'string', 'max:255'],
-            'address' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'max:255'],
-            'latitude' => ['double', 'max:255'],
-            'longitude' => ['double', 'max:255'],
+            'title' => ['string', 'max:255'],
+            'subtitle' => ['string', 'max:255'],
+            'description' => ['string'],
+            // 'image' => ['string', 'max:255'],
+            'icon' => ['string', 'max:255'],
+            'url' => ['string', 'max:255'],
+            'class' => ['string', 'max:255'],
+            'position' => ['string', 'max:255'],
         ])->validate();
 
-        Branch::where('id', $id)
+        Content::where('id', $id)
             ->update([
-            'area_id' => $req->area_id,
-            'code' => $req->code,
-            'name' => $req->name,
             'title' => $req->title,
-            'address' => $req->address,
-            'phone' => $req->phone,
-            'email' => $req->email,
-            'latitude' => $req->latitude,
-            'longitude' => $req->longitude,
+            'subtitle' => $req->subtitle,
+            'description' => $req->description,
+            'image' => $req->image,
+            'icon' => $req->icon,
+            'url' => $req->url,
+            'class' => $req->class,
+            'position' => $req->position,
             ]);
 
-        $branch = Branch::find($id);
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Mengubah master cabang ' . Branch::find($id)->name
-        );
+        // $branch = Branch::find($id);
+        // $this->DashboardController->createLog(
+        //     $req->header('user-agent'),
+        //     $req->ip(),
+        //     'Mengubah master cabang ' . Branch::find($id)->name
+        // );
+        // $branch->save();
 
-        $branch->save();
-
-        return Redirect::route('branch.index')
+        return Redirect::route('contents.index')
             ->with([
                 'status' => 'Berhasil merubah master cabang ',
                 'type' => 'success'

@@ -7,9 +7,11 @@
 @endsection
 
 @section('content')
+@php use Illuminate\Support\Facades\Crypt; @endphp
 <div class="card">
-    <form method="POST" action="{{ route('contents.store') }}">
-        @csrf
+    <form action="{{ route('contents.update', Crypt::encryptString($content->id)) }}" method="POST" class="form-data" enctype="multipart/form-data">
+                @csrf
+                @method('PUT')
         <div class="card-body">
             <div class="row">
                 @if($contentType->column_1 == 1)
@@ -17,7 +19,7 @@
                     <div class="d-block">
                         <label for="title" class="control-label">{{ __('Judul') }}<code>*</code></label>
                     </div>
-                    <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" required autofocus/>
+                    <input id="title" type="text" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ $content->title }}" required autofocus/>
                     @error('title')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -30,7 +32,7 @@
                     <div class="d-block">
                         <label for="subtitle" class="control-label">{{ __('Sub Judul') }}<code>*</code></label>
                     </div>
-                    <input id="subtitle" type="text" class="form-control @error('subtitle') is-invalid @enderror" name="subtitle" required/>
+                    <input id="subtitle" type="text" class="form-control @error('subtitle') is-invalid @enderror" name="subtitle" value="{{ $content->subtitle }}" required autofocus/>
                     @error('subtitle')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -43,7 +45,7 @@
                     <div class="d-block">
                         <label for="description" class="control-label">{{ __('Deskripsi') }}<code>*</code></label>
                     </div>
-                    <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" required autofocus/>
+                    <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{ $content->description }}" required autofocus/>
                     @error('description')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -73,7 +75,7 @@
                     <div class="d-block">
                         <label for="icon" class="control-label">{{ __('Ikon') }}<code>*</code></label>
                     </div>
-                    <input id="icon" type="text" class="form-control @error('icon') is-invalid @enderror" name="icon" required autofocus/>
+                    <input id="icon" type="text" class="form-control @error('icon') is-invalid @enderror" name="icon"  value="{{ $content->icon }}" required autofocus/>
                     @error('icon')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -86,7 +88,7 @@
                     <div class="d-block">
                         <label for="url" class="control-label">{{ __('Url') }}<code>*</code></label>
                     </div>
-                    <input id="url" type="text" class="form-control @error('url') is-invalid @enderror" name="url" required/>
+                    <input id="url" type="text" class="form-control @error('url') is-invalid @enderror" name="url"  value="{{ $content->url }}" required autofocus/>
                     @error('url')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -99,7 +101,7 @@
                     <div class="d-block">
                         <label for="class" class="control-label">{{ __('Class') }}<code>*</code></label>
                     </div>
-                    <input id="class" type="text" class="form-control @error('class') is-invalid @enderror" name="class" required autofocus/>
+                    <input id="class" type="text" class="form-control @error('class') is-invalid @enderror" name="class" value="{{ $content->class }}" required autofocus/>
                     @error('class')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -112,7 +114,7 @@
                     <div class="d-block">
                         <label for="position" class="control-label">{{ __('Posisi') }}<code>*</code></label>
                     </div>
-                    <input id="position" type="text" class="form-control @error('position') is-invalid @enderror" name="position" required/>
+                    <input id="position" type="text" class="form-control @error('position') is-invalid @enderror" name="position" value="{{ $content->position }}" required autofocus/>
                     @error('position')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -124,7 +126,7 @@
         </div>
         <div class="card-footer text-right">
             <a class="btn btn-outline" href="javascript:window.history.go(-1);">{{ __('Kembali') }}</a>
-            <button class="btn btn-primary mr-1" type="submit">Tambah {{ $contentType->name }}</button>
+            <button class="btn btn-primary mr-1" type="submit">Ubah {{ $contentType->name }}</button>
         </div>
     </form>
 </div>
