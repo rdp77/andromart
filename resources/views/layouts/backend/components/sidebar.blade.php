@@ -141,12 +141,8 @@
                 <ul class="dropdown-menu">
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
-                    'title'=>'Carousel',
-                    'url'=>''])
-                    @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
                     'title'=>'Konten',
-                    'url'=>''])
+                    'url'=>route('contents.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Notulen',
