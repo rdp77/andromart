@@ -23,6 +23,7 @@
                     </th>
                     <th>{{ __('Barang') }}</th>
                     <th>{{ __('Kondisi') }}</th>
+                    <th>{{ __('Cabang') }}</th>
                     <th>{{ __('Stok') }}</th>
                     <th>{{ __('Stok Min.') }}</th>
                     <th>{{ __('Satuan') }}</th>

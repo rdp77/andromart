@@ -64,13 +64,6 @@ class EmployeeController extends Controller
             'contact' => ['required', 'string', 'max:13',],
         ])->validate();
 
-        // User::create([
-        //     'name' => $req->name,
-        //     'username' => $req->username,
-        //     'role_id' => '1',
-        //     'password' => Hash::make($req->password),
-        // ]);
-
         $user = new \App\Models\User;
         $user->role_id = '1';
         $user->name = $req->name;

@@ -59,7 +59,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-4 col-xs-12">
+                <div class="form-group col-md-2 col-xs-12">
                     <label for="supplier_id">{{ __('Supplier') }}<code>*</code></label>
                     <select name="supplier_id" id="supplier_id" class="form-control select2" required autocomplete="supplier_id">
                         <option value=""> - Select - </option>
@@ -73,6 +73,17 @@
                     </div>
                     @enderror
                 </div>
+                <div class="form-group col-md-2">
+                    <label for="branch_id">{{ __('Cabang') }}<code>*</code></label>
+                    <div class="selectgroup selectgroup-pills">
+                        @foreach($branch as $branch)
+                        <label class="selectgroup-item">
+                          <input type="checkbox" name="branch_id[]" value="{{ $branch->id }}" class="selectgroup-input" checked="">
+                          <span class="selectgroup-button">{{ $branch->code }}</span>
+                        </label>
+                        @endforeach
+                    </div>
+                </div>
                 <div class="form-group col-md-4 col-xs-12">
                     <label for="description">{{ __('Keterangan') }}</label>
                     <input id="description" type="text" class="form-control @error('description') is-invalid @enderror"
@@ -83,7 +94,7 @@
                     </div>
                     @enderror
                 </div>
-                <div class="form-group col-md-4 col-xs-12">
+                <div class="form-group col-md-2 col-xs-12">
                     <label for="image">{{ __('Gambar') }}</label>
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" id="image" name="">

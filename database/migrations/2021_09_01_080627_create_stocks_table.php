@@ -17,6 +17,7 @@ class CreateStocksTable extends Migration
             $table->id();
             $table->integer('item_id');
             $table->integer('unit_id');
+            $table->integer('branch_id');
             $table->double('stock')->nullable();
             $table->double('min_stock')->nullable();
             $table->string('description')->nullable();

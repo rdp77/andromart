@@ -18,6 +18,7 @@ var table = $("#table").DataTable({
         { data: "DT_RowIndex", orderable: false, searchable: false },
         { data: "item.name" },
         { data: "item.condition" },
+        { data: "branch.code" },
         { data: "stock" },
         { data: "min_stock" },
         { data: "unit.code" },

@@ -24,7 +24,7 @@ class StockController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Stock::with('item', 'unit')->get();
+            $data = Stock::with('item', 'unit', 'branch')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {

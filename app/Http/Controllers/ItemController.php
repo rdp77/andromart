@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use App\Models\Item;
 use App\Models\Category;
+use App\Models\Stock;
 use App\Models\Supplier;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -64,9 +67,10 @@ class ItemController extends Controller
 
     public function create()
     {
+        $branch = Branch::all();
         $category = Category::all();
         $supplier = supplier::all();
-        return view('pages.backend.master.item.createItem', ['category' => $category, 'supplier' => $supplier]);
+        return view('pages.backend.master.item.createItem', ['branch' => $branch, 'category' => $category, 'supplier' => $supplier ]);
     }
 
     public function store(Request $req)
@@ -80,7 +84,9 @@ class ItemController extends Controller
             'condition' => ['required', 'string', 'max:10'],
         ])->validate();
 
+        $id = DB::table('items')->max('id')+1;
         Item::create([
+            'id' => $id,
             'name' => $req->name,
             'category_id' => $req->category_id,
             'supplier_id' => $req->supplier_id,
@@ -91,6 +97,19 @@ class ItemController extends Controller
             'description' => $req->description,
             'image' => $req->image,
         ]);
+
+        for ($i=0; $i <count($req->branch_id) ; $i++){
+            Stock::create([
+                'item_id' => $id,
+                'unit_id' => '1',
+                'branch_id' => $req->branch_id[$i],
+                'stock' => '0',
+                'min_stock' => '0',
+                'description' => $req->description,
+                'created_by' => Auth::user()->name,
+                'created_at' => date('Y-m-d h:i:s'),
+            ]);
+        }
 
         $this->DashboardController->createLog(
             $req->header('user-agent'),
@@ -108,9 +127,10 @@ class ItemController extends Controller
     public function edit($id)
     {
         $item = Item::find($id);
+        $branch = Branch::all();
         $category = Category::where('id', '!=', Item::find($id)->category_id)->get();
         $supplier = Supplier::where('id', '!=', Item::find($id)->supplier_id)->get();
-        return view('pages.backend.master.item.updateItem', ['item' => $item, 'category' => $category, 'supplier' => $supplier] );
+        return view('pages.backend.master.item.updateItem', ['branch' => $branch, 'item' => $item, 'category' => $category, 'supplier' => $supplier] );
     }
 
     public function update($id, Request $req)

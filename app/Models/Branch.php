@@ -32,11 +32,6 @@ class Branch extends Model
         return $this->belongsTo('App\Models\Area');
     }
 
-    public function item()
-    {
-        return $this->hasMany('App\Models\Item');
-    }
-
     public function customer()
     {
         return $this->hasMany('App\Models\Customer');
@@ -45,5 +40,10 @@ class Branch extends Model
     public function employee()
     {
         return $this->hasMany('App\Models\Employee');
+    }
+
+    public function stock()
+    {
+        return $this->hasMany('App\Models\Stock');
     }
 }

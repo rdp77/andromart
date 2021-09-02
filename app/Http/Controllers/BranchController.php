@@ -60,8 +60,8 @@ class BranchController extends Controller
             'address' => ['required', 'string', 'max:255'],
             'phone' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'max:255'],
-            'latitude' => ['double', 'max:255'],
-            'longitude' => ['double', 'max:255'],
+            // 'latitude' => ['double', 'max:255'],
+            // 'longitude' => ['double', 'max:255'],
         ])->validate();
 
         Branch::create([

@@ -12,6 +12,7 @@ class Stock extends Model
     protected $fillable = [
         'item_id',
         'unit_id',
+        'branch_id',
         'stock',
         'min_stock',
         'description',
@@ -31,5 +32,10 @@ class Stock extends Model
     public function unit()
     {
         return $this->belongsTo('App\Models\Unit');
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo('App\Models\Branch');
     }
 }
