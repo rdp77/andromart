@@ -18,7 +18,7 @@
             <div class="col-md-8 col-lg-4 mb-5 mb-lg-0 appear-animation" data-appear-animation="fadeInLeftShorter" data-appear-animation-delay="300">
                 <div class="testimonial testimonial-style-2 testimonial-with-quotes testimonial-remove-right-quote mb-0">
                     <div class="testimonial-author">
-                        <img src="img/clients/client-1.jpg" class="img-fluid rounded-circle mb-0" alt="">
+                        <img src="{{ asset($row->image) }}" class="img-fluid rounded-circle mb-0" alt="">
                     </div>
                     <blockquote>
                         <p class="px-xl-2 mb-0">{{ $row->description }}</p>

@@ -8,7 +8,7 @@
 
 @section('content')
 <div class="card">
-    <form method="POST" action="{{ route('contents.store') }}">
+    <form method="POST" action="{{ route('contentStores', Crypt::encryptString($contentType->id)) }}" enctype="multipart/form-data">
         @csrf
         <div class="card-body">
             <div class="row">
@@ -57,7 +57,7 @@
                         <label for="subtitle" class="control-label">{{ __('Gambar') }}<code>*</code></label>
                     </div>
                     <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="image" name="image">
+                      <input type="file" class="custom-file-input" id="image" name="image" required>
                       <!-- <input type="file" name="photo" class="custom-file-input"> -->
                       <label class="custom-file-label">Pilih Gambar</label>
                     </div>
@@ -112,7 +112,10 @@
                     <div class="d-block">
                         <label for="position" class="control-label">{{ __('Posisi') }}<code>*</code></label>
                     </div>
-                    <input id="position" type="text" class="form-control @error('position') is-invalid @enderror" name="position" required/>
+                    <select class="form-control @error('position') is-invalid @enderror" name="position" id="position" required>
+                        <option value="Left">Kiri</option>
+                        <option value="Right">Kanan</option>
+                    </select>
                     @error('position')
                     <div class="invalid-feedback">
                         {{ $message }}

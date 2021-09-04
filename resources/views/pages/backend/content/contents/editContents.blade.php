@@ -59,7 +59,9 @@
                         <label for="subtitle" class="control-label">{{ __('Gambar') }}<code>*</code></label>
                     </div>
                     <div class="custom-file">
+                      <!-- <img class="img-fluid" src="{{ asset($content->image) }}"> -->
                       <input type="file" class="custom-file-input" id="image" name="image">
+                      <input type="hidden" class="custom-file-input" id="image" name="imageBefore" value="{{ $content->image }}">
                       <!-- <input type="file" name="photo" class="custom-file-input"> -->
                       <label class="custom-file-label">Pilih Gambar</label>
                     </div>
@@ -114,7 +116,10 @@
                     <div class="d-block">
                         <label for="position" class="control-label">{{ __('Posisi') }}<code>*</code></label>
                     </div>
-                    <input id="position" type="text" class="form-control @error('position') is-invalid @enderror" name="position" value="{{ $content->position }}" required autofocus/>
+                    <select class="form-control @error('position') is-invalid @enderror" name="position" id="position" required>
+                        <option value="Left" <?php if($content->position == "Left"){ echo "selected"; } ?>>Kiri</option>
+                        <option value="Right" <?php if($content->position == "Right"){ echo "selected"; } ?>>Kanan</option>
+                    </select>
                     @error('position')
                     <div class="invalid-feedback">
                         {{ $message }}

@@ -14,8 +14,8 @@ class ContentSeeder extends Seeder
      */
     public function run()
     {
-        Content::create(['content_types_id' => '1', 'title' => 'WE WORK AND WE MAKE', 'subtitle' => 'DESIGNS ROCK STARS', 'description' => 'We create amazing solutins for our clients, contact us to learn how we can help.', 'image' => 'Test', 'position' => 'Test']);
-        Content::create(['content_types_id' => '1', 'title' => 'Test', 'subtitle' => 'Test', 'description' => 'Test', 'image' => 'Test', 'position' => 'Test']);
+        Content::create(['content_types_id' => '1', 'title' => 'WE WORK AND WE MAKE', 'subtitle' => 'DESIGNS ROCK STARS', 'description' => 'We create amazing solutins for our clients, contact us to learn how we can help.', 'image' => 'assetsfrontend/image/slides/slide-digital-agency-2.jpg', 'position' => 'Left']);
+        Content::create(['content_types_id' => '1', 'title' => 'WE WORK AND WE MAKE', 'subtitle' => 'DESIGNS ROCK STARS', 'description' => 'We create amazing solutins for our clients, contact us to learn how we can help.', 'image' => 'assetsfrontend/image/slides/slide-digital-agency-2.jpg', 'position' => 'Right']);
         Content::create(['content_types_id' => '2', 'title' => 'About', 'description' => 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Nulla consequat massa quis enim.', 'image' => 'assetsfrontend/img/demos/digital-agency/slides/slide-digital-agency-1.jpg']);
 
         Content::create(['content_types_id' => '3', 'title' => 'Test', 'description' => 'Test', 'image' => 'Test']);

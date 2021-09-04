@@ -1,7 +1,7 @@
 @if($contents['about_achievement'] == true)
 <section class="section section-default border-0">
 	<div class="container py-4">
-		<div class="row counters">
+		<div class="row counters justify-content-center">
 			@foreach($aboutAchievement as $row)
 			@php $angka = (int)$row->subtitle @endphp
 			<div class="col-sm-6 col-lg-3 mb-5 mb-lg-0">

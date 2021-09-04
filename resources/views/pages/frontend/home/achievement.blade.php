@@ -1,6 +1,6 @@
 @if($contents['home_achievement'] == true)
 <div class="container">
-    <div class="row counters counters-sm counters-text-dark py-4 my-5">
+    <div class="row counters counters-sm counters-text-dark py-4 my-5 justify-content-center">
         @foreach($homeAchievement as $row)
         @php $angka = (int)$row->subtitle @endphp
         <div class="col-sm-6 col-lg-3 mb-5 mb-lg-0">
