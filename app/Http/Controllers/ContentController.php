@@ -73,7 +73,7 @@ class ContentController extends Controller
         return view('pages.backend.content.contents.indexShowContents')->with('content', $content)->with('contentType', $contentType);
     }
 
-    public function store(Request $req)
+    public function stores(Request $req, $id)
     {
         $id = Crypt::decryptString($id);
         // dd($id);
@@ -87,17 +87,52 @@ class ContentController extends Controller
             'class' => ['string', 'max:255'],
             'position' => ['string', 'max:255'],
         ])->validate();
+        if($file = $req->file('image')){
+            $dir = 'photo_frontend';
+            $allowed = array("jpeg", "gif", "png", "jpg", "pdf");
+            if (!is_dir($dir)){
+                mkdir( $dir );       
+            }
+            $size = filesize($file);
+            $input_file = $file->getClientOriginalName();
+            $filename = pathinfo($input_file, PATHINFO_FILENAME);
+            $md5Name = date("Y-m-d H-i-s")."_".$filename."_".md5($file->getRealPath());
+            $guessExtension = $file->guessExtension();
+            $data = $md5Name.".".$guessExtension;
 
-        Content::create([
-            'title' => $req->title,
-            'subtitle' => $req->subtitle,
-            'description' => $req->description,
-            'image' => $req->image,
-            'icon' => $req->icon,
-            'url' => $req->url,
-            'class' => $req->class,
-            'position' => $req->position,
-            ]);
+            if($size > 5000000){
+                return Redirect::route('contents.index')->with(['status' => 'Ukuran File Terlalu Besar','type' => 'danger']);
+            } else if (!in_array($guessExtension, $allowed)){
+                return Redirect::route('contents.index')->with(['status' => 'Tipe File Berkas Salah','type' => 'danger']);
+            } else {
+                $file->move($dir, $data);
+                // dd($req->title);
+                $image = "photo_frontend/".$data;
+                // dd($req->title);
+                $content = new Content();
+                $content->content_types_id = $id;
+                $content->title = $req->title;
+                $content->subtitle = $req->subtitle;
+                $content->description = $req->description;
+                $content->image = $image;
+                $content->icon = $req->icon;
+                $content->url = $req->url;
+                $content->class = $req->class;
+                $content->position = $req->position;
+                $content->save();
+                // Content::create([
+                //     'content_types_id' => $id,
+                //     'title' => $req->title,
+                //     'subtitle' => $req->subtitle,
+                //     'description' => $req->description,
+                //     'image' => $image,
+                //     'icon' => $req->icon,
+                //     'url' => $req->url,
+                //     'class' => $req->class,
+                //     'position' => $req->position,
+                // ]);
+            }
+        }
 
         // $branch = Branch::find($id);
         // $this->DashboardController->createLog(
@@ -107,9 +142,9 @@ class ContentController extends Controller
         // );
         // $branch->save();
 
-        return Redirect::route('contents.index')
+        return Redirect::route('contents.show', Crypt::encryptString($id))
             ->with([
-                'status' => 'Berhasil merubah master cabang ',
+                'status' => 'Berhasil menambah content ',
                 'type' => 'success'
             ]);
     }
@@ -134,6 +169,7 @@ class ContentController extends Controller
     public function update(Request $req, $id)
     {
         $id = Crypt::decryptString($id);
+        $content = Content::where('id', $id)->first();
         // dd($id);
         Validator::make($req->all(), [
             'title' => ['string', 'max:255'],
@@ -145,30 +181,58 @@ class ContentController extends Controller
             'class' => ['string', 'max:255'],
             'position' => ['string', 'max:255'],
         ])->validate();
+        if($file = $req->file('image')){
+            // dd("if");
+            $dir = 'photo_frontend';
+            $allowed = array("jpeg", "gif", "png", "jpg", "pdf");
+            if (!is_dir($dir)){
+                mkdir( $dir );       
+            }
+            $size = filesize($file);
+            $input_file = $file->getClientOriginalName();
+            $filename = pathinfo($input_file, PATHINFO_FILENAME);
+            $md5Name = date("Y-m-d H-i-s")."_".$filename."_".md5($file->getRealPath());
+            $guessExtension = $file->guessExtension();
+            $data = $md5Name.".".$guessExtension;
 
-        Content::where('id', $id)
-            ->update([
-            'title' => $req->title,
-            'subtitle' => $req->subtitle,
-            'description' => $req->description,
-            'image' => $req->image,
-            'icon' => $req->icon,
-            'url' => $req->url,
-            'class' => $req->class,
-            'position' => $req->position,
-            ]);
-
-        // $branch = Branch::find($id);
-        // $this->DashboardController->createLog(
-        //     $req->header('user-agent'),
-        //     $req->ip(),
-        //     'Mengubah master cabang ' . Branch::find($id)->name
-        // );
-        // $branch->save();
-
-        return Redirect::route('contents.index')
+            if($size > 5000000){
+                return Redirect::route('contents.index')->with(['status' => 'Ukuran File Terlalu Besar','type' => 'danger']);
+            } else if (!in_array($guessExtension, $allowed)){
+                return Redirect::route('contents.index')->with(['status' => 'Tipe File Berkas Salah','type' => 'danger']);
+            } else {
+                $file->move($dir, $data);
+                // dd($req->title);
+                $image = "photo_frontend/".$data;
+                // dd($content);
+                // $content->content_types_id = $id;
+                $content->title = $req->title;
+                $content->subtitle = $req->subtitle;
+                $content->description = $req->description;
+                $content->image = $image;
+                $content->icon = $req->icon;
+                $content->url = $req->url;
+                $content->class = $req->class;
+                $content->position = $req->position;
+                $content->save();
+            }
+        } else {
+            // dd($req->imageBefore);
+            // dd($content);
+            // $content->content_types_id = $id;
+            $content->title = $req->title;
+            $content->subtitle = $req->subtitle;
+            $content->description = $req->description;
+            $content->image = $req->imageBefore;
+            $content->icon = $req->icon;
+            $content->url = $req->url;
+            $content->class = $req->class;
+            $content->position = $req->position;
+            $content->save();
+        }
+        $contentType = ContentType::where('id', $content->content_types_id)->first();
+        return Redirect::route('contents.show', Crypt::encryptString($contentType->id))
             ->with([
-                'status' => 'Berhasil merubah master cabang ',
+                'status' => 'Berhasil menambah content ',
                 'type' => 'success'
             ]);
     }

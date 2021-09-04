@@ -41,7 +41,7 @@
 	                    @if($contentType->column_1 == 1)<td>{{ $row->title }}</td>@endif
 	                    @if($contentType->column_2 == 1)<td>{{ $row->subtitle }}</td>@endif
 	                    @if($contentType->column_3 == 1)<td>{{ $row->description }}</td>@endif
-	                    @if($contentType->column_4 == 1)<td>{{ $row->image }}</td>@endif
+	                    @if($contentType->column_4 == 1)<td><img class="img-fluid" src="{{ asset($row->image) }}"></td>@endif
 	                    @if($contentType->column_5 == 1)<td>{{ $row->icon }}</td>@endif
 	                    @if($contentType->column_6 == 1)<td>{{ $row->url }}</td>@endif
 	                    @if($contentType->column_7 == 1)<td>{{ $row->class }}</td>@endif

@@ -11,7 +11,7 @@
 		</div>
 		<div class="row justify-content-center mt-4">
 			<div class="col-lg-8">
-				<div class="row mt-4">
+				<div class="row mt-4 justify-content-center">
 					@foreach($aboutLeadership as $row)
 					<div class="col-lg-3 col-12 text-center mb-4">
 						<div class="testimonial-author">
