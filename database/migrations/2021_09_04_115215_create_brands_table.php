@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateMasterMerkTable extends Migration
+class CreateBrandsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class CreateMasterMerkTable extends Migration
      */
     public function up()
     {
-        Schema::create('merk', function (Blueprint $table) {
+        Schema::create('brands', function (Blueprint $table) {
             $table->id();
-            $table->String('name');
-            $table->String('type');
+            $table->string('name');
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
+            $table->string('deleted_by')->nullable();
+            $table->softDeletesTz($column = 'deleted_at', $precision = 0);
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ class CreateMasterMerkTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('merk');
+        Schema::dropIfExists('brands');
     }
 }

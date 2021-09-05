@@ -55,6 +55,10 @@
                     'url'=>route('area.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
+                    'title'=>'Merk',
+                    'url'=>route('brand.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
                     'title'=>'Cabang',
                     'url'=>route('branch.index')])
                     @include('layouts.backend.components.sidebarMenu',[
@@ -85,6 +89,10 @@
                     'active'=>'',
                     'title'=>'Satuan',
                     'url'=>route('unit.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Tipe',
+                    'url'=>route('type.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Biaya Pengeluaran',
