@@ -97,6 +97,10 @@ class FrontendController extends Controller
     {
         return view('home');
     }
+    public function tracking($id)
+    {
+        return view('pages.frontend.statusService');
+    }
 
     /**
      * Display a listing of the resource.

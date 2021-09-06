@@ -22,37 +22,37 @@
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700,800%7CShadows+Into+Light%7CPlayfair+Display:400" rel="stylesheet" type="text/css">
 
         <!-- Vendor CSS -->
-        <link rel="stylesheet" href="assetsfrontend/vendor/bootstrap/css/bootstrap.min.css">
-        <link rel="stylesheet" href="assetsfrontend/vendor/fontawesome-free/css/all.min.css">
-        <link rel="stylesheet" href="assetsfrontend/vendor/animate/animate.min.css">
-        <link rel="stylesheet" href="assetsfrontend/vendor/simple-line-icons/css/simple-line-icons.min.css">
-        <link rel="stylesheet" href="assetsfrontend/vendor/owl.carousel/assets/owl.carousel.min.css">
-        <link rel="stylesheet" href="assetsfrontend/vendor/owl.carousel/assets/owl.theme.default.min.css">
-        <link rel="stylesheet" href="assetsfrontend/vendor/magnific-popup/magnific-popup.min.css">
+        <link rel="stylesheet" href="{{ asset('assetsfrontend/vendor/bootstrap/css/bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assetsfrontend/vendor/fontawesome-free/css/all.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assetsfrontend/vendor/animate/animate.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assetsfrontend/vendor/simple-line-icons/css/simple-line-icons.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assetsfrontend/vendor/owl.carousel/assets/owl.carousel.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assetsfrontend/vendor/owl.carousel/assets/owl.theme.default.min.css') }}">
+        <link rel="stylesheet" href="{{ asset('assetsfrontend/vendor/magnific-popup/magnific-popup.min.css') }}">
 
         <!-- Theme CSS -->
-        <link rel="stylesheet" href="assetsfrontend/css/theme.css">
-        <link rel="stylesheet" href="assetsfrontend/css/theme-elements.css">
-        <link rel="stylesheet" href="assetsfrontend/css/theme-blog.css">
-        <link rel="stylesheet" href="assetsfrontend/css/theme-shop.css">
+        <link rel="stylesheet" href="{{ asset('assetsfrontend/css/theme.css') }}">
+        <link rel="stylesheet" href="{{ asset('assetsfrontend/css/theme-elements.css') }}">
+        <link rel="stylesheet" href="{{ asset('assetsfrontend/css/theme-blog.css') }}">
+        <link rel="stylesheet" href="{{ asset('assetsfrontend/css/theme-shop.css') }}">
 
         <!-- Current Page CSS -->
-        <link rel="stylesheet" href="assetsfrontend/vendor/rs-plugin/css/settings.css">
-        <link rel="stylesheet" href="assetsfrontend/vendor/rs-plugin/css/layers.css">
-        <link rel="stylesheet" href="assetsfrontend/vendor/rs-plugin/css/navigation.css">
+        <link rel="stylesheet" href="{{ asset('assetsfrontend/vendor/rs-plugin/css/settings.css') }}">
+        <link rel="stylesheet" href="{{ asset('assetsfrontend/vendor/rs-plugin/css/layers.css') }}">
+        <link rel="stylesheet" href="{{ asset('assetsfrontend/vendor/rs-plugin/css/navigation.css') }}">
         
         <!-- Demo CSS -->
-        <link rel="stylesheet" href="assetsfrontend/css/demos/demo-digital-agency.css">
+        <link rel="stylesheet" href="{{ asset('assetsfrontend/css/demos/demo-digital-agency.css') }}">
 
         <!-- Skin CSS -->
-        <link rel="stylesheet" href="assetsfrontend/css/skins/skin-digital-agency.css"> 
+        <link rel="stylesheet" href="{{ asset('assetsfrontend/css/skins/skin-digital-agency.css') }}"> 
 
         <!-- Theme Custom CSS -->
-        <link rel="stylesheet" href="assetsfrontend/css/custom.css">
+        <link rel="stylesheet" href="{{ asset('assetsfrontend/css/custom.css') }}">
 
         <!-- Head Libs -->
-        <script src="assetsfrontend/vendor/modernizr/modernizr.min.js"></script>
-
+        <script src="{{ asset('assetsfrontend/vendor/modernizr/modernizr.min.js') }}"></script>
+        @stack('custom-css')
     </head>
     <body>
         <div class="body">
@@ -62,38 +62,38 @@
         </div>
 
         <!-- Vendor -->
-        <script src="assetsfrontend/vendor/jquery/jquery.min.js"></script>
-        <script src="assetsfrontend/vendor/jquery.appear/jquery.appear.min.js"></script>
-        <script src="assetsfrontend/vendor/jquery.easing/jquery.easing.min.js"></script>
-        <script src="assetsfrontend/vendor/jquery.cookie/jquery.cookie.min.js"></script>
-        <script src="assetsfrontend/vendor/popper/umd/popper.min.js"></script>
-        <script src="assetsfrontend/vendor/bootstrap/js/bootstrap.min.js"></script>
-        <script src="assetsfrontend/vendor/common/common.min.js"></script>
-        <script src="assetsfrontend/vendor/jquery.validation/jquery.validate.min.js"></script>
-        <script src="assetsfrontend/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js"></script>
-        <script src="assetsfrontend/vendor/jquery.gmap/jquery.gmap.min.js"></script>
-        <script src="assetsfrontend/vendor/jquery.lazyload/jquery.lazyload.min.js"></script>
-        <script src="assetsfrontend/vendor/isotope/jquery.isotope.min.js"></script>
-        <script src="assetsfrontend/vendor/owl.carousel/owl.carousel.min.js"></script>
-        <script src="assetsfrontend/vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
-        <script src="assetsfrontend/vendor/vide/jquery.vide.min.js"></script>
-        <script src="assetsfrontend/vendor/vivus/vivus.min.js"></script>
+        <script src="{{ asset('assetsfrontend/vendor/jquery/jquery.min.js') }}"></script>
+        <script src="{{ asset('assetsfrontend/vendor/jquery.appear/jquery.appear.min.js') }}"></script>
+        <script src="{{ asset('assetsfrontend/vendor/jquery.easing/jquery.easing.min.js') }}"></script>
+        <script src="{{ asset('assetsfrontend/vendor/jquery.cookie/jquery.cookie.min.js') }}"></script>
+        <script src="{{ asset('assetsfrontend/vendor/popper/umd/popper.min.js') }}"></script>
+        <script src="{{ asset('assetsfrontend/vendor/bootstrap/js/bootstrap.min.js') }}"></script>
+        <script src="{{ asset('assetsfrontend/vendor/common/common.min.js') }}"></script>
+        <script src="{{ asset('assetsfrontend/vendor/jquery.validation/jquery.validate.min.js') }}"></script>
+        <script src="{{ asset('assetsfrontend/vendor/jquery.easy-pie-chart/jquery.easypiechart.min.js') }}"></script>
+        <script src="{{ asset('assetsfrontend/vendor/jquery.gmap/jquery.gmap.min.js') }}"></script>
+        <script src="{{ asset('assetsfrontend/vendor/jquery.lazyload/jquery.lazyload.min.js') }}"></script>
+        <script src="{{ asset('assetsfrontend/vendor/isotope/jquery.isotope.min.js') }}"></script>
+        <script src="{{ asset('assetsfrontend/vendor/owl.carousel/owl.carousel.min.js') }}"></script>
+        <script src="{{ asset('assetsfrontend/vendor/magnific-popup/jquery.magnific-popup.min.js') }}"></script>
+        <script src="{{ asset('assetsfrontend/vendor/vide/jquery.vide.min.js') }}"></script>
+        <script src="{{ asset('assetsfrontend/vendor/vivus/vivus.min.js') }}"></script>
         
         <!-- Theme Base, Components and Settings -->
-        <script src="assetsfrontend/js/theme.js"></script>
+        <script src="{{ asset('assetsfrontend/js/theme.js') }}"></script>
 
         <!-- Current Page Vendor and Views -->
-        <script src="assetsfrontend/js/views/view.contact.js"></script>
+        <script src="{{ asset('assetsfrontend/js/views/view.contact.js') }}"></script>
         
         <!-- Current Page Vendor and Views -->
-        <script src="assetsfrontend/vendor/rs-plugin/js/jquery.themepunch.tools.min.js"></script>
-        <script src="assetsfrontend/vendor/rs-plugin/js/jquery.themepunch.revolution.min.js"></script>
+        <script src="{{ asset('assetsfrontend/vendor/rs-plugin/js/jquery.themepunch.tools.min.js') }}"></script>
+        <script src="{{ asset('assetsfrontend/vendor/rs-plugin/js/jquery.themepunch.revolution.min.js') }}"></script>
 
         <!-- Theme Custom -->
-        <script src="assetsfrontend/js/custom.js"></script>
+        <script src="{{ asset('assetsfrontend/js/custom.js') }}"></script>
         
         <!-- Theme Initialization Files -->
-        <script src="assetsfrontend/js/theme.init.js"></script>
+        <script src="{{ asset('assetsfrontend/js/theme.init.js') }}"></script>
         @stack('custom-scripts')
     </body>
 </html>
