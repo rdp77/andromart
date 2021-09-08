@@ -5,6 +5,7 @@
 <div role="main" class="main">
     @include('pages.frontend.home.slider')
     @include('pages.frontend.home.tabContent')
+    @include('pages.frontend.home.tracking')
     @include('pages.frontend.home.whoWeAre')
     @include('pages.frontend.home.testimonials')
     @include('pages.frontend.home.achievement')

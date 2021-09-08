@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Tipe;
+use App\Models\Icon;
 use Illuminate\Http\Request;
 
-class TipeController extends Controller
+class IconController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class TipeController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Tipe  $tipe
+     * @param  \App\Models\Icon  $icon
      * @return \Illuminate\Http\Response
      */
-    public function show(Tipe $tipe)
+    public function show(Icon $icon)
     {
         //
     }
@@ -52,10 +52,10 @@ class TipeController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Tipe  $tipe
+     * @param  \App\Models\Icon  $icon
      * @return \Illuminate\Http\Response
      */
-    public function edit(Tipe $tipe)
+    public function edit(Icon $icon)
     {
         //
     }
@@ -64,10 +64,10 @@ class TipeController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Tipe  $tipe
+     * @param  \App\Models\Icon  $icon
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Tipe $tipe)
+    public function update(Request $request, Icon $icon)
     {
         //
     }
@@ -75,10 +75,10 @@ class TipeController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Tipe  $tipe
+     * @param  \App\Models\Icon  $icon
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Tipe $tipe)
+    public function destroy(Icon $icon)
     {
         //
     }

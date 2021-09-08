@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 use Carbon\carbon;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class ServicePaymentController extends Controller
 {
@@ -42,7 +42,7 @@ class ServicePaymentController extends Controller
     {
         if ($req->ajax()) {
         $data = ServicePayment::with(['Service','ServiceDetail','user'])->get();
-        
+
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -63,7 +63,7 @@ class ServicePaymentController extends Controller
                     return Carbon::parse($row->date)->locale('id')->isoFormat('LL');
                 })
                 ->addColumn('totalValue', function ($row){
-                    return number_format($row->total,0,".",",");  
+                    return number_format($row->total,0,".",",");
                 })
                 ->addColumn('currentStatus', function ($row){
                     if($row->type == 'Lunas'){
@@ -74,7 +74,7 @@ class ServicePaymentController extends Controller
                         return '<div class="badge badge-danger">Belum Bayar</div>';
                     }
                 })
-                
+
                 ->addColumn('informationService', function ($row) {
                     if($row->Service->work_status == 'Proses'){
                         $work_status = '<div class="badge badge-warning">Proses Pengerjaan</div>';
@@ -141,14 +141,14 @@ class ServicePaymentController extends Controller
         $data = Service::where('technician_id',$employee->id)
         ->where(function ($query) {
             $query->where('payment_status','DownPayment');
-            $query->orWhere('payment_status',null);                  
+            $query->orWhere('payment_status',null);
         })->get();
         return view('pages.backend.transaction.servicePayment.createServicePayment',compact('employee','code','items','data'));
     }
 
     public function store(Request $req)
     {
-        
+
         // return $req->all();
         $dateConvert = $this->DashboardController->changeMonthIdToEn($req->date);
         $id = DB::table('service_payment')->max('id')+1;
@@ -178,7 +178,7 @@ class ServicePaymentController extends Controller
                 'total_payment'=>str_replace(",", '',$req->totalPayment),
             ]);
         }
-        
+
 
 
         // if($req->verificationPrice == 'N'){
@@ -203,7 +203,7 @@ class ServicePaymentController extends Controller
 
     // public function update($id, Request $req)
     // {
-        
+
     //     Service::where('id', $id)
     //         ->update([
     //         'sales_id'   => $req->salesId,
