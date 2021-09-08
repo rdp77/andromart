@@ -62,11 +62,23 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="brand">{{ __('Merk') }}<code>*</code></label>
-                            <input id="brand" type="text" class="form-control" name="brand">
+                            <select class="select2" name="brand">
+                                <option value="">- Select -</option>
+                                @foreach ($brand as $element)
+                                <option value="{{$element->id}}">{{$element->name}}</option>
+                                @endforeach
+                            </select>
+                            {{-- <input id="brand" type="text" class="form-control" name="brand"> --}}
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="series">{{ __('Seri') }}<code>*</code></label>
-                            <input id="series" type="text" class="form-control" name="series">
+                            <select class="select2" name="series">
+                                <option value="">- Select -</option>
+                                @foreach ($type as $element)
+                                <option value="{{$element->id}}">{{$element->name}}</option>
+                                @endforeach
+                            </select>
+                            {{-- <input id="series" type="text" class="form-control" name="series"> --}}
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="type">{{ __('tipe') }}<code>*</code></label>

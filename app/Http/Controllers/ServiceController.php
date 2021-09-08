@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Item;
+use App\Models\Type;
+use App\Models\Brand;
 use App\Models\Employee;
 use App\Models\Service;
 use App\Models\ServiceDetail;
@@ -226,7 +228,7 @@ class ServiceController extends Controller
         $employee = Employee::get();
         $items    = Item::where('name','!=','Jasa Service')->get();
         $brand    = Brand::get();
-        $type     = Tipe::get();
+        $type     = Type::get();
         return view('pages.backend.transaction.service.createService',compact('employee','code','items','brand','type'));
     }
 
