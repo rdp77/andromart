@@ -384,7 +384,7 @@ function choseService() {
                 if(data.message == 'empty'){
                     $(".hiddenFormUpdate").css("display", "none");
                 }else{
-                    if(data.result.work_status == 'Selesai'){
+                    if(data.result.work_status == 'Diambil'){
                         $(".hiddenFormUpdate").css("display", "none");
                     }else{
                         $(".hiddenFormUpdate").css("display", "block");
@@ -460,6 +460,9 @@ function updateStatusService() {
                                 '</div>'+
                             '</div>'
                         );
+                        if (status == 'Diambil') {
+                            location.reload();
+                        }
                     }
                 },
                 error: function(data) {

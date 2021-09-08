@@ -201,7 +201,7 @@ function sumTotal() {
 // fungsi update status
 function choseService() {
     var serviceId = $('.serviceId').find(':selected').val();
-    $('.activities').empty();
+    $('.dropHereItem').empty();
     $.ajax({
         url: "/transaction/service/service-form-update-status-load-data",
         data: {id:serviceId},

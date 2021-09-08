@@ -58,6 +58,7 @@ class ServiceController extends Controller
                     if($row->payment_status == null){
                         $actionBtn .= '<a class="dropdown-item" href="' . route('service.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
                         $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
+                        $actionBtn .= '<a class="dropdown-item" href="' . route('service.printService', $row->id) . '"><i class="fas fa-print"></i> Cetak</a>';
                     }
                     
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
@@ -140,29 +141,36 @@ class ServiceController extends Controller
                     $htmlAdd .=      '<td>Service</td>';
                     $htmlAdd .=      '<th>'.number_format($row->total_service,0,".",",").'</th>';
                     $htmlAdd .=      '<td>S.P Toko</td>';
-                    $htmlAdd .=      '<th>'.number_format(60/100*$row->total_price,0,".",",").'</th>';
+                    $htmlAdd .=      '<th>'.number_format($row->sharing_profit_store,0,".",",").'</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Part</td>';
                     $htmlAdd .=      '<th>'.number_format($row->total_part,0,".",",").'</th>';
                     $htmlAdd .=      '<td>S.P Teknisi</td>';
-                    $htmlAdd .=      '<th>'.number_format(40/100*$row->total_price,0,".",",").'</th>';
+                    $htmlAdd .=      '<th>'.number_format($row->sharing_profit_technician_1,0,".",",").'</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Lalai</td>';
                     $htmlAdd .=      '<th>'.number_format($row->total_loss,0,".",",").'</th>';
-                    if($row->technician_replacement_id != null){
-                        $htmlAdd .=      '<td>S.P Teknisi 2</td>';
-                        $htmlAdd .=      '<th>'.number_format(40/100*$row->total_price,0,".",",").'</th>';
-                    }
+                    $htmlAdd .=      '<td>S.P Teknisi 2</td>';
+                    $htmlAdd .=      '<th>'.number_format($row->sharing_profit_technician_2,0,".",",").'</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Diskon</td>';
                     $htmlAdd .=      '<th>'.number_format($row->discount_price,0,".",",").'</th>';
+                    $htmlAdd .=      '<td>Loss Store</td>';
+                    $htmlAdd .=      '<th>'.number_format($row->total_loss_store,0,".",",").'</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Total</td>';
                     $htmlAdd .=      '<th>'.number_format($row->total_price,0,".",",").'</th>';
+                    $htmlAdd .=      '<td>Loss Teknisi</td>';
+                    $htmlAdd .=      '<th>'.number_format($row->total_loss_technician_1,0,".",",").'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=      '<td></td>';
+                    $htmlAdd .=      '<th></th>';
+                    $htmlAdd .=      '<td>Loss Teknisi 2</td>';
+                    $htmlAdd .=      '<th>'.number_format($row->total_loss_technician_2,0,".",",").'</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .= '<table>';
 
@@ -180,6 +188,8 @@ class ServiceController extends Controller
                         $workStatus = '<div class="badge badge-danger">Service Batal</div>';
                     }elseif($row->work_status == 'Manifest'){
                         $workStatus = '<div class="badge badge-primary">Barang Diterima</div>';
+                    }elseif($row->work_status == 'Diambil'){
+                        $workStatus = '<div class="badge badge-success">Sudah Diambil</div>';
                     }
 
                     if($row->payment_status == 'Lunas'){
@@ -248,6 +258,10 @@ class ServiceController extends Controller
         $id = DB::table('service')->max('id')+1;
         $sharing_profit_store = (str_replace(",", '',$req->totalPrice)/100)*60;
         $sharing_profit_technician_1 = (str_replace(",", '',$req->totalPrice)/100)*40;
+
+        $total_loss_technician_1 = (str_replace(",", '',$req->totalLoss)/100)*60;
+        $total_loss_store = (str_replace(",", '',$req->totalLoss)/100)*40;
+        
         $estimateDate = $this->DashboardController->changeMonthIdToEn($req->estimateDate);
 
         Service::create([
@@ -272,6 +286,10 @@ class ServiceController extends Controller
             'total_payment'=>0,
             'total_downpayment'=>0,
             'total_loss'=>str_replace(",", '',$req->totalLoss),
+            'total_loss_technician_1'=>$total_loss_technician_1,
+            'total_loss_technician_2'=>0,
+            'total_loss_store'=>$total_loss_store,
+            'sharing_profit_status'=>'Belum',
             'discount_price'=>str_replace(",", '',$req->totalDiscountValue),
             'discount_percent'=>str_replace(",", '',$req->totalDiscountPercent),
             'total_price'=>str_replace(",", '',$req->totalPrice),
@@ -331,6 +349,12 @@ class ServiceController extends Controller
         $Service = Service::find($id);
         $member = User::get();
         return view('pages.backend.transaction.service.editService', ['Service' => $Service,'member'=>$member]);
+    }
+    public function printService($id)
+    {
+        $Service = Service::find($id);
+        $member = User::get();
+        return view('pages.backend.transaction.service.printService', ['Service' => $Service,'member'=>$member]);
     }
 
     // public function update($id, Request $req)
@@ -394,17 +418,46 @@ class ServiceController extends Controller
     {
         try {
             // return $req->all();
+            $checkData = Service::where('id',$req->id)->first();
+            // return $checkData;
             $index = ServiceStatusMutation::where('service_id', $req->id)->count()+1;
+
             if($req->status == 'Mutasi'){
                 $technician_replacement_id = $req->technicianId;
+                if($checkData->total_loss_store == 0){
+                    $total_loss_technician_1 = 0;
+                    $total_loss_technician_2 = 0;
+                }else{
+                    $total_loss_technician_1 = 10/100*$checkData->total_loss;
+                    $total_loss_technician_2 = 50/100*$checkData->total_loss;
+                }
+                $sharing_profit_technician_1 = 5/100*$checkData->total_price;
+                $sharing_profit_technician_2 = 35/100*$checkData->total_price;
             }else{
-                $technician_replacement_id = null;
+                if($checkData->technician_replacement_id != null){
+                    $technician_replacement_id = $checkData->technician_replacement_id;
+                    $total_loss_technician_1 = $checkData->total_loss_technician_1;
+                    $total_loss_technician_2 = $checkData->total_loss_technician_2;
+                    $sharing_profit_technician_1 =  $checkData->sharing_profit_technician_1;
+                    $sharing_profit_technician_2 = $checkData->sharing_profit_technician_2; 
+                }else{
+                    $technician_replacement_id = null;
+                    $total_loss_technician_1 = $checkData->total_loss_technician_1;
+                    $total_loss_technician_2 = 0;
+                    $sharing_profit_technician_1 =  $checkData->sharing_profit_technician_1;
+                    $sharing_profit_technician_2 = 0; 
+                }
+                
             }
             
             
             Service::where('id', $req->id)->update([
                 'work_status'=>$req->status,
                 'technician_replacement_id'=>$technician_replacement_id,
+                'total_loss_technician_1'=>$total_loss_technician_1,
+                'total_loss_technician_2'=>$total_loss_technician_2,
+                'sharing_profit_technician_1'=>$sharing_profit_technician_1,
+                'sharing_profit_technician_2'=>$sharing_profit_technician_2,
             ]);
             ServiceStatusMutation::create([
                 'service_id'=>$req->id,

@@ -75,10 +75,10 @@
                     <h4>Harga</h4>
 
                 </div>
-                <input id="totalPriceHidden" type="text" value="0" class="form-control cleaveNumeral"
+                <input id="totalPriceHidden" type="hidden" value="0" class="form-control cleaveNumeral"
                 name="totalPriceHidden" style="text-align: right">
 
-                <input id="checkDpData" type="text" class="form-control"
+                <input id="checkDpData" type="hidden" class="form-control"
                 name="checkDpData" style="text-align: right">
 
                 <div class="card-body">

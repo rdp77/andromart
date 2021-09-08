@@ -37,6 +37,11 @@ Route::group(['prefix' => 'transaction'], function () {
             [ServiceController::class, 'serviceFormUpdateStatusSaveData']
         )->name('service.serviceFormUpdateStatusSaveData');
 
+        Route::get(
+            'service/{id}',
+            [ServiceController::class, 'printService']
+        )->name('service.printService');
+
         Route::resource('service-payment', ServicePaymentController::class);
 
     });

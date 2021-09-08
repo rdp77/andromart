@@ -15,6 +15,14 @@ class CreateSharingProfitTable extends Migration
     {
         Schema::create('sharing_profit', function (Blueprint $table) {
             $table->id();
+            $table->date('date_start');
+            $table->date('date_end');
+            $table->date('employe_id');
+            $table->date('total');
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
+            $table->string('deleted_by')->nullable();
+            $table->softDeletesTz($column = 'deleted_at', $precision = 0);
             $table->timestamps();
         });
     }

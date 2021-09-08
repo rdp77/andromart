@@ -28,10 +28,7 @@
                         'active'=>'',
                         'title'=>'Update WO Service',
                         'url'=>route('service.serviceFormUpdateStatus')])
-                    @include('layouts.backend.components.sidebarMenu',[
-                        'active'=>'',
-                        'title'=>'Pelunasan Service',
-                        'url'=>route('service-payment.index')])
+                   
                     @include('layouts.backend.components.sidebarMenu',[
                         'active'=>'',
                         'title'=>'Penjualan',
@@ -60,7 +57,11 @@
                     @include('layouts.backend.components.sidebarMenu',[
                         'active'=>'',
                         'title'=>'Sharing Profit',
-                        'url'=>route('service.index')])
+                        'url'=>route('sharing-profit.index')])
+                     @include('layouts.backend.components.sidebarMenu',[
+                        'active'=>'',
+                        'title'=>'Pelunasan Service',
+                        'url'=>route('service-payment.index')])
                 </ul>
             </li>
             <li class="nav-item dropdown">

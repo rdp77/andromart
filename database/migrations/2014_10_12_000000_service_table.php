@@ -37,7 +37,7 @@ class ServiceTable extends Migration
             $table->double('discount_price');
             $table->double('discount_percent');
             $table->double('total_price');
-            $table->double('total_loss');
+
             $table->double('total_payment')->nullable();
             $table->double('total_downpayment')->nullable();
             $table->date('payment_date')->nullable();
@@ -51,6 +51,11 @@ class ServiceTable extends Migration
             $table->string('description')->nullable();
             $table->string('warranty_id');
             $table->string('verification_price');
+            $table->double('total_loss');
+            $table->double('total_loss_technician_1');
+            $table->double('total_loss_technician_2');
+            $table->double('total_loss_store');
+            $table->String('sharing_profit_status');
             $table->double('sharing_profit_store');
             $table->double('sharing_profit_technician_1');
             $table->double('sharing_profit_technician_2');

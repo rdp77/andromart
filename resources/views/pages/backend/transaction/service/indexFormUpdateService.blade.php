@@ -41,6 +41,7 @@
                                 <option value="Proses">Proses</option>
                                 <option value="Mutasi">Mutasi</option>
                                 <option value="Selesai">Selesai</option>
+                                <option value="Diambil">Sudah Diambil</option>
                                 <option value="Batal">Batal</option>
                             </select>
                         </div>

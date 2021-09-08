@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\ServicePaymentController;
+// use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\SharingProfitController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,10 +16,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'finance'], function () {
-    
     Route::group(['prefix' => 'sharing-profit'], function () {
-
-        Route::resource('sharing-profit', ServiceController::class)
+        Route::resource('sharing-profit', SharingProfitController::class)
             ->except([
                 'show',
             ]);
@@ -29,17 +27,17 @@ Route::group(['prefix' => 'finance'], function () {
         //     [ServiceController::class, 'sharing-profitFormUpdateStatus']
         // )->name('sharing-profit.serviceFormUpdateStatus');
 
-        // Route::post(
-        //     'sharing-profit-form-update-status-load-data',
-        //     [ServiceController::class, 'sharing-profitFormUpdateStatusLoadData']
-        // )->name('sharing-profit.serviceFormUpdateStatusLoadData');
+        Route::post(
+            'sharing-profit-load-data-service',
+            [SharingProfitController::class, 'sharingProfitLoadDataService']
+        )->name('sharing-profit.sharingProfitLoadDataService');
 
         // Route::post(
         //     'sharing-profit-form-update-status-save-data',
         //     [ServiceController::class, 'sharing-profitFormUpdateStatusSaveData']
         // )->name('sharing-profit.serviceFormUpdateStatusSaveData');
 
-        Route::resource('sharing-profit-payment', ServicePaymentController::class);
+        // Route::resource('sharing-profit-payment', ServicePaymentController::class);
 
     });
 
