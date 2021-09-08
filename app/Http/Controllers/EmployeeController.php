@@ -81,6 +81,7 @@ class EmployeeController extends Controller
             'contact' => $req->contact,
             'gender' => $req->gender,
             'address' => $req->address,
+            'created_by' => Auth::user()->name,
         ]);
 
         $this->DashboardController->createLog(
@@ -129,6 +130,7 @@ class EmployeeController extends Controller
                 'contact' => $req->contact,
                 'gender' => $req->gender,
                 'address' => $req->address,
+                'updated_by' => Auth::user()->name,
             ]);
 
         User::where('id', Employee::find($id)->user_id)

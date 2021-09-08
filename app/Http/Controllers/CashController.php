@@ -68,6 +68,7 @@ class CashController extends Controller
             'code' => $req->code,
             'name' => $req->name,
             'balance' => $req->balance,
+            'created_by' => Auth::user()->name,
         ]);
 
         $this->DashboardController->createLog(
@@ -107,6 +108,7 @@ class CashController extends Controller
             'code' => $req->code,
             'name' => $req->name,
             'balance' => $req->balance,
+            'updated_by' => Auth::user()->name,
             ]);
 
         $cash = Cash::find($id);

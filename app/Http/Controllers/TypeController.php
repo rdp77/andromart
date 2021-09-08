@@ -60,6 +60,7 @@ class TypeController extends Controller
         Type::create([
             'brand_id' => $req->brand_id,
             'name' => $req->name,
+            'created_by' => Auth::user()->name,
         ]);
 
         $this->DashboardController->createLog(
@@ -97,7 +98,8 @@ class TypeController extends Controller
         Type::where('id', $id)
             ->update([
                 'brand_id' => $req->brand_id,
-                'name' => $req->name
+                'name' => $req->name,
+                'updated_by' => Auth::user()->name,
             ]);
 
         $type = Type::find($id);

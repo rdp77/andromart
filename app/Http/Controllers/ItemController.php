@@ -96,6 +96,7 @@ class ItemController extends Controller
             'condition' => $req->condition,
             'description' => $req->description,
             'image' => $req->image,
+            'created_by' => Auth::user()->name,
         ]);
 
         for ($i=0; $i <count($req->branch_id) ; $i++){
@@ -155,6 +156,7 @@ class ItemController extends Controller
             'condition' => $req->condition,
             'description' => $req->description,
             'image' => $req->image,
+            'updated_by' => Auth::user()->name,
             ]);
 
         $item = Item::find($id);

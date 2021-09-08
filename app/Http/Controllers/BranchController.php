@@ -74,6 +74,7 @@ class BranchController extends Controller
             'email' => $req->email,
             'latitude' => $req->latitude,
             'longitude' => $req->longitude,
+            'created_by' => Auth::user()->name,
         ]);
 
         $this->DashboardController->createLog(
@@ -126,6 +127,7 @@ class BranchController extends Controller
             'email' => $req->email,
             'latitude' => $req->latitude,
             'longitude' => $req->longitude,
+            'updated_by' => Auth::user()->name,
             ]);
 
         $branch = Branch::find($id);

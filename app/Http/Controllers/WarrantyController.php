@@ -58,6 +58,7 @@ class WarrantyController extends Controller
         Warranty::create([
             'name' => $req->name,
             'periode' => $req->periode,
+            'created_by' => Auth::user()->name,
         ]);
 
         $this->DashboardController->createLog(
@@ -95,6 +96,7 @@ class WarrantyController extends Controller
             ->update([
             'name' => $req->name,
             'periode' => $req->periode,
+            'updated_by' => Auth::user()->name,
         ]);
 
         $warranty = Warranty::find($id);

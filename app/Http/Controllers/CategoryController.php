@@ -58,6 +58,7 @@ class CategoryController extends Controller
         Category::create([
             'code' => $req->code,
             'name' => $req->name,
+            'created_by' => Auth::user()->name,
         ]);
 
         $this->DashboardController->createLog(
@@ -95,6 +96,7 @@ class CategoryController extends Controller
             ->update([
             'code' => $req->code,
             'name' => $req->name,
+            'updated_by' => Auth::user()->name,
             ]);
 
         $category = Category::find($id);
