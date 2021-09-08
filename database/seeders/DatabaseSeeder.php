@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             ContentSeeder::class,
             EmployeeSeeder::class,
             ItemSeeder::class,
+            StockSeeder::class,
             ServiceDetailSeeder::class,
             ServiceSeeder::class,
             SupplierSeeder::class,

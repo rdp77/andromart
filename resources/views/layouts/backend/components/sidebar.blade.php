@@ -40,6 +40,14 @@
                         'active'=>'',
                         'title'=>'Pembelian',
                         'url'=>''])
+                    @include('layouts.backend.components.sidebarMenu',[
+                        'active'=>'',
+                        'title'=>'Pemasukan',
+                        'url'=>''])
+                    @include('layouts.backend.components.sidebarMenu',[
+                        'active'=>'',
+                        'title'=>'Pengeluaran',
+                        'url'=>route('payment.index')])
                 </ul>
             </li>
             {{-- Master Data --}}
@@ -55,47 +63,23 @@
                     'url'=>route('area.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
-                    'title'=>'Merk',
-                    'url'=>route('brand.index')])
-                    @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
-                    'title'=>'Cabang',
-                    'url'=>route('branch.index')])
-                    @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
-                    'title'=>'Kategori',
-                    'url'=>route('category.index')])
-                    @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
                     'title'=>'Barang',
                     'url'=>route('item.index')])
-                    @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
-                    'title'=>'Hak Akses',
-                    'url'=>''])
-                    @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
-                    'title'=>'Supplier',
-                    'url'=>route('supplier.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Biaya',
                     'url'=>route('cost.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
-                    'title'=>'Kas',
-                    'url'=>route('cash.index')])
+                    'title'=>'Cabang',
+                    'url'=>route('branch.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
-                    'title'=>'Satuan',
-                    'url'=>route('unit.index')])
+                    'title'=>'Garansi',
+                    'url'=>route('warranty.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
-                    'title'=>'Tipe',
-                    'url'=>route('type.index')])
-                    @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
-                    'title'=>'Biaya Pengeluaran',
+                    'title'=>'Hak Akses',
                     'url'=>''])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
@@ -103,12 +87,32 @@
                     'url'=>route('employee.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
+                    'title'=>'Kas',
+                    'url'=>route('cash.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Kategori',
+                    'url'=>route('category.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Merk',
+                    'url'=>route('brand.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
                     'title'=>'Pelanggan',
                     'url'=>route('customer.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
-                    'title'=>'Warranty',
-                    'url'=>route('warranty.index')])
+                    'title'=>'Satuan',
+                    'url'=>route('unit.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Supplier',
+                    'url'=>route('supplier.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Tipe',
+                    'url'=>route('type.index')])
                 </ul>
             </li>
             {{-- Gudang --}}

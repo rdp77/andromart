@@ -151,7 +151,7 @@ class SaleController extends Controller
 
     public function create()
     {
-        $code = $this->code('SL-');
+        $code = $this->code('PJT-');
         $employee = Employee::get();
         $item = Item::where('name','!=','Jasa Service')->get();
         return view('pages.backend.transaction.sale.createSale', compact('code', 'employee', 'item'));

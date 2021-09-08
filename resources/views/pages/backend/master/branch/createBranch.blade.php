@@ -26,9 +26,9 @@
                     @enderror
                 </div>
                 <div class="form-group col-md-6 col-xs-12">
-                    <label for="title">{{ __('Nama Lain') }}<code>*</code></label>
+                    <label for="title">{{ __('Nama Lain') }}</label>
                     <input id="title" type="text" class="form-control @error('title') is-invalid @enderror"
-                        name="title" value="{{ old('title') }}" requierd autocomplete="title">
+                        name="title" value="{{ old('title') }}" autocomplete="title">
                     @error('title')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -79,7 +79,7 @@
                 </div>
                 <div class="form-group col-md-6 col-xs-12">
                     <div class="d-block">
-                        <label for="email" class="control-label">{{ __('Email') }}<code>*</code></label>
+                        <label for="email" class="control-label">{{ __('Email') }}</label>
                     </div>
                     <div class="input-group">
                         <div class="input-group-prepend">
@@ -88,7 +88,7 @@
                           </div>
                         </div>
                         <input id="email" type="email" class="form-control email @error('email') is-invalid @enderror" name="email"
-                            required autofocus>
+                            autofocus>
                         @error('email')
                         <div class="invalid-feedback">
                             {{ $message }}

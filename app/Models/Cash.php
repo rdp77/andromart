@@ -19,4 +19,9 @@ class Cash extends Model
         'updated_by',
         'deleted_by',
     ];
+
+    public function payment()
+    {
+        return $this->hasMany('App\Models\Payment');
+    }
 }

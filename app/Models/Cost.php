@@ -18,4 +18,9 @@ class Cost extends Model
         'updated_by',
         'deleted_by',
     ];
+
+    public function Payment()
+    {
+        return $this->hasMany('App\Models\Payment');
+    }
 }
