@@ -51,10 +51,10 @@
                                     <label for="cash_id"
                                         class="control-label">{{ __('Kass') }}<code>*</code></label>
                                 </div>
-                                <select class="select2 @error('cash_id') is-invalid @enderror" name="cash_id" required>
+                                <select class="select2 costValue @error('cash_id') is-invalid @enderror" onchange="dropValueCost()" name="cash_id" required>
                                     <option value="">- Select -</option>
                                     @foreach ($cash as $cash)
-                                    <option value="{{$cash->id}}">{{$cash->code}} - {{$cash->name}}</option>
+                                    <option  data-cost="{{$cash->balance}}" value="{{$cash->id}}">{{$cash->code}} - {{$cash->name}}</option>
                                     @endforeach
                                 </select>
                                 @error('cash_id')
@@ -82,7 +82,7 @@
                                     <label for="cost_id"
                                         class="control-label">{{ __('Jenis Biaya') }}<code>*</code></label>
                                 </div>
-                                <select class="select2 @error('cost_id') is-invalid @enderror" name="cost_id" required>
+                                <select class="select2  @error('cost_id') is-invalid @enderror"  name="cost_id" required>
                                     <option value="">- Select -</option>
                                     @foreach ($cost as $cost)
                                     <option value="{{$cost->id}}">{{$cost->code}} - {{$cost->name}}</option>
@@ -127,4 +127,7 @@
             </div>
         </div>
     </div>
+@endsection
+@section('script')
+<script src="{{ asset('assets/pages/transaction/paymentScript.js') }}"></script>
 @endsection
