@@ -16,7 +16,9 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'transaction'], function () {
+    
     Route::group(['prefix' => 'service'], function () {
+
         Route::resource('service', ServiceController::class)
             ->except([
                 'show',
@@ -40,4 +42,5 @@ Route::group(['prefix' => 'transaction'], function () {
         Route::resource('service-payment', ServicePaymentController::class);
 
     });
+
 });
