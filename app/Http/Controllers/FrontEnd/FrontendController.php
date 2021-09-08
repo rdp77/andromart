@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Models\Content;
 use App\Models\ContentType;
+use App\Models\Service;
+use App\Models\ServiceStatusMutation;
 
 use App\Library\QueryLibrary;
 
@@ -99,7 +101,11 @@ class FrontendController extends Controller
     }
     public function tracking($id)
     {
-        return view('pages.frontend.statusService');
+        // $models = ServiceStatusMutation::
+        // join('service', 'service_status_mutation.service_id', '=', 'service.id')->where('service.code', $id)
+        // ->get();
+        $models = ServiceStatusMutation::get();
+        return view('pages.frontend.statusService', compact('models', 'id'));
     }
 
     /**

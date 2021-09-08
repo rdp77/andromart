@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Area;
+use App\Models\Icon;
 use App\Models\Content;
 use App\Models\ContentType;
 use Illuminate\Http\Request;
@@ -55,7 +56,8 @@ class ContentController extends Controller
         $id = Crypt::decryptString($id);
         $contentType = ContentType::where('id', $id)->first();
         $content = Content::where('content_types_id', $id)->get();
-        return view('pages.backend.content.contents.createContents')->with('content', $content)->with('contentType', $contentType);
+        $icon = Icon::get();
+        return view('pages.backend.content.contents.createContents')->with('content', $content)->with('contentType', $contentType)->with('icon', $icon);
         // return view('pages.backend.master.branch.createBranch', ['area' => $area]);
     }
     public function create()
@@ -163,7 +165,8 @@ class ContentController extends Controller
         $id = Crypt::decryptString($id);
         $content = Content::where('id', $id)->first();
         $contentType = ContentType::where('id', $content->content_types_id)->first();
-        return view('pages.backend.content.contents.editContents')->with('content', $content)->with('contentType', $contentType);
+        $icon = Icon::get();
+        return view('pages.backend.content.contents.editContents')->with('content', $content)->with('contentType', $contentType)->with('icon', $icon);
     }
 
     public function update(Request $req, $id)
