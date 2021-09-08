@@ -31,10 +31,9 @@
                             <label for="warranty">{{ __('Garansi') }}<code>*</code></label>
                             <select class="select2" name="warranty">
                                 <option value="">- Select -</option>
-                                <option value="1">1 Minggu</option>
-                                <option value="2">1 Bulan</option>
-                                <option value="3">3 Bulan</option>
-                                <option value="4">2 Minggu</option>
+                                @foreach ($warranty as $element)
+                                    <option value="{{$element->id}}">{{$element->periode}} {{$element->name}}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>

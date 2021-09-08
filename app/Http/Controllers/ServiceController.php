@@ -8,6 +8,7 @@ use App\Models\Type;
 use App\Models\Brand;
 use App\Models\Employee;
 use App\Models\Service;
+use App\Models\Warranty;
 use App\Models\ServiceDetail;
 use App\Models\ServiceStatusMutation;
 use Illuminate\Http\Request;
@@ -229,7 +230,8 @@ class ServiceController extends Controller
         $items    = Item::where('name','!=','Jasa Service')->get();
         $brand    = Brand::get();
         $type     = Type::get();
-        return view('pages.backend.transaction.service.createService',compact('employee','code','items','brand','type'));
+        $warranty = Warranty::get();
+        return view('pages.backend.transaction.service.createService',compact('employee','code','items','brand','type','warranty'));
     }
 
     public function store(Request $req)

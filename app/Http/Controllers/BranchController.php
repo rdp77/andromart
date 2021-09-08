@@ -104,6 +104,15 @@ class BranchController extends Controller
 
     public function update(Request $req, $id)
     {
+
+        $checkBranch = Branch::find($id);
+
+        if($req->code != $checkBranch->code){
+            Validator::make($req->all(), [
+                'code' => ['required', 'unique'],
+            ])->validate();
+            return 'kode kembar';
+        }
         Validator::make($req->all(), [
             'area_id' => ['required', 'integer'],
             'code' => ['required', 'string', 'max:255'],
