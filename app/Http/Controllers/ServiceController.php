@@ -225,8 +225,9 @@ class ServiceController extends Controller
         $code     = $this->code('SRV-');
         $employee = Employee::get();
         $items    = Item::where('name','!=','Jasa Service')->get();
-        $brand    = 
-        return view('pages.backend.transaction.service.createService',compact('employee','code','items'));
+        $brand    = Brand::get();
+        $type     = Tipe::get();
+        return view('pages.backend.transaction.service.createService',compact('employee','code','items','brand','type'));
     }
 
     public function store(Request $req)
