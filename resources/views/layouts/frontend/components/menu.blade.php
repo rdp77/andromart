@@ -43,13 +43,13 @@
 											@endif
 
 										</li>
-										<li>
+										<!-- <li>
 											@if($menuActive == 'work')
 												<a class="nav-link active" href="{{ route('frontendWork') }}">Work</a>
 											@else
 												<a class="nav-link" href="{{ route('frontendWork') }}">Work</a>
 											@endif
-										</li>
+										</li> -->
 										<li>
 											@if($menuActive == 'contact')
 												<a class="nav-link active" href="{{ route('frontendContact') }}">Contact</a>

@@ -77,7 +77,18 @@
                     <div class="d-block">
                         <label for="icon" class="control-label">{{ __('Ikon') }}<code>*</code></label>
                     </div>
-                    <input id="icon" type="text" class="form-control @error('icon') is-invalid @enderror" name="icon"  value="{{ $content->icon }}" required autofocus/>
+                    <select class="form-control selectric" name="icon">
+                    <!-- <select name='icon' class="selectpicker form-control" data-live-search="true"> -->
+                    @foreach($icon as $row)
+                        <!-- <option data-icon="{{ $row->icon }}" value="{{ $row->icon }}"> -->
+                        @if($content->icon == $row->icon)
+                        <option value="{{ $row->icon }}" selected>{{ $row->icon }}</option>
+                        @else
+                        <option value="{{ $row->icon }}">{{ $row->icon }}</option>
+                        @endif
+                    @endforeach
+                    </select>
+                    <!-- <input id="icon" type="text" class="form-control @error('icon') is-invalid @enderror" name="icon"  value="{{ $content->icon }}" required autofocus/> -->
                     @error('icon')
                     <div class="invalid-feedback">
                         {{ $message }}

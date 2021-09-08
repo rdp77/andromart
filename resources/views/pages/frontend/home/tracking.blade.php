@@ -9,7 +9,7 @@
 	</div>
     <div class="card-footer text-right">
         <a href="" id="hrefUrls" class="btn btn-primary mr-1" type="submit" onclick="show()">
-        	<i class="far fa-search"></i>{{ __('Simpan Data') }}
+        	<i class="far fa-search"></i>{{ __('Cari Id Service') }}
         </a>
     </div>
 </div>

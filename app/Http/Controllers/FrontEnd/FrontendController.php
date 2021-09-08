@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Models\Branch;
 use App\Models\Content;
 use App\Models\ContentType;
+use App\Models\Service;
+use App\Models\ServiceStatusMutation;
 
 use App\Library\QueryLibrary;
 
@@ -87,11 +90,13 @@ class FrontendController extends Controller
     }
     public function contact()
     {
+        $branch = Branch::get();
+        // dd($branch);
         $contactsTitle = $this->library->contentFirst(30);
         $contactsMessageTitle = $this->library->contentFirst(31);
 
         $contents = $this->globalContent;
-        return view('pages.frontend.contact.indexContact', compact('contents', 'contactsTitle', 'contactsMessageTitle'));
+        return view('pages.frontend.contact.indexContact', compact('contents', 'contactsTitle', 'contactsMessageTitle', 'branch'));
     }
     public function login()
     {
@@ -99,7 +104,11 @@ class FrontendController extends Controller
     }
     public function tracking($id)
     {
-        return view('pages.frontend.statusService');
+        // $models = ServiceStatusMutation::
+        // join('service', 'service_status_mutation.service_id', '=', 'service.id')->where('service.code', $id)
+        // ->get();
+        $models = ServiceStatusMutation::get();
+        return view('pages.frontend.statusService', compact('models', 'id'));
     }
 
     /**

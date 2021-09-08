@@ -5,7 +5,11 @@
 @section('morebreadcrumb')
 <div class="breadcrumb-item active">{{ $contentType->name }}</div>
 @endsection
-
+@push('custom-css')
+    <!-- new css -->
+    <link rel="stylesheet" href="http://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" rel="stylesheet" />
+@endpush
 @section('content')
 <div class="card">
     <form method="POST" action="{{ route('contentStores', Crypt::encryptString($contentType->id)) }}" enctype="multipart/form-data">
@@ -73,7 +77,17 @@
                     <div class="d-block">
                         <label for="icon" class="control-label">{{ __('Ikon') }}<code>*</code></label>
                     </div>
-                    <input id="icon" type="text" class="form-control @error('icon') is-invalid @enderror" name="icon" required autofocus/>
+
+                    <select class="form-control selectric" name="icon">
+                    <!-- <select name='icon' class="selectpicker form-control" data-live-search="true"> -->
+                    @foreach($icon as $row)
+                        <!-- <option data-icon="{{ $row->icon }}" value="{{ $row->icon }}"> -->
+                        <option value="{{ $row->icon }}">
+                            {{ $row->icon }}
+                        </option>
+                    @endforeach
+                    </select>
+                    <!-- <input id="icon" type="text" class="form-control @error('icon') is-invalid @enderror" name="icon" required autofocus/> -->
                     @error('icon')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -132,3 +146,10 @@
     </form>
 </div>
 @endsection
+@push('custom-js')
+<!-- new js -->
+
+    <script src="http://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="http://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.js"></script>
+@endpush

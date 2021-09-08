@@ -9,30 +9,16 @@
 		<div class="row justify-content-center mt-4">
 			<div class="col-lg-10">
 				<div class="row justify-content-between mt-4 text-left">
+					@foreach($branch as $row)
 					<div class="col-lg-5 mb-4">
-						<h4 class="mt-3 mb-0">New York</h4>
+						<h4 class="mt-3 mb-0">{{ $row->name }}</h4>
 						<ul class="list list-icons mt-3">
-							<li><i class="fas fa-map-marker-alt"></i> <strong>Address:</strong> 1234 Street, City Name, United States</li>
-							<li><i class="fas fa-phone"></i> <strong>Phone:</strong> (123) 456-789</li>
-							<li><i class="far fa-envelope"></i> <strong>Email:</strong> <a href="mailto:mail@example.com">mail@example.com</a></li>
+							<li><i class="fas fa-map-marker-alt"></i> <strong>Address:</strong>{{ $row->address }}</li>
+							<li><i class="fas fa-phone"></i> <strong>Phone:</strong> {{ $row->phone }}</li>
+							<li><i class="far fa-envelope"></i> <strong>Email:</strong> <a href="mailto:{{ $row->email }}">{{ $row->email }}</a></li>
 						</ul>
 					</div>
-					<div class="col-lg-5 mb-4">
-						<h4 class="mt-3 mb-0">New York</h4>
-						<ul class="list list-icons mt-3">
-							<li><i class="fas fa-map-marker-alt"></i> <strong>Address:</strong> 1234 Street, City Name, United States</li>
-							<li><i class="fas fa-phone"></i> <strong>Phone:</strong> (123) 456-789</li>
-							<li><i class="far fa-envelope"></i> <strong>Email:</strong> <a href="mailto:mail@example.com">mail@example.com</a></li>
-						</ul>
-					</div>
-					<div class="col-lg-5 mb-4">
-						<h4 class="mt-3 mb-0">Los Angeles</h4>
-						<ul class="list list-icons mt-3">
-							<li><i class="fas fa-map-marker-alt"></i> <strong>Address:</strong> 1234 Street, City Name, United States</li>
-							<li><i class="fas fa-phone"></i> <strong>Phone:</strong> (123) 456-789</li>
-							<li><i class="far fa-envelope"></i> <strong>Email:</strong> <a href="mailto:mail@example.com">mail@example.com</a></li>
-						</ul>
-					</div>
+					@endforeach
 				</div>
 			</div>
 		</div>

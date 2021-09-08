@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UnitSeeder::class,
             User::class,
+            IconSeeder::class,
         ]);
     }
 }
