@@ -15,31 +15,31 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'transaction'], function () {
+Route::group(['prefix' => 'finance'], function () {
     
-    Route::group(['prefix' => 'service'], function () {
+    Route::group(['prefix' => 'sharing-profit'], function () {
 
-        Route::resource('service', ServiceController::class)
+        Route::resource('sharing-profit', ServiceController::class)
             ->except([
                 'show',
             ]);
 
-        Route::get(
-            'service-form-update-status',
-            [ServiceController::class, 'serviceFormUpdateStatus']
-        )->name('service.serviceFormUpdateStatus');
+        // Route::get(
+        //     'sharing-profit-form-update-status',
+        //     [ServiceController::class, 'sharing-profitFormUpdateStatus']
+        // )->name('sharing-profit.serviceFormUpdateStatus');
 
-        Route::post(
-            'service-form-update-status-load-data',
-            [ServiceController::class, 'serviceFormUpdateStatusLoadData']
-        )->name('service.serviceFormUpdateStatusLoadData');
+        // Route::post(
+        //     'sharing-profit-form-update-status-load-data',
+        //     [ServiceController::class, 'sharing-profitFormUpdateStatusLoadData']
+        // )->name('sharing-profit.serviceFormUpdateStatusLoadData');
 
-        Route::post(
-            'service-form-update-status-save-data',
-            [ServiceController::class, 'serviceFormUpdateStatusSaveData']
-        )->name('service.serviceFormUpdateStatusSaveData');
+        // Route::post(
+        //     'sharing-profit-form-update-status-save-data',
+        //     [ServiceController::class, 'sharing-profitFormUpdateStatusSaveData']
+        // )->name('sharing-profit.serviceFormUpdateStatusSaveData');
 
-        Route::resource('service-payment', ServicePaymentController::class);
+        Route::resource('sharing-profit-payment', ServicePaymentController::class);
 
     });
 
