@@ -66,6 +66,7 @@ class CustomerController extends Controller
             'name' => $req->name,
             'contact' => $req->contact,
             'address' => $req->address,
+            'created_by' => Auth::user()->name,
         ]);
 
         $this->DashboardController->createLog(
@@ -110,6 +111,7 @@ class CustomerController extends Controller
                 'name' => $req->name,
                 'contact' => $req->contact,
                 'address' => $req->address,
+                'updated' => Auth::user()->name,
             ]);
 
         $customer = Customer::find($id);

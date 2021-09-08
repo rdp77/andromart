@@ -60,6 +60,7 @@ class SupplierController extends Controller
             'name' => $req->name,
             'address' => $req->address,
             'contact' => $req->contact,
+            'created_by' => Auth::user()->name,
         ]);
 
         $this->DashboardController->createLog(
@@ -99,6 +100,7 @@ class SupplierController extends Controller
                 'name' => $req->name,
                 'address' => $req->address,
                 'contact' => $req->contact,
+                'updated_by' => Auth::user()->name,
             ]);
 
         $supplier = Supplier::find($id);

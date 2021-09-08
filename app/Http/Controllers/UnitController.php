@@ -58,6 +58,7 @@ class UnitController extends Controller
         Unit::create([
             'code' => $req->code,
             'name' => $req->name,
+            'created_by' => Auth::user()->name,
         ]);
 
         $this->DashboardController->createLog(
@@ -95,6 +96,7 @@ class UnitController extends Controller
             ->update([
             'code' => $req->code,
             'name' => $req->name,
+            'updated_by' => Auth::user()->name,
             ]);
 
         $unit = Unit::find($id);

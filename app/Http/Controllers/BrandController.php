@@ -56,6 +56,7 @@ class BrandController extends Controller
 
         Brand::create([
             'name' => $req->name,
+            'created_by' => Auth::user()->name,
         ]);
 
         $this->DashboardController->createLog(
@@ -90,7 +91,8 @@ class BrandController extends Controller
 
         Brand::where('id', $id)
             ->update([
-                'name' => $req->name
+                'name' => $req->name,
+                'updated_by' => Auth::user()->name,
             ]);
 
         $brand = Brand::find($id);

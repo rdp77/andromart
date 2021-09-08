@@ -73,6 +73,7 @@ class UsersController extends Controller
             'name' => $req->name,
             'username' => $req->username,
             'password' => Hash::make($req->password),
+            'created_by' => Auth::user()->name,
         ]);
 
         $this->DashboardController->createLog(
@@ -104,7 +105,8 @@ class UsersController extends Controller
         User::where('id', $id)
             ->update([
                 'name' => $req->name,
-                'username' => $req->username
+                'username' => $req->username,
+                'updated_by' => Auth::user()->name,
             ]);
 
         $user = User::find($id);
