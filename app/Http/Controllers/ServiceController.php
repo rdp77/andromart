@@ -222,9 +222,10 @@ class ServiceController extends Controller
     }
     public function create()
     {
-        $code   = $this->code('SRV-');
+        $code     = $this->code('SRV-');
         $employee = Employee::get();
-        $items  = Item::where('name','!=','Jasa Service')->get();
+        $items    = Item::where('name','!=','Jasa Service')->get();
+        $brand    = 
         return view('pages.backend.transaction.service.createService',compact('employee','code','items'));
     }
 
