@@ -26,7 +26,6 @@ class CreateStocksTransactionTable extends Migration
             $table->string('deleted_by')->nullable();
             $table->softDeletesTz($column = 'deleted_at', $precision = 0);
             $table->timestamps();
-            $table->timestamps();
         });
     }
 
