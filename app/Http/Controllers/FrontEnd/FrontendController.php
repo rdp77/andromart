@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Frontend;
 use App\Models\Branch;
 use App\Models\Content;
 use App\Models\ContentType;
+use App\Models\Message;
 use App\Models\Service;
 use App\Models\ServiceStatusMutation;
 
 use App\Library\QueryLibrary;
-
+use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
@@ -128,6 +129,22 @@ class FrontendController extends Controller
     public function create()
     {
         //
+    }
+    public function message(Request $request)
+    {
+        // dd("masuk");
+        $message = new Message;
+        $message->name = $request->name;
+        $message->email = $request->email;
+        $message->subject = $request->subject;
+        $message->message = $request->message;
+        if($message->save()) {
+            return Redirect::route('frontendContact')
+                ->with([
+                    'status' => 'Berhasil memberikan masukan ',
+                    'type' => 'success'
+                ]);
+        }
     }
 
     /**

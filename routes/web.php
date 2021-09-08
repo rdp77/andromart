@@ -24,6 +24,7 @@ Route::get('/about', [FrontendController::class, 'about'])->name('frontendAbout'
 Route::get('/services', [FrontendController::class, 'services'])->name('frontendServices');
 Route::get('/work', [FrontendController::class, 'work'])->name('frontendWork');
 Route::get('/contact', [FrontendController::class, 'contact'])->name('frontendContact');
+Route::post('/message', [FrontendController::class, 'message'])->name('frontendMessage');
 Route::get('/login', [FrontendController::class, 'login'])->name('frontendLogin');
 Route::get('/trackingService/{id}', [FrontendController::class, 'tracking'])->name('frontendTracking');
 // Route::get('/login', function () {
