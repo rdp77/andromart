@@ -4,6 +4,7 @@
 @section('content')
 <div role="main" class="main">
 	@include('pages.frontend.contact.branch')
+	@include('layouts.backend.components.notification')
 	@include('pages.frontend.contact.messages')
 	<!-- Google Maps - Go to the bottom of the page to change settings and map location. -->
 	<!-- <div id="googlemaps" class="google-map"></div> -->
