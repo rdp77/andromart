@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Frontend;
 
+use App\Models\Branch;
 use App\Models\Content;
 use App\Models\ContentType;
 use App\Models\Service;
@@ -89,11 +90,13 @@ class FrontendController extends Controller
     }
     public function contact()
     {
+        $branch = Branch::get();
+        // dd($branch);
         $contactsTitle = $this->library->contentFirst(30);
         $contactsMessageTitle = $this->library->contentFirst(31);
 
         $contents = $this->globalContent;
-        return view('pages.frontend.contact.indexContact', compact('contents', 'contactsTitle', 'contactsMessageTitle'));
+        return view('pages.frontend.contact.indexContact', compact('contents', 'contactsTitle', 'contactsMessageTitle', 'branch'));
     }
     public function login()
     {
