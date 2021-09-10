@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSharingProfitTable extends Migration
+class CreateLossItemsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateSharingProfitTable extends Migration
      */
     public function up()
     {
-        Schema::create('sharing_profit', function (Blueprint $table) {
+        Schema::create('loss_items', function (Blueprint $table) {
             $table->id();
             $table->date('date');
             $table->date('date_start');

@@ -53,6 +53,7 @@ require __DIR__ . '/master/typeRoute.php';
 require __DIR__ . '/master/warrantyRoute.php';
 require __DIR__ . '/transaction/serviceRoute.php';
 require __DIR__ . '/finance/sharingProfitRoute.php';
+require __DIR__ . '/finance/lossItemsRoute.php';
 require __DIR__ . '/transaction/saleRoute.php';
 require __DIR__ . '/transaction/paymentRoute.php';
 require __DIR__ . '/transaction/purchasingRoute.php';

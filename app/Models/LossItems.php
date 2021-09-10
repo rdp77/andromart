@@ -5,10 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SharingProfit extends Model
+class LossItems extends Model
 {
     use HasFactory;
-    protected $table = 'sharing_profit';
+    protected $table = 'loss_items';
     protected $fillable = [
         'id',
         'date',

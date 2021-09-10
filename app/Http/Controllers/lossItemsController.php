@@ -9,8 +9,8 @@ use App\Models\Brand;
 use App\Models\Employee;
 use App\Models\Service;
 use App\Models\Warranty;
-use App\Models\SharingProfit;
-use App\Models\SharingProfitDetail;
+use App\Models\lossItems;
+use App\Models\lossItemsDetail;
 use App\Models\ServiceDetail;
 use App\Models\ServiceStatusMutation;
 use Illuminate\Http\Request;
@@ -24,7 +24,7 @@ use Yajra\DataTables\DataTables;
 use Carbon\carbon;
 // use DB;
 
-class SharingProfitController extends Controller
+class lossItemsController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -47,14 +47,15 @@ class SharingProfitController extends Controller
     {
         $data = Service::where('technician_id',Auth::user()->id)->get();
         $employee = Employee::get();
-        return view('pages.backend.finance.sharing_profit.sharingProfit',compact('data','employee'));
+        return view('pages.backend.finance.loss_items.lossItems',compact('data','employee'));
     }
-    public function sharingProfitLoadDataService(Request $req)
+    public function lossItemsLoadDataService(Request $req)
     {
         // return $req->all();
-        $data = Service::with(['ServiceDetail','ServiceDetail.Items','ServiceStatusMutation','ServiceStatusMutation.Technician','SharingProfitDetail','SharingProfitDetail.SharingProfit'])
+        $data = Service::with(['ServiceDetail','ServiceDetail.Items','ServiceStatusMutation','ServiceStatusMutation.Technician','LossItemsDetail','LossItemsDetail.LossItems'])
         ->whereBetween('date', [$this->DashboardController->changeMonthIdToEn($req->dateS), $this->DashboardController->changeMonthIdToEn($req->dateE)])
         ->where('work_status','Diambil')
+        ->where('total_loss','!=',0)
         ->where(function ($query) use ($req) {
             $query->where('technician_id',$req->id)
                   ->orWhere('technician_replacement_id', $req->id);
@@ -82,7 +83,7 @@ class SharingProfitController extends Controller
     public function store(Request $req)
     {
         // return $req->all();
-        $checkData = SharingProfit::where('date_start',$this->DashboardController->changeMonthIdToEn($req->startDate))
+        $checkData = LossItems::where('date_start',$this->DashboardController->changeMonthIdToEn($req->startDate))
                                   ->where('date_end',$this->DashboardController->changeMonthIdToEn($req->endDate))
                                   ->where('employe_id',$req->technicianId)
                                   ->get();
@@ -90,7 +91,7 @@ class SharingProfitController extends Controller
            return Response::json(['status' => 'fail','message'=>'Data Sudah Ada']);
         }
         $index = DB::table('sharing_profit')->max('id')+1;
-        SharingProfit::create([
+        LossItems::create([
             'id'=>$index,
             'date'=>date('Y-m-d'),
             'date_start'=>$this->DashboardController->changeMonthIdToEn($req->startDate),
@@ -102,7 +103,7 @@ class SharingProfitController extends Controller
         ]);
         
         for ($i=0; $i <count($req->idDetail) ; $i++) {
-            SharingProfitDetail::create([
+            LossItemsDetail::create([
                 'id'=>$i+1,
                 'sharing_profit_id'=>$index,
                 'service_id'=>$req->idDetail[$i],
@@ -113,48 +114,6 @@ class SharingProfitController extends Controller
         }
         return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
     }
-
-    public function edit($id)
-    {
-        $Service = Service::find($id);
-        $member = User::get();
-        return view('pages.backend.transaction.service.editService', ['Service' => $Service,'member'=>$member]);
-    }
-    public function printService($id)
-    {
-        $Service = Service::find($id);
-        $member = User::get();
-        return view('pages.backend.transaction.service.printService', ['Service' => $Service,'member'=>$member]);
-    }
-
-    // public function update($id, Request $req)
-    // {
-
-    //     Service::where('id', $id)
-    //         ->update([
-    //         'sales_id'   => $req->salesId,
-    //         'liquid_date'=> date('Y-m-d',strtotime($req->liquidDate)),
-    //         'total'      => str_replace(",", '',$req->total),
-    //         'updated_by' => Auth::user()->name,
-    //         'updated_at' => date('Y-m-d h:i:s'),
-    //     ]);
-
-    //     $Service = Service::find($id);
-    //     $this->DashboardController->createLog(
-    //         $req->header('user-agent'),
-    //         $req->ip(),
-    //         'Mengubah Service ' . Service::find($id)->name
-    //     );
-
-    //     $Service->save();
-
-    //     return Redirect::route('service.index')
-    //         ->with([
-    //             'status' => 'Berhasil merubah Dana Kredit',
-    //             'type' => 'success'
-    //         ]);
-    // }
-
     public function destroy(Request $req, $id)
     {
         $this->DashboardController->createLog(
@@ -167,7 +126,7 @@ class SharingProfitController extends Controller
     }
     public function serviceFormUpdateStatus()
     {
-        $data = Service::where('technician_id',Auth::user()->id)->get();
+        $data     = Service::where('technician_id',Auth::user()->id)->get();
         $employee = Employee::get();
         return view('pages.backend.transaction.service.indexFormUpdateService',compact('data','employee'));
     }

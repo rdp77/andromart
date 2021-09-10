@@ -1,106 +1,8 @@
-"use strict";
-
-var table = $("#table").DataTable({
-    pageLength: 10,
-    processing: true,
-    serverSide: true,
-    responsive: true,
-    lengthMenu: [
-        [10, 25, 50, -1],
-        [10, 25, 50, "Semua"],
-    ],
-    ajax: {
-        url: "/transaction/service/service",
-        type: "GET",
-    },
-    dom: '<"html5buttons">lBrtip',
-    columns: [
-        // { data: "code" },
-        { data: "Informasi" },
-        { data: "dataCustomer" },
-        { data: "dataItem" },
-        { data: "finance" },
-        { data: "currentStatus" },
-        { data: "action", orderable: false, searchable: true },
-    ],
-    buttons: [
-        {
-            extend: "print",
-            text: "Print Semua",
-            exportOptions: {
-                modifier: {
-                    selected: null,
-                },
-                columns: ":visible",
-            },
-            messageTop: "Dokumen dikeluarkan tanggal " + moment().format("L"),
-            // footer: true,
-            header: true,
-        },
-        {
-            extend: "csv",
-        },
-        {
-            extend: "print",
-            text: "Print Yang Dipilih",
-            exportOptions: {
-                columns: ":visible",
-            },
-        },
-        {
-            extend: "excelHtml5",
-            exportOptions: {
-                columns: ":visible",
-            },
-        },
-        {
-            extend: "pdfHtml5",
-            exportOptions: {
-                columns: [0, 1, 2, 5],
-            },
-        },
-        {
-            extend: "colvis",
-            postfixButtons: ["colvisRestore"],
-            text: "Sembunyikan Kolom",
-        },
-    ],
-});
-
-$(".filter_name").on("keyup", function () {
-    table.search($(this).val()).draw();
-});
-
 $.ajaxSetup({
     headers: {
         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
     },
 });
-
-function del(id) {
-    swal({
-        title: "Apakah Anda Yakin?",
-        text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus data pengguna Anda.",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-    }).then((willDelete) => {
-        if (willDelete) {
-            $.ajax({
-                url: "/transaction/service/service/" + id,
-                type: "DELETE",
-                success: function () {
-                    swal("Data pengguna berhasil dihapus", {
-                        icon: "success",
-                    });
-                    table.draw();
-                },
-            });
-        } else {
-            swal("Data pengguna Anda tidak jadi dihapus!");
-        }
-    });
-}
 
 function save() {
     swal({
@@ -145,7 +47,7 @@ function checkEmploye() {
     $('.dropHereTotalVal').val(0);
     $('.dropHere').empty();
     $.ajax({
-        url: "/finance/sharing-profit/sharing-profit-load-data-service",
+        url: "/finance/loss-items/loss-items-load-data-service",
         data: {id:technicianId,dateS:dateS,dateE:dateE},
         type: 'POST',
         success: function(data) {
@@ -167,11 +69,7 @@ function checkEmploye() {
                         }else{
                             var totalProfit = value.sharing_profit_technician_2;
                         }
-                        // if (value.sharing_profit_detail.service_id == null) {
-                        //     var pay = '<div class="badge badge-danger">Belum Bayar</div>';
-                        // }else{
-                        //     var pay = '<div class="badge badge-success">Sudah Dibayarkan</div>';
-                        // }
+        
                         totalAkhir+=totalProfit;
                         $('.dropHere').append(
                             '<tr>'+
@@ -214,7 +112,7 @@ function saveSharingProfit() {
     }).then((willSave) => {
         if (willSave) {
             $.ajax({
-                url: "/finance/sharing-profit/sharing-profit",
+                url: "/finance/loss-items/loss-items",
                 data: $(".form-data").serialize(),
                 type: 'POST',
                 success: function(data) {

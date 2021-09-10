@@ -78,6 +78,14 @@ class Service extends Model
     {
         return $this->hasMany('App\Models\ServiceStatusMutation', 'service_id', 'id');
     }
+    public function SharingProfitDetail()
+    {
+        return $this->hasMany('App\Models\SharingProfitDetail', 'service_id', 'id');
+    }
+    public function LossItemsDetail()
+    {
+        return $this->hasMany('App\Models\LossItemsDetail', 'service_id', 'id');
+    }
     public function Employee1()
     {
         return $this->belongsTo('App\Models\Employee', 'technician_id', 'id');

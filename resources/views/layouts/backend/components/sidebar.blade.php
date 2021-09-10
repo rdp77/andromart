@@ -58,10 +58,14 @@
                         'active'=>'',
                         'title'=>'Sharing Profit',
                         'url'=>route('sharing-profit.index')])
-                     @include('layouts.backend.components.sidebarMenu',[
+                    @include('layouts.backend.components.sidebarMenu',[
                         'active'=>'',
                         'title'=>'Pelunasan Service',
                         'url'=>route('service-payment.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                        'active'=>'',
+                        'title'=>'Barang Loss Trans',
+                        'url'=>route('loss-items.index')])
                 </ul>
             </li>
             <li class="nav-item dropdown">

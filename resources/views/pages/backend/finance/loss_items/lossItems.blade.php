@@ -1,9 +1,9 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__('Sharing Profit'))
-@section('titleContent', __('Sharing Profit'))
+@section('title', __('pages.title').__('Barang Loss Transaksi'))
+@section('titleContent', __('Barang Loss Transaksi'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
-<div class="breadcrumb-item active">{{ __('Sharing Profit') }}</div>
+<div class="breadcrumb-item active">{{ __('Barang Loss Transaksi') }}</div>
 @endsection
 
 @section('content')
@@ -74,5 +74,5 @@
 </form>
 @endsection
 @section('script')
-<script src="{{ asset('assets/pages/finance/sharingProfitScript.js') }}"></script>
+<script src="{{ asset('assets/pages/finance/lossItemsScript.js') }}"></script>
 @endsection

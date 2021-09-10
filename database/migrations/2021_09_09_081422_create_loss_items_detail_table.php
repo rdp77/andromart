@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSharingProfitTable extends Migration
+class CreateLossItemsDetailTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,13 @@ class CreateSharingProfitTable extends Migration
      */
     public function up()
     {
-        Schema::create('sharing_profit', function (Blueprint $table) {
+        Schema::create('loss_items_detail', function (Blueprint $table) {
             $table->id();
-            $table->date('date');
-            $table->date('date_start');
-            $table->date('date_end');
-            $table->integer('employe_id');
-            $table->double('total');
+            $table->integer('loss_items_id');
+            $table->integer('service_id');
+            $table->integer('total');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
-            $table->string('deleted_by')->nullable();
-            $table->softDeletesTz($column = 'deleted_at', $precision = 0);
             $table->timestamps();
         });
     }
@@ -35,6 +31,6 @@ class CreateSharingProfitTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sharing_profit');
+        Schema::dropIfExists('sharing_profit_detail');
     }
 }
