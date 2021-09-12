@@ -1,5 +1,5 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__(' | Peraturan'))
+@section('title', __('pages.title').__(' | Notulensi'))
 @section('titleContent', __('Detail'))
 @section('breadcrumb', __('Tanggal ').date('d-M-Y'))
 
@@ -32,13 +32,13 @@
                                 <div class="article-title">
                                 </div>
                               </div> -->
-                                  <h2>{{ $rows->name }}</h2>
+                                  <h2>{{ $rows->description }}</h2>
                               <div class="article-details">
                                 <i class="fas fa-file" style="font-size: 150px; margin-bottom: 20px;"></i>
                                 <!-- <p>Duis aute irure dolor in reprehenderit in voluptate velit esse
                                 cillum dolore eu fugiat nulla pariatur. </p> -->
                                 <div class="article-cta">
-                                  <a href="{{ asset($rows->file) }}" class="btn btn-primary" target="_blank">Unduh</a>
+                                  <a href="{{ asset($rows->photo) }}" class="btn btn-primary" target="_blank">Unduh</a>
                                 </div>
                               </div>
                             </article>

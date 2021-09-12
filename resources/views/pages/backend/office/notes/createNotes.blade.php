@@ -1,22 +1,34 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__(' | Tambah Master Area'))
-@section('titleContent', __('Tambah Master Area'))
+@section('title', __('pages.title').__(' | Tambah Notulensi'))
+@section('titleContent', __('Tambah Notulensi'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
-<div class="breadcrumb-item active">{{ __('Master Area') }}</div>
-<div class="breadcrumb-item active">{{ __('Tambah Master Area') }}</div>
+<div class="breadcrumb-item active">{{ __('Notulensi') }}</div>
+<div class="breadcrumb-item active">{{ __('Tambah Notulensi') }}</div>
 @endsection
 
 @section('content')
 <div class="card">
-    <form method="POST" action="{{ route('area.store') }}">
+    <form method="POST" action="{{ route('notes.store') }}" enctype="multipart/form-data" class="form-data">
         @csrf
         <div class="card-body">
-            <div class="form-group col-md-4 col-xs-12">
-                <label for="code">{{ __('Kode Area') }}<code>*</code></label>
-                <input id="code" type="text" class="form-control @error('code') is-invalid @enderror"
-                    name="code" value="{{ old('code') }}" required autocomplete="code">
-                @error('code')
+            <div class="form-group col-md-6 col-xs-12">
+                <div class="d-block">
+                    <label for="titles" class="control-label">{{ __('Judul') }}<code>*</code></label>
+                </div>
+                <input id="titles" type="text" class="form-control @error('titles') is-invalid @enderror" name="titles"
+                    required autofocus>
+                @error('titles')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+                @enderror
+            </div>
+            <div class="form-group col-md-12 col-xs-12">
+                <label for="description">{{ __('Deskripsi') }}<code>*</code></label>
+                <input id="description" type="text" class="form-control @error('description') is-invalid @enderror"
+                    name="description" autofocus>
+                @error('description')
                 <div class="invalid-feedback">
                     {{ $message }}
                 </div>
@@ -24,11 +36,14 @@
             </div>
             <div class="form-group col-md-6 col-xs-12">
                 <div class="d-block">
-                    <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
+                    <label for="subtitle" class="control-label">{{ __('File') }}<code>*</code></label>
                 </div>
-                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                    required autofocus>
-                @error('name')
+                <div class="custom-file">
+                  <input type="file" class="custom-file-input" id="file" name="file[]" multiple>
+                  <!-- <input type="file" name="photo" class="custom-file-input"> -->
+                  <label class="custom-file-label">Pilih File</label>
+                </div>
+                @error('file')
                 <div class="invalid-feedback">
                     {{ $message }}
                 </div>
@@ -37,7 +52,7 @@
         </div>
         <div class="card-footer text-right">
             <a class="btn btn-outline" href="javascript:window.history.go(-1);">{{ __('Kembali') }}</a>
-            <button class="btn btn-primary mr-1" type="submit">{{ __('Tambah Data Master') }}</button>
+            <button class="btn btn-primary mr-1" type="submit">{{ __('Tambah Notulensi') }}</button>
         </div>
     </form>
 </div>
