@@ -157,6 +157,23 @@
                     'url'=>''])
                 </ul>
             </li>
+            {{-- Kantor --}}
+            <li class="nav-item dropdown">
+                <a href="javascript:void(0)" class="nav-link has-dropdown" data-toggle="dropdown">
+                    <i class="fas fa-boxes"></i>
+                    <span>{{ __('Kantor') }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Peraturan',
+                    'url'=>route('regulation.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Notulen',
+                    'url'=>'notes.index'])
+                </ul>
+            </li>
             {{-- Konten --}}
             <li class="nav-item dropdown">
                 <a href="javascript:void(0)" class="nav-link has-dropdown" data-toggle="dropdown">

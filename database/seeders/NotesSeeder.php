@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Notes;
 use Illuminate\Database\Seeder;
 
 class NotesSeeder extends Seeder
@@ -13,6 +14,9 @@ class NotesSeeder extends Seeder
      */
     public function run()
     {
-        //
+        Notes::create([
+            'users_id' => 1,
+            'title' => 'Coba',
+        ]);
     }
 }

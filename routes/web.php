@@ -38,6 +38,9 @@ Route::get('/log', [DashboardController::class, 'log'])
     ->name('dashboard.log');
 
 require __DIR__ . '/auth.php';
+
+require __DIR__ . '/users.php';
+
 require __DIR__ . '/master/areaRoute.php';
 require __DIR__ . '/master/branchRoute.php';
 require __DIR__ . '/master/brandRoute.php';
@@ -51,12 +54,18 @@ require __DIR__ . '/master/unitRoute.php';
 require __DIR__ . '/master/supplierRoute.php';
 require __DIR__ . '/master/typeRoute.php';
 require __DIR__ . '/master/warrantyRoute.php';
+
 require __DIR__ . '/transaction/serviceRoute.php';
-require __DIR__ . '/finance/sharingProfitRoute.php';
+require __DIR__ . '/transaction/serviceRoute.php';
 require __DIR__ . '/transaction/saleRoute.php';
 require __DIR__ . '/transaction/paymentRoute.php';
-require __DIR__ . '/transaction/purchasingRoute.php';
+
+require __DIR__ . '/finance/sharingProfitRoute.php';
+
+require __DIR__ . '/warehouse/stockRoute.php';
+
 require __DIR__ . '/content/notes.php';
 require __DIR__ . '/content/contents.php';
-require __DIR__ . '/users.php';
-require __DIR__ . '/warehouse/stockRoute.php';
+
+require __DIR__ . '/office/regulation.php';
+require __DIR__ . '/office/notes.php';

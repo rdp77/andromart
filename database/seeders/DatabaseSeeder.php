@@ -33,6 +33,8 @@ class DatabaseSeeder extends Seeder
             User::class,
             IconSeeder::class,
             WarrantySeeder::class,
+            RegulationSeeder::class,
+            NotesSeeder::class,
         ]);
     }
 }

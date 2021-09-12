@@ -2,170 +2,146 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Notes;
-use App\Models\NotesPhoto;
+use App\Models\Area;
+use App\Models\Regulation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Crypt;
 use Yajra\DataTables\DataTables;
+use Carbon\carbon;
 
 class NotesController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct(DashboardController $DashboardController)
     {
         $this->middleware('auth');
         $this->DashboardController = $DashboardController;
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-
-    public function index()
+    public function index(Request $req)
     {
-        $models = Notes::join('users', 'notes.users_id', '=', 'users.id')
-        ->select('notes.id as notes_id', 'notes.date as date', 'users.name as name', 'users.id as users_id', 'notes.title as title')
-        ->get();
-        // if($edit == null) {
-        //     // $kelurahan = Kelurahan::get();
-        // } else {
-        //     dd($edit);
-        //     $model = Notes::join('users', 'notes.users_id', '=', 'users.id')
-        //     ->select('notes.id as notes_id', 'notes.date as date', 'users.name as name', 'users.id as users_id', 'notes.title as title')
-        //     ->first();
-        //     return view('pages.backend.content.notes.editNotes')->with('model', $model);
-        // }
-        return view('pages.backend.content.notes.indexNotes')->with('models', $models);
+        // dd("masuk");
+        // dd(Regulation::get());
+        if ($req->ajax()) {
+            // $data = Branch::with('area')->get();
+            $data = Notes::with('users')->get();
+            // $data = Notes::get();
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<div class="btn-group">';
+                    $actionBtn .= '<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                            data-toggle="dropdown">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>';
+                    $actionBtn .= '<div class="dropdown-menu">
+                            <a class="dropdown-item" href="' . route('notes.show', Crypt::encryptString($row->id)) . '">Lihat</a>';
+                    $actionBtn .= '<a class="dropdown-item" href="' . route('notes.edit', Crypt::encryptString($row->id)) . '">Edit</a>';
+                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
+                    $actionBtn .= '</div></div>';
+                    return $actionBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('pages.backend.office.notes.indexNotes');
     }
 
     public function create()
     {
-        return view('pages.backend.content.notes.createNotes');
+        return view('pages.backend.master.area.createArea');
     }
-    public function store(Request $request)
+
+    public function store(Request $req)
     {
-        $users_id = Auth::user()->id;
-        $notes = new Notes;
-        $notes->users_id = $users_id;
-        $notes->date = now();
-        $notes->title = $request->title;
-        $notes->description = $request->description;
-        $notes->save();
-        $notes_id = $notes->id;
-        $photo = array();
-        if($files = $request->file('photo')){
-            foreach($files as $file){
+        Validator::make($req->all(), [
+            'code' => ['required', 'string', 'max:255', 'unique:areas'],
+            'name' => ['required', 'string', 'max:255'],
+        ])->validate();
 
-                $dir = 'photo_notes';
-                $allowed = array("jpeg", "gif", "png", "jpg", "pdf");
+        Area::create([
+            'code' => $req->code,
+            'name' => $req->name,
+            'created_by' => Auth::user()->name,
+        ]);
 
-                if (!is_dir($dir)){
-                    mkdir( $dir );       
-                }
-                $size = filesize($file);
-                $input_file = $file->getClientOriginalName();
-                $filename = pathinfo($input_file, PATHINFO_FILENAME);
-                $md5Name = date("Y-m-d H-i-s")."_".$filename."_".md5($file->getRealPath());
-                $guessExtension = $file->guessExtension();
-                $data = $md5Name.".".$guessExtension;
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Membuat master area baru'
+        );
 
-                if($size > 5000000){
-                    // return Redirect::route('notes.index')->with(['status' => 'Ukuran File Terlalu Besar','type' => 'danger']);
-                } else if (!in_array($guessExtension, $allowed)){
-                    // return redirect('/operator/berkas-pengajuan/insert-foto/'.$id_encrypt)->with('danger', 'Tipe file berkas salah');
-                } else {
-                    $file->move($dir, $data);
-                    $notesPhoto = new NotesPhoto;
-                    $notesPhoto->notes_id = $notes_id;
-                    $notesPhoto->photo = "photo_notes/".$data;
-                    $notesPhoto->save();
-                }
-            }
-        }
-        return Redirect::route('notes.index')->with(['status' => 'Berhasil membuat user baru','type' => 'success']);
+        return Redirect::route('area.index')
+            ->with([
+                'status' => 'Berhasil membuat master area baru',
+                'type' => 'success'
+            ]);
     }
-        
-    public function show($id)
+
+    public function show(Notes $notes, $id)
     {
-        $models = Notes::where('notes.id', $id)
-        ->join('users', 'notes.users_id', '=', 'users.id')
-        ->select('notes.id as notes_id', 'notes.date as date', 'users.name as name', 'users.id as users_id', 'notes.title as title', 'notes.description as description')
-        ->first();
-        $modelsPhoto = NotesPhoto::where('notes_id', $id)->get();
-        return view('pages.backend.content.notes.detailNotes')->with('models', $models)->with('modelsPhoto', $modelsPhoto);
+        $id = Crypt::decryptString($id);
+        dd($id);
     }
 
     public function edit($id)
     {
-        $models = Notes::where('id', $id)->first();
-        $modelsPhoto = NotesPhoto::where('notes_id', $id)->get();
-        return view('pages.backend.content.notes.editNotes')->with('models', $models)->with('modelsPhoto', $modelsPhoto);
-        // return view('pages.backend.content.notes.editNotes');
+        $area = Area::find($id);
+        return view('pages.backend.master.area.updateArea', ['area' => $area]);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $req, $id)
     {
-        $notes = Notes::where('id', $id)->first();
-        $notes->title = $request->title;
-        $notes->description = $request->description;
-        $notes->save();
-
-        $photo = array();
-        if($files = $request->file('photo')){
-            foreach($files as $file){
-
-                $dir = 'photo_notes';
-                $allowed = array("jpeg", "gif", "png", "jpg", "pdf");
-
-                if (!is_dir($dir)){
-                    mkdir( $dir );       
-                }
-                $size = filesize($file);
-                $input_file = $file->getClientOriginalName();
-                $filename = pathinfo($input_file, PATHINFO_FILENAME);
-                $md5Name = date("Y-m-d H-i-s")."_".$filename."_".md5($file->getRealPath());
-                $guessExtension = $file->guessExtension();
-                $data = $md5Name.".".$guessExtension;
-
-                if($size > 5000000){
-                    // return Redirect::route('notes.index')->with(['status' => 'Ukuran File Terlalu Besar','type' => 'danger']);
-                } else if (!in_array($guessExtension, $allowed)){
-                    // return redirect('/operator/berkas-pengajuan/insert-foto/'.$id_encrypt)->with('danger', 'Tipe file berkas salah');
-                } else {
-                    $file->move($dir, $data);
-                    $notesPhoto = new NotesPhoto;
-                    $notesPhoto->notes_id = $id;
-                    $notesPhoto->photo = "photo_notes/".$data;
-                    $notesPhoto->save();
-                }
-            }
+        if($req->code == Area::find($id)->code){
+            Validator::make($req->all(), [
+                'name' => ['required', 'string', 'max:255'],
+            ])->validate();
         }
-        return Redirect::route('notes.index')->with(['status' => 'Berhasil membuat user baru','type' => 'success']);
+        else{
+            Validator::make($req->all(), [
+                'code' => ['required', 'string', 'max:255', 'unique:areas'],
+                'name' => ['required', 'string', 'max:255'],
+            ])->validate();
+        }
+
+        Area::where('id', $id)
+            ->update([
+                'code' => $req->code,
+                'name' => $req->name,
+                'updated_by' => Auth::user()->name,
+            ]);
+
+        $area = Area::find($id);
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Mengubah masrter area ' . Area::find($id)->name
+        );
+
+        $area->save();
+
+        return Redirect::route('area.index')
+            ->with([
+                'status' => 'Berhasil merubah master area ',
+                'type' => 'success'
+            ]);
     }
 
-    public function destroy(Request $request, $id)
+    public function destroy(Request $req, $id)
     {
-        $models = Notes::findOrFail($id);
-        $models->delete();
-        
-        return redirect()->route('notes.edit', $id);
-    }
-    public function delete($id)
-    {
-        dd("ini id hapus wk ".$id);
-        $models = Notes::findOrFail($id);
-        $models->delete();
-        return redirect()->route('notes.edit', $id);
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Menghapus master area ' . Area::find($id)->name
+        );
+
+        Area::destroy($id);
+
+        return Response::json(['status' => 'success']);
     }
 }
