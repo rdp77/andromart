@@ -160,7 +160,7 @@
             {{-- Kantor --}}
             <li class="nav-item dropdown">
                 <a href="javascript:void(0)" class="nav-link has-dropdown" data-toggle="dropdown">
-                    <i class="fas fa-boxes"></i>
+                    <i class="fas fa-building"></i>
                     <span>{{ __('Kantor') }}</span>
                 </a>
                 <ul class="dropdown-menu">
