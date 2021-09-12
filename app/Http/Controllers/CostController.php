@@ -87,10 +87,17 @@ class CostController extends Controller
 
     public function update(Request $req, $id)
     {
-        Validator::make($req->all(), [
-            'code' => ['required', 'string', 'max:255'],
-            'name' => ['required', 'string', 'max:255'],
-        ])->validate();
+        if ($req->code == Cost::find($id)->code) {
+            Validator::make($req->all(), [
+                'name' => ['required', 'string', 'max:255'],
+            ])->validate();
+        }
+        else {
+            Validator::make($req->all(), [
+                'code' => ['required', 'string', 'max:255', 'unique:costs'],
+                'name' => ['required', 'string', 'max:255'],
+            ])->validate();
+        }
 
         Cost::where('id', $id)
             ->update([
