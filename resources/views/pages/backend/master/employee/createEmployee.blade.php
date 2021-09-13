@@ -111,11 +111,11 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-md-4 col-xs-6">
+                        <div class="form-group col-md-4 col-xs-12">
                             <label for="birthday">{{ __('Tanggal Lahir') }}<code>*</code></label>
-                            <input id="birthday" type="date" class="form-control" name="birthday">
+                            <input id="birthday" type="text" class="form-control datepicker" name="birthday">
                         </div>
-                        <div class="form-group col-md-4 col-xs-6">
+                        <div class="form-group col-md-4 col-xs-12">
                             <label for="gender">{{ __('Jenis Kelamin') }}<code>*</code></label>
                             <div class="selectgroup w-100">
                                 <label class="selectgroup-item">
@@ -139,7 +139,7 @@
                                 </div>
                                 </div>
                                 <input id="contact" type="text" class="form-control @error('contact') is-invalid @enderror"
-                                    name="contact" value="{{ old('contact') }}" required autocomplete="contact" placeholder="6285755145397">
+                                    name="contact" value="{{ old('contact') }}" required autocomplete="contact">
                                 @error('contact')
                                 <div class="invalid-feedback">
                                     {{ $message }}

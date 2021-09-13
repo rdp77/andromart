@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -89,6 +90,12 @@ class UsersController extends Controller
             ]);
     }
 
+    public function showUser()
+    {
+        $user = User::find(Auth::user()->id);
+        return view('pages.backend.users.showUsers', compact('user'));
+    }
+
     public function edit($id)
     {
         $user = User::find($id);
@@ -97,16 +104,36 @@ class UsersController extends Controller
 
     public function update($id, Request $req)
     {
-        Validator::make($req->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'username' => ['required', 'string', 'max:255', 'unique:users'],
-        ])->validate();
+        if ($req->identity == User::find($id)->employee->identity) {
+            Validator::make($req->all(), [
+                'name' => ['required', 'string', 'max:255'],
+                'address' => ['required', 'string', 'max:255',],
+            ])->validate();
+        }
+        else {
+            Validator::make($req->all(), [
+                'identity' => ['required', 'string', 'max:255', 'unique:employees'],
+                'name' => ['required', 'string', 'max:255'],
+                'address' => ['required', 'string', 'max:255',],
+            ])->validate();
+        }
+
+        $birthday = $this->DashboardController->changeMonthIdToEn($req->birthday);
+
+        Employee::where('id', User::find($id)->employee->id)
+            ->update([
+                'identity' => $req->identity,
+                'name' => $req->name,
+                'birthday' => $birthday,
+                'contact' => $req->contact,
+                'gender' => $req->gender,
+                'address' => $req->address,
+                'updated_by' => Auth::user()->name,
+            ]);
 
         User::where('id', $id)
             ->update([
                 'name' => $req->name,
-                'username' => $req->username,
-                'updated_by' => Auth::user()->name,
             ]);
 
         $user = User::find($id);
@@ -118,7 +145,7 @@ class UsersController extends Controller
 
         $user->save();
 
-        return Redirect::route('users.index')
+        return Redirect::route('employee.index')
             ->with([
                 'status' => 'Berhasil merubah user',
                 'type' => 'success'

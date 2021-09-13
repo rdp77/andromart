@@ -28,7 +28,7 @@
                         'active'=>'',
                         'title'=>'Update WO Service',
                         'url'=>route('service.serviceFormUpdateStatus')])
-                   
+
                     @include('layouts.backend.components.sidebarMenu',[
                         'active'=>'',
                         'title'=>'Penjualan',
@@ -57,7 +57,7 @@
                     @include('layouts.backend.components.sidebarMenu',[
                         'active'=>'',
                         'title'=>'Sharing Profit',
-                        'url'=>route('sharing-profit.index')])
+                        'url'=>''])
                      @include('layouts.backend.components.sidebarMenu',[
                         'active'=>'',
                         'title'=>'Pelunasan Service',
@@ -171,7 +171,7 @@
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Notulen',
-                    'url'=>'notes.index'])
+                    'url'=>route('notes.index')])
                 </ul>
             </li>
             {{-- Konten --}}

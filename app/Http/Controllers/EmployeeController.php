@@ -61,7 +61,6 @@ class EmployeeController extends Controller
             'identity' => ['required', 'string', 'max:255', 'unique:employees'],
             'name' => ['required', 'string', 'max:255'],
             'address' => ['required', 'string', 'max:255',],
-            'contact' => ['required', 'string', 'max:13',],
         ])->validate();
 
         $user = new \App\Models\User;
@@ -71,13 +70,15 @@ class EmployeeController extends Controller
         $user->password = Hash::make($req->password);
         $user->save();
 
+        $birthday = $this->DashboardController->changeMonthIdToEn($req->birthday);
+
         Employee::create([
             'user_id' => $user->id,
             'branch_id' => $req->branch_id,
             'level' => $req->level,
             'identity' => $req->identity,
             'name' => $req->name,
-            'birthday' => $req->birthday,
+            'birthday' => $birthday,
             'contact' => $req->contact,
             'gender' => $req->gender,
             'address' => $req->address,
@@ -111,22 +112,29 @@ class EmployeeController extends Controller
 
     public function update(Request $req, $id)
     {
-        Validator::make($req->all(), [
-            'username' => ['required', 'string', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:6',],
-            'identity' => ['required', 'string', 'max:255', 'unique:employees'],
-            'name' => ['required', 'string', 'max:255'],
-            'address' => ['required', 'string', 'max:255',],
-            'contact' => ['required', 'string', 'max:13',],
-        ])->validate();
+        if ($req->identity == Employee::find($id)->identity) {
+            Validator::make($req->all(), [
+                'name' => ['required', 'string', 'max:255'],
+                'address' => ['required', 'string', 'max:255',],
+            ])->validate();
+        }
+        else {
+            Validator::make($req->all(), [
+                'identity' => ['required', 'string', 'max:255', 'unique:employees'],
+                'name' => ['required', 'string', 'max:255'],
+                'address' => ['required', 'string', 'max:255',],
+            ])->validate();
+        }
+
+        $birthday = $this->DashboardController->changeMonthIdToEn($req->birthday);
 
         Employee::where('id', $id)
             ->update([
-                'branch_id' => $req->branch_id,
-                'level' => $req->level,
+                // 'branch_id' => $req->branch_id,
+                // 'level' => $req->level,
                 'identity' => $req->identity,
                 'name' => $req->name,
-                'birthday' => $req->birthday,
+                'birthday' => $birthday,
                 'contact' => $req->contact,
                 'gender' => $req->gender,
                 'address' => $req->address,
@@ -135,7 +143,6 @@ class EmployeeController extends Controller
 
         User::where('id', Employee::find($id)->user_id)
             ->update([
-                'username' => $req->username,
                 'name' => $req->name,
             ]);
 

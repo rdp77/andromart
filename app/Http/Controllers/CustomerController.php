@@ -96,13 +96,23 @@ class CustomerController extends Controller
 
     public function update(Request $req, $id)
     {
-        Validator::make($req->all(), [
-            'branch_id' => ['required', 'integer'],
-            'identity' => ['required', 'string', 'max:255', 'unique:customers'],
-            'name' => ['required', 'string', 'max:255'],
-            'contact' => ['required', 'string', 'max:255'],
-            'address' => ['required', 'string', 'max:255'],
-        ])->validate();
+        if ($req->id == Customer::find($id)->identity) {
+            Validator::make($req->all(), [
+                'branch_id' => ['required', 'integer'],
+                'name' => ['required', 'string', 'max:255'],
+                'contact' => ['required', 'string', 'max:255'],
+                'address' => ['required', 'string', 'max:255'],
+            ])->validate();
+        }
+        else {
+            Validator::make($req->all(), [
+                'branch_id' => ['required', 'integer'],
+                'identity' => ['required', 'string', 'max:255', 'unique:customers'],
+                'name' => ['required', 'string', 'max:255'],
+                'contact' => ['required', 'string', 'max:255'],
+                'address' => ['required', 'string', 'max:255'],
+            ])->validate();
+        }
 
         Customer::where('id', $id)
             ->update([
