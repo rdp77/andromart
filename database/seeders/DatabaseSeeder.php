@@ -34,6 +34,8 @@ class DatabaseSeeder extends Seeder
             IconSeeder::class,
             WarrantySeeder::class,
             SettingPresentase::class,
+            RegulationSeeder::class,
+            NotesSeeder::class,
         ]);
     }
 }

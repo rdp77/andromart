@@ -104,26 +104,31 @@ class BranchController extends Controller
 
     public function update(Request $req, $id)
     {
-
-        $checkBranch = Branch::find($id);
-
-        if($req->code != $checkBranch->code){
+        if($req->code == Branch::find($id)->code){
             Validator::make($req->all(), [
-                'code' => ['required', 'unique'],
+                'area_id' => ['required', 'integer'],
+                'name' => ['required', 'string', 'max:255'],
+                'title' => ['required', 'string', 'max:255'],
+                'address' => ['required', 'string', 'max:255'],
+                'phone' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'max:255'],
+                'latitude' => ['double', 'max:255'],
+                'longitude' => ['double', 'max:255'],
             ])->validate();
-            return 'kode kembar';
         }
-        Validator::make($req->all(), [
-            'area_id' => ['required', 'integer'],
-            'code' => ['required', 'string', 'max:255'],
-            'name' => ['required', 'string', 'max:255'],
-            'title' => ['required', 'string', 'max:255'],
-            'address' => ['required', 'string', 'max:255'],
-            'phone' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'max:255'],
-            'latitude' => ['double', 'max:255'],
-            'longitude' => ['double', 'max:255'],
-        ])->validate();
+        else{
+            Validator::make($req->all(), [
+                'area_id' => ['required', 'integer'],
+                'code' => ['required', 'string', 'max:255', 'unique:branches'],
+                'name' => ['required', 'string', 'max:255'],
+                'title' => ['required', 'string', 'max:255'],
+                'address' => ['required', 'string', 'max:255'],
+                'phone' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'max:255'],
+                'latitude' => ['double', 'max:255'],
+                'longitude' => ['double', 'max:255'],
+            ])->validate();
+        }
 
         Branch::where('id', $id)
             ->update([

@@ -3,7 +3,7 @@
 		<ul>
 			<li data-transition="fade">
 				<img 
-					src="{{ asset('assetsfrontend/img/demos/digital-agency/slides/slide-digital-agency-1.jpg') }}"
+					src="{{ asset($carouselServices->image) }}"
 					alt=""
 					data-bgposition="center center" 
 					data-bgfit="cover" 
@@ -25,15 +25,15 @@
 				></div>
 				<div class="tp-dottedoverlay tp-opacity-overlay"></div> -->
 			</li>
-			<li data-transition="fade">
+			<!-- <li data-transition="fade">
 				<img 
-					src="{{ asset('assetsfrontend/img/demos/digital-agency/slides/slide-digital-agency-1.jpg') }}"
+					src="{{ asset($carouselServices->image) }}"
 					alt=""
 					data-bgposition="center center" 
 					data-bgfit="cover" 
 					data-bgrepeat="no-repeat" 
 					class="rev-slidebg">
-			</li>
+			</li> -->
 		</ul>
 	</div>
 </div>

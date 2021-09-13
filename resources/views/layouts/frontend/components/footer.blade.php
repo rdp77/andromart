@@ -1,3 +1,8 @@
+<?php
+use App\Models\Branch;
+
+$branch = Branch::get();
+?>
 <footer id="footer">
 	<div class="container">
 		<div class="row py-5">
@@ -8,18 +13,22 @@
 			</div>
 			<div class="col-md-8 d-flex justify-content-center justify-content-md-end mb-4 mb-lg-0">
 				<div class="row">
+					@foreach($branch as $row)
+					<!-- <div class="col-lg-5 mb-4">
+						<h4 class="mt-3 mb-0">{{ $row->name }}</h4>
+						<ul class="list list-icons mt-3">
+							<li><i class="fas fa-map-marker-alt"></i> <strong>Address:</strong>{{ $row->address }}</li>
+							<li><i class="fas fa-phone"></i> <strong>Phone:</strong> {{ $row->phone }}</li>
+							<li><i class="far fa-envelope"></i> <strong>Email:</strong> <a href="mailto:{{ $row->email }}">{{ $row->email }}</a></li>
+						</ul>
+					</div> -->
 					<div class="col-md-6 mb-3 mb-md-0">
 						<div class="ml-3 text-center text-md-right">
-							<h5 class="text-3 mb-0 text-color-light">NEW YORK</h5>
-							<p class="text-4 mb-0"><i class="fab fa-whatsapp text-color-primary top-1 p-relative"></i><span class="pl-1">(123) 465-7890</span></p>            
+							<h5 class="text-3 mb-0 text-color-light">{{ $row->name }}</h5>
+							<p class="text-4 mb-0"><i class="fab fa-whatsapp text-color-primary top-1 p-relative"></i><span class="pl-1">{{ $row->phone }}</span></p>            
 						</div>
 					</div>
-					<div class="col-md-6">
-						<div class="ml-3 text-center text-md-right">
-							<h5 class="text-3 mb-0 text-color-light">LOS ANGELES</h5>
-							<p class="text-4 mb-0"><i class="fab fa-whatsapp text-color-primary top-1 p-relative"></i><span class="pl-1">(123) 465-7890</span></p>
-						</div>
-					</div>
+					@endforeach
 				</div>
 			</div>
 		</div>
