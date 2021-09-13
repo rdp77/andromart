@@ -19,11 +19,11 @@ class CreateEmployeesTable extends Migration
             $table->integer('branch_id');
             $table->string('identity');
             $table->string('name');
-            $table->string('contact');
+            $table->double('contact');
             $table->string('address');
             $table->string('level');
             $table->string('gender');
-            $table->string('birthday')->nullable();
+            $table->date('birthday')->nullable();
             $table->string('avatar')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

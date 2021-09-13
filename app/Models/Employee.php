@@ -17,6 +17,7 @@ class Employee extends Model
         'address',
         'level',
         'gender',
+        'birthday',
         'avatar',
         'created_at',
         'updated_at',

@@ -93,9 +93,11 @@
                 <div class="d-sm-none d-lg-inline-block">{{ __('Hai, ') . Auth::user()->name }}</div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <div class="dropdown-title">{{ __('Administrator') }}</div>
+                <a href="{{ route('showUser') }}" class="dropdown-item has-icon">
+                    <i class="fas fa-user-tie"></i> {{ __('User Profil') }}
+                </a>
                 <a id="name" class="dropdown-item has-icon" style="cursor: pointer">
-                    <i class="fas fa-user"></i> {{ __('Ganti Nama') }}
+                    <i class="fas fa-id-badge"></i> {{ __('Ganti Nama') }}
                 </a>
                 <a href="{{ route('users.password') }}" class="dropdown-item has-icon">
                     <i class="fas fa-key"></i> {{ __('Ganti Password') }}
