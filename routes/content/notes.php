@@ -1,7 +1,7 @@
 <?php
 
-use App\Http\Controllers\NotesController;
-use Illuminate\Support\Facades\Route;
+// use App\Http\Controllers\NotesController;
+// use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::group(['prefix' => 'content'], function () {
-    // Route::post('notes/save-notes', [NotesController::class, 'create'])->name('save notes');
-    Route::get('notes/delete/{id}', [NotesController::class, 'delete'])->name('notesPhotoDelete');
-    Route::resource('notes', NotesController::class);
-});
+// Route::group(['prefix' => 'content'], function () {
+//     // Route::post('notes/save-notes', [NotesController::class, 'create'])->name('save notes');
+//     Route::get('notes/delete/{id}', [NotesController::class, 'delete'])->name('notesPhotoDelete');
+//     Route::resource('notes', NotesController::class);
+// });

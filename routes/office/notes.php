@@ -1,7 +1,7 @@
 <?php
 
-// use App\Http\Controllers\NotesController;
-// use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\NotesController;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,8 +14,8 @@
 |
 */
 
-// Route::group(['prefix' => 'office'], function () {
-//     Route::group(['prefix' => 'notes'], function () {
-//         Route::resource('notes', NotesController::class);
-//     });
-// });
+Route::group(['prefix' => 'office'], function () {
+    Route::group(['prefix' => 'notes'], function () {
+        Route::resource('notes', NotesController::class);
+    });
+});

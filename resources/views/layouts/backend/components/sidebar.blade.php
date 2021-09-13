@@ -189,10 +189,6 @@
                     'active'=>'',
                     'title'=>'Konten',
                     'url'=>route('contents.index')])
-                    @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
-                    'title'=>'Notulen',
-                    'url'=>route('notes.index')])
                 </ul>
             </li>
         </ul>
