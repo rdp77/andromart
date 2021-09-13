@@ -9,6 +9,7 @@ use App\Models\Brand;
 use App\Models\Employee;
 use App\Models\Service;
 use App\Models\Warranty;
+use App\Models\SettingPresentase;
 use App\Models\ServiceDetail;
 use App\Models\ServiceStatusMutation;
 use Illuminate\Http\Request;
@@ -253,14 +254,34 @@ class ServiceController extends Controller
         }
 
         $getEmployee =  Employee::where('user_id',Auth::user()->id)->first();
+        $settingPresentase =  SettingPresentase::get();
         
         // return $req->all();
-        $id = DB::table('service')->max('id')+1;
-        $sharing_profit_store = (str_replace(",", '',$req->totalPrice)/100)*60;
-        $sharing_profit_technician_1 = (str_replace(",", '',$req->totalPrice)/100)*40;
+        for ($i=0; $i <count($settingPresentase) ; $i++) { 
+            if($settingPresentase[$i]->name == 'Presentase Sharing Profit Toko'){
+                $sharingProfitStore = $settingPresentase[$i]->total;
+            }
+            if($settingPresentase[$i]->name == 'Presentase Sharing Profit Teknisi'){
+                $sharingProfitTechnician = $settingPresentase[$i]->total;
+            }
+            if($settingPresentase[$i]->name == 'Presentase Loss Toko'){
+                $lossStore = $settingPresentase[$i]->total;
+            }
+            if($settingPresentase[$i]->name == 'Presentase Loss Teknisi'){
+                $lossTechnician = $settingPresentase[$i]->total;
+            }
+        }
+        
 
-        $total_loss_technician_1 = (str_replace(",", '',$req->totalLoss)/100)*60;
-        $total_loss_store = (str_replace(",", '',$req->totalLoss)/100)*40;
+        // return [$sharingProfitStore,
+        // $sharingProfitTechnician,
+        // $lossStore,$lossTechnician];
+        $id = DB::table('service')->max('id')+1;
+        $sharing_profit_store =  ((str_replace(",", '',$req->totalService)/100)*$sharingProfitStore)+str_replace(",", '',$req->totalSparePart);
+        $sharing_profit_technician_1 = (str_replace(",", '',$req->totalService)/100)*$sharingProfitTechnician;
+
+        $total_loss_technician_1 = (str_replace(",", '',$req->totalLoss)/100)*$lossTechnician;
+        $total_loss_store = (str_replace(",", '',$req->totalLoss)/100)*$lossStore;
         
         $estimateDate = $this->DashboardController->changeMonthIdToEn($req->estimateDate);
 
@@ -407,7 +428,7 @@ class ServiceController extends Controller
 
         if($data == null){
             $message = 'empty';
-        }else{
+        }else{  
             $message = 'exist';
         }
 
@@ -421,18 +442,46 @@ class ServiceController extends Controller
             $checkData = Service::where('id',$req->id)->first();
             // return $checkData;
             $index = ServiceStatusMutation::where('service_id', $req->id)->count()+1;
-
+            $settingPresentase =  SettingPresentase::get();
+        
+            // return $req->all();
+            for ($i=0; $i <count($settingPresentase) ; $i++) { 
+                if($settingPresentase[$i]->name == 'Presentase Sharing Profit Toko'){
+                    $sharingProfitStore = $settingPresentase[$i]->total;
+                }
+                if($settingPresentase[$i]->name == 'Presentase Sharing Profit Teknisi'){
+                    $sharingProfitTechnician = $settingPresentase[$i]->total;
+                }
+                if($settingPresentase[$i]->name == 'Presentase Sharing Profit Teknisi 1'){
+                    $sharingProfitTechnician1 = $settingPresentase[$i]->total;
+                }
+                if($settingPresentase[$i]->name == 'Presentase Sharing Profit Teknisi 2'){
+                    $sharingProfitTechnician2 = $settingPresentase[$i]->total;
+                }
+                if($settingPresentase[$i]->name == 'Presentase Loss Toko'){
+                    $lossStore = $settingPresentase[$i]->total;
+                }
+                if($settingPresentase[$i]->name == 'Presentase Loss Teknisi'){
+                    $lossTechnician = $settingPresentase[$i]->total;
+                }
+                if($settingPresentase[$i]->name == 'Presentase Loss Teknisi 1'){
+                    $lossTechnician1 = $settingPresentase[$i]->total;
+                }
+                if($settingPresentase[$i]->name == 'Presentase Loss Teknisi 2'){
+                    $lossTechnician2 = $settingPresentase[$i]->total;
+                }
+            }
             if($req->status == 'Mutasi'){
                 $technician_replacement_id = $req->technicianId;
                 if($checkData->total_loss_store == 0){
                     $total_loss_technician_1 = 0;
                     $total_loss_technician_2 = 0;
                 }else{
-                    $total_loss_technician_1 = 10/100*$checkData->total_loss;
-                    $total_loss_technician_2 = 50/100*$checkData->total_loss;
+                    $total_loss_technician_1 = $lossTechnician1/100*$checkData->total_loss;
+                    $total_loss_technician_2 = $lossTechnician2/100*$checkData->total_loss;
                 }
-                $sharing_profit_technician_1 = 5/100*$checkData->total_price;
-                $sharing_profit_technician_2 = 35/100*$checkData->total_price;
+                $sharing_profit_technician_1 = $sharingProfitTechnician1/100*$checkData->total_price;
+                $sharing_profit_technician_2 = $sharingProfitTechnician2/100*$checkData->total_price;
             }else{
                 if($checkData->technician_replacement_id != null){
                     $technician_replacement_id = $checkData->technician_replacement_id;

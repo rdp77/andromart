@@ -120,7 +120,7 @@ function save() {
                         swal(data.message, {
                             icon: "success",
                         });
-                        location.reload();
+                        // location.reload();
                     }
                 },
                 error: function(data) {

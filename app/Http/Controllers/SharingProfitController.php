@@ -55,6 +55,7 @@ class SharingProfitController extends Controller
         $data = Service::with(['ServiceDetail','ServiceDetail.Items','ServiceStatusMutation','ServiceStatusMutation.Technician','SharingProfitDetail','SharingProfitDetail.SharingProfit'])
         ->whereBetween('date', [$this->DashboardController->changeMonthIdToEn($req->dateS), $this->DashboardController->changeMonthIdToEn($req->dateE)])
         ->where('work_status','Diambil')
+        ->where('payment_status','Lunas')
         ->where(function ($query) use ($req) {
             $query->where('technician_id',$req->id)
                   ->orWhere('technician_replacement_id', $req->id);
