@@ -10,17 +10,15 @@ var table = $("#table").DataTable({
         [10, 25, 50, "Semua"],
     ],
     ajax: {
-        url: "/office/regulation/regulation",
+        url: "/transaction/purchasing/reception",
         type: "GET",
     },
     dom: '<"html5buttons">lBrtip',
     columns: [
         { data: "DT_RowIndex", orderable: false, searchable: false },
-        { data: "branch.name" },
-        { data: "role.name" },
-        // { data: "branch_id" },
-        // { data: "role_id" },
-        { data: "title" },
+        { data: "date" },
+        { data: "code" },
+        { data: "supplier.name" },
         { data: "action", orderable: false, searchable: true },
     ],
     buttons: [
@@ -87,17 +85,17 @@ function del(id) {
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url: "/office/regulation/regulation/" + id,
+                url: "/transaction/purchasing/reception/" + id,
                 type: "DELETE",
                 success: function () {
-                    swal("Peraturan berhasil dihapus", {
+                    swal("Penerimaan berhasil dihapus", {
                         icon: "success",
                     });
                     table.draw();
                 },
             });
         } else {
-            swal("Peraturan Anda tidak jadi dihapus!");
+            swal("Penerimaan Anda tidak jadi dihapus!");
         }
     });
 }

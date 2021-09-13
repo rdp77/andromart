@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Purchasing;
 use Illuminate\Database\Seeder;
 
 class PurchasingSeeder extends Seeder
@@ -13,6 +14,10 @@ class PurchasingSeeder extends Seeder
      */
     public function run()
     {
-        //
+        Purchasing::create([
+            'supplier_id' => 1,
+            'date' => date('Y-m-d H:i:s'),
+            'code' => 'ini kode',
+        ]);
     }
 }

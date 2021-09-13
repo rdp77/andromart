@@ -61,13 +61,14 @@ require __DIR__ . '/finance/sharingProfitRoute.php';
 require __DIR__ . '/finance/lossItemsRoute.php';
 require __DIR__ . '/transaction/saleRoute.php';
 require __DIR__ . '/transaction/paymentRoute.php';
+require __DIR__ . '/transaction/purchasingRoute.php';
 
 require __DIR__ . '/finance/sharingProfitRoute.php';
 
 require __DIR__ . '/warehouse/stockRoute.php';
 
 // require __DIR__ . '/content/notes.php';
-require __DIR__ . '/content/contents.php';
+require __DIR__ . '/content/contentsRoute.php';
 
-require __DIR__ . '/office/regulation.php';
-require __DIR__ . '/office/notes.php';
+require __DIR__ . '/office/regulationRoute.php';
+require __DIR__ . '/office/notesRoute.php';

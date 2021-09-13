@@ -86,17 +86,17 @@ function del(id) {
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url: "/master/area/area/" + id,
+                url: "/office/notes/notes/" + id,
                 type: "DELETE",
                 success: function () {
-                    swal("Data master berhasil dihapus", {
+                    swal("Notulen berhasil dihapus", {
                         icon: "success",
                     });
                     table.draw();
                 },
             });
         } else {
-            swal("Data master Anda tidak jadi dihapus!");
+            swal("Notulen Anda tidak jadi dihapus!");
         }
     });
 }
