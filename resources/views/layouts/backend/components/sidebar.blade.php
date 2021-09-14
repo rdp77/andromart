@@ -123,6 +123,10 @@
                     'url'=>route('customer.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
+                    'title'=>'Setting Presentase',
+                    'url'=>route('presentase.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
                     'title'=>'Satuan',
                     'url'=>route('unit.index')])
                     @include('layouts.backend.components.sidebarMenu',[

@@ -36,4 +36,12 @@ class Employee extends Model
     {
         return $this->belongsTo('App\Models\Branch');
     }
+
+    public function getAvatar()
+    {
+        if(!$this->avatar){
+            return asset('assetsmaster/avatar/avatar.png');
+        }
+        return asset('assetsmaster/avatar/'. $this->avatar);
+    }
 }

@@ -44,4 +44,12 @@ class Item extends Model
     {
         return $this->hasOne('App\Models\Stock');
     }
+
+    public function getImage()
+    {
+        if(!$this->avatar){
+            return asset('assetsmaster/avatar/avatar.png');
+        }
+        return asset('assetsmaster/image/item/'. $this->image);
+    }
 }

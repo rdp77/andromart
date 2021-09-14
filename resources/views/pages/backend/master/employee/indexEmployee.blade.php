@@ -7,9 +7,8 @@
 @endsection
 
 @section('content')
-@include('pages.backend.components.filterSearch')
 @include('layouts.backend.components.notification')
-<div class="card">
+{{-- <div class="card">
     <div class="card-header">
         <a href="{{ route('employee.create') }}" class="btn btn-icon icon-left btn-primary">
             <i class="far fa-edit"></i>{{ __(' Tambah Pengguna') }}</a>
@@ -18,9 +17,6 @@
         <table class="table-striped table" id="table" width="100%">
             <thead>
                 <tr>
-                    {{-- <th class="text-center">
-                        {{ __('NO') }}
-                    </th> --}}
                     <th>{{ __('NIK') }}</th>
                     <th>
                         {{ __('Nama') }}
@@ -36,7 +32,87 @@
             </tbody>
         </table>
     </div>
+</div> --}}
+<div class="card">
+    <div class="card-header">
+        <a href="{{ route('employee.create') }}" class="btn btn-icon icon-left btn-primary">
+            <i class="far fa-edit"></i>{{ __(' Tambah Pengguna') }}</a>
+    </div>
+    <div class="row">
+        @foreach ($employee as $employee)
+        <div class="col-lg-4">
+            <div class="card profile-widget">
+                <div class="profile-widget-header">
+                  <img alt="image" src="{{ $employee->getAvatar() }}" class="rounded-circle profile-widget-picture">
+                  <div class="profile-widget-items">
+                    <div class="profile-widget-item">
+                      {{-- <div class="profile-widget-item-label">Posts</div>
+                      <div class="profile-widget-item-value">187</div> --}}
+                      <div class="profile-widget-item-value"> {{ $employee->name }}
+                        <div class="text-muted d-inline font-weight-normal">
+                            <div class="slash"></div>
+                            {{ $employee->level }}
+                            {{ $employee->branch->code }}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="profile-widget-description">
+                    <div class="profile-widget-name">NIK
+                      <div class="text-muted d-inline font-weight-normal">
+                          <div class="slash"></div> {{ $employee->identity }}
+                      </div>
+                    </div>
+                    <div class="profile-widget-name">Jenis Kelamin
+                        <div class="text-muted d-inline font-weight-normal">
+                            <div class="slash"></div> @if ($employee->gender == 'L')
+                                Pria
+                            @elseif ($employee->gender == 'P')
+                                Wanita
+                            @endif
+                        </div>
+                    </div>
+                    <div class="profile-widget-name">T. Tanggal Lahir
+                        <div class="text-muted d-inline font-weight-normal">
+                            <div class="slash"></div> {{ $employee->birthday }}
+                        </div>
+                    </div>
+                    <div class="profile-widget-name">No. Handphone
+                        <div class="text-muted d-inline font-weight-normal">
+                            <div class="slash"></div> 0{{ $employee->contact }}
+                        </div>
+                    </div>
+                    <div class="profile-widget-name">Alamat
+                        <div class="text-muted d-inline font-weight-normal">
+                            <div class="slash"></div> {{ $employee->address }}
+                        </div>
+                    </div>
+                </div>
+                {{-- <div class="card-footer text-center">
+                  <div class="font-weight-bold mb-2">Follow {{ $employee->name }} On</div>
+                  <a href="#" class="btn btn-lg">
+                    <i class="fab fa-facebook-f"></i>
+                  </a>
+                  <a href="#" class="btn btn-lg">
+                    <i class="fab fa-twitter"></i>
+                  </a>
+                  <a href="#" class="btn btn-lg">
+                    <i class="fab fa-github"></i>
+                  </a>
+                  <a href="#" class="btn btn-lg">
+                    <i class="fab fa-instagram"></i>
+                  </a>
+                </div> --}}
+              </div>
+        </div>
+        @endforeach
+    </div>
+
 </div>
+
+
 @endsection
 @section('script')
 <script src="{{ asset('assets/pages/master/employeeScript.js') }}"></script>

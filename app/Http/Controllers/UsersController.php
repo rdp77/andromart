@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
+use Carbon\Carbon;
 
 class UsersController extends Controller
 {
@@ -120,6 +121,9 @@ class UsersController extends Controller
 
         $birthday = $this->DashboardController->changeMonthIdToEn($req->birthday);
 
+        if ($req->hasFile('avatar')) {
+            $req->file('avatar')->move('assetsmaster/avatar/',$req->file('avatar')->getClientOriginalName());
+        }
         Employee::where('id', User::find($id)->employee->id)
             ->update([
                 'identity' => $req->identity,
@@ -128,8 +132,16 @@ class UsersController extends Controller
                 'contact' => $req->contact,
                 'gender' => $req->gender,
                 'address' => $req->address,
+                'avatar' => $req->file('avatar')->getClientOriginalName(),
                 'updated_by' => Auth::user()->name,
             ]);
+
+        // if($req->hasFile('avatar'))
+        // {
+        //     $req->file('avatar')->move('images/',$req->file('avatar')->getClientOriginalName());
+        //     $crew->avatar = $req->file('avatar')->getClientOriginalName();
+        //     $crew->save();
+        // }
 
         User::where('id', $id)
             ->update([

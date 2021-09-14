@@ -84,18 +84,26 @@ class ItemController extends Controller
             'condition' => ['required', 'string', 'max:10'],
         ])->validate();
 
+        $image = Item::create($req->all());
+        if ($req->hasFile('image')) {
+            $req->file('image')->move('assetsmaster/image/item/',$req->file('image')->getClientOriginalName());
+            $image->image = $req->file('image')->getClientOriginalName();
+            $image->save();
+        }
+
         $id = DB::table('items')->max('id')+1;
+
         Item::create([
             'id' => $id,
             'name' => $req->name,
             'category_id' => $req->category_id,
             'supplier_id' => $req->supplier_id,
-            'buy' => $req->buy,
-            'sell' => $req->sell,
-            'discount' => $req->discount,
+            'buy' => str_replace(",", '',$req->buy),
+            'sell' => str_replace(",", '',$req->sell),
+            'discount' => str_replace(",", '',$req->discount),
             'condition' => $req->condition,
             'description' => $req->description,
-            'image' => $req->image,
+            // 'image' => $req->file('image')->getClientOriginalName(),
             'created_by' => Auth::user()->name,
         ]);
 
@@ -145,6 +153,10 @@ class ItemController extends Controller
             'condition' => ['required', 'string', 'max:10'],
         ])->validate();
 
+        if ($req->hasFile('image')) {
+            $req->file('image')->move('assetsmaster/image/item/',$req->file('image')->getClientOriginalName());
+        }
+
         Item::where('id', $id)
             ->update([
             'name' => $req->name,
@@ -155,7 +167,7 @@ class ItemController extends Controller
             'discount' => $req->discount,
             'condition' => $req->condition,
             'description' => $req->description,
-            'image' => $req->image,
+            'image' => $req->file('image')->getClientOriginalName(),
             'updated_by' => Auth::user()->name,
             ]);
 

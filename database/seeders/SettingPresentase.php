@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use Illuminate\Database\Seeder;
-use DB;
+use Illuminate\Support\Facades\DB;
 class SettingPresentase extends Seeder
 {
     /**
@@ -13,6 +13,8 @@ class SettingPresentase extends Seeder
      */
     public function run()
     {
+        DB::table('setting_presentase')->truncate();
+
         DB::table('setting_presentase')->insert([
             [
                 'id' => '1',

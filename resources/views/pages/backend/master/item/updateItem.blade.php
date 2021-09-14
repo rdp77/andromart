@@ -9,7 +9,7 @@
 
 @section('content')
 <div class="card">
-    <form method="POST" action="{{ route('item.update',$item->id) }}">
+    <form method="POST" action="{{ route('item.update',$item->id) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
         <div class="card-body">
@@ -98,7 +98,7 @@
                 <div class="form-group col-md-2 col-xs-12">
                     <label for="image">{{ __('Gambar') }}</label>
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="image" name="">
+                        <input type="file" class="custom-file-input" id="image" name="image">
                         <label class="custom-file-label" for="image">Pilih Gambar</label>
                     </div>
                 </div>
