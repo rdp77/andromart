@@ -8,7 +8,7 @@
 @endsection
 
 @section('content')
-<form method="POST" class="form-data">
+<form class="form-data">
     @csrf
     <div class="row">
         <div class="col-lg-8">
@@ -29,7 +29,7 @@
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="warranty">{{ __('Garansi') }}<code>*</code></label>
-                            <select class="select2" name="warranty">
+                            <select class="select2 validation" name="warranty" data-name="Teknisi">
                                 <option value="">- Select -</option>
                                 @foreach ($warranty as $element)
                                     <option value="{{$element->id}}">{{$element->periode}} {{$element->name}}</option>
@@ -43,7 +43,7 @@
                                 <label for="technicianId"
                                     class="control-label">{{ __('Teknisi') }}<code>*</code></label>
                             </div>
-                            <select class="select2" name="technicianId">
+                            <select class="select2 validation" name="technicianId" data-name="Teknisi">
                                 <option value="">- Select -</option>
                                 @foreach ($employee as $element)
                                 <option value="{{$element->id}}">{{$element->name}}</option>
@@ -92,11 +92,11 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="complaint">{{ __('Keluhan') }}<code>*</code></label>
-                            <input id="complaint" type="text" class="form-control" name="complaint">
+                            <input id="complaint" type="text" class="form-control validation" data-name="Komplain" name="complaint">
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="equipment">{{ __('Kelengkapan') }}<code>*</code></label>
-                            <input id="equipment" type="text" class="form-control" name="equipment">
+                            <input id="equipment" type="text" class="form-control validation" data-name="Kelengkapan" name="equipment">
                         </div>
                     </div>
                     <div class="row">
@@ -106,16 +106,31 @@
                         </div>
                         <div class="form-group col-12 col-md-7 col-lg-7">
                             <label for="description">{{ __('Keterangan') }}<code>*</code></label>
-                            <input id="description" type="text" class="form-control" name="description">
+                            <input id="description" type="text" class="form-control validation" data-name="Deskripsi" name="description">
                         </div>
                     </div>
-
+                    <div class="row">
+                        <div class="form-group col-12 col-md-12 col-lg-12">
+                            <label for="description">{{ __('Ambil Foto') }}<code>*</code></label>
+                            <div id="my_camera"></div>
+                            <br/>
+                            <div class="row">
+                                <div class="form-group col-md-3">
+                                    <input type=button class="btn btn-primary" value="Take Snapshot" onClick="take_snapshot()">
+                                    <input type="hidden" name="image" class="image-tag">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#exampleModal">Lihat Gambar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <h6 style="color: #6777ef">Data Customer</h6>
                     <br>
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="customerName">{{ __('Nama') }}<code>*</code></label>
-                            <input id="customerName" type="text" class="form-control" name="customerName">
+                            <input id="customerName" type="text" class="form-control validation" data-name="Nama Customer" name="customerName">
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="series">{{ __('Member') }}<code>*</code></label>
@@ -130,11 +145,11 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-5 col-lg-5">
                             <label for="customerPhone">{{ __('No Tlp') }}<code>*</code></label>
-                            <input id="customerPhone" type="text" class="form-control" name="customerPhone">
+                            <input id="customerPhone" type="text" class="form-control validation" data-name="Tlp Customer" name="customerPhone">
                         </div>
                         <div class="form-group col-12 col-md-7 col-lg-7">
                             <label for="customerAdress">{{ __('Alamat') }}<code>*</code></label>
-                            <input id="customerAdress" type="text" class="form-control" name="customerAdress">
+                            <input id="customerAdress" type="text" class="form-control validation" data-name="alamat Customer" name="customerAdress">
                         </div>
                     </div>
 
@@ -201,9 +216,12 @@
                             name="totalPrice" onchange="sumTotal()" style="text-align: right">
                     </div>
                 </div>
+                
             </div>
         </div>
     </div>
+
+    
 
     <div class="card">
         <div class="card-header">
@@ -265,24 +283,6 @@
                         </tr>
                     </tbody>
                     <tbody class="dropHereItem" style="border: none !important">
-                        {{-- <tr>
-                    <td>LCD 15 inch</td>
-                    <td>700.000</td>
-                    <td>1</td>
-                    <td>700.000</td>
-                    <td>LCD baru ini boss</td>
-                    <td>Spare Part</td>
-                    <td><a href="#" class="btn btn-danger">X</a></td>
-                  </tr>
-                  <tr>
-                    <td>LCD 15 inch</td>
-                    <td>700.000</td>
-                    <td>1</td>
-                    <td>700.000</td>
-                    <td>Ga sengojo keplindes</td>
-                    <td>Loss</td>
-                    <td><a href="#" class="btn btn-danger">X</a></td>
-                  </tr> --}}
                     </tbody>
                 </table>
             </div>
@@ -291,10 +291,64 @@
             <button class="btn btn-primary mr-1" type="button" onclick="save()"><i class="far fa-save"></i>
                 {{ __('Simpan Data') }}</button>
         </div>
-    </div>
+    </div>      
+    <div class="modal fade" tabindex="1" role="dialog" id="exampleModal" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Gambar</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              {{-- <p>Modal body text goes here.</p> --}}
+            <div id="results"></div>
+            </div>
+            <div class="modal-footer bg-whitesmoke br">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
 </form>
+
 @endsection
 
+
 @section('script')
+
+
 <script src="{{ asset('assets/pages/transaction/serviceScript.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
+<style>
+    .modal-backdrop{
+        position: relative !important;
+    }
+</style>
+<script language="JavaScript">
+$( document ).ready(function() {
+    Webcam.set({
+        width: 700,
+        height: 420,
+        // dest_width:1000,
+        // dest_height:1000,
+        image_format: 'jpeg',
+        jpeg_quality: 100
+    });
+  
+    Webcam.attach( '#my_camera' );
+});
+    function take_snapshot() {
+                swal('Berhasil Mengambil Foto', {
+                    icon: "success",
+                });
+        Webcam.snap( function(data_uri) {
+            $(".image-tag").val(data_uri);
+            
+            document.getElementById('results').innerHTML = '<img name="image" id="sortpicture" class="image" src="'+data_uri+'"/>';
+        } );
+        
+    }
+</script>
 @endsection

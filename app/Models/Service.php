@@ -55,7 +55,7 @@ class Service extends Model
         'total_loss_technician_1',
         'total_loss_technician_2',
         'total_loss_store',
-        'sharing_profit_status',
+        'image',
         'sharing_profit_store',
         'sharing_profit_technician_1',
         'sharing_profit_technician_2',

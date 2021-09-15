@@ -1,3 +1,4 @@
+
 "use strict";
 
 var table = $("#table").DataTable({
@@ -103,6 +104,19 @@ function del(id) {
 }
 
 function save() {
+    
+
+    
+    // alert($(".form-data").serialize());
+    // var formData = new FormData();
+    // var image = '';
+    // Webcam.snap( function(data_uri) {
+    //     image = data_uri;
+    // });
+    // $.ajax
+    // var input = document.getElementById("image");
+    // file = input.files[0];
+    // formData.append("image", image);
     swal({
         title: "Apakah Anda Yakin?",
         text: "Aksi ini tidak dapat dikembalikan, dan akan menyimpan data Anda.",
@@ -110,11 +124,23 @@ function save() {
         buttons: true,
         dangerMode: true,
     }).then((willSave) => {
+
+        $('.validation').each(function(){
+            if ($(this).val() == '' || $(this).val() == null) {
+                return iziToast.error({
+                    type: 'warning',
+                    title: $(this).data('name') +' harus di isi'
+                });
+            }
+        })
+        
         if (willSave) {
             $.ajax({
                 url: "/transaction/service/service",
                 data: $(".form-data").serialize(),
                 type: 'POST',
+                // contentType: false,
+                processData: false,
                 success: function(data) {
                     if (data.status == 'success'){
                         swal(data.message, {
@@ -473,3 +499,4 @@ function updateStatusService() {
         }
     });
 }
+

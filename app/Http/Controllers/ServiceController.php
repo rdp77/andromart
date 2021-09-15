@@ -22,6 +22,7 @@ use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 use Carbon\carbon;
 // use DB;
+use Storage;
 
 class ServiceController extends Controller
 {
@@ -247,16 +248,15 @@ class ServiceController extends Controller
 
     public function store(Request $req)
     {
+        // return $req->all();     
+        // return $req->technicianId;
         $tech1 = Service::where('technician_id',$req->technicianId)->where('work_status','!=','Selesai')->count();
         $tech2 = Service::where('technician_replacement_id',$req->technicianId)->where('work_status','!=','Selesai')->count();
-        if($tech1+$tech2 >= 10){
-            return Response::json(['status' => 'fail','message'=>'Teknisi Memiliki 10 Pekerjaan Belum Selesai']);
-        }
+        
 
         $getEmployee =  Employee::where('user_id',Auth::user()->id)->first();
         $settingPresentase =  SettingPresentase::get();
         
-        // return $req->all();
         for ($i=0; $i <count($settingPresentase) ; $i++) { 
             if($settingPresentase[$i]->name == 'Presentase Sharing Profit Toko'){
                 $sharingProfitStore = $settingPresentase[$i]->total;
@@ -270,12 +270,21 @@ class ServiceController extends Controller
             if($settingPresentase[$i]->name == 'Presentase Loss Teknisi'){
                 $lossTechnician = $settingPresentase[$i]->total;
             }
+            if($settingPresentase[$i]->name == 'Batasan Maximum Handle Customer Pada Teknisi'){
+                $MaxHandle = $settingPresentase[$i]->total;
+            }
+        }
+
+        if($tech1+$tech2 >= $MaxHandle){
+            return Response::json(['status' => 'fail',
+                                   'message'=>'Teknisi Memiliki '+$MaxHandle+' Pekerjaan Belum Selesai']);
         }
         
 
         // return [$sharingProfitStore,
         // $sharingProfitTechnician,
         // $lossStore,$lossTechnician];
+        // return [$req->totalService,$req->totalSparePart];
         $id = DB::table('service')->max('id')+1;
         $sharing_profit_store =  ((str_replace(",", '',$req->totalService)/100)*$sharingProfitStore)+str_replace(",", '',$req->totalSparePart);
         $sharing_profit_technician_1 = (str_replace(",", '',$req->totalService)/100)*$sharingProfitTechnician;
@@ -285,6 +294,17 @@ class ServiceController extends Controller
         
         $estimateDate = $this->DashboardController->changeMonthIdToEn($req->estimateDate);
 
+        $image = $req->image;
+        $image = str_replace('data:image/jpeg;base64,','', $image);
+		$image = base64_decode($image);
+        // return $img = $req->file('image');
+        if ($image != null) {
+            $fileSave = 'public/Service_' . $this->code('SRV-') . '.' .'png';
+            return Storage::put($fileSave, $image);
+        }else{
+            $fileSave = null;
+        }
+        // return 'asd';
         Service::create([
             'id' =>$id,
             'code' =>$this->code('SRV-'),
@@ -310,7 +330,7 @@ class ServiceController extends Controller
             'total_loss_technician_1'=>$total_loss_technician_1,
             'total_loss_technician_2'=>0,
             'total_loss_store'=>$total_loss_store,
-            'sharing_profit_status'=>'Belum',
+            'image'=>$fileSave,
             'discount_price'=>str_replace(",", '',$req->totalDiscountValue),
             'discount_percent'=>str_replace(",", '',$req->totalDiscountPercent),
             'total_price'=>str_replace(",", '',$req->totalPrice),
