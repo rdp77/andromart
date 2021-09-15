@@ -31,10 +31,16 @@ class Sale extends Model
         'deleted_by',
     ];
 
-    public function sale_detail()
+    public function SaleDetail()
     {
         return $this->hasMany('App\Models\SaleDetail');
     }
+
+    public function SharingProfitDetail()
+    {
+        return $this->hasMany('App\Models\SharingProfitDetail');
+    }
+
     public function user()
     {
         return $this->hasOne('App\Models\User');

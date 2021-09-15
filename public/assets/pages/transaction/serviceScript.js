@@ -104,9 +104,9 @@ function del(id) {
 }
 
 function save() {
-    
 
-    
+
+
     // alert($(".form-data").serialize());
     // var formData = new FormData();
     // var image = '';
@@ -133,7 +133,7 @@ function save() {
                 });
             }
         })
-        
+
         if (willSave) {
             $.ajax({
                 url: "/transaction/service/service",
@@ -153,12 +153,12 @@ function save() {
                     // edit(id);
                 }
             });
-            
+
         } else {
             swal("Data Dana Kredit PDL Berhasil Dihapus!");
         }
     });
-    
+
 }
 
 function addItem() {
@@ -229,16 +229,18 @@ $(document.body).on("change",".itemsDetail",function(){
     if(isNaN(parseInt($('.qtyDetail_'+index).val()))){
         var itemQty =  0; }else{
         var itemQty = $('.qtyDetail_'+index).val().replace(/,/g, ''),asANumber = +itemQty;}
-    $('.priceDetail_'+index).val(parseInt(itemPrice).toLocaleString());
+    $('.priceDetail_'+index).val(parseInt(itemPrice).toLocaleString('en-US'));
     var totalItemPrice = itemPrice*itemQty;
-    $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString());
+    $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
     if(typeDetail == 'SparePart'){
-        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString());
+        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailLoss_'+index).val(0);
     }else{
-        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString());
+        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailSparePart_'+index).val(0);
     }
+    console.log(parseInt(totalItemPrice).toLocaleString('en-US'));
+    console.log(totalItemPrice);
     sum();
     sumTotal();
     sumDiscont();
@@ -263,12 +265,12 @@ $(document.body).on("keyup",".qtyDetail",function(){
         var itemQty =  0; }else{
         var itemQty = this.value.replace(/,/g, ''),asANumber = +itemQty;}
     var totalItemPrice = itemPrice*itemQty;
-    $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString());
+    $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
     if(typeDetail == 'SparePart'){
-        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString());
+        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailLoss_'+index).val(0);
     }else{
-        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString());
+        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailSparePart_'+index).val(0);
     }
     sum();
@@ -287,12 +289,12 @@ $(document.body).on("keyup",".priceDetail",function(){
         var itemQty =  0; }else{
         var itemQty = $('.qtyDetail_'+index).val().replace(/,/g, ''),asANumber = +itemQty;}
     var totalItemPrice = itemPrice*itemQty;
-    $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString());
+    $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
     if(typeDetail == 'SparePart'){
-        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString());
+        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailLoss_'+index).val(0);
     }else{
-        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString());
+        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailSparePart_'+index).val(0);
     }
     sum();
@@ -311,18 +313,18 @@ $(document.body).on("keyup",".priceServiceDetail",function(){
 // fungsi sum
 function sum() {
     var priceDetailSparePart = 0;
-    $('.priceDetailSparePart').each(function(){
+    $('.priceDetailSparePart').each(function () {
         priceDetailSparePart += parseInt(this.value.replace(/,/g, ""));
     });
-    $('#totalSparePart').val(parseInt(priceDetailSparePart).toLocaleString()); 
+    $('#totalSparePart').val(parseInt(priceDetailSparePart).toLocaleString('en-US'));
     var priceDetailLoss = 0;
     $('.priceDetailLoss').each(function(){
         priceDetailLoss += parseInt(this.value.replace(/,/g, ""))
     });
-    $('#totalLoss').val(parseInt(priceDetailLoss).toLocaleString()); 
+    $('#totalLoss').val(parseInt(priceDetailLoss).toLocaleString('en-US'));
 }
 
-// fungsi rubah tipe 
+// fungsi rubah tipe
 $(document.body).on("change",".typeDetail",function(){
     var value = this.value;
     var index = $(this).find(':selected').data('index');
@@ -334,10 +336,11 @@ $(document.body).on("change",".typeDetail",function(){
         var itemQty = $('.qtyDetail_'+index).val().replace(/,/g, ''),asANumber = +itemQty;}
     var totalItemPrice = itemPrice*itemQty;
     if(value == 'SparePart'){
-        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString());
-        $('.priceDetailLoss_'+index).val(0);
+        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
+        $('.priceDetailLoss_' + index).val(0);
+
     }else{
-        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString());
+        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailSparePart_'+index).val(0);
     }
     sum();
@@ -366,7 +369,7 @@ function sumDiscont() {
         var sumTotalPrice = (parseInt(totalDiscountPercent)/100)*(parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDownPayment));
     }else{
         var sumTotalPrice = (100/100)*(parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDownPayment));}
-    $('#totalDiscountValue').val(parseInt(sumTotalPrice).toLocaleString());
+    $('#totalDiscountValue').val(parseInt(sumTotalPrice).toLocaleString('en-US'));
     sumTotal();
 }
 
@@ -392,7 +395,7 @@ function sumTotal() {
         var sumTotal = 0;
     }else{
         var sumTotal = parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDownPayment)-parseInt(totalDiscountValue);}
-    $('#totalPrice').val(parseInt(sumTotal).toLocaleString()); 
+    $('#totalPrice').val(parseInt(sumTotal).toLocaleString('en-US'));
 }
 
 

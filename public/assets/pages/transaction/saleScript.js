@@ -140,7 +140,7 @@ function addItem() {
 
     var dataItems = [];
     $.each($('.itemsData'), function(){
-        dataItems += '<option data-index="'+(index+1)+'" data-price="'+$(this).data('price')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
+        dataItems += '<option data-index="'+(index+1)+'" data-price="'+$(this).data('price')+'" data-stock="'+$(this).data('supplier')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
     });
 
     $('.dropHereItem').append(
@@ -162,17 +162,20 @@ function addItem() {
                 '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="1" style="text-align: right">'+
             '</td>'+
             '<td>'+
+                '<input type="text" class="form-control stock stock_'+(index+1)+'" name="" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
+            '</td>'+
+            '<td>'+
                 '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="0" style="text-align: right">'+
             '</td>'+
             '<td>'+
                 '<input type="text" class="form-control" name="descriptionDetail[]">'+
             '</td>'+
-            '<td>'+
-                '<select class="form-control typeDetail typeDetail_'+(index+1)+'" name="typeDetail[]">'+
-                    '<option selected data-index="'+(index+1)+'" value="SparePart">SparePart</option>'+
-                    '<option data-index="'+(index+1)+'" value="Loss">Loss</option>'+
-                '</select>'+
-            '</td>'+
+            // '<td>'+
+            //     '<select class="form-control typeDetail typeDetail_'+(index+1)+'" name="typeDetail[]">'+
+            //         '<option selected data-index="'+(index+1)+'" value="SparePart">SparePart</option>'+
+            //         '<option data-index="'+(index+1)+'" value="Loss">Loss</option>'+
+            //     '</select>'+
+            // '</td>'+
             '<td>'+
                 '<button type="button" class="btn btn-danger removeDataDetail" value="'+(index+1)+'" >X</button>'+
             '</td>'+

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
+use App\Models\Brand;
+use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\Item;
 use App\Models\Sale;
@@ -153,13 +156,15 @@ class SaleController extends Controller
     {
         $code = $this->code('PJT-');
         $employee = Employee::get();
+        $warranty = Warranty::get();
+        $customer = Customer::get();
         $item = Item::where('name','!=','Jasa Service')->get();
-        return view('pages.backend.transaction.sale.createSale', compact('code', 'employee', 'item'));
+        return view('pages.backend.transaction.sale.createSale', compact('code', 'employee', 'item', 'warranty', 'customer'));
     }
 
-    public function store(Request $request)
+    public function store(Request $req)
     {
-        //
+
     }
 
     public function show($id)

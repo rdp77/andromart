@@ -84,28 +84,38 @@ class ItemController extends Controller
             'condition' => ['required', 'string', 'max:10'],
         ])->validate();
 
-        $image = Item::create($req->all());
-        if ($req->hasFile('image')) {
-            $req->file('image')->move('assetsmaster/image/item/',$req->file('image')->getClientOriginalName());
-            $image->image = $req->file('image')->getClientOriginalName();
-            $image->save();
-        }
-
         $id = DB::table('items')->max('id')+1;
 
-        Item::create([
-            'id' => $id,
-            'name' => $req->name,
-            'category_id' => $req->category_id,
-            'supplier_id' => $req->supplier_id,
-            'buy' => str_replace(",", '',$req->buy),
-            'sell' => str_replace(",", '',$req->sell),
-            'discount' => str_replace(",", '',$req->discount),
-            'condition' => $req->condition,
-            'description' => $req->description,
-            // 'image' => $req->file('image')->getClientOriginalName(),
-            'created_by' => Auth::user()->name,
-        ]);
+        if ($req->hasFile('image')) {
+            $req->file('image')->move('assetsmaster/image/item/',$req->file('image')->getClientOriginalName());
+            Item::create([
+                'id' => $id,
+                'name' => $req->name,
+                'category_id' => $req->category_id,
+                'supplier_id' => $req->supplier_id,
+                'buy' => str_replace(",", '',$req->buy),
+                'sell' => str_replace(",", '',$req->sell),
+                'discount' => str_replace(",", '',$req->discount),
+                'condition' => $req->condition,
+                'description' => $req->description,
+                'image' => $req->file('image')->getClientOriginalName(),
+                'created_by' => Auth::user()->name,
+            ]);
+        }
+        else {
+            Item::create([
+                'id' => $id,
+                'name' => $req->name,
+                'category_id' => $req->category_id,
+                'supplier_id' => $req->supplier_id,
+                'buy' => str_replace(",", '',$req->buy),
+                'sell' => str_replace(",", '',$req->sell),
+                'discount' => str_replace(",", '',$req->discount),
+                'condition' => $req->condition,
+                'description' => $req->description,
+                'created_by' => Auth::user()->name,
+            ]);
+        }
 
         for ($i=0; $i <count($req->branch_id) ; $i++){
             Stock::create([
@@ -196,6 +206,7 @@ class ItemController extends Controller
         );
 
         Item::destroy($id);
+        Stock::destroy(Item::where('item_id', $id));
 
         return Response::json(['status' => 'success']);
     }

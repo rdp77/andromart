@@ -216,12 +216,12 @@
                             name="totalPrice" onchange="sumTotal()" style="text-align: right">
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
 
-    
+
 
     <div class="card">
         <div class="card-header">
@@ -291,7 +291,7 @@
             <button class="btn btn-primary mr-1" type="button" onclick="save()"><i class="far fa-save"></i>
                 {{ __('Simpan Data') }}</button>
         </div>
-    </div>      
+    </div>
     <div class="modal fade" tabindex="1" role="dialog" id="exampleModal" aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
           <div class="modal-content">
@@ -336,7 +336,7 @@ $( document ).ready(function() {
         image_format: 'jpeg',
         jpeg_quality: 100
     });
-  
+
     Webcam.attach( '#my_camera' );
 });
     function take_snapshot() {
@@ -345,10 +345,10 @@ $( document ).ready(function() {
                 });
         Webcam.snap( function(data_uri) {
             $(".image-tag").val(data_uri);
-            
+
             document.getElementById('results').innerHTML = '<img name="image" id="sortpicture" class="image" src="'+data_uri+'"/>';
         } );
-        
+
     }
 </script>
 @endsection

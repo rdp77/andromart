@@ -45,10 +45,9 @@
                             <label for="warranty">{{ __('Garansi') }}<code>*</code></label>
                             <select class="select2" name="warranty_id">
                                 <option value="">- Select -</option>
-                                <option value="1">1 Minggu</option>
-                                <option value="2">2 Minggu</option>
-                                <option value="3">1 Bulan</option>
-                                <option value="4">3 Bulan</option>
+                                @foreach ($warranty as $warranty)
+                                <option value="{{ $warranty->id }}">{{ $warranty->periode }} {{ $warranty->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
@@ -64,16 +63,29 @@
                             <label for="series">{{ __('Member') }}<code>*</code></label>
                             <select class="select2" name="customer_id">
                                 <option value="">- Select -</option>
-                                <option value="1">Deny</option>
-                                <option value="2">Rizal</option>
-                                <option value="3">Alfian</option>
+                                @foreach ($customer as $customer)
+                                <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-5 col-lg-5">
-                            <label for="customer_phone">{{ __('No Tlp') }}<code>*</code></label>
-                            <input id="customer_phone" type="text" class="form-control" name="customer_phone">
+                            <label for="customer_telephone">{{ __('No. Telp.') }}<code>*</code></label>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    <i class="fas fa-phone"></i>
+                                </div>
+                                </div>
+                                <input id="customer_telephone" type="text" class="form-control @error('customer_telephone') is-invalid @enderror"
+                                    name="customer_telephone" value="{{ old('customer_telephone') }}" required>
+                                @error('customer_telephone')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                                @enderror
+                            </div>
                         </div>
                         <div class="form-group col-12 col-md-7 col-lg-7">
                             <label for="customer_address">{{ __('Alamat') }}<code>*</code></label>
@@ -91,26 +103,26 @@
                     <h4>Harga</h4>
                 </div>
                 <div class="card-body">
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="totalService">{{ __('Jasa') }}<code>*</code></label>
                         <input readonly id="totalService" onchange="sumTotal()" type="text" value="0"
                             class="form-control cleaveNumeral" name="totalService" style="text-align: right">
-                    </div>
+                    </div> --}}
                     <div class="form-group">
-                        <label for="totalSparePart">{{ __('Spare Part') }}<code>*</code></label>
+                        <label for="totalSparePart">{{ __('Barang') }}<code>*</code></label>
                         <input readonly id="totalSparePart" onchange="sumTotal()" type="text" value="0"
                             class="form-control cleaveNumeral" name="totalSparePart" style="text-align: right">
                     </div>
-                    <div class="form-group">
+                    {{-- <div class="form-group">
                         <label for="totalLoss">{{ __('Total Loss') }}<code>*</code></label>
                         <input readonly id="totalLoss" onchange="sumTotal()" type="text" value="0"
                             class="form-control cleaveNumeral" name="totalLoss" style="text-align: right">
-                    </div>
-                    <div class="form-group">
+                    </div> --}}
+                    {{-- <div class="form-group">
                         <label for="totalDownPayment">{{ __('Down Payment (DP)') }}<code>*</code></label>
                         <input id="totalDownPayment" type="text" value="0" class="form-control cleaveNumeral"
                             name="totalDownPayment" onkeyup="sumTotal()" style="text-align: right">
-                    </div>
+                    </div> --}}
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="totalDiscountPercent">{{ __('Diskon %') }}<code>*</code></label>
@@ -154,13 +166,14 @@
                             <th style="width: 20%">Barang / Jasa</th>
                             <th>Harga</th>
                             <th style="width: 9%">qty</th>
+                            <th style="width: 9%">Stok</th>
                             <th>Total</th>
                             <th>Deskripsi</th>
-                            <th style="width: 15%">tipe</th>
+                            {{-- <th style="width: 15%">tipe</th> --}}
                             <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    {{-- <tbody>
                         <tr>
                             <td style="display:none">
                                 <input type="text" class="form-control priceDetailSparePart cleaveNumeral"
@@ -191,7 +204,7 @@
                             </td>
                             <td><button href="#" type="button" class="btn btn-default">X</button></td>
                         </tr>
-                    </tbody>
+                    </tbody> --}}
                     <tbody class="dropHereItem" style="border: none !important">
                         {{-- <tr>
                     <td>LCD 15 inch</td>
