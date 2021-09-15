@@ -41,6 +41,7 @@ class PurchasingController extends Controller
 
     public function index(Request $req)
     {
+        dd("masuk");
         if ($req->ajax()) {
         $data = Service::get();
 

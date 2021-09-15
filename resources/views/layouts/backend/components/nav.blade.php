@@ -89,7 +89,7 @@
         <li class="dropdown">
             <a href="javascript:void(0)" data-toggle="dropdown"
                 class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                <img alt="image" src="{{ asset('assets/img/avatar.png') }}" class="rounded-circle mr-1">
+                <img alt="image" src="{{ Auth::user()->employee->getAvatar() }}" class="rounded-circle mr-1">
                 <div class="d-sm-none d-lg-inline-block">{{ __('Hai, ') . Auth::user()->name }}</div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">

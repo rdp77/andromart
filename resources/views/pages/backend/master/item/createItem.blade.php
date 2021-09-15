@@ -9,7 +9,7 @@
 
 @section('content')
 <div class="card">
-    <form method="POST" action="{{ route('item.store') }}">
+    <form method="POST" action="{{ route('item.store') }}" enctype="multipart/form-data">
         @csrf
         <div class="card-body">
             <div class="row">
@@ -97,7 +97,7 @@
                 <div class="form-group col-md-2 col-xs-12">
                     <label for="image">{{ __('Gambar') }}</label>
                     <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="image" name="">
+                        <input type="file" class="custom-file-input" id="image" name="image">
                         <label class="custom-file-label" for="image">Pilih Gambar</label>
                     </div>
                 </div>
@@ -112,13 +112,8 @@
                               Rp.
                             </div>
                           </div>
-                          <input id="buy" type="number" class="form-control currency @error('buy') is-invalid @enderror"
-                            name="buy" value="{{ old('buy') }}" required autocomplete="buy">
-                          @error('buy')
-                          <div class="invalid-feedback">
-                            {{ $message }}
-                          </div>
-                          @enderror
+                          <input id="buy" type="text" value="0" class="form-control cleaveNumeral"
+                            name="buy" style="text-align: right">
                         </div>
                     </div>
                 </div>
@@ -131,13 +126,8 @@
                               Rp.
                             </div>
                           </div>
-                          <input id="sell" type="number" class="form-control currency @error('sell') is-invalid @enderror"
-                            name="sell" value="{{ old('sell') }}" required autocomplete="sell">
-                          @error('sell')
-                          <div class="invalid-feedback">
-                            {{ $message }}
-                          </div>
-                          @enderror
+                          <input id="sell" type="text" value="0" class="form-control cleaveNumeral"
+                            name="sell" style="text-align: right">
                         </div>
                     </div>
                 </div>
@@ -150,13 +140,8 @@
                               Rp.
                             </div>
                           </div>
-                          <input id="discount" type="number" class="form-control currency @error('discount') is-invalid @enderror"
-                            name="discount" value="{{ old('discount') }}" autocomplete="discount">
-                          @error('discount')
-                          <div class="invalid-feedback">
-                            {{ $message }}
-                          </div>
-                          @enderror
+                          <input id="discount" type="text" value="0" class="form-control cleaveNumeral"
+                            name="discount" style="text-align: right">
                         </div>
                     </div>
                 </div>

@@ -28,7 +28,6 @@
                         'active'=>'',
                         'title'=>'Update WO Service',
                         'url'=>route('service.serviceFormUpdateStatus')])
-
                     @include('layouts.backend.components.sidebarMenu',[
                         'active'=>'',
                         'title'=>'Penjualan',
@@ -36,7 +35,11 @@
                     @include('layouts.backend.components.sidebarMenu',[
                         'active'=>'',
                         'title'=>'Pembelian',
-                        'url'=>''])
+                        'url'=>route('purchase.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                        'active'=>'',
+                        'title'=>'Penerimaan',
+                        'url'=>route('reception.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                         'active'=>'',
                         'title'=>'Pemasukan',
@@ -118,6 +121,10 @@
                     'active'=>'',
                     'title'=>'Pelanggan',
                     'url'=>route('customer.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Setting Presentase',
+                    'url'=>route('presentase.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Satuan',
