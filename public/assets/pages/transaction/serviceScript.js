@@ -124,17 +124,23 @@ function save() {
         buttons: true,
         dangerMode: true,
     }).then((willSave) => {
-
-        $('.validation').each(function(){
-            if ($(this).val() == '' || $(this).val() == null) {
-                return iziToast.error({
-                    type: 'warning',
-                    title: $(this).data('name') +' harus di isi'
-                });
-            }
-        })
-
         if (willSave) {
+            var validation = 0;
+            $('.validation').each(function(){
+                if ($(this).val() == '' || $(this).val() == null || $(this).val() == 0) {
+                    validation++;
+                    iziToast.warning({
+                        type: 'warning',
+                        title: $(this).data('name') +' Harus Di isi'
+                    });
+                }else{
+                    validation-1;
+                }
+            });
+            if (validation != 0) {
+                return false;
+            }
+            console.log(validation);
             $.ajax({
                 url: "/transaction/service/service",
                 data: $(".form-data").serialize(),
