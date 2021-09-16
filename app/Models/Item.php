@@ -42,7 +42,7 @@ class Item extends Model
 
     public function stock()
     {
-        return $this->hasOne('App\Models\Stock');
+        return $this->hasMany('App\Models\Stock');
     }
 
     public function getImage()
