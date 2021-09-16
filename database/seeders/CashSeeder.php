@@ -17,17 +17,25 @@ class CashSeeder extends Seeder
         DB::table('cashes')->insert([
             [
                 'id' => '1',
-                'name' => 'Debit BCA',
-                'code' => 'BCA',
+                'name' => 'Kas Toko',
+                'code' => 'KT',
                 'balance' => '1000000',
                 'created_at' => date("Y-m-d h:i:s"),
                 'updated_at' => date("Y-m-d h:i:s"),
             ],
             [
                 'id' => '2',
+                'name' => 'Debit BCA',
+                'code' => 'BCA',
+                'balance' => '5000000',
+                'created_at' => date("Y-m-d h:i:s"),
+                'updated_at' => date("Y-m-d h:i:s"),
+            ],
+            [
+                'id' => '3',
                 'name' => 'Debit Mandiri',
                 'code' => 'MANDIRI',
-                'balance' => '5000000',
+                'balance' => '2000000',
                 'created_at' => date("Y-m-d h:i:s"),
                 'updated_at' => date("Y-m-d h:i:s"),
             ],

@@ -123,8 +123,7 @@ class UsersController extends Controller
 
         if ($req->hasFile('avatar')) {
             $req->file('avatar')->move('assetsmaster/avatar/',$req->file('avatar')->getClientOriginalName());
-        }
-        Employee::where('id', User::find($id)->employee->id)
+            Employee::where('id', User::find($id)->employee->id)
             ->update([
                 'identity' => $req->identity,
                 'name' => $req->name,
@@ -135,13 +134,19 @@ class UsersController extends Controller
                 'avatar' => $req->file('avatar')->getClientOriginalName(),
                 'updated_by' => Auth::user()->name,
             ]);
-
-        // if($req->hasFile('avatar'))
-        // {
-        //     $req->file('avatar')->move('images/',$req->file('avatar')->getClientOriginalName());
-        //     $crew->avatar = $req->file('avatar')->getClientOriginalName();
-        //     $crew->save();
-        // }
+        }
+        else {
+            Employee::where('id', User::find($id)->employee->id)
+            ->update([
+                'identity' => $req->identity,
+                'name' => $req->name,
+                'birthday' => $birthday,
+                'contact' => $req->contact,
+                'gender' => $req->gender,
+                'address' => $req->address,
+                'updated_by' => Auth::user()->name,
+            ]);
+        }
 
         User::where('id', $id)
             ->update([
@@ -157,9 +162,9 @@ class UsersController extends Controller
 
         $user->save();
 
-        return Redirect::route('employee.index')
+        return Redirect::route('showUser')
             ->with([
-                'status' => 'Berhasil merubah user',
+                'status' => 'Berhasil mengubah data user',
                 'type' => 'success'
             ]);
     }

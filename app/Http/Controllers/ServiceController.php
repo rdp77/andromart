@@ -18,11 +18,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 use Carbon\carbon;
-// use DB;
-use Storage;
 
 class ServiceController extends Controller
 {
@@ -47,7 +46,7 @@ class ServiceController extends Controller
     {
         if ($req->ajax()) {
         $data = Service::with(['Employee1','Employee2','CreatedByUser'])->get();
-        
+
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -62,9 +61,9 @@ class ServiceController extends Controller
                         $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
                         $actionBtn .= '<a class="dropdown-item" href="' . route('service.printService', $row->id) . '"><i class="fas fa-print"></i> Cetak</a>';
                     }
-                    
+
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
-                    
+
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
@@ -217,7 +216,7 @@ class ServiceController extends Controller
                     $htmlAdd .= '<table>';
 
                     return $htmlAdd;
-                    
+
                 })
 
                 ->rawColumns(['action','dataItem','dataCustomer','finance','Informasi','currentStatus'])
@@ -248,16 +247,16 @@ class ServiceController extends Controller
 
     public function store(Request $req)
     {
-        // return $req->all();     
+        // return $req->all();
         // return $req->technicianId;
         $tech1 = Service::where('technician_id',$req->technicianId)->where('work_status','!=','Selesai')->count();
         $tech2 = Service::where('technician_replacement_id',$req->technicianId)->where('work_status','!=','Selesai')->count();
-        
+
 
         $getEmployee =  Employee::where('user_id',Auth::user()->id)->first();
         $settingPresentase =  SettingPresentase::get();
-        
-        for ($i=0; $i <count($settingPresentase) ; $i++) { 
+
+        for ($i=0; $i <count($settingPresentase) ; $i++) {
             if($settingPresentase[$i]->name == 'Presentase Sharing Profit Toko'){
                 $sharingProfitStore = $settingPresentase[$i]->total;
             }
@@ -279,7 +278,7 @@ class ServiceController extends Controller
             return Response::json(['status' => 'fail',
                                    'message'=>'Teknisi Memiliki '+$MaxHandle+' Pekerjaan Belum Selesai']);
         }
-        
+
 
         // return [$sharingProfitStore,
         // $sharingProfitTechnician,
@@ -291,7 +290,7 @@ class ServiceController extends Controller
 
         $total_loss_technician_1 = (str_replace(",", '',$req->totalLoss)/100)*$lossTechnician;
         $total_loss_store = (str_replace(",", '',$req->totalLoss)/100)*$lossStore;
-        
+
         $estimateDate = $this->DashboardController->changeMonthIdToEn($req->estimateDate);
 
         $image = $req->image;
@@ -448,7 +447,7 @@ class ServiceController extends Controller
 
         if($data == null){
             $message = 'empty';
-        }else{  
+        }else{
             $message = 'exist';
         }
 
@@ -463,9 +462,9 @@ class ServiceController extends Controller
             // return $checkData;
             $index = ServiceStatusMutation::where('service_id', $req->id)->count()+1;
             $settingPresentase =  SettingPresentase::get();
-        
+
             // return $req->all();
-            for ($i=0; $i <count($settingPresentase) ; $i++) { 
+            for ($i=0; $i <count($settingPresentase) ; $i++) {
                 if($settingPresentase[$i]->name == 'Presentase Sharing Profit Toko'){
                     $sharingProfitStore = $settingPresentase[$i]->total;
                 }
@@ -508,18 +507,18 @@ class ServiceController extends Controller
                     $total_loss_technician_1 = $checkData->total_loss_technician_1;
                     $total_loss_technician_2 = $checkData->total_loss_technician_2;
                     $sharing_profit_technician_1 =  $checkData->sharing_profit_technician_1;
-                    $sharing_profit_technician_2 = $checkData->sharing_profit_technician_2; 
+                    $sharing_profit_technician_2 = $checkData->sharing_profit_technician_2;
                 }else{
                     $technician_replacement_id = null;
                     $total_loss_technician_1 = $checkData->total_loss_technician_1;
                     $total_loss_technician_2 = 0;
                     $sharing_profit_technician_1 =  $checkData->sharing_profit_technician_1;
-                    $sharing_profit_technician_2 = 0; 
+                    $sharing_profit_technician_2 = 0;
                 }
-                
+
             }
-            
-            
+
+
             Service::where('id', $req->id)->update([
                 'work_status'=>$req->status,
                 'technician_replacement_id'=>$technician_replacement_id,

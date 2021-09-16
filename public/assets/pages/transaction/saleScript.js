@@ -170,12 +170,12 @@ function addItem() {
             '<td>'+
                 '<input type="text" class="form-control" name="descriptionDetail[]">'+
             '</td>'+
-            // '<td>'+
-            //     '<select class="form-control typeDetail typeDetail_'+(index+1)+'" name="typeDetail[]">'+
-            //         '<option selected data-index="'+(index+1)+'" value="SparePart">SparePart</option>'+
-            //         '<option data-index="'+(index+1)+'" value="Loss">Loss</option>'+
-            //     '</select>'+
-            // '</td>'+
+            '<td hidden>'+
+                '<select class="form-control typeDetail typeDetail_'+(index+1)+'" name="typeDetail[]">'+
+                    '<option selected data-index="'+(index+1)+'" value="SparePart">Barang</option>'+
+                    // '<option data-index="'+(index+1)+'" value="Loss">Loss</option>'+
+                '</select>'+
+            '</td>'+
             '<td>'+
                 '<button type="button" class="btn btn-danger removeDataDetail" value="'+(index+1)+'" >X</button>'+
             '</td>'+
@@ -205,14 +205,14 @@ $(document.body).on("change",".itemsDetail",function(){
     if(isNaN(parseInt($('.qtyDetail_'+index).val()))){
         var itemQty =  0; }else{
         var itemQty = $('.qtyDetail_'+index).val().replace(/,/g, ''),asANumber = +itemQty;}
-    $('.priceDetail_'+index).val(parseInt(itemPrice).toLocaleString());
+    $('.priceDetail_'+index).val(parseInt(itemPrice).toLocaleString('en-US'));
     var totalItemPrice = itemPrice*itemQty;
-    $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString());
+    $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
     if(typeDetail == 'SparePart'){
-        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString());
+        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailLoss_'+index).val(0);
     }else{
-        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString());
+        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailSparePart_'+index).val(0);
     }
     sum();
@@ -239,12 +239,12 @@ $(document.body).on("keyup",".qtyDetail",function(){
         var itemQty =  0; }else{
         var itemQty = this.value.replace(/,/g, ''),asANumber = +itemQty;}
     var totalItemPrice = itemPrice*itemQty;
-    $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString());
+    $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
     if(typeDetail == 'SparePart'){
-        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString());
+        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailLoss_'+index).val(0);
     }else{
-        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString());
+        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailSparePart_'+index).val(0);
     }
     sum();
@@ -263,12 +263,12 @@ $(document.body).on("keyup",".priceDetail",function(){
         var itemQty =  0; }else{
         var itemQty = $('.qtyDetail_'+index).val().replace(/,/g, ''),asANumber = +itemQty;}
     var totalItemPrice = itemPrice*itemQty;
-    $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString());
+    $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
     if(typeDetail == 'SparePart'){
-        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString());
+        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailLoss_'+index).val(0);
     }else{
-        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString());
+        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailSparePart_'+index).val(0);
     }
     sum();
@@ -290,36 +290,13 @@ function sum() {
     $('.priceDetailSparePart').each(function(){
         priceDetailSparePart += parseInt(this.value.replace(/,/g, ""));
     });
-    $('#totalSparePart').val(parseInt(priceDetailSparePart).toLocaleString());
+    $('#totalSparePart').val(parseInt(priceDetailSparePart).toLocaleString('en-US'));
     var priceDetailLoss = 0;
     $('.priceDetailLoss').each(function(){
         priceDetailLoss += parseInt(this.value.replace(/,/g, ""))
     });
-    $('#totalLoss').val(parseInt(priceDetailLoss).toLocaleString());
+    $('#totalLoss').val(parseInt(priceDetailLoss).toLocaleString('en-US'));
 }
-
-// fungsi rubah tipe
-$(document.body).on("change",".typeDetail",function(){
-    var value = this.value;
-    var index = $(this).find(':selected').data('index');
-    if(isNaN(parseInt($('.priceDetail_'+index).val()))){
-        var itemPrice =  0; }else{
-        var itemPrice = $('.priceDetail_'+index).val().replace(/,/g, ''),asANumber = +itemPrice;}
-    if(isNaN(parseInt($('.qtyDetail_'+index).val()))){
-        var itemQty =  0; }else{
-        var itemQty = $('.qtyDetail_'+index).val().replace(/,/g, ''),asANumber = +itemQty;}
-    var totalItemPrice = itemPrice*itemQty;
-    if(value == 'SparePart'){
-        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString());
-        $('.priceDetailLoss_'+index).val(0);
-    }else{
-        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString());
-        $('.priceDetailSparePart_'+index).val(0);
-    }
-    sum();
-    sumTotal();
-    sumDiscont();
-});
 
 function sumDiscont() {
     if(isNaN(parseInt($('#totalSparePart').val()))){
@@ -342,7 +319,7 @@ function sumDiscont() {
         var sumTotalPrice = (parseInt(totalDiscountPercent)/100)*(parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDownPayment));
     }else{
         var sumTotalPrice = (100/100)*(parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDownPayment));}
-    $('#totalDiscountValue').val(parseInt(sumTotalPrice).toLocaleString());
+    $('#totalDiscountValue').val(parseInt(sumTotalPrice).toLocaleString('en-US'));
     sumTotal();
 }
 
@@ -368,107 +345,5 @@ function sumTotal() {
         var sumTotal = 0;
     }else{
         var sumTotal = parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDownPayment)-parseInt(totalDiscountValue);}
-    $('#totalPrice').val(parseInt(sumTotal).toLocaleString());
-}
-
-
-
-// fungsi update status
-function choseService() {
-    var serviceId = $('.serviceId').find(':selected').val();
-    $('.activities').empty();
-    $.ajax({
-        url: "/transaction/service/service-form-update-status-load-data",
-        data: {id:serviceId},
-        type: 'POST',
-        success: function(data) {
-            if (data.status == 'success'){
-                if(data.message == 'empty'){
-                    $(".hiddenFormUpdate").css("display", "none");
-                }else{
-                    if(data.result.work_status == 'Selesai'){
-                        $(".hiddenFormUpdate").css("display", "none");
-                    }else{
-                        $(".hiddenFormUpdate").css("display", "block");
-                    }
-                    $.each(data.result.service_status_mutation, function(index,value){
-                        $('.activities').append(
-                            '<div class="activity">'+
-                                '<div class="activity-icon bg-primary text-white shadow-primary">'+
-                                    '<i class="fas fa-archive"></i>'+
-                                '</div>'+
-                                '<div class="activity-detail">'+
-                                    '<div class="mb-2">'+
-                                        '<span class="text-job text-primary">'+moment(value.created_at).format('DD MMMM YYYY')+'</span>'+
-                                        '<span class="bullet"></span>'+
-                                        '<a class="text-job" href="#" type="button">[ '+value.status+' ]</a>'+
-                                        '</div>'+
-                                    '<p>'+value.description+'</p>'+
-                                '</div>'+
-                            '</div>'
-                        );
-                    });
-                }
-            }
-        },
-        error: function(data) {
-        }
-    });
-}
-function changeStatusService() {
-
-    var value = $('.status').find(':selected').val();
-    if(value == 'Mutasi'){
-        $('.technicianFields').css('display','block');
-    }else{
-        $('.technicianFields').css('display','none');
-    }
-}
-
-function updateStatusService() {
-    var serviceId = $('.serviceId').find(':selected').val();
-    var status = $('.status').find(':selected').val();
-    var technicianId = $('.technicianId').find(':selected').val();
-    var description = $('.description').val();
-    swal({
-        title: "Apakah Anda Yakin?",
-        text: "Aksi ini tidak dapat dikembalikan, dan akan menyimpan data Anda.",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-    }).then((willSave) => {
-        if (willSave) {
-            $.ajax({
-                url: "/transaction/service/service-form-update-status-save-data",
-                data: {id:serviceId,status:status,description:description,technicianId:technicianId},
-                type: 'POST',
-                success: function(data) {
-                    if (data.status == 'success'){
-                        swal("Data Telah Tersimpan", {
-                            icon: "success",
-                        });
-                        $('.activities').append(
-                            '<div class="activity">'+
-                                '<div class="activity-icon bg-primary text-white shadow-primary">'+
-                                    '<i class="fas fa-archive"></i>'+
-                                '</div>'+
-                                '<div class="activity-detail">'+
-                                    '<div class="mb-2">'+
-                                        '<span class="text-job text-primary">'+moment().format('DD MMMM YYYY')+'</span>'+
-                                        '<span class="bullet"></span>'+
-                                        '<a class="text-job" href="#" type="button">[ '+status+' ]</a>'+
-                                        '</div>'+
-                                    '<p>'+description+'</p>'+
-                                '</div>'+
-                            '</div>'
-                        );
-                    }
-                },
-                error: function(data) {
-                }
-            });
-        } else {
-            swal("Data Dana Kredit PDL Berhasil Dihapus!");
-        }
-    });
+    $('#totalPrice').val(parseInt(sumTotal).toLocaleString('en-US'));
 }
