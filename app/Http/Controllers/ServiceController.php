@@ -299,9 +299,11 @@ class ServiceController extends Controller
         // return $img = $req->file('image');
         if ($image != null) {
             $fileSave = 'public/Service_' . $this->code('SRV-') . '.' .'png';
+            $fileName = 'Service_' . $this->code('SRV-') . '.' .'png';
             Storage::put($fileSave, $image);
         }else{
-            $fileSave = null;
+            // $fileSave = null;
+            $fileName = null;
         }
         // return 'asd';
         Service::create([
@@ -329,7 +331,7 @@ class ServiceController extends Controller
             'total_loss_technician_1'=>$total_loss_technician_1,
             'total_loss_technician_2'=>0,
             'total_loss_store'=>$total_loss_store,
-            'image'=>'Service_' . $this->code('SRV-') . '.' .'png',
+            'image'=>$fileName,
             'discount_price'=>str_replace(",", '',$req->totalDiscountValue),
             'discount_percent'=>str_replace(",", '',$req->totalDiscountPercent),
             'total_price'=>str_replace(",", '',$req->totalPrice),

@@ -52,7 +52,7 @@
                         <th>Tanggal</th>
                         <th>Customer</th>
                         <th>total</th>
-                        {{-- <th>Dibayarkan ?</th> --}}
+                        <th>Dibayarkan ?</th>
                     </tr>
                 </thead>
                 <tbody class="dropHere" style="border: none !important">

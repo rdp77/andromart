@@ -167,11 +167,11 @@ function checkEmploye() {
                         }else{
                             var totalProfit = value.sharing_profit_technician_2;
                         }
-                        // if (value.sharing_profit_detail.service_id == null) {
-                        //     var pay = '<div class="badge badge-danger">Belum Bayar</div>';
-                        // }else{
-                        //     var pay = '<div class="badge badge-success">Sudah Dibayarkan</div>';
-                        // }
+                        if (value.sharing_profit_detail.service_id == null) {
+                            var pay = '<div class="badge badge-danger">Belum Bayar</div>';
+                        }else{
+                            var pay = '<div class="badge badge-success">Sudah Dibayarkan</div>';
+                        }
                         totalAkhir+=totalProfit;
                         $('.dropHere').append(
                             '<tr>'+
@@ -188,9 +188,9 @@ function checkEmploye() {
                                 '<td>'+
                                     parseInt(totalProfit).toLocaleString('en-US')+
                                 '</td>'+
-                                // '<td>'+
-                                //     pay+
-                                // '</td>'+
+                                '<td>'+
+                                    pay+
+                                '</td>'+
                             '</tr>'
                         );
                     });

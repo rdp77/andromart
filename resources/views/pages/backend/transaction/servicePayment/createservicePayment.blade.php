@@ -102,23 +102,24 @@
                         <input readonly id="totalDownPayment" onchange="sumTotal()" type="text" value="0"
                             class="form-control cleaveNumeral" name="totalDownPayment" style="text-align: right">
                     </div>
+                    <div class="row">
+                        <div class="form-group col-12 col-md-6 col-lg-6">
+                            <label for="totalDiscountPercent">{{ __('Diskon %') }}<code>*</code></label>
+                            <input readonly id="totalDiscountPercent" type="text" value="0" class="form-control cleaveNumeral"
+                                name="totalDiscountPercent" onkeyup="sumTotal(),sumDiscont()" style="text-align: right">
+                        </div>
+                        <div class="form-group col-12 col-md-6 col-lg-6">
+                            <label for="totalDiscountValue">{{ __('Diskon') }}<code>*</code></label>
+                            <input readonly id="totalDiscountValue" type="text" value="0" class="form-control cleaveNumeral"
+                                name="totalDiscountValue" onkeyup="sumTotal(),sumDiscont()" style="text-align: right">
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label for="totalPayment">{{ __('Total Bayar') }}<code>*</code></label>
                         <input id="totalPayment" type="text" value="0" class="form-control cleaveNumeral"
                             name="totalPayment" style="text-align: right" onkeyup="sumTotal()">
                     </div>
-                    <div class="row" style="display: none">
-                        <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="totalDiscountPercent">{{ __('Diskon %') }}<code>*</code></label>
-                            <input id="totalDiscountPercent" type="text" value="0" class="form-control cleaveNumeral"
-                                name="totalDiscountPercent" onkeyup="sumTotal(),sumDiscont()" style="text-align: right">
-                        </div>
-                        <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="totalDiscountValue">{{ __('Diskon') }}<code>*</code></label>
-                            <input id="totalDiscountValue" type="text" value="0" class="form-control cleaveNumeral"
-                                name="totalDiscountValue" onkeyup="sumTotal(),sumDiscont()" style="text-align: right">
-                        </div>
-                    </div>
+                    
                     <div class="form-group">
                         <label for="totalPrice">{{ __('Total Harga') }}<code>*</code></label>
                         <input id="totalPrice" type="text" value="0" class="form-control cleaveNumeral"

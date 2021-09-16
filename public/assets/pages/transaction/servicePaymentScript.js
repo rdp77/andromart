@@ -178,14 +178,7 @@ function sumTotal() {
         var totalService =  0;
     }else{
         var totalService = $('#totalService').val().replace(/,/g, ''),asANumber = +totalService;}
-    if(isNaN(parseInt($('#totalDownPayment').val()))){
-        var totalDownPayment =  0;
-    }else{
-        var totalDownPayment = $('#totalDownPayment').val().replace(/,/g, ''),asANumber = +totalService;}
-    if(isNaN(parseInt($('#totalPayment').val()))){
-        var totalPayment =  0;
-    }else{
-        var totalPayment = $('#totalPayment').val().replace(/,/g, ''),asANumber = +totalPayment;}
+
 
 
     var sumTotal = parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDownPayment)-parseInt(totalPayment);
@@ -213,12 +206,16 @@ function choseService() {
                     $('#totalService').val(0);
                     $('#totalSparePart').val(0);
                     $('#totalPriceHidden').val(0);
+                    $('#totalDiscountPercent').val(0);
+                    $('#totalDiscountValue').val(0);
                     $('#checkDpData').val('');
                     $('.dropHereItem').empty();
                 }else{
                     $('#totalService').val(parseInt(data.result.total_service).toLocaleString('en-US'));
                     $('#totalSparePart').val(parseInt(data.result.total_part).toLocaleString('en-US'));
                     $('#totalDownPayment').val(parseInt(data.result.total_downpayment).toLocaleString('en-US'));
+                    $('#totalDiscountPercent').val(parseFloat(data.result.discount_percent).toLocaleString('en-US'));
+                    $('#totalDiscountValue').val(parseInt(data.result.discount_price).toLocaleString('en-US'));
                     $('#totalPriceHidden').val(data.result.total_service+data.result.total_part);
                     $('#checkDpData').val(data.result.total_downpayment);
                     if (data.result.downpayment_date != null){
