@@ -300,7 +300,7 @@ class ServiceController extends Controller
         // return $img = $req->file('image');
         if ($image != null) {
             $fileSave = 'public/Service_' . $this->code('SRV-') . '.' .'png';
-            return Storage::put($fileSave, $image);
+            Storage::put($fileSave, $image);
         }else{
             $fileSave = null;
         }
@@ -330,7 +330,7 @@ class ServiceController extends Controller
             'total_loss_technician_1'=>$total_loss_technician_1,
             'total_loss_technician_2'=>0,
             'total_loss_store'=>$total_loss_store,
-            'image'=>$fileSave,
+            'image'=>'Service_' . $this->code('SRV-') . '.' .'png',
             'discount_price'=>str_replace(",", '',$req->totalDiscountValue),
             'discount_percent'=>str_replace(",", '',$req->totalDiscountPercent),
             'total_price'=>str_replace(",", '',$req->totalPrice),
@@ -387,9 +387,14 @@ class ServiceController extends Controller
 
     public function edit($id)
     {
-        $Service = Service::find($id);
+        $service = Service::find($id);
         $member = User::get();
-        return view('pages.backend.transaction.service.editService', ['Service' => $Service,'member'=>$member]);
+        $employee = Employee::get();
+        $items    = Item::where('name','!=','Jasa Service')->get();
+        $brand    = Brand::get();
+        $type     = Type::get();
+        $warranty = Warranty::get();
+        return view('pages.backend.transaction.service.editService',compact('employee','items','brand','type','warranty','service'));
     }
     public function printService($id)
     {

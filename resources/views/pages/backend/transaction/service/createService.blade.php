@@ -207,7 +207,7 @@
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="totalDiscountValue">{{ __('Diskon') }}<code>*</code></label>
                             <input id="totalDiscountValue" type="text" value="0" class="form-control cleaveNumeral"
-                                name="totalDiscountValue" onkeyup="sumTotal(),sumDiscont()" style="text-align: right">
+                                name="totalDiscountValue" onkeyup="sumTotal(),sumDiscontValue()" style="text-align: right">
                         </div>
                     </div>
                     <div class="form-group">
