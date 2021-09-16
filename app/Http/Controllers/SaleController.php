@@ -9,6 +9,7 @@ use App\Models\Employee;
 use App\Models\Item;
 use App\Models\Sale;
 use App\Models\SaleDetail;
+use App\Models\Stock;
 use App\Models\User;
 use App\Models\Warranty;
 use Illuminate\Http\Request;
@@ -19,6 +20,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 use Carbon\carbon;
+use GuzzleHttp\Promise\Create;
 
 class SaleController extends Controller
 {
@@ -158,13 +160,29 @@ class SaleController extends Controller
         $employee = Employee::get();
         $warranty = Warranty::get();
         $customer = Customer::get();
-        $item = Item::where('name','!=','Jasa Service')->get();
+        // $stock = Stock::where();
+        $userBranch = Auth::user()->employee->branch_id;
+        $item = Item::with('stock')->where('name','!=','Jasa Service')->get();
+        // return $item = Item::with('stock')->where('branch_id','=', Auth::user()->employee->branch_id)->get();
         return view('pages.backend.transaction.sale.createSale', compact('code', 'employee', 'item', 'warranty', 'customer'));
     }
 
     public function store(Request $req)
     {
+        $id = DB::table('sales')->max('id')+1;
+        $getEmployee =  Employee::where('user_id',Auth::user()->id)->first();
 
+        Sale::create([
+            'id' => $id,
+            'code' => $this->code('PJT-'),
+            'user_id' => Auth::user()->id,
+            'branch_id' => $getEmployee->branch_id,
+            'customer_id' => $req->customerId,
+            'customer_name' => $req->customerName,
+            'customer_address' => $req->customerAddress,
+            'customer_phone' => $req->customerPhone,
+            'date' => date('Y-m-d'),
+        ]);
     }
 
     public function show($id)

@@ -155,7 +155,16 @@
         </div>
         <div class="card-body">
             @foreach ($item as $el)
-            <input class="itemsData" type="hidden" data-price="{{$el->sell}}" data-name="{{$el->name}}"
+                <input class="itemsData" type="hidden"
+                data-price="{{$el->sell}}"
+                @foreach ($el->stock as $el1)
+                    @if (Auth::user()->employee->branch_id == $el1->branch_id)
+                        data-stock="{{$el1->stock}}"
+                    @else
+                        data-stock="0"
+                    @endif
+                @endforeach
+                data-name="{{$el->name}}"
                 value="{{$el->id}}">
             @endforeach
 

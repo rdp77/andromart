@@ -140,7 +140,7 @@ function addItem() {
 
     var dataItems = [];
     $.each($('.itemsData'), function(){
-        dataItems += '<option data-index="'+(index+1)+'" data-price="'+$(this).data('price')+'" data-stock="'+$(this).data('supplier')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
+        dataItems += '<option data-index="'+(index+1)+'" data-price="'+$(this).data('price')+'" data-stock="'+$(this).data('stock')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
     });
 
     $('.dropHereItem').append(
@@ -151,7 +151,7 @@ function addItem() {
             '</td>'+
             '<td>'+
             '<select class="select2 itemsDetail" name="itemsDetail[]">'+
-                '<option value="">- Select -</option>'+
+                '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
                 dataItems+
             '</select>'+
             '</td>'+
@@ -162,7 +162,7 @@ function addItem() {
                 '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="1" style="text-align: right">'+
             '</td>'+
             '<td>'+
-                '<input type="text" class="form-control stock stock_'+(index+1)+'" name="" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
+                '<input type="text" class="form-control stock stock_'+(index+1)+'" readonly name="stockDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
             '</td>'+
             '<td>'+
                 '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="0" style="text-align: right">'+
@@ -196,28 +196,44 @@ function addItem() {
 }
 
 // mengganti item
-$(document.body).on("change",".itemsDetail",function(){
+$(document.body).on("change", ".itemsDetail", function () {
     var index = $(this).find(':selected').data('index');
-    var typeDetail = $('.typeDetail_'+index).find(':selected').val();
-    if(isNaN(parseInt($(this).find(':selected').data('price')))){
-        var itemPrice =  0; }else{
-        var itemPrice = $(this).find(':selected').data('price');}
-    if(isNaN(parseInt($('.qtyDetail_'+index).val()))){
-        var itemQty =  0; }else{
-        var itemQty = $('.qtyDetail_'+index).val().replace(/,/g, ''),asANumber = +itemQty;}
-    $('.priceDetail_'+index).val(parseInt(itemPrice).toLocaleString('en-US'));
-    var totalItemPrice = itemPrice*itemQty;
-    $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
-    if(typeDetail == 'SparePart'){
-        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
-        $('.priceDetailLoss_'+index).val(0);
+    console.log($(this).val());
+    console.log(index);
+
+    if ($(this).val() == '-') {
+        $('.priceDetail_' + index).val(0);
+        $('.stock_' + index).val(0);
+        $('.qtyDetail_' + index).val(0);
+        $('.totalPriceDetail_' + index).val(0);
     }else{
-        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
-        $('.priceDetailSparePart_'+index).val(0);
+        var typeDetail = $('.typeDetail_' + index).find(':selected').val();
+        if (isNaN(parseInt($(this).find(':selected').data('price')))) {
+            var itemPrice = 0;
+        } else {
+            var itemPrice = $(this).find(':selected').data('price');
+        }
+        if (isNaN(parseInt($('.qtyDetail_' + index).val()))) {
+            var itemQty = 0;
+        } else {
+            var itemQty = $('.qtyDetail_' + index).val().replace(/,/g, ''), asANumber = +itemQty;
+        }
+        $('.priceDetail_' + index).val(parseInt(itemPrice).toLocaleString('en-US'));
+        var totalItemPrice = itemPrice * itemQty;
+        $('.stock_' + index).val($(this).find(':selected').data('stock'));
+        $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
+        if(typeDetail == 'SparePart'){
+            $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
+            $('.priceDetailLoss_'+index).val(0);
+        }else{
+            $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
+            $('.priceDetailSparePart_'+index).val(0);
+        }
     }
     sum();
     sumTotal();
     sumDiscont();
+
 });
 
 // menghapus kolom
@@ -240,7 +256,8 @@ $(document.body).on("keyup",".qtyDetail",function(){
         var itemQty = this.value.replace(/,/g, ''),asANumber = +itemQty;}
     var totalItemPrice = itemPrice*itemQty;
     $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
-    if(typeDetail == 'SparePart'){
+
+    if (typeDetail == 'SparePart') {
         $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailLoss_'+index).val(0);
     }else{
@@ -256,7 +273,8 @@ $(document.body).on("keyup",".qtyDetail",function(){
 $(document.body).on("keyup",".priceDetail",function(){
     var index = $(this).data('index');
     var typeDetail = $('.typeDetail_'+index).find(':selected').val();
-    if(isNaN(parseInt(this.value))){
+
+    if (isNaN(parseInt(this.value))) {
         var itemPrice =  0; }else{
         var itemPrice = this.value.replace(/,/g, ''),asANumber = +itemPrice;}
     if(isNaN(parseInt($('.qtyDetail_'+index).val()))){
