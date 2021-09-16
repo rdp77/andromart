@@ -174,14 +174,24 @@ function sumTotal() {
         var totalSparePart =  0;
     }else{
         var totalSparePart = $('#totalSparePart').val().replace(/,/g, ''),asANumber = +totalSparePart;}
+
     if(isNaN(parseInt($('#totalService').val()))){
         var totalService =  0;
     }else{
         var totalService = $('#totalService').val().replace(/,/g, ''),asANumber = +totalService;}
 
+    if(isNaN(parseInt($('#totalPayment').val()))){
+        var totalPayment =  0;
+    }else{
+        var totalPayment = $('#totalPayment').val().replace(/,/g, ''),asANumber = +totalPayment;}
 
+    if(isNaN(parseInt($('#totalDiscountValue').val()))){
+        var totalDiscountValue =  0;
+    }else{
+        var totalDiscountValue = $('#totalDiscountValue').val().replace(/,/g, ''),asANumber = +totalDiscountValue;}
+        
+    var sumTotal = parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDiscountValue)-parseInt(totalPayment);
 
-    var sumTotal = parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDownPayment)-parseInt(totalPayment);
     if (sumTotal < 0) {
         $('#totalPrice').val(parseInt(0).toLocaleString('en-US'));
     }else{
