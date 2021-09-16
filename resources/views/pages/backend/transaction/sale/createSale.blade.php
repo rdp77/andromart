@@ -1,5 +1,5 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__('Tambah Penjualan'))
+@section('title', __('pages.title').__(' | Tambah Penjualan'))
 @section('titleContent', __('Tambah Penjualan'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
@@ -165,11 +165,11 @@
                         <tr>
                             <th style="width: 20%">Barang / Jasa</th>
                             <th>Harga</th>
-                            <th style="width: 9%">qty</th>
+                            <th style="width: 9%">Qty</th>
                             <th style="width: 9%">Stok</th>
-                            <th>Total</th>
+                            <th>Jumlah</th>
                             <th>Deskripsi</th>
-                            {{-- <th style="width: 15%">tipe</th> --}}
+                            <th style="width: 15%" hidden>tipe</th>
                             <th>Action</th>
                         </tr>
                     </thead>

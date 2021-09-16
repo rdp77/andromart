@@ -160,13 +160,13 @@ function save() {
                     // edit(id);
                 }
             });
-            
+
         } else {
             swal("Data Dana Kredit PDL Berhasil Dihapus!");
         }
     });
 
-    
+
 }
 
 function sumTotal() {
@@ -187,12 +187,12 @@ function sumTotal() {
     }else{
         var totalPayment = $('#totalPayment').val().replace(/,/g, ''),asANumber = +totalPayment;}
 
-    
+
     var sumTotal = parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDownPayment)-parseInt(totalPayment);
     if (sumTotal < 0) {
-        $('#totalPrice').val(parseInt(0).toLocaleString()); 
+        $('#totalPrice').val(parseInt(0).toLocaleString('en-US'));
     }else{
-        $('#totalPrice').val(parseInt(sumTotal).toLocaleString()); 
+        $('#totalPrice').val(parseInt(sumTotal).toLocaleString('en-US'));
     }
 }
 
@@ -211,16 +211,16 @@ function choseService() {
                 if(data.message == 'empty'){
                     $('.DownPaymentHidden').css('display','none');
                     $('#totalService').val(0);
-                    $('#totalSparePart').val(0); 
-                    $('#totalPriceHidden').val(0); 
-                    $('#checkDpData').val(''); 
+                    $('#totalSparePart').val(0);
+                    $('#totalPriceHidden').val(0);
+                    $('#checkDpData').val('');
                     $('.dropHereItem').empty();
                 }else{
-                    $('#totalService').val(parseInt(data.result.total_service).toLocaleString());
-                    $('#totalSparePart').val(parseInt(data.result.total_part).toLocaleString()); 
-                    $('#totalDownPayment').val(parseInt(data.result.total_downpayment).toLocaleString()); 
-                    $('#totalPriceHidden').val(data.result.total_service+data.result.total_part); 
-                    $('#checkDpData').val(data.result.total_downpayment); 
+                    $('#totalService').val(parseInt(data.result.total_service).toLocaleString('en-US'));
+                    $('#totalSparePart').val(parseInt(data.result.total_part).toLocaleString('en-US'));
+                    $('#totalDownPayment').val(parseInt(data.result.total_downpayment).toLocaleString('en-US'));
+                    $('#totalPriceHidden').val(data.result.total_service+data.result.total_part);
+                    $('#checkDpData').val(data.result.total_downpayment);
                     if (data.result.downpayment_date != null){
                         $('.DownPaymentHidden').css('display','block');
                     }else{
@@ -231,9 +231,9 @@ function choseService() {
                         $('.dropHereItem').append(
                                 '<tr>'+
                                     '<td>'+value.items.name+'</td>'+
-                                    '<td>'+parseInt(value.price).toLocaleString()+'</td>'+
-                                    '<td>'+parseInt(value.qty).toLocaleString()+'</td>'+
-                                    '<td>'+parseInt(value.total_price).toLocaleString()+'</td>'+
+                                    '<td>'+parseInt(value.price).toLocaleString('en-US')+'</td>'+
+                                    '<td>'+parseInt(value.qty).toLocaleString('en-US')+'</td>'+
+                                    '<td>'+parseInt(value.total_price).toLocaleString('en-US')+'</td>'+
                                     '<td>'+value.description+'</td>'+
                                     '<td>'+value.type+'</td>'+
                                 '</tr>'
@@ -241,7 +241,7 @@ function choseService() {
                         });
                 }
                 sumTotal();
-                
+
             }
         },
         error: function(data) {

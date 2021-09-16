@@ -7,6 +7,7 @@
 @endsection
 
 @section('content')
+@include('layouts.backend.components.notification')
   <div class="section-body">
     <h2 class="section-title">Hi, {{ $user->username }}</h2>
     <p class="section-lead">

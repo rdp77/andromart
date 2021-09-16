@@ -29,12 +29,12 @@ function save() {
                     // edit(id);
                 }
             });
-            
+
         } else {
             swal("Data Dana Kredit PDL Berhasil Dihapus!");
         }
     });
-    
+
 }
 
 
@@ -69,7 +69,7 @@ function checkEmploye() {
                         }else{
                             var totalProfit = value.sharing_profit_technician_2;
                         }
-        
+
                         totalAkhir+=totalProfit;
                         $('.dropHere').append(
                             '<tr>'+
@@ -84,7 +84,7 @@ function checkEmploye() {
                                     value.customer_name+
                                 '</td>'+
                                 '<td>'+
-                                    parseInt(totalProfit).toLocaleString()+
+                                    parseInt(totalProfit).toLocaleString('en-US')+
                                 '</td>'+
                                 // '<td>'+
                                 //     pay+
@@ -92,7 +92,7 @@ function checkEmploye() {
                             '</tr>'
                         );
                     });
-                    $('.dropHereTotal').text(parseInt(totalAkhir).toLocaleString());
+                    $('.dropHereTotal').text(parseInt(totalAkhir).toLocaleString('en-US'));
                     $('.dropHereTotalVal').html('<input type="hidden" class="form-control" name="totalValue" value="'+totalAkhir+'">');
                 }
             }
