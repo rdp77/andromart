@@ -154,6 +154,7 @@
             </div>
         </div>
         <div class="card-body">
+            
             @foreach ($item as $el)
                 <input class="itemsData" type="hidden"
                 data-price="{{$el->sell}}"

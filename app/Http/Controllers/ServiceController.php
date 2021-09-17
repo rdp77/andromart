@@ -238,11 +238,12 @@ class ServiceController extends Controller
     {
         $code     = $this->code('SRV-');
         $employee = Employee::get();
-        $items    = Item::where('name','!=','Jasa Service')->get();
+        // $items    = Item::where('name','!=','Jasa Service')->get();
+        $item     = Item::with('stock')->where('name','!=','Jasa Service')->get();
         $brand    = Brand::get();
         $type     = Type::get();
         $warranty = Warranty::get();
-        return view('pages.backend.transaction.service.createService',compact('employee','code','items','brand','type','warranty'));
+        return view('pages.backend.transaction.service.createService',compact('employee','code','item','brand','type','warranty'));
     }
 
     public function store(Request $req)
@@ -277,6 +278,12 @@ class ServiceController extends Controller
         if($tech1+$tech2 >= $MaxHandle){
             return Response::json(['status' => 'fail',
                                    'message'=>'Teknisi Memiliki '+$MaxHandle+' Pekerjaan Belum Selesai']);
+        }
+        for ($i=0; $i <count($req->itemsDetail) ; $i++) {
+            if($req->stockDetail[$i] == 0){
+                return Response::json(['status' => 'fail',
+                                    'message'=>'Stick Item Ada yang 0. Harap Cek Kembali']);
+            }
         }
 
 

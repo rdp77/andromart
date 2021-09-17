@@ -104,19 +104,6 @@ function del(id) {
 }
 
 function save() {
-
-
-
-    // alert($(".form-data").serialize());
-    // var formData = new FormData();
-    // var image = '';
-    // Webcam.snap( function(data_uri) {
-    //     image = data_uri;
-    // });
-    // $.ajax
-    // var input = document.getElementById("image");
-    // file = input.files[0];
-    // formData.append("image", image);
     swal({
         title: "Apakah Anda Yakin?",
         text: "Aksi ini tidak dapat dikembalikan, dan akan menyimpan data Anda.",
@@ -140,7 +127,6 @@ function save() {
             if (validation != 0) {
                 return false;
             }
-            console.log(validation);
             $.ajax({
                 url: "/transaction/service/service",
                 data: $(".form-data").serialize(),
@@ -161,7 +147,7 @@ function save() {
             });
 
         } else {
-            swal("Data Dana Kredit PDL Berhasil Dihapus!");
+            swal("Belum Disimpan !");
         }
     });
 
@@ -173,7 +159,7 @@ function addItem() {
 
     var dataItems = [];
     $.each($('.itemsData'), function(){
-        dataItems += '<option data-index="'+(index+1)+'" data-price="'+$(this).data('price')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
+        dataItems += '<option data-index="'+(index+1)+'"  data-price="'+$(this).data('price')+'" data-stock="'+$(this).data('stock')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
     });
 
     $('.dropHereItem').append(
@@ -184,7 +170,7 @@ function addItem() {
             '</td>'+
             '<td>'+
             '<select class="select2 itemsDetail" name="itemsDetail[]">'+
-                '<option value="">- Select -</option>'+
+                '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
                 dataItems+
             '</select>'+
             '</td>'+
@@ -193,6 +179,9 @@ function addItem() {
             '</td>'+
             '<td>'+
                 '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="1" style="text-align: right">'+
+            '</td>'+
+            '<td>'+
+                '<input type="text" class="form-control stock stock_'+(index+1)+'" readonly name="stockDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
             '</td>'+
             '<td>'+
                 '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="0" style="text-align: right">'+
@@ -229,25 +218,38 @@ function addItem() {
 // mengganti item
 $(document.body).on("change",".itemsDetail",function(){
     var index = $(this).find(':selected').data('index');
-    var typeDetail = $('.typeDetail_'+index).find(':selected').val();
-    if(isNaN(parseInt($(this).find(':selected').data('price')))){
-        var itemPrice =  0; }else{
-        var itemPrice = $(this).find(':selected').data('price');}
-    if(isNaN(parseInt($('.qtyDetail_'+index).val()))){
-        var itemQty =  0; }else{
-        var itemQty = $('.qtyDetail_'+index).val().replace(/,/g, ''),asANumber = +itemQty;}
-    $('.priceDetail_'+index).val(parseInt(itemPrice).toLocaleString('en-US'));
-    var totalItemPrice = itemPrice*itemQty;
-    $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
-    if(typeDetail == 'SparePart'){
-        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
-        $('.priceDetailLoss_'+index).val(0);
+    // console.log($(this).val());
+    // console.log(index);
+
+    if ($(this).val() == '-') {
+        $('.priceDetail_' + index).val(0);
+        $('.stock_' + index).val(0);
+        $('.qtyDetail_' + index).val(0);
+        $('.totalPriceDetail_' + index).val(0);
     }else{
-        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
-        $('.priceDetailSparePart_'+index).val(0);
+        var typeDetail = $('.typeDetail_' + index).find(':selected').val();
+        if (isNaN(parseInt($(this).find(':selected').data('price')))) {
+            var itemPrice = 0;
+        } else {
+            var itemPrice = $(this).find(':selected').data('price');
+        }
+        if (isNaN(parseInt($('.qtyDetail_' + index).val()))) {
+            var itemQty = 0;
+        } else {
+            var itemQty = $('.qtyDetail_' + index).val().replace(/,/g, ''), asANumber = +itemQty;
+        }
+        $('.priceDetail_' + index).val(parseInt(itemPrice).toLocaleString('en-US'));
+        var totalItemPrice = itemPrice * itemQty;
+        $('.stock_' + index).val($(this).find(':selected').data('stock'));
+        $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
+        if(typeDetail == 'SparePart'){
+            $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
+            $('.priceDetailLoss_'+index).val(0);
+        }else{
+            $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
+            $('.priceDetailSparePart_'+index).val(0);
+        }
     }
-    console.log(parseInt(totalItemPrice).toLocaleString('en-US'));
-    console.log(totalItemPrice);
     sum();
     sumTotal();
     sumDiscont();

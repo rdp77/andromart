@@ -232,8 +232,18 @@
             </div>
         </div>
         <div class="card-body">
-            @foreach ($items as $el)
-            <input class="itemsData" type="hidden" data-price="{{$el->sell}}" data-name="{{$el->name}}"
+
+            @foreach ($item as $el)
+                <input class="itemsData" type="hidden"
+                data-price="{{$el->sell}}"
+                @foreach ($el->stock as $el1)
+                    @if (Auth::user()->employee->branch_id == $el1->branch_id)
+                        data-stock="{{$el1->stock}}"
+                    @else
+                        data-stock="0"
+                    @endif
+                @endforeach
+                data-name="{{$el->name}}"
                 value="{{$el->id}}">
             @endforeach
 
@@ -243,7 +253,8 @@
                         <tr>
                             <th style="width: 20%">Barang / Jasa</th>
                             <th>Harga</th>
-                            <th style="width: 9%">qty</th>
+                            <th style="width: 9%">Qty</th>
+                            <th style="width: 9%">Stock</th>
                             <th>Total</th>
                             <th>Deskripsi</th>
                             <th style="width: 15%">tipe</th>
@@ -265,6 +276,9 @@
                             <td>
                                 <input type="text" class="form-control priceServiceDetail cleaveNumeral"
                                     name="priceDetail[]" style="text-align: right" value="0">
+                            </td>
+                            <td>
+                                <input readonly type="text" class="form-control" name="qtyDetail[]" value="1" style="text-align: right">
                             </td>
                             <td>
                                 <input readonly type="text" class="form-control" name="qtyDetail[]" value="1" style="text-align: right">
