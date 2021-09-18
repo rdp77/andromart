@@ -111,7 +111,7 @@ function save() {
     }).then((willSave) => {
         if (willSave) {
             $.ajax({
-                url: "/transaction/service/service",
+                url: "/transaction/sale/sale",
                 data: $(".form-data").serialize(),
                 type: 'POST',
                 success: function(data) {

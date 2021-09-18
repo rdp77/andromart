@@ -17,17 +17,22 @@ class CreateSalesTable extends Migration
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
             $table->string('code');
-            $table->string('user_id');
+            $table->integer('user_id');
+            $table->integer('branch_id');
             $table->integer('customer_id')->nullable();
             $table->string('customer_name')->nullable();
             $table->string('customer_address')->nullable();
             $table->string('customer_phone')->nullable();
             $table->date('date');
             $table->integer('warranty_id');
-            $table->double('discount_price');
-            $table->double('discount_percent');
+            $table->string('discount_type')->nullable();
+            $table->double('discount_price')->nullable();
+            $table->double('discount_percent')->nullable();
+            $table->double('item_price');
             $table->double('total_price');
-            $table->integer('sales_id')->nullable();
+            $table->integer('sales_id');
+            $table->double('sharing_profit_store');
+            $table->double('sharing_profit_sales');
             $table->string('description')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

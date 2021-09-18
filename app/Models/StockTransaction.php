@@ -4,17 +4,19 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class SaleDetail extends Model
+class StockTransaction extends Model
 {
     use HasFactory;
+    use SoftDeletes;
 
     protected $fillable = [
-        'sale_id',
         'item_id',
-        'price',
+        'unit_id',
+        'branch_id',
         'qty',
-        'total',
+        'type',
         'description',
         'created_at',
         'updated_at',
@@ -23,9 +25,4 @@ class SaleDetail extends Model
         'updated_by',
         'deleted_by',
     ];
-
-    public function Sale()
-    {
-        return $this->belongsTo('App\Models\Sale');
-    }
 }

@@ -30,11 +30,6 @@
                     <th>{{ __('Barang / QTY') }}</th>
                     <th>{{ __('Harga') }}</th>
                     <th>{{ __('Total') }}</th>
-                    {{-- <th>{{ __('Jasa') }}</th>
-                    <th>{{ __('SparePart') }}</th>
-                    <th>{{ __('Loss') }}</th>
-                    <th>{{ __('Diskon') }}</th>
-                    <th>{{ __('Jumlah') }}</th> --}}
                     <th>{{ __('Action') }}</th>
                 </tr>
             </thead>

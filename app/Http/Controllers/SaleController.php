@@ -33,7 +33,7 @@ class SaleController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Sale::get();
+            $data = Sale::with('SaleDetail')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -79,39 +79,41 @@ class SaleController extends Controller
                 ->addColumn('dataItem', function ($row) {
                     $htmlAdd = '<table>';
                     $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Merk</td>';
-                    $htmlAdd .=      '<th>'.$row->brand.'</th>';
+                    $htmlAdd .=      '<th>'.$row->SaleDetail->item_id.'</th>';
+                    $htmlAdd .=      '<th>'.$row->SaleDetail->qty.'</th>';
+                    // $htmlAdd .=      '<td>S.P Teknisi</td>';
+                    // $htmlAdd .=      '<th>'.number_format(40/100*$row->total_price,0,".",",").'</th>';
                     $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Seri</td>';
-                    $htmlAdd .=      '<th>'.$row->series.'</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>tipe</td>';
-                    $htmlAdd .=      '<th>'.$row->type.'</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>imei</td>';
-                    $htmlAdd .=      '<th>'.$row->no_imei.'</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>rusak</td>';
-                    $htmlAdd .=      '<th>'.$row->complaint.'</th>';
-                    $htmlAdd .=   '</tr>';
+                    // $htmlAdd .=   '<tr>';
+                    // $htmlAdd .=      '<td>Seri</td>';
+                    // $htmlAdd .=      '<th>'.$row->series.'</th>';
+                    // $htmlAdd .=   '</tr>';
+                    // $htmlAdd .=   '<tr>';
+                    // $htmlAdd .=      '<td>tipe</td>';
+                    // $htmlAdd .=      '<th>'.$row->type.'</th>';
+                    // $htmlAdd .=   '</tr>';
+                    // $htmlAdd .=   '<tr>';
+                    // $htmlAdd .=      '<td>imei</td>';
+                    // $htmlAdd .=      '<th>'.$row->no_imei.'</th>';
+                    // $htmlAdd .=   '</tr>';
+                    // $htmlAdd .=   '<tr>';
+                    // $htmlAdd .=      '<td>rusak</td>';
+                    // $htmlAdd .=      '<th>'.$row->complaint.'</th>';
+                    // $htmlAdd .=   '</tr>';
                     $htmlAdd .= '<table>';
 
                     return $htmlAdd;
                 })
                 ->addColumn('finance', function ($row) {
                     $htmlAdd = '<table>';
+                    // $htmlAdd .=   '<tr>';
+                    // $htmlAdd .=      '<td>Service</td>';
+                    // $htmlAdd .=      '<th>'.number_format($row->total_service,0,".",",").'</th>';
+                    // $htmlAdd .=      '<td>S.P Toko</td>';
+                    // $htmlAdd .=      '<th>'.number_format(60/100*$row->total_price,0,".",",").'</th>';
+                    // $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Service</td>';
-                    $htmlAdd .=      '<th>'.number_format($row->total_service,0,".",",").'</th>';
-                    $htmlAdd .=      '<td>S.P Toko</td>';
-                    $htmlAdd .=      '<th>'.number_format(60/100*$row->total_price,0,".",",").'</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Part</td>';
+                    $htmlAdd .=      '<td>Barang</td>';
                     $htmlAdd .=      '<th>'.number_format($row->total_part,0,".",",").'</th>';
                     $htmlAdd .=      '<td>S.P Teknisi</td>';
                     $htmlAdd .=      '<th>'.number_format(40/100*$row->total_price,0,".",",").'</th>';
@@ -172,17 +174,49 @@ class SaleController extends Controller
         $id = DB::table('sales')->max('id')+1;
         $getEmployee =  Employee::where('user_id',Auth::user()->id)->first();
 
+        // $sharing_profit_store =  ((str_replace(",", '',$req->totalService)/100)*$sharingProfitStore)+str_replace(",", '',$req->totalSparePart);
+        // $sharing_profit_sales = (str_replace(",", '',$req->totalService)/100)*$sharingProfitTechnician;
+
         Sale::create([
             'id' => $id,
             'code' => $this->code('PJT-'),
             'user_id' => Auth::user()->id,
+            'sales_id' => $req->sales_id,
             'branch_id' => $getEmployee->branch_id,
-            'customer_id' => $req->customerId,
-            'customer_name' => $req->customerName,
-            'customer_address' => $req->customerAddress,
-            'customer_phone' => $req->customerPhone,
+            'customer_id' => $req->customer_id,
+            'customer_name' => $req->customer_name,
+            'customer_address' => $req->customer_address,
+            'customer_phone' => $req->customer_phone,
             'date' => date('Y-m-d'),
+            'warranty_id' => $req->warranty,
+            'discount_price' => str_replace(",", '',$req->totalDiscountValue),
+            'discount_percent' => str_replace(",", '',$req->totalDiscountPercent),
+            'item_price' => str_replace(",", '',$req->totalSparePart),
+            'total_price' => str_replace(",", '',$req->totalPrice),
+            // 'sharing_profit_store' => str_replace(",", '',$req->sharing_profit_store),
+            // 'sharing_profit_sales' => str_replace(",", '',$req->sharing_profit_sales),
+            'sharing_profit_store' => 100,
+            'sharing_profit_sales' => 50,
+            'description' => $req->description,
+            'created_at' =>date('Y-m-d h:i:s'),
+            'created_by' => Auth::user()->name,
         ]);
+
+        for ($i=0; $i <count($req->itemsDetail) ; $i++) {
+            SaleDetail::create([
+                'sale_id'=> $id,
+                'item_id'=> $req->itemsDetail[$i],
+                'price'=> str_replace(",", '',$req->priceDetail[$i]),
+                'qty'=> $req->qtyDetail[$i],
+                'total'=> str_replace(",", '',$req->totalPriceDetail[$i]),
+                'description' => $req->descriptionDetail[$i],
+                'type' => $req->typeDetail[$i],
+                'created_by'=> Auth::user()->name,
+                'created_at'=> date('Y-m-d h:i:s'),
+            ]);
+        }
+
+        return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
     }
 
     public function show($id)

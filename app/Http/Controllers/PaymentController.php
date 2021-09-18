@@ -37,6 +37,13 @@ class PaymentController extends Controller
 
                     return $htmlAdd;
                 })
+                ->addColumn('price', function ($row){
+                    $htmlAdd =   '<tr>';
+                    $htmlAdd .=      '<td>'.number_format($row->price,0,".",",").'</td>';
+                    $htmlAdd .=   '</tr>';
+
+                    return $htmlAdd;
+                })
                 ->addColumn('action', function ($row) {
                     $actionBtn = '<div class="btn-group">';
                     $actionBtn .= '<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
@@ -49,7 +56,7 @@ class PaymentController extends Controller
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
-                ->rawColumns(['action', 'date'])
+                ->rawColumns(['action', 'date', 'price'])
                 ->make(true);
         }
         return view('pages.backend.transaction.payment.indexPayment');
@@ -77,20 +84,22 @@ class PaymentController extends Controller
 
     public function store(Request $req)
     {
+        $date = $this->DashboardController->changeMonthIdToEn($req->date);
+
         Payment::create([
             'code' => $req->code,
-            'date' => date('Y-m-d'),
+            'date' => $date,
             'cost_id' => $req->cost_id,
             'branch_id' => $req->branch_id,
             'cash_id' => $req->cash_id,
-            'price' => $req->price,
+            'price' => str_replace(",", '',$req->price),
             'description' => $req->description,
             'created_by' => Auth::user()->name,
         ]);
 
-        $biaya = Cash::findOrFail($req->cash_id);
-        $biaya->balance -= $req->price;
-        $biaya->save();
+        // $biaya = Cash::findOrFail($req->cash_id);
+        // $biaya->balance -= str_replace(",", '',$req->price);
+        // $biaya->save();
 
         $this->DashboardController->createLog(
             $req->header('user-agent'),
@@ -132,8 +141,14 @@ class PaymentController extends Controller
         ]);
     }
 
-    public function destroy($id)
+    public function destroy(Request $req, $id)
     {
-        //
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Menghapus Data Pengeluaran'
+        );
+        Payment::destroy($id);
+        return Response::json(['status' => 'success']);
     }
 }

@@ -17,7 +17,6 @@ class CreateCashesTable extends Migration
             $table->id();
             $table->string('name');
             $table->string('code');
-            $table->double('balance');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();

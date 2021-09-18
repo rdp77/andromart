@@ -4,24 +4,34 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Sale extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+
+    public $timestamps = false;
+    public $incrementing = true;
+
     protected $fillable = [
         'code',
         'user_id',
+        'branch_id',
         'customer_id',
         'customer_name',
         'customer_address',
         'customer_phone',
         'date',
         'warranty_id',
+        'discount_type',
         'discount_price',
         'discount_percent',
+        'item_price',
         'total_price',
-        'payment_date',
         'sales_id',
+        'sharing_profit_store',
+        'sharing_profit_sales',
         'description',
         'created_at',
         'updated_at',
@@ -44,5 +54,10 @@ class Sale extends Model
     public function user()
     {
         return $this->hasOne('App\Models\User');
+    }
+
+    public function Branch()
+    {
+        return $this->belongsTo('App\Models\Branch');
     }
 }

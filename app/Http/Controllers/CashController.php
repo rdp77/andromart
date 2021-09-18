@@ -37,15 +37,15 @@ class CashController extends Controller
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
-                ->addColumn('balance', function ($row) {
-                    $htmlAdd  =      '<tr>';
-                    $htmlAdd .=         '<td>'.number_format($row->balance,0,".",",").'</td>';
-                    $htmlAdd .=      '<tr>';
+                // ->addColumn('balance', function ($row) {
+                //     $htmlAdd  =      '<tr>';
+                //     $htmlAdd .=         '<td>'.number_format($row->balance,0,".",",").'</td>';
+                //     $htmlAdd .=      '<tr>';
 
-                    return $htmlAdd;
+                //     return $htmlAdd;
 
-                })
-                ->rawColumns(['action', 'balance'])
+                // })
+                ->rawColumns(['action'])
                 ->make(true);
         }
         return view('pages.backend.master.cash.indexCash');
@@ -61,13 +61,13 @@ class CashController extends Controller
         Validator::make($req->all(), [
             'code' => ['required', 'string', 'max:255', 'unique:cashes'],
             'name' => ['required', 'string', 'max:255'],
-            'balance' => ['required', 'string', 'max:255'],
+            // 'balance' => ['required', 'string', 'max:255'],
         ])->validate();
 
         Cash::create([
             'code' => $req->code,
             'name' => $req->name,
-            'balance' => $req->balance,
+            // 'balance' => $req->balance,
             'created_by' => Auth::user()->name,
         ]);
 
@@ -100,14 +100,14 @@ class CashController extends Controller
         if ($req->code == Cash::find($id)->code) {
             Validator::make($req->all(), [
                 'name' => ['required', 'string', 'max:255'],
-                'balance' => ['required', 'string', 'max:255'],
+                // 'balance' => ['required', 'string', 'max:255'],
             ]);
         }
         else{
             Validator::make($req->all(), [
                 'code' => ['required', 'string', 'max:255', 'unique:cashes'],
                 'name' => ['required', 'string', 'max:255'],
-                'balance' => ['required', 'string', 'max:255'],
+                // 'balance' => ['required', 'string', 'max:255'],
             ])->validate();
         }
 
@@ -115,7 +115,7 @@ class CashController extends Controller
             ->update([
             'code' => $req->code,
             'name' => $req->name,
-            'balance' => $req->balance,
+            // 'balance' => $req->balance,
             'updated_by' => Auth::user()->name,
             ]);
 

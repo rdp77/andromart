@@ -51,4 +51,9 @@ class Branch extends Model
     {
         return $this->hasMany('App\Models\Payment');
     }
+
+    public function Sale()
+    {
+        return $this->hasMany('App\Models\Sale');
+    }
 }
