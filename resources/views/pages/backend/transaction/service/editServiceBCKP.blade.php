@@ -24,7 +24,7 @@
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="date">{{ __('Tanggal') }}<code>*</code></label>
-                            <input id="date" type="text" class="form-control datepicker" readonly="" 
+                            <input id="date" type="text" class="form-control" readonly="" 
                             value="{{$service->date}}" name="date">
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
@@ -64,7 +64,7 @@
                             <select class="select2" name="brand">
                                 <option value="">- Select -</option>
                                 @foreach ($brand as $element)
-                                    <option @if ($service->brand == $element->id) selected @endif value="{{$element->id}}">{{$element->name}}</option>
+                                <option @if ($service->brand == $element->id) selected @endif value="{{$element->id}}">{{$element->name}}</option>
                                 @endforeach
                             </select>
                             {{-- <input id="brand" type="text" class="form-control" name="brand"> --}}
@@ -74,7 +74,7 @@
                             <select class="select2" name="series">
                                 <option value="">- Select -</option>
                                 @foreach ($type as $element)
-                                    <option @if ($service->series == $element->id) selected @endif value="{{$element->id}}">{{$element->name}}</option>
+                                <option @if ($service->series == $element->id) selected @endif value="{{$element->id}}">{{$element->name}}</option>
                                 @endforeach
                             </select>
                             {{-- <input id="series" type="text" class="form-control" name="series"> --}}
@@ -83,8 +83,8 @@
                             <label for="type">{{ __('tipe') }}<code>*</code></label>
                             <select class="select2" name="type">
                                 <option value="">- Select -</option>
-                                <option @if ($service->type == 'Handphone') selected @endif value="Handphone">Handphone</option>
-                                <option @if ($service->type == 'Laptop') selected @endif value="Laptop">Laptop</option>
+                                <option value="Handphone">Handphone</option>
+                                <option value="Laptop">Laptop</option>
                             </select>
                         </div>
 
@@ -102,7 +102,7 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-5 col-lg-5">
                             <label for="noImei">{{ __('No Imei') }}<code>*</code></label>
-                            <input id="noImei" value="{{$service->no_imei}}" type="text" class="form-control" name="noImei">
+                            <input id="noImei" value="{{$service->noImei}}" type="text" class="form-control" name="noImei">
                         </div>
                         <div class="form-group col-12 col-md-7 col-lg-7">
                             <label for="description">{{ __('Keterangan') }}<code>*</code></label>
@@ -137,9 +137,9 @@
                             <label for="series">{{ __('Member') }}<code>*</code></label>
                             <select class="select2" name="customerId">
                                 <option value="">- Select -</option>
-                                {{-- <option value="Deny">Deny</option>
+                                <option value="Deny">Deny</option>
                                 <option value="Rizal">Rizal</option>
-                                <option value="Alfian">Alfian</option> --}}
+                                <option value="Alfian">Alfian</option>
                             </select>
                         </div>
                     </div>
@@ -161,7 +161,6 @@
             <div class="card">
                 <div class="card-header">
                     <h4>Harga</h4>
-
                 </div>
                 <div class="card-body">
                     <div class="form-group">
@@ -199,21 +198,6 @@
                         <input id="totalDownPayment" type="text" value="0" class="form-control cleaveNumeral"
                             name="totalDownPayment" style="text-align: right">
                     </div>
-                    <div class="form-group">
-                        <label class="form-label">Satuan Diskon Yang Dipakai</label>
-                        <div class="selectgroup w-100">
-                            <label class="selectgroup-item">
-                                <input type="radio" name="typeDiscount" value="percent" onchange="changeDiscount('percent'),sumTotal()" checked
-                                    class="selectgroup-input">
-                                <span class="selectgroup-button">Persentase (%)</span>
-                            </label>
-                            <label class="selectgroup-item">
-                                <input type="radio" name="typeDiscount" value="value" onchange="changeDiscount('value'),sumTotal()" 
-                                    class="selectgroup-input">
-                                <span class="selectgroup-button">Harga (RP)</span>
-                            </label>
-                        </div>
-                    </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="totalDiscountPercent">{{ __('Diskon %') }}<code>*</code></label>
@@ -243,23 +227,12 @@
         <div class="card-header">
             <h4>Data Detail</h4>
             <div class="card-header-action">
-                <button onclick="addItem()" type="button" class="btn btn-warning">Tambah data <i
-                        class="fas fa-add"></i></button>
+                <button onclick="addItem()" type="button" class="btn btn-warning">Tambah data <i class="fas fa-add"></i></button>
             </div>
         </div>
         <div class="card-body">
-
-            @foreach ($item as $el)
-                <input class="itemsData" type="hidden"
-                data-price="{{$el->sell}}"
-                @foreach ($el->stock as $el1)
-                    @if (Auth::user()->employee->branch_id == $el1->branch_id)
-                        data-stock="{{$el1->stock}}"
-                    @else
-                        data-stock="0"
-                    @endif
-                @endforeach
-                data-name="{{$el->name}}"
+            @foreach ($items as $el)
+            <input class="itemsData" type="hidden" data-price="{{$el->sell}}" data-name="{{$el->name}}"
                 value="{{$el->id}}">
             @endforeach
 
@@ -269,8 +242,7 @@
                         <tr>
                             <th style="width: 20%">Barang / Jasa</th>
                             <th>Harga</th>
-                            <th style="width: 9%">Qty</th>
-                            <th style="width: 9%">Stock</th>
+                            <th style="width: 9%">qty</th>
                             <th>Total</th>
                             <th>Deskripsi</th>
                             <th style="width: 15%">tipe</th>
@@ -291,27 +263,22 @@
                             </td>
                             <td>
                                 <input type="text" class="form-control priceServiceDetail cleaveNumeral"
-                                    name="priceDetail[]" style="text-align: right" value="{{$service->ServiceDetail[0]->price}}">
+                                    name="priceDetail[]" style="text-align: right" value="0">
                             </td>
                             <td>
                                 <input readonly type="text" class="form-control" name="qtyDetail[]" value="1" style="text-align: right">
                             </td>
                             <td>
-                                <input readonly type="text" class="form-control" name="stockDetail[]" value="1" style="text-align: right">
-                            </td>
-                            <td>
                                 <input readonly type="text" class="form-control totalPriceServiceDetail cleaveNumeral"
-                                    name="totalPriceDetail[]" style="text-align: right" value="{{$service->ServiceDetail[0]->total_price}}">
+                                    name="totalPriceDetail[]" style="text-align: right" value="0">
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="descriptionDetail[]" value="{{$service->ServiceDetail[0]->description}}">
+                                <input type="text" class="form-control" name="descriptionDetail[]">
                             </td>
                             <td>
                                 <input readonly type="text" class="form-control" name="typeDetail[]" value="Jasa">
                             </td>
-                            <td>
-                                <button href="#" type="button" class="btn btn-default">X</button>
-                            </td>
+                            <td><button href="#" type="button" class="btn btn-default">X</button></td>
                         </tr>
                     </tbody>
                     <tbody class="dropHereItem" style="border: none !important">
@@ -334,7 +301,8 @@
               </button>
             </div>
             <div class="modal-body">
-                <div id="results"><img src="{{ asset('storage/'.$service->image) }}" alt=""></div>
+              {{-- <p>Modal body text goes here.</p> --}}
+            <div id="results"><img src="{{ asset('storage/'.$service->image) }}" alt=""></div>
             </div>
             <div class="modal-footer bg-whitesmoke br">
               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

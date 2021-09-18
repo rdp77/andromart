@@ -34,6 +34,7 @@ class ServiceTable extends Migration
             $table->String('clock');
             $table->double('total_service');
             $table->double('total_part');
+            $table->String('discount_type');
             $table->double('discount_price');
             $table->double('discount_percent');
             $table->double('total_price');

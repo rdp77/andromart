@@ -153,6 +153,22 @@ function save() {
 
 }
 
+
+function changeDiscount(params) {
+    if (params == 'percent') {
+        $('#totalDiscountValue').css('pointer-events','none');
+        $('#totalDiscountValue').css('background-color','#e9ecef');
+        $('#totalDiscountPercent').css('pointer-events','auto');
+        $('#totalDiscountPercent').css('background-color','#fff');
+    }else{
+        $('#totalDiscountPercent').css('pointer-events','none');
+        $('#totalDiscountPercent').css('background-color','#e9ecef');
+        $('#totalDiscountValue').css('pointer-events','auto');
+        $('#totalDiscountValue').css('background-color','#fff');
+    }
+}
+
+
 function addItem() {
     var index = $('.priceDetail').length;
     var dataDetail = $('.dataDetail').length;
@@ -209,10 +225,16 @@ function addItem() {
             numeralThousandsGroupStyle: "thousand",
         });
     });
+
+    var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
+
     sum();
     sumTotal();
-    sumDiscont();
-    sumDiscontValue();
+    if (checkVerificationDiscount == 'percent') {
+        sumDiscont();
+    }else{
+        sumDiscontValue();
+    }
 }
 
 // mengganti item
@@ -226,6 +248,8 @@ $(document.body).on("change",".itemsDetail",function(){
         $('.stock_' + index).val(0);
         $('.qtyDetail_' + index).val(0);
         $('.totalPriceDetail_' + index).val(0);
+        $('.priceDetailLoss_'+index).val(0);
+        $('.priceDetailSparePart_'+index).val(0);
     }else{
         var typeDetail = $('.typeDetail_' + index).find(':selected').val();
         if (isNaN(parseInt($(this).find(':selected').data('price')))) {
@@ -250,19 +274,29 @@ $(document.body).on("change",".itemsDetail",function(){
             $('.priceDetailSparePart_'+index).val(0);
         }
     }
+    var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
+
     sum();
     sumTotal();
-    sumDiscont();
-    sumDiscontValue();
+    if (checkVerificationDiscount == 'percent') {
+        sumDiscont();
+    }else{
+        sumDiscontValue();
+    }
 });
 
 // menghapus kolom
 $(document.body).on("click",".removeDataDetail",function(){
     $('.dataDetail_'+this.value).remove();
+    var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
+
     sum();
     sumTotal();
-    sumDiscont();
-    sumDiscontValue();
+    if (checkVerificationDiscount == 'percent') {
+        sumDiscont();
+    }else{
+        sumDiscontValue();
+    }
 });
 
 // merubah qty
@@ -284,10 +318,15 @@ $(document.body).on("keyup",".qtyDetail",function(){
         $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailSparePart_'+index).val(0);
     }
+    var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
+
     sum();
     sumTotal();
-    sumDiscont();
-    sumDiscontValue();
+    if (checkVerificationDiscount == 'percent') {
+        sumDiscont();
+    }else{
+        sumDiscontValue();
+    }
 });
 
 // merubah harga
@@ -309,19 +348,30 @@ $(document.body).on("keyup",".priceDetail",function(){
         $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailSparePart_'+index).val(0);
     }
+    var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
+
     sum();
     sumTotal();
-    sumDiscont();
-    sumDiscontValue();
+    if (checkVerificationDiscount == 'percent') {
+        sumDiscont();
+    }else{
+        sumDiscontValue();
+    }
 });
 
 // merubah harga jasa
 $(document.body).on("keyup",".priceServiceDetail",function(){
     $('.totalPriceServiceDetail').val(this.value);
     $('#totalService').val(this.value);
+    var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
+
+    sum();
     sumTotal();
-    sumDiscont();
-    sumDiscontValue();
+    if (checkVerificationDiscount == 'percent') {
+        sumDiscont();
+    }else{
+        sumDiscontValue();
+    }
 });
 
 // fungsi sum
@@ -357,10 +407,15 @@ $(document.body).on("change",".typeDetail",function(){
         $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailSparePart_'+index).val(0);
     }
+    var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
+
     sum();
     sumTotal();
-    sumDiscont();
-    sumDiscontValue();
+    if (checkVerificationDiscount == 'percent') {
+        sumDiscont();
+    }else{
+        sumDiscontValue();
+    }
 });
 
 function sumDiscont() {
@@ -368,10 +423,12 @@ function sumDiscont() {
         var totalSparePart =  0;
     }else{
         var totalSparePart = $('#totalSparePart').val().replace(/,/g, ''),asANumber = +totalSparePart;}
+
     if(isNaN(parseInt($('#totalService').val()))){
         var totalService =  0;
     }else{
         var totalService = $('#totalService').val().replace(/,/g, ''),asANumber = +totalService;}
+
     if(isNaN(parseInt($('#totalDiscountPercent').val()))){
         var totalDiscountPercent =  0;
     }else{
@@ -380,6 +437,7 @@ function sumDiscont() {
     if(totalDiscountPercent <= 100){
         var sumTotalPrice = (parseInt(totalDiscountPercent)/100)*(parseInt(totalService)+parseInt(totalSparePart));
         $('#totalDiscountValue').val(parseInt(sumTotalPrice).toLocaleString('en-US'));
+        $('#totalDiscountPercent').val(totalDiscountPercent);
     }else{
         $('#totalDiscountPercent').val(0);
         $('#totalDiscountValue').val(0);
@@ -410,7 +468,11 @@ function sumDiscontValue() {
         }else{
             var sumTotalPrice = 100;
         }
-    $('#totalDiscountPercent').val(parseFloat(sumTotalPrice).toLocaleString('en-US'));
+    if (isNaN(parseInt(sumTotalPrice))) {
+        $('#totalDiscountPercent').val(0);
+    }else{
+        $('#totalDiscountPercent').val(parseFloat(sumTotalPrice).toLocaleString('en-US'));
+    }
     sumTotal();
 }
 
@@ -541,6 +603,10 @@ function updateStatusService() {
                         if (status == 'Diambil') {
                             location.reload();
                         }
+                    }else{
+                        swal(data.message, {
+                            icon: "warning",
+                        });
                     }
                 },
                 error: function(data) {

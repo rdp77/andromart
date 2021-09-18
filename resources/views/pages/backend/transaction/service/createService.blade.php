@@ -136,9 +136,9 @@
                             <label for="series">{{ __('Member') }}<code>*</code></label>
                             <select class="select2" name="customerId">
                                 <option value="">- Select -</option>
-                                <option value="Deny">Deny</option>
+                                {{-- <option value="Deny">Deny</option>
                                 <option value="Rizal">Rizal</option>
-                                <option value="Alfian">Alfian</option>
+                                <option value="Alfian">Alfian</option> --}}
                             </select>
                         </div>
                     </div>
@@ -198,6 +198,21 @@
                         <input id="totalDownPayment" type="text" value="0" class="form-control cleaveNumeral"
                             name="totalDownPayment" style="text-align: right">
                     </div>
+                    <div class="form-group">
+                        <label class="form-label">Satuan Diskon Yang Dipakai</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="typeDiscount" value="percent" onchange="changeDiscount('percent'),sumTotal()" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button">Persentase (%)</span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="typeDiscount" value="value" onchange="changeDiscount('value'),sumTotal()" 
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button">Harga (RP)</span>
+                            </label>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="totalDiscountPercent">{{ __('Diskon %') }}<code>*</code></label>
@@ -206,7 +221,7 @@
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="totalDiscountValue">{{ __('Diskon') }}<code>*</code></label>
-                            <input id="totalDiscountValue" type="text" value="0" class="form-control cleaveNumeral"
+                            <input id="totalDiscountValue" style="pointer-events: none;background-color:#e9ecef" type="text" value="0" class="form-control cleaveNumeral"
                                 name="totalDiscountValue" onkeyup="sumTotal(),sumDiscontValue()" style="text-align: right">
                         </div>
                     </div>
@@ -281,7 +296,7 @@
                                 <input readonly type="text" class="form-control" name="qtyDetail[]" value="1" style="text-align: right">
                             </td>
                             <td>
-                                <input readonly type="text" class="form-control" name="qtyDetail[]" value="1" style="text-align: right">
+                                <input readonly type="text" class="form-control" name="stockDetail[]" value="1" style="text-align: right">
                             </td>
                             <td>
                                 <input readonly type="text" class="form-control totalPriceServiceDetail cleaveNumeral"
@@ -353,16 +368,16 @@ $( document ).ready(function() {
 
     Webcam.attach( '#my_camera' );
 });
-    function take_snapshot() {
-                swal('Berhasil Mengambil Foto', {
-                    icon: "success",
-                });
-        Webcam.snap( function(data_uri) {
-            $(".image-tag").val(data_uri);
+function take_snapshot() {
+            swal('Berhasil Mengambil Foto', {
+                icon: "success",
+            });
+    Webcam.snap( function(data_uri) {
+        $(".image-tag").val(data_uri);
 
-            document.getElementById('results').innerHTML = '<img name="image" id="sortpicture" class="image" src="'+data_uri+'"/>';
-        } );
+        document.getElementById('results').innerHTML = '<img name="image" id="sortpicture" class="image" src="'+data_uri+'"/>';
+    } );
 
-    }
+}
 </script>
 @endsection

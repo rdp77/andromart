@@ -45,7 +45,7 @@ class ServiceController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-        $data = Service::with(['Employee1','Employee2','CreatedByUser'])->get();
+        $data = Service::with(['Employee1','Employee2','CreatedByUser','Type','Brand'])->get();
 
             return Datatables::of($data)
                 ->addIndexColumn()
@@ -114,11 +114,11 @@ class ServiceController extends Controller
                     $htmlAdd = '<table>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Merk</td>';
-                    $htmlAdd .=      '<th>'.$row->brand.'</th>';
+                    $htmlAdd .=      '<th>'.$row->Brand->name.'</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Seri</td>';
-                    $htmlAdd .=      '<th>'.$row->series.'</th>';
+                    $htmlAdd .=      '<th>'.$row->Type->name.'</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>tipe</td>';
@@ -282,11 +282,9 @@ class ServiceController extends Controller
         for ($i=0; $i <count($req->itemsDetail) ; $i++) {
             if($req->stockDetail[$i] == 0){
                 return Response::json(['status' => 'fail',
-                                    'message'=>'Stick Item Ada yang 0. Harap Cek Kembali']);
+                                    'message'=>'Stock Item Ada yang 0. Harap Cek Kembali']);
             }
         }
-
-
         // return [$sharingProfitStore,
         // $sharingProfitTechnician,
         // $lossStore,$lossTechnician];
@@ -303,13 +301,11 @@ class ServiceController extends Controller
         $image = $req->image;
         $image = str_replace('data:image/jpeg;base64,','', $image);
 		$image = base64_decode($image);
-        // return $img = $req->file('image');
         if ($image != null) {
             $fileSave = 'public/Service_' . $this->code('SRV-') . '.' .'png';
             $fileName = 'Service_' . $this->code('SRV-') . '.' .'png';
             Storage::put($fileSave, $image);
         }else{
-            // $fileSave = null;
             $fileName = null;
         }
         // return 'asd';
@@ -339,6 +335,7 @@ class ServiceController extends Controller
             'total_loss_technician_2'=>0,
             'total_loss_store'=>$total_loss_store,
             'image'=>$fileName,
+            'discount_type'=>$req->typeDiscount,
             'discount_price'=>str_replace(",", '',$req->totalDiscountValue),
             'discount_percent'=>str_replace(",", '',$req->totalDiscountPercent),
             'total_price'=>str_replace(",", '',$req->totalPrice),
@@ -395,14 +392,14 @@ class ServiceController extends Controller
 
     public function edit($id)
     {
-        $service = Service::find($id);
-        $member = User::get();
+        $service  = Service::with('ServiceDetail')->find($id);
+        $member   = User::get();
         $employee = Employee::get();
-        $items    = Item::where('name','!=','Jasa Service')->get();
         $brand    = Brand::get();
         $type     = Type::get();
         $warranty = Warranty::get();
-        return view('pages.backend.transaction.service.editService',compact('employee','items','brand','type','warranty','service'));
+        $item     = Item::with('stock')->where('name','!=','Jasa Service')->get();
+        return view('pages.backend.transaction.service.editService',compact('employee','item','brand','type','warranty','service'));
     }
     public function printService($id)
     {

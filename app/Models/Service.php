@@ -34,6 +34,7 @@ class Service extends Model
         'clock',
         'total_service',
         'total_part',
+        'discount_type',
         'discount_price',
         'discount_percent',
         'total_price',
@@ -85,6 +86,14 @@ class Service extends Model
     public function LossItemsDetail()
     {
         return $this->hasMany('App\Models\LossItemsDetail', 'service_id', 'id');
+    }
+    public function Brand()
+    {
+        return $this->belongsTo('App\Models\Brand', 'brand', 'id');
+    }
+    public function Type()
+    {
+        return $this->belongsTo('App\Models\Type', 'series', 'id');
     }
     public function Employee1()
     {
