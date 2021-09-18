@@ -28,4 +28,9 @@ class SaleDetail extends Model
     {
         return $this->belongsTo('App\Models\Sale');
     }
+
+    public function Item()
+    {
+        return $this->belongsTo('App\Models\Item');
+    }
 }

@@ -52,4 +52,9 @@ class Item extends Model
         }
         return asset('assetsmaster/image/item/'. $this->image);
     }
+
+    public function SaleDetail()
+    {
+        return $this->hasMany('App\Models\SaleDetail');
+    }
 }

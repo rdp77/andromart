@@ -128,10 +128,23 @@ function save() {
             });
 
         } else {
-            swal("Data Dana Kredit PDL Berhasil Dihapus!");
+            swal("Data belum di simpan !");
         }
     });
+}
 
+function changeDiscount(params) {
+    if (params == 'percent') {
+        $('#totalDiscountValue').css('pointer-events','none');
+        $('#totalDiscountValue').css('background-color','#e9ecef');
+        $('#totalDiscountPercent').css('pointer-events','auto');
+        $('#totalDiscountPercent').css('background-color','#fff');
+    }else{
+        $('#totalDiscountPercent').css('pointer-events','none');
+        $('#totalDiscountPercent').css('background-color','#e9ecef');
+        $('#totalDiscountValue').css('pointer-events','auto');
+        $('#totalDiscountValue').css('background-color','#fff');
+    }
 }
 
 function addItem() {
@@ -190,16 +203,23 @@ function addItem() {
             numeralThousandsGroupStyle: "thousand",
         });
     });
+
+    var checkVerificationDiscount = $('input[name="typeDiscount"]:checked').val();
+
     sum();
     sumTotal();
-    sumDiscont();
+    if (checkVerificationDiscount == 'percent') {
+        sumDiscont();
+    }else{
+        sumDiscontValue();
+    }
 }
 
 // mengganti item
 $(document.body).on("change", ".itemsDetail", function () {
     var index = $(this).find(':selected').data('index');
-    console.log($(this).val());
-    console.log(index);
+    // console.log($(this).val());
+    // console.log(index);
 
     if ($(this).val() == '-') {
         $('.priceDetail_' + index).val(0);
@@ -230,18 +250,30 @@ $(document.body).on("change", ".itemsDetail", function () {
             $('.priceDetailSparePart_'+index).val(0);
         }
     }
+    var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
+
     sum();
     sumTotal();
-    sumDiscont();
+    if (checkVerificationDiscount == 'percent') {
+        sumDiscont();
+    }else{
+        sumDiscontValue();
+    }
 
 });
 
 // menghapus kolom
 $(document.body).on("click",".removeDataDetail",function(){
     $('.dataDetail_'+this.value).remove();
+    var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
+
     sum();
     sumTotal();
-    sumDiscont();
+    if (checkVerificationDiscount == 'percent') {
+        sumDiscont();
+    }else{
+        sumDiscontValue();
+    }
 });
 
 // merubah qty
@@ -264,9 +296,15 @@ $(document.body).on("keyup",".qtyDetail",function(){
         $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailSparePart_'+index).val(0);
     }
+    var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
+
     sum();
     sumTotal();
-    sumDiscont();
+    if (checkVerificationDiscount == 'percent') {
+        sumDiscont();
+    }else{
+        sumDiscontValue();
+    }
 });
 
 // merubah harga
@@ -289,23 +327,21 @@ $(document.body).on("keyup",".priceDetail",function(){
         $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailSparePart_'+index).val(0);
     }
+    var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
+
     sum();
     sumTotal();
-    sumDiscont();
-});
-
-// merubah harga jasa
-$(document.body).on("keyup",".priceServiceDetail",function(){
-    $('.totalPriceServiceDetail').val(this.value);
-    $('#totalService').val(this.value);
-    sumTotal();
-    sumDiscont();
+    if (checkVerificationDiscount == 'percent') {
+        sumDiscont();
+    }else{
+        sumDiscontValue();
+    }
 });
 
 // fungsi sum
 function sum() {
     var priceDetailSparePart = 0;
-    $('.priceDetailSparePart').each(function(){
+    $('.priceDetailSparePart').each(function () {
         priceDetailSparePart += parseInt(this.value.replace(/,/g, ""));
     });
     $('#totalSparePart').val(parseInt(priceDetailSparePart).toLocaleString('en-US'));
@@ -316,33 +352,59 @@ function sum() {
     $('#totalLoss').val(parseInt(priceDetailLoss).toLocaleString('en-US'));
 }
 
+// fungsi rubah tipe
+$(document.body).on("change",".typeDetail",function(){
+    var value = this.value;
+    var index = $(this).find(':selected').data('index');
+    if(isNaN(parseInt($('.priceDetail_'+index).val()))){
+        var itemPrice =  0; }else{
+        var itemPrice = $('.priceDetail_'+index).val().replace(/,/g, ''),asANumber = +itemPrice;}
+    if(isNaN(parseInt($('.qtyDetail_'+index).val()))){
+        var itemQty =  0; }else{
+        var itemQty = $('.qtyDetail_'+index).val().replace(/,/g, ''),asANumber = +itemQty;}
+    var totalItemPrice = itemPrice*itemQty;
+    if(value == 'SparePart'){
+        $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
+        $('.priceDetailLoss_' + index).val(0);
+
+    }else{
+        $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
+        $('.priceDetailSparePart_'+index).val(0);
+    }
+    var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
+
+    sum();
+    sumTotal();
+    if (checkVerificationDiscount == 'percent') {
+        sumDiscont();
+    }else{
+        sumDiscontValue();
+    }
+});
+
 function sumDiscont() {
     if(isNaN(parseInt($('#totalSparePart').val()))){
         var totalSparePart =  0;
     }else{
         var totalSparePart = $('#totalSparePart').val().replace(/,/g, ''),asANumber = +totalSparePart;}
-    if(isNaN(parseInt($('#totalService').val()))){
-        var totalService =  0;
-    }else{
-        var totalService = $('#totalService').val().replace(/,/g, ''),asANumber = +totalService;}
-    if(isNaN(parseInt($('#totalDownPayment').val()))){
-        var totalDownPayment =  0;
-    }else{
-        var totalDownPayment = $('#totalDownPayment').val().replace(/,/g, ''),asANumber = +totalDownPayment;}
+
     if(isNaN(parseInt($('#totalDiscountPercent').val()))){
         var totalDiscountPercent =  0;
     }else{
         var totalDiscountPercent = $('#totalDiscountPercent').val().replace(/,/g, ''),asANumber = +totalDiscountPercent;}
+
     if(totalDiscountPercent <= 100){
-        var sumTotalPrice = (parseInt(totalDiscountPercent)/100)*(parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDownPayment));
+        var sumTotalPrice = (parseInt(totalDiscountPercent)/100)*(parseInt(totalService)+parseInt(totalSparePart));
+        $('#totalDiscountValue').val(parseInt(sumTotalPrice).toLocaleString('en-US'));
+        $('#totalDiscountPercent').val(totalDiscountPercent);
     }else{
-        var sumTotalPrice = (100/100)*(parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDownPayment));}
-    $('#totalDiscountValue').val(parseInt(sumTotalPrice).toLocaleString('en-US'));
+        $('#totalDiscountPercent').val(0);
+        $('#totalDiscountValue').val(0);
+        var sumTotalPrice = (100/100)*(parseInt(totalService)+parseInt(totalSparePart));}
     sumTotal();
 }
 
-function sumTotal() {
-    var checkVerificationPrice =  $('input[name="verificationPrice"]:checked').val();
+function sumDiscontValue() {
     if(isNaN(parseInt($('#totalSparePart').val()))){
         var totalSparePart =  0;
     }else{
@@ -351,17 +413,57 @@ function sumTotal() {
         var totalService =  0;
     }else{
         var totalService = $('#totalService').val().replace(/,/g, ''),asANumber = +totalService;}
-    if(isNaN(parseInt($('#totalDownPayment').val()))){
-        var totalDownPayment =  0;
-    }else{
-        var totalDownPayment = $('#totalDownPayment').val().replace(/,/g, ''),asANumber = +totalDownPayment;}
+
     if(isNaN(parseInt($('#totalDiscountValue').val()))){
         var totalDiscountValue =  0;
     }else{
         var totalDiscountValue = $('#totalDiscountValue').val().replace(/,/g, ''),asANumber = +totalDiscountValue;}
+        var totalValue = parseInt(totalService)+parseInt(totalSparePart);
+
+        if(totalDiscountValue <= totalValue){
+            console.log(totalDiscountValue);
+            console.log(totalValue);
+            var sumTotalPrice = (parseInt(totalDiscountValue)/totalValue)*100;
+        }else{
+            var sumTotalPrice = 100;
+        }
+    if (isNaN(parseInt(sumTotalPrice))) {
+        $('#totalDiscountPercent').val(0);
+    }else{
+        $('#totalDiscountPercent').val(parseFloat(sumTotalPrice).toLocaleString('en-US'));
+    }
+    sumTotal();
+}
+
+function sumTotal() {
+    var checkVerificationPrice =  $('input[name="verificationPrice"]:checked').val();
+
+    if(isNaN(parseInt($('#totalSparePart').val()))){
+        var totalSparePart =  0;
+    }else{
+        var totalSparePart = $('#totalSparePart').val().replace(/,/g, ''),asANumber = +totalSparePart;}
+
+    if(isNaN(parseInt($('#totalService').val()))){
+        var totalService =  0;
+    }else{
+        var totalService = $('#totalService').val().replace(/,/g, ''),asANumber = +totalService;}
+
+    if(isNaN(parseInt($('#totalDiscountValue').val()))){
+        var totalDiscountValue =  0;
+    }else{
+        var totalDiscountValue = $('#totalDiscountValue').val().replace(/,/g, ''),asANumber = +totalDiscountValue;}
+
     if(checkVerificationPrice == 'Y'){
         var sumTotal = 0;
     }else{
-        var sumTotal = parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDownPayment)-parseInt(totalDiscountValue);}
-    $('#totalPrice').val(parseInt(sumTotal).toLocaleString('en-US'));
+        var sumTotal = parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDiscountValue);}
+
+    var totalValue = parseInt(totalService)+parseInt(totalSparePart);
+
+    if (totalDiscountValue <= totalValue) {
+        $('#totalPrice').val(parseInt(sumTotal).toLocaleString('en-US'));
+    }else{
+        $('#totalPrice').val(totalValue);
+        $('#totalDiscountValue').val(0);
+    }
 }

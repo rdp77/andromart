@@ -33,7 +33,7 @@ class SaleController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Sale::with('SaleDetail')->get();
+            $data = Sale::with('SaleDetail','SaleDetail.Item')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -78,53 +78,23 @@ class SaleController extends Controller
                 })
                 ->addColumn('dataItem', function ($row) {
                     $htmlAdd = '<table>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<th>'.$row->SaleDetail->item_id.'</th>';
-                    $htmlAdd .=      '<th>'.$row->SaleDetail->qty.'</th>';
-                    // $htmlAdd .=      '<td>S.P Teknisi</td>';
-                    // $htmlAdd .=      '<th>'.number_format(40/100*$row->total_price,0,".",",").'</th>';
-                    $htmlAdd .=   '</tr>';
-                    // $htmlAdd .=   '<tr>';
-                    // $htmlAdd .=      '<td>Seri</td>';
-                    // $htmlAdd .=      '<th>'.$row->series.'</th>';
-                    // $htmlAdd .=   '</tr>';
-                    // $htmlAdd .=   '<tr>';
-                    // $htmlAdd .=      '<td>tipe</td>';
-                    // $htmlAdd .=      '<th>'.$row->type.'</th>';
-                    // $htmlAdd .=   '</tr>';
-                    // $htmlAdd .=   '<tr>';
-                    // $htmlAdd .=      '<td>imei</td>';
-                    // $htmlAdd .=      '<th>'.$row->no_imei.'</th>';
-                    // $htmlAdd .=   '</tr>';
-                    // $htmlAdd .=   '<tr>';
-                    // $htmlAdd .=      '<td>rusak</td>';
-                    // $htmlAdd .=      '<th>'.$row->complaint.'</th>';
-                    // $htmlAdd .=   '</tr>';
+                    foreach ($row->SaleDetail as $key => $value) {
+                        $htmlAdd .=   '<tr>';
+                        $htmlAdd .=      '<th>'.$value->Item->name.'</th>';
+                        $htmlAdd .=      '<th>'.$value->qty.'</th>';
+                        $htmlAdd .=   '</tr>';
+                    }
                     $htmlAdd .= '<table>';
 
                     return $htmlAdd;
                 })
                 ->addColumn('finance', function ($row) {
                     $htmlAdd = '<table>';
-                    // $htmlAdd .=   '<tr>';
-                    // $htmlAdd .=      '<td>Service</td>';
-                    // $htmlAdd .=      '<th>'.number_format($row->total_service,0,".",",").'</th>';
-                    // $htmlAdd .=      '<td>S.P Toko</td>';
-                    // $htmlAdd .=      '<th>'.number_format(60/100*$row->total_price,0,".",",").'</th>';
-                    // $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Barang</td>';
-                    $htmlAdd .=      '<th>'.number_format($row->total_part,0,".",",").'</th>';
-                    $htmlAdd .=      '<td>S.P Teknisi</td>';
+                    $htmlAdd .=      '<th>'.number_format($row->item_price,0,".",",").'</th>';
+                    $htmlAdd .=      '<td>S.P Sales</td>';
                     $htmlAdd .=      '<th>'.number_format(40/100*$row->total_price,0,".",",").'</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Lalai</td>';
-                    $htmlAdd .=      '<th>'.number_format($row->total_loss,0,".",",").'</th>';
-                    if($row->technician_replacement_id != null){
-                        $htmlAdd .=      '<td>S.P Teknisi 2</td>';
-                        $htmlAdd .=      '<th>'.number_format(40/100*$row->total_price,0,".",",").'</th>';
-                    }
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Diskon</td>';
@@ -137,7 +107,6 @@ class SaleController extends Controller
                     $htmlAdd .= '<table>';
 
                     return $htmlAdd;
-
                 })
 
                 ->rawColumns(['action','dataItem','dataCustomer','finance','dataDateOperator'])
@@ -162,7 +131,6 @@ class SaleController extends Controller
         $employee = Employee::get();
         $warranty = Warranty::get();
         $customer = Customer::get();
-        // $stock = Stock::where();
         $userBranch = Auth::user()->employee->branch_id;
         $item = Item::with('stock')->where('name','!=','Jasa Service')->get();
         // return $item = Item::with('stock')->where('branch_id','=', Auth::user()->employee->branch_id)->get();
@@ -189,6 +157,7 @@ class SaleController extends Controller
             'customer_phone' => $req->customer_phone,
             'date' => date('Y-m-d'),
             'warranty_id' => $req->warranty,
+            'discount_type' => $req->typeDiscount,
             'discount_price' => str_replace(",", '',$req->totalDiscountValue),
             'discount_percent' => str_replace(",", '',$req->totalDiscountPercent),
             'item_price' => str_replace(",", '',$req->totalSparePart),

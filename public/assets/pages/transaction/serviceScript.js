@@ -147,7 +147,7 @@ function save() {
             });
 
         } else {
-            swal("Belum Disimpan !");
+            swal("Data Belum Disimpan !");
         }
     });
 
@@ -433,7 +433,7 @@ function sumDiscont() {
         var totalDiscountPercent =  0;
     }else{
         var totalDiscountPercent = $('#totalDiscountPercent').val().replace(/,/g, ''),asANumber = +totalDiscountPercent;}
-    
+
     if(totalDiscountPercent <= 100){
         var sumTotalPrice = (parseInt(totalDiscountPercent)/100)*(parseInt(totalService)+parseInt(totalSparePart));
         $('#totalDiscountValue').val(parseInt(sumTotalPrice).toLocaleString('en-US'));
@@ -478,17 +478,17 @@ function sumDiscontValue() {
 
 function sumTotal() {
     var checkVerificationPrice =  $('input[name="verificationPrice"]:checked').val();
-    
+
     if(isNaN(parseInt($('#totalSparePart').val()))){
         var totalSparePart =  0;
     }else{
         var totalSparePart = $('#totalSparePart').val().replace(/,/g, ''),asANumber = +totalSparePart;}
-    
+
     if(isNaN(parseInt($('#totalService').val()))){
         var totalService =  0;
     }else{
         var totalService = $('#totalService').val().replace(/,/g, ''),asANumber = +totalService;}
-    
+
     if(isNaN(parseInt($('#totalDiscountValue').val()))){
         var totalDiscountValue =  0;
     }else{
@@ -498,9 +498,9 @@ function sumTotal() {
         var sumTotal = 0;
     }else{
         var sumTotal = parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDiscountValue);}
-    
+
     var totalValue = parseInt(totalService)+parseInt(totalSparePart);
-    
+
     if (totalDiscountValue <= totalValue) {
         $('#totalPrice').val(parseInt(sumTotal).toLocaleString('en-US'));
     }else{

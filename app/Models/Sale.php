@@ -43,7 +43,7 @@ class Sale extends Model
 
     public function SaleDetail()
     {
-        return $this->hasMany('App\Models\SaleDetail');
+        return $this->hasMany('App\Models\SaleDetail', 'sale_id', 'id');
     }
 
     public function SharingProfitDetail()

@@ -11,7 +11,7 @@
 <form method="POST" class="form-data">
     @csrf
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-7">
             <div class="card">
                 <div class="card-header">
                     <h4>Form Data</h4>
@@ -97,32 +97,32 @@
             </div>
         </div>
 
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="card">
                 <div class="card-header">
                     <h4>Harga</h4>
                 </div>
                 <div class="card-body">
-                    {{-- <div class="form-group">
-                        <label for="totalService">{{ __('Jasa') }}<code>*</code></label>
-                        <input readonly id="totalService" onchange="sumTotal()" type="text" value="0"
-                            class="form-control cleaveNumeral" name="totalService" style="text-align: right">
-                    </div> --}}
                     <div class="form-group">
                         <label for="totalSparePart">{{ __('Barang') }}<code>*</code></label>
                         <input readonly id="totalSparePart" onchange="sumTotal()" type="text" value="0"
                             class="form-control cleaveNumeral" name="totalSparePart" style="text-align: right">
                     </div>
-                    {{-- <div class="form-group">
-                        <label for="totalLoss">{{ __('Total Loss') }}<code>*</code></label>
-                        <input readonly id="totalLoss" onchange="sumTotal()" type="text" value="0"
-                            class="form-control cleaveNumeral" name="totalLoss" style="text-align: right">
-                    </div> --}}
-                    {{-- <div class="form-group">
-                        <label for="totalDownPayment">{{ __('Down Payment (DP)') }}<code>*</code></label>
-                        <input id="totalDownPayment" type="text" value="0" class="form-control cleaveNumeral"
-                            name="totalDownPayment" onkeyup="sumTotal()" style="text-align: right">
-                    </div> --}}
+                    <div class="form-group">
+                        <label class="form-label">Satuan Diskon Yang Dipakai</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="typeDiscount" value="percent" onchange="changeDiscount('percent'),sumTotal()" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button">Persentase (%)</span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="typeDiscount" value="value" onchange="changeDiscount('value'),sumTotal()"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button">Harga (RP)</span>
+                            </label>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="totalDiscountPercent">{{ __('Diskon %') }}<code>*</code></label>
@@ -131,8 +131,8 @@
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="totalDiscountValue">{{ __('Diskon') }}<code>*</code></label>
-                            <input id="totalDiscountValue" type="text" value="0" class="form-control cleaveNumeral"
-                                name="totalDiscountValue" onkeyup="sumTotal(),sumDiscont()" style="text-align: right">
+                            <input id="totalDiscountValue" style="pointer-events: none;background-color:#e9ecef" type="text" value="0" class="form-control cleaveNumeral"
+                                name="totalDiscountValue" onkeyup="sumTotal(),sumDiscontValue()" style="text-align: right">
                         </div>
                     </div>
                     <div class="form-group">
@@ -154,7 +154,7 @@
             </div>
         </div>
         <div class="card-body">
-            
+
             @foreach ($item as $el)
                 <input class="itemsData" type="hidden"
                 data-price="{{$el->sell}}"
@@ -183,57 +183,8 @@
                             <th>Action</th>
                         </tr>
                     </thead>
-                    {{-- <tbody>
-                        <tr>
-                            <td style="display:none">
-                                <input type="text" class="form-control priceDetailSparePart cleaveNumeral"
-                                    name="priceDetailSparePart[]" value="0">
-                                <input type="text" class="form-control priceDetailLoss cleaveNumeral"
-                                    name="priceDetailLoss[]" value="0">
-                            </td>
-                            <td>
-                                <input readonly type="hidden" class="form-control " name="itemsDetail[]" value="1">
-                                Jasa
-                            </td>
-                            <td>
-                                <input type="text" class="form-control priceServiceDetail cleaveNumeral"
-                                    name="priceDetail[]" style="text-align: right" value="0">
-                            </td>
-                            <td>
-                                <input readonly type="text" class="form-control" name="qtyDetail[]" value="1" style="text-align: right">
-                            </td>
-                            <td>
-                                <input readonly type="text" class="form-control totalPriceServiceDetail cleaveNumeral"
-                                    name="totalPriceDetail[]" style="text-align: right" value="0">
-                            </td>
-                            <td>
-                                <input type="text" class="form-control" name="descriptionDetail[]">
-                            </td>
-                            <td>
-                                <input readonly type="text" class="form-control" name="typeDetail[]" value="Jasa">
-                            </td>
-                            <td><button href="#" type="button" class="btn btn-default">X</button></td>
-                        </tr>
-                    </tbody> --}}
                     <tbody class="dropHereItem" style="border: none !important">
-                        {{-- <tr>
-                    <td>LCD 15 inch</td>
-                    <td>700.000</td>
-                    <td>1</td>
-                    <td>700.000</td>
-                    <td>LCD baru ini boss</td>
-                    <td>Spare Part</td>
-                    <td><a href="#" class="btn btn-danger">X</a></td>
-                  </tr>
-                  <tr>
-                    <td>LCD 15 inch</td>
-                    <td>700.000</td>
-                    <td>1</td>
-                    <td>700.000</td>
-                    <td>Ga sengojo keplindes</td>
-                    <td>Loss</td>
-                    <td><a href="#" class="btn btn-danger">X</a></td>
-                  </tr> --}}
+
                     </tbody>
                 </table>
             </div>

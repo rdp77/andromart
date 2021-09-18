@@ -19,7 +19,7 @@ class CreateStocksTransactionTable extends Migration
             $table->integer('unit_id');
             $table->integer('branch_id');
             $table->double('qty')->nullable();
-            $table->string('type')->nullable();
+            $table->string('code');
             $table->string('description')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
