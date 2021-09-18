@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\Type;
+use App\Models\Stock;
 use App\Models\Brand;
+use App\Models\StockMutation;
 use App\Models\Employee;
 use App\Models\Service;
 use App\Models\Warranty;
@@ -279,12 +281,6 @@ class ServiceController extends Controller
             return Response::json(['status' => 'fail',
                                    'message'=>'Teknisi Memiliki '+$MaxHandle+' Pekerjaan Belum Selesai']);
         }
-        for ($i=0; $i <count($req->itemsDetail) ; $i++) {
-            if($req->stockDetail[$i] == 0){
-                return Response::json(['status' => 'fail',
-                                    'message'=>'Stock Item Ada yang 0. Harap Cek Kembali']);
-            }
-        }
         // return [$sharingProfitStore,
         // $sharingProfitTechnician,
         // $lossStore,$lossTechnician];
@@ -351,7 +347,7 @@ class ServiceController extends Controller
             'created_at' =>date('Y-m-d h:i:s'),
             'created_by' => Auth::user()->name,
         ]);
-
+        $checkStock = [];
         for ($i=0; $i <count($req->itemsDetail) ; $i++) {
             ServiceDetail::create([
                 'service_id'=>$id,
@@ -364,8 +360,37 @@ class ServiceController extends Controller
                 'created_by'=>Auth::user()->name,
                 'created_at'=>date('Y-m-d h:i:s'),
             ]);
+            if($req->typeDetail[$i] != 'Jasa'){
+                $checkStock[$i] = Stock::where('item_id',$req->itemsDetail[$i])
+                             ->where('branch_id',Auth::user()->id)
+                             ->where('id','!=',1)
+                             ->get();
+                if($checkStock[$i][0]->stock < $req->qtyDetail[$i]){
+                    return Response::json(['status' => 'fail',
+                                    'message'=>'Stock Item Ada yang 0. Harap Cek Kembali']);
+                }
+                if($req->typeDetail[$i] == 'SparePart'){
+                   $desc[$i] = 'Pengeluaran Barang Pada Service '.$this->code('SRV-');
+                }else{
+                   $desc[$i] = 'Pengeluaran Barang Loss Pada Service '.$this->code('SRV-');
+                }
+                Stock::where('item_id',$req->itemsDetail[$i])
+                ->where('branch_id',Auth::user()->id)->update([
+                    'stock'      =>$checkStock[$i][0]->stock-$req->qtyDetail[$i],
+                ]);
+                StockMutation::create([
+                    'item_id'    =>$req->itemsDetail[$i],
+                    'unit_id'    =>$checkStock[$i][0]->unit_id,
+                    'branch_id'  =>$checkStock[$i][0]->branch_id,
+                    'qty'      =>$req->qtyDetail[$i],
+                    'code'       =>$this->code('SRV-'),
+                    'type'       =>'Out',
+                    'description'=>$desc[$i],
+                ]);
+            }
         }
-
+        // return $checkStock;
+        
         ServiceStatusMutation::create([
             'service_id'=>$id,
             'technician_id'=>$req->technicianId,
@@ -525,7 +550,6 @@ class ServiceController extends Controller
                     $sharing_profit_technician_1 =  $checkData->sharing_profit_technician_1;
                     $sharing_profit_technician_2 = 0;
                 }
-
             }
             Service::where('id', $req->id)->update([
                 'work_status'=>$req->status,
