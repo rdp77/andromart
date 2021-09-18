@@ -528,8 +528,6 @@ class ServiceController extends Controller
                 }
 
             }
-
-
             Service::where('id', $req->id)->update([
                 'work_status'=>$req->status,
                 'technician_replacement_id'=>$technician_replacement_id,
