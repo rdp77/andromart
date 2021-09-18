@@ -34,7 +34,7 @@
                                 <label for="sales"
                                     class="control-label">{{ __('Sales') }}<code>*</code></label>
                             </div>
-                            <select class="select2" name="sales">
+                            <select class="select2" name="sales_id">
                                 <option value="">- Select -</option>
                                 @foreach ($employee as $employee)
                                 <option value="{{$employee->id}}">{{$employee->name}}</option>
@@ -43,7 +43,7 @@
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="warranty">{{ __('Garansi') }}<code>*</code></label>
-                            <select class="select2" name="warranty_id">
+                            <select class="select2" name="warranty">
                                 <option value="">- Select -</option>
                                 @foreach ($warranty as $warranty)
                                 <option value="{{ $warranty->id }}">{{ $warranty->periode }} {{ $warranty->name }}</option>
@@ -71,15 +71,15 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-5 col-lg-5">
-                            <label for="customer_telephone">{{ __('No. Telp.') }}<code>*</code></label>
+                            <label for="customer_phone">{{ __('No. Telp.') }}<code>*</code></label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                 <div class="input-group-text">
                                     <i class="fas fa-phone"></i>
                                 </div>
                                 </div>
-                                <input id="customer_telephone" type="text" class="form-control @error('customer_telephone') is-invalid @enderror"
-                                    name="customer_telephone" value="{{ old('customer_telephone') }}" required>
+                                <input id="customer_phone" type="text" class="form-control @error('customer_phone') is-invalid @enderror"
+                                    name="customer_phone" value="{{ old('customer_phone') }}" required>
                                 @error('customer_telephone')
                                 <div class="invalid-feedback">
                                     {{ $message }}

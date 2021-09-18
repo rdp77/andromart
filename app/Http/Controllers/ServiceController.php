@@ -350,7 +350,6 @@ class ServiceController extends Controller
             'sharing_profit_technician_2'=>str_replace(",", '',0),
             'created_at' =>date('Y-m-d h:i:s'),
             'created_by' => Auth::user()->name,
-            'created_at' => date('Y-m-d h:i:s'),
         ]);
 
         for ($i=0; $i <count($req->itemsDetail) ; $i++) {

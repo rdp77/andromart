@@ -51,19 +51,14 @@
                                     <label for="cash_id"
                                         class="control-label">{{ __('Kass') }}<code>*</code></label>
                                 </div>
-                                <select class="select2 costValue @error('cash_id') is-invalid @enderror" onchange="dropValueCost()" name="cash_id" required>
+                                <select class="select2" name="cash_id" required>
                                     <option value="">- Select -</option>
                                     @foreach ($cash as $cash)
                                     <option  data-cost="{{$cash->balance}}" value="{{$cash->id}}">{{$cash->code}} - {{$cash->name}}</option>
                                     @endforeach
                                 </select>
-                                @error('cash_id')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                                @enderror
                             </div>
-                            <div class="form-group col-md-3 col-xs-12">
+                            {{-- <div class="form-group col-md-3 col-xs-12">
                                 <label for="balance">{{ __('Saldo Kas') }}<code>*</code></label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -72,9 +67,9 @@
                                         </div>
                                     </div>
                                     <input id="rupiah" type="text" class="form-control currency"
-                                        name="balance" value="" readonly autocomplete="balance">
+                                        name="balance" value="" readonly style="text-align: right">
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="row">
                             <div class="form-group col-md-3 col-xs-12">
@@ -102,8 +97,8 @@
                                         Rp.
                                         </div>
                                     </div>
-                                    <input id="rupiah" type="text" class="form-control currency @error('price') is-invalid @enderror"
-                                        name="price" value="{{ old('price') }}" required autocomplete="price">
+                                    <input id="rupiah" type="text" class="form-control cleaveNumeral @error('price') is-invalid @enderror"
+                                        name="price" value="{{ old('price') }}" required style="text-align: right">
                                     @error('price')
                                     <div class="invalid-feedback">
                                         {{ $message }}

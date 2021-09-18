@@ -103,8 +103,10 @@ function del(id) {
     });
 }
 
-function dropValueCost() {
-    var costValue = $('.costValue').find(':selected').data('cost');
-    // alert(costValue);
-    $('#rupiah').val(parseInt(costValue).toLocaleString('en-US'));
-}
+// function dropValueCost() {
+//     var costValue = $('.costValue').find(':selected').data('cost');
+//     // alert(costValue);
+//     $('#rupiah').val(parseInt(costValue).toLocaleString('en-US'));
+// }
+
+
