@@ -15,20 +15,20 @@ class CreatePurchasingsTable extends Migration
     {
         Schema::create('purchasings', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('supplier_id');
+            $table->unsignedBigInteger('employee_id')->nullable();
 
             $table->datetime('date')->nullable();
             $table->integer('price')->nullable();
             $table->integer('discount')->nullable();
             $table->string('code')->unique();
-            $table->string('status')->nullable();
+            $table->string('status')->nullable()->comment('paid = bayar, dept = hutang');
 
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();
             $table->softDeletesTz($column = 'deleted_at', $precision = 0);
             
-            $table->foreign('supplier_id')->references('id')->on('suppliers')->onDelete('cascade');
+            $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
             $table->timestamps();
         });
     }
