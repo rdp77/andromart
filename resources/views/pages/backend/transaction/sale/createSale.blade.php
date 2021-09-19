@@ -179,6 +179,7 @@
                             <th style="width: 9%">Stok</th>
                             <th>Jumlah</th>
                             <th>Deskripsi</th>
+                            <th style="width: 10%" hidden>P.S. Sales %</th>
                             <th style="width: 15%" hidden>tipe</th>
                             <th>Action</th>
                         </tr>

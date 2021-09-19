@@ -10,6 +10,7 @@ use App\Models\Item;
 use App\Models\Sale;
 use App\Models\SaleDetail;
 use App\Models\Stock;
+use App\Models\StockMutation;
 use App\Models\User;
 use App\Models\Warranty;
 use Illuminate\Http\Request;
@@ -171,6 +172,7 @@ class SaleController extends Controller
             'created_by' => Auth::user()->name,
         ]);
 
+        $checkStock = [];
         for ($i=0; $i <count($req->itemsDetail) ; $i++) {
             SaleDetail::create([
                 'sale_id'=> $id,
@@ -183,6 +185,34 @@ class SaleController extends Controller
                 'created_by'=> Auth::user()->name,
                 'created_at'=> date('Y-m-d h:i:s'),
             ]);
+            if($req->typeDetail[$i] != 'Jasa'){
+                $checkStock[$i] = Stock::where('item_id',$req->itemsDetail[$i])
+                             ->where('branch_id',Auth::user()->id)
+                             ->where('id','!=',1)
+                             ->get();
+                if($checkStock[$i][0]->stock < $req->qtyDetail[$i]){
+                    return Response::json(['status' => 'fail',
+                                    'message'=>'Stock Item Ada yang 0. Harap Cek Kembali']);
+                }
+                if($req->typeDetail[$i] == 'SparePart'){
+                   $desc[$i] = 'Pengeluaran Barang Pada Penjualan '.$this->code('PJT-');
+                }else{
+                   $desc[$i] = 'Pengeluaran Barang Loss Pada Penjualan '.$this->code('PJT-');
+                }
+                Stock::where('item_id',$req->itemsDetail[$i])
+                ->where('branch_id',Auth::user()->id)->update([
+                    'stock'      =>$checkStock[$i][0]->stock-$req->qtyDetail[$i],
+                ]);
+                StockMutation::create([
+                    'item_id'    =>$req->itemsDetail[$i],
+                    'unit_id'    =>$checkStock[$i][0]->unit_id,
+                    'branch_id'  =>$checkStock[$i][0]->branch_id,
+                    'qty'      =>$req->qtyDetail[$i],
+                    'code'       =>$this->code('PJT-'),
+                    'type'       =>'Out',
+                    'description'=>$desc[$i],
+                ]);
+            }
         }
 
         return Response::json(['status' => 'success','message'=>'Data Tersimpan']);

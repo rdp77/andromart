@@ -16,7 +16,6 @@ class ItemSeeder extends Seeder
     {
         DB::table('items')->insert([
             [
-                // 'id' => '1',
                 'name' => 'Jasa Service',
                 'category_id' => '1',
                 'supplier_id' => '1',
@@ -30,7 +29,6 @@ class ItemSeeder extends Seeder
                 'updated_at' => date("Y-m-d h:i:s"),
             ],
             [
-                // 'id' => '2',
                 'name' => 'LCD 16x2',
                 'category_id' => '1',
                 'supplier_id' => '1',
@@ -40,6 +38,32 @@ class ItemSeeder extends Seeder
                 'image' => ' ',
                 'condition' => 'Baru',
                 'description' => 'LCD anti retak anti maling',
+                'created_at' => date("Y-m-d h:i:s"),
+                'updated_at' => date("Y-m-d h:i:s"),
+            ],
+            [
+                'name' => 'Realme 3 PRO',
+                'category_id' => '2',
+                'supplier_id' => '1',
+                'buy' => '1500000',
+                'sell' => '1800000',
+                'discount' => ' ',
+                'image' => ' ',
+                'condition' => 'Bekas',
+                'description' => 'Biru Laut',
+                'created_at' => date("Y-m-d h:i:s"),
+                'updated_at' => date("Y-m-d h:i:s"),
+            ],
+            [
+                'name' => 'MSI GF63',
+                'category_id' => '3',
+                'supplier_id' => '1',
+                'buy' => '10000000',
+                'sell' => '12000000',
+                'discount' => ' ',
+                'image' => ' ',
+                'condition' => 'Baru',
+                'description' => 'Merah Hitam',
                 'created_at' => date("Y-m-d h:i:s"),
                 'updated_at' => date("Y-m-d h:i:s"),
             ],

@@ -183,10 +183,12 @@ function addItem() {
             '<td>'+
                 '<input type="text" class="form-control" name="descriptionDetail[]">'+
             '</td>'+
-            '<td hidden>'+
+            '<td>'+
+                '<input type="number" class="form-control" name="profitSharing[]">'+
+            '</td>'+
+            '<td style="display:none">'+
                 '<select class="form-control typeDetail typeDetail_'+(index+1)+'" name="typeDetail[]">'+
                     '<option selected data-index="'+(index+1)+'" value="SparePart">Barang</option>'+
-                    // '<option data-index="'+(index+1)+'" value="Loss">Loss</option>'+
                 '</select>'+
             '</td>'+
             '<td>'+
