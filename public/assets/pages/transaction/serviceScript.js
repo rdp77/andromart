@@ -139,6 +139,10 @@ function save() {
                             icon: "success",
                         });
                         // location.reload();
+                    }else{
+                        swal(data.message, {
+                            icon: "warning",
+                        });
                     }
                 },
                 error: function(data) {

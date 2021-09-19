@@ -28,7 +28,7 @@ class ServiceTable extends Migration
             $table->date('estimate_date');
             $table->String('brand')->nullable();
             $table->String('series')->nullable();
-            $table->String('type')->nullable();
+            $table->integer('type')->nullable();
             $table->String('no_imei')->nullable();
             $table->String('complaint')->nullable();
             $table->String('clock');

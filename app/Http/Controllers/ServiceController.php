@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\Type;
+use App\Models\Category;
 use App\Models\Stock;
 use App\Models\Brand;
 use App\Models\StockMutation;
@@ -244,173 +245,182 @@ class ServiceController extends Controller
         $item     = Item::with('stock')->where('name','!=','Jasa Service')->get();
         $brand    = Brand::get();
         $type     = Type::get();
+        $category = Category::get();
         $warranty = Warranty::get();
-        return view('pages.backend.transaction.service.createService',compact('employee','code','item','brand','type','warranty'));
+        return view('pages.backend.transaction.service.createService',compact('employee','code','item','brand','type','warranty','category'));
     }
 
     public function store(Request $req)
     {
-        // return $req->all();
-        // return $req->technicianId;
-        $tech1 = Service::where('technician_id',$req->technicianId)->where('work_status','!=','Selesai')->count();
-        $tech2 = Service::where('technician_replacement_id',$req->technicianId)->where('work_status','!=','Selesai')->count();
+        DB::beginTransaction();
+        try {
+            // return $req->all();
+            // return $req->technicianId;
+            $tech1 = Service::where('technician_id',$req->technicianId)->where('work_status','!=','Selesai')->count();
+            $tech2 = Service::where('technician_replacement_id',$req->technicianId)->where('work_status','!=','Selesai')->count();
 
 
-        $getEmployee =  Employee::where('user_id',Auth::user()->id)->first();
-        $settingPresentase =  SettingPresentase::get();
+            $getEmployee =  Employee::where('user_id',Auth::user()->id)->first();
+            $settingPresentase =  SettingPresentase::get();
 
-        for ($i=0; $i <count($settingPresentase) ; $i++) {
-            if($settingPresentase[$i]->name == 'Presentase Sharing Profit Toko'){
-                $sharingProfitStore = $settingPresentase[$i]->total;
+            for ($i=0; $i <count($settingPresentase) ; $i++) {
+                if($settingPresentase[$i]->name == 'Presentase Sharing Profit Toko'){
+                    $sharingProfitStore = $settingPresentase[$i]->total;
+                }
+                if($settingPresentase[$i]->name == 'Presentase Sharing Profit Teknisi'){
+                    $sharingProfitTechnician = $settingPresentase[$i]->total;
+                }
+                if($settingPresentase[$i]->name == 'Presentase Loss Toko'){
+                    $lossStore = $settingPresentase[$i]->total;
+                }
+                if($settingPresentase[$i]->name == 'Presentase Loss Teknisi'){
+                    $lossTechnician = $settingPresentase[$i]->total;
+                }
+                if($settingPresentase[$i]->name == 'Batasan Maximum Handle Customer Pada Teknisi'){
+                    $MaxHandle = $settingPresentase[$i]->total;
+                }
             }
-            if($settingPresentase[$i]->name == 'Presentase Sharing Profit Teknisi'){
-                $sharingProfitTechnician = $settingPresentase[$i]->total;
-            }
-            if($settingPresentase[$i]->name == 'Presentase Loss Toko'){
-                $lossStore = $settingPresentase[$i]->total;
-            }
-            if($settingPresentase[$i]->name == 'Presentase Loss Teknisi'){
-                $lossTechnician = $settingPresentase[$i]->total;
-            }
-            if($settingPresentase[$i]->name == 'Batasan Maximum Handle Customer Pada Teknisi'){
-                $MaxHandle = $settingPresentase[$i]->total;
-            }
-        }
 
-        if($tech1+$tech2 >= $MaxHandle){
-            return Response::json(['status' => 'fail',
-                                   'message'=>'Teknisi Memiliki '+$MaxHandle+' Pekerjaan Belum Selesai']);
-        }
-        // return [$sharingProfitStore,
-        // $sharingProfitTechnician,
-        // $lossStore,$lossTechnician];
-        // return [$req->totalService,$req->totalSparePart];
-        $id = DB::table('service')->max('id')+1;
-        $sharing_profit_store =  ((str_replace(",", '',$req->totalService)/100)*$sharingProfitStore)+str_replace(",", '',$req->totalSparePart);
-        $sharing_profit_technician_1 = (str_replace(",", '',$req->totalService)/100)*$sharingProfitTechnician;
+            if($tech1+$tech2 >= $MaxHandle){
+                return Response::json(['status' => 'fail',
+                                       'message'=>'Teknisi Memiliki '+$MaxHandle+' Pekerjaan Belum Selesai']);
+            }
+            // return [$sharingProfitStore,
+            // $sharingProfitTechnician,
+            // $lossStore,$lossTechnician];
+            // return [$req->totalService,$req->totalSparePart];
+            $id = DB::table('service')->max('id')+1;
+            $sharing_profit_store =  ((str_replace(",", '',$req->totalService)/100)*$sharingProfitStore)+str_replace(",", '',$req->totalSparePart);
+            $sharing_profit_technician_1 = (str_replace(",", '',$req->totalService)/100)*$sharingProfitTechnician;
 
-        $total_loss_technician_1 = (str_replace(",", '',$req->totalLoss)/100)*$lossTechnician;
-        $total_loss_store = (str_replace(",", '',$req->totalLoss)/100)*$lossStore;
+            $total_loss_technician_1 = (str_replace(",", '',$req->totalLoss)/100)*$lossTechnician;
+            $total_loss_store = (str_replace(",", '',$req->totalLoss)/100)*$lossStore;
 
-        $estimateDate = $this->DashboardController->changeMonthIdToEn($req->estimateDate);
+            $estimateDate = $this->DashboardController->changeMonthIdToEn($req->estimateDate);
 
-        $image = $req->image;
-        $image = str_replace('data:image/jpeg;base64,','', $image);
-		$image = base64_decode($image);
-        if ($image != null) {
-            $fileSave = 'public/Service_' . $this->code('SRV-') . '.' .'png';
-            $fileName = 'Service_' . $this->code('SRV-') . '.' .'png';
-            Storage::put($fileSave, $image);
-        }else{
-            $fileName = null;
-        }
-        // return 'asd';
-        Service::create([
-            'id' =>$id,
-            'code' =>$this->code('SRV-'),
-            'user_id'=>Auth::user()->id,
-            'branch_id'=>$getEmployee->branch_id,
-            'customer_id'=>$req->customerId,
-            'customer_name'=>$req->customerName,
-            'customer_address'=>$req->customerAdress,
-            'customer_phone'=>$req->customerPhone,
-            'date'=>date('Y-m-d'),
-            'estimate_date'=>$estimateDate,
-            'brand'=>$req->brand,
-            'series'=>$req->series,
-            'type'=>$req->type,
-            'no_imei'=>$req->noImei,
-            'complaint'=>$req->complaint,
-            'clock'=>date('h:i'),
-            'total_service'=>str_replace(",", '',$req->totalService),
-            'total_part'=>str_replace(",", '',$req->totalSparePart),
-            'total_payment'=>0,
-            'total_downpayment'=>0,
-            'total_loss'=>str_replace(",", '',$req->totalLoss),
-            'total_loss_technician_1'=>$total_loss_technician_1,
-            'total_loss_technician_2'=>0,
-            'total_loss_store'=>$total_loss_store,
-            'image'=>$fileName,
-            'discount_type'=>$req->typeDiscount,
-            'discount_price'=>str_replace(",", '',$req->totalDiscountValue),
-            'discount_percent'=>str_replace(",", '',$req->totalDiscountPercent),
-            'total_price'=>str_replace(",", '',$req->totalPrice),
-            'work_status'=>'Manifest',
-            'equipment'=>$req->equipment,
-            'description'=>$req->description,
-            'warranty_id'=>$req->warranty,
-            'verification_price'=>$req->verificationPrice,
-            'technician_id'=>$req->technicianId,
-            'sharing_profit_store'=>str_replace(",", '',$sharing_profit_store),
-            'sharing_profit_technician_1'=>str_replace(",", '',$sharing_profit_technician_1),
-            'sharing_profit_technician_2'=>str_replace(",", '',0),
-            'created_at' =>date('Y-m-d h:i:s'),
-            'created_by' => Auth::user()->name,
-        ]);
-        $checkStock = [];
-        for ($i=0; $i <count($req->itemsDetail) ; $i++) {
-            ServiceDetail::create([
+            $image = $req->image;
+            $image = str_replace('data:image/jpeg;base64,','', $image);
+            $image = base64_decode($image);
+            if ($image != null) {
+                $fileSave = 'public/Service_' . $this->code('SRV-') . '.' .'png';
+                $fileName = 'Service_' . $this->code('SRV-') . '.' .'png';
+                Storage::put($fileSave, $image);
+            }else{
+                $fileName = null;
+            }
+            // return 'asd';
+            Service::create([
+                'id' =>$id,
+                'code' =>$this->code('SRV-'),
+                'user_id'=>Auth::user()->id,
+                'branch_id'=>$getEmployee->branch_id,
+                'customer_id'=>$req->customerId,
+                'customer_name'=>$req->customerName,
+                'customer_address'=>$req->customerAdress,
+                'customer_phone'=>$req->customerPhone,
+                'date'=>date('Y-m-d'),
+                'estimate_date'=>$estimateDate,
+                'brand'=>$req->brand,
+                'series'=>$req->series,
+                'type'=>$req->type,
+                'no_imei'=>$req->noImei,
+                'complaint'=>$req->complaint,
+                'clock'=>date('h:i'),
+                'total_service'=>str_replace(",", '',$req->totalService),
+                'total_part'=>str_replace(",", '',$req->totalSparePart),
+                'total_payment'=>0,
+                'total_downpayment'=>0,
+                'total_loss'=>str_replace(",", '',$req->totalLoss),
+                'total_loss_technician_1'=>$total_loss_technician_1,
+                'total_loss_technician_2'=>0,
+                'total_loss_store'=>$total_loss_store,
+                'image'=>$fileName,
+                'discount_type'=>$req->typeDiscount,
+                'discount_price'=>str_replace(",", '',$req->totalDiscountValue),
+                'discount_percent'=>str_replace(",", '',$req->totalDiscountPercent),
+                'total_price'=>str_replace(",", '',$req->totalPrice),
+                'work_status'=>'Manifest',
+                'equipment'=>$req->equipment,
+                'description'=>$req->description,
+                'warranty_id'=>$req->warranty,
+                'verification_price'=>$req->verificationPrice,
+                'technician_id'=>$req->technicianId,
+                'sharing_profit_store'=>str_replace(",", '',$sharing_profit_store),
+                'sharing_profit_technician_1'=>str_replace(",", '',$sharing_profit_technician_1),
+                'sharing_profit_technician_2'=>str_replace(",", '',0),
+                'created_at' =>date('Y-m-d h:i:s'),
+                'created_by' => Auth::user()->name,
+            ]);
+            $checkStock = [];
+            for ($i=0; $i <count($req->itemsDetail) ; $i++) {
+                ServiceDetail::create([
+                    'service_id'=>$id,
+                    'item_id'=>$req->itemsDetail[$i],
+                    'price'=>str_replace(",", '',$req->priceDetail[$i]),
+                    'qty'=>$req->qtyDetail[$i],
+                    'total_price'=>str_replace(",", '',$req->totalPriceDetail[$i]),
+                    'description' =>str_replace(",", '',$req->descriptionDetail[$i]),
+                    'type' =>$req->typeDetail[$i],
+                    'created_by'=>Auth::user()->name,
+                    'created_at'=>date('Y-m-d h:i:s'),
+                ]);
+                if($req->typeDetail[$i] != 'Jasa'){
+                    $checkStock[$i] = Stock::where('item_id',$req->itemsDetail[$i])
+                                ->where('branch_id',Auth::user()->id)
+                                ->where('id','!=',1)
+                                ->get();
+                    if($checkStock[$i][0]->stock < $req->qtyDetail[$i]){
+                        return Response::json(['status' => 'fail',
+                                        'message'=>'Stock Item Ada yang 0. Harap Cek Kembali']);
+                    }
+                    if($req->typeDetail[$i] == 'SparePart'){
+                        $desc[$i] = 'Pengeluaran Barang Pada Service '.$this->code('SRV-');
+                    }else{
+                        $desc[$i] = 'Pengeluaran Barang Loss Pada Service '.$this->code('SRV-');
+                    }
+                    Stock::where('item_id',$req->itemsDetail[$i])
+                    ->where('branch_id',Auth::user()->id)->update([
+                        'stock'      =>$checkStock[$i][0]->stock-$req->qtyDetail[$i],
+                    ]);
+                    StockMutation::create([
+                        'item_id'    =>$req->itemsDetail[$i],
+                        'unit_id'    =>$checkStock[$i][0]->unit_id,
+                        'branch_id'  =>$checkStock[$i][0]->branch_id,
+                        'qty'        =>$req->qtyDetail[$i],
+                        'code'       =>$this->code('SRV-'),
+                        'type'       =>'Out',
+                        'description'=>$desc[$i],
+                    ]);
+                }
+            }
+            // return $checkStock;
+            
+            ServiceStatusMutation::create([
                 'service_id'=>$id,
-                'item_id'=>$req->itemsDetail[$i],
-                'price'=>str_replace(",", '',$req->priceDetail[$i]),
-                'qty'=>$req->qtyDetail[$i],
-                'total_price'=>str_replace(",", '',$req->totalPriceDetail[$i]),
-                'description' =>str_replace(",", '',$req->descriptionDetail[$i]),
-                'type' =>$req->typeDetail[$i],
+                'technician_id'=>$req->technicianId,
+                'index'=>1,
+                'status'=>'Manifest',
+                'description'=>'Barang Sedang Dicek & Diterima oleh '.Auth::user()->name,
                 'created_by'=>Auth::user()->name,
                 'created_at'=>date('Y-m-d h:i:s'),
             ]);
-            if($req->typeDetail[$i] != 'Jasa'){
-                $checkStock[$i] = Stock::where('item_id',$req->itemsDetail[$i])
-                             ->where('branch_id',Auth::user()->id)
-                             ->where('id','!=',1)
-                             ->get();
-                if($checkStock[$i][0]->stock < $req->qtyDetail[$i]){
-                    return Response::json(['status' => 'fail',
-                                    'message'=>'Stock Item Ada yang 0. Harap Cek Kembali']);
-                }
-                if($req->typeDetail[$i] == 'SparePart'){
-                   $desc[$i] = 'Pengeluaran Barang Pada Service '.$this->code('SRV-');
-                }else{
-                   $desc[$i] = 'Pengeluaran Barang Loss Pada Service '.$this->code('SRV-');
-                }
-                Stock::where('item_id',$req->itemsDetail[$i])
-                ->where('branch_id',Auth::user()->id)->update([
-                    'stock'      =>$checkStock[$i][0]->stock-$req->qtyDetail[$i],
-                ]);
-                StockMutation::create([
-                    'item_id'    =>$req->itemsDetail[$i],
-                    'unit_id'    =>$checkStock[$i][0]->unit_id,
-                    'branch_id'  =>$checkStock[$i][0]->branch_id,
-                    'qty'      =>$req->qtyDetail[$i],
-                    'code'       =>$this->code('SRV-'),
-                    'type'       =>'Out',
-                    'description'=>$desc[$i],
-                ]);
-            }
+
+            // if($req->verificationPrice == 'N'){
+            //     echo 'menjurnal';
+
+            // }
+            // $this->DashboardController->createLog(
+            //     $req->header('user-agent'),
+            //     $req->ip(),
+            //     'Membuat Dana Kredit Pagu per PDL'
+            // );
+            DB::commit();
+            return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return Response::json(['status' => 'error','message'=>$th]);
         }
-        // return $checkStock;
-        
-        ServiceStatusMutation::create([
-            'service_id'=>$id,
-            'technician_id'=>$req->technicianId,
-            'index'=>1,
-            'status'=>'Manifest',
-            'description'=>'Barang Sedang Dicek & Diterima oleh '.Auth::user()->name,
-            'created_by'=>Auth::user()->name,
-            'created_at'=>date('Y-m-d h:i:s'),
-        ]);
 
-        // if($req->verificationPrice == 'N'){
-        //     echo 'menjurnal';
-
-        // }
-        // $this->DashboardController->createLog(
-        //     $req->header('user-agent'),
-        //     $req->ip(),
-        //     'Membuat Dana Kredit Pagu per PDL'
-        // );
-        return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
 
     }
 

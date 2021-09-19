@@ -60,34 +60,44 @@
                     <br>
                     <div class="row">
                         <div class="form-group col-12 col-md-4 col-lg-4">
-                            <label for="brand">{{ __('Merk') }}<code>*</code></label>
-                            <select class="select2" name="brand">
+                            <label for="type">{{ __('tipe') }}<code>*</code></label>
+                            <select class="select2 type" name="type">
                                 <option value="">- Select -</option>
-                                @foreach ($brand as $element)
-                                <option value="{{$element->id}}">{{$element->name}}</option>
+                                @foreach ($category as $element)
+                                    <option value="{{$element->id}}">{{$element->name}}</option>
                                 @endforeach
+                                {{-- <option value="Handphone">Handphone</option>
+                                <option value="Laptop">Laptop</option> --}}
+                            </select>
+                        </div>
+                        <div class="form-group col-12 col-md-4 col-lg-4">
+                            <label for="brand">{{ __('Merk') }}<code>*</code></label>
+                            <select class="select2 brand" name="brand">
+                                <option value="">- Select -</option>
+                                {{-- @foreach ($brand as $element)
+                                <option value="{{$element->id}}">{{$element->name}}</option>
+                                @endforeach --}}
                             </select>
                             {{-- <input id="brand" type="text" class="form-control" name="brand"> --}}
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="series">{{ __('Seri') }}<code>*</code></label>
-                            <select class="select2" name="series">
+                            <select class="select2 series" name="series">
                                 <option value="">- Select -</option>
-                                @foreach ($type as $element)
+                                {{-- @foreach ($type as $element)
                                 <option value="{{$element->id}}">{{$element->name}}</option>
-                                @endforeach
+                                @endforeach --}}
                             </select>
                             {{-- <input id="series" type="text" class="form-control" name="series"> --}}
                         </div>
-                        <div class="form-group col-12 col-md-4 col-lg-4">
-                            <label for="type">{{ __('tipe') }}<code>*</code></label>
-                            <select class="select2" name="type">
-                                <option value="">- Select -</option>
-                                <option value="Handphone">Handphone</option>
-                                <option value="Laptop">Laptop</option>
-                            </select>
-                        </div>
-
+                        @foreach ($brand as $el)
+                            <input class="brandData" type="hidden"
+                            value="{{$el->id}}">
+                        @endforeach
+                        @foreach ($series as $el)
+                            <input class="seriesData" type="hidden"
+                            value="{{$el->id}}">
+                        @endforeach
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
