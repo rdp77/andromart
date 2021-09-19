@@ -60,8 +60,8 @@
                     <br>
                     <div class="row">
                         <div class="form-group col-12 col-md-4 col-lg-4">
-                            <label for="type">{{ __('tipe') }}<code>*</code></label>
-                            <select class="select2 type" name="type">
+                            <label for="type">{{ __('Kategori') }}<code>*</code></label>
+                            <select class="select2 type" name="type" onchange="category()">
                                 <option value="">- Select -</option>
                                 @foreach ($category as $element)
                                     <option value="{{$element->id}}">{{$element->name}}</option>
@@ -90,14 +90,19 @@
                             </select>
                             {{-- <input id="series" type="text" class="form-control" name="series"> --}}
                         </div>
+                        
                         @foreach ($brand as $el)
                             <input class="brandData" type="hidden"
+                            data-name="{{$el->name}}"
                             value="{{$el->id}}">
                         @endforeach
-                        @foreach ($series as $el)
+
+                        @foreach ($type as $el)
                             <input class="seriesData" type="hidden"
+                            data-name="{{$el->name}}"
                             value="{{$el->id}}">
                         @endforeach
+
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">

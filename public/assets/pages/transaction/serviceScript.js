@@ -172,6 +172,19 @@ function changeDiscount(params) {
     }
 }
 
+function category() {
+    var params = $('.type').find(':selected').val();
+    $.each($('.brandData'), function(){
+        if (params == ) {
+            
+        }
+        dataItems += '<option value="'+this.value+'">'+$(this).data('name')+'</option>';
+    });
+
+    $('.brand').append(
+        '<option data-index="'+(index+1)+'">- Select -</option>'+
+        dataItems);
+}
 
 function addItem() {
     var index = $('.priceDetail').length;
