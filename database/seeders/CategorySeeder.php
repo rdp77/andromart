@@ -20,6 +20,21 @@ class CategorySeeder extends Seeder
                 'name' => 'Sparepart',
                 'code' => 'SPT',
             ],
+            [
+                'id' => '2',
+                'name' => 'Handphone',
+                'code' => 'HP',
+            ],
+            [
+                'id' => '3',
+                'name' => 'Laptop',
+                'code' => 'LP',
+            ],
+            [
+                'id' => '4',
+                'name' => 'Komputer',
+                'code' => 'PC',
+            ],
         ]);
 
     }
