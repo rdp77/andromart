@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -22,7 +23,7 @@ class BrandController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Brand::all();
+            $data = Brand::with('category')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -45,7 +46,8 @@ class BrandController extends Controller
 
     public function create()
     {
-        return view('pages.backend.master.brand.createBrand');
+        $category = Category::where('id', '!=', 1)->get();
+        return view('pages.backend.master.brand.createBrand', compact('category'));
     }
 
     public function store(Request $req)
@@ -56,6 +58,7 @@ class BrandController extends Controller
 
         Brand::create([
             'name' => $req->name,
+            'category_id' => $req->category_id,
             'created_by' => Auth::user()->name,
         ]);
 
@@ -92,6 +95,7 @@ class BrandController extends Controller
         Brand::where('id', $id)
             ->update([
                 'name' => $req->name,
+                'category_id' => $req->category_id,
                 'updated_by' => Auth::user()->name,
             ]);
 

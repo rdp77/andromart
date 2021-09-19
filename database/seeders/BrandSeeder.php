@@ -17,13 +17,22 @@ class BrandSeeder extends Seeder
         DB::table('brands')->insert([
             [
                 'id' => '1',
-                'name' => 'APPLE',
+                'category_id' => '1',
+                'name' => 'No Brand',
                 'created_at' => date("Y-m-d h:i:s"),
                 'updated_at' => date("Y-m-d h:i:s"),
             ],
             [
                 'id' => '2',
-                'name' => 'REALME',
+                'category_id' => '2',
+                'name' => 'APPLE',
+                'created_at' => date("Y-m-d h:i:s"),
+                'updated_at' => date("Y-m-d h:i:s"),
+            ],
+            [
+                'id' => '3',
+                'category_id' => '3',
+                'name' => 'APPLE',
                 'created_at' => date("Y-m-d h:i:s"),
                 'updated_at' => date("Y-m-d h:i:s"),
             ],

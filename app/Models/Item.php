@@ -14,7 +14,7 @@ class Item extends Model
 
     protected $fillable = [
         'name',
-        'category_id',
+        'brand_id',
         'supplier_id',
         'buy',
         'sell',
@@ -30,14 +30,14 @@ class Item extends Model
         'deleted_by',
     ];
 
-    public function category()
-    {
-        return $this->belongsTo('App\Models\Category');
-    }
-
     public function supplier()
     {
         return $this->belongsTo('App\Models\Supplier');
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo('App\Models\Brand');
     }
 
     public function stock()

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Branch;
 use App\Models\Item;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Stock;
 use App\Models\Supplier;
@@ -67,17 +68,18 @@ class ItemController extends Controller
 
     public function create()
     {
-        $branch = Branch::all();
-        $category = Category::all();
-        $supplier = supplier::all();
-        return view('pages.backend.master.item.createItem', ['branch' => $branch, 'category' => $category, 'supplier' => $supplier ]);
+        $branch = Branch::get();
+        $category = Category::get();
+        $brand = Brand::get();
+        $supplier = supplier::get();
+        return view('pages.backend.master.item.createItem', ['branch' => $branch, 'brand' => $brand, 'supplier' => $supplier, 'category' => $category ]);
     }
 
     public function store(Request $req)
     {
         Validator::make($req->all(), [
             'name' => ['required', 'string', 'max:255'],
-            'category_id' => ['required', 'integer'],
+            'brand_id' => ['required', 'integer'],
             'supplier_id' => ['required', 'integer'],
             'buy' => ['required', 'string', 'max:255'],
             'sell' => ['required', 'string', 'max:255'],
@@ -91,7 +93,7 @@ class ItemController extends Controller
             Item::create([
                 'id' => $id,
                 'name' => $req->name,
-                'category_id' => $req->category_id,
+                'brand_id' => $req->brand_id,
                 'supplier_id' => $req->supplier_id,
                 'buy' => str_replace(",", '',$req->buy),
                 'sell' => str_replace(",", '',$req->sell),
@@ -106,7 +108,7 @@ class ItemController extends Controller
             Item::create([
                 'id' => $id,
                 'name' => $req->name,
-                'category_id' => $req->category_id,
+                'brand_id' => $req->brand_id,
                 'supplier_id' => $req->supplier_id,
                 'buy' => str_replace(",", '',$req->buy),
                 'sell' => str_replace(",", '',$req->sell),
@@ -147,16 +149,16 @@ class ItemController extends Controller
     {
         $item = Item::find($id);
         $branch = Branch::all();
-        $category = Category::where('id', '!=', Item::find($id)->category_id)->get();
+        $brand = Brand::where('id', '!=', Item::find($id)->brand_id)->get();
         $supplier = Supplier::where('id', '!=', Item::find($id)->supplier_id)->get();
-        return view('pages.backend.master.item.updateItem', ['branch' => $branch, 'item' => $item, 'category' => $category, 'supplier' => $supplier] );
+        return view('pages.backend.master.item.updateItem', ['branch' => $branch, 'item' => $item, 'brand' => $brand, 'supplier' => $supplier] );
     }
 
     public function update($id, Request $req)
     {
         Validator::make($req->all(), [
             'name' => ['required', 'string', 'max:255'],
-            'category_id' => ['required', 'integer'],
+            'brand_id' => ['required', 'integer'],
             'supplier_id' => ['required', 'integer'],
             'buy' => ['required', 'string', 'max:255'],
             'sell' => ['required', 'string', 'max:255'],
@@ -170,7 +172,7 @@ class ItemController extends Controller
         Item::where('id', $id)
             ->update([
             'name' => $req->name,
-            'category_id' => $req->category_id,
+            'brand_id' => $req->brand_id,
             'supplier_id' => $req->supplier_id,
             'buy' => $req->buy,
             'sell' => $req->sell,

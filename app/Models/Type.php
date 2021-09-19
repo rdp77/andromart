@@ -21,4 +21,5 @@ class Type extends Model
     {
         return $this->belongsTo('App\Models\Brand');
     }
+
 }

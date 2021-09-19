@@ -183,7 +183,7 @@ function addItem() {
             '<td>'+
                 '<input type="text" class="form-control" name="descriptionDetail[]">'+
             '</td>'+
-            '<td>'+
+            '<td hidden>'+
                 '<input type="number" class="form-control" name="profitSharing[]">'+
             '</td>'+
             '<td style="display:none">'+
@@ -396,13 +396,13 @@ function sumDiscont() {
         var totalDiscountPercent = $('#totalDiscountPercent').val().replace(/,/g, ''),asANumber = +totalDiscountPercent;}
 
     if(totalDiscountPercent <= 100){
-        var sumTotalPrice = (parseInt(totalDiscountPercent)/100)*(parseInt(totalService)+parseInt(totalSparePart));
+        var sumTotalPrice = (parseInt(totalDiscountPercent)/100)*(parseInt(totalSparePart));
         $('#totalDiscountValue').val(parseInt(sumTotalPrice).toLocaleString('en-US'));
         $('#totalDiscountPercent').val(totalDiscountPercent);
     }else{
         $('#totalDiscountPercent').val(0);
         $('#totalDiscountValue').val(0);
-        var sumTotalPrice = (100/100)*(parseInt(totalService)+parseInt(totalSparePart));}
+        var sumTotalPrice = (100/100)*(parseInt(totalSparePart));}
     sumTotal();
 }
 
@@ -420,7 +420,7 @@ function sumDiscontValue() {
         var totalDiscountValue =  0;
     }else{
         var totalDiscountValue = $('#totalDiscountValue').val().replace(/,/g, ''),asANumber = +totalDiscountValue;}
-        var totalValue = parseInt(totalService)+parseInt(totalSparePart);
+        var totalValue = parseInt(totalSparePart);
 
         if(totalDiscountValue <= totalValue){
             console.log(totalDiscountValue);
@@ -445,11 +445,6 @@ function sumTotal() {
     }else{
         var totalSparePart = $('#totalSparePart').val().replace(/,/g, ''),asANumber = +totalSparePart;}
 
-    if(isNaN(parseInt($('#totalService').val()))){
-        var totalService =  0;
-    }else{
-        var totalService = $('#totalService').val().replace(/,/g, ''),asANumber = +totalService;}
-
     if(isNaN(parseInt($('#totalDiscountValue').val()))){
         var totalDiscountValue =  0;
     }else{
@@ -458,9 +453,9 @@ function sumTotal() {
     if(checkVerificationPrice == 'Y'){
         var sumTotal = 0;
     }else{
-        var sumTotal = parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDiscountValue);}
+        var sumTotal = parseInt(totalSparePart)-parseInt(totalDiscountValue);}
 
-    var totalValue = parseInt(totalService)+parseInt(totalSparePart);
+    var totalValue = parseInt(totalSparePart);
 
     if (totalDiscountValue <= totalValue) {
         $('#totalPrice').val(parseInt(sumTotal).toLocaleString('en-US'));

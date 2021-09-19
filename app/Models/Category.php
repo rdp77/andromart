@@ -19,8 +19,8 @@ class Category extends Model
         'deleted_by',
     ];
 
-    public function item()
+    public function brand()
     {
-        return $this->hasMany('App\Models\Item');
+        return $this->hasMany('App\Models\Brand');
     }
 }

@@ -18,9 +18,10 @@
         <table class="table-striped table" id="table" width="100%">
             <thead>
                 <tr>
-                    <th class="text-center">
+                    <th class="text-center" width="10%">
                         {{ __('NO') }}
                     </th>
+                    <th width="30%">{{ __('Kode Kategori') }}</th>
                     <th>{{ __('Nama') }}</th>
                     <th>{{ __('Aksi') }}</th>
                 </tr>
