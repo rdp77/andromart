@@ -3,13 +3,26 @@
 namespace App\Http\Controllers;
 
 use App\Models\Purchasing;
+use App\Models\Supplier;
+use App\Models\User;
+use App\Models\Item;
+use App\Models\Type;
+use App\Models\Unit;
+use App\Models\Branch;
+use App\Models\Employee;
+use App\Models\Service;
+use App\Models\Warranty;
+use App\Models\SettingPresentase;
+use App\Models\ServiceDetail;
+use App\Models\ServiceStatusMutation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Contracts\Encryption\DecryptException;
-use Illuminate\Support\Facades\Crypt;
 use Yajra\DataTables\DataTables;
 use Carbon\carbon;
 
@@ -23,10 +36,8 @@ class PurchaseController extends Controller
 
     public function index(Request $req)
     {
-        // dd("masuk purchase");
         if ($req->ajax()) {
             $data = Purchasing::with('supplier')->get();
-            // $data = Purchasing::get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -48,70 +59,37 @@ class PurchaseController extends Controller
         return view('pages.backend.transaction.purchase.indexPurchase');
     }
 
+    public function code($type)
+    {
+        $month = Carbon::now()->format('m');
+        $year = Carbon::now()->format('y');
+        $index = DB::table('purchasings')->max('id')+1;
+
+        $index = str_pad($index, 3, '0', STR_PAD_LEFT);
+        return $code = $type.$year . $month . $index;
+    }
     public function create()
     {
-        return view('pages.backend.office.notes.createNotes');
+        $code     = $this->code('PCS-');
+        $employee = Employee::get();
+        // $items    = Item::where('name','!=','Jasa Service')->get();
+        $item     = Item::with('stock')->where('name','!=','Jasa Service')->get();
+        $unit     = Unit::get();
+        $branch   = Branch::get();
+        return view('pages.backend.transaction.purchase.createPurchase',compact('employee','code','item', 'unit', 'branch'));
+        // return view('pages.backend.transaction.purchase.createPurchase');
     }
 
     public function store(Request $req)
     {
-        // dd($req->role);
-        Validator::make($req->all(), [
-            // 'code' => ['required', 'string', 'max:255', 'unique:areas'],
-            'titles' => ['required', 'string', 'max:255'],
-            'description' => ['string'],
-        ])->validate();
-
-        $notes = new Notes;
-        $notes->users_id = Auth::user()->id;
-        $notes->date = date('Y-m-d H:i:s');
-        $notes->title = $req->titles;
-        $notes->description = $req->description;
-        $notes->created_by = Auth::user()->name;
-        $notes->save();
-
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Membuat Notulen Baru'
-        );
-        // dd($req->file('file'));
-        if($files = $req->file('file')){
-            // dd($files[0]->getClientOriginalName());
-            foreach($files as $file){
-                $dir = 'photo_notes';
-                $allowed = array("jpeg", "gif", "png", "jpg", "pdf", "doc", "docx");
-                if (!is_dir($dir)){
-                    mkdir( $dir );       
-                }
-                $size = filesize($file);
-                $input_file = $file->getClientOriginalName();
-                $filename = pathinfo($input_file, PATHINFO_FILENAME);
-                $md5Name = date("Y-m-d H-i-s")."_".$filename."_".md5($file->getRealPath());
-                $guessExtension = $file->guessExtension();
-                $data = $md5Name.".".$guessExtension;
-
-                if($size > 5000000){
-                    // return Redirect::route('notes.index')->with(['status' => 'Ukuran File Terlalu Besar','type' => 'danger']);
-                } else if (!in_array($guessExtension, $allowed)){
-                    // return redirect('/operator/berkas-pengajuan/insert-foto/'.$id_encrypt)->with('danger', 'Tipe file berkas salah');
-                } else {
-                    $file->move($dir, $data);
-
-                    $notesFile = new NotesPhoto;
-                    $notesFile->notes_id = $notes->id;
-                    $notesFile->description = $filename;
-                    $notesFile->photo = "photo_notes/".$data;
-                    $notesFile->save();
-                }
-            }
-        }
-
-        return Redirect::route('notes.index')
-            ->with([
-                'status' => 'Berhasil membuat menambah notulensi',
-                'type' => 'success'
-            ]);
+        return $req->all();
+        // dd("masuk");
+        // return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
+        // return Redirect::route('notes.index')
+        //     ->with([
+        //         'status' => 'Berhasil membuat menambah notulensi',
+        //         'type' => 'success'
+        //     ]);
     }
 
     public function show(Notes $notes, $id)

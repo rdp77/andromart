@@ -15,9 +15,11 @@ class PurchasingSeeder extends Seeder
     public function run()
     {
         Purchasing::create([
-            'supplier_id' => 1,
             'date' => date('Y-m-d H:i:s'),
             'code' => 'ini kode',
+            'price' => 1350000,
+            'discount' => 50000,
+            'status' => 'dept',
         ]);
     }
 }

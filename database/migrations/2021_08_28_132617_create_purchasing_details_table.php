@@ -18,6 +18,8 @@ class CreatePurchasingDetailsTable extends Migration
 
             $table->unsignedBigInteger('purchasing_id');
             $table->unsignedBigInteger('item_id');
+            $table->unsignedBigInteger('unit_id');
+            $table->unsignedBigInteger('branch_id');
 
             $table->integer('price')->default(0);
             $table->integer('qty')->default(0);
@@ -31,6 +33,8 @@ class CreatePurchasingDetailsTable extends Migration
             
             $table->foreign('purchasing_id')->references('id')->on('purchasings')->onDelete('cascade');
             $table->foreign('item_id')->references('id')->on('items')->onDelete('cascade');
+            $table->foreign('unit_id')->references('id')->on('units')->onDelete('cascade');
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
 
             $table->timestamps();
         });

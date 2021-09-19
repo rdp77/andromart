@@ -37,6 +37,7 @@ class DatabaseSeeder extends Seeder
             RegulationSeeder::class,
             NotesSeeder::class,
             PurchasingSeeder::class,
+            PurchasingDetailSeeder::class,
         ]);
     }
 }

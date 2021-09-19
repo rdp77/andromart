@@ -1,45 +1,139 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__(' | Edit Master Area'))
-@section('titleContent', __('Edit Master Area'))
+@section('title', __('pages.title').__('Ubah Penerimaan'))
+@section('titleContent', __('Ubah Penerimaan'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
-<div class="breadcrumb-item active">{{ __('Master Area') }}</div>
-<div class="breadcrumb-item active">{{ __('Edit Master Area') }}</div>
+<div class="breadcrumb-item active">{{ __('Penerimaan') }}</div>
+<div class="breadcrumb-item active">{{ __('Ubah Penerimaan') }}</div>
 @endsection
 
 @section('content')
-<div class="card">
-    <form method="POST" action="{{ route('area.update',$area->id) }}">
-        @csrf
-        @method('PUT')
-        <div class="card-body">
-            <div class="form-group col-md-4 col-xs-12">
-                <label for="code">{{ __('Kode') }}<code>*</code></label>
-                <input id="code" type="text" class="form-control @error('code') is-invalid @enderror"
-                    name="code" value="{{ $area->code }}" required autocomplete="code">
-                @error('code')
-                <div class="invalid-feedback">
-                    {{ $message }}
+<form method="POST" action="{{ route('reception.update', $id) }}">
+    @csrf
+    @method('PUT')
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Informasi</h4>
                 </div>
-                @enderror
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group col-12 col-md-6 col-lg-6">
+                            <label for="code">{{ __('Kode Faktur') }}<code>*</code></label>
+                            <input id="code" type="text" class="form-control" readonly="" value="{{ $model->code }}" name="code">
+                        </div>
+                        <div class="form-group col-12 col-md-6 col-lg-6">
+                            <label for="date">{{ __('Tanggal') }}<code>*</code></label>
+                            <input id="date" type="text" class="form-control" readonly="" value="{{date('d F Y')}}"
+                                name="date">
+                        </div>
+                    </div>
+                        @php 
+                            if($model->employee_id == null) {
+                                $pembeli = "Tanpa Pembeli";
+                            } else {
+                                $pembeli = $model->employee_id;
+                            }
+                        @endphp
+                        <!-- @if($model->employee_id == null)
+                            $pembeli = "Tanpa Pembeli";
+                        @else
+                            $pembeli = $model->employee_id;
+                        @endif -->
+                    <div class="row">
+                        <div class="form-group col-12 col-md-6 col-lg-6">
+                            <label for="pembeli">{{ __('Pembeli') }}<code>*</code></label>
+                            <input id="pembeli" type="text" class="form-control" value="{{ $pembeli }}" readonly>
+                        </div>
+                        <div class="form-group col-12 col-md-6 col-lg-6">
+                            <label for="status">{{ __('Status') }}<code>*</code></label>
+                            <input id="status" type="text" class="form-control" value="{{ $model->status }}" readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        @if($model->status == 'dept')
+                        <div class="form-group col-12 col-md-6 col-lg-6">
+                            <label for="totalPrice">{{ __('Total Harga') }}<code>*</code></label>
+                            <input id="totalPrice" type="text" class="form-control" value="{{ $model->price }}" readonly>
+                        </div>
+                        <div class="form-group col-12 col-md-6 col-lg-6">
+                            <label for="totalDiscount">{{ __('Total Diskon') }}<code>*</code></label>
+                            <input id="totalDiscount" type="text" class="form-control" value="{{ $model->discount }}" readonly>
+                        </div>
+                        @endif
+                    </div>
+                </div>
             </div>
-            <div class="form-group col-md-6 col-xs-12">
-                <div class="d-block">
-                    <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
-                </div>
-                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                    value="{{ $area->name }}" required autofocus>
-                @error('name')
-                <div class="invalid-feedback">
-                    {{ $message }}
-                </div>
-                @enderror
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%">Nama</th>
+                            <th>Barang yang belum datang</th>
+                            <th>Barang yang telah datang</th>
+                            <!-- <th>Action</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php $i = 0; @endphp
+                        @foreach($models as $row)
+                            <tr>
+                                <td><input type="text" class="form-control" value="{{ $row->itemName }}" readonly></td>
+                                <td><input type="text" class="form-control cleaveNumeral qtyOld_{{ $i++ }}" value="{{ $row->qty }} / {{ $row->unitName }}" readonly></td>
+                                <td><input type="text" class="form-control cleaveNumeral qtyNew_{{ $i++ }}" name="qtyNew[]" onkeyup="checkQty()" style="text-align: right"></td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                    <tbody class="dropHereItem" style="border: none !important">
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="card-footer text-right">
-            <a class="btn btn-outline" href="javascript:window.history.go(-1);">{{ __('Kembali') }}</a>
-            <button class="btn btn-primary mr-1" type="submit">{{ __('pages.edit') }}</button>
+            <button class="btn btn-primary mr-1" type="button" onclick="save()"><i class="far fa-save"></i>{{ __('Simpan Data') }}</button>
         </div>
-    </form>
-</div>
+    </div>
+    <div class="modal fade" tabindex="1" role="dialog" id="exampleModal" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Gambar</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              {{-- <p>Modal body text goes here.</p> --}}
+            <div id="results"></div>
+            </div>
+            <div class="modal-footer bg-whitesmoke br">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+</form>
+
+@endsection
+
+
+@section('script')
+
+
+<script src="{{ asset('assets/pages/transaction/receptionScript.js') }}"></script>
+<script type="text/javascript">
+    function checkQty() {
+
+    }
+</script>
+<style>
+    .modal-backdrop{
+        position: relative !important;
+    }
+</style>
 @endsection

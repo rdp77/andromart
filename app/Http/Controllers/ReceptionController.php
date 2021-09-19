@@ -34,8 +34,7 @@ class ReceptionController extends Controller
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>';
                     $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('notes.show', Crypt::encryptString($row->id)) . '">Lihat</a>';
-                    $actionBtn .= '<a class="dropdown-item" href="' . route('notes.edit', Crypt::encryptString($row->id)) . '">Edit</a>';
+                        <a class="dropdown-item" href="' . route('reception.edit', Crypt::encryptString($row->id)) . '">Ubah</a>';
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
@@ -53,63 +52,6 @@ class ReceptionController extends Controller
 
     public function store(Request $req)
     {
-        // dd($req->role);
-        Validator::make($req->all(), [
-            // 'code' => ['required', 'string', 'max:255', 'unique:areas'],
-            'titles' => ['required', 'string', 'max:255'],
-            'description' => ['string'],
-        ])->validate();
-
-        $notes = new Notes;
-        $notes->users_id = Auth::user()->id;
-        $notes->date = date('Y-m-d H:i:s');
-        $notes->title = $req->titles;
-        $notes->description = $req->description;
-        $notes->created_by = Auth::user()->name;
-        $notes->save();
-
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Membuat Notulen Baru'
-        );
-        // dd($req->file('file'));
-        if($files = $req->file('file')){
-            // dd($files[0]->getClientOriginalName());
-            foreach($files as $file){
-                $dir = 'photo_notes';
-                $allowed = array("jpeg", "gif", "png", "jpg", "pdf", "doc", "docx");
-                if (!is_dir($dir)){
-                    mkdir( $dir );       
-                }
-                $size = filesize($file);
-                $input_file = $file->getClientOriginalName();
-                $filename = pathinfo($input_file, PATHINFO_FILENAME);
-                $md5Name = date("Y-m-d H-i-s")."_".$filename."_".md5($file->getRealPath());
-                $guessExtension = $file->guessExtension();
-                $data = $md5Name.".".$guessExtension;
-
-                if($size > 5000000){
-                    // return Redirect::route('notes.index')->with(['status' => 'Ukuran File Terlalu Besar','type' => 'danger']);
-                } else if (!in_array($guessExtension, $allowed)){
-                    // return redirect('/operator/berkas-pengajuan/insert-foto/'.$id_encrypt)->with('danger', 'Tipe file berkas salah');
-                } else {
-                    $file->move($dir, $data);
-
-                    $notesFile = new NotesPhoto;
-                    $notesFile->notes_id = $notes->id;
-                    $notesFile->description = $filename;
-                    $notesFile->photo = "photo_notes/".$data;
-                    $notesFile->save();
-                }
-            }
-        }
-
-        return Redirect::route('notes.index')
-            ->with([
-                'status' => 'Berhasil membuat menambah notulensi',
-                'type' => 'success'
-            ]);
     }
 
     public function show(Notes $notes, $id)
@@ -127,8 +69,20 @@ class ReceptionController extends Controller
 
     public function edit($id)
     {
-        $area = Area::find($id);
-        return view('pages.backend.master.area.updateArea', ['area' => $area]);
+        $id = Crypt::decryptString($id);
+        $model = Purchasing::where('purchasings.id', $id)
+        // ->join('employees', 'purchasings.employee_id', 'employees.id')
+        ->first();
+        $models = Purchasing::where('purchasings.id', $id)
+        ->join('purchasing_details', 'purchasings.id', 'purchasing_details.purchasing_id')
+        ->join('items', 'purchasing_details.item_id', 'items.id')
+        ->join('stocks', 'items.id', 'stocks.item_id')
+        ->join('units', 'stocks.unit_id', 'units.id')
+        ->join('branches', 'stocks.branch_id', 'branches.id')
+        ->where('purchasing_details.qty', '>', 0)
+        ->select('purchasing_details.id as id','qty', 'items.name as itemName', 'branches.name as branchName', 'units.name as unitName')
+        ->get();
+        return view('pages.backend.transaction.reception.editReception', compact('model', 'models', 'id'));
     }
 
     public function update(Request $req, $id)
