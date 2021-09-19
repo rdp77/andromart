@@ -175,6 +175,7 @@ function changeDiscount(params) {
 function category() {
     var dataItems = [];
     $('.brand').empty();
+    
     var params = $('.type').find(':selected').val();
     $.each($('.brandData'), function(){
         if (params == $(this).data('category')) {
@@ -183,7 +184,24 @@ function category() {
     });
     $('.brand').append('<option value="">- Select -</option>');
     $('.brand').append(dataItems);
+    // Reset Series
+    $('.series').empty();
+    $('.series').append('<option value="">- Select -</option>');
 }
+
+$(document.body).on("change",".brand",function(){
+    var dataItems = [];
+    $('.series').empty();
+    var params = $('.brand').find(':selected').val();
+    $.each($('.seriesData'), function(){
+        if (params == $(this).data('brand')) {
+            dataItems += '<option value="'+this.value+'">'+$(this).data('name')+'</option>';
+        }
+    });
+    $('.series').append('<option value="">- Select -</option>');
+    $('.series').append(dataItems);
+});
+
 
 function addItem() {
     var index = $('.priceDetail').length;

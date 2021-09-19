@@ -100,6 +100,7 @@
 
                         @foreach ($type as $el)
                             <input class="seriesData" type="hidden"
+                            data-brand="{{$el->brand_id}}"
                             data-name="{{$el->name}}"
                             value="{{$el->id}}">
                         @endforeach
