@@ -173,17 +173,16 @@ function changeDiscount(params) {
 }
 
 function category() {
+    var dataItems = [];
+    $('.brand').empty();
     var params = $('.type').find(':selected').val();
     $.each($('.brandData'), function(){
-        if (params == ) {
-            
+        if (params == $(this).data('category')) {
+            dataItems += '<option value="'+this.value+'">'+$(this).data('name')+'</option>';
         }
-        dataItems += '<option value="'+this.value+'">'+$(this).data('name')+'</option>';
     });
-
-    $('.brand').append(
-        '<option data-index="'+(index+1)+'">- Select -</option>'+
-        dataItems);
+    $('.brand').append('<option value="">- Select -</option>');
+    $('.brand').append(dataItems);
 }
 
 function addItem() {

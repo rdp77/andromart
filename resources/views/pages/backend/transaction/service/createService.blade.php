@@ -93,6 +93,7 @@
                         
                         @foreach ($brand as $el)
                             <input class="brandData" type="hidden"
+                            data-category="{{$el->category_id}}"
                             data-name="{{$el->name}}"
                             value="{{$el->id}}">
                         @endforeach

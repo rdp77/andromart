@@ -72,11 +72,7 @@ class ItemSeeder extends Seeder
                 'brand_id' => '3',
                 'supplier_id' => '1',
                 'buy' => '10000000',
-<<<<<<< Updated upstream
-                'sell' => '12000000',
-=======
                 'sell' => '13000000',
->>>>>>> Stashed changes
                 'discount' => '0',
                 'image' => ' ',
                 'condition' => 'Bekas',
