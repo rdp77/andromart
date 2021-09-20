@@ -96,14 +96,14 @@ class ItemController extends Controller
 
     public function store(Request $req)
     {
-        Validator::make($req->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'brand_id' => ['required', 'integer'],
-            'supplier_id' => ['required', 'integer'],
-            'buy' => ['required', 'string', 'max:255'],
-            'sell' => ['required', 'string', 'max:255'],
-            'condition' => ['required', 'string', 'max:10'],
-        ])->validate();
+        // Validator::make($req->all(), [
+        //     'name' => ['required', 'string', 'max:255'],
+        //     'brand_id' => ['required', 'integer'],
+        //     'supplier_id' => ['required', 'integer'],
+        //     'buy' => ['required', 'string', 'max:255'],
+        //     'sell' => ['required', 'string', 'max:255'],
+        //     'condition' => ['required', 'string', 'max:10'],
+        // ])->validate();
 
         $id = DB::table('items')->max('id')+1;
 
@@ -112,7 +112,7 @@ class ItemController extends Controller
             Item::create([
                 'id' => $id,
                 'name' => $req->name,
-                'brand_id' => $req->brand_id,
+                'brand_id' => $req->brand,
                 'supplier_id' => $req->supplier_id,
                 'buy' => str_replace(",", '',$req->buy),
                 'sell' => str_replace(",", '',$req->sell),
@@ -127,7 +127,7 @@ class ItemController extends Controller
             Item::create([
                 'id' => $id,
                 'name' => $req->name,
-                'brand_id' => $req->brand_id,
+                'brand_id' => $req->brand,
                 'supplier_id' => $req->supplier_id,
                 'buy' => str_replace(",", '',$req->buy),
                 'sell' => str_replace(",", '',$req->sell),
