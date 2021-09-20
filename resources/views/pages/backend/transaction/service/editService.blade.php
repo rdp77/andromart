@@ -60,33 +60,56 @@
                     <br>
                     <div class="row">
                         <div class="form-group col-12 col-md-4 col-lg-4">
+                            <label for="type">{{ __('Kategori') }}<code>*</code></label>
+                            <select class="select2 type" name="type" onchange="category()">
+                                <option value="">- Select -</option>
+                                @foreach ($category as $element)
+                                    <option @if ($service->type == $element->id) selected @endif value="{{$element->id}}">{{$element->name}}</option>
+                                @endforeach
+                                {{-- <option value="Handphone">Handphone</option>
+                                <option value="Laptop">Laptop</option> --}}
+                            </select>
+                        </div>
+                        <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="brand">{{ __('Merk') }}<code>*</code></label>
-                            <select class="select2" name="brand">
+                            <select class="select2 brand" name="brand">
                                 <option value="">- Select -</option>
                                 @foreach ($brand as $element)
+                                    @if ($element->category_id == $service->type)
                                     <option @if ($service->brand == $element->id) selected @endif value="{{$element->id}}">{{$element->name}}</option>
+                                    @endif
                                 @endforeach
                             </select>
                             {{-- <input id="brand" type="text" class="form-control" name="brand"> --}}
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="series">{{ __('Seri') }}<code>*</code></label>
-                            <select class="select2" name="series">
+                            <select class="select2 series" name="series">
                                 <option value="">- Select -</option>
                                 @foreach ($type as $element)
-                                    <option @if ($service->series == $element->id) selected @endif value="{{$element->id}}">{{$element->name}}</option>
+                                    @if ($element->brand_id == $service->brand)
+                                        <option @if ($service->series == $element->id) selected @endif value="{{$element->id}}">{{$element->name}}</option>
+                                    @endif
                                 @endforeach
                             </select>
                             {{-- <input id="series" type="text" class="form-control" name="series"> --}}
                         </div>
-                        <div class="form-group col-12 col-md-4 col-lg-4">
-                            <label for="type">{{ __('tipe') }}<code>*</code></label>
-                            <select class="select2" name="type">
-                                <option value="">- Select -</option>
-                                <option @if ($service->type == 'Handphone') selected @endif value="Handphone">Handphone</option>
-                                <option @if ($service->type == 'Laptop') selected @endif value="Laptop">Laptop</option>
-                            </select>
-                        </div>
+                        <input type="hidden" class="brandHidden" value="{{$service->brand}}">
+                        <input type="hidden" class="seriesHidden" value="{{$service->series}}">
+
+                        @foreach ($brand as $el)
+                            <input class="brandData" type="hidden"
+                            data-category="{{$el->category_id}}"
+                            data-name="{{$el->name}}"
+                            value="{{$el->id}}">
+                        @endforeach
+
+                        @foreach ($type as $el)
+                            <input class="seriesData" type="hidden"
+                            data-brand="{{$el->brand_id}}"
+                            data-name="{{$el->name}}"
+                            value="{{$el->id}}">
+                        @endforeach
 
                     </div>
                     <div class="row">
@@ -215,13 +238,25 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="totalDiscountPercent">{{ __('Diskon %') }}<code>*</code></label>
-                            <input id="totalDiscountPercent" type="text" value="{{$service->discount_percent}}" class="form-control cleaveNumeral"
-                                name="totalDiscountPercent" onkeyup="sumTotal(),sumDiscont()" style="text-align: right">
+                            <input id="totalDiscountPercent" 
+                            @if ($service->discount_type == 'value') 
+                                style="pointer-events:none"
+                                style="background-color:#e9ecef"
+                            @endif 
+                            style="text-align: right"
+                            type="text" value="{{$service->discount_percent}}" class="form-control cleaveNumeral"
+                            name="totalDiscountPercent" onkeyup="sumTotal(),sumDiscont()">
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="totalDiscountValue">{{ __('Diskon') }}<code>*</code></label>
-                            <input id="totalDiscountValue" type="text" value="{{$service->discount_price}}" class="form-control cleaveNumeral"
-                                name="totalDiscountValue" onkeyup="sumTotal(),sumDiscontValue()" style="text-align: right">
+                            <input id="totalDiscountValue" 
+                            @if ($service->discount_type == 'percent')
+                                style="pointer-events:none"
+                                style="background-color:#e9ecef"
+                            @endif 
+                            style="text-align: right"
+                            type="text" value="{{$service->discount_price}}" class="form-control cleaveNumeral"
+                            name="totalDiscountValue" onkeyup="sumTotal(),sumDiscontValue()">
                         </div>
                     </div>
                     <div class="form-group">
@@ -253,8 +288,6 @@
                 @foreach ($el->stock as $el1)
                     @if (Auth::user()->employee->branch_id == $el1->branch_id)
                         data-stock="{{$el1->stock}}"
-                    @else
-                        data-stock="0"
                     @endif
                 @endforeach
                 data-name="{{$el->name}}"
@@ -278,34 +311,35 @@
                     <tbody>
                         <tr>
                             <td style="display:none">
+                                <input type="hidden" name="idDetailOld[]" value="{{$service->ServiceDetail[0]->id}}">
                                 <input type="text" class="form-control priceDetailSparePart cleaveNumeral"
-                                    name="priceDetailSparePart[]" value="0">
+                                    name="priceDetailSparePartOld[]" value="0">
                                 <input type="text" class="form-control priceDetailLoss cleaveNumeral"
-                                    name="priceDetailLoss[]" value="0">
+                                    name="priceDetailLossOld[]" value="0">
                             </td>
                             <td>
-                                <input readonly type="hidden" class="form-control " name="itemsDetail[]" value="1">
+                                <input readonly type="hidden" class="form-control " name="itemsDetailOld[]" value="1">
                                 Jasa
                             </td>
                             <td>
                                 <input type="text" class="form-control priceServiceDetail cleaveNumeral "
-                                    name="priceDetail[]" style="text-align: right" value="{{$service->ServiceDetail[0]->price}}">
+                                    name="priceDetailOld[]" style="text-align: right" value="{{$service->ServiceDetail[0]->price}}">
                             </td>
                             <td>
-                                <input readonly type="text" class="form-control" name="qtyDetail[]" value="1" style="text-align: right">
+                                <input readonly type="text" class="form-control" name="qtyDetailOld[]" value="1" style="text-align: right">
                             </td>
                             <td>
-                                <input readonly type="text" class="form-control" name="stockDetail[]" value="1" style="text-align: right">
+                                <input readonly type="text" class="form-control" name="stockDetailOld[]" value="1" style="text-align: right">
                             </td>
                             <td>
                                 <input readonly type="text" class="form-control totalPriceServiceDetail cleaveNumeral"
-                                    name="totalPriceDetail[]" style="text-align: right" value="{{$service->ServiceDetail[0]->total_price}}">
+                                    name="totalPriceDetailOld[]" style="text-align: right" value="{{$service->ServiceDetail[0]->total_price}}">
                             </td>
                             <td>
-                                <input type="text" class="form-control" name="descriptionDetail[]" value="{{$service->ServiceDetail[0]->description}}">
+                                <input type="text" class="form-control" name="descriptionDetailOld[]" value="{{$service->ServiceDetail[0]->description}}">
                             </td>
                             <td>
-                                <input readonly type="text" class="form-control" name="typeDetail[]" value="Jasa">
+                                <input readonly type="text" class="form-control" name="typeDetailOld[]" value="Jasa">
                             </td>
                             <td>
                                 <button href="#" type="button" class="btn btn-default">X</button>
@@ -315,8 +349,9 @@
                             @if ($el->type != 'Jasa')
                             <tr class="dataDetail dataDetail_{{$i}}">
                                 <td style="display:none" >
+                                    <input type="hidden" name="idDetailOld[]" value="{{$el->id}}">
                                     <input type="text" class="form-control priceDetailSparePart priceDetailSparePart_{{$i}} cleaveNumeral"
-                                        name="priceDetailSparePart[]" 
+                                        name="priceDetailSparePartOld[]" 
                                         @if ($el->type == 'SparePart')
                                             value="{{$el->total_price}}"
                                         @else
@@ -324,7 +359,7 @@
                                         @endif
                                     >
                                     <input type="text" class="form-control priceDetailLoss priceDetailLoss_{{$i}} cleaveNumeral"
-                                        name="priceDetailLoss[]" 
+                                        name="priceDetailLossOld[]" 
                                         @if ($el->type == 'Loss')
                                             value="{{$el->total_price}}"
                                         @else
@@ -333,7 +368,7 @@
                                     >
                                 </td>
                                 <td>
-                                    <select class="select2 itemsDetail" name="itemsDetail[]">
+                                    <select class="select2 itemsDetail" name="itemsDetailOld[]">
                                         <option value="-" data-index="">- Select -</option>
                                         @php
                                             $stock = 0;
@@ -341,12 +376,16 @@
                                         @foreach ($item as $el0)
                                             <option data-index="{{$i}}"  data-price="{{$el0->sell}}" 
                                             @foreach ($el0->stock as $el1)
-                                                @if (Auth::user()->employee->branch_id == $el1->branch_id)
-                                                    data-stock="{{$el1->stock}}"
+                                                @if (
+                                                Auth::user()->employee->branch_id == $el1->branch_id 
+                                                && 
+                                                $el0->id 
+                                                == $el1->item_id)
                                                     {{$stock+=$el1->stock}}
+                                                    data-stock="{{$el1->stock}}"
                                                 @else
                                                     {{$stock=0}}
-                                                    data-stock="0"
+                                                    data-stock="0"s
                                                 @endif
                                             @endforeach 
                                             @if ($el0->id == $el->item_id)
@@ -357,28 +396,28 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control priceServiceDetail cleaveNumeral  priceDetail priceDetail_{{$i}}" name="priceDetail[]" style="text-align: right" value="{{$el->price}}">
+                                    <input type="text" class="form-control priceServiceDetail cleaveNumeral  priceDetail priceDetail_{{$i}}" name="priceDetailOld[]" style="text-align: right" value="{{$el->price}}">
                                 </td>
                                 <td>
-                                    <input readonly type="text" class="form-control qtyDetail qtyDetail_{{$i}}" name="qtyDetail[]" value="{{$el->qty}}" style="text-align: right">
+                                    <input readonly type="text" class="form-control qtyDetail qtyDetail_{{$i}}" name="qtyDetailOld[]" value="{{$el->qty}}" style="text-align: right">
                                 </td>
                                 <td>
-                                    <input readonly type="text" class="form-control stockDetail stock_{{$i}}" name="stockDetail[]" value="{{$stock}}" style="text-align: right">
+                                    <input readonly type="text" class="form-control stockDetail stock_{{$i}}" name="stockDetailOld[]" value="{{$stock}}" style="text-align: right">
                                 </td>
                                 <td>
-                                    <input readonly type="text" class="form-control totalPriceDetail cleaveNumeral totalPriceDetail_{{$i}}" name="totalPriceDetail[]" style="text-align: right" value="{{$el->total_price}}">
+                                    <input readonly type="text" class="form-control totalPriceDetail cleaveNumeral totalPriceDetail_{{$i}}" name="totalPriceDetailOld[]" style="text-align: right" value="{{$el->total_price}}">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control" name="descriptionDetail[]" value="{{$el->description}}">
+                                    <input type="text" class="form-control" name="descriptionDetailOld[]" value="{{$el->description}}">
                                 </td>
                                 <td>
-                                    <select class="form-control typeDetail typeDetail_{{$i}}" name="typeDetail[]">
+                                    <select class="form-control typeDetail typeDetail_{{$i}}" name="typeDetailOld[]">
                                         <option @if ($el->type == 'SparePart') selected @endif data-index="{{$i}}" value="SparePart">SparePart</option>
                                         <option @if ($el->type == 'SparePart') selected @endif data-index="{{$i}}" value="Loss">Loss</option>
                                     </select>
                                 </td>
                                 <td>
-                                    <button type="button" class="btn btn-danger removeDataDetail" value="{{$i}}" >X</button>
+                                    <button type="button" class="btn btn-danger removeDataDetailExisting" data-id="{{$el->id}}" value="{{$i}}" >X</button>
                                 </td>
                             </tr>
                             @endif
@@ -389,8 +428,11 @@
                 </table>
             </div>
         </div>
+        <div class="dropDeletedExistingData">
+
+        </div>
         <div class="card-footer text-right">
-            <button class="btn btn-primary mr-1" type="button" onclick="save()"><i class="far fa-save"></i>
+            <button class="btn btn-primary mr-1" type="button" onclick="updateData({{$service->id}})"><i class="far fa-save"></i>
                 {{ __('Simpan Data') }}</button>
         </div>
     </div>
