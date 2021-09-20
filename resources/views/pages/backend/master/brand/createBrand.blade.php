@@ -13,6 +13,20 @@
         @csrf
         <div class="card-body">
             <div class="form-group col-md-4 col-xs-12">
+                <label for="category_id">{{ __('Kategori') }}<code>*</code></label>
+                <select name="category_id" id="category_id" class="form-control select2" required autocomplete="category_id">
+                    <option value=""> - Select - </option>
+                    @foreach ($category as $category)
+                    <option value="{{ $category->id }}">{{ $category->code }} - {{ $category->name }}</option>
+                    @endforeach
+                </select>
+                @error('category_id')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+                @enderror
+            </div>
+            <div class="form-group col-md-4 col-xs-12">
                 <div class="d-block">
                     <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
                 </div>

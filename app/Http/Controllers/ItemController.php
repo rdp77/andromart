@@ -8,6 +8,7 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Stock;
 use App\Models\Supplier;
+use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +29,7 @@ class ItemController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Item::with('category', 'supplier')->get();
+            $data = Item::where('id', '!=', 1)->with('brand', 'brand.category', 'supplier')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -43,24 +44,41 @@ class ItemController extends Controller
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
-                ->addColumn('buy', function ($row) {
-                    $htmlAdd  =      '<tr>';
-                    $htmlAdd .=         '<td>'.number_format($row->buy,0,".",",").'</td>';
-                    $htmlAdd .=      '<tr>';
+
+                ->addColumn('brand', function ($row) {
+                    $htmlAdd = '<table>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<td>Kategori</td>';
+                    $htmlAdd .=      '<th>'.$row->brand->category->code.'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<td>Merk</td>';
+                    $htmlAdd .=      '<th>'.$row->brand->name.'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .= '<table>';
+
+                    return $htmlAdd;
+                })
+
+                ->addColumn('price', function ($row) {
+                    $htmlAdd = '<table>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<td>Beli</td>';
+                    $htmlAdd .=      '<th>'.number_format($row->buy,0,".",",").'</th>';
+                    $htmlAdd .=      '<td>Profit</td>';
+                    $htmlAdd .=      '<th>'.number_format($row->sell - $row->buy,0,".",",").'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<td>Jual</td>';
+                    $htmlAdd .=      '<th>'.number_format($row->sell,0,".",",").'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .= '<table>';
 
                     return $htmlAdd;
 
                 })
 
-                ->addColumn('sell', function ($row) {
-                    $htmlAdd  =      '<tr>';
-                    $htmlAdd .=         '<td>'.number_format($row->sell,0,".",",").'</td>';
-                    $htmlAdd .=      '<tr>';
-
-                    return $htmlAdd;
-
-                })
-                ->rawColumns(['action', 'buy', 'sell'])
+                ->rawColumns(['action', 'brand', 'price'])
                 ->make(true);
         }
         return view('pages.backend.master.item.indexItem');
@@ -71,8 +89,9 @@ class ItemController extends Controller
         $branch = Branch::get();
         $category = Category::get();
         $brand = Brand::get();
-        $supplier = supplier::get();
-        return view('pages.backend.master.item.createItem', ['branch' => $branch, 'brand' => $brand, 'supplier' => $supplier, 'category' => $category ]);
+        $type = Type::get();
+        $supplier = Supplier::get();
+        return view('pages.backend.master.item.createItem', compact('branch', 'category', 'brand', 'type', 'supplier'));
     }
 
     public function store(Request $req)
