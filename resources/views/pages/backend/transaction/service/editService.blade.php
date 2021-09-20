@@ -413,7 +413,7 @@
                                 <td>
                                     <select class="form-control typeDetail typeDetail_{{$i}}" name="typeDetailOld[]">
                                         <option @if ($el->type == 'SparePart') selected @endif data-index="{{$i}}" value="SparePart">SparePart</option>
-                                        <option @if ($el->type == 'SparePart') selected @endif data-index="{{$i}}" value="Loss">Loss</option>
+                                        <option @if ($el->type == 'Loss') selected @endif data-index="{{$i}}" value="Loss">Loss</option>
                                     </select>
                                 </td>
                                 <td>
