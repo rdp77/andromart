@@ -46,7 +46,7 @@ class BrandController extends Controller
 
     public function create()
     {
-        $category = Category::where('id', '!=', 1)->get();
+        $category = Category::get();
         return view('pages.backend.master.brand.createBrand', compact('category'));
     }
 
@@ -82,8 +82,9 @@ class BrandController extends Controller
 
     public function edit($id)
     {
+        $category = Category::where('id', '!=', Brand::find($id)->category_id)->get();
         $brand = Brand::find($id);
-        return view('pages.backend.master.brand.updateBrand', ['brand' => $brand]);
+        return view('pages.backend.master.brand.updateBrand', ['brand' => $brand, 'category' => $category]);
     }
 
     public function update(Request $req, $id)

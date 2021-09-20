@@ -13,6 +13,31 @@
         @csrf
         <div class="card-body">
             <div class="row">
+                <div class="form-group col-12 col-md-4 col-lg-4">
+                    <label for="type">{{ __('Kategori') }}<code>*</code></label>
+                    <select class="select2 type" name="type" onchange="category()">
+                        <option value="">- Select -</option>
+                        @foreach ($category as $element)
+                            <option value="{{$element->id}}">{{$element->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group col-12 col-md-4 col-lg-4">
+                    <label for="brand">{{ __('Merk') }}<code>*</code></label>
+                    <select class="select2 brand" name="brand">
+                        <option value="">- Select -</option>
+                    </select>
+                </div>
+
+                @foreach ($brand as $el)
+                    <input class="brandData" type="hidden"
+                        data-category="{{$el->category_id}}"
+                        data-name="{{$el->name}}"
+                        value="{{$el->id}}">
+                @endforeach
+
+            </div>
+            <div class="row">
                 <div class="form-group col-md-4 col-xs-12">
                     <div class="d-block">
                         <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
@@ -20,20 +45,6 @@
                     <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
                         value="{{ old('name') }}" required autofocus>
                     @error('name')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                    @enderror
-                </div>
-                <div class="form-group col-md-4 col-xs-12">
-                    <label for="category_id">{{ __('Kategori') }}<code>*</code></label>
-                    <select name="category_id" id="category_id" class="form-control select2" required autocomplete="category_id">
-                        <option value=""> - Select - </option>
-                        @foreach ($category as $category)
-                        <option value="{{ $category->id }}">{{ $category->code }} - {{ $category->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('category_id')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>
@@ -61,7 +72,7 @@
             <div class="row">
                 <div class="form-group col-md-2 col-xs-12">
                     <label for="supplier_id">{{ __('Supplier') }}<code>*</code></label>
-                    <select name="supplier_id" id="supplier_id" class="form-control select2" required autocomplete="supplier_id">
+                    <select name="supplier_id" id="supplier_id" class="form-control select2" required>
                         <option value=""> - Select - </option>
                         @foreach ($supplier as $supplier)
                         <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
@@ -153,4 +164,8 @@
         </div>
     </form>
 </div>
+@endsection
+
+@section('script')
+<script src="{{ asset('assets/pages/transaction/serviceScript.js') }}"></script>
 @endsection
