@@ -21,9 +21,9 @@ class CreatePurchasingDetailsTable extends Migration
             $table->unsignedBigInteger('unit_id');
             $table->unsignedBigInteger('branch_id');
 
-            $table->integer('price')->default(0);
-            $table->integer('qty')->default(0);
-            $table->integer('total')->default(0);
+            $table->string('price')->default(0);
+            $table->string('qty')->default(0);
+            $table->string('total')->default(0);
             $table->mediumText('description')->nullable();
 
             $table->string('created_by')->nullable();

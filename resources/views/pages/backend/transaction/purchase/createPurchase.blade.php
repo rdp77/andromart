@@ -8,7 +8,8 @@
 @endsection
 
 @section('content')
-<form class="form-data">
+<!-- <form class="form-data"> -->
+<form method="POST" action="{{ route('purchase.store') }}" class="form-data">
     @csrf
     <div class="row">
         <div class="col-lg-8">
@@ -24,21 +25,20 @@
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="date">{{ __('Tanggal') }}<code>*</code></label>
-                            <input id="date" type="text" class="form-control" readonly="" value="{{date('d F Y')}}"
-                                name="date">
+                            <input id="date" type="text" class="form-control" readonly="" value="{{date('d F Y')}}" name="date">
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="warranty">{{ __('Pembeli') }}<code>*</code></label>
-                            <select class="select2 validation" name="supplier" data-name="Supplier">
+                            <select class="select2 validation" name="buyer" data-name="Buyer">
                                 <option value="">- Select -</option>
                                 @foreach ($employee as $row)
                                     <option value="{{$row->id}}">{{$row->name}}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-12 col-md-6 col-lg-6">
+                        <div class="form-group col-12">
                             <label class="form-label">Pembayaran</label>
                             <div class="selectgroup w-100">
                                 <label class="selectgroup-item">
@@ -136,14 +136,19 @@
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
-                        <tr>
+                        <!-- <tr>
                             <th style="width: 20%">Item</th>
                             <th>Harga Beli</th>
                             <th style="width: 9%">Qty</th>
                             <th>Total</th>
                             <th>Unit</th>
                             <th>Cabang</th>
-                            <!-- <th>Deskripsi</th> -->
+                            <th>Action</th>
+                        </tr> -->
+                        <tr>
+                            <th>Cabang / Unit</th>
+                            <th>Item / QTY</th>
+                            <th>Harga Beli / Total</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -153,8 +158,10 @@
             </div>
         </div>
         <div class="card-footer text-right">
-            <button class="btn btn-primary mr-1" type="button" onclick="save()"><i class="far fa-save"></i>
-                {{ __('Simpan Datas') }}</button>
+            <!-- <button class="btn btn-primary mr-1" type="button" onclick="save()"><i class="far fa-save"></i>
+                {{ __('Simpan Data') }}</button> -->
+            <button class="btn btn-primary mr-1" type="submit"><i class="far fa-save"></i>
+                {{ __('Simpan Data') }}</button>
         </div>
     </div>
     <div class="modal fade" tabindex="1" role="dialog" id="exampleModal" aria-hidden="true" style="display: none;">
@@ -182,8 +189,6 @@
 
 
 @section('script')
-
-
 <script src="{{ asset('assets/pages/transaction/purchaseScript.js') }}"></script>
 <style>
     .modal-backdrop{

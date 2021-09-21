@@ -110,16 +110,37 @@ function save() {
         dangerMode: true,
     }).then((willSave) => {
         if (willSave) {
+            var validation = 0;
+            $('.validation').each(function(){
+                if ($(this).val() == '' || $(this).val() == null || $(this).val() == 0) {
+                    validation++;
+                    iziToast.warning({
+                        type: 'warning',
+                        title: $(this).data('name') +' Harus Di isi'
+                    });
+                }else{
+                    validation-1;
+                }
+            });
+            if (validation != 0) {
+                return false;
+            }
             $.ajax({
                 url: "/transaction/sale/sale",
                 data: $(".form-data").serialize(),
                 type: 'POST',
+                // contentType: false,
+                processData: false,
                 success: function(data) {
                     if (data.status == 'success'){
-                        swal("Data Pengajuan Pinjaman Disimpan", {
+                        swal(data.message, {
                             icon: "success",
                         });
-                        location.reload();
+                        // location.reload();
+                    }else{
+                        swal(data.message, {
+                            icon: "warning",
+                        });
                     }
                 },
                 error: function(data) {
@@ -128,9 +149,63 @@ function save() {
             });
 
         } else {
-            swal("Data belum di simpan !");
+            swal("Data Belum Disimpan !");
         }
     });
+}
+
+function updateData(params) {
+    swal({
+        title: "Apakah Anda Yakin?",
+        text: "Aksi ini tidak dapat dikembalikan, dan akan menyimpan data Anda.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willSave) => {
+        if (willSave) {
+            var validation = 0;
+            $('.validation').each(function(){
+                if ($(this).val() == '' || $(this).val() == null || $(this).val() == 0) {
+                    validation++;
+                    iziToast.warning({
+                        type: 'warning',
+                        title: $(this).data('name') +' Harus Di isi'
+                    });
+                }else{
+                    validation-1;
+                }
+            });
+            if (validation != 0) {
+                return false;
+            }
+            $.ajax({
+                url: "/transaction/sale/sale/"+params,
+                data: $(".form-data").serialize(),
+                type: 'PUT',
+                // contentType: false,
+                processData: false,
+                success: function(data) {
+                    if (data.status == 'success'){
+                        swal(data.message, {
+                            icon: "success",
+                        });
+                        // location.reload();
+                    }else{
+                        swal(data.message, {
+                            icon: "warning",
+                        });
+                    }
+                },
+                error: function(data) {
+                    // edit(id);
+                }
+            });
+
+        } else {
+            swal("Data Belum Disimpan !");
+        }
+    });
+
 }
 
 function changeDiscount(params) {

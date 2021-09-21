@@ -23,7 +23,7 @@
                     </th>
                     <th>{{ __('Tanggal') }}</th>
                     <th>{{ __('Kode') }}</th>
-                    <th>{{ __('Supplier') }}</th>
+                    <th>{{ __('Proses') }}</th>
                     <th>{{ __('Aksi') }}</th>
                 </tr>
             </thead>

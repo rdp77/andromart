@@ -60,11 +60,11 @@
                     <div class="row">
                         <div class="form-group col-12">
                             <label for="totalPrice">{{ __('Total Harga') }}<code>*</code></label>
-                            <input id="totalPrice" type="text" class="form-control  cleaveNumeral" value="{{ $model->price }}" readonly>
+                            <input id="totalPrice" type="text" class="form-control" value="{{ $model->price }}" readonly>
                         </div>
                         <div class="form-group col-12">
                             <label for="totalDiscount">{{ __('Total Diskon') }}<code>*</code></label>
-                            <input id="totalDiscount" type="text" class="form-control  cleaveNumeral" value="{{ $model->discount }}" readonly>
+                            <input id="totalDiscount" type="text" class="form-control" value="{{ $model->discount }}" readonly>
                         </div>
                         @if($model->status == 'dept')
                         <div class="form-group col-12">

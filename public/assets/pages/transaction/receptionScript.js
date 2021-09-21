@@ -18,7 +18,7 @@ var table = $("#table").DataTable({
         { data: "DT_RowIndex", orderable: false, searchable: false },
         { data: "date" },
         { data: "code" },
-        { data: "supplier.name" },
+        { data: "done" },
         { data: "action", orderable: false, searchable: true },
     ],
     buttons: [
@@ -98,4 +98,11 @@ function del(id) {
             swal("Penerimaan Anda tidak jadi dihapus!");
         }
     });
+}
+
+function checkQty() {
+    console.log($('.qtyNew_1').val());
+    if($('.qtyOld_1').val() < $('.qtyNew_1').val()) {
+        alert("Jumlah yang diambil lebih banyak");
+    }
 }

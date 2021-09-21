@@ -18,7 +18,7 @@ var table = $("#table").DataTable({
         { data: "DT_RowIndex", orderable: false, searchable: false },
         { data: "date" },
         { data: "code" },
-        { data: "supplier.name" },
+        { data: "done" },
         { data: "action", orderable: false, searchable: true },
     ],
     buttons: [
@@ -135,11 +135,17 @@ function addItem() {
     $.each($('.branchesData'), function(){
         dataBranches += '<option data-index="'+(index+1)+'"  data-code="'+$(this).data('code')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
     });
-
+    var dataDet = dataDetail+1;
     $('.dropHereItem').append(
-        '<tr class="dataDetail dataDetail_'+(dataDetail+1)+'">'+
+        '<tr class="dataDetail dataDetail_'+(dataDet)+'">'+
             '<td style="display:none">'+
-                '<input type="text" class="form-control priceDetailSparePart priceDetailSparePart_'+(index+1)+'" name="priceDetailSparePart[]" value="0">'+
+                '<input type="hidden" class="form-control priceDetailSparePart priceDetailSparePart_'+(index+1)+'" name="idDetail[]" value="'+(index)+'">'+
+            '</td>'+
+            '<td>'+
+            '<select class="select2 itemsDetail" name="branchesDetail[]">'+
+                '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
+                dataBranches+
+            '</select>'+
             '</td>'+
             '<td>'+
             '<select class="select2 itemsDetail" name="itemsDetail[]">'+
@@ -151,11 +157,11 @@ function addItem() {
                 '<input type="text" class="form-control cleaveNumeral priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
             '</td>'+
             '<td>'+
-                '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="1" style="text-align: right; width: 75px;">'+
+                '<button type="button" class="btn btn-danger removeDataDetail" value="'+(index+1)+'" >X</button>'+
             '</td>'+
-            '<td>'+
-                '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="0" style="text-align: right">'+
-            '</td>'+
+        '</tr>' +
+         // class="dataDetail dataDetail_'+(dataDet)+'"
+        '<tr class="dataDetail dataDetail_'+(dataDet)+'" style="border-bottom: solid 2px #ddd; margin-bottom: 5px;">'+
             '<td>'+
             '<select class="select2 itemsDetail" name="unitsDetail[]">'+
                 '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
@@ -163,14 +169,14 @@ function addItem() {
             '</select>'+
             '</td>'+
             '<td>'+
-            '<select class="select2 itemsDetail" name="branchesDetail[]">'+
-                '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
-                dataBranches+
-            '</select>'+
+                '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="1" style="text-align: right; width: 75px;">'+
             '</td>'+
             '<td>'+
-                '<button type="button" class="btn btn-danger removeDataDetail" value="'+(index+1)+'" >X</button>'+
+                '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="0" style="text-align: right">'+
             '</td>'+
+            // '<td>'+
+            //     '<button type="button" class="btn btn-danger removeDataDetail" value="'+(index+1)+'" >X</button>'+
+            // '</td>'+
         '</tr>'
     );
     $('.select2').select2();
@@ -183,8 +189,8 @@ function addItem() {
         });
     });
 
-    var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
-    sumTotal();
+    // var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
+    // sumTotal();
 }
 
 // mengganti item
@@ -273,8 +279,6 @@ function sumDiscount() {
     }
     sumTotal();
 }
-function sum() {
-}
 function sumTotal() {
     var totalGrand = 0;
     var totalPriceDetail = 0;
@@ -313,6 +317,7 @@ function save() {
         dangerMode: true,
     }).then((willSave) => {
         if (willSave) {
+            // swal("Belum Disimpan !");
             var validation = 0;
             $('.validation').each(function(){
                 if ($(this).val() == '' || $(this).val() == null || $(this).val() == 0) {

@@ -1,3 +1,4 @@
+@if($contents['carousel_services'] == true)
 <div class="slider-container rev_slider_wrapper" style="height: 350px;">
 	<div id="revolutionSlider" class="slider rev_slider" data-version="5.4.8" data-plugin-revolution-slider data-plugin-options="{'delay': 9000, 'gridwidth': 800, 'gridheight': 350, 'spinner': 'off'}">
 		<ul>
@@ -37,3 +38,4 @@
 		</ul>
 	</div>
 </div>
+@endif

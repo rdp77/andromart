@@ -16,7 +16,7 @@
             <div class="form-group col-md-4 col-xs-12">
                 <label for="category_id">{{ __('Kategori') }}<code>*</code></label>
                 <select name="category_id" id="category_id" class="form-control select2" required autocomplete="category_id">
-                    <option {{ $brand->category->id }}">{{ $brand->category->code }} - {{ $brand->category->name }} </option>
+                    <option value="{{ $brand->category->id }}">{{ $brand->category->code }} - {{ $brand->category->name }} </option>
                     @foreach ($category as $category)
                     <option value="{{ $category->id }}">{{ $category->code }} - {{ $category->name }}</option>
                     @endforeach

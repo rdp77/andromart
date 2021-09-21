@@ -394,7 +394,7 @@ class ServiceController extends Controller
                 }
             }
             // return $checkStock;
-            
+
             ServiceStatusMutation::create([
                 'service_id'=>$id,
                 'technician_id'=>$req->technicianId,
@@ -615,7 +615,7 @@ class ServiceController extends Controller
                 $destroyExistingData = DB::table('service_detail')->whereIn('id',$req->deletedExistingData)->delete();
             }
 
-            // menyimpan data baru dan memperbaru stock 
+            // menyimpan data baru dan memperbaru stock
             if($req->itemsDetail != null){
                 $checkStock = [];
                 for ($i=0; $i <count($req->itemsDetail) ; $i++) {
@@ -660,7 +660,7 @@ class ServiceController extends Controller
                     }
                 }
             }
-            
+
             // return 'asd';
             // mengecek data existing 
             if($req->itemsDetailOld != null){

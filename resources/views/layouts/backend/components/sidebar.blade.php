@@ -197,6 +197,12 @@
                     'title'=>'Konten',
                     'url'=>route('contents.index')])
                 </ul>
+                <ul class="dropdown-menu">
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Pesan',
+                    'url'=>route('message.index')])
+                </ul>
             </li>
         </ul>
     </aside>

@@ -49,7 +49,7 @@
           </div>
           <div class="profile-widget-name">T. Tanggal Lahir
             <div class="text-muted d-inline font-weight-normal">
-              <div class="slash"></div> {{ $user->employee->birthday }}
+              <div class="slash"></div> {{ \Carbon\Carbon::parse($user->employee->birthday)->locale('id')->isoFormat('LL') }}
             </div>
           </div>
           <div class="profile-widget-name">No. Handphone

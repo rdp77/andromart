@@ -1,3 +1,4 @@
+@if($contents['home_about_us'] == true)
 <section class="section section-height-3 bg-color-grey-scale-1 border-top-0 m-0">
     <div class="container">
         <div class="row py-3 mb-2">
@@ -39,3 +40,4 @@
         </div>
     </div>
 </section>
+@endif

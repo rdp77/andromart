@@ -18,10 +18,11 @@ class CreatePurchasingsTable extends Migration
             $table->unsignedBigInteger('employee_id')->nullable();
 
             $table->datetime('date')->nullable();
-            $table->integer('price')->nullable();
-            $table->integer('discount')->nullable();
+            $table->string('price')->nullable();
+            $table->string('discount')->nullable();
             $table->string('code')->unique();
             $table->string('status')->nullable()->comment('paid = bayar, dept = hutang');
+            $table->integer('done')->default(0);
 
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

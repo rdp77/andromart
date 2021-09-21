@@ -10,16 +10,17 @@ var table = $("#table").DataTable({
         [10, 25, 50, "Semua"],
     ],
     ajax: {
-        url: "/master/type/type",
+        url: "/content/messages/message",
         type: "GET",
     },
     dom: '<"html5buttons">lBrtip',
     columns: [
         { data: "DT_RowIndex", orderable: false, searchable: false },
-        { data: "brand.category.name" },
-        { data: "brand.name" },
         { data: "name" },
-        { data: "action", orderable: false, searchable: true },
+        { data: "email" },
+        { data: "subject" },
+        { data: "message" },
+        // { data: "action", orderable: false, searchable: true },
     ],
     buttons: [
         {
@@ -78,24 +79,31 @@ $.ajaxSetup({
 function del(id) {
     swal({
         title: "Apakah Anda Yakin?",
-        text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus data master Anda.",
+        text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus data peraturan Anda.",
         icon: "warning",
         buttons: true,
         dangerMode: true,
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url: "/master/type/type/" + id,
+                url: "/content/messages/message" + id,
                 type: "DELETE",
                 success: function () {
-                    swal("Data master berhasil dihapus", {
+                    swal("Penerimaan berhasil dihapus", {
                         icon: "success",
                     });
                     table.draw();
                 },
             });
         } else {
-            swal("Data master Anda tidak jadi dihapus!");
+            swal("Penerimaan Anda tidak jadi dihapus!");
         }
     });
+}
+
+function checkQty() {
+    console.log($('.qtyNew_1').val());
+    if($('.qtyOld_1').val() < $('.qtyNew_1').val()) {
+        alert("Jumlah yang diambil lebih banyak");
+    }
 }

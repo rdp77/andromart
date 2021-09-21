@@ -23,7 +23,7 @@ class TypeController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Type::with('brand')->get();
+            $data = Type::with(['brand', 'brand.category'])->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {

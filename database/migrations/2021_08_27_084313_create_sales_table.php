@@ -30,9 +30,11 @@ class CreateSalesTable extends Migration
             $table->double('discount_percent')->nullable();
             $table->double('item_price');
             $table->double('total_price');
+            $table->integer('buyer_id');
             $table->integer('sales_id');
             $table->double('sharing_profit_store');
             $table->double('sharing_profit_sales');
+            $table->double('sharing_profit_buyer');
             $table->string('description')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

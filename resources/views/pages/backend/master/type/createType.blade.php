@@ -1,10 +1,10 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__(' | Tambah Master Brand'))
-@section('titleContent', __('Tambah Master Brand'))
+@section('title', __('pages.title').__(' | Tambah Master Tipe'))
+@section('titleContent', __('Tambah Master Tipe'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
-<div class="breadcrumb-item active">{{ __('Master Brand') }}</div>
-<div class="breadcrumb-item active">{{ __('Tambah Master Brand') }}</div>
+<div class="breadcrumb-item active">{{ __('Master Tipe') }}</div>
+<div class="breadcrumb-item active">{{ __('Tambah Master Tipe') }}</div>
 @endsection
 
 @section('content')
@@ -17,7 +17,7 @@
                 <select name="brand_id" id="brand_id" class="form-control select2" required autocomplete="brand_id">
                     <option value=""> - Select - </option>
                     @foreach ($brand as $brand)
-                    <option value="{{ $brand->id }}"> {{ $brand->name }} </option>
+                    <option value="{{ $brand->id }}"> {{ $brand->category->code }} - {{ $brand->name }} </option>
                     @endforeach
                 </select>
             </div>

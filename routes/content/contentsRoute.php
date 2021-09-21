@@ -20,4 +20,5 @@ Route::group(['prefix' => 'content'], function () {
     Route::post('contents/store/{id}', [ContentController::class, 'stores'])->name('contentStores');
     Route::get('contents/delete/{id}', [ContentController::class, 'delete'])->name('contentPhotoDelete');
     Route::resource('contents', ContentController::class);
+    Route::get('contents/active/{id}/{status}', [ContentController::class, 'active'])->name('contentActive');
 });

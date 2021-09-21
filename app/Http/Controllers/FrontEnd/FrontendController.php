@@ -48,6 +48,7 @@ class FrontendController extends Controller
         // }
         // dd($contents['services_help']);
         // return view('pages.frontend.home.indexHome')->with('content', $content);
+        // dd($contents);
         return view('pages.frontend.home.indexHome', compact('contents', 'carouselHome', 'homeTab', 'homeAboutUs', 'homeHireUs', 'homeTestimonialTitle', 'homeTestimonial', 'homeAchievement', 'homeVendor'));
     }
     public function about()

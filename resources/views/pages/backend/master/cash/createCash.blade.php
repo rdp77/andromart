@@ -34,7 +34,7 @@
                 </div>
                 @enderror
             </div>
-            <div class="form-group col-md-3 col-xs-12">
+            {{-- <div class="form-group col-md-3 col-xs-12">
                 <label for="balance">{{ __('Saldo') }}<code>*</code></label>
                     <div class="input-group">
                       <div class="input-group-prepend">
@@ -50,7 +50,7 @@
                       </div>
                       @enderror
                     </div>
-            </div>
+            </div> --}}
         </div>
         <div class="card-footer text-right">
             <a class="btn btn-outline" href="javascript:window.history.go(-1);">{{ __('Kembali') }}</a>

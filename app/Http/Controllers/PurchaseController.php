@@ -3,26 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Purchasing;
-use App\Models\Supplier;
-use App\Models\User;
+use App\Models\PurchasingDetail;
+use App\Models\Stock;
+use App\Models\Employee;
 use App\Models\Item;
-use App\Models\Type;
 use App\Models\Unit;
 use App\Models\Branch;
-use App\Models\Employee;
-use App\Models\Service;
-use App\Models\Warranty;
-use App\Models\SettingPresentase;
-use App\Models\ServiceDetail;
-use App\Models\ServiceStatusMutation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Crypt;
 use Yajra\DataTables\DataTables;
 use Carbon\carbon;
 
@@ -37,7 +31,16 @@ class PurchaseController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Purchasing::with('supplier')->get();
+            $data = Purchasing::with('employee')->get();
+            foreach($data as $row) {
+                if($row->done == 2) {
+                    $row->done = "Telah Selesai";
+                } else if ($row->done == 1) {
+                    $row->done = "Masih Proses";
+                } else {
+                    $row->done = "Belum Proses";
+                }
+            }
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -47,8 +50,7 @@ class PurchaseController extends Controller
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>';
                     $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('notes.show', Crypt::encryptString($row->id)) . '">Lihat</a>';
-                    $actionBtn .= '<a class="dropdown-item" href="' . route('notes.edit', Crypt::encryptString($row->id)) . '">Edit</a>';
+                        <a class="dropdown-item" href="' . route('reception.edit', Crypt::encryptString($row->id)) . '">Terima</a>';
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
@@ -61,10 +63,12 @@ class PurchaseController extends Controller
 
     public function code($type)
     {
+        $date = date('Y-m-d');
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
-        $index = DB::table('purchasings')->max('id')+1;
 
+        $now = Purchasing::whereBetween("created_at", [$date.' 00:00:00', $date.' 23:59:59'])->count();
+        $index = $now + 1;
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
         return $code = $type.$year . $month . $index;
     }
@@ -82,14 +86,33 @@ class PurchaseController extends Controller
 
     public function store(Request $req)
     {
-        return $req->all();
-        // dd("masuk");
-        // return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
-        // return Redirect::route('notes.index')
-        //     ->with([
-        //         'status' => 'Berhasil membuat menambah notulensi',
-        //         'type' => 'success'
-        //     ]);
+        $date = date('Y-m-d H:i:s');
+        $purchasing = new Purchasing;
+        $purchasing->code = $req->code;
+        $purchasing->date = $date;
+        $purchasing->employee_id = $req->buyer;
+        $purchasing->status = $req->pay;
+        
+        $purchasing->discount = str_replace(",", '',$req->discountTotal);
+        $purchasing->price = str_replace(",", '',$req->grandTotal);
+        $purchasing->save();
+
+        foreach($req->idDetail as $row) {
+            $purchasingDetail = new PurchasingDetail;
+            $purchasingDetail->purchasing_id = $purchasing->id;
+            $purchasingDetail->item_id = str_replace(",", '',$req->itemsDetail[$row]);
+            $purchasingDetail->unit_id = str_replace(",", '',$req->unitsDetail[$row]);
+            $purchasingDetail->branch_id = str_replace(",", '',$req->branchesDetail[$row]);
+            $purchasingDetail->price = str_replace(",", '',$req->priceDetail[$row]);
+            $purchasingDetail->qty = str_replace(",", '',$req->qtyDetail[$row]);
+            $purchasingDetail->total = str_replace(",", '',$req->totalPriceDetail[$row]);
+            $purchasingDetail->save();
+        }
+        return Redirect::route('purchase.index')
+            ->with([
+                'status' => 'Berhasil membuat menambah notulensi',
+                'type' => 'success'
+            ]);
     }
 
     public function show(Notes $notes, $id)
