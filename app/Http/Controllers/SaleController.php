@@ -156,6 +156,7 @@ class SaleController extends Controller
                 'code' => $this->code('PJT-'),
                 'user_id' => Auth::user()->id,
                 'sales_id' => $req->sales_id,
+                'buyer_id' => 1,
                 'branch_id' => $getEmployee->branch_id,
                 'customer_id' => $req->customer_id,
                 'customer_name' => $req->customer_name,
