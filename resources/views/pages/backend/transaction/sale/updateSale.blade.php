@@ -20,11 +20,11 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="code">{{ __('Kode Faktur') }}<code>*</code></label>
-                            <input id="code" type="text" class="form-control" readonly="" value="{{$code}}" name="code">
+                            <input id="code" type="text" class="form-control" readonly="" value="{{$sale->code}}" name="code">
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="date">{{ __('Tanggal') }}<code>*</code></label>
-                            <input id="date" type="text" class="form-control" readonly="" value="{{date('d F Y')}}"
+                            <input id="date" type="text" class="form-control" readonly="" value="{{ \Carbon\Carbon::parse($sale->date)->locale('id')->isoFormat('LL') }}"
                                 name="date">
                         </div>
                     </div>
@@ -35,16 +35,16 @@
                                     class="control-label">{{ __('Sales') }}<code>*</code></label>
                             </div>
                             <select class="select2 validation" name="sales_id" data-name="Sales">
-                                <option value="">- Select -</option>
-                                @foreach ($employee as $employee)
-                                <option value="{{$employee->id}}">{{$employee->name}}</option>
+                                <option value="{{$sale->sales->id}}">{{$sale->sales->name}}</option>
+                                @foreach ($sales as $sales)
+                                <option value="{{$sales->id}}">{{$sales->name}}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="warranty">{{ __('Garansi') }}<code>*</code></label>
                             <select class="select2 validation" name="warranty" data-name="Masa Garansi">
-                                <option value="">- Select -</option>
+                                <option value="{{$sale->warranty->id}}">{{$sale->warranty->periode}} {{$sale->warranty->name}}</option>
                                 @foreach ($warranty as $warranty)
                                 <option value="{{ $warranty->id }}">{{ $warranty->periode }} {{ $warranty->name }}</option>
                                 @endforeach
@@ -57,7 +57,8 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="customer_name">{{ __('Nama') }}<code>*</code></label>
-                            <input id="customer_name" type="text" class="form-control validation" name="customer_name" data-name="Nama Customer">
+                            <input id="customer_name" type="text" class="form-control validation" name="customer_name"
+                            data-name="Nama Customer" value="{{$sale->customer_name}}">
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="series">{{ __('Member') }}<code>*</code></label>
@@ -79,7 +80,7 @@
                                 </div>
                                 </div>
                                 <input id="customer_phone" type="text" class="form-control @error('customer_phone') is-invalid @enderror"
-                                    name="customer_phone" value="{{ old('customer_phone') }}">
+                                    name="customer_phone" value="{{$sale->customer_phone}}">
                                 @error('customer_telephone')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -89,7 +90,8 @@
                         </div>
                         <div class="form-group col-12 col-md-7 col-lg-7">
                             <label for="customer_address">{{ __('Alamat') }}<code>*</code></label>
-                            <input id="customer_address" type="text" class="form-control validation" data-name="Alamat" name="customer_address">
+                            <input id="customer_address" type="text" class="form-control validation" data-name="Alamat"
+                            name="customer_address" value="{{$sale->customer_address}}">
                         </div>
                     </div>
 
@@ -191,7 +193,7 @@
             </div>
         </div>
         <div class="card-footer text-right">
-            <button class="btn btn-primary mr-1" type="button" onclick="save()"><i class="far fa-save"></i>
+            <button class="btn btn-primary mr-1" type="button" onclick="updateData({{$sale->id}})"><i class="far fa-save"></i>
                 {{ __('Simpan Data') }}</button>
         </div>
     </div>
