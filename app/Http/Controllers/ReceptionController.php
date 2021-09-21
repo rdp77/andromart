@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Purchasing;
+use App\Models\PurchasingDetail;
+use App\Models\Stock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -24,7 +26,16 @@ class ReceptionController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Purchasing::with('supplier')->get();
+            $data = Purchasing::with('employee')->get();
+            foreach($data as $row) {
+                if($row->done == 2) {
+                    $row->done = "Telah Selesai";
+                } else if ($row->done == 1) {
+                    $row->done = "Masih Proses";
+                } else {
+                    $row->done = "Belum Proses";
+                }
+            }
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -80,44 +91,44 @@ class ReceptionController extends Controller
         ->join('units', 'stocks.unit_id', 'units.id')
         ->join('branches', 'stocks.branch_id', 'branches.id')
         ->where('purchasing_details.qty', '>', 0)
-        ->select('purchasing_details.id as id','qty', 'items.name as itemName', 'branches.name as branchName', 'units.name as unitName')
+        ->select('purchasing_details.id as id', 'qty', 'items.name as itemName', 'branches.name as branchName', 'units.name as unitName', 'items.id as item_id', 'units.id as unit_id', 'branches.id as branch_id')
         ->get();
         return view('pages.backend.transaction.reception.editReception', compact('model', 'models', 'id'));
     }
 
     public function update(Request $req, $id)
     {
-        if($req->code == Area::find($id)->code){
-            Validator::make($req->all(), [
-                'name' => ['required', 'string', 'max:255'],
-            ])->validate();
+        $purchase = Purchasing::where('id', $id)->first();
+        $purchase->done = 1;
+        $purchase->save();
+        // dd($req->idDetail);
+        foreach($req->idDetail as $row) {
+            $purchasing = PurchasingDetail::where('id', $req->idPurchasing[$row])
+            ->first();
+            $purchasing->qty -= $req->qtyNew[$row];
+            $purchasing->save();
+
+            $stocks = Stock::where('item_id', $req->idItem[$row])
+            ->where('unit_id', $req->idUnit[$row])
+            ->where('branch_id', $req->idBranch[$row])
+            ->first();
+            $stocks->stock += $req->qtyNew[$row];
+            $stocks->save();
         }
-        else{
-            Validator::make($req->all(), [
-                'code' => ['required', 'string', 'max:255', 'unique:areas'],
-                'name' => ['required', 'string', 'max:255'],
-            ])->validate();
+        $done = 1;
+        $purchaseDetail = PurchasingDetail::where('purchasing_id', $id)->get();
+        foreach($purchaseDetail as $row) {
+            if($row->qty > 0) {
+                $done = 0;
+            }
         }
-
-        Area::where('id', $id)
-            ->update([
-                'code' => $req->code,
-                'name' => $req->name,
-                'updated_by' => Auth::user()->name,
-            ]);
-
-        $area = Area::find($id);
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Mengubah masrter area ' . Area::find($id)->name
-        );
-
-        $area->save();
-
-        return Redirect::route('area.index')
+        if($done == 1){
+            $purchase->done = 2;
+            $purchase->save();
+        }
+        return Redirect::route('reception.index')
             ->with([
-                'status' => 'Berhasil merubah master area ',
+                'status' => 'Berhasil mencatat penerimaan ',
                 'type' => 'success'
             ]);
     }

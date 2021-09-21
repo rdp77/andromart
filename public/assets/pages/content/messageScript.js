@@ -10,16 +10,17 @@ var table = $("#table").DataTable({
         [10, 25, 50, "Semua"],
     ],
     ajax: {
-        url: "/transaction/purchasing/reception",
+        url: "/content/messages/message",
         type: "GET",
     },
     dom: '<"html5buttons">lBrtip',
     columns: [
         { data: "DT_RowIndex", orderable: false, searchable: false },
-        { data: "date" },
-        { data: "code" },
-        { data: "done" },
-        { data: "action", orderable: false, searchable: true },
+        { data: "name" },
+        { data: "email" },
+        { data: "subject" },
+        { data: "message" },
+        // { data: "action", orderable: false, searchable: true },
     ],
     buttons: [
         {
@@ -85,7 +86,7 @@ function del(id) {
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url: "/transaction/purchasing/reception/" + id,
+                url: "/content/messages/message" + id,
                 type: "DELETE",
                 success: function () {
                     swal("Penerimaan berhasil dihapus", {

@@ -46,7 +46,7 @@ class ContentController extends Controller
         //         ->rawColumns(['action'])
         //         ->make(true);
         // }
-        $content = ContentType::get();
+        $content = ContentType::orderBy('id', 'asc')->get();
         return view('pages.backend.content.contents.indexContents')->with('content', $content);
         // return view('pages.backend.master.branch.indexBranch');
     }
@@ -251,5 +251,14 @@ class ContentController extends Controller
         Branch::destroy($id);
 
         return Response::json(['status' => 'success']);
+    }
+    public function active($id, $status)
+    {
+        // dd($status);
+        $content = ContentType::where('id', $id)->first();
+        // dd($content);
+        $content->active = $status;
+        $content->save();
+        return Redirect::route('contents.index');
     }
 }

@@ -1,11 +1,14 @@
+@if($contents['contacts_title'] == true && $contents['contacts_message_title'] == true)
 <section class="section section-text-light section-default bg-color-dark section-center border-top-0 mt-0">
 	<div class="container">
+		@if($contents['contacts_title'] == true)
 		<div class="row justify-content-center">
 			<div class="col-lg-8 mt-5">
 				<h1 class="mt-5 font-weight-semibold">{{ $contactsTitle->title }}</h1>
 				<p class="mb-0 text-4 opacity-7">{{ $contactsTitle->subtitle }}</p>
 			</div>
 		</div>
+		@endif
 		<div class="row justify-content-center mt-4">
 			<div class="col-lg-10">
 				<div class="row justify-content-between mt-4 text-left">
@@ -22,6 +25,8 @@
 				</div>
 			</div>
 		</div>
+
+		@if($contents['contacts_message_title'] == true)
 		<div class="row justify-content-center mt-4">
 			<div class="col-lg-10 text-center">
 
@@ -38,5 +43,7 @@
 
 			</div>
 		</div>
+		@endif
 	</div>
 </section>
+@endif

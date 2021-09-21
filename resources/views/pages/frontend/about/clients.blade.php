@@ -1,5 +1,7 @@
+@if($contents['about_clients'] == true && $contents['about_clients_title'] == true)
 <section class="section section-default section-footer border-0">
 	<div class="container py-4">
+		@if($contents['about_clients_title'] == true)
 		<div class="row">
 			<div class="col-lg-12 text-center">
 				<h2 class="mb-0 mt-3 font-weight-extra-bold text-6">{{ $aboutClientsTitle->title }}</h2>
@@ -9,6 +11,8 @@
 				</div>
 			</div>
 		</div>
+		@endif
+		@if($contents['about_clients'] == true)
 		<div class="row mt-4">
 			<div class="content-grid col mt-5 mb-4">
 				<div class="row content-grid-row">
@@ -20,5 +24,7 @@
 				</div>
 			</div>
 		</div>
+		@endif
 	</div>
 </section>
+@endif

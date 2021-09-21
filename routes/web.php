@@ -70,6 +70,7 @@ require __DIR__ . '/warehouse/stockRoute.php';
 
 // require __DIR__ . '/content/notes.php';
 require __DIR__ . '/content/contentsRoute.php';
+require __DIR__ . '/content/messageRoute.php';
 
 require __DIR__ . '/office/regulationRoute.php';
 require __DIR__ . '/office/notesRoute.php';
