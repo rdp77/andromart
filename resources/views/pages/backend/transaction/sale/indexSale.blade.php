@@ -29,7 +29,6 @@
                     <th>{{ __('Pelanggan') }}</th>
                     <th>{{ __('Barang / QTY') }}</th>
                     <th>{{ __('Harga') }}</th>
-                    <th>{{ __('Total') }}</th>
                     <th>{{ __('Action') }}</th>
                 </tr>
             </thead>

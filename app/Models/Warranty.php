@@ -18,4 +18,9 @@ class Warranty extends Model
         'updated_by',
         'deleted_by',
     ];
+
+    public function Sale()
+    {
+        return $this->hasMany('App\Models\Sale');
+    }
 }

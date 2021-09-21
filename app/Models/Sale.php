@@ -30,8 +30,10 @@ class Sale extends Model
         'item_price',
         'total_price',
         'sales_id',
+        'buyer_id',
         'sharing_profit_store',
         'sharing_profit_sales',
+        'sharing_profit_buyer',
         'description',
         'created_at',
         'updated_at',
@@ -56,8 +58,23 @@ class Sale extends Model
         return $this->hasOne('App\Models\User');
     }
 
+    public function Sales()
+    {
+        return $this->belongsTo('App\Models\Employee', 'sales_id', 'id');
+    }
+
+    public function Buyer()
+    {
+        return $this->belongsTo('App\Models\Employee', 'buyer_id', 'id');
+    }
+
     public function Branch()
     {
         return $this->belongsTo('App\Models\Branch');
+    }
+
+    public function Warranty()
+    {
+        return $this->belongsTo('App\Models\Warranty');
     }
 }

@@ -291,7 +291,7 @@ class ServiceController extends Controller
             // return [$req->totalService,$req->totalSparePart];
             $id = DB::table('service')->max('id')+1;
             $sharing_profit_store =  (((str_replace(",", '',$req->totalService)- - str_replace(",", '',$req->totalDiscountValue))/100)*$sharingProfitStore)+str_replace(",", '',$req->totalSparePart);
-            $sharing_profit_technician_1 = (str_replace(",", '',$req->totalService - sstr_replace(",", '',$req->totalDiscountValue))/100)*$sharingProfitTechnician;
+            $sharing_profit_technician_1 = (str_replace(",", '',$req->totalService - str_replace(",", '',$req->totalDiscountValue))/100)*$sharingProfitTechnician;
 
             $total_loss_technician_1 = (str_replace(",", '',$req->totalLoss)/100)*$lossTechnician;
             $total_loss_store = (str_replace(",", '',$req->totalLoss)/100)*$lossStore;
@@ -394,7 +394,7 @@ class ServiceController extends Controller
                 }
             }
             // return $checkStock;
-            
+
             ServiceStatusMutation::create([
                 'service_id'=>$id,
                 'technician_id'=>$req->technicianId,
@@ -613,7 +613,7 @@ class ServiceController extends Controller
                 $destroyExistingData = DB::table('service_detail')->whereIn('id',$req->deletedExistingData)->delete();
             }
 
-            // menyimpan data baru dan memperbaru stock 
+            // menyimpan data baru dan memperbaru stock
             if($req->itemsDetail != null){
                 $checkStock = [];
                 for ($i=0; $i <count($req->itemsDetail) ; $i++) {
@@ -658,12 +658,12 @@ class ServiceController extends Controller
                     }
                 }
             }
-            
+
             // return 'asd';
             if($req->itemsDetailOld != null){
                 $checkDataOld = ServiceDetail::whereIn('id',$req->itemsDetailOld)->get();
                 $checkStockDeleted = [];
-                    
+
                 for ($i=0; $i <count($checkDataOld) ; $i++) {
                     $checkStockDeleted[$i] = Stock::where('item_id',$checkDataDeleted[$i]->item_id)
                                                 ->where('branch_id',$getEmployee->branch_id)
@@ -689,12 +689,12 @@ class ServiceController extends Controller
                 }
             }
 
-            
 
 
-            
+
+
             // return $checkStock;
-            
+
             // ServiceStatusMutation::create([
             //     'service_id'=>$id,
             //     'technician_id'=>$req->technicianId,
