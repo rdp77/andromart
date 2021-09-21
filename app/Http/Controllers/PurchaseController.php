@@ -63,10 +63,12 @@ class PurchaseController extends Controller
 
     public function code($type)
     {
+        $date = date('Y-m-d');
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
-        $index = DB::table('purchasings')->max('id')+1;
 
+        $now = Purchasing::whereBetween("created_at", [$date.' 00:00:00', $date.' 23:59:59'])->count();
+        $index = $now + 1;
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
         return $code = $type.$year . $month . $index;
     }
@@ -84,14 +86,33 @@ class PurchaseController extends Controller
 
     public function store(Request $req)
     {
-        // return $req->all();
-        dd("masuk");
-        // return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
-        // return Redirect::route('notes.index')
-        //     ->with([
-        //         'status' => 'Berhasil membuat menambah notulensi',
-        //         'type' => 'success'
-        //     ]);
+        $date = date('Y-m-d H:i:s');
+        $purchasing = new Purchasing;
+        $purchasing->code = $req->code;
+        $purchasing->date = $date;
+        $purchasing->employee_id = $req->buyer;
+        $purchasing->status = $req->pay;
+        
+        $purchasing->discount = str_replace(",", '',$req->discountTotal);
+        $purchasing->price = str_replace(",", '',$req->grandTotal);
+        $purchasing->save();
+
+        foreach($req->idDetail as $row) {
+            $purchasingDetail = new PurchasingDetail;
+            $purchasingDetail->purchasing_id = $purchasing->id;
+            $purchasingDetail->item_id = str_replace(",", '',$req->itemsDetail[$row]);
+            $purchasingDetail->unit_id = str_replace(",", '',$req->unitsDetail[$row]);
+            $purchasingDetail->branch_id = str_replace(",", '',$req->branchesDetail[$row]);
+            $purchasingDetail->price = str_replace(",", '',$req->priceDetail[$row]);
+            $purchasingDetail->qty = str_replace(",", '',$req->qtyDetail[$row]);
+            $purchasingDetail->total = str_replace(",", '',$req->totalPriceDetail[$row]);
+            $purchasingDetail->save();
+        }
+        return Redirect::route('purchase.index')
+            ->with([
+                'status' => 'Berhasil membuat menambah notulensi',
+                'type' => 'success'
+            ]);
     }
 
     public function show(Notes $notes, $id)

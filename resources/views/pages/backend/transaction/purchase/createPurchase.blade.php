@@ -8,7 +8,8 @@
 @endsection
 
 @section('content')
-<form class="form-data">
+<!-- <form class="form-data"> -->
+<form method="POST" action="{{ route('purchase.store') }}" class="form-data">
     @csrf
     <div class="row">
         <div class="col-lg-8">
@@ -24,8 +25,7 @@
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="date">{{ __('Tanggal') }}<code>*</code></label>
-                            <input id="date" type="text" class="form-control" readonly="" value="{{date('d F Y')}}"
-                                name="date">
+                            <input id="date" type="text" class="form-control" readonly="" value="{{date('d F Y')}}" name="date">
                         </div>
                     </div>
                     <div class="row">
@@ -158,8 +158,10 @@
             </div>
         </div>
         <div class="card-footer text-right">
-            <button class="btn btn-primary mr-1" type="button" onclick="save()"><i class="far fa-save"></i>
-                {{ __('Simpan Datas') }}</button>
+            <!-- <button class="btn btn-primary mr-1" type="button" onclick="save()"><i class="far fa-save"></i>
+                {{ __('Simpan Data') }}</button> -->
+            <button class="btn btn-primary mr-1" type="submit"><i class="far fa-save"></i>
+                {{ __('Simpan Data') }}</button>
         </div>
     </div>
     <div class="modal fade" tabindex="1" role="dialog" id="exampleModal" aria-hidden="true" style="display: none;">
