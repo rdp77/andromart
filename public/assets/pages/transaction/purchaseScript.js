@@ -139,7 +139,7 @@ function addItem() {
     $('.dropHereItem').append(
         '<tr class="dataDetail dataDetail_'+(dataDet)+'">'+
             '<td style="display:none">'+
-                '<input type="text" class="form-control priceDetailSparePart priceDetailSparePart_'+(index+1)+'" name="priceDetailSparePart[]" value="0">'+
+                '<input type="hidden" class="form-control priceDetailSparePart priceDetailSparePart_'+(index+1)+'" name="idDetail[]" value="'+(index)+'">'+
             '</td>'+
             '<td>'+
             '<select class="select2 itemsDetail" name="branchesDetail[]">'+
@@ -161,7 +161,7 @@ function addItem() {
             '</td>'+
         '</tr>' +
          // class="dataDetail dataDetail_'+(dataDet)+'"
-        '<tr class="dataDetail dataDetail_'+(dataDet)+'">'+
+        '<tr class="dataDetail dataDetail_'+(dataDet)+'" style="border-bottom: solid 2px #ddd; margin-bottom: 5px;">'+
             '<td>'+
             '<select class="select2 itemsDetail" name="unitsDetail[]">'+
                 '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
