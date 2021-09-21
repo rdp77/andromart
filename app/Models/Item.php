@@ -11,8 +11,10 @@ class Item extends Model
 
     protected $table = 'items';
     public $timestamps = false;
+    public $increments = false;
 
     protected $fillable = [
+        'id',
         'name',
         'brand_id',
         'supplier_id',

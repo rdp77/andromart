@@ -96,15 +96,6 @@ class ItemController extends Controller
 
     public function store(Request $req)
     {
-        // Validator::make($req->all(), [
-        //     'name' => ['required', 'string', 'max:255'],
-        //     'brand_id' => ['required', 'integer'],
-        //     'supplier_id' => ['required', 'integer'],
-        //     'buy' => ['required', 'string', 'max:255'],
-        //     'sell' => ['required', 'string', 'max:255'],
-        //     'condition' => ['required', 'string', 'max:10'],
-        // ])->validate();
-
         $id = DB::table('items')->max('id')+1;
 
         if ($req->hasFile('image')) {
@@ -166,41 +157,54 @@ class ItemController extends Controller
 
     public function edit($id)
     {
-        $item = Item::find($id);
-        $branch = Branch::all();
-        $brand = Brand::where('id', '!=', Item::find($id)->brand_id)->get();
+        $item = Item::with('brand')->find($id);
+        $category = Category::get();
+        $brand = Brand::get();
         $supplier = Supplier::where('id', '!=', Item::find($id)->supplier_id)->get();
-        return view('pages.backend.master.item.updateItem', ['branch' => $branch, 'item' => $item, 'brand' => $brand, 'supplier' => $supplier] );
+        return view('pages.backend.master.item.updateItem', compact('item', 'category', 'brand', 'brand', 'supplier'));
     }
 
     public function update($id, Request $req)
     {
-        Validator::make($req->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'brand_id' => ['required', 'integer'],
-            'supplier_id' => ['required', 'integer'],
-            'buy' => ['required', 'string', 'max:255'],
-            'sell' => ['required', 'string', 'max:255'],
-            'condition' => ['required', 'string', 'max:10'],
-        ])->validate();
+        // Validator::make($req->all(), [
+        //     'name' => ['required', 'string', 'max:255'],
+        //     'brand_id' => ['required', 'integer'],
+        //     'supplier_id' => ['required', 'integer'],
+        //     'buy' => ['required', 'string', 'max:255'],
+        //     'sell' => ['required', 'string', 'max:255'],
+        //     'condition' => ['required', 'string', 'max:10'],
+        // ])->validate();
 
         if ($req->hasFile('image')) {
             $req->file('image')->move('assetsmaster/image/item/',$req->file('image')->getClientOriginalName());
-        }
-
-        Item::where('id', $id)
+            Item::where('id', $id)
             ->update([
             'name' => $req->name,
-            'brand_id' => $req->brand_id,
+            'brand_id' => $req->brand,
             'supplier_id' => $req->supplier_id,
-            'buy' => $req->buy,
-            'sell' => $req->sell,
-            'discount' => $req->discount,
+            'buy' => str_replace(",", '',$req->buy),
+            'sell' => str_replace(",", '',$req->sell),
+            'discount' => str_replace(",", '',$req->discount),
             'condition' => $req->condition,
             'description' => $req->description,
             'image' => $req->file('image')->getClientOriginalName(),
             'updated_by' => Auth::user()->name,
             ]);
+        }
+        else {
+            Item::where('id', $id)
+            ->update([
+            'name' => $req->name,
+            'brand_id' => $req->brand,
+            'supplier_id' => $req->supplier_id,
+            'buy' => str_replace(",", '',$req->buy),
+            'sell' => str_replace(",", '',$req->sell),
+            'discount' => str_replace(",", '',$req->discount),
+            'condition' => $req->condition,
+            'description' => $req->description,
+            'updated_by' => Auth::user()->name,
+            ]);
+        }
 
         $item = Item::find($id);
         $this->DashboardController->createLog(

@@ -18,7 +18,7 @@ var table = $("#table").DataTable({
         { data: "DT_RowIndex", orderable: false, searchable: false },
         { data: "code" },
         { data: "name" },
-        { data: "balance" },
+        // { data: "balance" },
         { data: "action", orderable: false, searchable: true },
     ],
     buttons: [

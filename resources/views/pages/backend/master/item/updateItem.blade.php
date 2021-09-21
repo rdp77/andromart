@@ -14,6 +14,34 @@
         @method('PUT')
         <div class="card-body">
             <div class="row">
+                <div class="form-group col-12 col-md-4 col-lg-4">
+                    <label for="type">{{ __('Kategori') }}<code>*</code></label>
+                    <select class="select2 type" name="type" onchange="category()">
+                        {{-- <option value="">- Select -</option> --}}
+                        {{-- <option value="{{ $item->brand->category->id }}"> {{ $item->brand->category->name }} </option> --}}
+                        @foreach ($category as $element)
+                        <option value="{{$element->id}}" @if ($element->id == $item->brand->category->id) selected @endif>{{$element->name}}</option>
+                        {{-- <option value="{{$element->id}}">{{$element->name}}</option> --}}
+                        @endforeach
+                    </select>
+                </div>
+                <div class="form-group col-12 col-md-4 col-lg-4">
+                    <label for="brand">{{ __('Merk') }}<code>*</code></label>
+                    <select class="select2 brand" name="brand">
+                        <option value="">- Select -</option>
+                    </select>
+                </div>
+
+                @foreach ($brand as $el)
+                    <input class="brandData" type="hidden"
+                        data-category="{{$el->category_id}}"
+                        data-name="{{$el->name}}"
+                        value="{{$el->id}}">
+                @endforeach
+
+            </div>
+
+            <div class="row">
                 <div class="form-group col-md-4 col-xs-12">
                     <div class="d-block">
                         <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
@@ -21,20 +49,6 @@
                     <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
                         value="{{ $item->name }}" required autofocus>
                     @error('name')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                    @enderror
-                </div>
-                <div class="form-group col-md-4 col-xs-12">
-                    <label for="category_id">{{ __('Kategori') }}<code>*</code></label>
-                    <select name="category_id" id="category_id" class="form-control select2" required autocomplete="category_id">
-                        <option value="{{ $item->category->id }}">{{ $item->category->code }} - {{ $item->category->name }}</option>
-                        @foreach ($category as $category)
-                        <option value="{{ $category->id }}">{{ $category->code }} - {{ $category->name }}</option>
-                        @endforeach
-                    </select>
-                    @error('category_id')
                     <div class="invalid-feedback">
                         {{ $message }}
                     </div>
@@ -113,8 +127,8 @@
                               Rp.
                             </div>
                           </div>
-                          <input id="buy" type="number" class="form-control currency @error('buy') is-invalid @enderror"
-                            name="buy" value="{{ $item->buy }}" required autocomplete="buy">
+                          <input id="buy" type="text" class="form-control cleaveNumeral @error('buy') is-invalid @enderror"
+                            name="buy" value="{{ $item->buy }}" required style="text-align: right">
                           @error('buy')
                           <div class="invalid-feedback">
                             {{ $message }}
@@ -132,8 +146,8 @@
                               Rp.
                             </div>
                           </div>
-                          <input id="sell" type="number" class="form-control currency @error('sell') is-invalid @enderror"
-                            name="sell" value="{{ $item->sell }}" required autocomplete="sell">
+                          <input id="sell" type="text" class="form-control cleaveNumeral @error('sell') is-invalid @enderror"
+                            name="sell" value="{{ $item->sell }}" required style="text-align: right">
                           @error('sell')
                           <div class="invalid-feedback">
                             {{ $message }}
@@ -151,8 +165,8 @@
                               Rp.
                             </div>
                           </div>
-                          <input id="discount" type="number" class="form-control currency @error('discount') is-invalid @enderror"
-                            name="discount" value="{{ $item->discount }}" autocomplete="discount">
+                          <input id="discount" type="text" class="form-control cleaveNumeral @error('discount') is-invalid @enderror"
+                            name="discount" value="{{ $item->discount }}" style="text-align: right">
                           @error('discount')
                           <div class="invalid-feedback">
                             {{ $message }}
@@ -169,4 +183,8 @@
         </div>
     </form>
 </div>
+@endsection
+
+@section('script')
+<script src="{{ asset('assets/pages/transaction/serviceScript.js') }}"></script>
 @endsection

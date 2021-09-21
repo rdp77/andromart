@@ -21,6 +21,7 @@
                     <th class="text-center">
                         {{ __('NO') }}
                     </th>
+                    <th style="width: 20%">{{ __('Kategori') }}</th>
                     <th>{{ __('Merk') }}</th>
                     <th>{{ __('Nama') }}</th>
                     <th>{{ __('Aksi') }}</th>
