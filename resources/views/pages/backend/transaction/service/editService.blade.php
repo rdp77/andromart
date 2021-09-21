@@ -370,22 +370,11 @@
                                 <td>
                                     <select class="select2 itemsDetail" name="itemsDetailOld[]">
                                         <option value="-" data-index="">- Select -</option>
-                                        @php
-                                            $stock = 0;
-                                        @endphp
                                         @foreach ($item as $el0)
                                             <option data-index="{{$i}}"  data-price="{{$el0->sell}}" 
                                             @foreach ($el0->stock as $el1)
-                                                @if (
-                                                Auth::user()->employee->branch_id == $el1->branch_id 
-                                                && 
-                                                $el0->id 
-                                                == $el1->item_id)
-                                                    {{$stock+=$el1->stock}}
+                                                @if ((Auth::user()->employee->branch_id == $el1->branch_id))
                                                     data-stock="{{$el1->stock}}"
-                                                @else
-                                                    {{$stock=0}}
-                                                    data-stock="0"s
                                                 @endif
                                             @endforeach 
                                             @if ($el0->id == $el->item_id)
@@ -396,13 +385,21 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control priceServiceDetail cleaveNumeral  priceDetail priceDetail_{{$i}}" name="priceDetailOld[]" style="text-align: right" value="{{$el->price}}">
+                                    <input type="text" class="form-control cleaveNumeral  priceDetail priceDetail_{{$i}}" name="priceDetailOld[]" data-index="{{$i}}" style="text-align: right" value="{{$el->price}}">
                                 </td>
                                 <td>
-                                    <input readonly type="text" class="form-control qtyDetail qtyDetail_{{$i}}" name="qtyDetailOld[]" value="{{$el->qty}}" style="text-align: right">
+                                    <input type="text" class="form-control qtyDetail qtyDetail_{{$i}}" name="qtyDetailOld[]" value="{{$el->qty}}" data-index="{{$i}}" style="text-align: right">
                                 </td>
                                 <td>
-                                    <input readonly type="text" class="form-control stockDetail stock_{{$i}}" name="stockDetailOld[]" value="{{$stock}}" style="text-align: right">
+                                    <input readonly type="text" class="form-control stockDetail stock_{{$i}}" name="stockDetailOld[]" 
+                                    @foreach ($item as $el0)
+                                        @foreach ($el0->stock as $el1)
+                                            @if ((Auth::user()->employee->branch_id == $el1->branch_id))
+                                                value="{{$el1->stock}}" 
+                                            @endif
+                                        @endforeach 
+                                    @endforeach
+                                    style="text-align: right">
                                 </td>
                                 <td>
                                     <input readonly type="text" class="form-control totalPriceDetail cleaveNumeral totalPriceDetail_{{$i}}" name="totalPriceDetailOld[]" style="text-align: right" value="{{$el->total_price}}">

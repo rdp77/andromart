@@ -16,7 +16,7 @@ class PurchasingSeeder extends Seeder
     {
         Purchasing::create([
             'date' => date('Y-m-d H:i:s'),
-            'code' => 'ini kode',
+            'code' => 'xnxx',
             'price' => 1350000,
             'discount' => 50000,
             'status' => 'dept',
