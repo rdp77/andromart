@@ -256,8 +256,8 @@ class ServiceController extends Controller
         DB::beginTransaction();
         try {
             // return $req->technicianId;
-            $tech1 = Service::where('technician_id',$req->technicianId)->where('work_status','!=','Selesai')->count();
-            $tech2 = Service::where('technician_replacement_id',$req->technicianId)->where('work_status','!=','Selesai')->count();
+            $tech1 = Service::where('technician_id',$req->technicianId)->where('work_status','!=','Selesai')->where('work_status','!=','Diambil')->count();
+            $tech2 = Service::where('technician_replacement_id',$req->technicianId)->where('work_status','!=','Selesai')->where('work_status','!=','Diambil')->count();
 
 
             $getEmployee =  Employee::where('user_id',Auth::user()->id)->first();
@@ -439,9 +439,10 @@ class ServiceController extends Controller
     }
     public function printService($id)
     {
-        $Service = Service::find($id);
+        $Service = Service::with('ServiceDetail','ServiceDetail.Items','Employee1','Employee2','CreatedByUser','Type','Brand','Brand.Category')->find($id);
+        // return $Service;
         $member = User::get();
-        return view('pages.backend.transaction.service.printService', ['Service' => $Service,'member'=>$member]);
+        return view('pages.backend.transaction.service.printService', ['service' => $Service,'member'=>$member]);
     }
 
     public function update($id, Request $req)
@@ -653,7 +654,7 @@ class ServiceController extends Controller
                             'unit_id'    =>$checkStock[$i][0]->unit_id,
                             'branch_id'  =>$checkStock[$i][0]->branch_id,
                             'qty'        =>$req->qtyDetail[$i],
-                            'code'       =>$this->code('SRV-'),
+                            'code'       =>$req->code,
                             'type'       =>'Out',
                             'description'=>$desc[$i],
                         ]);
@@ -661,10 +662,8 @@ class ServiceController extends Controller
                 }
             }
 
-            // return 'asd';
             // mengecek data existing 
             if($req->itemsDetailOld != null){
-            // return 'asd';
             // return $req->all();
                 // mengecek data existing 
                 $checkDataOld = ServiceDetail::whereIn('id',$req->idDetailOld)->get();
@@ -674,70 +673,129 @@ class ServiceController extends Controller
                     // memfilter type kecuali jasa
                     if($checkDataOld[$i]->item_id != 1){
                         // return$checkDataOld[$i];
-                    if($req->typeDetailOld[$i] != 'Jasa'){
-                        $checkStockExisting[$i] = Stock::where('item_id',$req->itemsDetailOld[$i])
-                                    ->where('branch_id',$getEmployee->branch_id)
-                                    ->where('id','!=',1)
-                                    ->get();
-                        
-                        $checkStockExistingOlder[$i] = Stock::where('item_id',$checkDataOld[$i]->item_id)
-                                    ->where('branch_id',$getEmployee->branch_id)
-                                    ->where('id','!=',1)
-                                    ->get();
-                        // if($checkStockExisting[$i][0]->stock < ($req->qtyDetailOld[$i])){
-                        //     return Response::json(['status' => 'fail',
-                        //                     'message'=>'Stock Item Ada yang 0. Harap Cek Kembali']);
-                        // }
-                        // return 'masuk 1';
-                        // mengecek kembali jika data item sama dengan data yang ada di service_detail
-                        if($checkDataOld[$i]->item_id == $req->itemsDetailOld[$i]){
-                        // return 'masuk 2.1';
-                        // mengecek kembali jika data QTY sama dengan data yang ada di service_detail
-                            if($checkDataOld[$i]->qty == $req->qtyDetailOld[$i]){
-                                // return 'masuk 3.1';
-                                // jika qty di service_detail sama dengan QTY yang akan di update
-                                if($checkDataOld[$i]->type == $req->typeDetailOld[$i]){
-                                    // return 'masuk 4.1';
-                                    // Jika Type sama maka tidak perlu melakukan update stock mutasi
-                                }else{
-                                    // Jika Type berbeda maka perlu melakukan update stock mutasi dengan type yaitu MUTATION
-                                    // return 'masuk 4.2';
-                                    $desc[$i] = '(Update Service) Perubahan Barang dari '.$checkDataOld[$i]->type.' Menjadi '.$req->typeDetailOld[$i].' Pada Service '.$req->code;
+                        if($req->typeDetailOld[$i] != 'Jasa'){
+                            $checkStockExisting[$i] = Stock::where('item_id',$req->itemsDetailOld[$i])
+                                        ->where('branch_id',$getEmployee->branch_id)
+                                        ->where('id','!=',1)
+                                        ->get();
+                            
+                            $checkStockExistingOlder[$i] = Stock::where('item_id',$checkDataOld[$i]->item_id)
+                                        ->where('branch_id',$getEmployee->branch_id)
+                                        ->where('id','!=',1)
+                                        ->get();
+                            // if($checkStockExisting[$i][0]->stock < ($req->qtyDetailOld[$i])){
+                            //     return Response::json(['status' => 'fail',
+                            //                     'message'=>'Stock Item Ada yang 0. Harap Cek Kembali']);
+                            // }
+                            // return 'masuk 1';
+                            // mengecek kembali jika data item sama dengan data yang ada di service_detail
+                            if($checkDataOld[$i]->item_id == $req->itemsDetailOld[$i]){
+                            // return 'masuk 2.1';
+                            // mengecek kembali jika data QTY sama dengan data yang ada di service_detail
+                                if($checkDataOld[$i]->qty == $req->qtyDetailOld[$i]){
+                                    // return 'masuk 3.1';
+                                    // jika qty di service_detail sama dengan QTY yang akan di update
+                                    if($checkDataOld[$i]->type == $req->typeDetailOld[$i]){
+                                        // return 'masuk 4.1';
+                                        // Jika Type sama maka tidak perlu melakukan update stock mutasi
+                                    }else{
+                                        // Jika Type berbeda maka perlu melakukan update stock mutasi dengan type yaitu MUTATION
+                                        // return 'masuk 4.2';
+                                        $desc[$i] = '(Update Service) Perubahan Barang dari '.$checkDataOld[$i]->type.' Menjadi '.$req->typeDetailOld[$i].' Pada Service '.$req->code;
 
+                                        StockMutation::create([
+                                            'item_id'    =>$req->itemsDetailOld[$i],
+                                            'unit_id'    =>$checkStockExisting[$i][0]->unit_id,
+                                            'branch_id'  =>$checkStockExisting[$i][0]->branch_id,
+                                            'qty'        =>$req->qtyDetailOld[$i],
+                                            'code'       =>$req->code,
+                                            'type'       =>'Mutation',
+                                            'description'=>$desc[$i],
+                                        ]);
+                                    }
+                                    // mengupdate service detail jika item sama + qty sama + perubahan tipe sparepart / loss
+                                    ServiceDetail::where('id',$req->idDetailOld[$i])->update([
+                                        // 'service_id'=>$id,
+                                        // 'item_id'=>$req->itemsDetailOld[$i],
+                                        'price'=>str_replace(",", '',$req->priceDetailOld[$i]),
+                                        // 'qty'=>$req->qtyDetailOld[$i],
+                                        'total_price'=>str_replace(",", '',$req->totalPriceDetailOld[$i]),
+                                        'description' =>str_replace(",", '',$req->descriptionDetailOld[$i]),
+                                        'type' =>$req->typeDetailOld[$i],
+                                        'updated_by'=>Auth::user()->name,
+                                        'updated_at'=>date('Y-m-d h:i:s'),
+                                    ]);
+                                    
+                                }else{
+                                    // return 'masuk 3.2';
+                                    // jika qty di service_detail berbeda dengan QTY yang akan di update
+                                    // return $checkDataOld;
+                                    if($req->typeDetailOld[$i] == 'SparePart'){
+                                        $descPengembalian[$i] = '(Update Service) Pengembalian Barang Pada Service '.$req->code;
+                                    }else{
+                                        $descPengembalian[$i] = '(Update Service) Pengembalian Barang Loss Pada Service '.$req->code;
+                                    }
+                                    StockMutation::create([
+                                        'item_id'    =>$req->itemsDetailOld[$i],
+                                        'unit_id'    =>$checkStockExisting[$i][0]->unit_id,
+                                        'branch_id'  =>$checkStockExisting[$i][0]->branch_id,
+                                        'qty'        =>$checkDataOld[$i]->qty,
+                                        'code'       =>$req->code,
+                                        'type'       =>'In',
+                                        'description'=>$descPengembalian[$i],
+                                    ]);
+
+                                    // Pegeluaran atas data item yang dirubah
+                                    if($req->typeDetailOld[$i] == 'SparePart'){
+                                        $descPengeluaran[$i] = '(Update Service) Pengeluaran Barang Pada Service '.$req->code;
+                                    }else{
+                                        $descPengeluaran[$i] = '(Update Service) Pengeluaran Barang Loss Pada Service '.$req->code;
+                                    }
                                     StockMutation::create([
                                         'item_id'    =>$req->itemsDetailOld[$i],
                                         'unit_id'    =>$checkStockExisting[$i][0]->unit_id,
                                         'branch_id'  =>$checkStockExisting[$i][0]->branch_id,
                                         'qty'        =>$req->qtyDetailOld[$i],
                                         'code'       =>$req->code,
-                                        'type'       =>'Mutation',
-                                        'description'=>$desc[$i],
+                                        'type'       =>'Out',
+                                        'description'=>$descPengeluaran[$i],
+                                    ]);
+                                    
+                                    Stock::where('item_id',$checkDataOld[$i]->item_id)
+                                    ->where('branch_id',$getEmployee->branch_id)->update([
+                                        'stock'      =>$checkStockExisting[$i][0]->stock+$checkDataOld[$i]->qty-$req->qtyDetailOld[$i],
+                                    ]);
+
+                                    ServiceDetail::where('id',$req->idDetailOld[$i])->update([
+                                        // 'service_id'=>$id,
+                                        // 'item_id'=>$req->itemsDetailOld[$i],
+                                        'price'=>str_replace(",", '',$req->priceDetailOld[$i]),
+                                        'qty'=>$req->qtyDetailOld[$i],
+                                        'total_price'=>str_replace(",", '',$req->totalPriceDetailOld[$i]),
+                                        'description' =>str_replace(",", '',$req->descriptionDetailOld[$i]),
+                                        'type' =>$req->typeDetailOld[$i],
+                                        'updated_by'=>Auth::user()->name,
+                                        'updated_at'=>date('Y-m-d h:i:s'),
                                     ]);
                                 }
-                                // mengupdate service detail jika item sama + qty sama + perubahan tipe sparepart / loss
-                                ServiceDetail::where('id',$req->idDetailOld[$i])->update([
-                                    // 'service_id'=>$id,
-                                    // 'item_id'=>$req->itemsDetailOld[$i],
-                                    'price'=>str_replace(",", '',$req->priceDetailOld[$i]),
-                                    // 'qty'=>$req->qtyDetailOld[$i],
-                                    'total_price'=>str_replace(",", '',$req->totalPriceDetailOld[$i]),
-                                    'description' =>str_replace(",", '',$req->descriptionDetailOld[$i]),
-                                    'type' =>$req->typeDetailOld[$i],
-                                    'updated_by'=>Auth::user()->name,
-                                    'updated_at'=>date('Y-m-d h:i:s'),
-                                ]);
-                                
                             }else{
-                                // return 'masuk 3.2';
-                                // jika qty di service_detail berbeda dengan QTY yang akan di update
-                                // return $checkDataOld;
-                                if($req->typeDetailOld[$i] == 'SparePart'){
+                                // return 'masuk 2.2';
+                                // pengembalian stock atas item service_detail yang dirubah
+                        
+                                if($checkStockExistingOlder[$i][0]->item_id == $checkDataOld[$i]->item_id){
+                                    Stock::where('item_id',$checkDataOld[$i]->item_id)
+                                            ->where('branch_id',$getEmployee->branch_id)->update([
+                                                'stock'      =>$checkStockExistingOlder[$i][0]->stock+$checkDataOld[$i]->qty,
+                                            ]);
+                                }
+                            
+                                if($checkDataOld[$i]->type == 'SparePart'){
                                     $descPengembalian[$i] = '(Update Service) Pengembalian Barang Pada Service '.$req->code;
                                 }else{
                                     $descPengembalian[$i] = '(Update Service) Pengembalian Barang Loss Pada Service '.$req->code;
                                 }
                                 StockMutation::create([
-                                    'item_id'    =>$req->itemsDetailOld[$i],
+                                    'item_id'    =>$checkDataOld[$i]->item_id,
                                     'unit_id'    =>$checkStockExisting[$i][0]->unit_id,
                                     'branch_id'  =>$checkStockExisting[$i][0]->branch_id,
                                     'qty'        =>$checkDataOld[$i]->qty,
@@ -752,6 +810,10 @@ class ServiceController extends Controller
                                 }else{
                                     $descPengeluaran[$i] = '(Update Service) Pengeluaran Barang Loss Pada Service '.$req->code;
                                 }
+                                Stock::where('item_id',$req->itemsDetailOld[$i])
+                                ->where('branch_id',$getEmployee->branch_id)->update([
+                                    'stock'      =>$checkStockExisting[$i][0]->stock-$req->qtyDetailOld[$i],
+                                ]);
                                 StockMutation::create([
                                     'item_id'    =>$req->itemsDetailOld[$i],
                                     'unit_id'    =>$checkStockExisting[$i][0]->unit_id,
@@ -761,15 +823,10 @@ class ServiceController extends Controller
                                     'type'       =>'Out',
                                     'description'=>$descPengeluaran[$i],
                                 ]);
-                                
-                                Stock::where('item_id',$checkDataOld[$i]->item_id)
-                                ->where('branch_id',$getEmployee->branch_id)->update([
-                                    'stock'      =>$checkStockExisting[$i][0]->stock+$checkDataOld[$i]->qty-$req->qtyDetailOld[$i],
-                                ]);
 
                                 ServiceDetail::where('id',$req->idDetailOld[$i])->update([
                                     // 'service_id'=>$id,
-                                    // 'item_id'=>$req->itemsDetailOld[$i],
+                                    'item_id'=>$req->itemsDetailOld[$i],
                                     'price'=>str_replace(",", '',$req->priceDetailOld[$i]),
                                     'qty'=>$req->qtyDetailOld[$i],
                                     'total_price'=>str_replace(",", '',$req->totalPriceDetailOld[$i]),
@@ -778,69 +835,22 @@ class ServiceController extends Controller
                                     'updated_by'=>Auth::user()->name,
                                     'updated_at'=>date('Y-m-d h:i:s'),
                                 ]);
-                            }
-                        }else{
-                            // return 'masuk 2.2';
-                            // pengembalian stock atas item service_detail yang dirubah
-                     
-                            if($checkStockExistingOlder[$i][0]->item_id == $checkDataOld[$i]->item_id){
-                                 Stock::where('item_id',$checkDataOld[$i]->item_id)
-                                        ->where('branch_id',$getEmployee->branch_id)->update([
-                                            'stock'      =>$checkStockExistingOlder[$i][0]->stock+$checkDataOld[$i]->qty,
-                                        ]);
-                            }
-                           
-                            if($checkDataOld[$i]->type == 'SparePart'){
-                                $descPengembalian[$i] = '(Update Service) Pengembalian Barang Pada Service '.$req->code;
-                            }else{
-                                $descPengembalian[$i] = '(Update Service) Pengembalian Barang Loss Pada Service '.$req->code;
-                            }
-                            StockMutation::create([
-                                'item_id'    =>$checkDataOld[$i]->item_id,
-                                'unit_id'    =>$checkStockExisting[$i][0]->unit_id,
-                                'branch_id'  =>$checkStockExisting[$i][0]->branch_id,
-                                'qty'        =>$checkDataOld[$i]->qty,
-                                'code'       =>$req->code,
-                                'type'       =>'In',
-                                'description'=>$descPengembalian[$i],
-                            ]);
 
-                            // Pegeluaran atas data item yang dirubah
-                            if($req->typeDetailOld[$i] == 'SparePart'){
-                                $descPengeluaran[$i] = '(Update Service) Pengeluaran Barang Pada Service '.$req->code;
-                            }else{
-                                $descPengeluaran[$i] = '(Update Service) Pengeluaran Barang Loss Pada Service '.$req->code;
                             }
-                            Stock::where('item_id',$req->itemsDetailOld[$i])
-                            ->where('branch_id',$getEmployee->branch_id)->update([
-                                'stock'      =>$checkStockExisting[$i][0]->stock-$req->qtyDetailOld[$i],
-                            ]);
-                            StockMutation::create([
-                                'item_id'    =>$req->itemsDetailOld[$i],
-                                'unit_id'    =>$checkStockExisting[$i][0]->unit_id,
-                                'branch_id'  =>$checkStockExisting[$i][0]->branch_id,
-                                'qty'        =>$req->qtyDetailOld[$i],
-                                'code'       =>$req->code,
-                                'type'       =>'Out',
-                                'description'=>$descPengeluaran[$i],
-                            ]);
-
-                            ServiceDetail::where('id',$req->idDetailOld[$i])->update([
-                                // 'service_id'=>$id,
-                                'item_id'=>$req->itemsDetailOld[$i],
-                                'price'=>str_replace(",", '',$req->priceDetailOld[$i]),
-                                'qty'=>$req->qtyDetailOld[$i],
-                                'total_price'=>str_replace(",", '',$req->totalPriceDetailOld[$i]),
-                                'description' =>str_replace(",", '',$req->descriptionDetailOld[$i]),
-                                'type' =>$req->typeDetailOld[$i],
-                                'updated_by'=>Auth::user()->name,
-                                'updated_at'=>date('Y-m-d h:i:s'),
-                            ]);
-
                         }
                     }
-                    }
                 }
+                ServiceDetail::where('id',$req->idDetailOld[0])->update([
+                    // 'service_id'=>$id,
+                    'item_id'=>$req->itemsDetailOld[0],
+                    'price'=>str_replace(",", '',$req->priceDetailOld[0]),
+                    'qty'=>$req->qtyDetailOld[0],
+                    'total_price'=>str_replace(",", '',$req->totalPriceDetailOld[0]),
+                    'description' =>str_replace(",", '',$req->descriptionDetailOld[0]),
+                    'type' =>$req->typeDetailOld[0],
+                    'updated_by'=>Auth::user()->name,
+                    'updated_at'=>date('Y-m-d h:i:s'),
+                ]);
             }
             DB::commit();
             return Response::json(['status' => 'success','message'=>'Data Tersimpan']);

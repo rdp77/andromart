@@ -1,46 +1,57 @@
 @include('layouts.components.header')
-
+<style>
+  body{
+    -webkit-print-color-adjust: exact !important;
+  }
+  .invoice-number{
+    margin-top: -120px !important;
+  }
+  .table.table-md td, .table.table-md th {
+    padding: 5px !important;
+  }
+</style>
 <div class="invoice">
   <div class="invoice-print">
     <div class="row">
       <div class="col-lg-12">
         <div class="invoice-title">
-          <h2>Invoice</h2>
-          <div class="invoice-number">Order #12345</div>
+          {{-- <h2>Invoice</h2> --}}
+          <h2><img alt="Porto" height="150" src="{{ asset('assetsfrontend/img/andromart.png') }}" style="margin-top: 10px;"></h2>
+          <div class="invoice-number"><h3>Job Order :</h3><h1 style="font-size: 50px">{{$service->code}}</h1></div>
         </div>
-        <hr>
+        <br>
+        <br>
+        {{-- <hr> --}}
         <div class="row">
           <div class="col-md-6">
             <address>
-              <strong>Billed To:</strong><br>
-                Ujang Maman<br>
-                1234 Main<br>
-                Apt. 4B<br>
-                Bogor Barat, Indonesia
+              <strong><p style="font-size: 38px">Teknisi</p></strong>
+              <p style="font-size: 30px">{{$service->employee1->name}}</p>
+              <p style="font-size: 30px">{{$service->employee1->contact}}</p>
             </address>
           </div>
           <div class="col-md-6 text-md-right">
             <address>
-              <strong>Shipped To:</strong><br>
-              Muhamad Nauval Azhar<br>
-              1234 Main<br>
-              Apt. 4B<br>
-              Bogor Barat, Indonesia
+              <strong><p style="font-size: 38px">Customer</p></strong>
+              <p style="font-size: 30px">{{$service->customer_name}}</p>
+              <p style="font-size: 30px">{{$service->customer_phone}}</p>
+              <p style="font-size: 30px">{{$service->customer_address}}</p>
             </address>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6">
             <address>
-              <strong>Payment Method:</strong><br>
-              Visa ending **** 4242<br>
-              ujang@maman.com
+              <br>
+              <strong><h2>Status Bayar</h2></strong>
+              <strong><h3 style="color:#28a745">Lunas </h3></strong>
             </address>
           </div>
           <div class="col-md-6 text-md-right">
             <address>
-              <strong>Order Date:</strong><br>
-              September 19, 2018<br><br>
+              <br>
+              <strong><h2>Tanggal</h2></strong>
+              <p style="font-size: 30px">25 September 2021</p>
             </address>
           </div>
         </div>
@@ -49,76 +60,82 @@
     
     <div class="row mt-4">
       <div class="col-md-12">
-        <div class="section-title">Order Summary</div>
-        <p class="section-lead">All items here cannot be deleted.</p>
-        <div class="table-responsive">
+        {{-- <div class="section-title"><h3>Service Detail</h3></div> --}}
+        <div>
+          <table class="table table-striped table-hover table-md">
+            <tbody>
+              <tr>
+              </tr>
+                <th class="text-left" colspan="2" style="font-size: 25px">Service Detail</th>
+                <th class="text-left" style="font-size: 25px">Keluhan</th>
+                <th class="text-left" style="font-size: 25px">Keterangan</th>
+              </tr>
+              <tr>
+                <td style="font-size: 20px">Tipe</td>
+                <td style="font-size: 20px">{{$service->Brand->Category->name}}</td>
+                <td rowspan="3" style="font-size: 20px">{{$service->complaint}}</td>
+                <td rowspan="3" style="font-size: 20px">{{$service->description}}</td>
+              </tr>
+              <tr>
+                <td style="font-size: 20px">Merk</td>
+                <td style="font-size: 20px">{{$service->Brand->name}}</td>
+              </tr>
+              <tr>
+                <td style="font-size: 20px">Series</td>
+                <td style="font-size: 20px">{{$service->Type->name}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
           <table class="table table-striped table-hover table-md">
             <tbody><tr>
-              <th data-width="40" style="width: 40px;">#</th>
-              <th>Item</th>
-              <th class="text-center">Price</th>
-              <th class="text-center">Quantity</th>
-              <th class="text-right">Totals</th>
+              <th data-width="40" style="width: 40px;" style="font-size: 25px">#</th>
+              <th style="font-size: 25px">Item</th>
+              <th class="text-center" style="font-size: 25px">Harga</th>
+              <th class="text-center" style="font-size: 25px">Qty</th>
+              <th class="text-right" style="font-size: 25px">total</th>
             </tr>
-            <tr>
-              <td>1</td>
-              <td>Mouse Wireless</td>
-              <td class="text-center">$10.99</td>
-              <td class="text-center">1</td>
-              <td class="text-right">$10.99</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Keyboard Wireless</td>
-              <td class="text-center">$20.00</td>
-              <td class="text-center">3</td>
-              <td class="text-right">$60.00</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Headphone Blitz TDR-3000</td>
-              <td class="text-center">$600.00</td>
-              <td class="text-center">1</td>
-              <td class="text-right">$600.00</td>
-            </tr>
+            @foreach ($service->ServiceDetail as $i => $el)
+              <tr>
+                <td style="font-size: 20px">{{$i+1}}</td>
+                <td style="font-size: 20px">{{$el->Items->name}}</td>
+                <td style="font-size: 20px" class="text-center">{{$el->price}}</td>
+                <td style="font-size: 20px" class="text-center">{{$el->qty}}</td>
+                <td style="font-size: 20px" class="text-right">{{$el->total_price}}</td>
+              </tr>
+            @endforeach
           </tbody></table>
         </div>
         <div class="row mt-4">
-          <div class="col-lg-8">
-            <div class="section-title">Payment Method</div>
-            <p class="section-lead">The payment method that we provide is to make it easier for you to pay invoices.</p>
-            <div class="images">
-              <img src="assets/img/visa.png" alt="visa">
-              <img src="assets/img/jcb.png" alt="jcb">
-              <img src="assets/img/mastercard.png" alt="mastercard">
-              <img src="assets/img/paypal.png" alt="paypal">
-            </div>
+          <div class="col-lg-8 col-md-8 col-sm-8">
+            <div class="section-title" style="font-size: 20px">Payment Method</div>
+            <p class="section-lead" style="font-size: 20px">The payment method that we provide is to make it easier for you to pay invoices.</p>
           </div>
-          <div class="col-lg-4 text-right">
-            <div class="invoice-detail-item">
-              <div class="invoice-detail-name">Subtotal</div>
-              <div class="invoice-detail-value">$670.99</div>
-            </div>
-            <div class="invoice-detail-item">
-              <div class="invoice-detail-name">Shipping</div>
-              <div class="invoice-detail-value">$15</div>
-            </div>
-            <hr class="mt-2 mb-2">
-            <div class="invoice-detail-item">
-              <div class="invoice-detail-name">Total</div>
-              <div class="invoice-detail-value invoice-detail-value-lg">$685.99</div>
-            </div>
+          <div class="col-lg-4 col-md-4 col-sm-4  text-right">
+            <table class="table table-striped table-hover table-md">
+              <tbody>
+                <tr>
+                  <td class="text-right" style="font-size: 20px">Jasa</td>
+                  <td class="text-right" style="font-size: 20px"><b>{{$service->total_service}}</b></td>
+                </tr>
+                <tr>
+                  <td class="text-right" style="font-size: 20px">Spare Part</td>
+                  <td class="text-right" style="font-size: 20px"><b>{{$service->total_part}}</b></td>
+                </tr>
+                <tr>
+                  <td class="text-right" style="font-size: 20px">Discount</td>
+                  <td class="text-right" style="font-size: 20px"><b>{{$service->discount_price}}</b></td>
+                </tr>
+                <tr>
+                  <td class="text-right" style="font-size: 20px">Total Service</td>
+                  <td class="text-right" style="font-size: 20px"><b>{{$service->total_price}}</b></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
     </div>
-  </div>
-  <hr>
-  <div class="text-md-right">
-    <div class="float-lg-left mb-lg-0 mb-3">
-      <button class="btn btn-primary btn-icon icon-left"><i class="fas fa-credit-card"></i> Process Payment</button>
-      <button class="btn btn-danger btn-icon icon-left"><i class="fas fa-times"></i> Cancel</button>
-    </div>
-    <button class="btn btn-warning btn-icon icon-left"><i class="fas fa-print"></i> Print</button>
   </div>
 </div>
