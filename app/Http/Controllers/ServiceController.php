@@ -701,7 +701,7 @@ class ServiceController extends Controller
                                     // Jika Type sama maka tidak perlu melakukan update stock mutasi
                                 }else{
                                     // Jika Type berbeda maka perlu melakukan update stock mutasi dengan type yaitu MUTATION
-                                    return 'masuk 4.2';
+                                    // return 'masuk 4.2';
                                     $desc[$i] = '(Update Service) Perubahan Barang dari '.$checkDataOld[$i]->type.' Menjadi '.$req->typeDetailOld[$i].' Pada Service '.$req->code;
 
                                     StockMutation::create([

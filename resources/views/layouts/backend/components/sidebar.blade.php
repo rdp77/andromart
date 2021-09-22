@@ -150,14 +150,18 @@
                     'active'=>'',
                     'title'=>'Stok',
                     'url'=>route('stock.index')])
-                    @include('layouts.backend.components.sidebarMenu',[
+                    {{-- @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Stok Masuk',
-                    'url'=>''])
+                    'url'=>route('stockIn.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Stok Keluar',
-                    'url'=>''])
+                    'url'=>route('stockIn.index')]) --}}
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Stok Transaksi',
+                    'url'=>route('stockTransaction.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Stok Opname',

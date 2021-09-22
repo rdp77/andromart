@@ -11,12 +11,20 @@ class StockTransaction extends Model
     use HasFactory;
     use SoftDeletes;
 
+    protected $table = 'stocks_transaction';
+    public $timestamps = false;
+    public $incrementing = true;
+
     protected $fillable = [
+        'id',
         'item_id',
         'unit_id',
         'branch_id',
         'qty',
         'type',
+        'reason',
+        'date',
+        'code',
         'description',
         'created_at',
         'updated_at',
@@ -25,4 +33,13 @@ class StockTransaction extends Model
         'updated_by',
         'deleted_by',
     ];
+
+    public function item()
+    {
+        return $this->belongsTo('App\Models\Item');
+    }
+    public function stock()
+    {
+        return $this->belongsTo('App\Models\Stock');
+    }
 }
