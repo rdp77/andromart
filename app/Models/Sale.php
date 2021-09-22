@@ -77,4 +77,9 @@ class Sale extends Model
     {
         return $this->belongsTo('App\Models\Warranty');
     }
+
+    public function Customer()
+    {
+        return $this->belongsTo('App\Models\Customer', 'customer_id', 'id');
+    }
 }
