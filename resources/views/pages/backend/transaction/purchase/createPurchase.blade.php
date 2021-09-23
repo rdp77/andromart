@@ -118,7 +118,7 @@
             @foreach ($item as $el)
                 <input class="itemsData" type="hidden"
                 data-price="{{$el->buy}}"
-                data-name="{{$el->name}}"
+                data-name="{{$el->name}} | {{$el->supplier}}"
                 value="{{$el->id}}">
             @endforeach
             @foreach ($unit as $el)

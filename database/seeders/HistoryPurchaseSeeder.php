@@ -2,10 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\Purchasing;
+use App\Models\HistoryPurchase;
 use Illuminate\Database\Seeder;
 
-class PurchasingSeeder extends Seeder
+class HistoryPurchaseSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -14,12 +14,9 @@ class PurchasingSeeder extends Seeder
      */
     public function run()
     {
-        Purchasing::create([
+        HistoryPurchase::create([
+            'purchasing_id' => 1,
             'date' => date('Y-m-d H:i:s'),
-            'code' => 'PCS-10001010',
-            'price' => 1350000,
-            'discount' => 50000,
-            'status' => 'dept',
         ]);
     }
 }

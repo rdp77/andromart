@@ -78,7 +78,7 @@ $.ajaxSetup({
 function del(id) {
     swal({
         title: "Apakah Anda Yakin?",
-        text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus data peraturan Anda.",
+        text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus data pembelian Anda.",
         icon: "warning",
         buttons: true,
         dangerMode: true,
@@ -136,6 +136,7 @@ function addItem() {
         dataBranches += '<option data-index="'+(index+1)+'"  data-code="'+$(this).data('code')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
     });
     var dataDet = dataDetail+1;
+    console.log(dataDet);
     $('.dropHereItem').append(
         '<tr class="dataDetail dataDetail_'+(dataDet)+'">'+
             '<td style="display:none">'+
@@ -161,7 +162,7 @@ function addItem() {
             '</td>'+
         '</tr>' +
          // class="dataDetail dataDetail_'+(dataDet)+'"
-        '<tr class="dataDetail dataDetail_'+(dataDet)+'" style="border-bottom: solid 2px #ddd; margin-bottom: 5px;">'+
+        '<tr class="dataDetail_'+(dataDet)+'">'+
             '<td>'+
             '<select class="select2 itemsDetail" name="unitsDetail[]">'+
                 '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
@@ -169,7 +170,7 @@ function addItem() {
             '</select>'+
             '</td>'+
             '<td>'+
-                '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="1" style="text-align: right; width: 75px;">'+
+                '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="1" style="text-align: right;">'+
             '</td>'+
             '<td>'+
                 '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="0" style="text-align: right">'+
@@ -177,7 +178,15 @@ function addItem() {
             // '<td>'+
             //     '<button type="button" class="btn btn-danger removeDataDetail" value="'+(index+1)+'" >X</button>'+
             // '</td>'+
+        '</tr>' +
+        '<tr class="dataDetail_'+(dataDet)+'" style="border-bottom: solid 2px #ddd; margin-bottom: 5px;">'+
+            '<td colspan="4">'+
+                '<input type="text" class="form-control desDetail desDetail_'+(index+1)+'" name="desDetail[]" placeholder="Deskripsi">'+
+            '</td>'+
+        '</tr>' +
+        '<tr class="dataDetail_'+(dataDet)+'" height="50px">'+
         '</tr>'
+
     );
     $('.select2').select2();
     $(".cleaveNumeral")

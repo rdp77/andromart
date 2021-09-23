@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Purchasing;
 use App\Models\PurchasingDetail;
+use App\Models\HistoryPurchase;
+use App\Models\HistoryDetailPurchase;
 use App\Models\Stock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -28,12 +30,16 @@ class ReceptionController extends Controller
         if ($req->ajax()) {
             $data = Purchasing::with('employee')->get();
             foreach($data as $row) {
+                $tanggal = date("d F", strtotime($row->date));
+                $row->date = $tanggal;
                 if($row->done == 2) {
                     $row->done = "Telah Selesai";
                 } else if ($row->done == 1) {
                     $row->done = "Masih Proses";
+                }  else if ($row->done == 3) {
+                    $row->done = "Belum Diproses";
                 } else {
-                    $row->done = "Belum Proses";
+                    $row->done = "Belum Diverifikasi";
                 }
             }
             return Datatables::of($data)
@@ -44,9 +50,13 @@ class ReceptionController extends Controller
                             data-toggle="dropdown">
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>';
-                    $actionBtn .= '<div class="dropdown-menu">
-                        <a class="dropdown-item" href="' . route('reception.edit', Crypt::encryptString($row->id)) . '">Ubah</a>';
-                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
+                    if($row->done == "Belum Diverifikasi") {
+                        $actionBtn .= '<div class="dropdown-menu">';
+                    } else {
+                        $actionBtn .= '<div class="dropdown-menu">
+                            <a class="dropdown-item" href="' . route('reception.edit', Crypt::encryptString($row->id)) . '">Ubah</a>';
+                    }
+                    // $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
@@ -93,7 +103,11 @@ class ReceptionController extends Controller
         ->where('purchasing_details.qty', '>', 0)
         ->select('purchasing_details.id as id', 'qty', 'items.name as itemName', 'branches.name as branchName', 'units.name as unitName', 'items.id as item_id', 'units.id as unit_id', 'branches.id as branch_id')
         ->get();
-        return view('pages.backend.transaction.reception.editReception', compact('model', 'models', 'id'));
+        $history = HistoryPurchase::where('purchasing_id', $id)->get();
+        // dd($history);
+        // $historyDetail = HistoryDetailPurchase::where('')
+
+        return view('pages.backend.transaction.reception.editReception', compact('model', 'models', 'id', 'history'));
     }
 
     public function update(Request $req, $id)
@@ -124,6 +138,7 @@ class ReceptionController extends Controller
         }
         if($done == 1){
             $purchase->done = 2;
+            $purchase->created_by = Auth::user()->name;
             $purchase->save();
         }
         return Redirect::route('reception.index')
@@ -145,79 +160,9 @@ class ReceptionController extends Controller
 
         return Response::json(['status' => 'success']);
     }
-    // /**
-    //  * Display a listing of the resource.
-    //  *
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function index()
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Show the form for creating a new resource.
-    //  *
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function create()
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Store a newly created resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function store(Request $request)
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Display the specified resource.
-    //  *
-    //  * @param  \App\Models\Purchasing  $purchasing
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function show(Purchasing $purchasing)
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Show the form for editing the specified resource.
-    //  *
-    //  * @param  \App\Models\Purchasing  $purchasing
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function edit(Purchasing $purchasing)
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Update the specified resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @param  \App\Models\Purchasing  $purchasing
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function update(Request $request, Purchasing $purchasing)
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Remove the specified resource from storage.
-    //  *
-    //  * @param  \App\Models\Purchasing  $purchasing
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function destroy(Purchasing $purchasing)
-    // {
-    //     //
-    // }
+    public function history(Request $request)
+    {
+        $models = $request->id;
+        return view('pages.backend.transaction.reception.historyReception', compact("models"));
+    }
 }
