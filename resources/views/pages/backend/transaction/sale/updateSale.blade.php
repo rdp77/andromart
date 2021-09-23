@@ -173,6 +173,7 @@
             @foreach ($item as $el)
                 <input class="itemsData" type="hidden"
                 data-price="{{$el->sell - $el->discount}}"
+                data-supplier="{{$el->supplier->name}}"
                 @foreach ($el->stock as $el1)
                     @if (Auth::user()->employee->branch_id == $el1->branch_id)
                         data-stock="{{$el1->stock}}"
@@ -242,7 +243,7 @@
                                     </select>
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control  supplier supplier_{{$i}}" name="supplierDetailOld[]" data-index="{{$i}}"" value="{{$el->item->supplier->name}}">
+                                    <input type="text" readonly class="form-control  supplier supplier_{{$i}}" name="supplierDetailOld[]" data-index="{{$i}}"" value="{{$el->item->supplier->name}}">
                                 </td>
                                 <td>
                                     <input type="text" class="form-control cleaveNumeral  priceDetail priceDetail_{{$i}}" name="priceDetailOld[]" data-index="{{$i}}" style="text-align: right" value="{{$el->price}}">

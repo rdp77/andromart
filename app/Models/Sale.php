@@ -12,9 +12,10 @@ class Sale extends Model
     use SoftDeletes;
 
     public $timestamps = false;
-    public $incrementing = true;
+    public $incrementing = false;
 
     protected $fillable = [
+        'id',
         'code',
         'user_id',
         'branch_id',
