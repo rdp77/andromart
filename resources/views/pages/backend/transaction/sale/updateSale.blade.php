@@ -35,7 +35,7 @@
                                     class="control-label">{{ __('Sales') }}<code>*</code></label>
                             </div>
                             <select class="select2 validation" name="sales_id" data-name="Sales">
-                                <option value="{{$sale->sales->id}}">{{$sale->sales->name}}</option>
+                                {{-- <option value="{{$sale->sales->id}}">{{$sale->sales->name}}</option> --}}
                                 @foreach ($sales as $sales)
                                 <option value="{{$sales->id}}">{{$sales->name}}</option>
                                 @endforeach
