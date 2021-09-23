@@ -249,7 +249,7 @@ function addItem() {
             '</select>'+
             '</td>'+
             '<td>'+
-                '<input type="text" class="form-control supplier supplier_'+(index+1)+'" name="supplierDetail[]" data-index="'+(index+1)+'">'+
+                '<input type="text" class="form-control supplier supplier_'+(index+1)+'" name="supplierDetail[]" data-index="'+(index+1)+'" readonly>'+
             '</td>'+
             '<td>'+
                 '<input type="text" class="form-control cleaveNumeral priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
