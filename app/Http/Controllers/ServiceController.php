@@ -863,13 +863,64 @@ class ServiceController extends Controller
 
     public function destroy(Request $req, $id)
     {
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Menghapus Data Kredit'
-        );
-        ServiceDetail::where('service_id',$id)->destroy($id);
-        return Response::json(['status' => 'success']);
+        // $this->DashboardController->createLog(
+        //     $req->header('user-agent'),
+        //     $req->ip(),
+        //     'Menghapus Data Kredit'
+        // );
+        DB::beginTransaction();
+        try {
+                $getEmployee =  Employee::where('user_id',Auth::user()->id)->first();
+                $checkDataDeleted = ServiceDetail::where('service_id',$id)->get();
+                $checkStockDeleted = [];
+                for ($i=0; $i <count($checkDataDeleted) ; $i++) {
+                    $checkStockDeleted[$i] = Stock::where('item_id',$checkDataDeleted[$i]->item_id)
+                                                ->where('branch_id',$getEmployee->branch_id)
+                                                ->where('id','!=',1)
+                                                ->get();
+
+                    if($checkDataDeleted[$i]->type == 'SparePart'){
+                        $desc[$i] = '(Update Service) Pengembalian Barang Pada Service '.$req->code;
+                    }else{
+                        $desc[$i] = '(Update Service) Pengembalian Barang Loss Pada Service '.$req->code;
+                    }
+                    // return $desc;
+                    Stock::where('item_id',$checkDataDeleted[$i]->item_id)
+                    ->where('branch_id',$getEmployee->branch_id)->update([
+                        'stock'      =>$checkStockDeleted[$i][0]->stock+$checkDataDeleted[$i]->qty,
+                    ]);
+                    StockMutation::create([
+                        'item_id'    =>$checkDataDeleted[$i]->item_id,
+                        'unit_id'    =>$checkStockDeleted[$i][0]->unit_id,
+                        'branch_id'  =>$checkStockDeleted[$i][0]->branch_id,
+                        'qty'        =>$checkDataDeleted[$i]->qty,
+                        'code'       =>$req->code,
+                        'type'       =>'In',
+                        'description'=>$desc[$i],
+                    ]);
+                }
+
+            DB::table('service')->where('id',$id)->delete();
+            DB::table('service_detail')->where('id',$id)->delete();
+            DB::table('service_payment')->where('id',$id)->delete();
+            DB::table('service_status_mutation')->where('id',$id)->delete();
+            // Stock::where('item_id',$checkDataOld[$i]->item_id)
+            //                                     ->where('branch_id',$getEmployee->branch_id)->update([
+            //                                         'stock'      =>$checkStockExistingOlder[$i][0]->stock+$checkDataOld[$i]->qty,
+            //                                     ]);
+
+            // Service::where('id',$id)->destroy($id);
+            // ServiceDetail::where('service_id',$id)->destroy($id);
+            // ServicePayment::where('service_id',$id)->destroy($id);
+            // ServiceMutation::where('service_id',$id)->destroy($id);
+            return Response::json(['status' => 'success']);
+            DB::commit();
+            return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return$th;
+            return Response::json(['status' => 'error','message'=>$th]);
+        }
     }
     public function serviceFormUpdateStatus()
     {
