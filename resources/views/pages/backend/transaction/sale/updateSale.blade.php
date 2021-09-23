@@ -35,7 +35,7 @@
                                     class="control-label">{{ __('Sales') }}<code>*</code></label>
                             </div>
                             <select class="select2 validation" name="sales_id" data-name="Sales">
-                                {{-- <option value="{{$sale->sales->id}}">{{$sale->sales->name}}</option> --}}
+                                <option value="{{$sale->sales->id}}">{{$sale->sales->name}}</option>
                                 @foreach ($sales as $sales)
                                 <option value="{{$sales->id}}">{{$sales->name}}</option>
                                 @endforeach
@@ -63,7 +63,7 @@
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="series">{{ __('Member') }}<code>*</code></label>
                             <select class="select2" name="customer_id">
-                                <option value="{{ $sale->customer->id }}">{{ $sale->customer->name }}</option>
+                                {{-- <option value="{{ $sale->customer->id }}">{{ $sale->customer->name }}</option> --}}
                                 @foreach ($customer as $customer)
                                 <option value="{{ $customer->id }}">{{ $customer->name }}</option>
                                 @endforeach
