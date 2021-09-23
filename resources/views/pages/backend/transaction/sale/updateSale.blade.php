@@ -109,7 +109,7 @@
                     <div class="form-group">
                         <label for="totalSparePart">{{ __('Barang') }}<code>*</code></label>
                         <input readonly id="totalSparePart" onchange="sumTotal()" type="text" value="{{ $sale->item_price}}"
-                            class="form-control cleaveNumeral" name="totalSparePart" style="text-align: right">
+                            class="form-control cleaveNumeral validation" data-name="Barang" name="totalSparePart" style="text-align: right">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Satuan Diskon Yang Dipakai</label>
