@@ -112,8 +112,8 @@ class EmployeeController extends Controller
 
         Employee::where('id', $id)
             ->update([
-                // 'branch_id' => $req->branch_id,
-                // 'level' => $req->level,
+                'branch_id' => $req->branch_id,
+                'level' => $req->level,
                 'identity' => $req->identity,
                 'name' => $req->name,
                 'birthday' => $birthday,

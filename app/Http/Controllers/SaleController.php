@@ -44,9 +44,10 @@ class SaleController extends Controller
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>';
                     $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('sale.edit', $row->id) . '">Edit</a>';
-                    $actionBtn .= '<a onclick="" class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
-                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
+                            <a class="dropdown-item" href="' . route('sale.edit', $row->id) . '" >Edit</a>';
+                    $actionBtn .= '<a class="dropdown-item" href="' . route('sale.printSale', $row->id) . '" target="output"><i class="fas fa-print"></i> Cetak</a>';
+                    // $actionBtn .= '<a onclick="" class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
+                    // $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
@@ -557,5 +558,13 @@ class SaleController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function printSale($id)
+    {
+        $sale = Sale::with('SaleDetail', 'Sales', 'SaleDetail.Item', 'SaleDetail.Item.Brand', 'SaleDetail.Item.Brand.Category', 'CreatedByUser')->find($id);
+        // return $Service;
+        $member = User::get();
+        return view('pages.backend.transaction.sale.printSale', ['sale' => $sale,'member'=>$member]);
     }
 }

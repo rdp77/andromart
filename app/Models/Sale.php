@@ -82,4 +82,9 @@ class Sale extends Model
     {
         return $this->belongsTo('App\Models\Customer', 'customer_id', 'id');
     }
+
+    public function CreatedByUser()
+    {
+        return $this->belongsTo('App\Models\User', 'user_id', 'id');
+    }
 }
