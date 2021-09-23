@@ -64,6 +64,7 @@
                             <label for="series">{{ __('Member') }}<code>*</code></label>
                             <select class="select2" name="customer_id">
                                 {{-- <option value="{{ $sale->customer->id }}">{{ $sale->customer->name }}</option> --}}
+                                <option value=""> -Select- </option>
                                 @foreach ($customer as $customer)
                                 <option value="{{ $customer->id }}">{{ $customer->name }}</option>
                                 @endforeach
