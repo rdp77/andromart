@@ -136,7 +136,7 @@ function save() {
                         swal(data.message, {
                             icon: "success",
                         });
-                        // location.reload();
+                        location.reload();
                     }else{
                         swal(data.message, {
                             icon: "warning",
@@ -189,7 +189,7 @@ function updateData(params) {
                         swal(data.message, {
                             icon: "success",
                         });
-                        // location.reload();
+                        location.reload();
                     }else{
                         swal(data.message, {
                             icon: "warning",
@@ -228,7 +228,12 @@ function addItem() {
 
     var dataItems = [];
     $.each($('.itemsData'), function(){
-        dataItems += '<option data-index="'+(index+1)+'" data-price="'+$(this).data('price')+'" data-stock="'+$(this).data('stock')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
+        if ($(this).data('stock') == null) {
+            var stocks = 0;
+        }else{
+            var stocks = $(this).data('stock');
+        }
+        dataItems += '<option data-index="'+(index+1)+'" data-supplier="'+$(this).data('supplier')+'" data-price="'+$(this).data('price')+'" data-stock="'+stocks+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
     });
 
     $('.dropHereItem').append(
@@ -242,6 +247,9 @@ function addItem() {
                 '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
                 dataItems+
             '</select>'+
+            '</td>'+
+            '<td>'+
+                '<input type="text" class="form-control supplier supplier_'+(index+1)+'" name="supplierDetail[]" data-index="'+(index+1)+'">'+
             '</td>'+
             '<td>'+
                 '<input type="text" class="form-control cleaveNumeral priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
@@ -300,6 +308,7 @@ $(document.body).on("change", ".itemsDetail", function () {
 
     if ($(this).val() == '-') {
         $('.priceDetail_' + index).val(0);
+        $('.supplier_' + index).val(' ');
         $('.stock_' + index).val(0);
         $('.qtyDetail_' + index).val(0);
         $('.totalPriceDetail_' + index).val(0);
@@ -318,6 +327,7 @@ $(document.body).on("change", ".itemsDetail", function () {
         $('.priceDetail_' + index).val(parseInt(itemPrice).toLocaleString('en-US'));
         var totalItemPrice = itemPrice * itemQty;
         $('.stock_' + index).val($(this).find(':selected').data('stock'));
+        $('.supplier_' + index).val($(this).find(':selected').data('supplier'));
         $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         if(typeDetail == 'SparePart'){
             $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
@@ -344,6 +354,19 @@ $(document.body).on("click",".removeDataDetail",function(){
     $('.dataDetail_'+this.value).remove();
     var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
 
+    sum();
+    sumTotal();
+    if (checkVerificationDiscount == 'percent') {
+        sumDiscont();
+    }else{
+        sumDiscontValue();
+    }
+});
+
+$(document.body).on("click",".removeDataDetailExisting",function(){
+    $('.dropDeletedExistingData').append('<input type="hidden" class="form-control" value="'+$(this).data('id')+'" name="deletedExistingData[]">');
+    $('.dataDetail_'+this.value).remove();
+    var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
     sum();
     sumTotal();
     if (checkVerificationDiscount == 'percent') {

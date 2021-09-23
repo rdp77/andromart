@@ -31,7 +31,10 @@ class NotesController extends Controller
         if ($req->ajax()) {
             // $data = Branch::with('area')->get();
             $data = Notes::with('users')->get();
-            // $data = Notes::get();
+            foreach($data as $row) {
+                $tanggal = date("d F", strtotime($row->date));
+                $row->date = $tanggal;
+            }
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -140,39 +143,39 @@ class NotesController extends Controller
 
     public function update(Request $req, $id)
     {
-        if($req->code == Area::find($id)->code){
-            Validator::make($req->all(), [
-                'name' => ['required', 'string', 'max:255'],
-            ])->validate();
-        }
-        else{
-            Validator::make($req->all(), [
-                'code' => ['required', 'string', 'max:255', 'unique:areas'],
-                'name' => ['required', 'string', 'max:255'],
-            ])->validate();
-        }
+        // if($req->code == Area::find($id)->code){
+        //     Validator::make($req->all(), [
+        //         'name' => ['required', 'string', 'max:255'],
+        //     ])->validate();
+        // }
+        // else{
+        //     Validator::make($req->all(), [
+        //         'code' => ['required', 'string', 'max:255', 'unique:areas'],
+        //         'name' => ['required', 'string', 'max:255'],
+        //     ])->validate();
+        // }
 
-        Area::where('id', $id)
-            ->update([
-                'code' => $req->code,
-                'name' => $req->name,
-                'updated_by' => Auth::user()->name,
-            ]);
+        // Area::where('id', $id)
+        //     ->update([
+        //         'code' => $req->code,
+        //         'name' => $req->name,
+        //         'updated_by' => Auth::user()->name,
+        //     ]);
 
-        $area = Area::find($id);
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Mengubah masrter area ' . Area::find($id)->name
-        );
+        // $area = Area::find($id);
+        // $this->DashboardController->createLog(
+        //     $req->header('user-agent'),
+        //     $req->ip(),
+        //     'Mengubah masrter area ' . Area::find($id)->name
+        // );
 
-        $area->save();
+        // $area->save();
 
-        return Redirect::route('area.index')
-            ->with([
-                'status' => 'Berhasil merubah master area ',
-                'type' => 'success'
-            ]);
+        // return Redirect::route('area.index')
+        //     ->with([
+        //         'status' => 'Berhasil merubah master area ',
+        //         'type' => 'success'
+        //     ]);
     }
 
     public function destroy(Request $req, $id)
@@ -180,10 +183,10 @@ class NotesController extends Controller
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Menghapus master area ' . Area::find($id)->name
+            'Menghapus Notulensi ' . Notes::find($id)->name
         );
 
-        Area::destroy($id);
+        Notes::destroy($id);
 
         return Response::json(['status' => 'success']);
     }

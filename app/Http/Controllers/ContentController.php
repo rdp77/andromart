@@ -121,6 +121,7 @@ class ContentController extends Controller
                 $content->url = $req->url;
                 $content->class = $req->class;
                 $content->position = $req->position;
+                $content->created_by = Auth::user()->name;
                 $content->save();
                 // Content::create([
                 //     'content_types_id' => $id,

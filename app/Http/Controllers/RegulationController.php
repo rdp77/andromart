@@ -129,10 +129,6 @@ class RegulationController extends Controller
     {
         $id = Crypt::decryptString($id);
         $models = Regulation::where('id', $id)->first();
-        // $models = Notes::where('notes.id', $id)
-        // ->join('users', 'notes.users_id', '=', 'users.id')
-        // ->select('notes.id as notes_id', 'notes.date as date', 'users.name as name', 'users.id as users_id', 'notes.title as title', 'notes.description as description')
-        // ->first();
         $modelsFile = RegulationDetail::where('regulation_id', $id)->get();
         // dd($modelsFile);
         return view('pages.backend.office.regulation.showRegulation', compact('models', 'modelsFile'));
@@ -140,48 +136,10 @@ class RegulationController extends Controller
 
     public function edit($id)
     {
-        $id = Crypt::decryptString($id);
-        dd($id);
-        $area = Area::find($id);
-        return view('pages.backend.master.area.updateArea', ['area' => $area]);
     }
 
     public function update(Request $req, $id)
     {
-        dd('ini update');
-        if($req->code == Area::find($id)->code){
-            Validator::make($req->all(), [
-                'name' => ['required', 'string', 'max:255'],
-            ])->validate();
-        }
-        else{
-            Validator::make($req->all(), [
-                'code' => ['required', 'string', 'max:255', 'unique:areas'],
-                'name' => ['required', 'string', 'max:255'],
-            ])->validate();
-        }
-
-        Area::where('id', $id)
-            ->update([
-                'code' => $req->code,
-                'name' => $req->name,
-                'updated_by' => Auth::user()->name,
-            ]);
-
-        $area = Area::find($id);
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Mengubah masrter area ' . Area::find($id)->name
-        );
-
-        $area->save();
-
-        return Redirect::route('area.index')
-            ->with([
-                'status' => 'Berhasil merubah master area ',
-                'type' => 'success'
-            ]);
     }
 
     public function destroy(Request $req, $id)
@@ -189,10 +147,10 @@ class RegulationController extends Controller
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Menghapus master area ' . Area::find($id)->name
+            'Menghapus peraturan ' . Regulation::find($id)->name
         );
 
-        Area::destroy($id);
+        Regulation::destroy($id);
 
         return Response::json(['status' => 'success']);
     }

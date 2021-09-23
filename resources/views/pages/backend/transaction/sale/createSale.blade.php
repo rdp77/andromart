@@ -106,7 +106,7 @@
                     <div class="form-group">
                         <label for="totalSparePart">{{ __('Barang') }}<code>*</code></label>
                         <input readonly id="totalSparePart" onchange="sumTotal()" type="text" value="0"
-                            class="form-control cleaveNumeral" name="totalSparePart" style="text-align: right">
+                            class="form-control cleaveNumeral validation" data-name="Barang" name="totalSparePart" style="text-align: right">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Satuan Diskon Yang Dipakai</label>
@@ -166,6 +166,7 @@
                     @endif
                 @endforeach
                 data-name="{{$el->name}}"
+                data-supplier="{{$el->supplier->name}}"
                 value="{{$el->id}}">
             @endforeach
 
@@ -174,6 +175,7 @@
                     <thead>
                         <tr>
                             <th style="width: 20%">Barang</th>
+                            <th style="width: 15%">Supplier</th>
                             <th>Harga</th>
                             <th style="width: 9%">Qty</th>
                             <th style="width: 9%">Stok</th>

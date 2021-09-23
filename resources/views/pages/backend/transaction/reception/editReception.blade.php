@@ -83,44 +83,85 @@
             </div>
         </div>
     </div>
-    <div class="card">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th style="width: 20%">Nama</th>
-                            <th>Barang yang belum datang</th>
-                            <th>Barang yang telah datang</th>
-                            <!-- <th>Action</th> -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php $i = 0; @endphp
-                        @foreach($models as $row)
-                            <tr>
-                                <td><input type="text" class="form-control" value="{{ $row->itemName }}" readonly></td>
-                                <td><input type="text" class="form-control cleaveNumeral qtyOld_{{ $i }}" value="{{ $row->qty }}" readonly></td>
-                                <td>
-                                    <input type="text" class="form-control cleaveNumeral qtyNew_{{ $i }}" name="qtyNew[]" onkeyup="checkQty()" style="text-align: right">
-                                    <input type="hidden" name="idDetail[]" value="{{ $i }}">
-                                    <input type="hidden" name="idPurchasing[]" value="{{ $row->id }}">
-                                    <input type="hidden" name="idItem[]" value="{{ $row->item_id }}">
-                                    <input type="hidden" name="idUnit[]" value="{{ $row->unit_id }}">
-                                    <input type="hidden" name="idBranch[]" value="{{ $row->branch_id }}">
-                                </td>
-                            </tr>
-                            @php $i++ @endphp
-                        @endforeach
-                    </tbody>
-                    <tbody class="dropHereItem" style="border: none !important">
-                    </tbody>
-                </table>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Barang</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 20%">Nama</th>
+                                    <th>Barang yang belum datang</th>
+                                    <th>Barang yang telah datang</th>
+                                    <!-- <th>Action</th> -->
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php $i = 0; @endphp
+                                @foreach($models as $row)
+                                    <tr>
+                                        <td><input type="text" class="form-control" value="{{ $row->itemName }}" readonly></td>
+                                        <td><input type="text" class="form-control cleaveNumeral qtyOld_{{ $i }}" value="{{ $row->qty }}" name="qtyOld[]" readonly></td>
+                                        <td>
+                                            <input type="text" class="form-control cleaveNumeral qtyNew_{{ $i }}" name="qtyNew[]" style="text-align: right" value="0">
+                                             <!-- onkeyup="checkQty()" -->
+                                            <input type="hidden" name="idDetail[]" value="{{ $i }}">
+                                            <input type="hidden" name="idPurchasing[]" value="{{ $row->id }}">
+                                            <input type="hidden" name="idItem[]" value="{{ $row->item_id }}">
+                                            <input type="hidden" name="idUnit[]" value="{{ $row->unit_id }}">
+                                            <input type="hidden" name="idBranch[]" value="{{ $row->branch_id }}">
+                                        </td>
+                                    </tr>
+                                    @php $i++ @endphp
+                                @endforeach
+                            </tbody>
+                            <tbody class="dropHereItem" style="border: none !important">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer text-right">
+                    <a class="btn btn-outline" href="javascript:window.history.go(-1);">{{ __('Kembali') }}</a>
+                    <button class="btn btn-primary mr-1" type="submit"><i class="far fa-save"></i>{{ __('Ubah Data') }}</button>
+                </div>
             </div>
         </div>
-        <div class="card-footer text-right">
-            <a class="btn btn-outline" href="javascript:window.history.go(-1);">{{ __('Kembali') }}</a>
-            <button class="btn btn-primary mr-1" type="submit"><i class="far fa-save"></i>{{ __('Ubah Data') }}</button>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>History Pengeditan</h4>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Tanggal</h4>
+                </div>
+                <div class="card-body">
+                    @foreach($history as $row)
+                        <button onclick="historys('{{ csrf_token() }}', '{{ route('receptionHistory') }}', '#data-history', '{{ $row->purchasing_id }}', '{{ $row->id }}')" class="btn btn-primary mr-1" type="button">
+                            <i class="far fa-save"></i>{{ $row->date }}
+                        </button>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-8">
+            <div class="card" id="data-history">
+                <div class="card-header">
+                    <h4>Harga</h4>
+                </div>
+                <div class="card-body">
+                    <h5 class="text-secondary">History Kosong</h5>
+                </div>
+            </div>
         </div>
     </div>
     <div class="modal fade" tabindex="1" role="dialog" id="exampleModal" aria-hidden="true" style="display: none;">

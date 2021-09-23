@@ -6,7 +6,10 @@
 <div class="breadcrumb-item active">{{ __('Notulensi') }}</div>
 <div class="breadcrumb-item active">{{ __('Tambah Notulensi') }}</div>
 @endsection
-
+@push('custom-css')
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+@endpush
 @section('content')
 <div class="card">
     <form method="POST" action="{{ route('notes.store') }}" enctype="multipart/form-data" class="form-data">
@@ -26,8 +29,7 @@
             </div>
             <div class="form-group col-md-12 col-xs-12">
                 <label for="description">{{ __('Deskripsi') }}<code>*</code></label>
-                <input id="description" type="text" class="form-control @error('description') is-invalid @enderror"
-                    name="description" autofocus>
+                <textarea class="summernote @error('description') is-invalid @enderror" id="description" name="description"></textarea>
                 @error('description')
                 <div class="invalid-feedback">
                     {{ $message }}

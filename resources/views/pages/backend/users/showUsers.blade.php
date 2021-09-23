@@ -9,7 +9,7 @@
 @section('content')
 @include('layouts.backend.components.notification')
 <div class="section-body">
-  <h2 class="section-title">Hi, {{ $user->username }}</h2>
+  <h2 class="section-title">Hi, {{ $user->employee->name }}</h2>
   <p class="section-lead">
     This page describe about yourself.
   </p>
@@ -22,45 +22,56 @@
           <div class="profile-widget-items">
             <div class="profile-widget-item">
               <div class="profile-widget-item-value"> {{ $user->employee->name }}
-                <div class="text-muted d-inline font-weight-normal">
+                {{-- <div class="text-muted d-inline font-weight-normal">
                   <div class="slash"></div>
                   {{ $user->employee->level }}
                   {{ $user->employee->branch->code }}
-                </div>
+                </div> --}}
               </div>
             </div>
           </div>
         </div>
 
         <div class="profile-widget-description">
-          <div class="profile-widget-name">NIK
-            <div class="text-muted d-inline font-weight-normal">
-              <div class="slash"></div> {{ $user->employee->identity }}
+            <div class="profile-widget-name">
+                <i class="fa fa-user-astronaut"></i> &nbsp;&nbsp;
+                <div class="text-muted d-inline font-weight-normal">
+                    {{ $user->employee->level }} - {{ $user->employee->branch->code }}
+                </div>
             </div>
+          <div class="profile-widget-name">
+                <div class="text-muted d-inline font-weight-normal">
+                <i class="fa fa-address-card"></i> &nbsp;
+                {{ $user->employee->identity }}
+                </div>
           </div>
-          <div class="profile-widget-name">Jenis Kelamin
-            <div class="text-muted d-inline font-weight-normal">
-              <div class="slash"></div> @if ($user->employee->gender == 'L')
-              Pria
-              @elseif ($user->employee->gender == 'P')
-              Wanita
-              @endif
-            </div>
+          <div class="profile-widget-name">
+                <i class="fa fa-restroom"></i> &nbsp;
+                <div class="text-muted d-inline font-weight-normal">
+                @if ($user->employee->gender == 'L')
+                Pria
+                @elseif ($user->employee->gender == 'P')
+                Wanita
+                @endif
+                </div>
           </div>
-          <div class="profile-widget-name">T. Tanggal Lahir
-            <div class="text-muted d-inline font-weight-normal">
-              <div class="slash"></div> {{ \Carbon\Carbon::parse($user->employee->birthday)->locale('id')->isoFormat('LL') }}
-            </div>
+          <div class="profile-widget-name">
+                <i class="fa fa-birthday-cake"></i> &nbsp;&nbsp;
+                <div class="text-muted d-inline font-weight-normal">
+                {{ \Carbon\Carbon::parse($user->employee->birthday)->locale('id')->isoFormat('LL') }}
+                </div>
           </div>
-          <div class="profile-widget-name">No. Handphone
-            <div class="text-muted d-inline font-weight-normal">
-              <div class="slash"></div> 0{{ $user->employee->contact }}
-            </div>
+          <div class="profile-widget-name">
+                <i class="fa fa-mobile-alt"></i> &nbsp;&nbsp;&nbsp;
+                <div class="text-muted d-inline font-weight-normal">
+                0{{ $user->employee->contact }}
+                </div>
           </div>
-          <div class="profile-widget-name">Alamat
-            <div class="text-muted d-inline font-weight-normal">
-              <div class="slash"></div> {{ $user->employee->address }}
-            </div>
+          <div class="profile-widget-name">
+                <i class="fa fa-home"></i> &nbsp;
+                <div class="text-muted d-inline font-weight-normal">
+                {{ $user->employee->address }}
+                </div>
           </div>
         </div>
         {{-- <div class="card-footer text-center">
@@ -93,11 +104,16 @@
         <div class="row">
           <div class="form-group col-md-4 col-12">
             <label for="identity">{{ __('NIK') }}<code>*</code></label>
-            <input type="text" class="form-control" value="{{ $user->employee->identity }}" name="identity">
+            <input type="text" class="form-control @error('identity') is-invalid @enderror"" value="{{ $user->employee->identity }}" name="identity" required>
+            @error('identity')
+              <div class="invalid-feedback">
+                {{ $message }}
+              </div>
+            @enderror
           </div>
           <div class="form-group col-md-6 col-12">
             <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
-            <input type="text" class="form-control" value="{{ $user->employee->name }}" name="name">
+            <input type="text" class="form-control" value="{{ $user->employee->name }}" name="name" required>
           </div>
         </div>
         <div class="row">
@@ -132,7 +148,7 @@
                 </div>
               </div>
               <input id="contact" type="text" class="form-control @error('contact') is-invalid @enderror" name="contact"
-                value="0{{ $user->employee->contact }}" required autocomplete="contact">
+                value="0{{ $user->employee->contact }}" required>
               @error('contact')
               <div class="invalid-feedback">
                 {{ $message }}
@@ -142,7 +158,7 @@
           </div>
           <div class="form-group col-md-7 col-12">
             <label for="address">{{ __('Alamat') }}<code>*</code></label>
-            <input type="text" class="form-control" value="{{ $user->employee->address }}" name="address">
+            <input type="text" class="form-control" value="{{ $user->employee->address }}" name="address" required>
             <div class="invalid-feedback">
               Please fill in the first name
             </div>

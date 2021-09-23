@@ -100,9 +100,23 @@ function del(id) {
     });
 }
 
-function checkQty() {
-    console.log($('.qtyNew_1').val());
-    if($('.qtyOld_1').val() < $('.qtyNew_1').val()) {
-        alert("Jumlah yang diambil lebih banyak");
-    }
+// function checkQty() {
+//     console.log($('.qtyNew_1').val());
+//     if($('.qtyOld_1').val() < $('.qtyNew_1').val()) {
+//         alert("Jumlah yang diambil lebih banyak");
+//     }
+// }
+var loading = `-- sedang memuat data --`;
+function historys(token, url, target, id, history) {
+    console.log(token);
+    $(target).html(loading);
+    $.post(url, {
+        _token: token,
+        id,
+        history
+    },
+    function (data) {
+        console.log(data);
+        $(target).html(data);
+    });
 }

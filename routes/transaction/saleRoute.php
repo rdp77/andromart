@@ -20,5 +20,10 @@ Route::group(['prefix' => 'transaction'], function () {
             ->except([
                 'show',
             ]);
+
+        Route::get(
+            'sale/{id}',
+            [SaleController::class, 'printSale']
+        )->name('sale.printSale');
     });
 });

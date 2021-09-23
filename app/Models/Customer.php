@@ -27,4 +27,9 @@ class Customer extends Model
     {
         return $this->belongsTo('App\Models\Branch');
     }
+
+    // public function Sale()
+    // {
+    //     return $this->hasMany('App\Models\Sale');
+    // }
 }

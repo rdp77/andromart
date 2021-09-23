@@ -68,7 +68,7 @@
                     <div class="row">
                         <div class="form-group col-md-6 col-xs-12">
                             <label for="branch_id">{{ __('Cabang') }}<code>*</code></label>
-                            <select name="branch_id" id="branch_id" class="form-control select2" required autocomplete="branch_id">
+                            <select name="branch_id" id="branch_id" class="form-control select2" required>
                                 <option value=""> - Select - </option>
                                 @foreach ($branch as $branch)
                                 <option value="{{ $branch->id }}"> {{ $branch->code }} - {{ $branch->name }} </option>
@@ -77,7 +77,7 @@
                         </div>
                         <div class="form-group col-md-6 col-xs-12">
                             <label for="level">{{ __('Pekerjaan') }}<code>*</code></label>
-                            <select name="level" id="level" class="form-control select2" required autocomplete="level">
+                            <select name="level" id="level" class="form-control select2" required>
                                 <option value=""> - Select - </option>
                                 <option value="Owner"> Owner </option>
                                 <option value="Admin"> Admin / Kasir </option>
@@ -90,7 +90,7 @@
                         <div class="form-group col-md-4 col-xs-12">
                             <label for="identity">{{ __('NIK') }}<code>*</code></label>
                             <input id="identity" type="text" class="form-control @error('identity') is-invalid @enderror"
-                                name="identity" value="{{ old('identity') }}" required autocomplete="identity">
+                                name="identity" value="{{ old('identity') }}" required>
                             @error('identity')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -102,7 +102,7 @@
                                 <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
                             </div>
                             <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                                required autofocus>
+                                required value="{{ old('name') }}">
                             @error('name')
                             <div class="invalid-feedback">
                                 {{ $message }}
@@ -113,7 +113,7 @@
                     <div class="row">
                         <div class="form-group col-md-4 col-xs-12">
                             <label for="birthday">{{ __('Tanggal Lahir') }}<code>*</code></label>
-                            <input id="birthday" type="text" class="form-control datepicker" name="birthday">
+                            <input id="birthday" type="text" class="form-control datepicker" name="birthday" value="{{ old('birthday') }}">
                         </div>
                         <div class="form-group col-md-4 col-xs-12">
                             <label for="gender">{{ __('Jenis Kelamin') }}<code>*</code></label>
@@ -139,7 +139,7 @@
                                 </div>
                                 </div>
                                 <input id="contact" type="text" class="form-control @error('contact') is-invalid @enderror"
-                                    name="contact" value="{{ old('contact') }}" required autocomplete="contact">
+                                    name="contact" value="{{ old('contact') }}" required>
                                 @error('contact')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -150,7 +150,7 @@
                         <div class="form-group col-md-7 col-xs-12">
                             <label for="address">{{ __('Alamat') }}<code>*</code></label>
                             <input id="address" type="text" class="form-control @error('address') is-invalid @enderror"
-                                name="address" value="{{ old('address') }}" required autocomplete="address">
+                                name="address" value="{{ old('address') }}" required>
                             @error('address')
                             <div class="invalid-feedback">
                                 {{ $message }}
