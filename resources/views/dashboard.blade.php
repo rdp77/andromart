@@ -8,15 +8,76 @@
 <div class="row">
     <div class="col-lg-4 col-md-4 col-sm-12">
         <div class="card card-statistic-2">
-            <div class="card-stats">
+            <div class="card gradient-bottom">
+                <div class="card-header">
+                    {{-- <h3>{{$total[1]}}</h3> --}}
+                    <h3>Sharing Profit </h3>
+                  <br>
+                  {{-- <div class="card-header-action dropdown">
+                    <a href="#" data-toggle="dropdown" class="btn btn-danger dropdown-toggle">Month</a>
+                    <ul class="dropdown-menu dropdown-menu-sm dropdown-menu-right">
+                      <li class="dropdown-title">Select Period</li>
+                      <li><a href="#" class="dropdown-item">Today</a></li>
+                      <li><a href="#" class="dropdown-item">Week</a></li>
+                      <li><a href="#" class="dropdown-item active">Month</a></li>
+                      <li><a href="#" class="dropdown-item">This Year</a></li>
+                    </ul>
+                  </div> --}}
+                </div>
+                <div class="card-body" id="top-5-scroll" tabindex="2" style="height: 315px; overflow: hidden; outline: none;">
+                  <ul class="list-unstyled list-unstyled-border">
+                      @php
+                          $total = 0;
+                      @endphp
+                      @foreach ($sharingProfit as $el)
+                        <li class="media">
+                            <i class="fas fa-phone" style="font-size: 50px;margin-right:20px"></i>
+                        {{-- <img class="mr-3 rounded" width="55" src="{{asset('assets/img/products/product-3-50.png')}}" alt="product"> --}}
+                        <div class="media-body">
+                            <div class="float-right"><div class="font-weight-600 text-muted text-small">86 Sales</div></div>
+                            <div class="media-title">{{$el->name}}</div>
+                            <div class="mt-1">
+                            <div class="budget-price">
+                                <div class="budget-price-square bg-primary" data-width="64%" style="width: 64%;"></div>
+                                {{-- @if ($el->Service1 != null) --}}
+                                    {{-- {{$total+=$el->Service1->sharing_profit_technician_1}} --}}
+                                {{-- @endif --}}
+                                {{-- @if ($el->Service2 != null) --}}
+                                    {{-- {{$total+=$el->Service1->sharing_profit_technician_2}} --}}
+                                {{-- @endif --}}
+                                {{-- {{$el->Service1}} --}}
+                                <div class="budget-price-label"></div>
+                            </div>
+                            {{-- <div class="budget-price">
+                                <div class="budget-price-square bg-danger" data-width="43%" style="width: 43%;"></div>
+                                <div class="budget-price-label">$38,700</div>
+                            </div> --}}
+                            </div>
+                        </div>
+                        </li>
+                      @endforeach
+                  </ul>
+                </div>
+                <div class="card-footer pt-3 d-flex justify-content-center">
+                  {{-- <div class="budget-price justify-content-center">
+                    <div class="budget-price-square bg-primary" data-width="20" style="width: 20px;"></div>
+                    <div class="budget-price-label">Selling Price</div>
+                  </div>
+                  <div class="budget-price justify-content-center">
+                    <div class="budget-price-square bg-danger" data-width="20" style="width: 20px;"></div>
+                    <div class="budget-price-label">Budget Price</div>
+                  </div> --}}
+                </div>
+              </div>
+            {{-- <div class="card-stats">
                 <div class="card-stats-title">
                     {{ __('Simpanan Agustus 2021') }}
                 </div>
             </div>
             <div class="card-icon shadow-primary bg-primary">
                 <i class="fas fa-archive"></i>
-            </div>
-            <div class="card-wrap">
+            </div> --}}
+            {{-- <div class="card-wrap">
                 <div class="card-header">
                     <h4>{{ __('Simpanan Anggota') }}</h4>
                 </div>
@@ -45,7 +106,7 @@
                 <div class="card-body">
                     59
                 </div>
-            </div>
+            </div> --}}
         </div>
     </div>
     <div class="col-lg-4 col-md-4 col-sm-12">
