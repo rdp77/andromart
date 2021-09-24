@@ -36,8 +36,8 @@
                             </div>
                             <select class="select2 validation" name="sales_id" data-name="Sales">
                                 <option value="">- Select -</option>
-                                @foreach ($employee as $employee)
-                                <option value="{{$employee->id}}">{{$employee->name}}</option>
+                                @foreach ($sales as $sales)
+                                <option value="{{$sales->id}}">{{$sales->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -47,6 +47,25 @@
                                 <option value="">- Select -</option>
                                 @foreach ($warranty as $warranty)
                                 <option value="{{ $warranty->id }}">{{ $warranty->periode }} {{ $warranty->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-12 col-md-6 col-lg-6">
+                            <label for="payment_method" class="control-label">{{ __('Metode Pembayaran') }}<code>*</code></label>
+                            <select class="select2 validation" name="payment_method" data-name="Metode Pembayaran" required>
+                                <option value="">- Select -</option>
+                                <option value="Cash">Cash / Tunai</option>
+                                <option value="Transfer">Transfer</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-12 col-md-6 col-lg-6">
+                            <label for="cash_id">{{ __('Kode Kas') }}<code>*</code></label>
+                            <select class="select2 validation" name="cash_id" data-name="Kode Kas">
+                                <option value="">- Select -</option>
+                                @foreach ($cash as $cash)
+                                <option value="{{ $cash->id }}">{{ $cash->code }} - {{ $cash->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -154,6 +173,11 @@
             </div>
         </div>
         <div class="card-body">
+            @foreach ($buyer as $buyer)
+                <input class="buyerData" type="hidden"
+                data-name="{{$buyer->name}}"
+                value="{{$buyer->id}}">
+            @endforeach
 
             @foreach ($item as $el)
                 <input class="itemsData" type="hidden"
@@ -175,13 +199,14 @@
                     <thead>
                         <tr>
                             <th style="width: 20%">Barang</th>
-                            <th style="width: 15%">Supplier</th>
-                            <th>Harga</th>
-                            <th style="width: 9%">Qty</th>
-                            <th style="width: 9%">Stok</th>
-                            <th>Jumlah</th>
+                            {{-- <th style="width: 15%">Supplier</th> --}}
+                            <th style="width: 9%">Qty | Stock</th>
+                            <th style="width: 12%">Harga | Jumlah</th>
+                            {{-- <th style="width: 9%">Stok</th> --}}
+                            {{-- <th style="width: 11%">Jumlah</th> --}}
+                            <th style="width: 20%">Operator</th>
+                            <th style="width: 10%">P.S. %</th>
                             <th>Deskripsi</th>
-                            <th style="width: 10%" hidden>P.S. Sales %</th>
                             <th style="width: 15%" hidden>tipe</th>
                             <th>Action</th>
                         </tr>

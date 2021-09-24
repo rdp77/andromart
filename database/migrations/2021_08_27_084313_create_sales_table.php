@@ -23,7 +23,9 @@ class CreateSalesTable extends Migration
             $table->string('customer_name')->nullable();
             $table->string('customer_address')->nullable();
             $table->string('customer_phone')->nullable();
+            $table->string('payment_method')->nullable();
             $table->date('date');
+            $table->integer('cash_id');
             $table->integer('warranty_id');
             $table->string('discount_type')->nullable();
             $table->double('discount_price')->nullable();

@@ -226,6 +226,10 @@ function addItem() {
     var index = $('.priceDetail').length;
     var dataDetail = $('.dataDetail').length;
 
+    var dataBuyer = [];
+    $.each($('.buyerData'), function(){
+        dataBuyer += '<option data-index="'+(index+1)+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
+    });
     var dataItems = [];
     $.each($('.itemsData'), function(){
         if ($(this).data('stock') == null) {
@@ -243,31 +247,42 @@ function addItem() {
                 '<input type="text" class="form-control priceDetailLoss priceDetailLoss_'+(index+1)+'" name="priceDetailLoss[]" value="0">'+
             '</td>'+
             '<td>'+
-            '<select class="select2 itemsDetail" name="itemsDetail[]">'+
-                '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
-                dataItems+
-            '</select>'+
-            '</td>'+
-            '<td>'+
+                '<select class="select2 itemsDetail" name="itemsDetail[]">'+
+                    '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
+                    dataItems+
+                '</select>' +
                 '<input type="text" class="form-control supplier supplier_'+(index+1)+'" name="supplierDetail[]" data-index="'+(index+1)+'" readonly>'+
             '</td>'+
-            '<td>'+
-                '<input type="text" class="form-control cleaveNumeral priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
-            '</td>'+
-            '<td>'+
-                '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="1" style="text-align: right">'+
-            '</td>'+
-            '<td>'+
+            // '<td>'+
+            //     '<input type="text" class="form-control supplier supplier_'+(index+1)+'" name="supplierDetail[]" data-index="'+(index+1)+'" readonly>'+
+            // '</td>'+
+            // '<td>'+
+            //     '<input type="text" class="form-control cleaveNumeral priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
+            // '</td>'+
+            '<td>' +
+                '<input type="text" class="form-control qtyDetail qtyDetail_' + (index + 1) + '" name="qtyDetail[]" data-index="' + (index + 1) + '" value="1" style="text-align: right">' +
                 '<input type="text" class="form-control stock stock_'+(index+1)+'" readonly name="stockDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
             '</td>'+
-            '<td>'+
+            // '<td>'+
+            //     '<input type="text" class="form-control stock stock_'+(index+1)+'" readonly name="stockDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
+            // '</td>'+
+            '<td>' +
+                '<input type="text" class="form-control cleaveNumeral priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
                 '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="0" style="text-align: right">'+
             '</td>'+
             '<td>'+
-                '<input type="text" class="form-control" name="descriptionDetail[]">'+
+                '<select class="select2 buyerDetail" name="buyerDetail[]">'+
+                    '<option value="-" data-index="'+(index+1)+'">- Select Buyer -</option>'+
+                    dataBuyer+
+                '</select>' +
+                '<input type="text" class="form-control name="salesDetail[]" value="Sales" readonly>'+
             '</td>'+
-            '<td hidden>'+
-                '<input type="number" class="form-control" name="profitSharing[]">'+
+            '<td>'+
+                '<input type="number" class="form-control" name="profitSharingBuyer[]">'+
+                '<input type="number" class="form-control" name="profitSharingSales[]">'+
+            '</td>'+
+            '<td>'+
+                '<input type="text" class="form-control" name="descriptionDetail[]">'+
             '</td>'+
             '<td style="display:none">'+
                 '<select class="form-control typeDetail typeDetail_'+(index+1)+'" name="typeDetail[]">'+

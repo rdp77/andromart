@@ -12,7 +12,7 @@ class Sale extends Model
     use SoftDeletes;
 
     public $timestamps = false;
-    public $incrementing = false;
+    public $incrementing = true;
 
     protected $fillable = [
         'id',
@@ -24,10 +24,12 @@ class Sale extends Model
         'customer_address',
         'customer_phone',
         'date',
+        'cash_id',
         'warranty_id',
         'discount_type',
         'discount_price',
         'discount_percent',
+        'payment_method',
         'item_price',
         'total_price',
         'sales_id',
@@ -87,5 +89,10 @@ class Sale extends Model
     public function CreatedByUser()
     {
         return $this->belongsTo('App\Models\User', 'user_id', 'id');
+    }
+
+    public function Cash()
+    {
+        return $this->belongsTo('App\Models\Cash');
     }
 }

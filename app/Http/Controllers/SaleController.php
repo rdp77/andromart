@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Branch;
 use App\Models\Brand;
+use App\Models\Cash;
 use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\Item;
@@ -134,12 +135,14 @@ class SaleController extends Controller
     public function create()
     {
         $code = $this->code('PJT-');
-        $employee = Employee::get();
+        $sales = Employee::get();
+        $cash = Cash::get();
+        $buyer = Employee::get();
         $warranty = Warranty::get();
         $customer = Customer::get();
         $userBranch = Auth::user()->employee->branch_id;
         $item = Item::with('stock')->where('name','!=','Jasa Service')->get();
-        return view('pages.backend.transaction.sale.createSale', compact('code', 'employee', 'item', 'warranty', 'customer'));
+        return view('pages.backend.transaction.sale.createSale', compact('code', 'cash', 'buyer', 'sales', 'item', 'warranty', 'customer'));
     }
 
     public function store(Request $req)
@@ -158,11 +161,13 @@ class SaleController extends Controller
                 'user_id' => Auth::user()->id,
                 'sales_id' => $req->sales_id,
                 'buyer_id' => $req->sales_id,
+                'cash_id' => $req->cash_id,
                 'branch_id' => $getEmployee->branch_id,
                 'customer_id' => $req->customer_id,
                 'customer_name' => $req->customer_name,
                 'customer_address' => $req->customer_address,
                 'customer_phone' => $req->customer_phone,
+                'payment_method' => $req->payment_method,
                 'date' => date('Y-m-d'),
                 'warranty_id' => $req->warranty,
                 'discount_type' => $req->typeDiscount,
@@ -555,9 +560,23 @@ class SaleController extends Controller
         }
     }
 
-    public function destroy($id)
+    public function destroy(Request $req, $id)
     {
-        //
+        // $tran = SaleDetail::where('item_id', $id);
+        // if(count($tran) != null)
+        // {
+        //     return Response::json(['status' => 'error','message'=>'Data tidak dapat dihapus']);
+        // }
+        // else {
+        //     $this->DashboardController->createLog(
+        //         $req->header('user-agent'),
+        //         $req->ip(),
+        //         'Menghapus Data Kredit'
+        //     );
+        //     Sale::where('id',$id)->destroy($id);
+        //     return Response::json(['status' => 'success']);
+        // }
+
     }
 
     public function printSale($id)

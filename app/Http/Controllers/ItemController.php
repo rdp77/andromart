@@ -6,6 +6,7 @@ use App\Models\Branch;
 use App\Models\Item;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\SaleDetail;
 use App\Models\Stock;
 use App\Models\Supplier;
 use App\Models\Type;
@@ -224,6 +225,23 @@ class ItemController extends Controller
 
     public function destroy(Request $req, $id)
     {
+        // $tr = SaleDetail::where('item_id', $id);
+        // $checkStock = Item::with('Stocks', 'stock')->find($id)->get();
+        // if ($checkStock > 0) {
+        //     return Response::json(['status' => 'error', 'message' => 'Data tidak bisa dihapus']);
+        // }
+        // else {
+        //     $this->DashboardController->createLog(
+        //         $req->header('user-agent'),
+        //         $req->ip(),
+        //         'Menghapus master barang ' . Item::find($id)->name
+        //     );
+
+        //     Item::destroy($id);
+        //     Stock::destroy(Item::where('item_id', $id));
+        //     return Response::json(['status' => 'success']);
+        // }
+        // ------
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
@@ -232,7 +250,6 @@ class ItemController extends Controller
 
         Item::destroy($id);
         Stock::destroy(Item::where('item_id', $id));
-
-        return Response::json(['status' => 'success']);
+        return Response::json(['status' => 'Berhasil menghapus Master Barang', 'type' => 'success']);
     }
 }
