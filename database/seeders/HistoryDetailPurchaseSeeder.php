@@ -14,9 +14,9 @@ class HistoryDetailPurchaseSeeder extends Seeder
      */
     public function run()
     {
-        HistoryDetailPurchase::create([
-            'history_purchase_id' => 1,
-            'purchasing_detail_id' => 1,
-        ]);
+        // HistoryDetailPurchase::create([
+        //     'history_purchase_id' => 1,
+        //     'purchasing_detail_id' => 1,
+        // ]);
     }
 }

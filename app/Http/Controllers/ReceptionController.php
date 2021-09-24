@@ -30,7 +30,7 @@ class ReceptionController extends Controller
         if ($req->ajax()) {
             $data = Purchasing::with('employee')->get();
             foreach($data as $row) {
-                $tanggal = date("d F", strtotime($row->date));
+                $tanggal = date("d F Y", strtotime($row->date));
                 $row->date = $tanggal;
                 if($row->done == 2) {
                     $row->done = "Telah Selesai";
@@ -104,7 +104,14 @@ class ReceptionController extends Controller
         ->select('purchasing_details.id as id', 'qty', 'items.name as itemName', 'branches.name as branchName', 'units.name as unitName', 'items.id as item_id', 'units.id as unit_id', 'branches.id as branch_id')
         ->get();
         $history = HistoryPurchase::where('purchasing_id', $id)->get();
-        // dd($history);
+        foreach($history as $row) {
+            $historyDetail = HistoryDetailPurchase::where('history_purchase_id', $row->id)
+            ->join('purchasing_details', 'purchasing_detail_id', 'purchasing_details.id')
+            ->join('items', 'purchasing_details.item_id', 'items.id')
+            ->select('history_detail_purchases.qty as qty', 'history_detail_purchases.id as id', 'name', 'purchasing_detail_id')
+            ->get();
+            $row->history_detail = $historyDetail;
+        }
         // $historyDetail = HistoryDetailPurchase::where('')
 
         return view('pages.backend.transaction.reception.editReception', compact('model', 'models', 'id', 'history'));
@@ -112,14 +119,26 @@ class ReceptionController extends Controller
 
     public function update(Request $req, $id)
     {
+        $date = date('Y-m-d H:i:s');
         $purchase = Purchasing::where('id', $id)->first();
         $purchase->done = 1;
         $purchase->save();
-        // dd($req->idDetail);
+
+        $historyPurchase = new HistoryPurchase;
+        $historyPurchase->purchasing_id = $id;
+        $historyPurchase->date = $date;
+        $historyPurchase->save();
+
         foreach($req->idDetail as $row) {
             $purchasing = PurchasingDetail::where('id', $req->idPurchasing[$row])
             ->first();
+            $historyDetailPurchase = new HistoryDetailPurchase;
+            $historyDetailPurchase->history_purchase_id = $historyPurchase->id;
+            $historyDetailPurchase->purchasing_detail_id = $purchasing->id;
+            $historyDetailPurchase->qty = $req->qtyNew[$row];
+            $historyDetailPurchase->save();
             $purchasing->qty -= $req->qtyNew[$row];
+            $purchasing->edit = 1;
             $purchasing->save();
 
             $stocks = Stock::where('item_id', $req->idItem[$row])
@@ -129,6 +148,21 @@ class ReceptionController extends Controller
             $stocks->stock += $req->qtyNew[$row];
             $stocks->save();
         }
+
+        // foreach($req->idDetail as $row) {
+        //     $purchasing = PurchasingDetail::where('id', $req->idPurchasing[$row])
+        //     ->first();
+        //     $purchasing->qty -= $req->qtyNew[$row];
+        //     $purchasing->save();
+
+        //     $stocks = Stock::where('item_id', $req->idItem[$row])
+        //     ->where('unit_id', $req->idUnit[$row])
+        //     ->where('branch_id', $req->idBranch[$row])
+        //     ->first();
+        //     $stocks->stock += $req->qtyNew[$row];
+        //     $stocks->save();
+        // }
+
         $done = 1;
         $purchaseDetail = PurchasingDetail::where('purchasing_id', $id)->get();
         foreach($purchaseDetail as $row) {
@@ -147,16 +181,65 @@ class ReceptionController extends Controller
                 'type' => 'success'
             ]);
     }
+    public function updateHistory($id, $history, $qtyEdit = null)
+    {
+        // $id = 2;
+        // $history = 3;
+        // $qtyEdit = 20;
+        $queryHistory = HistoryDetailPurchase::where('id', $history)
+        ->where('purchasing_detail_id', $id)->first();
+        $purchasingDetail = PurchasingDetail::where('id', $id)->first();
+        $stocks = Stock::where('item_id', $purchasingDetail->item_id)
+            ->where('unit_id', $purchasingDetail->unit_id)
+            ->where('branch_id', $purchasingDetail->branch_id)
+            ->first();
+        $qtyTrue = 0;
+        $qtyBefore = $queryHistory->qty;
+        if($qtyBefore > $qtyEdit){
+            $qtyTrue = $qtyBefore - $qtyEdit;
+            $queryHistory->qty = $qtyEdit;
+            $queryHistory->save();
+
+            $purchasingDetail->qty += $qtyTrue;
+            $purchasingDetail->save();
+
+            $stocks->stock -= $qtyTrue;
+            $stocks->save();
+        } else if($qtyBefore < $qtyEdit) {
+            $qtyTrue = $qtyEdit - $qtyBefore;
+            $queryHistory->qty = $qtyEdit;
+            $queryHistory->save();
+
+            $purchasingDetail->qty -= $qtyTrue;
+            $purchasingDetail->save();
+
+            $stocks->stock += $qtyTrue;
+            $stocks->save();
+        } else {
+
+        }
+        return Redirect::route('reception.index')
+            ->with([
+                'status' => 'Berhasil mengubah jumlah barang ',
+                'type' => 'success'
+            ]);
+
+    }
+    public function updated(Request $req)
+    {
+
+        // return Response::json(['status' => 'success']);
+    }
 
     public function destroy(Request $req, $id)
     {
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Menghapus master area ' . Area::find($id)->name
+            'Menghapus data barang ' . PurchasingDetail::find($id)->name
         );
 
-        Area::destroy($id);
+        PurchasingDetail::destroy($id);
 
         return Response::json(['status' => 'success']);
     }

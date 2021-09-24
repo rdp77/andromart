@@ -33,7 +33,7 @@ class PurchaseController extends Controller
         if ($req->ajax()) {
             $data = Purchasing::with('employee')->get();
             foreach($data as $row) {
-                $tanggal = date("d F", strtotime($row->date));
+                $tanggal = date("d F Y", strtotime($row->date));
                 $row->date = $tanggal;
                 if($row->done == 2) {
                     $row->done = "Telah Selesai";
@@ -56,6 +56,7 @@ class PurchaseController extends Controller
                     if($row->done == 'Belum Proses'){
                         $actionBtn .= '<div class="dropdown-menu">
                             <a class="dropdown-item" href="' . route('purchaseApprove', Crypt::encryptString($row->id)) . '">Setujui</a>';
+                        // $actionBtn .= '<a class="dropdown-item" href="' . route('purchase.edit', Crypt::encryptString($row->id)) . '">Ubah</a>';
                         $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     } else {
                         $actionBtn .= '<div class="dropdown-menu">
@@ -117,6 +118,7 @@ class PurchaseController extends Controller
             $purchasingDetail->unit_id = $req->unitsDetail[$row];
             $purchasingDetail->branch_id = $req->branchesDetail[$row];
             $purchasingDetail->price = str_replace(",", '',$req->priceDetail[$row]);
+            $purchasingDetail->qty_start = str_replace(",", '',$req->qtyDetail[$row]);
             $purchasingDetail->qty = str_replace(",", '',$req->qtyDetail[$row]);
             $purchasingDetail->total = str_replace(",", '',$req->totalPriceDetail[$row]);
             $purchasingDetail->description = $req->desDetail[$row];
@@ -132,19 +134,29 @@ class PurchaseController extends Controller
 
     public function show(Notes $notes, $id)
     {
-        $id = Crypt::decryptString($id);
-        $models = Notes::where('id', $id)->first();
-        // $models = Notes::where('notes.id', $id)
-        // ->join('users', 'notes.users_id', '=', 'users.id')
-        // ->select('notes.id as notes_id', 'notes.date as date', 'users.name as name', 'users.id as users_id', 'notes.title as title', 'notes.description as description')
-        // ->first();
-        $modelsFile = NotesPhoto::where('notes_id', $id)->get();
-        // dd($modelsFile);
-        return view('pages.backend.office.notes.showNotes', compact('models', 'modelsFile'));
     }
 
     public function edit($id)
     {
+        $id = Crypt::decryptString($id);
+        $employee = Employee::get();
+        // $items    = Item::where('name','!=','Jasa Service')->get();
+        $item     = Item::with('stock')->where('items.name','!=','Jasa Service')
+        ->join('suppliers', 'items.supplier_id', 'suppliers.id')
+        ->select('items.id as id', 'items.name as name', 'buy', 'suppliers.name as supplier')
+        ->get();
+        $unit     = Unit::get();
+        $branch   = Branch::get();
+        $model = Purchasing::where('id', $id)->first();
+        $models = PurchasingDetail::where('purchasing_id', $id)
+        ->join('items', 'purchasing_details.item_id', 'items.id')
+        ->join('units', 'purchasing_details.unit_id', 'units.id')
+        ->join('branches', 'purchasing_details.branch_id', 'branches.id')
+        ->select('purchasing_details.id as id', 'qty', 'items.id as item_id', 'items.name as item_name', 'units.id as unit_id', 'units.name as unit_name', 'branches.id as branch_id', 'branches.name as branch_name', 'purchasing_details.description as description')
+        ->get();
+        // dd($models);
+        $jumlah = PurchasingDetail::where('purchasing_id', $id)->count();
+        return view('pages.backend.transaction.purchase.editPurchase',compact('employee','item', 'unit', 'branch', 'model', 'models', 'jumlah'));
     }
 
     public function update(Request $req, $id)

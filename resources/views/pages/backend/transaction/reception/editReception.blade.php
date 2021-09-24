@@ -97,18 +97,27 @@
                                     <th style="width: 20%">Nama</th>
                                     <th>Barang yang belum datang</th>
                                     <th>Barang yang telah datang</th>
-                                    <!-- <th>Action</th> -->
+                                    <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @php $i = 0; @endphp
                                 @foreach($models as $row)
                                     <tr>
-                                        <td><input type="text" class="form-control" value="{{ $row->itemName }}" readonly></td>
-                                        <td><input type="text" class="form-control cleaveNumeral qtyOld_{{ $i }}" value="{{ $row->qty }}" name="qtyOld[]" readonly></td>
                                         <td>
-                                            <input type="text" class="form-control cleaveNumeral qtyNew_{{ $i }}" name="qtyNew[]" style="text-align: right" value="0">
-                                             <!-- onkeyup="checkQty()" -->
+                                            <input type="text" class="form-control" value="{{ $row->itemName }}" readonly>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control cleaveNumeral qtyOld_{{ $i }}" value="{{ $row->qty }}" name="qtyOld[]" readonly>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control cleaveNumeral qtyNew_{{ $i }}" name="qtyNew[]" style="text-align: right" value="0" onkeyup="checkQty({{ $i }})">
+                                        </td>
+                                        <td>
+                                            @if($row->edit != 1)
+                                                <button type="button" class="btn btn-danger" value="{{ $i }}" onclick="deleted({{$row->id}})">X</button>
+                                            @endif
+                                            <!-- onkeyup="checkQty()" -->
                                             <input type="hidden" name="idDetail[]" value="{{ $i }}">
                                             <input type="hidden" name="idPurchasing[]" value="{{ $row->id }}">
                                             <input type="hidden" name="idItem[]" value="{{ $row->item_id }}">
@@ -139,30 +148,62 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-4">
+        @foreach($history as $row)
+        <!-- <div class="col-lg-4">
             <div class="card">
                 <div class="card-header">
                     <h4>Tanggal</h4>
                 </div>
                 <div class="card-body">
-                    @foreach($history as $row)
-                        <button onclick="historys('{{ csrf_token() }}', '{{ route('receptionHistory') }}', '#data-history', '{{ $row->purchasing_id }}', '{{ $row->id }}')" class="btn btn-primary mr-1" type="button">
-                            <i class="far fa-save"></i>{{ $row->date }}
-                        </button>
-                    @endforeach
+                    <h6>{{ $row->tanggal }}</h6>
                 </div>
             </div>
-        </div>
-        <div class="col-lg-8">
-            <div class="card" id="data-history">
+        </div> -->
+        <div class="col-lg-12">
+            <div class="card">
                 <div class="card-header">
-                    <h4>Harga</h4>
+                    <h4>{{ date('d F Y H:i:s', strtotime($row->date)) }}</h4>
                 </div>
                 <div class="card-body">
-                    <h5 class="text-secondary">History Kosong</h5>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 20%">Nama</th>
+                                    <th>Jumlah Barang</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php 
+                                    $i = 0; 
+                                    $historyDetail = $row->history_detail;
+                                @endphp
+                                @foreach($historyDetail as $rows)
+                                    <tr>
+                                        <td width="60%">
+                                            <input type="text" class="form-control" value="{{ $rows->name }}" readonly>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control cleaveNumeral qtyEdit_{{ $rows->id }}" name="qtyEdit[]" style="text-align: right" value="{{ $rows->qty }}">
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="idEdit[]" value="{{ $rows->id }}">
+                                            <!-- <a href="/transaction/purchasing/reception/updated/1/2/8">Test</a> -->
+                                            <button type="button" class="btn btn-warning" value="{{ $i }}" onclick="edited('{{ csrf_token() }}', '{{ $rows->purchasing_detail_id }}', '{{$rows->id}}')">Ubah</button>
+                                        </td>
+                                    </tr>
+                                    @php $i++ @endphp
+                                @endforeach
+                            </tbody>
+                            <tbody class="dropHereItem" style="border: none !important">
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
+        @endforeach
     </div>
     <div class="modal fade" tabindex="1" role="dialog" id="exampleModal" aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
