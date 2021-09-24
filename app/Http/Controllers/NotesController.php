@@ -32,7 +32,7 @@ class NotesController extends Controller
             // $data = Branch::with('area')->get();
             $data = Notes::with('users')->get();
             foreach($data as $row) {
-                $tanggal = date("d F", strtotime($row->date));
+                $tanggal = date("d F Y", strtotime($row->date));
                 $row->date = $tanggal;
             }
             return Datatables::of($data)

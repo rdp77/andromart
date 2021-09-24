@@ -8,8 +8,10 @@ use Illuminate\Database\Eloquent\Model;
 class SaleDetail extends Model
 {
     use HasFactory;
+    public $incrementing = true;
 
     protected $fillable = [
+        'id',
         'sale_id',
         'item_id',
         'price',

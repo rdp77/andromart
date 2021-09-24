@@ -51,6 +51,10 @@
                                 </label>
                             </div>
                         </div>
+                        <div class="form-group col-12">
+                            <label for="descriptionPurchase">{{ __('Keterangan') }}<code>*</code></label>
+                            <input id="descriptionPurchase" type="text" class="form-control" name="descriptionPurchase">
+                        </div>
                     </div>
                 </div>
             </div>

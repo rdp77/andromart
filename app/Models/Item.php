@@ -11,7 +11,7 @@ class Item extends Model
 
     protected $table = 'items';
     public $timestamps = false;
-    public $increments = false;
+    public $incrementing = true;
 
     protected $fillable = [
         'id',
@@ -45,6 +45,11 @@ class Item extends Model
     public function stock()
     {
         return $this->hasMany('App\Models\Stock');
+    }
+
+    public function Stocks()
+    {
+        return $this->belongsTo('App\Models\Stock');
     }
 
     public function getImage()

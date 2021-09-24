@@ -23,7 +23,9 @@ class CreatePurchasingDetailsTable extends Migration
 
             $table->string('price')->default(0);
             $table->string('qty')->default(0);
+            $table->string('qty_start')->default(0);
             $table->string('total')->default(0);
+            $table->integer('edit')->default(0)->comment('0 new, 1 edited, 2 backValue');
             $table->mediumText('description')->nullable();
 
             $table->string('created_by')->nullable();

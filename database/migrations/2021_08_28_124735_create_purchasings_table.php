@@ -23,6 +23,7 @@ class CreatePurchasingsTable extends Migration
             $table->string('code')->unique();
             $table->string('status')->nullable()->comment('paid = bayar, dept = hutang');
             $table->integer('done')->default(0)->comment('0 baru, 1 proses, 2 selesai, 3 disetujui');
+            $table->mediumText('description')->nullable();
 
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
