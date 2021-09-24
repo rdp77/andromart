@@ -29,24 +29,20 @@
                       @php
                           $total = 0;
                       @endphp
-                      @foreach ($sharingProfit as $el)
+                      @foreach ($sharingProfit as $i => $el)
                         <li class="media">
                             <i class="fas fa-phone" style="font-size: 50px;margin-right:20px"></i>
                         {{-- <img class="mr-3 rounded" width="55" src="{{asset('assets/img/products/product-3-50.png')}}" alt="product"> --}}
                         <div class="media-body">
-                            <div class="float-right"><div class="font-weight-600 text-muted text-small">86 Sales</div></div>
+                            {{-- <div class="float-right"><div class="font-weight-600 text-muted text-small">86 Sales</div></div> --}}
                             <div class="media-title">{{$el->name}}</div>
                             <div class="mt-1">
                             <div class="budget-price">
                                 <div class="budget-price-square bg-primary" data-width="64%" style="width: 64%;"></div>
-                                {{-- @if ($el->Service1 != null) --}}
-                                    {{-- {{$total+=$el->Service1->sharing_profit_technician_1}} --}}
+                                {{-- @if ($sharingProfit1 ) --}}
+                                    
                                 {{-- @endif --}}
-                                {{-- @if ($el->Service2 != null) --}}
-                                    {{-- {{$total+=$el->Service1->sharing_profit_technician_2}} --}}
-                                {{-- @endif --}}
-                                {{-- {{$el->Service1}} --}}
-                                <div class="budget-price-label"></div>
+                                <div class="budget-price-label">{{$sharingProfit1[$i]}}</div>
                             </div>
                             {{-- <div class="budget-price">
                                 <div class="budget-price-square bg-danger" data-width="43%" style="width: 43%;"></div>

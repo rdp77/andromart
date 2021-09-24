@@ -924,7 +924,8 @@ class ServiceController extends Controller
     }
     public function serviceFormUpdateStatus()
     {
-        $data = Service::where('technician_id',Auth::user()->id)->get();
+        // where('technician_id',Auth::user()->id)->
+        $data = Service::get();
         $employee = Employee::get();
         return view('pages.backend.transaction.service.indexFormUpdateService',compact('data','employee'));
     }
