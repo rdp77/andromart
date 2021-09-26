@@ -27,7 +27,7 @@
                     @foreach($homeTab as $row)
                     <div class="tab-pane @if($j == 0) active @endif" id="{{ $row->class }}">
                         <div class="text-center">
-                            {{ $row->description }}
+                            <?php echo $row->description ?>
                             <!-- {{ $row->class }} -->
                         </div>
                     </div>

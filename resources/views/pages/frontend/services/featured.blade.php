@@ -5,7 +5,7 @@
 		<div class="col-lg-4 featured-box-full featured-box-full-primary">
 			<i class="{{ $row->icon }} icons"></i>
 			<h4 class="mt-3">{{ $row->title }}</h4>
-			<p>{{ $row->description }}</p>
+			<p><?php echo $row->description ?></p>
 		</div>
 		@endforeach
 	</div>

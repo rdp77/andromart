@@ -23,7 +23,7 @@
 					</span>	
 					<div class="feature-box-info">
 						<h4 class="mb-2 mt-3 text-4 text-uppercase font-weight-bold">{{ $row->title }}</h4>
-						<p class="mb-4">{{ $row->description }}</p>
+						<p class="mb-4"><?php echo $row->description ?></p>
 					</div>
 				</div>
 			</div>

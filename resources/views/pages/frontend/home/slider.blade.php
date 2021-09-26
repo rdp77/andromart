@@ -54,7 +54,7 @@
                     data-y="center" data-voffset="['65','65','65','95']"
                     data-width="['690','690','690','800']"
                     data-fontsize="['18','18','18','35']"
-                    data-lineheight="['29','29','29','40']">{{ $row->description }}</div>
+                    data-lineheight="['29','29','29','40']"><?php echo $row->description ?></div>
             </li>
             @else
             <li class="slide-overlay slide-overlay-level-7" data-transition="fade">
@@ -102,7 +102,7 @@
                     data-width="['600','600','600','600']"
                     data-fontsize="['18','18','18','30']"
                     data-lineheight="['29','29','29','40']"
-                    style="margin-top: 10px;">{{ $row->description }}</div>
+                    style="margin-top: 10px;"><?php echo $row->description ?></div>
 
                 <!-- <a class="tp-caption btn btn-primary font-weight-bold"
                     href="#"
