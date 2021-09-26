@@ -8,7 +8,7 @@
                 <i class="icons {{ $row->icon }} text-8 mb-3"></i>
                 <strong class="font-weight-extra-bold mb-1" data-to="{{ $angka }}">0</strong>
                 <label>{{ $row->title }}</label>
-                <p class="text-color-primary text-2 line-height-1 mb-0">{{ $row->description }}</p>
+                <?php echo $row->description ?>
             </div>
         </div>
         @endforeach

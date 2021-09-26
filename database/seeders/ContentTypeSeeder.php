@@ -17,7 +17,7 @@ class ContentTypeSeeder extends Seeder
         ContentType::create(['name' => 'Carousel Home', 'type' => 'carousel_home', 'status' => true, 'column_1' => true, 'column_2' => true, 'column_3' => true, 'column_4' => true, 'column_8' => true]);
         ContentType::create(['name' => 'Carousel About', 'type' => 'carousel_about', 'status' => false, 'column_1'=> true, 'column_3'=> true, 'column_4' => true]);
         ContentType::create(['name' => 'Carousel Services', 'type' => 'carousel_services', 'status' => false, 'column_1'=> true, 'column_3'=> true, 'column_4' => true]);
-        ContentType::create(['name' => 'Carousel Work', 'type' => 'carousel_work', 'status' => false, 'column_1'=> true, 'column_3'=> true, 'column_4' => true]);
+        ContentType::create(['deleted' = true, 'name' => 'Carousel Work', 'type' => 'carousel_work', 'status' => false, 'column_1'=> true, 'column_3'=> true, 'column_4' => true]);
         ContentType::create(['name' => 'Home Tab', 'type' => 'home_tab', 'status' => true, 'column_1'=> true, 'column_3'=> true, 'column_6'=> true, 'column_7' => true]);
         ContentType::create(['name' => 'Home About Us', 'type' => 'home_about_us', 'status' => false, 'column_1'=> true, 'column_2'=> true, 'column_3'=> true, 'column_6' => true]);
         ContentType::create(['name' => 'Home Hire Us', 'type' => 'home_hire_us', 'status' => true, 'column_1'=> true, 'column_5' => true]);
@@ -34,7 +34,7 @@ class ContentTypeSeeder extends Seeder
         ContentType::create(['name' => 'About Leadership', 'type' => 'about_leadership', 'status' => true, 'column_1'=> true, 'column_2'=> true, 'column_4' => true]);
         ContentType::create(['name' => 'About Clients Title', 'type' => 'about_clients_title', 'status' => false, 'column_1'=> true, 'column_2' => true]);
         ContentType::create(['name' => 'About Clients', 'type' => 'about_clients', 'status' => true, 'column_4' => true]);
-        ContentType::create(['name' => 'Services Title', 'type' => 'services_title', 'status' => false, 'column_1' => true]);
+        ContentType::create(['deleted' => true, 'name' => 'Services Title', 'type' => 'services_title', 'status' => false, 'column_1' => true]);
         ContentType::create(['name' => 'Services Help Title', 'type' => 'services_help_title', 'status' => false, 'column_1'=> true, 'column_2' => true]);
         ContentType::create(['name' => 'Services Help', 'type' => 'services_help', 'status' => true, 'column_1'=> true, 'column_3'=> true, 'column_5' => true]);
         ContentType::create(['name' => 'Services Action', 'type' => 'services_action', 'status' => true, 'column_1'=> true, 'column_3'=> true, 'column_5' => true]);

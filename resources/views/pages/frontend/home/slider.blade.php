@@ -102,7 +102,7 @@
                     data-width="['600','600','600','600']"
                     data-fontsize="['18','18','18','30']"
                     data-lineheight="['29','29','29','40']"
-                    style="margin-top: 30px;">{{ $row->description }}</div>
+                    style="margin-top: 10px;">{{ $row->description }}</div>
 
                 <!-- <a class="tp-caption btn btn-primary font-weight-bold"
                     href="#"

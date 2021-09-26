@@ -6,6 +6,8 @@
 <div class="breadcrumb-item active">{{ $contentType->name }}</div>
 @endsection
 @push('custom-css')
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
     <!-- new css -->
     <link rel="stylesheet" href="http://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" rel="stylesheet" />
@@ -47,7 +49,8 @@
                     <div class="d-block">
                         <label for="description" class="control-label">{{ __('Deskripsi') }}<code>*</code></label>
                     </div>
-                    <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" required autofocus/>
+                    <textarea class="summernote @error('description') is-invalid @enderror" id="description" name="description"></textarea>
+                    <!-- <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" required autofocus/> -->
                     @error('description')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -149,7 +152,7 @@
 @push('custom-js')
 <!-- new js -->
 
-    <script src="http://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- <script src="http://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="http://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.js"></script>
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.js"></script> -->
 @endpush

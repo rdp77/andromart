@@ -46,7 +46,7 @@ class ContentController extends Controller
         //         ->rawColumns(['action'])
         //         ->make(true);
         // }
-        $content = ContentType::orderBy('id', 'asc')->get();
+        $content = ContentType::orderBy('id', 'asc')->where('deleted', false)->get();
         return view('pages.backend.content.contents.indexContents')->with('content', $content);
         // return view('pages.backend.master.branch.indexBranch');
     }
@@ -62,7 +62,7 @@ class ContentController extends Controller
     }
     public function create()
     {
-        $content = ContentType::get();
+        $content = ContentType::where('deleted', 0)->get();
         return view('pages.backend.content.contents.createContents')->with('content', $content);
         // return view('pages.backend.master.branch.createBranch', ['area' => $area]);
     }
@@ -110,7 +110,7 @@ class ContentController extends Controller
                 $file->move($dir, $data);
                 // dd($req->title);
                 $image = "photo_frontend/".$data;
-                // dd($req->title);
+
                 $content = new Content();
                 $content->content_types_id = $id;
                 $content->title = $req->title;
@@ -121,29 +121,21 @@ class ContentController extends Controller
                 $content->url = $req->url;
                 $content->class = $req->class;
                 $content->position = $req->position;
-                $content->created_by = Auth::user()->name;
                 $content->save();
-                // Content::create([
-                //     'content_types_id' => $id,
-                //     'title' => $req->title,
-                //     'subtitle' => $req->subtitle,
-                //     'description' => $req->description,
-                //     'image' => $image,
-                //     'icon' => $req->icon,
-                //     'url' => $req->url,
-                //     'class' => $req->class,
-                //     'position' => $req->position,
-                // ]);
             }
+        } else {
+            $content = new Content();
+            $content->content_types_id = $id;
+            $content->title = $req->title;
+            $content->subtitle = $req->subtitle;
+            $content->description = $req->description;
+            $content->icon = $req->icon;
+            $content->url = $req->url;
+            $content->class = $req->class;
+            $content->position = $req->position;
+            // $content->created_by = Auth::user()->name;
+            $content->save();
         }
-
-        // $branch = Branch::find($id);
-        // $this->DashboardController->createLog(
-        //     $req->header('user-agent'),
-        //     $req->ip(),
-        //     'Mengubah master cabang ' . Branch::find($id)->name
-        // );
-        // $branch->save();
 
         return Redirect::route('contents.show', Crypt::encryptString($id))
             ->with([
@@ -173,7 +165,6 @@ class ContentController extends Controller
     public function update(Request $req, $id)
     {
         $id = Crypt::decryptString($id);
-        $content = Content::where('id', $id)->first();
         // dd($id);
         Validator::make($req->all(), [
             'title' => ['string', 'max:255'],
@@ -205,14 +196,16 @@ class ContentController extends Controller
                 return Redirect::route('contents.index')->with(['status' => 'Tipe File Berkas Salah','type' => 'danger']);
             } else {
                 $file->move($dir, $data);
-                // dd($req->title);
+                
                 $image = "photo_frontend/".$data;
                 // dd($content);
                 // $content->content_types_id = $id;
+
+                $content = Content::where('id', $id)->first();
+                $content->image = $image;
                 $content->title = $req->title;
                 $content->subtitle = $req->subtitle;
                 $content->description = $req->description;
-                $content->image = $image;
                 $content->icon = $req->icon;
                 $content->url = $req->url;
                 $content->class = $req->class;
@@ -220,19 +213,18 @@ class ContentController extends Controller
                 $content->save();
             }
         } else {
-            // dd($req->imageBefore);
-            // dd($content);
+            $content = Content::where('id', $id)->first();
             // $content->content_types_id = $id;
             $content->title = $req->title;
             $content->subtitle = $req->subtitle;
             $content->description = $req->description;
-            $content->image = $req->imageBefore;
             $content->icon = $req->icon;
             $content->url = $req->url;
             $content->class = $req->class;
             $content->position = $req->position;
             $content->save();
         }
+        
         $contentType = ContentType::where('id', $content->content_types_id)->first();
         return Redirect::route('contents.show', Crypt::encryptString($contentType->id))
             ->with([
