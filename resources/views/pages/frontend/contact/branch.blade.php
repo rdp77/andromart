@@ -17,7 +17,7 @@
 						<h4 class="mt-3 mb-0">{{ $row->name }}</h4>
 						<ul class="list list-icons mt-3">
 							<li><i class="fas fa-map-marker-alt"></i> <strong>Address:</strong>{{ $row->address }}</li>
-							<li><i class="fas fa-phone"></i> <strong>Phone:</strong> {{ $row->phone }}</li>
+							<li><i class="fas fa-phone"></i> <strong>Phone:</strong> 0{{ $row->phone }}</li>
 							<li><i class="far fa-envelope"></i> <strong>Email:</strong> <a href="mailto:{{ $row->email }}">{{ $row->email }}</a></li>
 						</ul>
 					</div>

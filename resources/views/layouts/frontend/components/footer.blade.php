@@ -18,14 +18,14 @@ $branch = Branch::get();
 						<h4 class="mt-3 mb-0">{{ $row->name }}</h4>
 						<ul class="list list-icons mt-3">
 							<li><i class="fas fa-map-marker-alt"></i> <strong>Address:</strong>{{ $row->address }}</li>
-							<li><i class="fas fa-phone"></i> <strong>Phone:</strong> {{ $row->phone }}</li>
+							<li><i class="fas fa-phone"></i> <strong>Phone:</strong> 0{{ $row->phone }}</li>
 							<li><i class="far fa-envelope"></i> <strong>Email:</strong> <a href="mailto:{{ $row->email }}">{{ $row->email }}</a></li>
 						</ul>
 					</div> -->
 					<div class="col-md-6 mb-3 mb-md-0">
 						<div class="ml-3 text-center text-md-right">
 							<h5 class="text-3 mb-0 text-color-light">{{ $row->name }}</h5>
-							<p class="text-4 mb-0"><i class="fab fa-whatsapp text-color-primary top-1 p-relative"></i><span class="pl-1">{{ $row->phone }}</span></p>            
+							<p class="text-4 mb-0"><i class="fab fa-whatsapp text-color-primary top-1 p-relative"></i><span class="pl-1">0{{ $row->phone }}</span></p>
 						</div>
 					</div>
 					@endforeach
