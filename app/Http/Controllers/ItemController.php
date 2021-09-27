@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 use Carbon\carbon;
@@ -98,9 +99,17 @@ class ItemController extends Controller
     public function store(Request $req)
     {
         $id = DB::table('items')->max('id')+1;
+        $image = $req->image;
+            $image = str_replace('data:image/jpeg;base64,','', $image);
+            $image = base64_decode($image);
+            if ($image != null) {
+                $fileSave = 'public/assetsmaster/image/IMG_' . $id . '.' .'png';
+                $fileName = 'IMG_' . $id . '.' .'png';
+                Storage::put($fileSave, $image);
+            }else{
+                $fileName = null;
+            }
 
-        if ($req->hasFile('image')) {
-            $req->file('image')->move('assetsmaster/image/item/',$req->file('image')->getClientOriginalName());
             Item::create([
                 'id' => $id,
                 'name' => $req->name,
@@ -110,25 +119,41 @@ class ItemController extends Controller
                 'sell' => str_replace(",", '',$req->sell),
                 'discount' => str_replace(",", '',$req->discount),
                 'condition' => $req->condition,
-                'description' => $req->description,
-                'image' => $req->file('image')->getClientOriginalName(),
-                'created_by' => Auth::user()->name,
-            ]);
-        }
-        else {
-            Item::create([
-                'id' => $id,
-                'name' => $req->name,
-                'brand_id' => $req->brand,
-                'supplier_id' => $req->supplier_id,
-                'buy' => str_replace(",", '',$req->buy),
-                'sell' => str_replace(",", '',$req->sell),
-                'discount' => str_replace(",", '',$req->discount),
-                'condition' => $req->condition,
+                'image' => $fileName,
                 'description' => $req->description,
                 'created_by' => Auth::user()->name,
             ]);
-        }
+
+        // if ($req->hasFile('image')) {
+        //     $req->file('image')->move('assetsmaster/image/item/',$req->file('image')->getClientOriginalName());
+        //     Item::create([
+        //         'id' => $id,
+        //         'name' => $req->name,
+        //         'brand_id' => $req->brand,
+        //         'supplier_id' => $req->supplier_id,
+        //         'buy' => str_replace(",", '',$req->buy),
+        //         'sell' => str_replace(",", '',$req->sell),
+        //         'discount' => str_replace(",", '',$req->discount),
+        //         'condition' => $req->condition,
+        //         'description' => $req->description,
+        //         'image' => $req->file('image')->getClientOriginalName(),
+        //         'created_by' => Auth::user()->name,
+        //     ]);
+        // }
+        // else {
+        //     Item::create([
+        //         'id' => $id,
+        //         'name' => $req->name,
+        //         'brand_id' => $req->brand,
+        //         'supplier_id' => $req->supplier_id,
+        //         'buy' => str_replace(",", '',$req->buy),
+        //         'sell' => str_replace(",", '',$req->sell),
+        //         'discount' => str_replace(",", '',$req->discount),
+        //         'condition' => $req->condition,
+        //         'description' => $req->description,
+        //         'created_by' => Auth::user()->name,
+        //     ]);
+        // }
 
         for ($i=0; $i <count($req->branch_id) ; $i++){
             Stock::create([
@@ -175,10 +200,19 @@ class ItemController extends Controller
         //     'sell' => ['required', 'string', 'max:255'],
         //     'condition' => ['required', 'string', 'max:10'],
         // ])->validate();
+        $checkData = Item::where('id',$id)->first();
+        $image = $req->image;
+        $image = str_replace('data:image/jpeg;base64,','', $image);
+        $image = base64_decode($image);
+        if ($image != null) {
+            $fileSave = 'public/assetsmaster/image/IMG_' . $checkData->id . '.' .'png';
+            $fileName = 'IMG_' . $checkData->id . '.' .'png';
+            Storage::put($fileSave, $image);
+        }else{
+            $fileName = $checkData->image;
+        }
 
-        if ($req->hasFile('image')) {
-            $req->file('image')->move('assetsmaster/image/item/',$req->file('image')->getClientOriginalName());
-            Item::where('id', $id)
+        Item::where('id', $id)
             ->update([
             'name' => $req->name,
             'brand_id' => $req->brand,
@@ -188,24 +222,39 @@ class ItemController extends Controller
             'discount' => str_replace(",", '',$req->discount),
             'condition' => $req->condition,
             'description' => $req->description,
-            'image' => $req->file('image')->getClientOriginalName(),
+            'image' => $fileName,
             'updated_by' => Auth::user()->name,
             ]);
-        }
-        else {
-            Item::where('id', $id)
-            ->update([
-            'name' => $req->name,
-            'brand_id' => $req->brand,
-            'supplier_id' => $req->supplier_id,
-            'buy' => str_replace(",", '',$req->buy),
-            'sell' => str_replace(",", '',$req->sell),
-            'discount' => str_replace(",", '',$req->discount),
-            'condition' => $req->condition,
-            'description' => $req->description,
-            'updated_by' => Auth::user()->name,
-            ]);
-        }
+        // if ($req->hasFile('image')) {
+        //     $req->file('image')->move('assetsmaster/image/item/',$req->file('image')->getClientOriginalName());
+        //     Item::where('id', $id)
+        //     ->update([
+        //     'name' => $req->name,
+        //     'brand_id' => $req->brand,
+        //     'supplier_id' => $req->supplier_id,
+        //     'buy' => str_replace(",", '',$req->buy),
+        //     'sell' => str_replace(",", '',$req->sell),
+        //     'discount' => str_replace(",", '',$req->discount),
+        //     'condition' => $req->condition,
+        //     'description' => $req->description,
+        //     'image' => $req->file('image')->getClientOriginalName(),
+        //     'updated_by' => Auth::user()->name,
+        //     ]);
+        // }
+        // else {
+        //     Item::where('id', $id)
+        //     ->update([
+        //     'name' => $req->name,
+        //     'brand_id' => $req->brand,
+        //     'supplier_id' => $req->supplier_id,
+        //     'buy' => str_replace(",", '',$req->buy),
+        //     'sell' => str_replace(",", '',$req->sell),
+        //     'discount' => str_replace(",", '',$req->discount),
+        //     'condition' => $req->condition,
+        //     'description' => $req->description,
+        //     'updated_by' => Auth::user()->name,
+        //     ]);
+        // }
 
         $item = Item::find($id);
         $this->DashboardController->createLog(
