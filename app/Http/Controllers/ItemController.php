@@ -103,7 +103,7 @@ class ItemController extends Controller
             $image = str_replace('data:image/jpeg;base64,','', $image);
             $image = base64_decode($image);
             if ($image != null) {
-                $fileSave = 'public/assetsmaster/image/IMG_' . $id . '.' .'png';
+                $fileSave = 'public/assetsmaster/image/item/IMG_' . $id . '.' .'png';
                 $fileName = 'IMG_' . $id . '.' .'png';
                 Storage::put($fileSave, $image);
             }else{
@@ -205,7 +205,7 @@ class ItemController extends Controller
         $image = str_replace('data:image/jpeg;base64,','', $image);
         $image = base64_decode($image);
         if ($image != null) {
-            $fileSave = 'public/assetsmaster/image/IMG_' . $checkData->id . '.' .'png';
+            $fileSave = 'public/assetsmaster/image/item/IMG_' . $checkData->id . '.' .'png';
             $fileName = 'IMG_' . $checkData->id . '.' .'png';
             Storage::put($fileSave, $image);
         }else{
