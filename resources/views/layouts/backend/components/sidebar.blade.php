@@ -103,6 +103,10 @@
                     'url'=>''])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
+                    'title'=>'Ikon',
+                    'url'=>''])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
                     'title'=>'Karyawan',
                     'url'=>route('employee.index')])
                     @include('layouts.backend.components.sidebarMenu',[
@@ -206,6 +210,32 @@
                     'active'=>'',
                     'title'=>'Pesan',
                     'url'=>route('message.index')])
+                </ul>
+            </li>
+            {{-- System --}}
+            <li class="nav-item dropdown">
+                <a href="javascript:void(0)" class="nav-link has-dropdown" data-toggle="dropdown">
+                    <i class="fas fa-cog"></i>
+                    <span>{{ __('System') }}</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li class="nav-item dropdown">
+                        <a class="nav-link" href="">Visi Misi</a>
+                        <ul class="dropdown-menu">
+                            <li class="">
+                                Visi
+                            </li>
+                            <li class="">
+                                Misi
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="dropdown-menu">
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'SOP',
+                    'url'=>''])
                 </ul>
             </li>
         </ul>

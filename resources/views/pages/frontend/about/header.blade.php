@@ -18,7 +18,7 @@
 	<div class="row justify-content-center">
 		<div class="col-lg-8 mt-5 title-with-video-custom text-center">
 			<h1 class="mt-5 pt-5 font-weight-semibold">{{ $carouselAbout->title }}</h1>
-			<p class="mb-0 text-4 opacity-7">{{ $carouselAbout->description }}</p>
+			<p class="mb-0 text-4 opacity-7"><?php echo $carouselAbout->description ?></p>
 		</div>
 	</div>
 </div>

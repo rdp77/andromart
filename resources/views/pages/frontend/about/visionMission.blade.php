@@ -8,13 +8,13 @@
 				@if($contents['about_vision'] == true)
 				<div class="col-lg-6">
 					<h4 class="font-weight-extra-bold">{{ $aboutVision->title }}</h4>
-					<p class="">{{ $aboutVision->description }}</p>
+					<p class=""><?php echo $aboutVision->description ?></p>
 				</div>
 				@endif
 				@if($contents['about_mission'] == true)
 				<div class="col-lg-6">
 					<h4 class="font-weight-extra-bold">{{ $aboutMission->title }}</h4>
-					<p class="">{{ $aboutMission->description }}</p>
+					<p class=""><?php echo $aboutMission->description ?></p>
 				</div>
 				@endif
 			</div>

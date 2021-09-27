@@ -21,7 +21,7 @@
                         <img src="{{ asset($row->image) }}" class="img-fluid rounded-circle mb-0" alt="">
                     </div>
                     <blockquote>
-                        <p class="px-xl-2 mb-0">{{ $row->description }}</p>
+                        <p class="px-xl-2 mb-0"><?php echo $row->description; ?></p>
                     </blockquote>
                     <div class="testimonial-author">
                         <p><strong class="text-color-light opacity-10 text-4">{{ $row->title }}</strong></p>
