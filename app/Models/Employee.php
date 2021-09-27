@@ -41,7 +41,7 @@ class Employee extends Model
         // return $this->hasMany('App\Models\Service','');
         return $this->hasMany('App\Models\Service', 'technician_replacement_id', 'id');
     }
-    
+
     // public function Employee1()
     // {
     //     return $this->belongsTo('App\Models\Employee', 'technician_id', 'id');
@@ -53,6 +53,11 @@ class Employee extends Model
     public function branch()
     {
         return $this->belongsTo('App\Models\Branch');
+    }
+
+    public function Role()
+    {
+        return $this->belongsTo('App\Models\Role');
     }
 
     public function getAvatar()

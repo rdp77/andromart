@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Branch;
 use App\Models\Employee;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,14 +26,15 @@ class EmployeeController extends Controller
 
     public function index(Request $req)
     {
-        $employee = Employee::all();
+        $employee = Employee::where('id', '!=', '1')->get();
         return view('pages.backend.master.employee.indexEmployee', compact('employee'));
     }
 
     public function create()
     {
+        $role = Role::get();
         $branch = Branch::get();
-        return view('pages.backend.master.employee.createEmployee', ['branch' => $branch]);
+        return view('pages.backend.master.employee.createEmployee', compact('role', 'branch'));
     }
 
     public function store(Request $req)
@@ -42,11 +44,13 @@ class EmployeeController extends Controller
             'password' => ['required', 'string', 'min:6',],
             'identity' => ['required', 'string', 'max:255', 'unique:employees'],
             'name' => ['required', 'string', 'max:255'],
-            'address' => ['required', 'string', 'max:255',],
+            'address' => ['required', 'string', 'max:255'],
+            'role_id' => ['required', 'integer'],
+            'level' => ['required', 'integer', 'max:5'],
         ])->validate();
 
         $user = new \App\Models\User;
-        $user->role_id = '1';
+        $user->role_id = $req->role_id;
         $user->name = $req->name;
         $user->username = $req->username;
         $user->password = Hash::make($req->password);
@@ -89,7 +93,8 @@ class EmployeeController extends Controller
     {
         $branch = Branch::where('id', '!=', Employee::find($id)->branch_id)->get();
         $employee = Employee::find($id);
-        return view('pages.backend.master.employee.updateEmployee', ['employee' => $employee, 'branch' => $branch]);
+        $role = Role::where('id', '!=', $employee->user->role_id)->get();
+        return view('pages.backend.master.employee.updateEmployee', compact('branch', 'employee', 'role'));
     }
 
     public function update(Request $req, $id)
@@ -98,6 +103,8 @@ class EmployeeController extends Controller
             Validator::make($req->all(), [
                 'name' => ['required', 'string', 'max:255'],
                 'address' => ['required', 'string', 'max:255',],
+                'role_id' => ['required', 'integer'],
+                'level' => ['required', 'integer', 'max:5'],
             ])->validate();
         }
         else {
@@ -105,6 +112,8 @@ class EmployeeController extends Controller
                 'identity' => ['required', 'string', 'max:255', 'unique:employees'],
                 'name' => ['required', 'string', 'max:255'],
                 'address' => ['required', 'string', 'max:255',],
+                'role_id' => ['required', 'integer'],
+                'level' => ['required', 'integer', 'max:5'],
             ])->validate();
         }
 
@@ -126,6 +135,7 @@ class EmployeeController extends Controller
         User::where('id', Employee::find($id)->user_id)
             ->update([
                 'name' => $req->name,
+                'role_id' => $req->role_id,
             ]);
 
         $employee = Employee::find($id);

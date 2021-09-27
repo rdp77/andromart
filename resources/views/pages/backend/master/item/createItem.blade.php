@@ -90,7 +90,7 @@
                         @foreach($branch as $branch)
                         <label class="selectgroup-item">
                           <input type="checkbox" name="branch_id[]" value="{{ $branch->id }}" class="selectgroup-input" checked="">
-                          <span class="selectgroup-button">{{ $branch->code }}</span>
+                          <span class="selectgroup-button">{{ $branch->name }}</span>
                         </label>
                         @endforeach
                     </div>
@@ -105,11 +105,27 @@
                     </div>
                     @enderror
                 </div>
-                <div class="form-group col-md-2 col-xs-12">
+                {{-- <div class="form-group col-md-2 col-xs-12">
                     <label for="image">{{ __('Gambar') }}</label>
                     <div class="custom-file">
                         <input type="file" class="custom-file-input" id="image" name="image">
                         <label class="custom-file-label" for="image">Pilih Gambar</label>
+                    </div>
+                </div> --}}
+            </div>
+            <div class="row">
+                <div class="form-group col-12 col-md-12 col-lg-12">
+                    <label for="image">{{ __('Ambil Foto') }}<code>*</code></label>
+                    <div id="my_camera"></div>
+                    <br/>
+                    <div class="row">
+                        <div class="form-group col-md-3">
+                            <input type=button class="btn btn-primary" value="Take Snapshot" onClick="take_snapshot()">
+                            <input type="hidden" name="image" class="image-tag">
+                        </div>
+                        <div class="form-group col-md-3">
+                            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#exampleModal">Lihat Gambar</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -168,4 +184,35 @@
 
 @section('script')
 <script src="{{ asset('assets/pages/transaction/serviceScript.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
+<style>
+    .modal-backdrop{
+        position: relative !important;
+    }
+</style>
+<script language="JavaScript">
+$( document ).ready(function() {
+    Webcam.set({
+        width: 700,
+        height: 420,
+        // dest_width:1000,
+        // dest_height:1000,
+        image_format: 'jpeg',
+        jpeg_quality: 100
+    });
+
+    Webcam.attach( '#my_camera' );
+});
+function take_snapshot() {
+            swal('Berhasil Mengambil Foto', {
+                icon: "success",
+            });
+    Webcam.snap( function(data_uri) {
+        $(".image-tag").val(data_uri);
+
+        document.getElementById('results').innerHTML = '<img name="image" id="sortpicture" class="image" src="'+data_uri+'"/>';
+    } );
+
+}
+</script>
 @endsection

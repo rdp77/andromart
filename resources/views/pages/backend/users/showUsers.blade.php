@@ -36,7 +36,7 @@
             <div class="profile-widget-name">
                 <i class="fa fa-user-astronaut"></i> &nbsp;&nbsp;
                 <div class="text-muted d-inline font-weight-normal">
-                    {{ $user->employee->level }} - {{ $user->employee->branch->code }}
+                    {{ $user->role->name }} {{ $user->employee->level }} - {{ $user->employee->branch->name }}
                 </div>
             </div>
           <div class="profile-widget-name">

@@ -8,31 +8,6 @@
 
 @section('content')
 @include('layouts.backend.components.notification')
-{{-- <div class="card">
-    <div class="card-header">
-        <a href="{{ route('employee.create') }}" class="btn btn-icon icon-left btn-primary">
-            <i class="far fa-edit"></i>{{ __(' Tambah Pengguna') }}</a>
-    </div>
-    <div class="card-body">
-        <table class="table-striped table" id="table" width="100%">
-            <thead>
-                <tr>
-                    <th>{{ __('NIK') }}</th>
-                    <th>
-                        {{ __('Nama') }}
-                    </th>
-                    <th>{{ __('Cabang') }}</th>
-                    <th>{{ __('Kontak') }}</th>
-                    <th>{{ __('Alamat') }}</th>
-                    <th>{{ __('Bagian') }}</th>
-                    <th>{{ __('Aksi') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
-    </div>
-</div> --}}
 <div class="card">
     <div class="card-header">
         <a href="{{ route('employee.create') }}" class="btn btn-icon icon-left btn-primary">
@@ -63,7 +38,7 @@
                     <div class="profile-widget-name">
                         <i class="fa fa-user-astronaut"></i> &nbsp;&nbsp;
                         <div class="text-muted d-inline font-weight-normal">
-                            {{ $employee->level }} - {{ $employee->branch->code }}
+                            {{ $employee->user->role->name }} {{ $employee->level }} - {{ $employee->branch->name }}
                         </div>
                     </div>
                     <div class="profile-widget-name">
