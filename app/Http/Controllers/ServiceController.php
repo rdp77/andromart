@@ -11,6 +11,8 @@ use App\Models\Brand;
 use App\Models\StockMutation;
 use App\Models\Employee;
 use App\Models\Service;
+use App\Models\ServiceEquipment;
+use App\Models\ServiceCondition;
 use App\Models\Warranty;
 use App\Models\SettingPresentase;
 use App\Models\ServiceDetail;
@@ -62,8 +64,8 @@ class ServiceController extends Controller
                     if($row->payment_status == null){
                         $actionBtn .= '<a class="dropdown-item" href="' . route('service.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
                         $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
-                        $actionBtn .= '<a class="dropdown-item" href="' . route('service.printService', $row->id) . '"><i class="fas fa-print"></i> Cetak</a>';
                     }
+                    $actionBtn .= '<a class="dropdown-item" href="' . route('service.printService', $row->id) . '"><i class="fas fa-print"></i> Cetak</a>';
 
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
 
@@ -252,7 +254,7 @@ class ServiceController extends Controller
 
     public function store(Request $req)
     {
-            // return $req->all();
+        return $req->all();
         DB::beginTransaction();
         try {
             // return $req->technicianId;
@@ -405,6 +407,79 @@ class ServiceController extends Controller
                 'created_at'=>date('Y-m-d h:i:s'),
             ]);
 
+            ServiceCondition::create([
+                'service_id'=>$id,
+                'name'=>'LCD',
+                'status'=>$req->LcdCondition,
+            ]);
+            ServiceCondition::create([
+                'service_id'=>$id,
+                'name'=>'Camera Depan',
+                'status'=>$req->cameraDepanCondition,
+            ]);
+            ServiceCondition::create([
+                'service_id'=>$id,
+                'name'=>'Camera Belakang',
+                'status'=>$req->cameraBelakangCondition,
+            ]);
+            ServiceCondition::create([
+                'service_id'=>$id,
+                'name'=>'Buzzer',
+                'status'=>$req->buzzerCondition,
+            ]);
+            ServiceCondition::create([
+                'service_id'=>$id,
+                'name'=>'Charger',
+                'status'=>$req->chargerCondition,
+            ]);
+            ServiceCondition::create([
+                'service_id'=>$id,
+                'name'=>'Mic',
+                'status'=>$req->micCondition,
+            ]);
+            ServiceCondition::create([
+                'service_id'=>$id,
+                'name'=>'Speaker',
+                'status'=>$req->speakerCondition,
+            ]);
+            ServiceCondition::create([
+                'service_id'=>$id,
+                'name'=>'Touch Screen',
+                'status'=>$req->touchScreenCondition,
+            ]);
+            ServiceCondition::create([
+                'service_id'=>$id,
+                'name'=>'Vibrator',
+                'status'=>$req->vibratorCondition,
+            ]);
+            if($req->laptopPcEquipment != null){
+                ServiceCondition::create([
+                    'service_id'=>$id,
+                    'name'=>'Vibrator',
+                    'status'=>$req->laptopPcEquipment,
+                ]);
+            }
+            if($req->chargerEquipment != null){
+                ServiceCondition::create([
+                    'service_id'=>$id,
+                    'name'=>'Vibrator',
+                    'status'=>$req->laptopPcEquipment,
+                ]);
+            }
+            if($req->bateraiEquipment != null){
+                ServiceCondition::create([
+                    'service_id'=>$id,
+                    'name'=>'Vibrator',
+                    'status'=>$req->bateraiEquipment,
+                ]);
+            }
+            if($req->bateraiEquipment != null){
+                ServiceCondition::create([
+                    'service_id'=>$id,
+                    'name'=>'Vibrator',
+                    'status'=>$req->bateraiEquipment,
+                ]);
+            }
             // if($req->verificationPrice == 'N'){
             //     echo 'menjurnal';
 
