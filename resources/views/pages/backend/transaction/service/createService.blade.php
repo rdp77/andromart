@@ -191,66 +191,66 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="form-group col-12 col-md-4 col-lg-4">
+                        <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
                                 <input type="checkbox" name="laptopPcEquipment" class="custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Laptop / PC</span>
                             </label>
                         </div>
-                        <div class="form-group col-12 col-md-4 col-lg-4">
+                        <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
                                 <input type="checkbox" name="chargerEquipment" class="custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Charger</span>
                             </label>
                         </div>
-                        <div class="form-group col-12 col-md-4 col-lg-4">
+                        <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
                                 <input type="checkbox" name="bateraiEquipment" class="custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Baterai</span>
                             </label>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-12 col-md-4 col-lg-4">
+                        <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
                                 <input type="checkbox" name="hardiskSsdEquipment" class="custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Hardisk / SSD</span>
                             </label>
                         </div>
-                        <div class="form-group col-12 col-md-4 col-lg-4">
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
                                 <input type="checkbox" name="RamEquipment" class="custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">RAM</span>
                             </label>
                         </div>
-                        <div class="form-group col-12 col-md-4 col-lg-4">
+                        <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
                                 <input type="checkbox" name="HandphoneEquipment" class="custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Handphone</span>
                             </label>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-12 col-md-4 col-lg-4">
+                        <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
                                 <input type="checkbox" name="printerEquipment" class="custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Printer</span>
                             </label>
                         </div>
-                        <div class="form-group col-12 col-md-4 col-lg-4">
+                        <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
                                 <input type="checkbox" name="tasLaptopEquipment" class="custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Tas Laptop</span>
                             </label>
                         </div>
+                    </div>
+                    {{-- <div class="row">
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
                                 <input type="checkbox" name="lainLainEquipment" class="custom-switch-input">
@@ -258,10 +258,7 @@
                                 <span class="custom-switch-description">Lain Lain</span>
                             </label>
                         </div>
-                    </div>
-                        
-                        
-                        
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -357,7 +354,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="LcdCondition" value="X"
+                                <input type="radio" name="LcdCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
@@ -377,7 +374,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="touchScreenCondition" value="X"
+                                <input type="radio" name="touchScreenCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
@@ -397,7 +394,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="speakerCondition" value="X"
+                                <input type="radio" name="speakerCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
@@ -417,7 +414,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="chargerCondition" value="X"
+                                <input type="radio" name="chargerCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
@@ -437,7 +434,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="cameraDepanCondition" value="X"
+                                <input type="radio" name="cameraDepanCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
@@ -457,7 +454,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="cameraBelakangCondition" value="X"
+                                <input type="radio" name="cameraBelakangCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
@@ -477,7 +474,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="vibratorCondition" value="X"
+                                <input type="radio" name="vibratorCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
@@ -497,7 +494,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="micCondition" value="X"
+                                <input type="radio" name="micCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
@@ -517,7 +514,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="buzzerCondition" value="X"
+                                <input type="radio" name="buzzerCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
