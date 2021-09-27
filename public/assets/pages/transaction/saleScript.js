@@ -92,6 +92,7 @@ function del(id) {
                     swal("Data pengguna berhasil dihapus", {
                         icon: "success",
                     });
+                    location.reload();
                     table.draw();
                 },
             });

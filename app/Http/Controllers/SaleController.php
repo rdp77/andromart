@@ -135,9 +135,9 @@ class SaleController extends Controller
     public function create()
     {
         $code = $this->code('PJT-');
-        $sales = Employee::get();
+        $sales = Employee::where('id', '!=', '1')->get();
         $cash = Cash::get();
-        $buyer = Employee::get();
+        $buyer = Employee::where('id', '!=', '1')->get();
         $warranty = Warranty::get();
         $customer = Customer::get();
         $userBranch = Auth::user()->employee->branch_id;

@@ -100,7 +100,7 @@
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Hak Akses',
-                    'url'=>''])
+                    'url'=>route('role.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Ikon',
@@ -173,7 +173,7 @@
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Stok Mutasi',
-                    'url'=>''])
+                    'url'=>route('stockMutation.index')])
                 </ul>
             </li>
             {{-- Kantor --}}

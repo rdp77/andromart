@@ -22,7 +22,7 @@
                   </div>
                   <div class="card-body">
                       <div class="row">
-                        <div class="form-group col-md-6 col-xs-12">
+                        <div class="form-group col-md-5 col-xs-12">
                             <label for="branch_id">{{ __('Cabang') }}<code>*</code></label>
                             <select name="branch_id" id="branch_id" class="form-control select2" required>
                                 <option value="{{ $employee->branch->id }}"> {{ $employee->branch->code }} - {{ $employee->branch->name }} </option>
@@ -31,21 +31,29 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-md-6 col-xs-12">
-                            <label for="level">{{ __('Pekerjaan') }}<code>*</code></label>
-                            <select name="level" id="level" class="form-control select2" required>
-                                <option value=""> - Select - </option>
-                                <option value="Owner"> Owner </option>
-                                <option value="Admin"> Admin / Kasir </option>
-                                <option value="Teknisi">  Teknisi </option>
-                                <option value="Sales">  Sales / Support </option>
+                        <div class="form-group col-md-5 col-xs-12">
+                            <label for="role_id">{{ __('Pekerjaan') }}<code>*</code></label>
+                            <select name="role_id" id="role_id" class="form-control select2" required>
+                                <option value="{{ $employee->user->role->id }}"> {{ $employee->user->role->name }} </option>
+                                @foreach ($role as $role)
+                                <option value="{{ $role->id }}"> {{ $role->name }} </option>
+                                @endforeach
                             </select>
+                        </div>
+                        <div class="form-group col-md-2 col-xs-12">
+                            <label for="level">{{ __('Level') }}<code>*</code></label>
+                            <input id="level" type="text" class="form-control @error('level') is-invalid @enderror" name="level" value="{{ $employee->level }}" required>
+                            @error('level')
+                            <div class="invalid-feedback">
+                              {{ $message }}
+                            </div>
+                          @enderror
                         </div>
                       </div>
                     <div class="row">
                       <div class="form-group col-md-4 col-12">
                         <label for="identity">{{ __('NIK') }}<code>*</code></label>
-                        <input type="text" class="form-control @error('identity') is-invalid @enderror"" value="{{ $employee->identity }}" name="identity" required>
+                        <input type="text" class="form-control @error('identity') is-invalid @enderror" value="{{ $employee->identity }}" name="identity" required>
                         @error('identity')
                           <div class="invalid-feedback">
                             {{ $message }}
