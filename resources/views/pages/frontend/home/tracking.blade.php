@@ -32,7 +32,11 @@
                     <ul class="list list-icons mt-3">
                         <li><i class="fas fa-map-marker-alt"></i>{{ $row->address }}</li>
                         @if($row->phone != null)
-                        <li><i class="fas fa-phone"></i> {{ $row->phone }}</li>
+                        <li>
+                            <a href="https://api.whatsapp.com/send?phone=62{{$row->phone}}&text=Hai, Saya ingin service HP/Laptop di Andromart" target="_blank">
+                                <i class="fab fa-whatsapp"></i>
+                            </a> 0{{ $row->phone }}
+                        </li>
                         @endif
                         @if($row->email != null)
                         <li><i class="far fa-envelope"></i> <a href="mailto:{{ $row->email }}">{{ $row->email }}</a></li>
