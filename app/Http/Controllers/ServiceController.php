@@ -254,7 +254,9 @@ class ServiceController extends Controller
 
     public function store(Request $req)
     {
-        return $req->all();
+        // return 
+        // return [$req->bateraiEquipment,$req->ramEquipment];
+        // return $req->all();
         DB::beginTransaction();
         try {
             // return $req->technicianId;
@@ -452,34 +454,108 @@ class ServiceController extends Controller
                 'name'=>'Vibrator',
                 'status'=>$req->vibratorCondition,
             ]);
-            if($req->laptopPcEquipment != null){
-                ServiceCondition::create([
+            $dataEquipment = [];
+
+            if($req->laptopPcEquipment == 'on'){
+                $dataEquipment[0] = 'Y';
+                $dataEquipmentName[0] = 'Laptop / PC';
+            }else{
+                $dataEquipment[0] = 'N';
+                $dataEquipmentName[0] = 'Laptop / PC';
+            }
+            if($req->chargerEquipment == 'on'){
+                $dataEquipment[1] = 'Y';
+                $dataEquipmentName[1] = 'Charger';
+            }else{
+                $dataEquipment[1] = 'N';
+                $dataEquipmentName[1] = 'Charger';
+            }
+            if($req->bateraiEquipment == 'on'){
+                $dataEquipment[2] = 'Y';
+                $dataEquipmentName[2] = 'Baterai';
+            }else{
+                $dataEquipment[2] = 'N';
+                $dataEquipmentName[2] = 'Baterai';
+            }
+            if($req->hardiskSsdEquipment == 'on'){
+                $dataEquipment[3] = 'Y';
+                $dataEquipmentName[3] = 'Hardisk / SSD';
+            }else{
+                $dataEquipment[3] = 'N';
+                $dataEquipmentName[3] = 'Hardisk / SSD';
+            }
+            if($req->RamEquipment == 'on'){
+                $dataEquipment[4] = 'Y';
+                $dataEquipmentName[4] = 'Ram';
+            }else{
+                $dataEquipment[4] = 'N';
+                $dataEquipmentName[4] = 'Ram';
+            }
+            if($req->HandphoneEquipment == 'on'){
+                $dataEquipment[5] = 'Y';
+                $dataEquipmentName[5] = 'Handphone';
+            }else{
+                $dataEquipment[5] = 'N';
+                $dataEquipmentName[5] = 'Handphone';
+            }
+            if($req->printerEquipment == 'on'){
+                $dataEquipment[6] = 'Y';
+                $dataEquipmentName[6] = 'Printer';
+            }else{
+                $dataEquipment[6] = 'N';
+                $dataEquipmentName[6] = 'Printer';
+            }
+            if($req->tasLaptopEquipment == 'on'){
+                $dataEquipment[7] = 'Y';
+                $dataEquipmentName[7] = 'Tas Laptop';
+            }else{
+                $dataEquipment[7] = 'N';
+                $dataEquipmentName[7] = 'Tas Laptop';
+            }
+            // return [$dataEquipment,$dataEquipmentName];
+            for ($i=0; $i <count($dataEquipment) ; $i++) { 
+                ServiceEquipment::create([
                     'service_id'=>$id,
-                    'name'=>'Vibrator',
-                    'status'=>$req->laptopPcEquipment,
+                    'name'=>$dataEquipmentName[$i],
+                    'status'=>$dataEquipment[$i],
                 ]);
             }
-            if($req->chargerEquipment != null){
-                ServiceCondition::create([
-                    'service_id'=>$id,
-                    'name'=>'Vibrator',
-                    'status'=>$req->laptopPcEquipment,
-                ]);
-            }
-            if($req->bateraiEquipment != null){
-                ServiceCondition::create([
-                    'service_id'=>$id,
-                    'name'=>'Vibrator',
-                    'status'=>$req->bateraiEquipment,
-                ]);
-            }
-            if($req->bateraiEquipment != null){
-                ServiceCondition::create([
-                    'service_id'=>$id,
-                    'name'=>'Vibrator',
-                    'status'=>$req->bateraiEquipment,
-                ]);
-            }
+            
+            // ServiceEquipment::create([
+            //     'service_id'=>$id,
+            //     'name'=>'Charger',
+            //     'status'=>$req->laptopPcEquipment,
+            // ]);
+            // ServiceEquipment::create([
+            //     'service_id'=>$id,
+            //     'name'=>'Baterai',
+            //     'status'=>$req->bateraiEquipment,
+            // ]);
+            // ServiceEquipment::create([
+            //     'service_id'=>$id,
+            //     'name'=>'Hardisk / SSD',
+            //     'status'=>$req->hardiskSsdEquipment,
+            // ]);
+            // ServiceEquipment::create([
+            //     'service_id'=>$id,
+            //     'name'=>'Ram',
+            //     'status'=>$req->RamEquipment,
+            // ]);
+            // ServiceEquipment::create([
+            //     'service_id'=>$id,
+            //     'name'=>'Handphone',
+            //     'status'=>$req->HandphoneEquipment,
+            // ]);
+            // ServiceEquipment::create([
+            //     'service_id'=>$id,
+            //     'name'=>'Printer',
+            //     'status'=>$req->printerEquipment,
+            // ]);
+            // ServiceEquipment::create([
+            //     'service_id'=>$id,
+            //     'name'=>'Tas Laptop',
+            //     'status'=>$req->tasLaptopEquipment,
+            // ]);
             // if($req->verificationPrice == 'N'){
             //     echo 'menjurnal';
 
