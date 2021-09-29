@@ -8,8 +8,11 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Models\SaleDetail;
 use App\Models\Stock;
+use App\Models\StockMutation;
 use App\Models\Supplier;
 use App\Models\Type;
+use App\Models\Unit;
+use App\Models\Warranty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -31,7 +34,7 @@ class ItemController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Item::where('id', '!=', 1)->with('brand', 'brand.category', 'supplier')->get();
+            $data = Item::where('id', '!=', 1)->with('brand', 'brand.category', 'supplier', 'warranty')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -62,6 +65,21 @@ class ItemController extends Controller
                     return $htmlAdd;
                 })
 
+                ->addColumn('condition', function ($row) {
+                    $htmlAdd = '<table>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<td>Kondisi</td>';
+                    $htmlAdd .=      '<th>'.$row->condition.'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<td>Garansi</td>';
+                    $htmlAdd .=      '<th>'.$row->warranty->periode. $row->warranty->name.'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .= '<table>';
+
+                    return $htmlAdd;
+                })
+
                 ->addColumn('price', function ($row) {
                     $htmlAdd = '<table>';
                     $htmlAdd .=   '<tr>';
@@ -80,7 +98,7 @@ class ItemController extends Controller
 
                 })
 
-                ->rawColumns(['action', 'brand', 'price'])
+                ->rawColumns(['action', 'brand', 'price', 'condition'])
                 ->make(true);
         }
         return view('pages.backend.master.item.indexItem');
@@ -89,15 +107,26 @@ class ItemController extends Controller
     public function create()
     {
         $branch = Branch::get();
-        $category = Category::get();
         $brand = Brand::get();
-        $type = Type::get();
+        $category = Category::get();
         $supplier = Supplier::get();
-        return view('pages.backend.master.item.createItem', compact('branch', 'category', 'brand', 'type', 'supplier'));
+        $type = Type::get();
+        $unit = Unit::get();
+        $warranty = Warranty::get();
+        return view('pages.backend.master.item.createItem', compact('branch', 'category', 'brand', 'type', 'supplier', 'unit', 'warranty'));
     }
 
     public function store(Request $req)
     {
+        // Validator::make($req->all(), [
+        //     // 'name' => ['required', 'string', 'max:255'],
+        //     // 'brand_id' => ['required', 'integer'],
+        //     // 'supplier_id' => ['required', 'integer'],
+        //     // 'unit_id' => ['required', 'integer'],
+        //     'buy' => ['required', 'string', 'max:255'],
+        //     'sell' => ['required', 'string', 'max:255'],
+        // ])->validate();
+
         $id = DB::table('items')->max('id')+1;
         $image = $req->image;
             $image = str_replace('data:image/jpeg;base64,','', $image);
@@ -115,6 +144,7 @@ class ItemController extends Controller
                 'name' => $req->name,
                 'brand_id' => $req->brand,
                 'supplier_id' => $req->supplier_id,
+                'warranty_id' => $req->warranty_id,
                 'buy' => str_replace(",", '',$req->buy),
                 'sell' => str_replace(",", '',$req->sell),
                 'discount' => str_replace(",", '',$req->discount),
@@ -124,41 +154,10 @@ class ItemController extends Controller
                 'created_by' => Auth::user()->name,
             ]);
 
-        // if ($req->hasFile('image')) {
-        //     $req->file('image')->move('assetsmaster/image/item/',$req->file('image')->getClientOriginalName());
-        //     Item::create([
-        //         'id' => $id,
-        //         'name' => $req->name,
-        //         'brand_id' => $req->brand,
-        //         'supplier_id' => $req->supplier_id,
-        //         'buy' => str_replace(",", '',$req->buy),
-        //         'sell' => str_replace(",", '',$req->sell),
-        //         'discount' => str_replace(",", '',$req->discount),
-        //         'condition' => $req->condition,
-        //         'description' => $req->description,
-        //         'image' => $req->file('image')->getClientOriginalName(),
-        //         'created_by' => Auth::user()->name,
-        //     ]);
-        // }
-        // else {
-        //     Item::create([
-        //         'id' => $id,
-        //         'name' => $req->name,
-        //         'brand_id' => $req->brand,
-        //         'supplier_id' => $req->supplier_id,
-        //         'buy' => str_replace(",", '',$req->buy),
-        //         'sell' => str_replace(",", '',$req->sell),
-        //         'discount' => str_replace(",", '',$req->discount),
-        //         'condition' => $req->condition,
-        //         'description' => $req->description,
-        //         'created_by' => Auth::user()->name,
-        //     ]);
-        // }
-
         for ($i=0; $i <count($req->branch_id) ; $i++){
             Stock::create([
                 'item_id' => $id,
-                'unit_id' => '1',
+                'unit_id' => $req->unit_id,
                 'branch_id' => $req->branch_id[$i],
                 'stock' => '0',
                 'min_stock' => '0',
@@ -183,11 +182,13 @@ class ItemController extends Controller
 
     public function edit($id)
     {
-        $item = Item::with('brand')->find($id);
         $category = Category::get();
         $brand = Brand::get();
+        $item = Item::find($id);
         $supplier = Supplier::where('id', '!=', Item::find($id)->supplier_id)->get();
-        return view('pages.backend.master.item.updateItem', compact('item', 'category', 'brand', 'brand', 'supplier'));
+        $unit = Unit::get();
+        $warranty = Warranty::where('id', '!=', Item::find($id)->warranty_id)->get();
+        return view('pages.backend.master.item.updateItem', compact('item', 'category', 'brand', 'brand', 'supplier', 'unit', 'warranty'));
     }
 
     public function update($id, Request $req)
@@ -217,6 +218,7 @@ class ItemController extends Controller
             'name' => $req->name,
             'brand_id' => $req->brand,
             'supplier_id' => $req->supplier_id,
+            'warranty_id' => $req->warranty_id,
             'buy' => str_replace(",", '',$req->buy),
             'sell' => str_replace(",", '',$req->sell),
             'discount' => str_replace(",", '',$req->discount),
@@ -225,36 +227,6 @@ class ItemController extends Controller
             'image' => $fileName,
             'updated_by' => Auth::user()->name,
             ]);
-        // if ($req->hasFile('image')) {
-        //     $req->file('image')->move('assetsmaster/image/item/',$req->file('image')->getClientOriginalName());
-        //     Item::where('id', $id)
-        //     ->update([
-        //     'name' => $req->name,
-        //     'brand_id' => $req->brand,
-        //     'supplier_id' => $req->supplier_id,
-        //     'buy' => str_replace(",", '',$req->buy),
-        //     'sell' => str_replace(",", '',$req->sell),
-        //     'discount' => str_replace(",", '',$req->discount),
-        //     'condition' => $req->condition,
-        //     'description' => $req->description,
-        //     'image' => $req->file('image')->getClientOriginalName(),
-        //     'updated_by' => Auth::user()->name,
-        //     ]);
-        // }
-        // else {
-        //     Item::where('id', $id)
-        //     ->update([
-        //     'name' => $req->name,
-        //     'brand_id' => $req->brand,
-        //     'supplier_id' => $req->supplier_id,
-        //     'buy' => str_replace(",", '',$req->buy),
-        //     'sell' => str_replace(",", '',$req->sell),
-        //     'discount' => str_replace(",", '',$req->discount),
-        //     'condition' => $req->condition,
-        //     'description' => $req->description,
-        //     'updated_by' => Auth::user()->name,
-        //     ]);
-        // }
 
         $item = Item::find($id);
         $this->DashboardController->createLog(
@@ -274,31 +246,31 @@ class ItemController extends Controller
 
     public function destroy(Request $req, $id)
     {
-        // $tr = SaleDetail::where('item_id', $id);
-        // $checkStock = Item::with('Stocks', 'stock')->find($id)->get();
-        // if ($checkStock > 0) {
-        //     return Response::json(['status' => 'error', 'message' => 'Data tidak bisa dihapus']);
-        // }
-        // else {
-        //     $this->DashboardController->createLog(
-        //         $req->header('user-agent'),
-        //         $req->ip(),
-        //         'Menghapus master barang ' . Item::find($id)->name
-        //     );
+        $transaction = StockMutation::where('item_id', '=', $id)->get();
+        $checkTransaction = count($transaction);
+        $stock = Stock::where('item_id', '=', $id)->get();
+        $checkStock = collect($stock)->sum('stock');
+        // dd($checkStock);
+        // dd($checkTransaction);
+        if ($checkStock > 0) {
+            return Response::json(['status' => 'error', 'message' => "Data tidak bisa dihapus, Sisa Stok = $checkStock"]);
+        }
+        else {
+            if ($checkTransaction > 0) {
+                return Response::json(['status' => 'error', 'message' => "Data yang sudah di transaksikan tidak bisa dihapus"]);
+            }
+            else {
+                $this->DashboardController->createLog(
+                    $req->header('user-agent'),
+                    $req->ip(),
+                    'Menghapus master barang ' . Item::find($id)->name
+                );
 
-        //     Item::destroy($id);
-        //     Stock::destroy(Item::where('item_id', $id));
-        //     return Response::json(['status' => 'success']);
-        // }
-        // ------
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Menghapus master barang ' . Item::find($id)->name
-        );
-
-        Item::destroy($id);
-        Stock::destroy(Item::where('item_id', $id));
-        return Response::json(['status' => 'Berhasil menghapus Master Barang', 'type' => 'success']);
+                Item::destroy($id);
+                Stock::destroy($stock);
+                // Stock::where('item_id', '=', $id)->delete();
+                return Response::json(['status' => 'success', 'message' => 'Data master berhasil dihapus !']);
+            }
+        }
     }
 }

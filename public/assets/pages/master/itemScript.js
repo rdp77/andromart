@@ -90,12 +90,24 @@ function del(id) {
             $.ajax({
                 url: "/master/item/item/" + id,
                 type: "DELETE",
-                success: function () {
-                    swal("Data master berhasil dihapus", {
-                        icon: "success",
-                    });
-                    table.draw();
+                success: function(data) {
+                    if (data.status == 'success'){
+                        swal(data.message, {
+                            icon: "success",
+                        });
+                        location.reload();
+                    }else{
+                        swal(data.message, {
+                            icon: "warning",
+                        });
+                    }
                 },
+                // success: function () {
+                //     swal("Data master berhasil dihapus", {
+                //         icon: "success",
+                //     });
+                //     table.draw();
+                // },
             });
         } else {
             swal("Data master Anda tidak jadi dihapus!");

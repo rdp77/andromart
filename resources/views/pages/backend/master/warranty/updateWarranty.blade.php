@@ -29,7 +29,7 @@
                 <div class="d-block">
                     <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
                 </div>
-                <select name="name" id="name" class="form-control select2" required autocomplete="name">
+                <select name="name" id="name" class="form-control select2" required>
                     <option value="Hari" @if ($warranty->name == 'Hari') selected @endif> Hari </option>
                     <option value="Minggu" @if ($warranty->name == 'Minggu') selected @endif> Minggu </option>
                     <option value="Bulan" @if ($warranty->name == 'Bulan') selected @endif> Bulan </option>

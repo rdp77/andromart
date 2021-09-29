@@ -21,6 +21,6 @@ class Unit extends Model
 
     public function stock()
     {
-        return $this->hasOne('App\Models\Stock');
+        return $this->belongsTo('App\Models\Stock');
     }
 }

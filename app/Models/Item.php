@@ -18,6 +18,7 @@ class Item extends Model
         'name',
         'brand_id',
         'supplier_id',
+        'warranty_id',
         'buy',
         'sell',
         'discount',
@@ -47,7 +48,7 @@ class Item extends Model
         return $this->hasMany('App\Models\Stock');
     }
 
-    public function Stocks()
+    public function stocks()
     {
         return $this->belongsTo('App\Models\Stock');
     }
@@ -63,5 +64,10 @@ class Item extends Model
     public function SaleDetail()
     {
         return $this->hasMany('App\Models\SaleDetail');
+    }
+
+    public function warranty()
+    {
+        return $this->belongsTo('App\Models\Warranty');
     }
 }

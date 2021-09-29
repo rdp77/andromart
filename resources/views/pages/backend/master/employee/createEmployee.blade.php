@@ -20,7 +20,7 @@
                         <div class="form-group col-md-8">
                             <label for="username">{{ __('Username') }}<code>*</code></label>
                             <input id="username" type="text" class="form-control @error('username') is-invalid @enderror"
-                                name="username" value="{{ old('username') }}" required autocomplete="username">
+                                name="username" value="{{ old('username') }}" required>
                             @error('username')
                             <div class="invalid-feedback">
                                 {{ $message }}

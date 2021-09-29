@@ -53,7 +53,7 @@ class BrandController extends Controller
     public function store(Request $req)
     {
         Validator::make($req->all(), [
-            'name' => ['required', 'string', 'max:255', 'unique:brands'],
+            'name' => ['required', 'string', 'max:255'],
         ])->validate();
 
         Brand::create([

@@ -14,7 +14,7 @@
         <div class="card-body">
             <div class="form-group col-md-4 col-xs-12">
                 <label for="category_id">{{ __('Kategori') }}<code>*</code></label>
-                <select name="category_id" id="category_id" class="form-control select2" required autocomplete="category_id">
+                <select name="category_id" id="category_id" class="form-control select2" required>
                     <option value=""> - Select - </option>
                     @foreach ($category as $category)
                     <option value="{{ $category->id }}">{{ $category->code }} - {{ $category->name }}</option>
@@ -31,7 +31,7 @@
                     <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
                 </div>
                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                    required autofocus>
+                    required>
                 @error('name')
                 <div class="invalid-feedback">
                     {{ $message }}

@@ -25,6 +25,7 @@
                     <th>{{ __('Cabang') }}</th>
                     <th>{{ __('Item') }}</th>
                     <th>{{ __('Tipe / Qty') }}</th>
+                    <th>{{ __('Operator') }}</th>
                     <th>{{ __('Keterangan') }}</th>
                     {{-- <th>{{ __('Action') }}</th> --}}
                 </tr>

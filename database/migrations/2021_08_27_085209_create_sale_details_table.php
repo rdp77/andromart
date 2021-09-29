@@ -20,6 +20,11 @@ class CreateSaleDetailsTable extends Migration
             $table->double('price');
             $table->double('qty');
             $table->double('total');
+            $table->integer('sales_id');
+            $table->integer('buyer_id')->nullable();
+            $table->double('sharing_profit_store');
+            $table->double('sharing_profit_sales');
+            $table->double('sharing_profit_buyer');
             $table->string('description')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

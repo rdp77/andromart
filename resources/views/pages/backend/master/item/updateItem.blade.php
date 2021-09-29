@@ -31,14 +31,21 @@
                         <option value="{{ $item->brand->id }}">{{ $item->brand->name }}</option>
                     </select>
                 </div>
-
                 @foreach ($brand as $el)
                     <input class="brandData" type="hidden"
                         data-category="{{$el->category_id}}"
                         data-name="{{$el->name}}"
                         value="{{$el->id}}">
                 @endforeach
-
+                <div class="form-group col-12 col-md-4 col-lg-4">
+                    <label for="unit_id">{{ __('Satuan') }}<code>*</code></label>
+                    <select class="select2" name="unit_id" required>
+                        {{-- <option value="{{$item->stock->unit->id}}">{{$item->stock->unit->code}} - {{$item->stock->unit->name}}</option> --}}
+                        @foreach ($unit as $unit)
+                            <option value="{{$unit->id}}">{{$unit->code}} - {{$unit->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
 
             <div class="row">
@@ -47,7 +54,7 @@
                         <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
                     </div>
                     <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                        value="{{ $item->name }}" required autofocus>
+                        value="{{ $item->name }}" required>
                     @error('name')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -72,11 +79,20 @@
                     </div>
                     @enderror
                 </div>
+                <div class="form-group col-12 col-md-4 col-lg-4">
+                    <label for="warranty_id">{{ __('Garansi') }}<code>*</code></label>
+                    <select class="select2" name="warranty_id" required>
+                        <option value="{{$item->warranty->id}}">{{$item->warranty->periode}} {{$item->warranty->name}}</option>
+                        @foreach ($warranty as $warranty)
+                            <option value="{{$warranty->id}}">{{$warranty->periode}} {{$warranty->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-2 col-xs-12">
+                <div class="form-group col-md-3 col-xs-12">
                     <label for="supplier_id">{{ __('Supplier') }}<code>*</code></label>
-                    <select name="supplier_id" id="supplier_id" class="form-control select2" required autocomplete="supplier_id">
+                    <select name="supplier_id" id="supplier_id" class="form-control select2" required>
                         <option value="{{ $item->supplier->id }}">{{ $item->supplier->name }}</option>
                         @foreach ($supplier as $supplier)
                         <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
@@ -88,21 +104,10 @@
                     </div>
                     @enderror
                 </div>
-                {{-- <div class="form-group col-md-2">
-                    <label for="branch_id">{{ __('Cabang') }}<code>*</code></label>
-                    <div class="selectgroup selectgroup-pills">
-                        @foreach($branch as $branch)
-                        <label class="selectgroup-item">
-                          <input type="checkbox" name="branch_id[]" value="{{ $branch->id }}" class="selectgroup-input" checked="">
-                          <span class="selectgroup-button">{{ $branch->code }}</span>
-                        </label>
-                        @endforeach
-                    </div>
-                </div> --}}
                 <div class="form-group col-md-4 col-xs-12">
                     <label for="description">{{ __('Keterangan') }}</label>
                     <input id="description" type="text" class="form-control @error('description') is-invalid @enderror"
-                        name="description" value="{{ $item->description }}" autocomplete="description">
+                        name="description" value="{{ $item->description }}">
                     @error('description')
                     <div class="invalid-feedback">
                         {{ $message }}

@@ -79,48 +79,12 @@
                 <ul class="dropdown-menu">
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
-                    'title'=>'Area',
-                    'url'=>route('area.index')])
-                    @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
                     'title'=>'Barang',
                     'url'=>route('item.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
-                    'title'=>'Biaya',
-                    'url'=>route('cost.index')])
-                    @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
-                    'title'=>'Cabang',
-                    'url'=>route('branch.index')])
-                    @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
-                    'title'=>'Garansi',
-                    'url'=>route('warranty.index')])
-                    @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
-                    'title'=>'Hak Akses',
-                    'url'=>route('role.index')])
-                    @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
-                    'title'=>'Ikon',
-                    'url'=>''])
-                    @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
                     'title'=>'Karyawan',
                     'url'=>route('employee.index')])
-                    @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
-                    'title'=>'Kas',
-                    'url'=>route('cash.index')])
-                    @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
-                    'title'=>'Kategori',
-                    'url'=>route('category.index')])
-                    @include('layouts.backend.components.sidebarMenu',[
-                    'active'=>'',
-                    'title'=>'Merk',
-                    'url'=>route('brand.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Pelanggan',
@@ -131,16 +95,52 @@
                     'url'=>route('presentase.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
-                    'title'=>'Satuan',
-                    'url'=>route('unit.index')])
+                    'title'=>'Garansi',
+                    'url'=>route('warranty.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'Supplier',
                     'url'=>route('supplier.index')])
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
+                    'title'=>'Satuan',
+                    'url'=>route('unit.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
                     'title'=>'Tipe',
                     'url'=>route('type.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Merk',
+                    'url'=>route('brand.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Kategori',
+                    'url'=>route('category.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Biaya',
+                    'url'=>route('cost.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Kas',
+                    'url'=>route('cash.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Hak Akses',
+                    'url'=>route('role.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Cabang',
+                    'url'=>route('branch.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Area',
+                    'url'=>route('area.index')])
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Ikon',
+                    'url'=>''])
                 </ul>
             </li>
             {{-- Gudang --}}

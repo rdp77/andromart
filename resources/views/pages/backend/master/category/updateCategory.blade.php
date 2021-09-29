@@ -30,7 +30,7 @@
                     <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
                 </div>
                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                    value="{{ $category->name }}" required autofocus>
+                    value="{{ $category->name }}" required>
                 @error('name')
                 <div class="invalid-feedback">
                     {{ $message }}
