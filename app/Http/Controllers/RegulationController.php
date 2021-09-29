@@ -45,7 +45,8 @@ class RegulationController extends Controller
                     $actionBtn .= '<div class="dropdown-menu">
                             <a class="dropdown-item" href="' . route('regulation.show', Crypt::encryptString($row->id)) . '">Lihat</a>';
                     $actionBtn .= '<a class="dropdown-item" href="' . route('regulation.edit', Crypt::encryptString($row->id)) . '">Edit</a>';
-                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
+                    $actionBtn .= '<a class="dropdown-item" href="' . route('regulationDelete', Crypt::encryptString($row->id)) . '">Hapus</a>';
+                    // $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
@@ -144,6 +145,23 @@ class RegulationController extends Controller
         $branch = Branch::get();
         // dd($models);
         return view('pages.backend.office.regulation.editRegulation', compact('role', 'branch', 'model', 'models'));
+    }
+    public function regulationDelete($id)
+    {
+        $id = Crypt::decryptString($id);
+        $model = Regulation::where('id', $id)->first();
+        $model->delete();
+
+        $models = RegulationDetail::where('regulation_id', $id)->get();
+        foreach($models as $row) {
+            $modelDetail = RegulationDetail::where('id', $row->id)->first();
+            $modelDetail->delete();
+        }
+        return Redirect::route('regulation.index')
+            ->with([
+                'status' => 'Berhasil menghapus peraturan',
+                'type' => 'success'
+            ]);
     }
     public function deleteDetail($id, $iddetail)
     {
