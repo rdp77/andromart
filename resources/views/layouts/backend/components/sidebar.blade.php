@@ -219,23 +219,16 @@
                     <span>{{ __('System') }}</span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link" href="">Visi Misi</a>
-                        <ul class="dropdown-menu">
-                            <li class="">
-                                Visi
-                            </li>
-                            <li class="">
-                                Misi
-                            </li>
-                        </ul>
-                    </li>
+                    @include('layouts.backend.components.sidebarMenu',[
+                    'active'=>'',
+                    'title'=>'Visi Misi',
+                    'url'=>route('visiMisi')])
                 </ul>
                 <ul class="dropdown-menu">
                     @include('layouts.backend.components.sidebarMenu',[
                     'active'=>'',
                     'title'=>'SOP',
-                    'url'=>''])
+                    'url'=>route('regulationAll')])
                 </ul>
             </li>
         </ul>

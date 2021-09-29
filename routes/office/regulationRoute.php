@@ -17,5 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::group(['prefix' => 'office'], function () {
     Route::group(['prefix' => 'regulation'], function () {
         Route::resource('regulation', RegulationController::class);
+        Route::get('/all-sop', [RegulationController::class, 'all'])->name('regulationAll');
+        Route::get('/select-sop/{id}', [RegulationController::class, 'select'])->name('regulationSelect');
+        Route::get('/visi-misi', [RegulationController::class, 'visiMisi'])->name('visiMisi');
     });
 });

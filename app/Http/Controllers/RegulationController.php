@@ -8,6 +8,7 @@ use App\Models\Notes;
 use App\Models\NotesPhoto;
 use App\Models\Regulation;
 use App\Models\RegulationDetail;
+use App\Models\Content;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -153,5 +154,44 @@ class RegulationController extends Controller
         Regulation::destroy($id);
 
         return Response::json(['status' => 'success']);
+    }
+    public function all()
+    {
+        $models = Regulation::join('roles', 'regulations.role_id', 'roles.id')
+        ->join('branches', 'regulations.branch_id', 'branches.id')
+        ->select('regulations.id as id','regulations.title as title', 'regulations.description as description', 'regulations.date as date', 'branches.name as branchName', 'roles.name as roleName')
+        ->get();
+        // $models = [];
+        return view('pages.backend.office.sop.indexSop', compact('models'));
+    }
+    public function select($id)
+    {
+        $model = Regulation::join('roles', 'regulations.role_id', 'roles.id')
+        ->join('branches', 'regulations.branch_id', 'branches.id')
+        ->select('regulations.id as id','regulations.title as title', 'regulations.description as description', 'regulations.date as date', 'branches.name as branchName', 'roles.name as roleName')
+        ->where('regulations.id', $id)
+        ->first();
+        $file = [];
+        $image = [];
+        $models = RegulationDetail::where('regulation_id', $id)->get();
+        foreach($models as $row) {
+            $ext = substr($row->file,-3);
+            if($ext == 'jpg' || $ext == 'png' || $ext == 'peg') {
+                $image[] = $row->file;
+            } else {
+                $file[$row->name] = $row->file;
+            }
+        }
+        $imageLength = count($image);
+        if($imageLength == 0){
+            $image[] = 'assetsfrontend/img/andromart.png';
+        }
+        return view('pages.backend.office.sop.showSop', compact('model', 'file', 'image', 'imageLength'));
+    }
+    public function visiMisi()
+    {
+        $visi = Content::where('content_types_id', 12)->first();
+        $misi = Content::where('content_types_id', 13)->first();
+        return view('pages.backend.office.sop.visiMisi', compact('visi', 'misi'));
     }
 }
