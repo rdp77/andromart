@@ -20,5 +20,6 @@ Route::group(['prefix' => 'office'], function () {
         Route::get('/all-sop', [RegulationController::class, 'all'])->name('regulationAll');
         Route::get('/select-sop/{id}', [RegulationController::class, 'select'])->name('regulationSelect');
         Route::get('/visi-misi', [RegulationController::class, 'visiMisi'])->name('visiMisi');
+        Route::get('/delete-detail/{id}/{iddetail}', [RegulationController::class, 'deleteDetail'])->name('deleteDetail');
     });
 });
