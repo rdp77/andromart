@@ -284,11 +284,13 @@ class ServiceController extends Controller
                     $MaxHandle = $settingPresentase[$i]->total;
                 }
             }
-
-            if($tech1+$tech2 >= $MaxHandle){
-                return Response::json(['status' => 'fail',
-                                       'message'=>'Teknisi Memiliki '+$MaxHandle+' Pekerjaan Belum Selesai']);
+            if($req->technicianId != 1 || $req->technicianId != '1'){
+                if($tech1+$tech2 >= $MaxHandle){
+                    return Response::json(['status' => 'fail',
+                                           'message'=>'Teknisi Memiliki '+$MaxHandle+' Pekerjaan Belum Selesai']);
+                }
             }
+            
             // return [$sharingProfitStore,
             // $sharingProfitTechnician,
             // $lossStore,$lossTechnician];
