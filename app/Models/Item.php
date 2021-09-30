@@ -11,11 +11,14 @@ class Item extends Model
 
     protected $table = 'items';
     public $timestamps = false;
+    public $incrementing = true;
 
     protected $fillable = [
+        'id',
         'name',
         'brand_id',
         'supplier_id',
+        'warranty_id',
         'buy',
         'sell',
         'discount',
@@ -45,6 +48,11 @@ class Item extends Model
         return $this->hasMany('App\Models\Stock');
     }
 
+    public function stocks()
+    {
+        return $this->belongsTo('App\Models\Stock');
+    }
+
     public function getImage()
     {
         if(!$this->avatar){
@@ -56,5 +64,10 @@ class Item extends Model
     public function SaleDetail()
     {
         return $this->hasMany('App\Models\SaleDetail');
+    }
+
+    public function warranty()
+    {
+        return $this->belongsTo('App\Models\Warranty');
     }
 }

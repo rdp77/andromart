@@ -46,57 +46,164 @@
                             <label for="pembeli">{{ __('Pembeli') }}<code>*</code></label>
                             <input id="pembeli" type="text" class="form-control" value="{{ $pembeli }}" readonly>
                         </div>
-                        <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="status">{{ __('Status') }}<code>*</code></label>
-                            <input id="status" type="text" class="form-control" value="{{ $model->status }}" readonly>
-                        </div>
-                    </div>
-                    <div class="row">
-                        @if($model->status == 'dept')
-                        <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="totalPrice">{{ __('Total Harga') }}<code>*</code></label>
-                            <input id="totalPrice" type="text" class="form-control" value="{{ $model->price }}" readonly>
-                        </div>
-                        <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="totalDiscount">{{ __('Total Diskon') }}<code>*</code></label>
-                            <input id="totalDiscount" type="text" class="form-control" value="{{ $model->discount }}" readonly>
-                        </div>
-                        @endif
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="card">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th style="width: 20%">Nama</th>
-                            <th>Barang yang belum datang</th>
-                            <th>Barang yang telah datang</th>
-                            <!-- <th>Action</th> -->
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @php $i = 0; @endphp
-                        @foreach($models as $row)
-                            <tr>
-                                <td><input type="text" class="form-control" value="{{ $row->itemName }}" readonly></td>
-                                <td><input type="text" class="form-control cleaveNumeral qtyOld_{{ $i++ }}" value="{{ $row->qty }} / {{ $row->unitName }}" readonly></td>
-                                <td><input type="text" class="form-control cleaveNumeral qtyNew_{{ $i++ }}" name="qtyNew[]" onkeyup="checkQty()" style="text-align: right"></td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                    <tbody class="dropHereItem" style="border: none !important">
-                    </tbody>
-                </table>
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Harga</h4>
+
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group col-12">
+                            <label for="totalPrice">{{ __('Total Harga') }}<code>*</code></label>
+                            <input id="totalPrice" type="text" class="form-control  cleaveNumeral" value="{{ $model->price }}" readonly>
+                        </div>
+                        <div class="form-group col-12">
+                            <label for="totalDiscount">{{ __('Total Diskon') }}<code>*</code></label>
+                            <input id="totalDiscount" type="text" class="form-control  cleaveNumeral" value="{{ $model->discount }}" readonly>
+                        </div>
+                        @if($model->status == 'dept')
+                        <div class="form-group col-12">
+                            <label for="status">{{ __('Status') }}<code>*</code></label>
+                            <input id="status" type="text" class="form-control" value="Belum Dibayar" readonly>
+                        </div>
+                        @else
+                        <div class="form-group col-12">
+                            <label for="status">{{ __('Status') }}<code>*</code></label>
+                            <input id="status" type="text" class="form-control" value="Telah Dibayar" readonly>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+
             </div>
         </div>
-        <div class="card-footer text-right">
-            <button class="btn btn-primary mr-1" type="button" onclick="save()"><i class="far fa-save"></i>{{ __('Simpan Data') }}</button>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Barang</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 20%">Nama</th>
+                                    <th>Barang yang belum datang</th>
+                                    <th>Barang yang telah datang</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php $i = 0; @endphp
+                                @foreach($models as $row)
+                                    <tr>
+                                        <td>
+                                            <input type="text" class="form-control" value="{{ $row->itemName }}" readonly>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control cleaveNumeral qtyOld_{{ $i }}" value="{{ $row->qty }}" name="qtyOld[]" readonly>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control cleaveNumeral qtyNew_{{ $i }}" name="qtyNew[]" style="text-align: right" value="0" onkeyup="checkQty({{ $i }})">
+                                        </td>
+                                        <td>
+                                            @if($row->edit != 1)
+                                                <button type="button" class="btn btn-danger" value="{{ $i }}" onclick="deleted({{$row->id}})">X</button>
+                                            @endif
+                                            <!-- onkeyup="checkQty()" -->
+                                            <input type="hidden" name="idDetail[]" value="{{ $i }}">
+                                            <input type="hidden" name="idPurchasing[]" value="{{ $row->id }}">
+                                            <input type="hidden" name="idItem[]" value="{{ $row->item_id }}">
+                                            <input type="hidden" name="idUnit[]" value="{{ $row->unit_id }}">
+                                            <input type="hidden" name="idBranch[]" value="{{ $row->branch_id }}">
+                                        </td>
+                                    </tr>
+                                    @php $i++ @endphp
+                                @endforeach
+                            </tbody>
+                            <tbody class="dropHereItem" style="border: none !important">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer text-right">
+                    <a class="btn btn-outline" href="javascript:window.history.go(-1);">{{ __('Kembali') }}</a>
+                    <button class="btn btn-primary mr-1" type="submit"><i class="far fa-save"></i>{{ __('Ubah Data') }}</button>
+                </div>
+            </div>
         </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>History Pengeditan</h4>
+                </div>
+            </div>
+        </div>
+        @foreach($history as $row)
+        <!-- <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Tanggal</h4>
+                </div>
+                <div class="card-body">
+                    <h6>{{ $row->tanggal }}</h6>
+                </div>
+            </div>
+        </div> -->
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>{{ date('d F Y H:i:s', strtotime($row->date)) }}</h4>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th style="width: 20%">Nama</th>
+                                    <th>Jumlah Barang</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @php 
+                                    $i = 0; 
+                                    $historyDetail = $row->history_detail;
+                                @endphp
+                                @foreach($historyDetail as $rows)
+                                    <tr>
+                                        <td width="60%">
+                                            <input type="text" class="form-control" value="{{ $rows->name }}" readonly>
+                                        </td>
+                                        <td>
+                                            <input type="text" class="form-control cleaveNumeral qtyEdit_{{ $rows->id }}" name="qtyEdit[]" style="text-align: right" value="{{ $rows->qty }}">
+                                        </td>
+                                        <td>
+                                            <input type="hidden" name="idEdit[]" value="{{ $rows->id }}">
+                                            <!-- <a href="/transaction/purchasing/reception/updated/1/2/8">Test</a> -->
+                                            <button type="button" class="btn btn-warning" value="{{ $i }}" onclick="edited('{{ csrf_token() }}', '{{ $rows->purchasing_detail_id }}', '{{$rows->id}}')">Ubah</button>
+                                        </td>
+                                    </tr>
+                                    @php $i++ @endphp
+                                @endforeach
+                            </tbody>
+                            <tbody class="dropHereItem" style="border: none !important">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @endforeach
     </div>
     <div class="modal fade" tabindex="1" role="dialog" id="exampleModal" aria-hidden="true" style="display: none;">
         <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
@@ -123,13 +230,8 @@
 
 
 @section('script')
-
-
 <script src="{{ asset('assets/pages/transaction/receptionScript.js') }}"></script>
 <script type="text/javascript">
-    function checkQty() {
-
-    }
 </script>
 <style>
     .modal-backdrop{

@@ -1,45 +1,283 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__(' | Edit Master Area'))
-@section('titleContent', __('Edit Master Area'))
+@section('title', __('pages.title').__('Edit Pembelian'))
+@section('titleContent', __('Edit Pembelian'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
-<div class="breadcrumb-item active">{{ __('Master Area') }}</div>
-<div class="breadcrumb-item active">{{ __('Edit Master Area') }}</div>
+<div class="breadcrumb-item active">{{ __('Pembelian') }}</div>
+<div class="breadcrumb-item active">{{ __('Edit Pembelian') }}</div>
 @endsection
 
 @section('content')
-<div class="card">
-    <form method="POST" action="{{ route('area.update',$area->id) }}">
-        @csrf
-        @method('PUT')
-        <div class="card-body">
-            <div class="form-group col-md-4 col-xs-12">
-                <label for="code">{{ __('Kode') }}<code>*</code></label>
-                <input id="code" type="text" class="form-control @error('code') is-invalid @enderror"
-                    name="code" value="{{ $area->code }}" required autocomplete="code">
-                @error('code')
-                <div class="invalid-feedback">
-                    {{ $message }}
+<!-- <form class="form-data"> -->
+<form method="POST" action="{{ route('purchase.update', $model->id) }}" class="form-data">
+    @csrf
+    @method('PUT')
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Informasi</h4>
                 </div>
-                @enderror
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group col-12 col-md-6 col-lg-6">
+                            <label for="code">{{ __('Kode Faktur') }}<code>*</code></label>
+                            <input id="code" type="text" class="form-control" readonly="" value="{{ $model->code }}" name="code">
+                        </div>
+                        <div class="form-group col-12 col-md-6 col-lg-6">
+                            <label for="date">{{ __('Tanggal') }}<code>*</code></label>
+                            <input id="date" type="text" class="form-control" readonly="" value="{{date('d F Y', strtotime($model->date))}}" name="date">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-12 col-md-6 col-lg-6">
+                            <label for="warranty">{{ __('Pembeli') }}<code>*</code></label>
+                            <select class="select2 validation" name="buyer" data-name="Buyer">
+                                <option value="">- Select -</option>
+                                @foreach ($employee as $row)
+                                    @if($model->employee_id == $row->id)
+                                        <option value="{{$row->id}}" selected>{{$row->name}}</option>
+                                    @else
+                                        <option value="{{$row->id}}">{{$row->name}}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-12">
+                            <label class="form-label">Pembayaran</label>
+                            <div class="selectgroup w-100">
+                                <label class="selectgroup-item">
+                                    @if($model->status == "paid")
+                                        <input type="radio" name="pay" value="paid" class="selectgroup-input" checked>
+                                    @else
+                                        <input type="radio" name="pay" value="paid" class="selectgroup-input">
+                                    @endif
+                                    <span class="selectgroup-button">Telah Dibayar</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    @if($model->status == "debt")
+                                        <input type="radio" name="pay" value="debt" class="selectgroup-input" checked>
+                                    @else
+                                        <input type="radio" name="pay" value="debt" class="selectgroup-input">
+                                    @endif
+                                    <span class="selectgroup-button">Belum Dibayar</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group col-12">
+                            <label for="descriptionPurchase">{{ __('Keterangan') }}<code>*</code></label>
+                            <input id="descriptionPurchase" type="text" class="form-control" name="descriptionPurchase">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group col-md-6 col-xs-12">
-                <div class="d-block">
-                    <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
+        </div>
+        <!-- <div class="col-lg-4">
+            <div class="card">
+                <div class="card-header">
+                    <h4>Harga</h4>
                 </div>
-                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                    value="{{ $area->name }}" required autofocus>
-                @error('name')
-                <div class="invalid-feedback">
-                    {{ $message }}
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="priceTotal">{{ __('Harga Total') }}<code>*</code></label>
+                        <input readonly id="priceTotal" onchange="sumTotal()" type="text" value="0" class="form-control cleaveNumeral" name="priceTotal" style="text-align: right">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Satuan Diskon Yang Dipakai</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="typeDiscount" value="percent" onchange="changeDiscount('percent')" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button">Persentase (%)</span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="typeDiscount" value="value" onchange="changeDiscount('value')" 
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button">Harga (RP)</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-12 col-md-6 col-lg-6">
+                            <label for="totalDiscountPercent">{{ __('Diskon %') }}<code>*</code></label>
+                            <input id="totalDiscountPercent" type="text" value="0" class="form-control cleaveNumeral" name="totalDiscountPercent" onkeyup="sumTotal(), sumDiscount()" style="text-align: right">
+                        </div>
+                        <div class="form-group col-12 col-md-6 col-lg-6">
+                            <label for="totalDiscountValue">{{ __('Diskon') }}<code>*</code></label>
+                            <input id="totalDiscountValue" type="text" value="0" class="form-control cleaveNumeral" name="totalDiscountValue" onkeyup="sumTotal()" style="pointer-events: none;background-color:#e9ecef; text-align: right">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="discountTotal">{{ __('Jumlah Diskon') }}<code>*</code></label>
+                        <input readonly id="discountTotal" onchange="sumTotal()" type="text" value="0" class="form-control cleaveNumeral" name="discountTotal" style="text-align: right">
+                    </div>
+                    <div class="form-group">
+                        <label for="grandTotal">{{ __('Grand Total') }}<code>*</code></label>
+                        <input readonly id="grandTotal" onchange="sumTotal()" type="text" value="0" class="form-control cleaveNumeral" name="grandTotal" style="text-align: right">
+                    </div>
                 </div>
-                @enderror
+            </div>
+        </div> -->
+    </div>
+
+
+
+    <div class="card">
+        <div class="card-header">
+            <h4>Barang</h4>
+            <!-- <div class="card-header-action">
+                <button onclick="addItem()" type="button" class="btn btn-warning">Tambah Barang <i
+                        class="fas fa-add"></i></button>
+            </div> -->
+        </div>
+        <div class="card-body">
+
+            @foreach ($item as $el)
+                <input class="itemsData" type="hidden"
+                data-price="{{$el->buy}}"
+                data-name="{{$el->name}} | {{$el->supplier}}"
+                value="{{$el->id}}">
+            @endforeach
+            @foreach ($unit as $el)
+                <input class="unitsData" type="hidden"
+                data-name="{{$el->name}}"
+                data-code="{{$el->code}}"
+                value="{{$el->id}}">
+            @endforeach
+            @foreach ($branch as $el)
+                <input class="branchesData" type="hidden"
+                data-name="{{$el->name}}"
+                value="{{$el->id}}">
+            @endforeach
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <!-- <tr>
+                            <th style="width: 20%">Item</th>
+                            <th>Harga Beli</th>
+                            <th style="width: 9%">Qty</th>
+                            <th>Total</th>
+                            <th>Unit</th>
+                            <th>Cabang</th>
+                            <th>Action</th>
+                        </tr> -->
+                        <tr>
+                            <th>Cabang / Unit</th>
+                            <th>Item / QTY</th>
+                            <!-- <th>Harga Beli / Total</th> -->
+                            <!-- <th>Action</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @php $i = 0 @endphp
+                        @foreach($models as $row)
+                        <tr class="dataDetail dataDetail_{{ $i }}">
+                            <td style="display:none">
+                                <input type="hidden" class="form-control priceDetailSparePart priceDetailSparePart_" name="idDetail[]" value="{{ $i }}">
+                            </td>
+                            <td>
+                            <select class="select2 branchesDetail" name="branchesDetail[]">
+                                <option value="-" data-index="">- Select -</option>
+                                @foreach($branch as $rows)
+                                    @if($row->branch_id == $rows->id)
+                                    <option value="{{ $rows->id }}" selected>{{ $rows->name }}</option>
+                                    @else
+                                    <option value="{{ $rows->id }}">{{ $rows->name }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                            </td>
+                            <td>
+                            <select class="select2 itemsDetail" name="itemsDetail[]">
+                                <option value="-" data-index="">- Select -</option>
+                                @foreach($item as $rows)
+                                    @if($row->item_id == $rows->id)
+                                    <option value="{{ $rows->id }}" selected>{{ $rows->name }}</option>
+                                    @else
+                                    <option value="{{ $rows->id }}">{{ $rows->name }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                            </td>
+                            <!-- <td>
+                                <input type="text" class="form-control cleaveNumeral priceDetail priceDetail_" name="priceDetail[]" data-index="" value="0" style="text-align: right">
+                            </td> -->
+                            <!-- <td>
+                                <button type="button" class="btn btn-danger removeDataDetail" value="{{ $i }}" >X</button>
+                            </td> -->
+                        </tr> 
+                        <tr class="dataDetail_{{ $i }}">
+                            <td>
+                            <select class="select2 unitsDetail" name="unitsDetail[]">
+                                <option value="-" data-index="">- Select -</option>
+                                @foreach($unit as $rows)
+                                    @if($row->unit_id == $rows->id)
+                                    <option value="{{ $rows->id }}" selected>{{ $rows->name }}</option>
+                                    @else
+                                    <option value="{{ $rows->id }}">{{ $rows->name }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control qtyDetail qtyDetail_" name="qtyDetail[]" data-index="" value="{{ $row->qty }}" style="text-align: right;">
+                            </td>
+                            <!-- <td>
+                                <input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_" name="totalPriceDetail[]" value="0" style="text-align: right">
+                            </td> -->
+                        </tr> 
+                        <tr class="dataDetail_{{ $i }}" style="border-bottom: solid 2px #ddd; margin-bottom: 5px;">
+                            <td colspan="4">
+                                <input type="text" class="form-control desDetail desDetail_" name="desDetail[]" placeholder="Deskripsi">
+                            </td>
+                        </tr> 
+                        <tr class="dataDetail_{{ $i }}" height="50px">
+                        </tr>
+                        @php $i++ @endphp
+                        @endforeach
+                    </tbody>
+                    <tbody class="dropHereItem" style="border: none !important">
+                    </tbody>
+                </table>
             </div>
         </div>
         <div class="card-footer text-right">
-            <a class="btn btn-outline" href="javascript:window.history.go(-1);">{{ __('Kembali') }}</a>
-            <button class="btn btn-primary mr-1" type="submit">{{ __('pages.edit') }}</button>
+            <!-- <button class="btn btn-primary mr-1" type="button" onclick="save()"><i class="far fa-save"></i>
+                {{ __('Simpan Data') }}</button> -->
+            <button class="btn btn-primary mr-1" type="submit"><i class="far fa-save"></i>
+                {{ __('Simpan Data') }}</button>
         </div>
-    </form>
-</div>
+    </div>
+    <div class="modal fade" tabindex="1" role="dialog" id="exampleModal" aria-hidden="true" style="display: none;">
+        <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Gambar</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">×</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              {{-- <p>Modal body text goes here.</p> --}}
+            <div id="results"></div>
+            </div>
+            <div class="modal-footer bg-whitesmoke br">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+</form>
+
+@endsection
+
+
+@section('script')
+<script src="{{ asset('assets/pages/transaction/purchaseScript.js') }}"></script>
+<style>
+    .modal-backdrop{
+        position: relative !important;
+    }
+</style>
 @endsection

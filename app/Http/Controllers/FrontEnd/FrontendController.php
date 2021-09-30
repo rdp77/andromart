@@ -40,15 +40,8 @@ class FrontendController extends Controller
         $homeAchievement = $this->library->contentGet(10); // 7
         $homeVendor = $this->library->contentGet(11); // 8
         $contents = $this->globalContent;
-        // dd($contents);
-        // $content = ContentType::get();
-        // $contents = array('type' => 'active');
-        // foreach ($content as $row) {
-        //     $contents[$row->type] = $row->active;
-        // }
-        // dd($contents['services_help']);
-        // return view('pages.frontend.home.indexHome')->with('content', $content);
-        return view('pages.frontend.home.indexHome', compact('contents', 'carouselHome', 'homeTab', 'homeAboutUs', 'homeHireUs', 'homeTestimonialTitle', 'homeTestimonial', 'homeAchievement', 'homeVendor'));
+        $branch = Branch::get();
+        return view('pages.frontend.home.indexHome', compact('contents', 'carouselHome', 'homeTab', 'homeAboutUs', 'homeHireUs', 'homeTestimonialTitle', 'homeTestimonial', 'homeAchievement', 'homeVendor', 'branch'));
     }
     public function about()
     {

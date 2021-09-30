@@ -25,7 +25,7 @@
                         {{ __('Kode') }}
                     </th>
                     <th>{{ __('Nama') }}</th>
-                    <th>{{ __('Saldo') }}</th>
+                    {{-- <th>{{ __('Saldo') }}</th> --}}
                     <th>{{ __('Aksi') }}</th>
                 </tr>
             </thead>

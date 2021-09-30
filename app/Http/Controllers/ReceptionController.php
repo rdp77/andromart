@@ -3,6 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Purchasing;
+use App\Models\PurchasingDetail;
+use App\Models\HistoryPurchase;
+use App\Models\HistoryDetailPurchase;
+use App\Models\Stock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -24,7 +28,20 @@ class ReceptionController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Purchasing::with('supplier')->get();
+            $data = Purchasing::with('employee')->get();
+            foreach($data as $row) {
+                $tanggal = date("d F Y", strtotime($row->date));
+                $row->date = $tanggal;
+                if($row->done == 2) {
+                    $row->done = "Telah Selesai";
+                } else if ($row->done == 1) {
+                    $row->done = "Masih Proses";
+                }  else if ($row->done == 3) {
+                    $row->done = "Belum Diproses";
+                } else {
+                    $row->done = "Belum Diverifikasi";
+                }
+            }
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -33,9 +50,13 @@ class ReceptionController extends Controller
                             data-toggle="dropdown">
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>';
-                    $actionBtn .= '<div class="dropdown-menu">
-                        <a class="dropdown-item" href="' . route('reception.edit', Crypt::encryptString($row->id)) . '">Ubah</a>';
-                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
+                    if($row->done == "Belum Diverifikasi") {
+                        $actionBtn .= '<div class="dropdown-menu">';
+                    } else {
+                        $actionBtn .= '<div class="dropdown-menu">
+                            <a class="dropdown-item" href="' . route('reception.edit', Crypt::encryptString($row->id)) . '">Ubah</a>';
+                    }
+                    // $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
@@ -80,46 +101,134 @@ class ReceptionController extends Controller
         ->join('units', 'stocks.unit_id', 'units.id')
         ->join('branches', 'stocks.branch_id', 'branches.id')
         ->where('purchasing_details.qty', '>', 0)
-        ->select('purchasing_details.id as id','qty', 'items.name as itemName', 'branches.name as branchName', 'units.name as unitName')
+        ->select('purchasing_details.id as id', 'qty', 'items.name as itemName', 'branches.name as branchName', 'units.name as unitName', 'items.id as item_id', 'units.id as unit_id', 'branches.id as branch_id')
         ->get();
-        return view('pages.backend.transaction.reception.editReception', compact('model', 'models', 'id'));
+        $history = HistoryPurchase::where('purchasing_id', $id)->get();
+        foreach($history as $row) {
+            $historyDetail = HistoryDetailPurchase::where('history_purchase_id', $row->id)
+            ->join('purchasing_details', 'purchasing_detail_id', 'purchasing_details.id')
+            ->join('items', 'purchasing_details.item_id', 'items.id')
+            ->select('history_detail_purchases.qty as qty', 'history_detail_purchases.id as id', 'name', 'purchasing_detail_id')
+            ->get();
+            $row->history_detail = $historyDetail;
+        }
+        // $historyDetail = HistoryDetailPurchase::where('')
+
+        return view('pages.backend.transaction.reception.editReception', compact('model', 'models', 'id', 'history'));
     }
 
     public function update(Request $req, $id)
     {
-        if($req->code == Area::find($id)->code){
-            Validator::make($req->all(), [
-                'name' => ['required', 'string', 'max:255'],
-            ])->validate();
+        $date = date('Y-m-d H:i:s');
+        $purchase = Purchasing::where('id', $id)->first();
+        $purchase->done = 1;
+        $purchase->save();
+
+        $historyPurchase = new HistoryPurchase;
+        $historyPurchase->purchasing_id = $id;
+        $historyPurchase->date = $date;
+        $historyPurchase->save();
+
+        foreach($req->idDetail as $row) {
+            $purchasing = PurchasingDetail::where('id', $req->idPurchasing[$row])
+            ->first();
+            $historyDetailPurchase = new HistoryDetailPurchase;
+            $historyDetailPurchase->history_purchase_id = $historyPurchase->id;
+            $historyDetailPurchase->purchasing_detail_id = $purchasing->id;
+            $historyDetailPurchase->qty = $req->qtyNew[$row];
+            $historyDetailPurchase->save();
+            $purchasing->qty -= $req->qtyNew[$row];
+            $purchasing->edit = 1;
+            $purchasing->save();
+
+            $stocks = Stock::where('item_id', $req->idItem[$row])
+            ->where('unit_id', $req->idUnit[$row])
+            ->where('branch_id', $req->idBranch[$row])
+            ->first();
+            $stocks->stock += $req->qtyNew[$row];
+            $stocks->save();
         }
-        else{
-            Validator::make($req->all(), [
-                'code' => ['required', 'string', 'max:255', 'unique:areas'],
-                'name' => ['required', 'string', 'max:255'],
-            ])->validate();
+
+        // foreach($req->idDetail as $row) {
+        //     $purchasing = PurchasingDetail::where('id', $req->idPurchasing[$row])
+        //     ->first();
+        //     $purchasing->qty -= $req->qtyNew[$row];
+        //     $purchasing->save();
+
+        //     $stocks = Stock::where('item_id', $req->idItem[$row])
+        //     ->where('unit_id', $req->idUnit[$row])
+        //     ->where('branch_id', $req->idBranch[$row])
+        //     ->first();
+        //     $stocks->stock += $req->qtyNew[$row];
+        //     $stocks->save();
+        // }
+
+        $done = 1;
+        $purchaseDetail = PurchasingDetail::where('purchasing_id', $id)->get();
+        foreach($purchaseDetail as $row) {
+            if($row->qty > 0) {
+                $done = 0;
+            }
         }
-
-        Area::where('id', $id)
-            ->update([
-                'code' => $req->code,
-                'name' => $req->name,
-                'updated_by' => Auth::user()->name,
-            ]);
-
-        $area = Area::find($id);
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Mengubah masrter area ' . Area::find($id)->name
-        );
-
-        $area->save();
-
-        return Redirect::route('area.index')
+        if($done == 1){
+            $purchase->done = 2;
+            $purchase->created_by = Auth::user()->name;
+            $purchase->save();
+        }
+        return Redirect::route('reception.index')
             ->with([
-                'status' => 'Berhasil merubah master area ',
+                'status' => 'Berhasil mencatat penerimaan ',
                 'type' => 'success'
             ]);
+    }
+    public function updateHistory($id, $history, $qtyEdit = null)
+    {
+        // $id = 2;
+        // $history = 3;
+        // $qtyEdit = 20;
+        $queryHistory = HistoryDetailPurchase::where('id', $history)
+        ->where('purchasing_detail_id', $id)->first();
+        $purchasingDetail = PurchasingDetail::where('id', $id)->first();
+        $stocks = Stock::where('item_id', $purchasingDetail->item_id)
+            ->where('unit_id', $purchasingDetail->unit_id)
+            ->where('branch_id', $purchasingDetail->branch_id)
+            ->first();
+        $qtyTrue = 0;
+        $qtyBefore = $queryHistory->qty;
+        if($qtyBefore > $qtyEdit){
+            $qtyTrue = $qtyBefore - $qtyEdit;
+            $queryHistory->qty = $qtyEdit;
+            $queryHistory->save();
+
+            $purchasingDetail->qty += $qtyTrue;
+            $purchasingDetail->save();
+
+            $stocks->stock -= $qtyTrue;
+            $stocks->save();
+        } else if($qtyBefore < $qtyEdit) {
+            $qtyTrue = $qtyEdit - $qtyBefore;
+            $queryHistory->qty = $qtyEdit;
+            $queryHistory->save();
+
+            $purchasingDetail->qty -= $qtyTrue;
+            $purchasingDetail->save();
+
+            $stocks->stock += $qtyTrue;
+            $stocks->save();
+        } else {
+
+        }
+        return Redirect::route('reception.index')
+            ->with([
+                'status' => 'Berhasil mengubah jumlah barang ',
+                'type' => 'success'
+            ]);
+
+    }
+    public function updated(Request $req)
+    {
+
+        // return Response::json(['status' => 'success']);
     }
 
     public function destroy(Request $req, $id)
@@ -127,86 +236,16 @@ class ReceptionController extends Controller
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Menghapus master area ' . Area::find($id)->name
+            'Menghapus data barang ' . PurchasingDetail::find($id)->name
         );
 
-        Area::destroy($id);
+        PurchasingDetail::destroy($id);
 
         return Response::json(['status' => 'success']);
     }
-    // /**
-    //  * Display a listing of the resource.
-    //  *
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function index()
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Show the form for creating a new resource.
-    //  *
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function create()
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Store a newly created resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function store(Request $request)
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Display the specified resource.
-    //  *
-    //  * @param  \App\Models\Purchasing  $purchasing
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function show(Purchasing $purchasing)
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Show the form for editing the specified resource.
-    //  *
-    //  * @param  \App\Models\Purchasing  $purchasing
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function edit(Purchasing $purchasing)
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Update the specified resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @param  \App\Models\Purchasing  $purchasing
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function update(Request $request, Purchasing $purchasing)
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Remove the specified resource from storage.
-    //  *
-    //  * @param  \App\Models\Purchasing  $purchasing
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function destroy(Purchasing $purchasing)
-    // {
-    //     //
-    // }
+    public function history(Request $request)
+    {
+        $models = $request->id;
+        return view('pages.backend.transaction.reception.historyReception', compact("models"));
+    }
 }

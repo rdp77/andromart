@@ -31,10 +31,33 @@ class Employee extends Model
     {
         return $this->belongsTo('App\Models\User');
     }
+    public function Service1()
+    {
+        // return $this->hasMany('App\Models\Service','');
+        return $this->hasMany('App\Models\Service', 'technician_id', 'id');
+    }
+    public function Service2()
+    {
+        // return $this->hasMany('App\Models\Service','');
+        return $this->hasMany('App\Models\Service', 'technician_replacement_id', 'id');
+    }
 
+    // public function Employee1()
+    // {
+    //     return $this->belongsTo('App\Models\Employee', 'technician_id', 'id');
+    // }
+    // public function Employee2()
+    // {
+    //     return $this->belongsTo('App\Models\Employee', 'technician_replacement_id', 'id');
+    // }
     public function branch()
     {
         return $this->belongsTo('App\Models\Branch');
+    }
+
+    public function Role()
+    {
+        return $this->belongsTo('App\Models\Role');
     }
 
     public function getAvatar()

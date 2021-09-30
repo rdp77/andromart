@@ -92,6 +92,7 @@ function del(id) {
                     swal("Data pengguna berhasil dihapus", {
                         icon: "success",
                     });
+                    location.reload();
                     table.draw();
                 },
             });
@@ -110,16 +111,37 @@ function save() {
         dangerMode: true,
     }).then((willSave) => {
         if (willSave) {
+            var validation = 0;
+            $('.validation').each(function(){
+                if ($(this).val() == '' || $(this).val() == null || $(this).val() == 0) {
+                    validation++;
+                    iziToast.warning({
+                        type: 'warning',
+                        title: $(this).data('name') +' Harus Di isi'
+                    });
+                }else{
+                    validation-1;
+                }
+            });
+            if (validation != 0) {
+                return false;
+            }
             $.ajax({
                 url: "/transaction/sale/sale",
                 data: $(".form-data").serialize(),
                 type: 'POST',
+                // contentType: false,
+                processData: false,
                 success: function(data) {
                     if (data.status == 'success'){
-                        swal("Data Pengajuan Pinjaman Disimpan", {
+                        swal(data.message, {
                             icon: "success",
                         });
                         location.reload();
+                    }else{
+                        swal(data.message, {
+                            icon: "warning",
+                        });
                     }
                 },
                 error: function(data) {
@@ -128,9 +150,63 @@ function save() {
             });
 
         } else {
-            swal("Data belum di simpan !");
+            swal("Data Belum Disimpan !");
         }
     });
+}
+
+function updateData(params) {
+    swal({
+        title: "Apakah Anda Yakin?",
+        text: "Aksi ini tidak dapat dikembalikan, dan akan menyimpan data Anda.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willSave) => {
+        if (willSave) {
+            var validation = 0;
+            $('.validation').each(function(){
+                if ($(this).val() == '' || $(this).val() == null || $(this).val() == 0) {
+                    validation++;
+                    iziToast.warning({
+                        type: 'warning',
+                        title: $(this).data('name') +' Harus Di isi'
+                    });
+                }else{
+                    validation-1;
+                }
+            });
+            if (validation != 0) {
+                return false;
+            }
+            $.ajax({
+                url: "/transaction/sale/sale/"+params,
+                data: $(".form-data").serialize(),
+                type: 'PUT',
+                // contentType: false,
+                processData: false,
+                success: function(data) {
+                    if (data.status == 'success'){
+                        swal(data.message, {
+                            icon: "success",
+                        });
+                        location.reload();
+                    }else{
+                        swal(data.message, {
+                            icon: "warning",
+                        });
+                    }
+                },
+                error: function(data) {
+                    // edit(id);
+                }
+            });
+
+        } else {
+            swal("Data Belum Disimpan !");
+        }
+    });
+
 }
 
 function changeDiscount(params) {
@@ -151,9 +227,18 @@ function addItem() {
     var index = $('.priceDetail').length;
     var dataDetail = $('.dataDetail').length;
 
+    var dataBuyer = [];
+    $.each($('.buyerData'), function(){
+        dataBuyer += '<option data-index="'+(index+1)+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
+    });
     var dataItems = [];
     $.each($('.itemsData'), function(){
-        dataItems += '<option data-index="'+(index+1)+'" data-price="'+$(this).data('price')+'" data-stock="'+$(this).data('stock')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
+        if ($(this).data('stock') == null) {
+            var stocks = 0;
+        }else{
+            var stocks = $(this).data('stock');
+        }
+        dataItems += '<option data-index="'+(index+1)+'" data-supplier="'+$(this).data('supplier')+'" data-price="'+$(this).data('price')+'" data-profit="'+$(this).data('profit')+'" data-stock="'+stocks+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
     });
 
     $('.dropHereItem').append(
@@ -163,28 +248,34 @@ function addItem() {
                 '<input type="text" class="form-control priceDetailLoss priceDetailLoss_'+(index+1)+'" name="priceDetailLoss[]" value="0">'+
             '</td>'+
             '<td>'+
-            '<select class="select2 itemsDetail" name="itemsDetail[]">'+
-                '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
-                dataItems+
-            '</select>'+
+                '<select class="select2 itemsDetail" name="itemsDetail[]">'+
+                    '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
+                    dataItems+
+                '</select>' +
+                '<input type="text" class="form-control supplier supplier_'+(index+1)+'" name="supplierDetail[]" data-index="'+(index+1)+'" readonly>'+
             '</td>'+
-            '<td>'+
-                '<input type="text" class="form-control cleaveNumeral priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
-            '</td>'+
-            '<td>'+
-                '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="1" style="text-align: right">'+
-            '</td>'+
-            '<td>'+
+            '<td>' +
+                '<input type="text" class="form-control qtyDetail qtyDetail_' + (index + 1) + '" name="qtyDetail[]" data-index="' + (index + 1) + '" value="1" style="text-align: right">' +
                 '<input type="text" class="form-control stock stock_'+(index+1)+'" readonly name="stockDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
             '</td>'+
-            '<td>'+
+            '<td>' +
+                '<input type="text" class="form-control cleaveNumeral priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
                 '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="0" style="text-align: right">'+
             '</td>'+
             '<td>'+
-                '<input type="text" class="form-control" name="descriptionDetail[]">'+
+                '<select class="select2 buyerDetail" name="buyerDetail[]">'+
+                    '<option value="" data-index="'+(index+1)+'">- Select Buyer -</option>'+
+                    dataBuyer+
+                '</select>' +
+                '<input type="text" class="form-control name="salesDetail[]" value="Sales" readonly>'+
             '</td>'+
-            '<td hidden>'+
-                '<input type="number" class="form-control" name="profitSharing[]">'+
+            '<td>'+
+                '<input type="number" class="form-control" name="profitSharingBuyer[]" value="0">'+
+                '<input type="number" class="form-control" name="profitSharingSales[]" value="0">'+
+            '</td>'+
+            '<td>'+
+                '<input type="text" class="form-control cleaveNumeral profitDetail profitDetail_'+(index+1)+'" name="profitDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right" hidden>'+
+                '<input type="text" class="form-control" name="descriptionDetail[]">' +
             '</td>'+
             '<td style="display:none">'+
                 '<select class="form-control typeDetail typeDetail_'+(index+1)+'" name="typeDetail[]">'+
@@ -225,6 +316,8 @@ $(document.body).on("change", ".itemsDetail", function () {
 
     if ($(this).val() == '-') {
         $('.priceDetail_' + index).val(0);
+        $('.profitDetail_' + index).val(0);
+        $('.supplier_' + index).val(' ');
         $('.stock_' + index).val(0);
         $('.qtyDetail_' + index).val(0);
         $('.totalPriceDetail_' + index).val(0);
@@ -241,8 +334,11 @@ $(document.body).on("change", ".itemsDetail", function () {
             var itemQty = $('.qtyDetail_' + index).val().replace(/,/g, ''), asANumber = +itemQty;
         }
         $('.priceDetail_' + index).val(parseInt(itemPrice).toLocaleString('en-US'));
+        // $('.profitDetail_' + index).val(parseInt(itemProfit).toLocaleString('en-US'));
         var totalItemPrice = itemPrice * itemQty;
+        $('.profitDetail_' + index).val($(this).find(':selected').data('profit'));
         $('.stock_' + index).val($(this).find(':selected').data('stock'));
+        $('.supplier_' + index).val($(this).find(':selected').data('supplier'));
         $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         if(typeDetail == 'SparePart'){
             $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
@@ -269,6 +365,19 @@ $(document.body).on("click",".removeDataDetail",function(){
     $('.dataDetail_'+this.value).remove();
     var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
 
+    sum();
+    sumTotal();
+    if (checkVerificationDiscount == 'percent') {
+        sumDiscont();
+    }else{
+        sumDiscontValue();
+    }
+});
+
+$(document.body).on("click",".removeDataDetailExisting",function(){
+    $('.dropDeletedExistingData').append('<input type="hidden" class="form-control" value="'+$(this).data('id')+'" name="deletedExistingData[]">');
+    $('.dataDetail_'+this.value).remove();
+    var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
     sum();
     sumTotal();
     if (checkVerificationDiscount == 'percent') {

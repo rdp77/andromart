@@ -20,6 +20,7 @@ class CreateContentTypesTable extends Migration
             $table->string('type', 100)->nullable();
             $table->boolean('active')->default(1);
             $table->boolean('status')->default(0);
+            $table->boolean('deleted')->default(0);
             $table->boolean('column_1')->default(0);
             $table->boolean('column_2')->default(0);
             $table->boolean('column_3')->default(0);

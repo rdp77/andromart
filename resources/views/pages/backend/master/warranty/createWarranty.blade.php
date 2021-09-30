@@ -15,7 +15,7 @@
             <div class="form-group col-md-2 col-xs-12">
                 <label for="periode">{{ __('Periode') }}<code>*</code></label>
                 <input id="periode" type="number" class="form-control @error('periode') is-invalid @enderror"
-                    name="periode" value="{{ old('periode') }}" required autocomplete="periode" placeholder="1 - 31">
+                    name="periode" value="{{ old('periode') }}" required placeholder="1 - 31" autofocus>
                 @error('periode')
                 <div class="invalid-feedback">
                     {{ $message }}
@@ -26,7 +26,7 @@
                 <div class="d-block">
                     <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
                 </div>
-                <select name="name" id="name" class="form-control select2" required autocomplete="name">
+                <select name="name" id="name" class="form-control select2" required>
                     <option value=""> - Select - </option>
                     <option value="Hari"> Hari </option>
                     <option value="Minggu"> Minggu </option>

@@ -5,7 +5,13 @@
 @section('morebreadcrumb')
 <div class="breadcrumb-item active">{{ $contentType->name }}</div>
 @endsection
-
+@push('custom-css')
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+    <!-- new css -->
+    <link rel="stylesheet" href="http://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" rel="stylesheet" />
+@endpush
 @section('content')
 @php use Illuminate\Support\Facades\Crypt; @endphp
 <div class="card">
@@ -45,7 +51,8 @@
                     <div class="d-block">
                         <label for="description" class="control-label">{{ __('Deskripsi') }}<code>*</code></label>
                     </div>
-                    <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{ $content->description }}" required autofocus/>
+                    <textarea class="summernote @error('description') is-invalid @enderror" id="description" name="description">{{ $content->description }}</textarea>
+                    <!-- <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{ $content->description }}" required autofocus/> -->
                     @error('description')
                     <div class="invalid-feedback">
                         {{ $message }}

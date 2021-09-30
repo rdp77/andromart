@@ -15,10 +15,10 @@
         <div class="card-body">
             <div class="form-group col-md-3 col-xs-12">
                 <label for="brand_id">{{ __('Merk') }}<code>*</code></label>
-                <select name="brand_id" id="brand_id" class="form-control select2" required autocomplete="brand_id">
-                    <option value="{{ $type->brand->id}}"> {{ $type->brand->name}} </option>
+                <select name="brand_id" id="brand_id" class="form-control select2" required>
+                    <option value="{{ $type->brand->id}}"> {{ $type->brand->category->code}} - {{ $type->brand->name}} </option>
                     @foreach ($brand as $brand)
-                    <option value="{{ $brand->id }}"> {{ $brand->name }} </option>
+                    <option value="{{ $brand->id }}"> {{ $brand->category->code }} - {{ $brand->name }} </option>
                     @endforeach
                 </select>
             </div>
@@ -27,7 +27,7 @@
                     <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
                 </div>
                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                    value="{{ $type->name }}" required autofocus>
+                    value="{{ $type->name }}" required>
                 @error('name')
                 <div class="invalid-feedback">
                     {{ $message }}

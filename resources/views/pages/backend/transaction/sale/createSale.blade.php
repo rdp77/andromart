@@ -29,35 +29,42 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-12 col-md-6 col-lg-6">
+                        <div class="form-group col-12 col-md-4 col-xs-12">
                             <div class="d-block">
                                 <label for="sales"
                                     class="control-label">{{ __('Sales') }}<code>*</code></label>
                             </div>
-                            <select class="select2" name="sales_id">
+                            <select class="select2 validation" name="sales_id" data-name="Sales">
                                 <option value="">- Select -</option>
-                                @foreach ($employee as $employee)
-                                <option value="{{$employee->id}}">{{$employee->name}}</option>
+                                @foreach ($sales as $sales)
+                                <option value="{{$sales->id}}">{{$sales->name}}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="warranty">{{ __('Garansi') }}<code>*</code></label>
-                            <select class="select2" name="warranty">
+                        <div class="form-group col-12 col-md-4 col-xs-12">
+                            <label for="payment_method" class="control-label">{{ __('Metode Pembayaran') }}<code>*</code></label>
+                            <select class="select2 validation" name="payment_method" data-name="Metode Pembayaran" required>
                                 <option value="">- Select -</option>
-                                @foreach ($warranty as $warranty)
-                                <option value="{{ $warranty->id }}">{{ $warranty->periode }} {{ $warranty->name }}</option>
+                                <option value="Cash">Cash / Tunai</option>
+                                <option value="Transfer">Transfer</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-12 col-md-4 col-xs-12">
+                            <label for="cash_id">{{ __('Kode Kas') }}<code>*</code></label>
+                            <select class="select2 validation" name="cash_id" data-name="Kode Kas">
+                                <option value="">- Select -</option>
+                                @foreach ($cash as $cash)
+                                <option value="{{ $cash->id }}">{{ $cash->code }} - {{ $cash->name }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
-
                     <h6 style="color: #6777ef">Data Customer</h6>
                     <br>
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="customer_name">{{ __('Nama') }}<code>*</code></label>
-                            <input id="customer_name" type="text" class="form-control" name="customer_name">
+                            <input id="customer_name" type="text" class="form-control validation" name="customer_name" data-name="Nama Customer">
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="series">{{ __('Member') }}<code>*</code></label>
@@ -79,7 +86,7 @@
                                 </div>
                                 </div>
                                 <input id="customer_phone" type="text" class="form-control @error('customer_phone') is-invalid @enderror"
-                                    name="customer_phone" value="{{ old('customer_phone') }}" required>
+                                    name="customer_phone" value="{{ old('customer_phone') }}">
                                 @error('customer_telephone')
                                 <div class="invalid-feedback">
                                     {{ $message }}
@@ -89,7 +96,7 @@
                         </div>
                         <div class="form-group col-12 col-md-7 col-lg-7">
                             <label for="customer_address">{{ __('Alamat') }}<code>*</code></label>
-                            <input id="customer_address" type="text" class="form-control" name="customer_address">
+                            <input id="customer_address" type="text" class="form-control validation" data-name="Alamat" name="customer_address">
                         </div>
                     </div>
 
@@ -106,7 +113,7 @@
                     <div class="form-group">
                         <label for="totalSparePart">{{ __('Barang') }}<code>*</code></label>
                         <input readonly id="totalSparePart" onchange="sumTotal()" type="text" value="0"
-                            class="form-control cleaveNumeral" name="totalSparePart" style="text-align: right">
+                            class="form-control cleaveNumeral validation" data-name="Barang" name="totalSparePart" style="text-align: right">
                     </div>
                     <div class="form-group">
                         <label class="form-label">Satuan Diskon Yang Dipakai</label>
@@ -154,10 +161,16 @@
             </div>
         </div>
         <div class="card-body">
+            @foreach ($buyer as $buyer)
+                <input class="buyerData" type="hidden"
+                data-name="{{$buyer->name}}"
+                value="{{$buyer->id}}">
+            @endforeach
 
-            @foreach ($item as $el)
+            {{-- @foreach ($item as $el)
                 <input class="itemsData" type="hidden"
-                data-price="{{$el->sell}}"
+                data-price="{{$el->sell - $el->discount}}"
+                data-profit="{{$el->buy}}"
                 @foreach ($el->stock as $el1)
                     @if (Auth::user()->employee->branch_id == $el1->branch_id)
                         data-stock="{{$el1->stock}}"
@@ -166,20 +179,32 @@
                     @endif
                 @endforeach
                 data-name="{{$el->name}}"
+                data-supplier="{{$el->supplier->name}}"
                 value="{{$el->id}}">
+            @endforeach --}}
+            @foreach ($stock as $el)
+                <input class="itemsData" type="hidden"
+                data-stock="{{$el->stock}}"
+                data-price="{{$el->item->sell - $el->item->discount}}"
+                data-profit="{{$el->item->buy}}"
+                data-name="{{$el->item->name}}"
+                data-supplier="{{$el->item->supplier->name}}"
+                value="{{$el->item->id}}">
             @endforeach
 
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th style="width: 20%">Barang / Jasa</th>
-                            <th>Harga</th>
-                            <th style="width: 9%">Qty</th>
-                            <th style="width: 9%">Stok</th>
-                            <th>Jumlah</th>
+                            <th style="width: 20%">Barang</th>
+                            {{-- <th style="width: 15%">Supplier</th> --}}
+                            <th style="width: 9%">Qty | Stock</th>
+                            <th style="width: 12%">Harga | Jumlah</th>
+                            {{-- <th style="width: 9%">Stok</th> --}}
+                            {{-- <th style="width: 11%">Jumlah</th> --}}
+                            <th style="width: 20%">Operator</th>
+                            <th style="width: 10%">P.S. %</th>
                             <th>Deskripsi</th>
-                            <th style="width: 10%" hidden>P.S. Sales %</th>
                             <th style="width: 15%" hidden>tipe</th>
                             <th>Action</th>
                         </tr>

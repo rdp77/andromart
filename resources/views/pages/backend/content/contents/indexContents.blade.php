@@ -20,7 +20,7 @@
                 <tr>
                     <th class="text-center">{{ __('NO') }}</th>
                     <th>{{ __('Konten') }}</th>
-                    <th>{{ __('Aksi') }}</th>
+                    <th colspan="2">{{ __('Aksi') }}</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,7 +32,20 @@
                 <tr>
                     <td class="text-center">{{ $i++ }}</td>
                     <td>{{ $row->name }}</td>
-                    <td><a class="dropdown-item" href="{{ route('contents.show', Crypt::encryptString($row->id)) }}">Lihat</a></td>
+                    <td><a class="dropdown-item" href="{{ route('contents.show', Crypt::encryptString($row->id)) }}" target="_blank">Lihat</a></td>
+                    @if($row->active == 1)
+                    <td>
+                        <a class="dropdown-item" href="contents/active/{{ $row->id }}/0">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                    </td>
+                    @else
+                    <td>
+                        <a class="dropdown-item" href="contents/active/{{ $row->id }}/1">
+                            <i class="fas fa-eye-slash"></i>
+                        </a>
+                    </td>
+                    @endif
                 </tr>
                 @endforeach
             </tbody>

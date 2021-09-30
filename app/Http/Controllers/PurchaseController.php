@@ -3,26 +3,20 @@
 namespace App\Http\Controllers;
 
 use App\Models\Purchasing;
-use App\Models\Supplier;
-use App\Models\User;
+use App\Models\PurchasingDetail;
+use App\Models\Stock;
+use App\Models\Employee;
 use App\Models\Item;
-use App\Models\Type;
 use App\Models\Unit;
 use App\Models\Branch;
-use App\Models\Employee;
-use App\Models\Service;
-use App\Models\Warranty;
-use App\Models\SettingPresentase;
-use App\Models\ServiceDetail;
-use App\Models\ServiceStatusMutation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Contracts\Encryption\DecryptException;
+use Illuminate\Support\Facades\Crypt;
 use Yajra\DataTables\DataTables;
 use Carbon\carbon;
 
@@ -37,7 +31,20 @@ class PurchaseController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Purchasing::with('supplier')->get();
+            $data = Purchasing::with('employee')->get();
+            foreach($data as $row) {
+                $tanggal = date("d F Y", strtotime($row->date));
+                $row->date = $tanggal;
+                if($row->done == 2) {
+                    $row->done = "Telah Selesai";
+                } else if ($row->done == 1) {
+                    $row->done = "Masih Proses";
+                } else if ($row->done == 3) {
+                    $row->done = "Telah DiSetujui";
+                } else {
+                    $row->done = "Belum Proses";
+                }
+            }
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -46,10 +53,15 @@ class PurchaseController extends Controller
                             data-toggle="dropdown">
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>';
-                    $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('notes.show', Crypt::encryptString($row->id)) . '">Lihat</a>';
-                    $actionBtn .= '<a class="dropdown-item" href="' . route('notes.edit', Crypt::encryptString($row->id)) . '">Edit</a>';
-                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
+                    if($row->done == 'Belum Proses'){
+                        $actionBtn .= '<div class="dropdown-menu">
+                            <a class="dropdown-item" href="' . route('purchaseApprove', Crypt::encryptString($row->id)) . '">Setujui</a>';
+                        // $actionBtn .= '<a class="dropdown-item" href="' . route('purchase.edit', Crypt::encryptString($row->id)) . '">Ubah</a>';
+                        $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
+                    } else {
+                        $actionBtn .= '<div class="dropdown-menu">
+                            <a class="dropdown-item" href="' . route('reception.edit', Crypt::encryptString($row->id)) . '">Terima</a>';
+                    }
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
@@ -61,10 +73,12 @@ class PurchaseController extends Controller
 
     public function code($type)
     {
+        $date = date('Y-m-d');
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
-        $index = DB::table('purchasings')->max('id')+1;
 
+        $now = Purchasing::whereBetween("created_at", [$date.' 00:00:00', $date.' 23:59:59'])->count();
+        $index = $now + 1;
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
         return $code = $type.$year . $month . $index;
     }
@@ -73,7 +87,10 @@ class PurchaseController extends Controller
         $code     = $this->code('PCS-');
         $employee = Employee::get();
         // $items    = Item::where('name','!=','Jasa Service')->get();
-        $item     = Item::with('stock')->where('name','!=','Jasa Service')->get();
+        $item     = Item::with('stock')->where('items.name','!=','Jasa Service')
+        ->join('suppliers', 'items.supplier_id', 'suppliers.id')
+        ->select('items.id as id', 'items.name as name', 'buy', 'suppliers.name as supplier')
+        ->get();
         $unit     = Unit::get();
         $branch   = Branch::get();
         return view('pages.backend.transaction.purchase.createPurchase',compact('employee','code','item', 'unit', 'branch'));
@@ -82,70 +99,68 @@ class PurchaseController extends Controller
 
     public function store(Request $req)
     {
-        return $req->all();
-        // dd("masuk");
-        // return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
-        // return Redirect::route('notes.index')
-        //     ->with([
-        //         'status' => 'Berhasil membuat menambah notulensi',
-        //         'type' => 'success'
-        //     ]);
+        $date = date('Y-m-d H:i:s');
+        $purchasing = new Purchasing;
+        $purchasing->code = $req->code;
+        $purchasing->date = $date;
+        $purchasing->employee_id = $req->buyer;
+        $purchasing->status = $req->pay;
+        
+        $purchasing->discount = str_replace(",", '',$req->discountTotal);
+        $purchasing->price = str_replace(",", '',$req->grandTotal);
+        $purchasing->created_by = Auth::user()->name;
+        $purchasing->save();
+
+        foreach($req->idDetail as $row) {
+            $purchasingDetail = new PurchasingDetail;
+            $purchasingDetail->purchasing_id = $purchasing->id;
+            $purchasingDetail->item_id = $req->itemsDetail[$row];
+            $purchasingDetail->unit_id = $req->unitsDetail[$row];
+            $purchasingDetail->branch_id = $req->branchesDetail[$row];
+            $purchasingDetail->price = str_replace(",", '',$req->priceDetail[$row]);
+            $purchasingDetail->qty_start = str_replace(",", '',$req->qtyDetail[$row]);
+            $purchasingDetail->qty = str_replace(",", '',$req->qtyDetail[$row]);
+            $purchasingDetail->total = str_replace(",", '',$req->totalPriceDetail[$row]);
+            $purchasingDetail->description = $req->desDetail[$row];
+            $purchasingDetail->created_by = Auth::user()->name;
+            $purchasingDetail->save();
+        }
+        return Redirect::route('purchase.index')
+            ->with([
+                'status' => 'Berhasil membuat menambah notulensi',
+                'type' => 'success'
+            ]);
     }
 
     public function show(Notes $notes, $id)
     {
-        $id = Crypt::decryptString($id);
-        $models = Notes::where('id', $id)->first();
-        // $models = Notes::where('notes.id', $id)
-        // ->join('users', 'notes.users_id', '=', 'users.id')
-        // ->select('notes.id as notes_id', 'notes.date as date', 'users.name as name', 'users.id as users_id', 'notes.title as title', 'notes.description as description')
-        // ->first();
-        $modelsFile = NotesPhoto::where('notes_id', $id)->get();
-        // dd($modelsFile);
-        return view('pages.backend.office.notes.showNotes', compact('models', 'modelsFile'));
     }
 
     public function edit($id)
     {
-        $area = Area::find($id);
-        return view('pages.backend.master.area.updateArea', ['area' => $area]);
+        $id = Crypt::decryptString($id);
+        $employee = Employee::get();
+        // $items    = Item::where('name','!=','Jasa Service')->get();
+        $item     = Item::with('stock')->where('items.name','!=','Jasa Service')
+        ->join('suppliers', 'items.supplier_id', 'suppliers.id')
+        ->select('items.id as id', 'items.name as name', 'buy', 'suppliers.name as supplier')
+        ->get();
+        $unit     = Unit::get();
+        $branch   = Branch::get();
+        $model = Purchasing::where('id', $id)->first();
+        $models = PurchasingDetail::where('purchasing_id', $id)
+        ->join('items', 'purchasing_details.item_id', 'items.id')
+        ->join('units', 'purchasing_details.unit_id', 'units.id')
+        ->join('branches', 'purchasing_details.branch_id', 'branches.id')
+        ->select('purchasing_details.id as id', 'qty', 'items.id as item_id', 'items.name as item_name', 'units.id as unit_id', 'units.name as unit_name', 'branches.id as branch_id', 'branches.name as branch_name', 'purchasing_details.description as description')
+        ->get();
+        // dd($models);
+        $jumlah = PurchasingDetail::where('purchasing_id', $id)->count();
+        return view('pages.backend.transaction.purchase.editPurchase',compact('employee','item', 'unit', 'branch', 'model', 'models', 'jumlah'));
     }
 
     public function update(Request $req, $id)
     {
-        if($req->code == Area::find($id)->code){
-            Validator::make($req->all(), [
-                'name' => ['required', 'string', 'max:255'],
-            ])->validate();
-        }
-        else{
-            Validator::make($req->all(), [
-                'code' => ['required', 'string', 'max:255', 'unique:areas'],
-                'name' => ['required', 'string', 'max:255'],
-            ])->validate();
-        }
-
-        Area::where('id', $id)
-            ->update([
-                'code' => $req->code,
-                'name' => $req->name,
-                'updated_by' => Auth::user()->name,
-            ]);
-
-        $area = Area::find($id);
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Mengubah masrter area ' . Area::find($id)->name
-        );
-
-        $area->save();
-
-        return Redirect::route('area.index')
-            ->with([
-                'status' => 'Berhasil merubah master area ',
-                'type' => 'success'
-            ]);
     }
 
     public function destroy(Request $req, $id)
@@ -153,10 +168,10 @@ class PurchaseController extends Controller
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Menghapus master area ' . Area::find($id)->name
+            'Menghapus Pembelian ' . Purchasing::find($id)->name
         );
-
-        Area::destroy($id);
+        PurchasingDetail::where('purchasing_id', $id)->delete();
+        Purchasing::destroy($id);
 
         return Response::json(['status' => 'success']);
     }
@@ -236,4 +251,18 @@ class PurchaseController extends Controller
     // {
     //     //
     // }
+
+    public function approve($id)
+    {
+        $id = Crypt::decryptString($id);
+        $purchase = Purchasing::where('id', $id)->first();
+        $purchase->done = 3;
+        $purchase->updated_by = Auth::user()->name;
+        $purchase->save();
+        return Redirect::route('purchase.index')
+            ->with([
+                'status' => 'Berhasil disetujui',
+                'type' => 'success'
+            ]);
+    }
 }

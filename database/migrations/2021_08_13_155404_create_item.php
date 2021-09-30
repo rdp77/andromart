@@ -18,6 +18,7 @@ class CreateItem extends Migration
             $table->string('name');
             $table->integer('brand_id');
             $table->integer('supplier_id');
+            $table->integer('warranty_id')->nullable();
             $table->double('buy');
             $table->double('sell');
             $table->double('discount')->nullable();

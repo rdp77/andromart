@@ -12,6 +12,8 @@ class PurchasingDetail extends Model
     protected $fillable = [
         'purchasing_id',
         'item_id',
+        'unit_id',
+        'branch_id',
 
         'price',
         'qty',
@@ -34,5 +36,15 @@ class PurchasingDetail extends Model
     public function item()
     {
         return $this->belongsTo('App\Models\Item');
+    }
+
+    public function unit()
+    {
+        return $this->belongsTo('App\Models\Unit');
+    }
+
+    public function branch()
+    {
+        return $this->belongsTo('App\Models\Branch');
     }
 }

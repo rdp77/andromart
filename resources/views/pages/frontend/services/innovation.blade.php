@@ -14,7 +14,7 @@
 					{{ $servicesInovation->subtitle }}
 				</p>
 				<p>
-					{{ $servicesInovation->description }}
+					<?php echo $servicesInovation->description ?>
 				</p>
 				<a class="btn btn-outline btn-primary text-1 font-weight-semibold text-uppercase px-5 btn-py-2 mb-3" href="{{ $servicesInovation->url }}">Get a Quote</a>
 			</div>

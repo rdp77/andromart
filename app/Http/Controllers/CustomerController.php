@@ -121,7 +121,7 @@ class CustomerController extends Controller
                 'name' => $req->name,
                 'contact' => $req->contact,
                 'address' => $req->address,
-                'updated' => Auth::user()->name,
+                'updated_by' => Auth::user()->name,
             ]);
 
         $customer = Customer::find($id);

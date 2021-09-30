@@ -12,166 +12,123 @@
     @csrf
     @method('PUT')
     <div class="row">
-        <div class="col-md-5">
-            <div class="card">
-                <div class="card-header">
-                    <h4>Form Pengguna</h4>
-                </div>
-                <div class="card-body">
-                        <div class="form-group col-md-8">
-                            <label for="username">{{ __('Username') }}<code>*</code></label>
-                            <input id="username" type="text" class="form-control @error('username') is-invalid @enderror"
-                                name="username" value="{{ $employee->user->username }}" required autocomplete="username">
-                            @error('username')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                            @enderror
-                        </div>
-                        <div class="form-group col-md-8">
-                            <label for="password">{{ __('Password') }}<code>* Ganti password anda pada halaman profil</code></label>
-                            <input id="password" type="text" class="form-control @error('password') is-invalid @enderror"
-                                name="password" autocomplete="password" value="andromart" readonly>
-                            @error('password')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                            @enderror
-                        </div>
-
-                    {{-- <div class="form-group">
-                        <div class="d-block">
-                            <label for="password" class="control-label">{{ __('Password') }}<code>*</code></label>
-                        </div>
-                        <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
-                            name="password" required autocomplete="current-password">
-                        @error('password')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                        @enderror
-                    </div>
-                    <div class="form-group">
-                        <label for="password-confirm" class="control-label">{{ __('Ulangi Password') }}</label>
-                        <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required
-                            autocomplete="new-password">
-                    </div> --}}
-
-                </div>
-            </div>
-        </div>
         <div class="col-md-7">
             <div class="card">
-                <div class="card-header">
-                    <h4>Form Data Karyawan</h4>
-                </div>
-                <div class="card-body">
-                    <div class="row">
-                        <div class="form-group col-md-6 col-xs-12">
+                <form method="POST" action="{{ route('employee.update', $employee->id) }}" enctype="multipart/form-data">
+                  @csrf
+                  @method('PUT')
+                  <div class="card-header">
+                    <h4>Edit Profile</h4>
+                  </div>
+                  <div class="card-body">
+                      <div class="row">
+                        <div class="form-group col-md-5 col-xs-12">
                             <label for="branch_id">{{ __('Cabang') }}<code>*</code></label>
-                            <select name="branch_id" id="branch_id" class="form-control select2" required autocomplete="branch_id">
+                            <select name="branch_id" id="branch_id" class="form-control select2" required>
                                 <option value="{{ $employee->branch->id }}"> {{ $employee->branch->code }} - {{ $employee->branch->name }} </option>
                                 @foreach ($branch as $branch)
                                 <option value="{{ $branch->id }}"> {{ $branch->code }} - {{ $branch->name }} </option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-md-6 col-xs-12">
-                            <label for="level">{{ __('Pekerjaan') }}<code>*</code></label>
-                            <select name="level" id="level" class="form-control select2" required autocomplete="level">
-                                <option value="Owner" @if ($employee->level == 'Owner') selected @endif> Owner </option>
-                                <option value="Admin" @if ($employee->level == 'Admin') selected @endif> Admin / Kasir </option>
-                                <option value="Teknisi" @if ($employee->level == 'Teknisi') selected @endif>  Teknisi </option>
-                                <option value="Sales" @if ($employee->level == 'Sales') selected @endif>  Sales / Support </option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-4 col-xs-12">
-                            <label for="identity">{{ __('NIK') }}<code>*</code></label>
-                            <input id="identity" type="text" class="form-control @error('identity') is-invalid @enderror"
-                                name="identity" value="{{ $employee->identity }}" required autocomplete="identity">
-                            @error('identity')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                            @enderror
-                        </div>
-                        <div class="form-group col-md-7">
-                            <div class="d-block">
-                                <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
-                            </div>
-                            <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                                value="{{ $employee->name }}" required autofocus>
-                            @error('name')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                            @enderror
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-md-4 col-xs-6">
-                            <label for="birthday">{{ __('Tanggal Lahir') }}<code>*</code></label>
-                            <input id="birthday" type="date" class="form-control" name="birthday" value="{{ $employee->birthday }}">
-                        </div>
-                        {{-- <div class="form-group col-md-4 col-xs-6">
-                            <label for="gender">{{ __('Jenis Kelamin') }}<code>*</code></label>
-                            <select name="gender" id="gender" class="form-control select2" required autocomplete="gender">
-                                <option value="L" @if ($employee->gender == 'L') selected @endif> Laki - laki </option>
-                                <option value="P" @if ($employee->gender == 'P') selected @endif>  Perempuan </option>
-                            </select>
-                        </div> --}}
-                        <div class="form-group col-md-4 col-xs-6">
-                            <label for="gender">{{ __('Jenis Kelamin') }}<code>*</code></label>
-                            <div class="selectgroup w-100">
-                                <label class="selectgroup-item">
-                                    <input type="radio" name="gender" value="L" class="selectgroup-input" @if ($employee->gender == 'L') checked="" @endif>
-                                    <span class="selectgroup-button selectgroup-button-icon"><i class="fas fa-male"></i></span>
-                                </label>
-                                <label class="selectgroup-item">
-                                    <input type="radio" name="gender" value="P" class="selectgroup-input" @if ($employee->gender == 'P') checked="" @endif>
-                                    <span class="selectgroup-button selectgroup-button-icon"><i class="fas fa-female"></i></span>
-                                </label>
-                            </div>
-                        </div>
-
-                    </div>
-                    <div class="row">
                         <div class="form-group col-md-5 col-xs-12">
-                            <label for="contact">{{ __('Kontak') }}<code>*</code></label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                <div class="input-group-text">
-                                    <i class="fas fa-phone"></i>
-                                </div>
-                                </div>
-                                <input id="contact" type="text" class="form-control @error('contact') is-invalid @enderror"
-                                    name="contact" value="{{ $employee->contact }}" required autocomplete="contact">
-                                @error('contact')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                                @enderror
-                            </div>
+                            <label for="role_id">{{ __('Pekerjaan') }}<code>*</code></label>
+                            <select name="role_id" id="role_id" class="form-control select2" required>
+                                <option value="{{ $employee->user->role->id }}"> {{ $employee->user->role->name }} </option>
+                                @foreach ($role as $role)
+                                <option value="{{ $role->id }}"> {{ $role->name }} </option>
+                                @endforeach
+                            </select>
                         </div>
-                        <div class="form-group col-md-7 col-xs-12">
-                            <label for="address">{{ __('Alamat') }}<code>*</code></label>
-                            <input id="address" type="text" class="form-control @error('address') is-invalid @enderror"
-                                name="address" value="{{ $employee->address }}" required autocomplete="address">
-                            @error('address')
+                        <div class="form-group col-md-2 col-xs-12">
+                            <label for="level">{{ __('Level') }}<code>*</code></label>
+                            <input id="level" type="text" class="form-control @error('level') is-invalid @enderror" name="level" value="{{ $employee->level }}" required>
+                            @error('level')
                             <div class="invalid-feedback">
-                                {{ $message }}
+                              {{ $message }}
                             </div>
-                            @enderror
+                          @enderror
                         </div>
+                      </div>
+                    <div class="row">
+                      <div class="form-group col-md-4 col-12">
+                        <label for="identity">{{ __('NIK') }}<code>*</code></label>
+                        <input type="text" class="form-control @error('identity') is-invalid @enderror" value="{{ $employee->identity }}" name="identity" required>
+                        @error('identity')
+                          <div class="invalid-feedback">
+                            {{ $message }}
+                          </div>
+                        @enderror
+                      </div>
+                      <div class="form-group col-md-6 col-12">
+                        <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
+                        <input type="text" class="form-control" value="{{ $employee->name }}" name="name" required>
+                      </div>
                     </div>
-                </div>
-                <div class="card-footer text-right">
+                    <div class="row">
+                      <div class="form-group col-md-4 col-12">
+                        <label for="birthday">{{ __('Tanggal Lahir') }}<code>*</code></label>
+                        <input id="birthday" type="text" class="form-control datepicker" name="birthday"
+                          value="{{ \Carbon\Carbon::parse($employee->birthday)->locale('id')->isoFormat('LL') }}">
+                      </div>
+                      <div class="form-group col-md-6 col-12">
+                        <label for="gender">{{ __('Jenis Kelamin') }}<code>*</code></label>
+                        <div class="selectgroup w-100">
+                          <label class="selectgroup-item">
+                            <input type="radio" name="gender" value="L" class="selectgroup-input" @if ($employee->gender ==
+                            'L') checked="" @endif>
+                            <span class="selectgroup-button selectgroup-button-icon"><i class="fas fa-male"></i></span>
+                          </label>
+                          <label class="selectgroup-item">
+                            <input type="radio" name="gender" value="P" class="selectgroup-input" @if ($employee->gender ==
+                            'P') checked="" @endif>
+                            <span class="selectgroup-button selectgroup-button-icon"><i class="fas fa-female"></i></span>
+                          </label>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-md-5 col-12">
+                        <label for="contact">{{ __('Kontak') }}<code>*</code></label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <div class="input-group-text">
+                              <i class="fas fa-phone"></i>
+                            </div>
+                          </div>
+                          <input id="contact" type="text" class="form-control @error('contact') is-invalid @enderror" name="contact"
+                            value="0{{ $employee->contact }}" required>
+                          @error('contact')
+                          <div class="invalid-feedback">
+                            {{ $message }}
+                          </div>
+                          @enderror
+                        </div>
+                      </div>
+                      <div class="form-group col-md-7 col-12">
+                        <label for="address">{{ __('Alamat') }}<code>*</code></label>
+                        <input type="text" class="form-control" value="{{ $employee->address }}" name="address" required>
+                        <div class="invalid-feedback">
+                          Please fill in the first name
+                        </div>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="form-group col-md-4 col-xs-12">
+                        <label for="avatar">{{ __('Avatar') }}</label>
+                        <div class="custom-file">
+                          <input type="file" class="custom-file-input" id="avatar" name="avatar">
+                          <label class="custom-file-label" for="avatar">Pilih Gambar</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="card-footer text-right">
                     <a class="btn btn-outline" href="javascript:window.history.go(-1);">{{ __('Kembali') }}</a>
                     <button class="btn btn-primary mr-1" type="submit">{{ __('pages.edit') }}</button>
-                </div>
-            </div>
+                  </div>
+                </form>
+              </div>
         </div>
     </div>
 </form>

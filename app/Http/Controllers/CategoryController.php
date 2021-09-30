@@ -87,7 +87,7 @@ class CategoryController extends Controller
 
     public function update(Request $req, $id)
     {
-        if ($req->code == Category::find($id->code)) {
+        if ($req->code == Category::find($id)->code) {
             Validator::make($req->all(), [
                 'name' => ['required', 'string', 'max:255'],
             ])->validate();

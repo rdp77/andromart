@@ -8,6 +8,7 @@ use App\Models\Notes;
 use App\Models\NotesPhoto;
 use App\Models\Regulation;
 use App\Models\RegulationDetail;
+use App\Models\Content;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -44,7 +45,8 @@ class RegulationController extends Controller
                     $actionBtn .= '<div class="dropdown-menu">
                             <a class="dropdown-item" href="' . route('regulation.show', Crypt::encryptString($row->id)) . '">Lihat</a>';
                     $actionBtn .= '<a class="dropdown-item" href="' . route('regulation.edit', Crypt::encryptString($row->id)) . '">Edit</a>';
-                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
+                    $actionBtn .= '<a class="dropdown-item" href="' . route('regulationDelete', Crypt::encryptString($row->id)) . '">Hapus</a>';
+                    // $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
@@ -129,10 +131,6 @@ class RegulationController extends Controller
     {
         $id = Crypt::decryptString($id);
         $models = Regulation::where('id', $id)->first();
-        // $models = Notes::where('notes.id', $id)
-        // ->join('users', 'notes.users_id', '=', 'users.id')
-        // ->select('notes.id as notes_id', 'notes.date as date', 'users.name as name', 'users.id as users_id', 'notes.title as title', 'notes.description as description')
-        // ->first();
         $modelsFile = RegulationDetail::where('regulation_id', $id)->get();
         // dd($modelsFile);
         return view('pages.backend.office.regulation.showRegulation', compact('models', 'modelsFile'));
@@ -141,45 +139,101 @@ class RegulationController extends Controller
     public function edit($id)
     {
         $id = Crypt::decryptString($id);
-        dd($id);
-        $area = Area::find($id);
-        return view('pages.backend.master.area.updateArea', ['area' => $area]);
+        $model = Regulation::where('id', $id)->first();
+        $models = RegulationDetail::where('regulation_id', $id)->get();
+        $role = Role::get();
+        $branch = Branch::get();
+        // dd($models);
+        return view('pages.backend.office.regulation.editRegulation', compact('role', 'branch', 'model', 'models'));
+    }
+    public function regulationDelete($id)
+    {
+        $id = Crypt::decryptString($id);
+        $model = Regulation::where('id', $id)->first();
+        $model->delete();
+
+        $models = RegulationDetail::where('regulation_id', $id)->get();
+        foreach($models as $row) {
+            $modelDetail = RegulationDetail::where('id', $row->id)->first();
+            $modelDetail->delete();
+        }
+        return Redirect::route('regulation.index')
+            ->with([
+                'status' => 'Berhasil menghapus peraturan',
+                'type' => 'success'
+            ]);
+    }
+    public function deleteDetail($id, $iddetail)
+    {
+        $model = RegulationDetail::where('id', $iddetail)->first();
+        $model->delete();
+        return Redirect::route('regulation.edit', Crypt::encryptString($id))
+            ->with([
+                'status' => 'Berhasil menghapus file',
+                'type' => 'success'
+            ]);
     }
 
     public function update(Request $req, $id)
     {
-        dd('ini update');
-        if($req->code == Area::find($id)->code){
-            Validator::make($req->all(), [
-                'name' => ['required', 'string', 'max:255'],
-            ])->validate();
-        }
-        else{
-            Validator::make($req->all(), [
-                'code' => ['required', 'string', 'max:255', 'unique:areas'],
-                'name' => ['required', 'string', 'max:255'],
-            ])->validate();
-        }
+        // dd($req->role);
+        Validator::make($req->all(), [
+            // 'code' => ['required', 'string', 'max:255', 'unique:areas'],
+            'role' => ['required', 'integer'],
+            'branch' => ['required', 'integer'],
+            'titles' => ['required', 'string', 'max:255'],
+            'description' => ['string'],
+        ])->validate();
 
-        Area::where('id', $id)
-            ->update([
-                'code' => $req->code,
-                'name' => $req->name,
-                'updated_by' => Auth::user()->name,
-            ]);
+        $regulation = Regulation::where('id', $id)->first();
+        $regulation->role_id = $req->role;
+        $regulation->branch_id = $req->branch;
+        $regulation->date = date('Y-m-d');
+        $regulation->title = $req->titles;
+        $regulation->description = $req->description;
+        $regulation->created_by = Auth::user()->name;
+        $regulation->save();
 
-        $area = Area::find($id);
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Mengubah masrter area ' . Area::find($id)->name
+            'Membuat Peraturan Baru'
         );
+        // dd($req->file('file'));
+        if($files = $req->file('file')){
+            // dd($files[0]->getClientOriginalName());
+            foreach($files as $file){
+                $dir = 'file_regulation';
+                $allowed = array("jpeg", "gif", "png", "jpg", "pdf", "doc", "docx");
+                if (!is_dir($dir)){
+                    mkdir( $dir );       
+                }
+                $size = filesize($file);
+                $input_file = $file->getClientOriginalName();
+                $filename = pathinfo($input_file, PATHINFO_FILENAME);
+                $md5Name = date("Y-m-d H-i-s")."_".$filename."_".md5($file->getRealPath());
+                $guessExtension = $file->guessExtension();
+                $data = $md5Name.".".$guessExtension;
 
-        $area->save();
+                if($size > 5000000){
+                    // return Redirect::route('notes.index')->with(['status' => 'Ukuran File Terlalu Besar','type' => 'danger']);
+                } else if (!in_array($guessExtension, $allowed)){
+                    // return redirect('/operator/berkas-pengajuan/insert-foto/'.$id_encrypt)->with('danger', 'Tipe file berkas salah');
+                } else {
+                    $file->move($dir, $data);
 
-        return Redirect::route('area.index')
+                    $regulationFile = new RegulationDetail;
+                    $regulationFile->regulation_id = $regulation->id;
+                    $regulationFile->name = $filename;
+                    $regulationFile->file = "file_regulation/".$data;
+                    $regulationFile->save();
+                }
+            }
+        }
+
+        return Redirect::route('regulation.index')
             ->with([
-                'status' => 'Berhasil merubah master area ',
+                'status' => 'Berhasil membuat menambah peraturan baru',
                 'type' => 'success'
             ]);
     }
@@ -189,11 +243,50 @@ class RegulationController extends Controller
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Menghapus master area ' . Area::find($id)->name
+            'Menghapus peraturan ' . Regulation::find($id)->name
         );
 
-        Area::destroy($id);
+        Regulation::destroy($id);
 
         return Response::json(['status' => 'success']);
+    }
+    public function all()
+    {
+        $models = Regulation::join('roles', 'regulations.role_id', 'roles.id')
+        ->join('branches', 'regulations.branch_id', 'branches.id')
+        ->select('regulations.id as id','regulations.title as title', 'regulations.description as description', 'regulations.date as date', 'branches.name as branchName', 'roles.name as roleName')
+        ->get();
+        // $models = [];
+        return view('pages.backend.office.sop.indexSop', compact('models'));
+    }
+    public function select($id)
+    {
+        $model = Regulation::join('roles', 'regulations.role_id', 'roles.id')
+        ->join('branches', 'regulations.branch_id', 'branches.id')
+        ->select('regulations.id as id','regulations.title as title', 'regulations.description as description', 'regulations.date as date', 'branches.name as branchName', 'roles.name as roleName')
+        ->where('regulations.id', $id)
+        ->first();
+        $file = [];
+        $image = [];
+        $models = RegulationDetail::where('regulation_id', $id)->get();
+        foreach($models as $row) {
+            $ext = substr($row->file,-3);
+            if($ext == 'jpg' || $ext == 'png' || $ext == 'peg') {
+                $image[] = $row->file;
+            } else {
+                $file[$row->name] = $row->file;
+            }
+        }
+        $imageLength = count($image);
+        if($imageLength == 0){
+            $image[] = 'assetsfrontend/img/andromart.png';
+        }
+        return view('pages.backend.office.sop.showSop', compact('model', 'file', 'image', 'imageLength'));
+    }
+    public function visiMisi()
+    {
+        $visi = Content::where('content_types_id', 12)->first();
+        $misi = Content::where('content_types_id', 13)->first();
+        return view('pages.backend.office.sop.visiMisi', compact('visi', 'misi'));
     }
 }

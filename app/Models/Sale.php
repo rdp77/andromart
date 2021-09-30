@@ -15,6 +15,7 @@ class Sale extends Model
     public $incrementing = true;
 
     protected $fillable = [
+        'id',
         'code',
         'user_id',
         'branch_id',
@@ -23,15 +24,17 @@ class Sale extends Model
         'customer_address',
         'customer_phone',
         'date',
-        'warranty_id',
+        'cash_id',
         'discount_type',
         'discount_price',
         'discount_percent',
+        'payment_method',
         'item_price',
         'total_price',
         'sales_id',
-        'sharing_profit_store',
-        'sharing_profit_sales',
+        'total_profit_store',
+        'total_profit_sales',
+        'total_profit_buyer',
         'description',
         'created_at',
         'updated_at',
@@ -56,8 +59,38 @@ class Sale extends Model
         return $this->hasOne('App\Models\User');
     }
 
+    public function Sales()
+    {
+        return $this->belongsTo('App\Models\Employee', 'sales_id', 'id');
+    }
+
+    public function Buyer()
+    {
+        return $this->belongsTo('App\Models\Employee', 'buyer_id', 'id');
+    }
+
     public function Branch()
     {
         return $this->belongsTo('App\Models\Branch');
+    }
+
+    public function Warranty()
+    {
+        return $this->belongsTo('App\Models\Warranty');
+    }
+
+    public function Customer()
+    {
+        return $this->belongsTo('App\Models\Customer', 'customer_id', 'id');
+    }
+
+    public function CreatedByUser()
+    {
+        return $this->belongsTo('App\Models\User', 'user_id', 'id');
+    }
+
+    public function Cash()
+    {
+        return $this->belongsTo('App\Models\Cash');
     }
 }

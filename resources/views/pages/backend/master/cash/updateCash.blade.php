@@ -30,29 +30,12 @@
                     <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
                 </div>
                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                    value="{{ $cash->name }}" required autofocus>
+                    value="{{ $cash->name }}" required>
                 @error('name')
                 <div class="invalid-feedback">
                     {{ $message }}
                 </div>
                 @enderror
-            </div>
-            <div class="form-group col-md-3 col-xs-12">
-                <label for="balance">{{ __('Saldo') }}<code>*</code></label>
-                    <div class="input-group">
-                      <div class="input-group-prepend">
-                        <div class="input-group-text">
-                          Rp.
-                        </div>
-                      </div>
-                      <input id="rupiah" type="text" class="form-control currency @error('balance') is-invalid @enderror"
-                        name="balance" value="{{ $cash->balance }}" required autocomplete="balance">
-                      @error('balance')
-                      <div class="invalid-feedback">
-                        {{ $message }}
-                      </div>
-                      @enderror
-                    </div>
             </div>
         </div>
         <div class="card-footer text-right">

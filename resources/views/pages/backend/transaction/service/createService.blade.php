@@ -55,10 +55,16 @@
                             <input id="estimateDate" type="text" class="form-control datepicker" name="estimateDate">
                         </div>
                     </div>
+                    {{-- <div class="row">
+                        <div class="form-group col-12 col-md-12 col-lg-12">
+                            <label for="description">{{ __('Estimasi Analisa') }}<code>*</code></label>
+                            <input type="text" class="form-control" data-name="Deskripsi">
+                        </div>
+                    </div> --}}
 
                     <h6 style="color: #6777ef">Data Barang</h6>
                     <br>
-                    <div class="row">
+                    <div class="row">   
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="type">{{ __('Kategori') }}<code>*</code></label>
                             <select class="select2 type" name="type" onchange="category()">
@@ -112,36 +118,21 @@
                             <input id="complaint" type="text" class="form-control validation" data-name="Komplain" name="complaint">
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="equipment">{{ __('Kelengkapan') }}<code>*</code></label>
-                            <input id="equipment" type="text" class="form-control validation" data-name="Kelengkapan" name="equipment">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-12 col-md-5 col-lg-5">
                             <label for="noImei">{{ __('No Imei') }}<code>*</code></label>
                             <input id="noImei" type="text" class="form-control" name="noImei">
                         </div>
-                        <div class="form-group col-12 col-md-7 col-lg-7">
+                        {{-- <div class="form-group col-12 col-md-6 col-lg-6">
+                            <label for="equipment">{{ __('Kelengkapan') }}<code>*</code></label>
+                            <input id="equipment" type="text" class="form-control validation" data-name="Kelengkapan" name="equipment">
+                        </div> --}}
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-12 col-md-12 col-lg-12">
                             <label for="description">{{ __('Keterangan') }}<code>*</code></label>
                             <input id="description" type="text" class="form-control validation" data-name="Deskripsi" name="description">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="form-group col-12 col-md-12 col-lg-12">
-                            <label for="description">{{ __('Ambil Foto') }}<code>*</code></label>
-                            <div id="my_camera"></div>
-                            <br/>
-                            <div class="row">
-                                <div class="form-group col-md-3">
-                                    <input type=button class="btn btn-primary" value="Take Snapshot" onClick="take_snapshot()">
-                                    <input type="hidden" name="image" class="image-tag">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#exampleModal">Lihat Gambar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
                     <h6 style="color: #6777ef">Data Customer</h6>
                     <br>
                     <div class="row">
@@ -170,6 +161,104 @@
                         </div>
                     </div>
 
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h4>Ambil Foto</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group col-12 col-md-12 col-lg-12">
+                            <div id="my_camera"></div>
+                            <br/>
+                            <div class="row">
+                                <div class="form-group col-md-3">
+                                    <input type=button class="btn btn-primary" value="Take Snapshot" onClick="take_snapshot()">
+                                    <input type="hidden" name="image" class="image-tag">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#exampleModal">Lihat Gambar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h4>Kelengkapan</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group col-12 col-md-3 col-lg-3">
+                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
+                                <input type="checkbox" name="laptopPcEquipment" class="custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Laptop / PC</span>
+                            </label>
+                        </div>
+                        <div class="form-group col-12 col-md-3 col-lg-3">
+                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
+                                <input type="checkbox" name="chargerEquipment" class="custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Charger</span>
+                            </label>
+                        </div>
+                        <div class="form-group col-12 col-md-3 col-lg-3">
+                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
+                                <input type="checkbox" name="bateraiEquipment" class="custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Baterai</span>
+                            </label>
+                        </div>
+                        <div class="form-group col-12 col-md-3 col-lg-3">
+                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
+                                <input type="checkbox" name="hardiskSsdEquipment" class="custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Hardisk / SSD</span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-12 col-md-3 col-lg-3">
+                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
+                                <input type="checkbox" name="RamEquipment" class="custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">RAM</span>
+                            </label>
+                        </div>
+                        <div class="form-group col-12 col-md-3 col-lg-3">
+                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
+                                <input type="checkbox" name="HandphoneEquipment" class="custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Handphone</span>
+                            </label>
+                        </div>
+                        <div class="form-group col-12 col-md-3 col-lg-3">
+                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
+                                <input type="checkbox" name="printerEquipment" class="custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Printer</span>
+                            </label>
+                        </div>
+                        <div class="form-group col-12 col-md-3 col-lg-3">
+                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
+                                <input type="checkbox" name="tasLaptopEquipment" class="custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Tas Laptop</span>
+                            </label>
+                        </div>
+                    </div>
+                    {{-- <div class="row">
+                        <div class="form-group col-12 col-md-4 col-lg-4">
+                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
+                                <input type="checkbox" name="lainLainEquipment" class="custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Lain Lain</span>
+                            </label>
+                        </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
@@ -247,6 +336,196 @@
                         <input id="totalPrice" type="text" value="0" class="form-control cleaveNumeral"
                             name="totalPrice" onchange="sumTotal()" style="text-align: right">
                     </div>
+                </div>
+
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h4>Kelengkapan & Kondisi</h4>
+
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="form-label">LCD</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="LcdCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="LcdCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="LcdCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Touch Screen</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="touchScreenCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="touchScreenCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="touchScreenCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Speaker</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="speakerCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="speakerCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="speakerCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Charger</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="chargerCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="chargerCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="chargerCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Camera Depan</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="cameraDepanCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="cameraDepanCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="cameraDepanCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Camera Belakang</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="cameraBelakangCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="cameraBelakangCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="cameraBelakangCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Vibrator</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="vibratorCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="vibratorCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="vibratorCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Mic</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="micCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="micCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="micCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Buzzer</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="buzzerCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="buzzerCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="buzzerCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>

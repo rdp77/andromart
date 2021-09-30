@@ -1,10 +1,10 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__(' | Tambah Master Brand'))
-@section('titleContent', __('Tambah Master Brand'))
+@section('title', __('pages.title').__(' | Tambah Master Tipe'))
+@section('titleContent', __('Tambah Master Tipe'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
-<div class="breadcrumb-item active">{{ __('Master Brand') }}</div>
-<div class="breadcrumb-item active">{{ __('Tambah Master Brand') }}</div>
+<div class="breadcrumb-item active">{{ __('Master Tipe') }}</div>
+<div class="breadcrumb-item active">{{ __('Tambah Master Tipe') }}</div>
 @endsection
 
 @section('content')
@@ -14,10 +14,10 @@
         <div class="card-body">
             <div class="form-group col-md-3 col-xs-12">
                 <label for="brand_id">{{ __('Merk') }}<code>*</code></label>
-                <select name="brand_id" id="brand_id" class="form-control select2" required autocomplete="brand_id">
+                <select name="brand_id" id="brand_id" class="form-control select2" required>
                     <option value=""> - Select - </option>
                     @foreach ($brand as $brand)
-                    <option value="{{ $brand->id }}"> {{ $brand->name }} </option>
+                    <option value="{{ $brand->id }}"> {{ $brand->category->code }} - {{ $brand->name }} </option>
                     @endforeach
                 </select>
             </div>
@@ -26,7 +26,7 @@
                     <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
                 </div>
                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                    required autofocus>
+                    required>
                 @error('name')
                 <div class="invalid-feedback">
                     {{ $message }}

@@ -18,7 +18,7 @@ class AreaSeeder extends Seeder
             [
                 'id' => '1',
                 'name' => 'Sidoarjo',
-                'code' => 'SDA',
+                'code' => '001',
                 'created_at' => date("Y-m-d h:i:s"),
                 'updated_at' => date("Y-m-d h:i:s"),
             ],

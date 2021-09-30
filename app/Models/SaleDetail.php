@@ -8,13 +8,20 @@ use Illuminate\Database\Eloquent\Model;
 class SaleDetail extends Model
 {
     use HasFactory;
+    public $incrementing = true;
 
     protected $fillable = [
+        'id',
         'sale_id',
         'item_id',
         'price',
         'qty',
         'total',
+        'sales_id',
+        'buyer_id',
+        'sharing_profit_store',
+        'sharing_profit_sales',
+        'sharing_profit_buyer',
         'description',
         'created_at',
         'updated_at',

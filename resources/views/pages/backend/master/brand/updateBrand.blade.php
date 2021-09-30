@@ -14,11 +14,25 @@
         @method('PUT')
         <div class="card-body">
             <div class="form-group col-md-4 col-xs-12">
+                <label for="category_id">{{ __('Kategori') }}<code>*</code></label>
+                <select name="category_id" id="category_id" class="form-control select2" required>
+                    <option value="{{ $brand->category->id }}">{{ $brand->category->code }} - {{ $brand->category->name }} </option>
+                    @foreach ($category as $category)
+                    <option value="{{ $category->id }}">{{ $category->code }} - {{ $category->name }}</option>
+                    @endforeach
+                </select>
+                @error('category_id')
+                <div class="invalid-feedback">
+                    {{ $message }}
+                </div>
+                @enderror
+            </div>
+            <div class="form-group col-md-4 col-xs-12">
                 <div class="d-block">
                     <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
                 </div>
                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                    value="{{ $brand->name }}" required autofocus>
+                    value="{{ $brand->name }}" required>
                 @error('name')
                 <div class="invalid-feedback">
                     {{ $message }}

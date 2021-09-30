@@ -10,13 +10,14 @@ class Purchasing extends Model
     use HasFactory;
 
     protected $fillable = [
-        'supplier_id',
+        'employee_id',
 
         'date',
         'price',
         'discount',
         'code',
         'status',
+        'done',
         
         'created_at',
         'updated_at',
@@ -26,9 +27,9 @@ class Purchasing extends Model
         'deleted_by',
     ];
 
-    public function supplier()
+    public function employee()
     {
-        return $this->belongsTo('App\Models\Supplier');
+        return $this->belongsTo('App\Models\Employee');
     }
 
     public function purchasingDetail()

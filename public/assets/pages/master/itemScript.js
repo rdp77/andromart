@@ -16,11 +16,10 @@ var table = $("#table").DataTable({
     dom: '<"html5buttons">lBrtip',
     columns: [
         { data: "DT_RowIndex", orderable: false, searchable: false },
-        { data: "category.name" },
+        { data: "brand" },
         { data: "name" },
         { data: "condition" },
-        { data: "buy" },
-        { data: "sell" },
+        { data: "price" },
         { data: "supplier.name" },
         { data: "description" },
         { data: "action", orderable: false, searchable: true },
@@ -91,15 +90,40 @@ function del(id) {
             $.ajax({
                 url: "/master/item/item/" + id,
                 type: "DELETE",
-                success: function () {
-                    swal("Data master berhasil dihapus", {
-                        icon: "success",
-                    });
-                    table.draw();
+                success: function(data) {
+                    if (data.status == 'success'){
+                        swal(data.message, {
+                            icon: "success",
+                        });
+                        location.reload();
+                    }else{
+                        swal(data.message, {
+                            icon: "warning",
+                        });
+                    }
                 },
+                // success: function () {
+                //     swal("Data master berhasil dihapus", {
+                //         icon: "success",
+                //     });
+                //     table.draw();
+                // },
             });
         } else {
             swal("Data master Anda tidak jadi dihapus!");
         }
     });
+}
+
+function category() {
+    var dataItems = [];
+    $('.brand').empty();
+    var params = $('.category').find(':selected').val();
+    $.each($('.brandData'), function(){
+        if (params == $(this).data('category')) {
+            dataItems += '<option value="'+this.value+'">'+$(this).data('name')+'</option>';
+        }
+    });
+    $('.brand').append('<option value="">- Select -</option>');
+    $('.brand').append(dataItems);
 }

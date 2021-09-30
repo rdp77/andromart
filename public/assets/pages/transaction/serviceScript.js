@@ -157,6 +157,60 @@ function save() {
 
 }
 
+function updateData(params) {
+    swal({
+        title: "Apakah Anda Yakin?",
+        text: "Aksi ini tidak dapat dikembalikan, dan akan menyimpan data Anda.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willSave) => {
+        if (willSave) {
+            var validation = 0;
+            $('.validation').each(function(){
+                if ($(this).val() == '' || $(this).val() == null || $(this).val() == 0) {
+                    validation++;
+                    iziToast.warning({
+                        type: 'warning',
+                        title: $(this).data('name') +' Harus Di isi'
+                    });
+                }else{
+                    validation-1;
+                }
+            });
+            if (validation != 0) {
+                return false;
+            }
+            $.ajax({
+                url: "/transaction/service/service/"+params,
+                data: $(".form-data").serialize(),
+                type: 'PUT',
+                // contentType: false,
+                processData: false,
+                success: function(data) {
+                    if (data.status == 'success'){
+                        swal(data.message, {
+                            icon: "success",
+                        });
+                        // location.reload();
+                    }else{
+                        swal(data.message, {
+                            icon: "warning",
+                        });
+                    }
+                },
+                error: function(data) {
+                    // edit(id);
+                }
+            });
+
+        } else {
+            swal("Data Belum Disimpan !");
+        }
+    });
+
+}
+
 
 function changeDiscount(params) {
     if (params == 'percent') {
@@ -209,7 +263,12 @@ function addItem() {
 
     var dataItems = [];
     $.each($('.itemsData'), function(){
-        dataItems += '<option data-index="'+(index+1)+'"  data-price="'+$(this).data('price')+'" data-stock="'+$(this).data('stock')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
+        if ($(this).data('stock') == null) {
+            var stocks = 0;
+        }else{
+            var stocks = $(this).data('stock');
+        }
+        dataItems += '<option data-index="'+(index+1)+'"  data-price="'+$(this).data('price')+'" data-stock="'+stocks+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
     });
 
     $('.dropHereItem').append(
@@ -324,6 +383,19 @@ $(document.body).on("click",".removeDataDetail",function(){
     $('.dataDetail_'+this.value).remove();
     var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
 
+    sum();
+    sumTotal();
+    if (checkVerificationDiscount == 'percent') {
+        sumDiscont();
+    }else{
+        sumDiscontValue();
+    }
+});
+
+$(document.body).on("click",".removeDataDetailExisting",function(){
+    $('.dropDeletedExistingData').append('<input type="hidden" class="form-control" value="'+$(this).data('id')+'" name="deletedExistingData[]">');
+    $('.dataDetail_'+this.value).remove();
+    var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
     sum();
     sumTotal();
     if (checkVerificationDiscount == 'percent') {
