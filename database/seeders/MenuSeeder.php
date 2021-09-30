@@ -57,6 +57,12 @@ class MenuSeeder extends Seeder
                 'url' => 'javascript:void(0)',
                 'hover' => null
             ],
+            [
+                'name' => 'System',
+                'icon' => 'fa-cog',
+                'url' => 'javascript:void(0)',
+                'hover' => null
+            ],
         ]);
     }
 }

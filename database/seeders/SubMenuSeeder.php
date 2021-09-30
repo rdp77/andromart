@@ -70,48 +70,13 @@ class SubMenuSeeder extends Seeder
             // Master Data
             [
                 'menu_id' => '4',
-                'name' => 'Area',
-                'url' => route('area.index')
-            ],
-            [
-                'menu_id' => '4',
                 'name' => 'Barang',
                 'url' => route('item.index')
             ],
             [
                 'menu_id' => '4',
-                'name' => 'Biaya',
-                'url' => route('cost.index')
-            ],
-            [
-                'menu_id' => '4',
-                'name' => 'Cabang',
-                'url' => route('branch.index')
-            ],
-            [
-                'menu_id' => '4',
-                'name' => 'Garansi',
-                'url' => route('warranty.index')
-            ],
-            [
-                'menu_id' => '4',
-                'name' => 'Hak Akses',
-                'url' => 'javascript:void(0)'
-            ],
-            [
-                'menu_id' => '4',
                 'name' => 'Karyawan',
                 'url' => route('employee.index')
-            ],
-            [
-                'menu_id' => '4',
-                'name' => 'Kas',
-                'url' => route('cash.index')
-            ],
-            [
-                'menu_id' => '4',
-                'name' => 'Merk',
-                'url' => route('branch.index')
             ],
             [
                 'menu_id' => '4',
@@ -125,8 +90,8 @@ class SubMenuSeeder extends Seeder
             ],
             [
                 'menu_id' => '4',
-                'name' => 'Satuan',
-                'url' => route('unit.index')
+                'name' => 'Garansi',
+                'url' => route('warranty.index')
             ],
             [
                 'menu_id' => '4',
@@ -135,8 +100,53 @@ class SubMenuSeeder extends Seeder
             ],
             [
                 'menu_id' => '4',
+                'name' => 'Satuan',
+                'url' => route('unit.index')
+            ],
+            [
+                'menu_id' => '4',
                 'name' => 'Tipe',
                 'url' => route('type.index')
+            ],
+            [
+                'menu_id' => '4',
+                'name' => 'Merk',
+                'url' => route('branch.index')
+            ],
+            [
+                'menu_id' => '4',
+                'name' => 'Kategori',
+                'url' => route('category.index')
+            ],
+            [
+                'menu_id' => '4',
+                'name' => 'Biaya',
+                'url' => route('cost.index')
+            ],
+            [
+                'menu_id' => '4',
+                'name' => 'Kas',
+                'url' => route('cash.index')
+            ],
+            [
+                'menu_id' => '4',
+                'name' => 'Hak Akses',
+                'url' => 'javascript:void(0)'
+            ],
+            [
+                'menu_id' => '4',
+                'name' => 'Cabang',
+                'url' => route('branch.index')
+            ],
+            [
+                'menu_id' => '4',
+                'name' => 'Area',
+                'url' => route('area.index')
+            ],
+            [
+                'menu_id' => '4',
+                'name' => 'Ikon',
+                'url' => 'javascript:void(0)'
             ],
             [
                 'menu_id' => '5',
@@ -145,13 +155,8 @@ class SubMenuSeeder extends Seeder
             ],
             [
                 'menu_id' => '5',
-                'name' => 'Stok Masuk',
-                'url' => 'javascript:void(0)'
-            ],
-            [
-                'menu_id' => '5',
-                'name' => 'Stok Keluar',
-                'url' => 'javascript:void(0)'
+                'name' => 'Stok Transaksi',
+                'url' => route('stockTransaction.index')
             ],
             [
                 'menu_id' => '5',
@@ -161,7 +166,7 @@ class SubMenuSeeder extends Seeder
             [
                 'menu_id' => '5',
                 'name' => 'Stok Mutasi',
-                'url' => 'javascript:void(0)'
+                'url' => route('stockMutation.index')
             ],
             [
                 'menu_id' => '6',
@@ -177,6 +182,21 @@ class SubMenuSeeder extends Seeder
                 'menu_id' => '7',
                 'name' => 'Konten',
                 'url' => route('contents.index')
+            ],
+            [
+                'menu_id' => '7',
+                'name' => 'Pesan',
+                'url' => route('message.index')
+            ],
+            [
+                'menu_id' => '8',
+                'name' => 'Visi Misi',
+                'url' => route('visiMisi')
+            ],
+            [
+                'menu_id' => '8',
+                'name' => 'SOP',
+                'url' => route('regulationAll')
             ],
         ]);
     }
