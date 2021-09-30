@@ -44,14 +44,14 @@
             <address>
               <br>
               <strong><h2>Status Bayar</h2></strong>
-              <strong><h3 style="color:#28a745">Lunas </h3></strong>
+              <strong><h3 style="color:#28a745">{{$service->payment_status}} </h3></strong>
             </address>
           </div>
           <div class="col-md-6 text-md-right">
             <address>
               <br>
               <strong><h2>Tanggal</h2></strong>
-              <p style="font-size: 30px">25 September 2021</p>
+              <p style="font-size: 30px">-</p>
             </address>
           </div>
         </div>
