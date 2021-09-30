@@ -108,7 +108,7 @@
                       @elseif ($el->status == 'Y')
                         <td><i class="fa fa-check"></i></td>
                       @elseif ($el->status == '?')
-                        <td><i class="fa fa-ask"></i></td>
+                        <td><i class="fa fa-question"></i></td>
                       @endif
                     </tr>
                 @endforeach
