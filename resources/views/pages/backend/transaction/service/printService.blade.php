@@ -66,7 +66,7 @@
             <tbody>
               <tr>
               </tr>
-                <th class="text-left" colspan="2" style="font-size: 25px">Service Detail</th>
+                <th class="text-left" colspan="2" style="font-size: 25px" width="40%">Service Detail</th>
                 <th class="text-left" style="font-size: 25px">Keluhan</th>
                 <th class="text-left" style="font-size: 25px">Keterangan</th>
               </tr>
@@ -84,10 +84,64 @@
                 <td style="font-size: 20px">Series</td>
                 <td style="font-size: 20px">{{$service->Type->name}}</td>
               </tr>
+              <tr>
+                <td style="font-size: 20px">Estimasi Analisa</td>
+                <td style="font-size: 20px">{{$service->estimate_day}}</td>
+              </tr>
             </tbody>
           </table>
         </div>
-        <div>
+
+        <div class="row mt-4">
+          <div class="col-lg-6 col-md-6 col-sm-6">
+            <table class="table table-striped table-hover table-md">
+              <tbody>
+                <tr>
+                </tr>
+                  <th class="text-left" colspan="2" style="font-size: 25px">Kelengkapan</th>
+                </tr>
+                @foreach ($service->ServiceCondition as $el)
+                    <tr>
+                      <th>{{$el->name}}</th>
+                      @if ($el->status == 'N')
+                        <td><i class="fa fa-times"></i></td>
+                      @elseif ($el->status == 'Y')
+                        <td><i class="fa fa-check"></i></td>
+                      @elseif ($el->status == '?')
+                        <td><i class="fa fa-ask"></i></td>
+                      @endif
+                    </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-6">
+            <table class="table table-striped table-hover table-md">
+              <tbody>
+                <tr>
+                </tr>
+                  <th class="text-left" colspan="2" style="font-size: 25px">Kondisi</th>
+                </tr>
+                @foreach ($service->ServiceEquipment as $el)
+                    <tr>
+                      <td><b>{{$el->name}}</b>  
+                      @if ($el->description != null)
+                      <br>
+                      Catatan : {{$el->description}}
+                      @endif </td>
+                      @if ($el->status == 'N')
+                        <td><i class="fa fa-times"></i></td>
+                      @elseif ($el->status == 'Y')
+                        <td><i class="fa fa-check"></i></td>
+                      @endif 
+                    </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        {{-- <div>
           <table class="table table-striped table-hover table-md">
             <tbody><tr>
               <th data-width="40" style="width: 40px;" style="font-size: 25px">#</th>
@@ -134,7 +188,7 @@
               </tbody>
             </table>
           </div>
-        </div>
+        </div> --}}
       </div>
     </div>
   </div>

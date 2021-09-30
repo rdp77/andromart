@@ -72,6 +72,14 @@ class Service extends Model
     {
         return $this->hasMany('App\Models\ServiceDetail', 'service_id', 'id');
     }
+    public function ServiceEquipment()
+    {
+        return $this->hasMany('App\Models\ServiceEquipment', 'service_id', 'id');
+    }
+    public function ServiceCondition()
+    {
+        return $this->hasMany('App\Models\ServiceCondition', 'service_id', 'id');
+    }
     public function ServicePayment()
     {
         return $this->hasMany('App\Models\ServicePayment', 'service_id', 'id');
