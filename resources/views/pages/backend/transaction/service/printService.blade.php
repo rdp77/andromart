@@ -24,14 +24,14 @@
         <br>
         {{-- <hr> --}}
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <address>
               <strong><p style="font-size: 38px">Teknisi</p></strong>
               <p style="font-size: 30px">{{$service->employee1->name}}</p>
-              <p style="font-size: 30px">{{$service->employee1->contact}}</p>
+              {{-- <p style="font-size: 30px">{{$service->employee1->contact}}</p> --}}
             </address>
           </div>
-          <div class="col-md-6 text-md-right">
+          <div class="col-md-8 text-md-right">
             <address>
               <strong><p style="font-size: 38px">Customer</p></strong>
               <p style="font-size: 30px">{{$service->customer_name}}</p>
