@@ -324,6 +324,7 @@ class ServiceController extends Controller
                 'customer_phone'=>$req->customerPhone,
                 'date'=>date('Y-m-d'),
                 'estimate_date'=>$estimateDate,
+                'estimate_day'=>$estimateDay,
                 'brand'=>$req->brand,
                 'series'=>$req->series,
                 'type'=>$req->type,
