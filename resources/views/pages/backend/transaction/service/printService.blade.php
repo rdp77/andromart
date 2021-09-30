@@ -123,18 +123,19 @@
                   <th class="text-left" colspan="2" style="font-size: 25px">Kelengkapan</th>
                 </tr>
                 @foreach ($service->ServiceEquipment as $el)
+                  @if ($el->description != null)
                     <tr>
                       <td><b>{{$el->name}}</b>  
-                      @if ($el->description != null)
                       <br>
                       Catatan : {{$el->description}}
-                      @endif </td>
+                      </td>
                       @if ($el->status == 'N')
                         <td><i class="fa fa-times"></i></td>
                       @elseif ($el->status == 'Y')
                         <td><i class="fa fa-check"></i></td>
                       @endif 
                     </tr>
+                  @endif
                 @endforeach
               </tbody>
             </table>
