@@ -32,6 +32,7 @@ class Service extends Model
         'no_imei',
         'complaint',
         'clock',
+        'estimate_day',
         'total_service',
         'total_part',
         'discount_type',
