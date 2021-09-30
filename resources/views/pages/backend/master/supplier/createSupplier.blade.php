@@ -36,7 +36,7 @@
                           </div>
                         </div>
                         <input id="contact" type="text" class="form-control @error('contact') is-invalid @enderror"
-                            name="contact" value="{{ old('contact') }}" required autocomplete="contact">
+                            name="contact" value="{{ old('contact') }}" required>
                         @error('contact')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -47,7 +47,7 @@
                 <div class="form-group col-md-6 col-xs-12">
                     <label for="address">{{ __('Alamat') }}<code>*</code></label>
                     <input id="address" type="text" class="form-control @error('address') is-invalid @enderror"
-                        name="address" value="{{ old('address') }}" required autocomplete="address">
+                        name="address" value="{{ old('address') }}" required>
                     @error('address')
                     <div class="invalid-feedback">
                         {{ $message }}

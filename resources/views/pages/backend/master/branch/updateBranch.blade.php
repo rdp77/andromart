@@ -29,7 +29,7 @@
                 <div class="form-group col-md-6 col-xs-12">
                     <label for="title">{{ __('Nama Lain') }}</label>
                     <input id="title" type="text" class="form-control @error('title') is-invalid @enderror"
-                        name="title" value="{{ $branch->title }}" autocomplete="title">
+                        name="title" value="{{ $branch->title }}">
                     @error('title')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -40,7 +40,7 @@
             <div class="row">
                 <div class="form-group col-md-6 col-xs-12">
                     <label for="area_id">{{ __('Kode Area') }}<code>*</code></label>
-                    <select name="area_id" id="area_id" class="form-control select2" required autocomplete="area_id">
+                    <select name="area_id" id="area_id" class="form-control select2" required>
                         <option value="{{ $branch->area->id }}"> {{ $branch->area->code }} - {{ $branch->area->name }} </option>
                         @foreach ($area as $area)
                         <option value="{{ $area->id }}"> {{ $area->code }} - {{ $area->name }} </option>
@@ -50,7 +50,7 @@
                 <div class="form-group col-md-6 col-xs-12">
                     <label for="code">{{ __('Kode Cabang') }}<code>*</code></label>
                     <input id="code" type="text" class="form-control @error('code') is-invalid @enderror"
-                        name="code" value="{{ $branch->code }}" required autocomplete="code">
+                        name="code" value="{{ $branch->code }}" required>
                     @error('code')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -70,7 +70,7 @@
                           </div>
                         </div>
                         <input id="phone" type="text" class="form-control phone-number @error('phone') is-invalid @enderror" name="phone"
-                            value="{{ $branch->phone }}" required autofocus>
+                            value="{{ $branch->phone }}" required>
                         @error('phone')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -89,7 +89,7 @@
                           </div>
                         </div>
                         <input id="email" type="email" class="form-control email @error('email') is-invalid @enderror" name="email"
-                            value="{{ $branch->email }}" autofocus>
+                            value="{{ $branch->email }}">
                         @error('email')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -104,7 +104,7 @@
                         <label for="address" class="control-label">{{ __('Alamat Cabang') }}<code>*</code></label>
                     </div>
                     <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address"
-                        value="{{ $branch->address }}" required autofocus>
+                        value="{{ $branch->address }}" required>
                     @error('address')
                     <div class="invalid-feedback">
                         {{ $message }}

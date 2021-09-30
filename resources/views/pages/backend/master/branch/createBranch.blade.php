@@ -49,7 +49,7 @@
                 <div class="form-group col-md-6 col-xs-12">
                     <label for="code">{{ __('Kode Cabang') }}<code>*</code></label>
                     <input id="code" type="text" class="form-control @error('code') is-invalid @enderror"
-                        name="code" value="{{ old('code') }}" required autocomplete="code">
+                        name="code" value="{{ old('code') }}" required>
                     @error('code')
                     <div class="invalid-feedback">
                         {{ $message }}

@@ -29,7 +29,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-12 col-md-6 col-lg-6">
+                        <div class="form-group col-12 col-md-4 col-xs-12">
                             <div class="d-block">
                                 <label for="sales"
                                     class="control-label">{{ __('Sales') }}<code>*</code></label>
@@ -41,18 +41,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="warranty">{{ __('Garansi') }}<code>*</code></label>
-                            <select class="select2 validation" name="warranty" data-name="Masa Garansi">
-                                <option value="">- Select -</option>
-                                @foreach ($warranty as $warranty)
-                                <option value="{{ $warranty->id }}">{{ $warranty->periode }} {{ $warranty->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-12 col-md-6 col-lg-6">
+                        <div class="form-group col-12 col-md-4 col-xs-12">
                             <label for="payment_method" class="control-label">{{ __('Metode Pembayaran') }}<code>*</code></label>
                             <select class="select2 validation" name="payment_method" data-name="Metode Pembayaran" required>
                                 <option value="">- Select -</option>
@@ -60,7 +49,7 @@
                                 <option value="Transfer">Transfer</option>
                             </select>
                         </div>
-                        <div class="form-group col-12 col-md-6 col-lg-6">
+                        <div class="form-group col-12 col-md-4 col-xs-12">
                             <label for="cash_id">{{ __('Kode Kas') }}<code>*</code></label>
                             <select class="select2 validation" name="cash_id" data-name="Kode Kas">
                                 <option value="">- Select -</option>
@@ -70,7 +59,6 @@
                             </select>
                         </div>
                     </div>
-
                     <h6 style="color: #6777ef">Data Customer</h6>
                     <br>
                     <div class="row">
@@ -179,9 +167,10 @@
                 value="{{$buyer->id}}">
             @endforeach
 
-            @foreach ($item as $el)
+            {{-- @foreach ($item as $el)
                 <input class="itemsData" type="hidden"
                 data-price="{{$el->sell - $el->discount}}"
+                data-profit="{{$el->buy}}"
                 @foreach ($el->stock as $el1)
                     @if (Auth::user()->employee->branch_id == $el1->branch_id)
                         data-stock="{{$el1->stock}}"
@@ -192,6 +181,15 @@
                 data-name="{{$el->name}}"
                 data-supplier="{{$el->supplier->name}}"
                 value="{{$el->id}}">
+            @endforeach --}}
+            @foreach ($stock as $el)
+                <input class="itemsData" type="hidden"
+                data-stock="{{$el->stock}}"
+                data-price="{{$el->item->sell - $el->item->discount}}"
+                data-profit="{{$el->item->buy}}"
+                data-name="{{$el->item->name}}"
+                data-supplier="{{$el->item->supplier->name}}"
+                value="{{$el->item->id}}">
             @endforeach
 
             <div class="table-responsive">

@@ -23,4 +23,9 @@ class Warranty extends Model
     {
         return $this->hasMany('App\Models\Sale');
     }
+
+    public function item()
+    {
+        return $this->belongsTo('App\Models\Item');
+    }
 }

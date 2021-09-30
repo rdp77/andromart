@@ -238,7 +238,7 @@ function addItem() {
         }else{
             var stocks = $(this).data('stock');
         }
-        dataItems += '<option data-index="'+(index+1)+'" data-supplier="'+$(this).data('supplier')+'" data-price="'+$(this).data('price')+'" data-stock="'+stocks+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
+        dataItems += '<option data-index="'+(index+1)+'" data-supplier="'+$(this).data('supplier')+'" data-price="'+$(this).data('price')+'" data-profit="'+$(this).data('profit')+'" data-stock="'+stocks+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
     });
 
     $('.dropHereItem').append(
@@ -254,36 +254,28 @@ function addItem() {
                 '</select>' +
                 '<input type="text" class="form-control supplier supplier_'+(index+1)+'" name="supplierDetail[]" data-index="'+(index+1)+'" readonly>'+
             '</td>'+
-            // '<td>'+
-            //     '<input type="text" class="form-control supplier supplier_'+(index+1)+'" name="supplierDetail[]" data-index="'+(index+1)+'" readonly>'+
-            // '</td>'+
-            // '<td>'+
-            //     '<input type="text" class="form-control cleaveNumeral priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
-            // '</td>'+
             '<td>' +
                 '<input type="text" class="form-control qtyDetail qtyDetail_' + (index + 1) + '" name="qtyDetail[]" data-index="' + (index + 1) + '" value="1" style="text-align: right">' +
                 '<input type="text" class="form-control stock stock_'+(index+1)+'" readonly name="stockDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
             '</td>'+
-            // '<td>'+
-            //     '<input type="text" class="form-control stock stock_'+(index+1)+'" readonly name="stockDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
-            // '</td>'+
             '<td>' +
                 '<input type="text" class="form-control cleaveNumeral priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
                 '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="0" style="text-align: right">'+
             '</td>'+
             '<td>'+
                 '<select class="select2 buyerDetail" name="buyerDetail[]">'+
-                    '<option value="-" data-index="'+(index+1)+'">- Select Buyer -</option>'+
+                    '<option value="" data-index="'+(index+1)+'">- Select Buyer -</option>'+
                     dataBuyer+
                 '</select>' +
                 '<input type="text" class="form-control name="salesDetail[]" value="Sales" readonly>'+
             '</td>'+
             '<td>'+
-                '<input type="number" class="form-control" name="profitSharingBuyer[]">'+
-                '<input type="number" class="form-control" name="profitSharingSales[]">'+
+                '<input type="number" class="form-control" name="profitSharingBuyer[]" value="0">'+
+                '<input type="number" class="form-control" name="profitSharingSales[]" value="0">'+
             '</td>'+
             '<td>'+
-                '<input type="text" class="form-control" name="descriptionDetail[]">'+
+                '<input type="text" class="form-control cleaveNumeral profitDetail profitDetail_'+(index+1)+'" name="profitDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right" hidden>'+
+                '<input type="text" class="form-control" name="descriptionDetail[]">' +
             '</td>'+
             '<td style="display:none">'+
                 '<select class="form-control typeDetail typeDetail_'+(index+1)+'" name="typeDetail[]">'+
@@ -324,6 +316,7 @@ $(document.body).on("change", ".itemsDetail", function () {
 
     if ($(this).val() == '-') {
         $('.priceDetail_' + index).val(0);
+        $('.profitDetail_' + index).val(0);
         $('.supplier_' + index).val(' ');
         $('.stock_' + index).val(0);
         $('.qtyDetail_' + index).val(0);
@@ -341,7 +334,9 @@ $(document.body).on("change", ".itemsDetail", function () {
             var itemQty = $('.qtyDetail_' + index).val().replace(/,/g, ''), asANumber = +itemQty;
         }
         $('.priceDetail_' + index).val(parseInt(itemPrice).toLocaleString('en-US'));
+        // $('.profitDetail_' + index).val(parseInt(itemProfit).toLocaleString('en-US'));
         var totalItemPrice = itemPrice * itemQty;
+        $('.profitDetail_' + index).val($(this).find(':selected').data('profit'));
         $('.stock_' + index).val($(this).find(':selected').data('stock'));
         $('.supplier_' + index).val($(this).find(':selected').data('supplier'));
         $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));

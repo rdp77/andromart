@@ -16,7 +16,7 @@
             <div class="form-group col-md-4 col-xs-12">
                 <label for="code">{{ __('Kode') }}<code>*</code></label>
                 <input id="code" type="text" class="form-control @error('code') is-invalid @enderror"
-                    name="code" value="{{ $area->code }}" required autocomplete="code">
+                    name="code" value="{{ $area->code }}" required>
                 @error('code')
                 <div class="invalid-feedback">
                     {{ $message }}
@@ -28,7 +28,7 @@
                     <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
                 </div>
                 <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                    value="{{ $area->name }}" required autofocus>
+                    value="{{ $area->name }}" required>
                 @error('name')
                 <div class="invalid-feedback">
                     {{ $message }}

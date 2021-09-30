@@ -16,7 +16,7 @@
             <div class="row">
                 <div class="form-group col-md-4 col-xs-12">
                     <label for="branch_id">{{ __('Cabang') }}<code>*</code></label>
-                    <select name="branch_id" id="branch_id" class="form-control select2" required autocomplete="branch_id">
+                    <select name="branch_id" id="branch_id" class="form-control select2" required>
                         <option value="{{ $customer->branch->id }}"> {{ $customer->branch->code }} - {{ $customer->branch->name }} </option>
                         @foreach ($branch as $branch)
                         <option value="{{ $branch->id }}"> {{ $branch->code }} - {{ $branch->name }} </option>
@@ -30,7 +30,7 @@
                         <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
                     </div>
                     <input id="name" type="text" value="{{ $customer->name }}" class="form-control @error('name') is-invalid @enderror" name="name"
-                        required autofocus>
+                        required>
                     @error('name')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -42,7 +42,7 @@
                         <label for="identity" class="control-label">{{ __('NIK') }}<code>*</code></label>
                     </div>
                     <input id="identity" type="text" value="{{ $customer->identity }}" class="form-control @error('identity') is-invalid @enderror" name="identity"
-                        required autofocus>
+                        required>
                     @error('identity')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -60,7 +60,7 @@
                           </div>
                         </div>
                         <input id="contact" type="text" class="form-control @error('contact') is-invalid @enderror"
-                            name="contact" value="{{ $customer->contact }}" required autocomplete="contact">
+                            name="contact" value="{{ $customer->contact }}" required>
                         @error('contact')
                         <div class="invalid-feedback">
                             {{ $message }}
@@ -71,7 +71,7 @@
                 <div class="form-group col-md-6 col-xs-12">
                     <label for="address">{{ __('Alamat') }}<code>*</code></label>
                     <input id="address" type="text" class="form-control @error('address') is-invalid @enderror"
-                        name="address" value="{{ $customer->address }}" required autocomplete="address">
+                        name="address" value="{{ $customer->address }}" required>
                     @error('address')
                     <div class="invalid-feedback">
                         {{ $message }}

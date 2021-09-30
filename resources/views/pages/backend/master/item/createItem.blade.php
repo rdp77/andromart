@@ -15,7 +15,7 @@
             <div class="row">
                 <div class="form-group col-12 col-md-4 col-lg-4">
                     <label for="type">{{ __('Kategori') }}<code>*</code></label>
-                    <select class="select2 type" name="type" onchange="category()">
+                    <select class="select2 type" name="type" onchange="category()" required>
                         <option value="">- Select -</option>
                         @foreach ($category as $element)
                             <option value="{{$element->id}}">{{$element->name}}</option>
@@ -24,18 +24,25 @@
                 </div>
                 <div class="form-group col-12 col-md-4 col-lg-4">
                     <label for="brand">{{ __('Merk') }}<code>*</code></label>
-                    <select class="select2 brand" name="brand">
+                    <select class="select2 brand" name="brand" required>
                         <option value="">- Select -</option>
                     </select>
                 </div>
-
                 @foreach ($brand as $el)
                     <input class="brandData" type="hidden"
                         data-category="{{$el->category_id}}"
                         data-name="{{$el->name}}"
                         value="{{$el->id}}">
                 @endforeach
-
+                <div class="form-group col-12 col-md-4 col-lg-4">
+                    <label for="unit_id">{{ __('Satuan') }}<code>*</code></label>
+                    <select class="select2" name="unit_id" required>
+                        <option value="">- Select -</option>
+                        @foreach ($unit as $unit)
+                            <option value="{{$unit->id}}">{{$unit->code}} - {{$unit->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-4 col-xs-12">
@@ -43,7 +50,7 @@
                         <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
                     </div>
                     <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                        value="{{ old('name') }}" required autofocus>
+                        value="{{ old('name') }}" required>
                     @error('name')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -68,9 +75,18 @@
                     </div>
                     @enderror
                 </div>
+                <div class="form-group col-12 col-md-4 col-lg-4">
+                    <label for="warranty_id">{{ __('Garansi') }}<code>*</code></label>
+                    <select class="select2" name="warranty_id" required>
+                        <option value="">- Select -</option>
+                        @foreach ($warranty as $warranty)
+                            <option value="{{$warranty->id}}">{{$warranty->periode}} {{$warranty->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-2 col-xs-12">
+                <div class="form-group col-md-3 col-xs-12">
                     <label for="supplier_id">{{ __('Supplier') }}<code>*</code></label>
                     <select name="supplier_id" id="supplier_id" class="form-control select2" required>
                         <option value=""> - Select - </option>
@@ -84,7 +100,7 @@
                     </div>
                     @enderror
                 </div>
-                <div class="form-group col-md-2">
+                <div class="form-group col-md-4">
                     <label for="branch_id">{{ __('Cabang') }}<code>*</code></label>
                     <div class="selectgroup selectgroup-pills">
                         @foreach($branch as $branch)
@@ -98,7 +114,7 @@
                 <div class="form-group col-md-4 col-xs-12">
                     <label for="description">{{ __('Keterangan') }}</label>
                     <input id="description" type="text" class="form-control @error('description') is-invalid @enderror"
-                        name="description" value="{{ old('description') }}" autocomplete="description">
+                        name="description" value="{{ old('description') }}">
                     @error('description')
                     <div class="invalid-feedback">
                         {{ $message }}
@@ -115,7 +131,7 @@
             </div>
             <div class="row">
                 <div class="form-group col-12 col-md-12 col-lg-12">
-                    <label for="image">{{ __('Ambil Foto') }}<code>*</code></label>
+                    <label for="image">{{ __('Ambil Foto') }}</label>
                     <div id="my_camera"></div>
                     <br/>
                     <div class="row">
