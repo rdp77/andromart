@@ -21,6 +21,7 @@ class ServiceEquipment extends Model
         'name' ,
         'service_id' ,
         'status' ,
+        'description' ,
         'created_by',
         'updated_by',
         'created_at' ,

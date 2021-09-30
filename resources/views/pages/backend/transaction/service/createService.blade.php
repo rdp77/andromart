@@ -29,8 +29,8 @@
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="warranty">{{ __('Garansi') }}<code>*</code></label>
-                            <select class="select2 validation" name="warranty" data-name="Teknisi">
-                                <option value="">- Select -</option>
+                            <select class="select2" name="warranty">
+                                <option value="null">- Select -</option>
                                 @foreach ($warranty as $element)
                                     <option value="{{$element->id}}">{{$element->periode}} {{$element->name}}</option>
                                 @endforeach
@@ -53,6 +53,12 @@
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="estimateDate">{{ __('Estimasi') }}<code>*</code></label>
                             <input id="estimateDate" type="text" class="form-control datepicker" name="estimateDate">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-12 col-md-12 col-lg-12">
+                            <label for="estimateDay">{{ __('Estimasi Cek') }}<code>*</code></label>
+                            <input id="estimateDay" type="text" class="form-control" name="estimateDay">
                         </div>
                     </div>
                     {{-- <div class="row">
@@ -193,72 +199,87 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
-                                <input type="checkbox" name="laptopPcEquipment" class="custom-switch-input">
+                                <input type="checkbox" name="laptopPcEquipment" class="laptopPcEquipment custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Laptop / PC</span>
                             </label>
+                            <div class="laptopPcEquipmentDescUsed" style="display: none"><hr>
+                                <input id="laptopPcEquipmentDesc" type="text" class="form-control" name="laptopPcEquipmentDesc">
+                            </div>    
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
-                                <input type="checkbox" name="chargerEquipment" class="custom-switch-input">
+                                <input type="checkbox" name="chargerEquipment" class="chargerEquipment custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Charger</span>
                             </label>
+                            <div class="chargerEquipmentDescUsed" style="display: none"><hr>
+                                <input id="chargerEquipmentDesc" type="text" class="form-control" name="chargerEquipmentDesc">
+                            </div>  
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
-                                <input type="checkbox" name="bateraiEquipment" class="custom-switch-input">
+                                <input type="checkbox" name="bateraiEquipment" class="bateraiEquipment custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Baterai</span>
                             </label>
+                            <div class="bateraiEquipmentDescUsed" style="display: none"><hr>
+                                <input id="bateraiEquipmentDesc" type="text" class="form-control" name="bateraiEquipmentDesc">
+                            </div> 
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
-                                <input type="checkbox" name="hardiskSsdEquipment" class="custom-switch-input">
+                                <input type="checkbox" name="hardiskSsdEquipment" class="hardiskSsdEquipment custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Hardisk / SSD</span>
                             </label>
+                            <div class="hardiskSsdEquipmentDescUsed" style="display: none"><hr>
+                                <input id="hardiskSsdEquipmentDesc" type="text" class="form-control" name="hardiskSsdEquipmentDesc">
+                            </div> 
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
-                                <input type="checkbox" name="RamEquipment" class="custom-switch-input">
+                                <input type="checkbox" name="RamEquipment" class="RamEquipment custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">RAM</span>
                             </label>
+                            <div class="RamEquipmentDescUsed" style="display: none"><hr>
+                                <input id="RamEquipmentDesc" type="text" class="form-control" name="RamEquipmentDesc">
+                            </div>
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
-                                <input type="checkbox" name="HandphoneEquipment" class="custom-switch-input">
+                                <input type="checkbox" name="HandphoneEquipment" class="HandphoneEquipment custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Handphone</span>
                             </label>
+                            <div class="HandphoneEquipmentDescUsed" style="display: none"><hr>
+                                <input id="HandphoneEquipmentDesc" type="text" class="form-control" name="HandphoneEquipmentDesc">
+                            </div>
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
-                                <input type="checkbox" name="printerEquipment" class="custom-switch-input">
+                                <input type="checkbox" name="printerEquipment" class="printerEquipment custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Printer</span>
                             </label>
+                            <div class="printerEquipmentDescUsed" style="display: none"><hr>
+                                <input id="printerEquipmentDesc" type="text" class="form-control" name="printerEquipmentDesc">
+                            </div>
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
-                                <input type="checkbox" name="tasLaptopEquipment" class="custom-switch-input">
+                                <input type="checkbox" name="tasLaptopEquipment" class="tasLaptopEquipment custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Tas Laptop</span>
                             </label>
+                            <div class="tasLaptopEquipmentDescUsed" style="display: none"><hr>
+                                <input id="tasLaptopEquipmentDesc" type="text" class="form-control" name="tasLaptopEquipmentDesc">
+                            </div>
                         </div>
                     </div>
-                    {{-- <div class="row">
-                        <div class="form-group col-12 col-md-4 col-lg-4">
-                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
-                                <input type="checkbox" name="lainLainEquipment" class="custom-switch-input">
-                                <span class="custom-switch-indicator"></span>
-                                <span class="custom-switch-description">Lain Lain</span>
-                            </label>
-                        </div>
-                    </div> --}}
                 </div>
             </div>
         </div>
@@ -341,7 +362,7 @@
             </div>
             <div class="card">
                 <div class="card-header">
-                    <h4>Kelengkapan & Kondisi</h4>
+                    <h4>Kondisi</h4>
 
                 </div>
                 <div class="card-body">

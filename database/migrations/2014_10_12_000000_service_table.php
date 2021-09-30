@@ -26,6 +26,7 @@ class ServiceTable extends Migration
             $table->String('customer_phone')->nullable();
             $table->date('date');
             $table->date('estimate_date');
+            $table->String('estimate_day')->nullable();
             $table->String('brand')->nullable();
             $table->String('series')->nullable();
             $table->integer('type')->nullable();
@@ -50,7 +51,7 @@ class ServiceTable extends Migration
             $table->integer('technician_id');
             $table->integer('technician_replacement_id')->nullable();
             $table->string('description')->nullable();
-            $table->string('warranty_id');
+            $table->string('warranty_id')->nullable();
             $table->string('verification_price');
             $table->double('total_loss');
             $table->double('total_loss_technician_1');

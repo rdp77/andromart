@@ -245,8 +245,8 @@ class ServiceController extends Controller
         $employee = Employee::get();
         // $items    = Item::where('name','!=','Jasa Service')->get();
         $item     = Item::with('stock')->where('name','!=','Jasa Service')->get();
-        $brand    = Brand::get();
-        $type     = Type::get();
+        $brand    = Brand::orderBy('name', 'ASC')->get();
+        $type     = Type::orderBy('name', 'ASC')->get();
         $category = Category::get();
         $warranty = Warranty::get();
         return view('pages.backend.transaction.service.createService',compact('employee','code','item','brand','type','warranty','category'));
@@ -370,7 +370,7 @@ class ServiceController extends Controller
                 ]);
                 if($req->typeDetail[$i] != 'Jasa'){
                     $checkStock[$i] = Stock::where('item_id',$req->itemsDetail[$i])
-                                ->where('branch_id',Auth::user()->id)
+                                ->where('branch_id',$getEmployee->branch_id)
                                 ->where('id','!=',1)
                                 ->get();
                     if($checkStock[$i][0]->stock < $req->qtyDetail[$i]){
@@ -459,58 +459,74 @@ class ServiceController extends Controller
             if($req->laptopPcEquipment == 'on'){
                 $dataEquipment[0] = 'Y';
                 $dataEquipmentName[0] = 'Laptop / PC';
+                $dataEquipmentDesc[0] = $req->laptopPcEquipmentDesc;
             }else{
                 $dataEquipment[0] = 'N';
                 $dataEquipmentName[0] = 'Laptop / PC';
+                $dataEquipmentDesc[0] = $req->laptopPcEquipmentDesc;
             }
             if($req->chargerEquipment == 'on'){
                 $dataEquipment[1] = 'Y';
                 $dataEquipmentName[1] = 'Charger';
+                $dataEquipmentDesc[1] = $req->chargerEquipmentDesc;
             }else{
                 $dataEquipment[1] = 'N';
                 $dataEquipmentName[1] = 'Charger';
+                $dataEquipmentDesc[1] = $req->chargerEquipmentDesc;
             }
             if($req->bateraiEquipment == 'on'){
                 $dataEquipment[2] = 'Y';
                 $dataEquipmentName[2] = 'Baterai';
+                $dataEquipmentDesc[2] = $req->bateraiEquipmentDesc;
             }else{
                 $dataEquipment[2] = 'N';
                 $dataEquipmentName[2] = 'Baterai';
+                $dataEquipmentDesc[2] = $req->bateraiEquipmentDesc;
             }
             if($req->hardiskSsdEquipment == 'on'){
                 $dataEquipment[3] = 'Y';
                 $dataEquipmentName[3] = 'Hardisk / SSD';
+                $dataEquipmentDesc[3] = $req->hardiskSsdEquipmentDesc;
             }else{
                 $dataEquipment[3] = 'N';
                 $dataEquipmentName[3] = 'Hardisk / SSD';
+                $dataEquipmentDesc[3] = $req->hardiskSsdEquipmentDesc;
             }
             if($req->RamEquipment == 'on'){
                 $dataEquipment[4] = 'Y';
                 $dataEquipmentName[4] = 'Ram';
+                $dataEquipmentDesc[4] = $req->RamEquipmentDesc;
             }else{
                 $dataEquipment[4] = 'N';
                 $dataEquipmentName[4] = 'Ram';
+                $dataEquipmentDesc[4] = $req->RamEquipmentDesc;
             }
             if($req->HandphoneEquipment == 'on'){
                 $dataEquipment[5] = 'Y';
                 $dataEquipmentName[5] = 'Handphone';
+                $dataEquipmentDesc[5] = $req->HandphoneEquipmentDesc;
             }else{
                 $dataEquipment[5] = 'N';
                 $dataEquipmentName[5] = 'Handphone';
+                $dataEquipmentDesc[5] = $req->HandphoneEquipmentDesc;
             }
             if($req->printerEquipment == 'on'){
                 $dataEquipment[6] = 'Y';
                 $dataEquipmentName[6] = 'Printer';
+                $dataEquipmentDesc[6] = $req->printerEquipmentDesc;
             }else{
                 $dataEquipment[6] = 'N';
                 $dataEquipmentName[6] = 'Printer';
+                $dataEquipmentDesc[6] = $req->printerEquipmentDesc;
             }
             if($req->tasLaptopEquipment == 'on'){
                 $dataEquipment[7] = 'Y';
                 $dataEquipmentName[7] = 'Tas Laptop';
+                $dataEquipmentDesc[7] = $req->tasLaptopEquipmentDesc;
             }else{
                 $dataEquipment[7] = 'N';
                 $dataEquipmentName[7] = 'Tas Laptop';
+                $dataEquipmentDesc[7] = $req->tasLaptopEquipmentDesc;
             }
             // return [$dataEquipment,$dataEquipmentName];
             for ($i=0; $i <count($dataEquipment) ; $i++) { 
@@ -518,6 +534,7 @@ class ServiceController extends Controller
                     'service_id'=>$id,
                     'name'=>$dataEquipmentName[$i],
                     'status'=>$dataEquipment[$i],
+                    'description'=>$dataEquipmentDesc[$i],
                 ]);
             }
             
@@ -797,7 +814,7 @@ class ServiceController extends Controller
                             $desc[$i] = '(Update Service) Pengeluaran Barang Loss Pada Service '.$req->code;
                         }
                         Stock::where('item_id',$req->itemsDetail[$i])
-                        ->where('branch_id',Auth::user()->id)->update([
+                        ->where('branch_id',$getEmployee->branch_id)->update([
                             'stock'      =>$checkStock[$i][0]->stock-$req->qtyDetail[$i],
                         ]);
                         StockMutation::create([
