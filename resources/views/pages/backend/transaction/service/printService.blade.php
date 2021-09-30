@@ -98,7 +98,7 @@
               <tbody>
                 <tr>
                 </tr>
-                  <th class="text-left" colspan="2" style="font-size: 25px">Kelengkapan</th>
+                  <th class="text-left" colspan="2" style="font-size: 25px">Kondisi</th>
                 </tr>
                 @foreach ($service->ServiceCondition as $el)
                     <tr>
@@ -120,7 +120,7 @@
               <tbody>
                 <tr>
                 </tr>
-                  <th class="text-left" colspan="2" style="font-size: 25px">Kondisi</th>
+                  <th class="text-left" colspan="2" style="font-size: 25px">Kelengkapan</th>
                 </tr>
                 @foreach ($service->ServiceEquipment as $el)
                     <tr>
