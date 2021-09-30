@@ -38,6 +38,8 @@ class DatabaseSeeder extends Seeder
             NotesSeeder::class,
             PurchasingSeeder::class,
             PurchasingDetailSeeder::class,
+            MenuSeeder::class,
+            SubMenuSeeder::class,
         ]);
     }
 }
