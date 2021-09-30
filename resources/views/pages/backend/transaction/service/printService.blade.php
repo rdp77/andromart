@@ -10,17 +10,7 @@
     padding: 5px !important;
   }
 </style>
-<style>
-  hr { 
-    display: block;
-    /* margin-top: 0.5em; */
-    /* margin-bottom: 0.5em; */
-    margin-left: auto;
-    margin-right: auto;
-    border-style: inset;
-    border-width: 1px;
-  } 
-  </style>
+
 <div class="invoice">
   <div class="invoice-print">
     <div class="row">
@@ -50,26 +40,31 @@
             </address>
           </div>
         </div>
+        <div style="border: 1px solid gray"></div>
         <div class="row">
           <div class="col-md-6">
-              <hr>
-              <address>
-              {{-- <br> --}}
-              <strong><h2>Status Bayar</h2></strong>
-              <strong><h3 style="color:#28a745">{{$service->payment_status}} </h3></strong>
+
+          <address>
+              <br>
+              <p><strong><o style="font-size: 36px">Bayar :</strong></o>  @if ($service->payment_status == null)
+                <o style="font-size: 36px"> Belum Bayar</o>
+                @else
+                {{$service->payment_status}}
+              @endif</p>
+              {{-- <strong><h3 style="color:#28a745"> </h3></strong>s --}}
             </address>
           </div>
           <div class="col-md-6 text-md-right">
             <address>
               <br>
-              <strong><h2>Tanggal</h2></strong>
-              <p style="font-size: 30px">-</p>
+              <strong><p style="font-size: 30px">Tanggal : {{date('d F Y',strtotime($service->date))}}</p></strong>
             </address>
           </div>
         </div>
       </div>
     </div>
-    <hr>
+    <div style="border: 1px solid gray"></div>
+
     
     <div class="row mt-4">
       <div class="col-md-12">
@@ -104,7 +99,7 @@
             </tbody>
           </table>
         </div>
-        <hr>
+        <div style="border: 1px solid gray"></div>
         <div class="row mt-4">
           <div class="col-lg-6 col-md-6 col-sm-6">
             <table class="table table-striped table-hover table-md">
@@ -128,7 +123,7 @@
               </tbody>
             </table>
           </div>
-          <div class="col-lg-6 col-md-6 col-sm-6">
+          <div class="col-lg-6 col-md-6 col-sm-6" style="border-left: 2px solid gray">
             <table class="table table-striped table-hover table-md">
               <tbody>
                 <tr>
