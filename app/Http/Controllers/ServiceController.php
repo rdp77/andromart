@@ -242,13 +242,13 @@ class ServiceController extends Controller
     public function create()
     {
         $code     = $this->code('SRV-');
-        $employee = Employee::get();
+        $employee = Employee::orderBy('name', 'ASC')->get();
         // $items    = Item::where('name','!=','Jasa Service')->get();
-        $item     = Item::with('stock')->where('name','!=','Jasa Service')->get();
+        $item     = Item::with('stock')->where('name','!=','Jasa Service')->orderBy('name', 'ASC')->get();
         $brand    = Brand::orderBy('name', 'ASC')->get();
         $type     = Type::orderBy('name', 'ASC')->get();
-        $category = Category::get();
-        $warranty = Warranty::get();
+        $category = Category::orderBy('name', 'ASC')->get();
+        $warranty = Warranty::orderBy('name', 'ASC')->get();
         return view('pages.backend.transaction.service.createService',compact('employee','code','item','brand','type','warranty','category'));
     }
 
@@ -326,7 +326,7 @@ class ServiceController extends Controller
                 'customer_phone'=>$req->customerPhone,
                 'date'=>date('Y-m-d'),
                 'estimate_date'=>$estimateDate,
-                'estimate_day'=>$estimateDay,
+                'estimate_day'=>$req->estimateDay,
                 'brand'=>$req->brand,
                 'series'=>$req->series,
                 'type'=>$req->type,
