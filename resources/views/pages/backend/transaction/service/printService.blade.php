@@ -10,6 +10,17 @@
     padding: 5px !important;
   }
 </style>
+<style>
+  hr { 
+    display: block;
+    /* margin-top: 0.5em; */
+    /* margin-bottom: 0.5em; */
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+  } 
+  </style>
 <div class="invoice">
   <div class="invoice-print">
     <div class="row">
@@ -35,14 +46,15 @@
               <strong><p style="font-size: 38px">Customer</p></strong>
               <p style="font-size: 30px">{{$service->customer_name}}</p>
               <p style="font-size: 30px">{{$service->customer_phone}}</p>
-              <p style="font-size: 30px">{{$service->customer_address}}</p>
+              <p style="font-size: 30px;margin: 10px auto;">{{$service->customer_address}}</p>
             </address>
           </div>
         </div>
         <div class="row">
           <div class="col-md-6">
-            <address>
-              <br>
+              <hr>
+              <address>
+              {{-- <br> --}}
               <strong><h2>Status Bayar</h2></strong>
               <strong><h3 style="color:#28a745">{{$service->payment_status}} </h3></strong>
             </address>
@@ -57,6 +69,7 @@
         </div>
       </div>
     </div>
+    <hr>
     
     <div class="row mt-4">
       <div class="col-md-12">
@@ -91,7 +104,7 @@
             </tbody>
           </table>
         </div>
-
+        <hr>
         <div class="row mt-4">
           <div class="col-lg-6 col-md-6 col-sm-6">
             <table class="table table-striped table-hover table-md">
