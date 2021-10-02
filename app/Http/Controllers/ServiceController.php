@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\Type;
+use App\Models\Customer;
 use App\Models\Category;
 use App\Models\Stock;
 use App\Models\Brand;
@@ -245,12 +246,14 @@ class ServiceController extends Controller
         $code     = $this->code('SRV');
         $employee = Employee::orderBy('name', 'ASC')->get();
         // $items    = Item::where('name','!=','Jasa Service')->get();
-        $item     = Item::with('stock')->where('name','!=','Jasa Service')->orderBy('name', 'ASC')->get();
+        $item     = Item::with('stock','supplier')->where('name','!=','Jasa Service')->orderBy('name', 'ASC')->get();
+        // return $item;
         $brand    = Brand::orderBy('name', 'ASC')->get();
         $type     = Type::orderBy('name', 'ASC')->get();
         $category = Category::orderBy('name', 'ASC')->get();
         $warranty = Warranty::orderBy('name', 'ASC')->get();
-        return view('pages.backend.transaction.service.createService',compact('employee','code','item','brand','type','warranty','category'));
+        $customer = Customer::orderBy('name', 'ASC')->get();
+        return view('pages.backend.transaction.service.createService',compact('employee','code','item','brand','type','warranty','category','customer'));
     }
 
     public function store(Request $req)
@@ -420,6 +423,11 @@ class ServiceController extends Controller
             ]);
             ServiceCondition::create([
                 'service_id'=>$id,
+                'name'=>'WIFI',
+                'status'=>$req->wifiCondition,
+            ]);
+            ServiceCondition::create([
+                'service_id'=>$id,
                 'name'=>'Camera Depan',
                 'status'=>$req->cameraDepanCondition,
             ]);
@@ -430,13 +438,13 @@ class ServiceController extends Controller
             ]);
             ServiceCondition::create([
                 'service_id'=>$id,
-                'name'=>'Buzzer',
-                'status'=>$req->buzzerCondition,
+                'name'=>'Speaker',
+                'status'=>$req->speakerCondition,
             ]);
             ServiceCondition::create([
                 'service_id'=>$id,
-                'name'=>'Charger',
-                'status'=>$req->chargerCondition,
+                'name'=>'Charging',
+                'status'=>$req->chargingCondition,
             ]);
             ServiceCondition::create([
                 'service_id'=>$id,

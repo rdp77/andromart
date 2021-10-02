@@ -150,6 +150,9 @@
                             <label for="series">{{ __('Member') }}<code>*</code></label>
                             <select class="select2" name="customerId">
                                 <option value="">- Select -</option>
+                                @foreach ($customer as $element)
+                                <option value="{{$element->id}}">{{$element->name}}</option>
+                                @endforeach 
                                 {{-- <option value="Deny">Deny</option>
                                 <option value="Rizal">Rizal</option>
                                 <option value="Alfian">Alfian</option> --}}
@@ -407,6 +410,26 @@
                         </div>
                     </div>
                     <div class="form-group">
+                        <label class="form-label">WIFI</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="wifiCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="wifiCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="wifiCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="form-label">Speaker</label>
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item">
@@ -427,20 +450,20 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Charger</label>
+                        <label class="form-label">Charging</label>
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item">
-                                <input type="radio" name="chargerCondition" value="Y"
+                                <input type="radio" name="chargingCondition" value="Y"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="chargerCondition" value="N"
+                                <input type="radio" name="chargingCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="chargerCondition" value="?" checked
+                                <input type="radio" name="chargingCondition" value="?" checked
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -527,20 +550,160 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="form-label">Buzzer</label>
+                        <label class="form-label">Speaker</label>
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item">
-                                <input type="radio" name="buzzerCondition" value="Y"
+                                <input type="radio" name="speakerCondition" value="Y"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="buzzerCondition" value="N"
+                                <input type="radio" name="speakerCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="buzzerCondition" value="?" checked
+                                <input type="radio" name="speakerCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Mic</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="micCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="micCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="micCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Touchpad</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="touchpadCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="touchpadCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="touchpadCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Keyboard</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="keyboardCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="keyboardCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="keyboardCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tombol Tombol</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="tombolCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="tombolCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="tombolCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Sinyal</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="sinyalCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="sinyalCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="sinyalCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Mic</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="usbCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="usbCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="usbCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Soket Audio</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="soketAudioCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="soketAudioCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="soketAudioCondition" value="?" checked
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
