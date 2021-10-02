@@ -298,7 +298,7 @@
               <tbody>
                 <tr>
                 </tr>
-                  <th class="text-center" colspan="8" style="font-size: 25px;padding:0px !important">Kelengkapan & Unit</th>
+                  <th class="text-center" colspan="8" style="font-size: 25px;padding:0px !important">Kelengkapan Unit</th>
                 </tr>
                 <tr >
                   @foreach ($service->ServiceEquipment as $i => $el)

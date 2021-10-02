@@ -196,7 +196,7 @@
             </div>
             <div class="card">
                 <div class="card-header">
-                    <h4>Kelengkapan</h4>
+                    <h4>Kelengkapan Unit</h4>
                 </div>
                 <div class="card-body">
                     <div class="row">
@@ -369,7 +369,7 @@
             </div>
             <div class="card">
                 <div class="card-header">
-                    <h4>Kondisi</h4>
+                    <h4>Kondisi Serah Terima Unit</h4>
 
                 </div>
                 <div class="card-body">
