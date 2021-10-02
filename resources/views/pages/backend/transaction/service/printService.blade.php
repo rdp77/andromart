@@ -28,7 +28,7 @@
           {{-- <h2>Invoice</h2> --}}
           <h2><img alt="Porto" height="150" src="{{ asset('assetsfrontend/img/andromart.png') }}" style="margin-top: 10px;"></h2>
           <div style="width: 400px">
-            <p style="font-size: 20px">{{Auth::user()->employee->branch->address}} <br>{{Auth::user()->employee->branch->phone}} </p>
+            <p style="font-size: 15px">{{Auth::user()->employee->branch->address}} <b>{{Auth::user()->employee->branch->phone}}</b> </p>
           </div>
           <div class="invoice-number"><h3>Job Order :</h3><h1 style="font-size: 50px;color:red" >{{$service->code}}</h1>
             <br>  
@@ -92,21 +92,21 @@
       <div class="col-md-12">
         {{-- <div class="section-title"><h3>Service Detail</h3></div> --}}
         <div>
-          <table class="table table-striped  table-md">
+          <table class="table table-sm">
             <tbody>
               <tr>
               </tr>
-                <th class="text-center" colspan="2" style="font-weight:700;font-size: 25px;" width="40%">Service Detail</th>
-                <th class="text-center" style="font-size: 25px">Keluhan</th>
-                <th class="text-center" style="font-size: 25px">Kesepakatan Bersama</th>
+                <th class="text-center" colspan="2" style="font-weight:700;font-size: 25px;padding:0px !important" width="40%">Service Detail</th>
+                <th class="text-center" style="font-size: 25px;padding:0px !important">Keluhan</th>
+                <th class="text-center" style="font-size: 25px;padding:0px !important">Kesepakatan Bersama</th>
               </tr>
               <tr>
-                <td style="font-size: 20px">Tipe</td>
-                <td style="border-right: 1px solid #1d98d4" style="font-size: 20px">{{$service->Brand->Category->name}}</td>
+                <td style="font-size: 17px">{{$service->Brand->Category->name}}</td>
+                <td style="border-right: 1px solid #1d98d4" style="font-size: 17px">{{$service->Brand->name}} {{$service->Type->name}}  </td>
                 <td style="border-right: 1px solid #1d98d4" class="text-center" rowspan="4" style="font-size: 17px">{{$service->complaint}}</td>
                 <td  class="text-center" rowspan="4" style="font-size: 17px">{{$service->description}}</td>
               </tr>
-              <tr>
+              {{-- <tr>
                 <td style="font-size: 20px">Merk</td>
                 <td style="border-right: 1px solid #1d98d4" style="font-size: 20px">{{$service->Brand->name}}</td>
               </tr>
@@ -117,27 +117,27 @@
               <tr>
                 <td  style="font-size: 20px">Estimasi Analisa</td>
                 <td style="border-right: 1px solid #1d98d4" style="font-size: 20px">{{$service->estimate_day}}</td>
-              </tr>
+              </tr> --}}
             </tbody>
           </table>
         </div>
         {{-- <div style="border: 1px solid gray"></div> --}}
         <div class="row mt-4" style="margin-top: 0px !important">
-          <div class="col-lg-6 col-md-6 col-sm-6">
-            <table class="table table-striped  table-md">
+          <div class="col-lg-12 col-md-12 col-sm-12">
+            <table class="table table-sm">
               <tbody>
                 <tr>
+                </tr >
+                  <th class="text-center" colspan="8" style="font-size: 25px;padding:0px !important">Kondisi Serah Terima Unit</th>
                 </tr>
-                  <th class="text-center" colspan="4" style="font-size: 25px;padding-top:0px !important">Kondisi Serah Terima Unit</th>
-                </tr>
-                <tr>
+                <tr >
                     <td style="font-size: 18px">{{$service->ServiceCondition[0]->name}}</td>
                     @if ($service->ServiceCondition[0]->status == 'N')
-                    <td style="border-right: 1px solid #1d98d4"><i class="fa fa-times"></i></td>
+                    <td><i class="fa fa-times"></i></td>
                     @elseif ($service->ServiceCondition[0]->status == 'Y')
-                      <td style="border-right: 1px solid #1d98d4"><i class="fa fa-check"></i></td>
+                      <td><i class="fa fa-check"></i></td>
                     @elseif ($service->ServiceCondition[0]->status == '?')
-                      <td style="border-right: 1px solid #1d98d4"><i class="fa fa-question"></i></td>
+                      <td><i class="fa fa-question"></i></td>
                     @endif
                     <td style="font-size: 18px">{{$service->ServiceCondition[1]->name}}</td>
                     @if ($service->ServiceCondition[1]->status == 'N')
@@ -147,33 +147,31 @@
                     @elseif ($service->ServiceCondition[1]->status == '?')
                       <td><i class="fa fa-question"></i></td>
                     @endif
-                </tr>
-                <tr>
                   <td style="font-size: 18px">{{$service->ServiceCondition[2]->name}}</td>
                   @if ($service->ServiceCondition[2]->status == 'N')
-                  <td style="border-right: 1px solid #1d98d4"><i class="fa fa-times"></i></td>
+                  <td><i class="fa fa-times"></i></td>
                   @elseif ($service->ServiceCondition[2]->status == 'Y')
-                    <td style="border-right: 1px solid #1d98d4"><i class="fa fa-check"></i></td>
+                    <td><i class="fa fa-check"></i></td>
                   @elseif ($service->ServiceCondition[2]->status == '?')
-                    <td style="border-right: 1px solid #1d98d4"><i class="fa fa-question"></i></td>
+                    <td><i class="fa fa-question"></i></td>
                   @endif
                   <td style="font-size: 18px">{{$service->ServiceCondition[3]->name}}</td>
                   @if ($service->ServiceCondition[3]->status == 'N')
-                  <td><i class="fa fa-times"></i></td>
+                  <td ><i class="fa fa-times"></i></td>
                   @elseif ($service->ServiceCondition[3]->status == 'Y')
-                    <td><i class="fa fa-check"></i></td>
+                    <td ><i class="fa fa-check"></i></td>
                   @elseif ($service->ServiceCondition[3]->status == '?')
-                    <td><i class="fa fa-question"></i></td>
+                    <td ><i class="fa fa-question"></i></td>
                   @endif
                 </tr>
                 <tr >
                   <td style="font-size: 18px">{{$service->ServiceCondition[4]->name}}</td>
                   @if ($service->ServiceCondition[4]->status == 'N')
-                  <td style="border-right: 1px solid #1d98d4"><i class="fa fa-times"></i></td>
+                  <td><i class="fa fa-times"></i></td>
                   @elseif ($service->ServiceCondition[4]->status == 'Y')
-                    <td style="border-right: 1px solid #1d98d4"><i class="fa fa-check"></i></td>
+                    <td><i class="fa fa-check"></i></td>
                   @elseif ($service->ServiceCondition[4]->status == '?')
-                    <td style="border-right: 1px solid #1d98d4"><i class="fa fa-question"></i></td>
+                    <td><i class="fa fa-question"></i></td>
                   @endif
                   <td style="font-size: 18px">{{$service->ServiceCondition[5]->name}}</td>
                   @if ($service->ServiceCondition[5]->status == 'N')
@@ -183,15 +181,13 @@
                   @elseif ($service->ServiceCondition[5]->status == '?')
                     <td><i class="fa fa-question"></i></td>
                   @endif
-                </tr>
-                <tr >
                   <td style="font-size: 18px">{{$service->ServiceCondition[6]->name}}</td>
                   @if ($service->ServiceCondition[6]->status == 'N')
-                  <td style="border-right: 1px solid #1d98d4"><i class="fa fa-times"></i></td>
+                  <td><i class="fa fa-times"></i></td>
                   @elseif ($service->ServiceCondition[6]->status == 'Y')
-                    <td style="border-right: 1px solid #1d98d4"><i class="fa fa-check"></i></td>
+                    <td><i class="fa fa-check"></i></td>
                   @elseif ($service->ServiceCondition[6]->status == '?')
-                    <td style="border-right: 1px solid #1d98d4"><i class="fa fa-question"></i></td>
+                    <td><i class="fa fa-question"></i></td>
                   @endif
                   <td style="font-size: 18px">{{$service->ServiceCondition[7]->name}}</td>
                   @if ($service->ServiceCondition[7]->status == 'N')
@@ -211,34 +207,92 @@
                   @elseif ($service->ServiceCondition[8]->status == '?')
                     <td><i class="fa fa-question"></i></td>
                   @endif
+                  <td style="font-size: 18px">{{$service->ServiceCondition[9]->name}}</td>
+                  @if ($service->ServiceCondition[9]->status == 'N')
+                  <td><i class="fa fa-times"></i></td>
+                  @elseif ($service->ServiceCondition[9]->status == 'Y')
+                    <td><i class="fa fa-check"></i></td>
+                  @elseif ($service->ServiceCondition[9]->status == '?')
+                    <td><i class="fa fa-question"></i></td>
+                  @endif
+                  <td style="font-size: 18px">{{$service->ServiceCondition[10]->name}}</td>
+                  @if ($service->ServiceCondition[10]->status == 'N')
+                  <td><i class="fa fa-times"></i></td>
+                  @elseif ($service->ServiceCondition[10]->status == 'Y')
+                    <td><i class="fa fa-check"></i></td>
+                  @elseif ($service->ServiceCondition[10]->status == '?')
+                    <td><i class="fa fa-question"></i></td>
+                  @endif
+                  <td style="font-size: 18px">{{$service->ServiceCondition[11]->name}}</td>
+                  @if ($service->ServiceCondition[11]->status == 'N')
+                  <td><i class="fa fa-times"></i></td>
+                  @elseif ($service->ServiceCondition[11]->status == 'Y')
+                    <td><i class="fa fa-check"></i></td>
+                  @elseif ($service->ServiceCondition[11]->status == '?')
+                    <td><i class="fa fa-question"></i></td>
+                  @endif
+                </tr>
+                <tr>
+                  <td style="font-size: 18px">{{$service->ServiceCondition[12]->name}}</td>
+                  @if ($service->ServiceCondition[12]->status == 'N')
+                  <td ><i class="fa fa-times"></i></td>
+                  @elseif ($service->ServiceCondition[12]->status == 'Y')
+                    <td ><i class="fa fa-check"></i></td>
+                  @elseif ($service->ServiceCondition[12]->status == '?')
+                    <td ><i class="fa fa-question"></i></td>
+                  @endif
+                  <td style="font-size: 18px">{{$service->ServiceCondition[13]->name}}</td>
+                  @if ($service->ServiceCondition[13]->status == 'N')
+                  <td><i class="fa fa-times"></i></td>
+                  @elseif ($service->ServiceCondition[13]->status == 'Y')
+                    <td><i class="fa fa-check"></i></td>
+                  @elseif ($service->ServiceCondition[13]->status == '?')
+                    <td><i class="fa fa-question"></i></td>
+                  @endif
+                  <td style="font-size: 18px">{{$service->ServiceCondition[14]->name}}</td>
+                  @if ($service->ServiceCondition[14]->status == 'N')
+                  <td><i class="fa fa-times"></i></td>
+                  @elseif ($service->ServiceCondition[14]->status == 'Y')
+                    <td><i class="fa fa-check"></i></td>
+                  @elseif ($service->ServiceCondition[14]->status == '?')
+                    <td><i class="fa fa-question"></i></td>
+                  @endif
                 </tr>
               </tbody>
             </table>
           </div>
-          <div class="col-lg-6 col-md-6 col-sm-6" 
+          <div class="col-lg-12 col-md-12 col-sm-12" 
           {{-- style="border-left: 2px solid gray"  --}}
           >
-            <table class="table table-striped  table-md">
+            <table class="table table-sm">
               <tbody>
                 <tr>
                 </tr>
-                  <th class="text-center" colspan="2" style="font-size: 25px;padding-top:0px !important">Kelengkapan & Unit</th>
+                  <th class="text-center" colspan="8" style="font-size: 25px;padding:0px !important">Kelengkapan & Unit</th>
                 </tr>
-                @foreach ($service->ServiceEquipment as $el)
-                  @if ($el->description != null)
-                    <tr>
-                      <td style="font-size: 18px"><b>{{$el->name}}</b>  
-                       : {{$el->description}}
-                      </td>
-                      @if ($el->status == 'N')
-                        <td><i class="fa fa-times"></i></td>
-                      @elseif ($el->status == 'Y')
-                        <td><i class="fa fa-check"></i></td>
-                      @endif 
-                    </tr>
+                <tr>
+                  @foreach ($service->ServiceEquipment as $i => $el)
+                  @if ($i <= 4)
+                    @if ($el->status == 'Y')
+                        <td width="25%" style="font-size: 18px"><b>{{$el->name}}</b>  
+                        <br>{{$el->description}}
+                        </td>
+                    @endif
                   @endif
-                @endforeach
-              </tbody>
+                  @endforeach
+                </tr>
+                <tr>
+                  @foreach ($service->ServiceEquipment as $i => $el)
+                  @if ($i > 4)
+                    @if ($el->status == 'Y')
+                        <td width="25%" style="font-size: 18px"><b>{{$el->name}}</b>  
+                        <br>{{$el->description}}
+                        </td>
+                    @endif
+                  @endif
+                  @endforeach
+                </tr>
+            </tbody>
             </table>
           </div>
         </div>

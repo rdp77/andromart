@@ -466,6 +466,36 @@ class ServiceController extends Controller
                 'name'=>'Vibrator',
                 'status'=>$req->vibratorCondition,
             ]);
+            ServiceCondition::create([
+                'service_id'=>$id,
+                'name'=>'Soket Audio',
+                'status'=>$req->soketAudioCondition,
+            ]);
+            ServiceCondition::create([
+                'service_id'=>$id,
+                'name'=>'Usb',
+                'status'=>$req->usbCondition,
+            ]);
+            ServiceCondition::create([
+                'service_id'=>$id,
+                'name'=>'Sinyal',
+                'status'=>$req->sinyalCondition,
+            ]);
+            ServiceCondition::create([
+                'service_id'=>$id,
+                'name'=>'Tombol Tombol',
+                'status'=>$req->tombolCondition,
+            ]);
+            ServiceCondition::create([
+                'service_id'=>$id,
+                'name'=>'Keyboard',
+                'status'=>$req->keyboardCondition,
+            ]);
+            ServiceCondition::create([
+                'service_id'=>$id,
+                'name'=>'Touchpad',
+                'status'=>$req->touchpadCondition,
+            ]);
             $dataEquipment = [];
 
             if($req->laptopPcEquipment == 'on'){
