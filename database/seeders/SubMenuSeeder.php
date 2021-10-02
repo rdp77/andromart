@@ -19,27 +19,27 @@ class SubMenuSeeder extends Seeder
             [
                 'menu_id' => '2',
                 'name' => 'Service',
-                'url' => '/transaction/service/service'
+                'url' => route('service.index')
             ],
             [
                 'menu_id' => '2',
                 'name' => 'Update WO Service',
-                'url' => '/transaction/service/service-form-update-status'
+                'url' => route('service.serviceFormUpdateStatus')
             ],
             [
                 'menu_id' => '2',
                 'name' => 'Penjualan',
-                'url' => '/transaction/sale/sale'
+                'url' => route('sale.index')
             ],
             [
                 'menu_id' => '2',
                 'name' => 'Pembelian',
-                'url' => '/transaction/purchasing/purchase'
+                'url' => route('purchase.index')
             ],
             [
                 'menu_id' => '2',
                 'name' => 'Penerimaan',
-                'url' => '/transaction/purchasing/reception'
+                'url' => route('reception.index')
             ],
             [
                 'menu_id' => '2',
@@ -49,23 +49,23 @@ class SubMenuSeeder extends Seeder
             [
                 'menu_id' => '2',
                 'name' => 'Pengeluaran',
-                'url' => '/transaction/payment/payment'
+                'url' => route('payment.index')
             ],
             // Finance
             [
                 'menu_id' => '3',
                 'name' => 'Sharing Profit',
-                'url' => '/finance/sharing-profit/sharing-profit'
+                'url' => route('sharing-profit.index')
             ],
             [
                 'menu_id' => '3',
                 'name' => 'Pelunasan Service',
-                'url' => '/transaction/service/service-payment'
+                'url' => route('service-payment.index')
             ],
             [
                 'menu_id' => '3',
                 'name' => 'Barang Loss Trans',
-                'url' => '/finance/loss-items/loss-items'
+                'url' => route('loss-items.index')
             ],
             // Master Data
             [
