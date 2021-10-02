@@ -10,10 +10,16 @@
         background-color: #1d98d4 !important; 
         color: white !important; 
     } 
-}
+  }
+  @media print { 
+    .table th.thred { 
+        background-color: grey !important; 
+        color: white !important; 
+    } 
+  }
   
   .invoice-number{
-    margin-top: -250px !important;
+    margin-top: -230px !important;
   }
   .table.table-md td, .table.table-md th {
     padding: 5px !important;
@@ -31,8 +37,12 @@
             <p style="font-size: 15px">{{Auth::user()->employee->branch->address}} <b> Tlp : {{Auth::user()->employee->branch->phone}}</b> </p>
           </div>
           <div class="invoice-number"><h3>Job Order :</h3><h1 style="font-size: 50px;color:red" >{{$service->code}}</h1>
-            <p style="font-size: 19px;font-weight:lighter">Lacak Perkembangan Service Kamu di : <br> <b>www.andromartindonesia.com</b> <br> <b> AM care : 0851-5646-2356
-              <br>Konsultasi Service</p></b>
+            <br>
+            <p style="font-size: 19px;font-weight:lighter">Lacak Perkembangan Service Kamu di : <br> <b>www.andromartindonesia.com</b> 
+              {{-- <br> <b> AM care : 0851-5646-2356 --}}
+              {{-- <br>Konsultasi Service --}}
+            </p>
+          {{-- </b> --}}
           </div>
           
         </div>
@@ -315,7 +325,7 @@
                   @foreach ($service->ServiceEquipment as $i => $el)
                   @if ($i > 3)
                     @if ($el->status == 'Y')
-                        <td width="25%" @if ($i < 8) style="border-right: 1px solid #1d98d4;border-top: 1px solid #1d98d4;" @endif style="font-size: 18px"><b>{{$el->name}}</b>  
+                        <td width="25%" @if ($i > 3 && $i < 8) style="border-right: 1px solid #1d98d4;border-top: 1px solid #1d98d4;" @endif style="font-size: 18px"><b>{{$el->name}}</b>  
                         <br>{{$el->description}}
                         </td>
                     @endif
@@ -361,6 +371,15 @@
         <br>
         <div class="row">
           <div class="col-md-9 text-md-right">
+            <table class="table table-md" style="border: 1px solid grey">
+              <tr>
+                <th class="text-center thred" colspan="2" style="font-size: 20px"><b> HOT LINE </b></th>
+              </tr>
+              <tr>
+                <td class="text-right" style="font-size: 30px" width="50%"><b> AM CARE : </b></td>
+                <td class="text-left" style="font-size: 30px" width="50%"><b> 0851-5646-2356</b></td>
+              </tr>
+            </table>
           </div>
             <div class="col-md-3 text-md-right">
             <table class="table table-md" style="border: 1px solid #1d98d4">

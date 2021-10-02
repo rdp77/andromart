@@ -29,7 +29,7 @@
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="warranty">{{ __('Garansi') }}<code>*</code></label>
-                            <select class="select2 validation" name="warranty" data-name="Teknisi">
+                            <select class="select2" name="warranty">
                                 <option value="">- Select -</option>
                                 @foreach ($warranty as $element)
                                     <option @if ($service->warranty_id == $element->id) selected @endif value="{{$element->id}}">{{$element->periode}} {{$element->name}}</option>
@@ -124,16 +124,13 @@
                             <input id="complaint" value="{{$service->complaint}}" type="text" class="form-control validation" data-name="Komplain" name="complaint">
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="equipment">{{ __('Kelengkapan') }}<code>*</code></label>
-                            <input id="equipment" value="{{$service->equipment}}" type="text" class="form-control validation" data-name="Kelengkapan" name="equipment">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-12 col-md-5 col-lg-5">
                             <label for="noImei">{{ __('No Imei') }}<code>*</code></label>
                             <input id="noImei" value="{{$service->no_imei}}" type="text" class="form-control" name="noImei">
                         </div>
-                        <div class="form-group col-12 col-md-7 col-lg-7">
+                    </div>
+                    <div class="row">
+                        
+                        <div class="form-group col-12 col-md-12 col-lg-12">
                             <label for="description">{{ __('Keterangan') }}<code>*</code></label>
                             <input id="description" value="{{$service->description}}" type="text" class="form-control validation" data-name="Deskripsi" name="description">
                         </div>
@@ -148,8 +145,15 @@
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="series">{{ __('Member') }}<code>*</code></label>
-                            <select class="select2" name="customerId">
+                            <select class="select2 customerId" name="customerId" onchange="customerChange()">
                                 <option value="">- Select -</option>
+                                @foreach ($customer as $element)
+                                <option @if ($service->customer_id == $element->id) selected @endif value="{{$element->id}}" 
+                                    data-name="{{$element->name}}" 
+                                    data-address="{{$element->address}}"
+                                    data-phone="{{$element->contact}}"
+                                    >{{$element->name}}</option>
+                                @endforeach 
                                 {{-- <option value="Deny">Deny</option>
                                 <option value="Rizal">Rizal</option>
                                 <option value="Alfian">Alfian</option> --}}
@@ -199,42 +203,65 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
-                                <input type="checkbox" name="chargerEquipment" class="chargerEquipment custom-switch-input">
+                                <input type="checkbox" name="chargerEquipment" @if ($service->ServiceEquipment[0]->status == 'Y') checked @endif  class="chargerEquipment custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Charger</span>
                             </label>
-                            <div class="chargerEquipmentDescUsed" style="display: none"><hr>
-                                <input id="chargerEquipmentDesc" type="text" class="form-control" name="chargerEquipmentDesc">
+                            <div class="chargerEquipmentDescUsed" 
+                                @if ($service->ServiceEquipment[0]->status == 'Y') 
+                                    style="display: block"
+                                @else 
+                                    style="display: none"
+                                @endif ><hr>
+                                <input id="chargerEquipmentDesc" value="{{$service->ServiceEquipment[0]->description}}" type="text" class="form-control" name="chargerEquipmentDesc">
                             </div>  
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
-                                <input type="checkbox" name="bateraiEquipment" class="bateraiEquipment custom-switch-input">
+                                <input type="checkbox" name="bateraiEquipment" @if ($service->ServiceEquipment[1]->status == 'Y') checked @endif class="bateraiEquipment custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Baterai</span>
                             </label>
-                            <div class="bateraiEquipmentDescUsed" style="display: none"><hr>
-                                <input id="bateraiEquipmentDesc" type="text" class="form-control" name="bateraiEquipmentDesc">
+                            <div class="bateraiEquipmentDescUsed" 
+                                @if ($service->ServiceEquipment[1]->status == 'Y') 
+                                    style="display: block"
+                                @else 
+                                    style="display: none"
+                                @endif
+                                ><hr>
+                                <input id="bateraiEquipmentDesc" type="text" value="{{$service->ServiceEquipment[1]->description}}" class="form-control" name="bateraiEquipmentDesc">
                             </div> 
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
-                                <input type="checkbox" name="hardiskSsdEquipment" class="hardiskSsdEquipment custom-switch-input">
+                                <input type="checkbox" name="hardiskSsdEquipment" @if ($service->ServiceEquipment[2]->status == 'Y') checked @endif class="hardiskSsdEquipment custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Hardisk / SSD</span>
                             </label>
-                            <div class="hardiskSsdEquipmentDescUsed" style="display: none"><hr>
-                                <input id="hardiskSsdEquipmentDesc" type="text" class="form-control" name="hardiskSsdEquipmentDesc">
+                            <div class="hardiskSsdEquipmentDescUsed"
+                                @if ($service->ServiceEquipment[2]->status == 'Y') 
+                                    style="display: block"
+                                @else 
+                                    style="display: none"
+                                @endif
+                                ><hr>
+                                <input id="hardiskSsdEquipmentDesc" type="text" value="{{$service->ServiceEquipment[2]->description}}" class="form-control" name="hardiskSsdEquipmentDesc">
                             </div> 
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
-                                <input type="checkbox" name="RamEquipment" class="RamEquipment custom-switch-input">
+                                <input type="checkbox" name="RamEquipment" @if ($service->ServiceEquipment[3]->status == 'Y') checked @endif class="RamEquipment custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">RAM</span>
                             </label>
-                            <div class="RamEquipmentDescUsed" style="display: none"><hr>
-                                <input id="RamEquipmentDesc" type="text" class="form-control" name="RamEquipmentDesc">
+                            <div class="RamEquipmentDescUsed"
+                            @if ($service->ServiceEquipment[3]->status == 'Y') 
+                                    style="display: block"
+                                @else 
+                                    style="display: none"
+                                @endif
+                            ><hr>
+                                <input id="RamEquipmentDesc" value="{{$service->ServiceEquipment[3]->description}}" type="text" class="form-control" name="RamEquipmentDesc">
                             </div>
                         </div>
                         
@@ -244,42 +271,66 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
-                                <input type="checkbox" name="kabelEquipment" class="kabelEquipment custom-switch-input">
+                                <input type="checkbox" name="kabelEquipment" @if ($service->ServiceEquipment[4]->status == 'Y') checked @endif class="kabelEquipment custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Kabel</span>
                             </label>
-                            <div class="kabelEquipmentDescUsed" style="display: none"><hr>
-                                <input id="kabelEquipmentDesc" type="text" class="form-control" name="kabelEquipmentDesc">
+                            <div class="kabelEquipmentDescUsed"
+                            @if ($service->ServiceEquipment[4]->status == 'Y') 
+                                    style="display: block"
+                                @else 
+                                    style="display: none"
+                                @endif
+                            ><hr>
+                                <input id="kabelEquipmentDesc" value="{{$service->ServiceEquipment[4]->description}}" type="text" class="form-control" name="kabelEquipmentDesc">
                             </div>    
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
-                                <input type="checkbox" name="tasLaptopEquipment" class="tasLaptopEquipment custom-switch-input">
+                                <input type="checkbox" name="tasLaptopEquipment" @if ($service->ServiceEquipment[5]->status == 'Y') checked @endif class="tasLaptopEquipment custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Tas Laptop</span>
                             </label>
-                            <div class="tasLaptopEquipmentDescUsed" style="display: none"><hr>
-                                <input id="tasLaptopEquipmentDesc" type="text" class="form-control" name="tasLaptopEquipmentDesc">
+                            <div class="tasLaptopEquipmentDescUsed"
+                            @if ($service->ServiceEquipment[5]->status == 'Y') 
+                                    style="display: block"
+                                @else 
+                                    style="display: none"
+                                @endif
+                            ><hr>
+                                <input id="tasLaptopEquipmentDesc" value="{{$service->ServiceEquipment[5]->description}}" type="text" class="form-control" name="tasLaptopEquipmentDesc">
                             </div>
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
-                                <input type="checkbox" name="aksesorisEquipment" class="aksesorisEquipment custom-switch-input">
+                                <input type="checkbox" name="aksesorisEquipment" @if ($service->ServiceEquipment[6]->status == 'Y') checked @endif class="aksesorisEquipment custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Aksesoris</span>
                             </label>
-                            <div class="aksesorisEquipmentDescUsed" style="display: none"><hr>
-                                <input id="aksesorisEquipmentDesc" type="text" class="form-control" name="aksesorisEquipmentDesc">
+                            <div class="aksesorisEquipmentDescUsed"
+                            @if ($service->ServiceEquipment[6]->status == 'Y') 
+                                    style="display: block"
+                                @else 
+                                    style="display: none"
+                                @endif
+                            ><hr>
+                                <input id="aksesorisEquipmentDesc" value="{{$service->ServiceEquipment[6]->description}}" type="text" class="form-control" name="aksesorisEquipmentDesc">
                             </div>
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
-                                <input type="checkbox" name="lainnyaEquipment" class="lainnyaEquipment custom-switch-input">
+                                <input type="checkbox" name="lainnyaEquipment" @if ($service->ServiceEquipment[7]->status == 'Y') checked @endif class="lainnyaEquipment custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Lainnya</span>
                             </label>
-                            <div class="lainnyaEquipmentDescUsed" style="display: none"><hr>
-                                <input id="lainnyaEquipmentDesc" type="text" class="form-control" name="lainnyaEquipmentDesc">
+                            <div class="lainnyaEquipmentDescUsed"
+                            @if ($service->ServiceEquipment[7]->status == 'Y') 
+                                    style="display: block"
+                                @else 
+                                    style="display: none"
+                                @endif
+                            ><hr>
+                                <input id="lainnyaEquipmentDesc" value="{{$service->ServiceEquipment[7]->description}}" type="text" class="form-control" name="lainnyaEquipmentDesc">
                             </div>
                         </div>
                         
@@ -384,17 +435,17 @@
                         <label class="form-label">LCD</label>
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item">
-                                <input type="radio" name="LcdCondition" value="Y"
+                                <input type="radio" name="LcdCondition" value="Y" @if ($service->ServiceCondition[0]->status == 'Y') checked @endif
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="LcdCondition" value="N"
+                                <input type="radio" name="LcdCondition" value="N" @if ($service->ServiceCondition[0]->status == 'N') checked @endif
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="LcdCondition" value="?" checked
+                                <input type="radio" name="LcdCondition" value="?" @if ($service->ServiceCondition[0]->status == '?') checked @endif 
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -404,17 +455,17 @@
                         <label class="form-label">Touch Screen</label>
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item">
-                                <input type="radio" name="touchScreenCondition" value="Y"
+                                <input @if ($service->ServiceCondition[8]->status == 'Y') checked @endif type="radio" name="touchScreenCondition" value="Y"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="touchScreenCondition" value="N"
+                                <input @if ($service->ServiceCondition[8]->status == 'N') checked @endif type="radio" name="touchScreenCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="touchScreenCondition" value="?" checked
+                                <input @if ($service->ServiceCondition[8]->status == '?') checked @endif type="radio" name="touchScreenCondition" value="?"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -424,17 +475,17 @@
                         <label class="form-label">WIFI</label>
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item">
-                                <input type="radio" name="wifiCondition" value="Y"
+                                <input @if ($service->ServiceCondition[1]->status == 'Y') checked @endif type="radio" name="wifiCondition" value="Y"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="wifiCondition" value="N"
+                                <input @if ($service->ServiceCondition[1]->status == 'N') checked @endif type="radio" name="wifiCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="wifiCondition" value="?" checked
+                                <input @if ($service->ServiceCondition[1]->status == '?') checked @endif type="radio" name="wifiCondition" value="?" 
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -444,17 +495,17 @@
                         <label class="form-label">Charging</label>
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item">
-                                <input type="radio" name="chargingCondition" value="Y"
+                                <input @if ($service->ServiceCondition[5]->status == 'Y') checked @endif type="radio" name="chargingCondition" value="Y"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="chargingCondition" value="N"
+                                <input @if ($service->ServiceCondition[5]->status == 'N') checked @endif type="radio" name="chargingCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="chargingCondition" value="?" checked
+                                <input @if ($service->ServiceCondition[5]->status == '?') checked @endif type="radio" name="chargingCondition" value="?"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -464,17 +515,17 @@
                         <label class="form-label">Camera Depan</label>
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item">
-                                <input type="radio" name="cameraDepanCondition" value="Y"
+                                <input @if ($service->ServiceCondition[2]->status == 'Y') checked @endif type="radio" name="cameraDepanCondition" value="Y"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="cameraDepanCondition" value="N"
+                                <input @if ($service->ServiceCondition[2]->status == 'N') checked @endif type="radio" name="cameraDepanCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="cameraDepanCondition" value="?" checked
+                                <input @if ($service->ServiceCondition[2]->status == '?') checked @endif type="radio" name="cameraDepanCondition" value="?" 
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -484,17 +535,17 @@
                         <label class="form-label">Camera Belakang</label>
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item">
-                                <input type="radio" name="cameraBelakangCondition" value="Y"
+                                <input @if ($service->ServiceCondition[3]->status == 'Y') checked @endif type="radio" name="cameraBelakangCondition" value="Y"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="cameraBelakangCondition" value="N"
+                                <input @if ($service->ServiceCondition[3]->status == 'N') checked @endif type="radio" name="cameraBelakangCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="cameraBelakangCondition" value="?" checked
+                                <input @if ($service->ServiceCondition[3]->status == '?') checked @endif type="radio" name="cameraBelakangCondition" value="?" 
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -504,17 +555,17 @@
                         <label class="form-label">Vibrator</label>
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item">
-                                <input type="radio" name="vibratorCondition" value="Y"
+                                <input  @if ($service->ServiceCondition[9]->status == 'Y') checked @endif type="radio" name="vibratorCondition" value="Y"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="vibratorCondition" value="N"
+                                <input  @if ($service->ServiceCondition[9]->status == 'N') checked @endif type="radio" name="vibratorCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="vibratorCondition" value="?" checked
+                                <input  @if ($service->ServiceCondition[9]->status == '?') checked @endif type="radio" name="vibratorCondition" value="?" 
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -524,17 +575,17 @@
                         <label class="form-label">Speaker</label>
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item">
-                                <input type="radio" name="speakerCondition" value="Y"
+                                <input  @if ($service->ServiceCondition[7]->status == 'Y') checked @endif type="radio" name="speakerCondition" value="Y"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="speakerCondition" value="N"
+                                <input  @if ($service->ServiceCondition[7]->status == 'N') checked @endif type="radio" name="speakerCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="speakerCondition" value="?" checked
+                                <input  @if ($service->ServiceCondition[7]->status == '?') checked @endif type="radio" name="speakerCondition" value="?" 
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -544,17 +595,17 @@
                         <label class="form-label">Mic</label>
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item">
-                                <input type="radio" name="micCondition" value="Y"
+                                <input  @if ($service->ServiceCondition[6]->status == 'Y') checked @endif type="radio" name="micCondition" value="Y"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="micCondition" value="N"
+                                <input  @if ($service->ServiceCondition[6]->status == 'N') checked @endif type="radio" name="micCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="micCondition" value="?" checked
+                                <input  @if ($service->ServiceCondition[6]->status == '?') checked @endif type="radio" name="micCondition" value="?" 
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -564,17 +615,17 @@
                         <label class="form-label">Touchpad</label>
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item">
-                                <input type="radio" name="touchpadCondition" value="Y"
+                                <input  @if ($service->ServiceCondition[15]->status == 'Y') checked @endif type="radio" name="touchpadCondition" value="Y"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="touchpadCondition" value="N"
+                                <input  @if ($service->ServiceCondition[15]->status == 'N') checked @endif type="radio" name="touchpadCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="touchpadCondition" value="?" checked
+                                <input  @if ($service->ServiceCondition[15]->status == '?') checked @endif type="radio" name="touchpadCondition" value="?" 
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -584,17 +635,17 @@
                         <label class="form-label">Keyboard</label>
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item">
-                                <input type="radio" name="keyboardCondition" value="Y"
+                                <input  @if ($service->ServiceCondition[14]->status == 'Y') checked @endif type="radio" name="keyboardCondition" value="Y"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="keyboardCondition" value="N"
+                                <input  @if ($service->ServiceCondition[14]->status == 'N') checked @endif type="radio" name="keyboardCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="keyboardCondition" value="?" checked
+                                <input  @if ($service->ServiceCondition[14]->status == '?') checked @endif type="radio" name="keyboardCondition" value="?" 
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -604,17 +655,17 @@
                         <label class="form-label">Tombol Tombol</label>
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item">
-                                <input type="radio" name="tombolCondition" value="Y"
+                                <input  @if ($service->ServiceCondition[13]->status == 'Y') checked @endif type="radio" name="tombolCondition" value="Y"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="tombolCondition" value="N"
+                                <input  @if ($service->ServiceCondition[13]->status == 'N') checked @endif type="radio" name="tombolCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="tombolCondition" value="?" checked
+                                <input  @if ($service->ServiceCondition[13]->status == '?') checked @endif type="radio" name="tombolCondition" value="?" 
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -624,17 +675,17 @@
                         <label class="form-label">Sinyal</label>
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item">
-                                <input type="radio" name="sinyalCondition" value="Y"
+                                <input  @if ($service->ServiceCondition[12]->status == 'Y') checked @endif type="radio" name="sinyalCondition" value="Y"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="sinyalCondition" value="N"
+                                <input  @if ($service->ServiceCondition[12]->status == 'N') checked @endif type="radio" name="sinyalCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="sinyalCondition" value="?" checked
+                                <input  @if ($service->ServiceCondition[12]->status == '?') checked @endif type="radio" name="sinyalCondition" value="?" 
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -644,17 +695,17 @@
                         <label class="form-label">Usb</label>
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item">
-                                <input type="radio" name="usbCondition" value="Y"
+                                <input  @if ($service->ServiceCondition[11]->status == 'Y') checked @endif type="radio" name="usbCondition" value="Y"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="usbCondition" value="N"
+                                <input  @if ($service->ServiceCondition[11]->status == 'N') checked @endif type="radio" name="usbCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="usbCondition" value="?" checked
+                                <input  @if ($service->ServiceCondition[11]->status == '?') checked @endif type="radio" name="usbCondition" value="?" 
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -664,17 +715,17 @@
                         <label class="form-label">Soket Audio</label>
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item">
-                                <input type="radio" name="soketAudioCondition" value="Y"
+                                <input  @if ($service->ServiceCondition[10]->status == 'Y') checked @endif type="radio" name="soketAudioCondition" value="Y"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-check"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="soketAudioCondition" value="N"
+                                <input  @if ($service->ServiceCondition[10]->status == 'N') checked @endif type="radio" name="soketAudioCondition" value="N"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="soketAudioCondition" value="?" checked
+                                <input  @if ($service->ServiceCondition[10]->status == '?') checked @endif type="radio" name="soketAudioCondition" value="?" 
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
