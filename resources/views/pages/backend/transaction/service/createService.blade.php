@@ -202,16 +202,6 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
-                                <input type="checkbox" name="laptopPcEquipment" class="laptopPcEquipment custom-switch-input">
-                                <span class="custom-switch-indicator"></span>
-                                <span class="custom-switch-description">Laptop / PC</span>
-                            </label>
-                            <div class="laptopPcEquipmentDescUsed" style="display: none"><hr>
-                                <input id="laptopPcEquipmentDesc" type="text" class="form-control" name="laptopPcEquipmentDesc">
-                            </div>    
-                        </div>
-                        <div class="form-group col-12 col-md-3 col-lg-3">
-                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
                                 <input type="checkbox" name="chargerEquipment" class="chargerEquipment custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Charger</span>
@@ -240,8 +230,6 @@
                                 <input id="hardiskSsdEquipmentDesc" type="text" class="form-control" name="hardiskSsdEquipmentDesc">
                             </div> 
                         </div>
-                    </div>
-                    <div class="row">
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
                                 <input type="checkbox" name="RamEquipment" class="RamEquipment custom-switch-input">
@@ -252,25 +240,20 @@
                                 <input id="RamEquipmentDesc" type="text" class="form-control" name="RamEquipmentDesc">
                             </div>
                         </div>
+                        
+                        
+                        
+                    </div>
+                    <div class="row">
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
-                                <input type="checkbox" name="HandphoneEquipment" class="HandphoneEquipment custom-switch-input">
+                                <input type="checkbox" name="kabelEquipment" class="kabelEquipment custom-switch-input">
                                 <span class="custom-switch-indicator"></span>
-                                <span class="custom-switch-description">Handphone</span>
+                                <span class="custom-switch-description">Kabel</span>
                             </label>
-                            <div class="HandphoneEquipmentDescUsed" style="display: none"><hr>
-                                <input id="HandphoneEquipmentDesc" type="text" class="form-control" name="HandphoneEquipmentDesc">
-                            </div>
-                        </div>
-                        <div class="form-group col-12 col-md-3 col-lg-3">
-                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
-                                <input type="checkbox" name="printerEquipment" class="printerEquipment custom-switch-input">
-                                <span class="custom-switch-indicator"></span>
-                                <span class="custom-switch-description">Printer</span>
-                            </label>
-                            <div class="printerEquipmentDescUsed" style="display: none"><hr>
-                                <input id="printerEquipmentDesc" type="text" class="form-control" name="printerEquipmentDesc">
-                            </div>
+                            <div class="kabelEquipmentDescUsed" style="display: none"><hr>
+                                <input id="kabelEquipmentDesc" type="text" class="form-control" name="kabelEquipmentDesc">
+                            </div>    
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
@@ -282,6 +265,27 @@
                                 <input id="tasLaptopEquipmentDesc" type="text" class="form-control" name="tasLaptopEquipmentDesc">
                             </div>
                         </div>
+                        <div class="form-group col-12 col-md-3 col-lg-3">
+                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
+                                <input type="checkbox" name="aksesorisEquipment" class="aksesorisEquipment custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Aksesoris</span>
+                            </label>
+                            <div class="aksesorisEquipmentDescUsed" style="display: none"><hr>
+                                <input id="aksesorisEquipmentDesc" type="text" class="form-control" name="aksesorisEquipmentDesc">
+                            </div>
+                        </div>
+                        <div class="form-group col-12 col-md-3 col-lg-3">
+                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
+                                <input type="checkbox" name="lainnyaEquipment" class="lainnyaEquipment custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Lainnya</span>
+                            </label>
+                            <div class="lainnyaEquipmentDescUsed" style="display: none"><hr>
+                                <input id="lainnyaEquipmentDesc" type="text" class="form-control" name="lainnyaEquipmentDesc">
+                            </div>
+                        </div>
+                        
                     </div>
                 </div>
             </div>

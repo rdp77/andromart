@@ -337,11 +337,11 @@ function addItem() {
     }
 }
 
-$(document.body).on("change",".laptopPcEquipment",function(){
+$(document.body).on("change",".lainnyaEquipment",function(){
     if ($(this).is(':checked') == true) {
-        $('.laptopPcEquipmentDescUsed').css('display','block');
+        $('.lainnyaEquipmentDescUsed').css('display','block');
     }else{
-        $('.laptopPcEquipmentDescUsed').css('display','none');
+        $('.lainnyaEquipmentDescUsed').css('display','none');
     }
 });
 $(document.body).on("change",".chargerEquipment",function(){
@@ -372,18 +372,18 @@ $(document.body).on("change",".RamEquipment",function(){
         $('.RamEquipmentDescUsed').css('display','none');
     }
 });
-$(document.body).on("change",".HandphoneEquipment",function(){
+$(document.body).on("change",".aksesorisEquipment",function(){
     if ($(this).is(':checked') == true) {
-        $('.HandphoneEquipmentDescUsed').css('display','block');
+        $('.aksesorisEquipmentDescUsed').css('display','block');
     }else{
-        $('.HandphoneEquipmentDescUsed').css('display','none');
+        $('.aksesorisEquipmentDescUsed').css('display','none');
     }
 });
-$(document.body).on("change",".printerEquipment",function(){
+$(document.body).on("change",".kabelEquipment",function(){
     if ($(this).is(':checked') == true) {
-        $('.printerEquipmentDescUsed').css('display','block');
+        $('.kabelEquipmentDescUsed').css('display','block');
     }else{
-        $('.printerEquipmentDescUsed').css('display','none');
+        $('.kabelEquipmentDescUsed').css('display','none');
     }
 });
 $(document.body).on("change",".tasLaptopEquipment",function(){

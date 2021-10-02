@@ -498,77 +498,79 @@ class ServiceController extends Controller
             ]);
             $dataEquipment = [];
 
-            if($req->laptopPcEquipment == 'on'){
+            
+            if($req->chargerEquipment == 'on'){
                 $dataEquipment[0] = 'Y';
-                $dataEquipmentName[0] = 'Laptop / PC';
-                $dataEquipmentDesc[0] = $req->laptopPcEquipmentDesc;
+                $dataEquipmentName[0] = 'Charger';
+                $dataEquipmentDesc[0] = $req->chargerEquipmentDesc;
             }else{
                 $dataEquipment[0] = 'N';
-                $dataEquipmentName[0] = 'Laptop / PC';
-                $dataEquipmentDesc[0] = $req->laptopPcEquipmentDesc;
-            }
-            if($req->chargerEquipment == 'on'){
-                $dataEquipment[1] = 'Y';
-                $dataEquipmentName[1] = 'Charger';
-                $dataEquipmentDesc[1] = $req->chargerEquipmentDesc;
-            }else{
-                $dataEquipment[1] = 'N';
-                $dataEquipmentName[1] = 'Charger';
-                $dataEquipmentDesc[1] = $req->chargerEquipmentDesc;
+                $dataEquipmentName[0] = 'Charger';
+                $dataEquipmentDesc[0] = $req->chargerEquipmentDesc;
             }
             if($req->bateraiEquipment == 'on'){
-                $dataEquipment[2] = 'Y';
-                $dataEquipmentName[2] = 'Baterai';
-                $dataEquipmentDesc[2] = $req->bateraiEquipmentDesc;
+                $dataEquipment[1] = 'Y';
+                $dataEquipmentName[1] = 'Baterai';
+                $dataEquipmentDesc[1] = $req->bateraiEquipmentDesc;
             }else{
-                $dataEquipment[2] = 'N';
-                $dataEquipmentName[2] = 'Baterai';
-                $dataEquipmentDesc[2] = $req->bateraiEquipmentDesc;
+                $dataEquipment[1] = 'N';
+                $dataEquipmentName[1] = 'Baterai';
+                $dataEquipmentDesc[1] = $req->bateraiEquipmentDesc;
             }
             if($req->hardiskSsdEquipment == 'on'){
-                $dataEquipment[3] = 'Y';
-                $dataEquipmentName[3] = 'Hardisk / SSD';
-                $dataEquipmentDesc[3] = $req->hardiskSsdEquipmentDesc;
+                $dataEquipment[2] = 'Y';
+                $dataEquipmentName[2] = 'Hardisk / SSD';
+                $dataEquipmentDesc[2] = $req->hardiskSsdEquipmentDesc;
             }else{
-                $dataEquipment[3] = 'N';
-                $dataEquipmentName[3] = 'Hardisk / SSD';
-                $dataEquipmentDesc[3] = $req->hardiskSsdEquipmentDesc;
+                $dataEquipment[2] = 'N';
+                $dataEquipmentName[2] = 'Hardisk / SSD';
+                $dataEquipmentDesc[2] = $req->hardiskSsdEquipmentDesc;
             }
             if($req->RamEquipment == 'on'){
-                $dataEquipment[4] = 'Y';
-                $dataEquipmentName[4] = 'Ram';
-                $dataEquipmentDesc[4] = $req->RamEquipmentDesc;
+                $dataEquipment[3] = 'Y';
+                $dataEquipmentName[3] = 'Ram';
+                $dataEquipmentDesc[3] = $req->RamEquipmentDesc;
             }else{
-                $dataEquipment[4] = 'N';
-                $dataEquipmentName[4] = 'Ram';
-                $dataEquipmentDesc[4] = $req->RamEquipmentDesc;
+                $dataEquipment[3] = 'N';
+                $dataEquipmentName[3] = 'Ram';
+                $dataEquipmentDesc[3] = $req->RamEquipmentDesc;
             }
             if($req->HandphoneEquipment == 'on'){
+                $dataEquipment[4] = 'Y';
+                $dataEquipmentName[4] = 'Kabel';
+                $dataEquipmentDesc[4] = $req->kabelEquipmentDesc;
+            }else{
+                $dataEquipment[4] = 'N';
+                $dataEquipmentName[4] = 'Kabel';
+                $dataEquipmentDesc[4] = $req->kabelEquipmentDesc;
+            }
+            if($req->tasLaptopEquipment == 'on'){
                 $dataEquipment[5] = 'Y';
-                $dataEquipmentName[5] = 'Handphone';
-                $dataEquipmentDesc[5] = $req->HandphoneEquipmentDesc;
+                $dataEquipmentName[5] = 'Tas Laptop';
+                $dataEquipmentDesc[5] = $req->tasLaptopEquipmentDesc;
             }else{
                 $dataEquipment[5] = 'N';
-                $dataEquipmentName[5] = 'Handphone';
-                $dataEquipmentDesc[5] = $req->HandphoneEquipmentDesc;
+                $dataEquipmentName[5] = 'Tas Laptop';
+                $dataEquipmentDesc[5] = $req->tasLaptopEquipmentDesc;
             }
             if($req->printerEquipment == 'on'){
                 $dataEquipment[6] = 'Y';
-                $dataEquipmentName[6] = 'Printer';
-                $dataEquipmentDesc[6] = $req->printerEquipmentDesc;
+                $dataEquipmentName[6] = 'Aksesoris';
+                $dataEquipmentDesc[6] = $req->aksesorisEquipmentDesc;
             }else{
                 $dataEquipment[6] = 'N';
-                $dataEquipmentName[6] = 'Printer';
-                $dataEquipmentDesc[6] = $req->printerEquipmentDesc;
+                $dataEquipmentName[6] = 'Aksesoris';
+                $dataEquipmentDesc[6] = $req->aksesorisEquipmentDesc;
             }
-            if($req->tasLaptopEquipment == 'on'){
+            
+            if($req->laptopPcEquipment == 'on'){
                 $dataEquipment[7] = 'Y';
-                $dataEquipmentName[7] = 'Tas Laptop';
-                $dataEquipmentDesc[7] = $req->tasLaptopEquipmentDesc;
+                $dataEquipmentName[7] = 'Lainnya';
+                $dataEquipmentDesc[7] = $req->lainnyaEquipmentDesc;
             }else{
                 $dataEquipment[7] = 'N';
-                $dataEquipmentName[7] = 'Tas Laptop';
-                $dataEquipmentDesc[7] = $req->tasLaptopEquipmentDesc;
+                $dataEquipmentName[7] = 'Lainnya';
+                $dataEquipmentDesc[7] = $req->lainnyaEquipmentDesc;
             }
             // return [$dataEquipment,$dataEquipmentName];
             for ($i=0; $i <count($dataEquipment) ; $i++) { 
