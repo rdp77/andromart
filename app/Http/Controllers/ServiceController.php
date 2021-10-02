@@ -232,16 +232,17 @@ class ServiceController extends Controller
 
     public function code($type)
     {
+        $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
         $index = DB::table('service')->max('id')+1;
 
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
-        return $code = $type.$year . $month . $index;
+        return $code = $type.$getEmployee->Branch->code.$year . $month . $index;
     }
     public function create()
     {
-        $code     = $this->code('SRV-');
+        $code     = $this->code('SRV');
         $employee = Employee::orderBy('name', 'ASC')->get();
         // $items    = Item::where('name','!=','Jasa Service')->get();
         $item     = Item::with('stock')->where('name','!=','Jasa Service')->orderBy('name', 'ASC')->get();
@@ -308,8 +309,8 @@ class ServiceController extends Controller
             $image = str_replace('data:image/jpeg;base64,','', $image);
             $image = base64_decode($image);
             if ($image != null) {
-                $fileSave = 'public/Service_' . $this->code('SRV-') . '.' .'png';
-                $fileName = 'Service_' . $this->code('SRV-') . '.' .'png';
+                $fileSave = 'public/Service_' . $this->code('SRV') . '.' .'png';
+                $fileName = 'Service_' . $this->code('SRV') . '.' .'png';
                 Storage::put($fileSave, $image);
             }else{
                 $fileName = null;
@@ -317,7 +318,7 @@ class ServiceController extends Controller
             // return 'asd';
             Service::create([
                 'id' =>$id,
-                'code' =>$this->code('SRV-'),
+                'code' =>$this->code('SRV'),
                 'user_id'=>Auth::user()->id,
                 'branch_id'=>$getEmployee->branch_id,
                 'customer_id'=>$req->customerId,
@@ -381,9 +382,9 @@ class ServiceController extends Controller
                                         'message'=>'Stock Item Ada yang 0. Harap Cek Kembali']);
                     }
                     if($req->typeDetail[$i] == 'SparePart'){
-                        $desc[$i] = 'Pengeluaran Barang Pada Service '.$this->code('SRV-');
+                        $desc[$i] = 'Pengeluaran Barang Pada Service '.$this->code('SRV');
                     }else{
-                        $desc[$i] = 'Pengeluaran Barang Loss Pada Service '.$this->code('SRV-');
+                        $desc[$i] = 'Pengeluaran Barang Loss Pada Service '.$this->code('SRV');
                     }
                     Stock::where('item_id',$req->itemsDetail[$i])
                     ->where('branch_id',Auth::user()->id)->update([
@@ -394,7 +395,7 @@ class ServiceController extends Controller
                         'unit_id'    =>$checkStock[$i][0]->unit_id,
                         'branch_id'  =>$checkStock[$i][0]->branch_id,
                         'qty'        =>$req->qtyDetail[$i],
-                        'code'       =>$this->code('SRV-'),
+                        'code'       =>$this->code('SRV'),
                         'type'       =>'Out',
                         'description'=>$desc[$i],
                     ]);

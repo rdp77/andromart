@@ -28,7 +28,7 @@
                                 name="date">
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
-                            <label for="warranty">{{ __('Garansi') }}<code>*</code></label>
+                            <label for="warranty">{{ __('Garansi') }}</label>
                             <select class="select2" name="warranty">
                                 <option value="null">- Select -</option>
                                 @foreach ($warranty as $element)

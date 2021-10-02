@@ -76,7 +76,7 @@
               </tr>
                 <th class="text-left" colspan="2" style="font-size: 25px" width="40%">Service Detail</th>
                 <th class="text-left" style="font-size: 25px">Keluhan</th>
-                <th class="text-left" style="font-size: 25px">Keterangan</th>
+                <th class="text-left" style="font-size: 25px">Kesepakatan Bersama</th>
               </tr>
               <tr>
                 <td style="font-size: 20px">Tipe</td>
