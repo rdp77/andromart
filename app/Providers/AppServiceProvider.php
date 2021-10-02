@@ -8,6 +8,7 @@ use Illuminate\Support\ServiceProvider;
 use App\Models\Employee;
 use App\Models\Service;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Schema;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -28,7 +29,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        View::share('menu', Menu::with('SubMenu')->get());
+        if (Schema::hasTable('menu') and Schema::hasTable('submenu')) {
+            View::share('menu', Menu::with('SubMenu')->get());
+        }
         view()->composer('*', function ($view) {
             if (Auth::check()) {
                 $chekSales = Employee::with('Service1', 'Service2')->where('id','!=',1)->get();
