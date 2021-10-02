@@ -102,7 +102,7 @@ function del(id) {
         }
     });
 }
-
+var idSaved = '';
 function save() {
     swal({
         title: "Apakah Anda Yakin?",
@@ -138,7 +138,10 @@ function save() {
                         swal(data.message, {
                             icon: "success",
                         });
+                        $('.tombolSave').css('display','none')
+                        $('.tombolPrint').css('display','block');
                         // location.reload();
+                        idSaved = data.id;
                     }else{
                         swal(data.message, {
                             icon: "warning",
@@ -155,6 +158,10 @@ function save() {
         }
     });
 
+}
+
+function print(params) {
+    window.open(params+'/transaction/service/service/'+idSaved);   
 }
 
 function updateData(params) {

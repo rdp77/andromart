@@ -579,53 +579,8 @@ class ServiceController extends Controller
                     'description'=>$dataEquipmentDesc[$i],
                 ]);
             }
-            
-            // ServiceEquipment::create([
-            //     'service_id'=>$id,
-            //     'name'=>'Charger',
-            //     'status'=>$req->laptopPcEquipment,
-            // ]);
-            // ServiceEquipment::create([
-            //     'service_id'=>$id,
-            //     'name'=>'Baterai',
-            //     'status'=>$req->bateraiEquipment,
-            // ]);
-            // ServiceEquipment::create([
-            //     'service_id'=>$id,
-            //     'name'=>'Hardisk / SSD',
-            //     'status'=>$req->hardiskSsdEquipment,
-            // ]);
-            // ServiceEquipment::create([
-            //     'service_id'=>$id,
-            //     'name'=>'Ram',
-            //     'status'=>$req->RamEquipment,
-            // ]);
-            // ServiceEquipment::create([
-            //     'service_id'=>$id,
-            //     'name'=>'Handphone',
-            //     'status'=>$req->HandphoneEquipment,
-            // ]);
-            // ServiceEquipment::create([
-            //     'service_id'=>$id,
-            //     'name'=>'Printer',
-            //     'status'=>$req->printerEquipment,
-            // ]);
-            // ServiceEquipment::create([
-            //     'service_id'=>$id,
-            //     'name'=>'Tas Laptop',
-            //     'status'=>$req->tasLaptopEquipment,
-            // ]);
-            // if($req->verificationPrice == 'N'){
-            //     echo 'menjurnal';
-
-            // }
-            // $this->DashboardController->createLog(
-            //     $req->header('user-agent'),
-            //     $req->ip(),
-            //     'Membuat Dana Kredit Pagu per PDL'
-            // );
             DB::commit();
-            return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
+            return Response::json(['status' => 'success','message'=>'Data Tersimpan','id'=>$id]);
         } catch (\Throwable $th) {
             DB::rollback();
             return$th;

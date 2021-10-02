@@ -757,8 +757,10 @@
             </div>
         </div>
         <div class="card-footer text-right">
-            <button class="btn btn-primary mr-1" type="button" onclick="save()"><i class="far fa-save"></i>
+            <button class="btn btn-primary mr-1 tombolSave" type="button" onclick="save()"><i class="far fa-save"></i>
                 {{ __('Simpan Data') }}</button>
+            <button class="btn btn-warning mr-1 tombolPrint" style="display: none" type="button" onclick="print('{{URL::to('/')}}')"><i class="fas fa-print"></i>
+                    {{ __('Cetak Data') }}</button>
         </div>
     </div>
     <div class="modal fade" tabindex="1" role="dialog" id="exampleModal" aria-hidden="true" style="display: none;">
