@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class ServiceEquipment extends Model
 {
     use HasFactory;
-    use SoftDeletes;
+    // use SoftDeletes;
 
 
     protected $table = 'service_equipment';
@@ -21,6 +21,7 @@ class ServiceEquipment extends Model
         'name' ,
         'service_id' ,
         'status' ,
+        'description' ,
         'created_by',
         'updated_by',
         'created_at' ,

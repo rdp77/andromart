@@ -18,6 +18,7 @@ class CreateServiceEquipment extends Migration
             $table->String('name');
             $table->integer('service_id');
             $table->String('status');
+            $table->String('description')->nullable();
             $table->timestamps();
         });
     }

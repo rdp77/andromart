@@ -32,6 +32,7 @@ class Service extends Model
         'no_imei',
         'complaint',
         'clock',
+        'estimate_day',
         'total_service',
         'total_part',
         'discount_type',
@@ -70,6 +71,14 @@ class Service extends Model
     public function ServiceDetail()
     {
         return $this->hasMany('App\Models\ServiceDetail', 'service_id', 'id');
+    }
+    public function ServiceEquipment()
+    {
+        return $this->hasMany('App\Models\ServiceEquipment', 'service_id', 'id');
+    }
+    public function ServiceCondition()
+    {
+        return $this->hasMany('App\Models\ServiceCondition', 'service_id', 'id');
     }
     public function ServicePayment()
     {

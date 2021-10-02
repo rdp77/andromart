@@ -10,6 +10,7 @@
     padding: 5px !important;
   }
 </style>
+
 <div class="invoice">
   <div class="invoice-print">
     <div class="row">
@@ -23,40 +24,47 @@
         <br>
         {{-- <hr> --}}
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-4">
             <address>
               <strong><p style="font-size: 38px">Teknisi</p></strong>
               <p style="font-size: 30px">{{$service->employee1->name}}</p>
-              <p style="font-size: 30px">{{$service->employee1->contact}}</p>
+              {{-- <p style="font-size: 30px">{{$service->employee1->contact}}</p> --}}
             </address>
           </div>
-          <div class="col-md-6 text-md-right">
+          <div class="col-md-8 text-md-right">
             <address>
               <strong><p style="font-size: 38px">Customer</p></strong>
               <p style="font-size: 30px">{{$service->customer_name}}</p>
               <p style="font-size: 30px">{{$service->customer_phone}}</p>
-              <p style="font-size: 30px">{{$service->customer_address}}</p>
+              <p style="font-size: 30px;margin: 10px auto;">{{$service->customer_address}}</p>
             </address>
           </div>
         </div>
+        <div style="border: 1px solid gray"></div>
         <div class="row">
           <div class="col-md-6">
-            <address>
+
+          <address>
               <br>
-              <strong><h2>Status Bayar</h2></strong>
-              <strong><h3 style="color:#28a745">Lunas </h3></strong>
+              <p><strong><o style="font-size: 36px">Bayar :</strong></o>  @if ($service->payment_status == null)
+                <o style="font-size: 36px"> Belum Bayar</o>
+                @else
+                {{$service->payment_status}}
+              @endif</p>
+              {{-- <strong><h3 style="color:#28a745"> </h3></strong>s --}}
             </address>
           </div>
           <div class="col-md-6 text-md-right">
             <address>
               <br>
-              <strong><h2>Tanggal</h2></strong>
-              <p style="font-size: 30px">25 September 2021</p>
+              <strong><p style="font-size: 30px">Tanggal : {{date('d F Y',strtotime($service->date))}}</p></strong>
             </address>
           </div>
         </div>
       </div>
     </div>
+    <div style="border: 1px solid gray"></div>
+
     
     <div class="row mt-4">
       <div class="col-md-12">
@@ -66,9 +74,9 @@
             <tbody>
               <tr>
               </tr>
-                <th class="text-left" colspan="2" style="font-size: 25px">Service Detail</th>
+                <th class="text-left" colspan="2" style="font-size: 25px" width="40%">Service Detail</th>
                 <th class="text-left" style="font-size: 25px">Keluhan</th>
-                <th class="text-left" style="font-size: 25px">Keterangan</th>
+                <th class="text-left" style="font-size: 25px">Kesepakatan Bersama</th>
               </tr>
               <tr>
                 <td style="font-size: 20px">Tipe</td>
@@ -84,10 +92,65 @@
                 <td style="font-size: 20px">Series</td>
                 <td style="font-size: 20px">{{$service->Type->name}}</td>
               </tr>
+              <tr>
+                <td style="font-size: 20px">Estimasi Analisa</td>
+                <td style="font-size: 20px">{{$service->estimate_day}}</td>
+              </tr>
             </tbody>
           </table>
         </div>
-        <div>
+        <div style="border: 1px solid gray"></div>
+        <div class="row mt-4">
+          <div class="col-lg-6 col-md-6 col-sm-6">
+            <table class="table table-striped table-hover table-md">
+              <tbody>
+                <tr>
+                </tr>
+                  <th class="text-left" colspan="2" style="font-size: 25px">Kondisi</th>
+                </tr>
+                @foreach ($service->ServiceCondition as $el)
+                    <tr>
+                      <th>{{$el->name}}</th>
+                      @if ($el->status == 'N')
+                        <td><i class="fa fa-times"></i></td>
+                      @elseif ($el->status == 'Y')
+                        <td><i class="fa fa-check"></i></td>
+                      @elseif ($el->status == '?')
+                        <td><i class="fa fa-question"></i></td>
+                      @endif
+                    </tr>
+                @endforeach
+              </tbody>
+            </table>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-6" style="border-left: 2px solid gray">
+            <table class="table table-striped table-hover table-md">
+              <tbody>
+                <tr>
+                </tr>
+                  <th class="text-left" colspan="2" style="font-size: 25px">Kelengkapan</th>
+                </tr>
+                @foreach ($service->ServiceEquipment as $el)
+                  @if ($el->description != null)
+                    <tr>
+                      <td><b>{{$el->name}}</b>  
+                      <br>
+                      Catatan : {{$el->description}}
+                      </td>
+                      @if ($el->status == 'N')
+                        <td><i class="fa fa-times"></i></td>
+                      @elseif ($el->status == 'Y')
+                        <td><i class="fa fa-check"></i></td>
+                      @endif 
+                    </tr>
+                  @endif
+                @endforeach
+              </tbody>
+            </table>
+          </div>
+        </div>
+        
+        {{-- <div>
           <table class="table table-striped table-hover table-md">
             <tbody><tr>
               <th data-width="40" style="width: 40px;" style="font-size: 25px">#</th>
@@ -134,7 +197,7 @@
               </tbody>
             </table>
           </div>
-        </div>
+        </div> --}}
       </div>
     </div>
   </div>

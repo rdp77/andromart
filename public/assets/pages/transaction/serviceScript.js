@@ -330,6 +330,64 @@ function addItem() {
     }
 }
 
+$(document.body).on("change",".laptopPcEquipment",function(){
+    if ($(this).is(':checked') == true) {
+        $('.laptopPcEquipmentDescUsed').css('display','block');
+    }else{
+        $('.laptopPcEquipmentDescUsed').css('display','none');
+    }
+});
+$(document.body).on("change",".chargerEquipment",function(){
+    if ($(this).is(':checked') == true) {
+        $('.chargerEquipmentDescUsed').css('display','block');
+    }else{
+        $('.chargerEquipmentDescUsed').css('display','none');
+    }
+});
+$(document.body).on("change",".bateraiEquipment",function(){
+    if ($(this).is(':checked') == true) {
+        $('.bateraiEquipmentDescUsed').css('display','block');
+    }else{
+        $('.bateraiEquipmentDescUsed').css('display','none');
+    }
+});
+$(document.body).on("change",".hardiskSsdEquipment",function(){
+    if ($(this).is(':checked') == true) {
+        $('.hardiskSsdEquipmentDescUsed').css('display','block');
+    }else{
+        $('.hardiskSsdEquipmentDescUsed').css('display','none');
+    }
+});
+$(document.body).on("change",".RamEquipment",function(){
+    if ($(this).is(':checked') == true) {
+        $('.RamEquipmentDescUsed').css('display','block');
+    }else{
+        $('.RamEquipmentDescUsed').css('display','none');
+    }
+});
+$(document.body).on("change",".HandphoneEquipment",function(){
+    if ($(this).is(':checked') == true) {
+        $('.HandphoneEquipmentDescUsed').css('display','block');
+    }else{
+        $('.HandphoneEquipmentDescUsed').css('display','none');
+    }
+});
+$(document.body).on("change",".printerEquipment",function(){
+    if ($(this).is(':checked') == true) {
+        $('.printerEquipmentDescUsed').css('display','block');
+    }else{
+        $('.printerEquipmentDescUsed').css('display','none');
+    }
+});
+$(document.body).on("change",".tasLaptopEquipment",function(){
+    if ($(this).is(':checked') == true) {
+        $('.tasLaptopEquipmentDescUsed').css('display','block');
+    }else{
+        $('.tasLaptopEquipmentDescUsed').css('display','none');
+    }
+});
+
+
 // mengganti item
 $(document.body).on("change",".itemsDetail",function(){
     var index = $(this).find(':selected').data('index');
