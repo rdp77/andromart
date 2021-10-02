@@ -304,7 +304,7 @@
                   @foreach ($service->ServiceEquipment as $i => $el)
                   @if ($i <= 3)
                     @if ($el->status == 'Y')
-                        <td @if ($i < 4) style="border-right: 1px solid #1d98d4" @endif width="25%" style="font-size: 18px"><b>{{$el->name}}</b>  
+                        <td @if ($i <= 3) style="border-right: 1px solid #1d98d4" @endif width="25%" style="font-size: 18px"><b>{{$el->name}}</b>  
                         <br>{{$el->description}}
                         </td>
                     @endif
