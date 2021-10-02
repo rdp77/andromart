@@ -302,7 +302,7 @@
                 </tr>
                 <tr >
                   @foreach ($service->ServiceEquipment as $i => $el)
-                  @if ($i <= 4)
+                  @if ($i <= 3)
                     @if ($el->status == 'Y')
                         <td @if ($i < 4) style="border-right: 1px solid #1d98d4" @endif width="25%" style="font-size: 18px"><b>{{$el->name}}</b>  
                         <br>{{$el->description}}
@@ -313,7 +313,7 @@
                 </tr>
                 <tr>
                   @foreach ($service->ServiceEquipment as $i => $el)
-                  @if ($i > 4)
+                  @if ($i > 3)
                     @if ($el->status == 'Y')
                         <td width="25%" @if ($i < 8) style="border-right: 1px solid #1d98d4;border-top: 1px solid #1d98d4;" @endif style="font-size: 18px"><b>{{$el->name}}</b>  
                         <br>{{$el->description}}

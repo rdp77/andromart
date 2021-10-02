@@ -148,10 +148,14 @@
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="series">{{ __('Member') }}<code>*</code></label>
-                            <select class="select2" name="customerId">
+                            <select class="select2 customerId" name="customerId" onchange="customerChange()">
                                 <option value="">- Select -</option>
                                 @foreach ($customer as $element)
-                                <option value="{{$element->id}}">{{$element->name}}</option>
+                                <option value="{{$element->id}}" 
+                                    data-name="{{$element->name}}" 
+                                    data-address="{{$element->address}}"
+                                    data-phone="{{$element->contact}}"
+                                    >{{$element->name}}</option>
                                 @endforeach 
                                 {{-- <option value="Deny">Deny</option>
                                 <option value="Rizal">Rizal</option>

@@ -55,6 +55,12 @@
                             <input id="estimateDate" type="text" value="{{$service->estimate_date}}" class="form-control datepicker" name="estimateDate">
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="form-group col-12 col-md-12 col-lg-12">
+                            <label for="estimateDay">{{ __('Estimasi Cek') }}<code>*</code></label>
+                            <input id="estimateDay" type="text" value="{{$service->estimate_day}}" class="form-control" name="estimateDay">
+                        </div>
+                    </div>
 
                     <h6 style="color: #6777ef">Data Barang</h6>
                     <br>
@@ -132,23 +138,7 @@
                             <input id="description" value="{{$service->description}}" type="text" class="form-control validation" data-name="Deskripsi" name="description">
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="form-group col-12 col-md-12 col-lg-12">
-                            <label for="description">{{ __('Ambil Foto') }}<code>*</code></label>
-                            <div id="my_camera"></div>
-                            <br/>
-                            <div class="row">
-                                <div class="form-group col-md-3">
-                                    <input type=button class="btn btn-primary" value="Take Snapshot" 
-                                    onClick="take_snapshot()">
-                                    <input type="hidden" name="image" class="image-tag">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#exampleModal">Lihat Gambar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    
                     <h6 style="color: #6777ef">Data Customer</h6>
                     <br>
                     <div class="row">
@@ -177,6 +167,123 @@
                         </div>
                     </div>
 
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h4>Ambil Foto</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group col-12 col-md-12 col-lg-12">
+                            <div id="my_camera"></div>
+                            <br/>
+                            <div class="row">
+                                <div class="form-group col-md-3">
+                                    <input type=button class="btn btn-primary" value="Take Snapshot" onClick="take_snapshot()">
+                                    <input type="hidden" name="image" class="image-tag">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#exampleModal">Lihat Gambar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h4>Kelengkapan Unit</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group col-12 col-md-3 col-lg-3">
+                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
+                                <input type="checkbox" name="chargerEquipment" class="chargerEquipment custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Charger</span>
+                            </label>
+                            <div class="chargerEquipmentDescUsed" style="display: none"><hr>
+                                <input id="chargerEquipmentDesc" type="text" class="form-control" name="chargerEquipmentDesc">
+                            </div>  
+                        </div>
+                        <div class="form-group col-12 col-md-3 col-lg-3">
+                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
+                                <input type="checkbox" name="bateraiEquipment" class="bateraiEquipment custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Baterai</span>
+                            </label>
+                            <div class="bateraiEquipmentDescUsed" style="display: none"><hr>
+                                <input id="bateraiEquipmentDesc" type="text" class="form-control" name="bateraiEquipmentDesc">
+                            </div> 
+                        </div>
+                        <div class="form-group col-12 col-md-3 col-lg-3">
+                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
+                                <input type="checkbox" name="hardiskSsdEquipment" class="hardiskSsdEquipment custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Hardisk / SSD</span>
+                            </label>
+                            <div class="hardiskSsdEquipmentDescUsed" style="display: none"><hr>
+                                <input id="hardiskSsdEquipmentDesc" type="text" class="form-control" name="hardiskSsdEquipmentDesc">
+                            </div> 
+                        </div>
+                        <div class="form-group col-12 col-md-3 col-lg-3">
+                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
+                                <input type="checkbox" name="RamEquipment" class="RamEquipment custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">RAM</span>
+                            </label>
+                            <div class="RamEquipmentDescUsed" style="display: none"><hr>
+                                <input id="RamEquipmentDesc" type="text" class="form-control" name="RamEquipmentDesc">
+                            </div>
+                        </div>
+                        
+                        
+                        
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-12 col-md-3 col-lg-3">
+                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
+                                <input type="checkbox" name="kabelEquipment" class="kabelEquipment custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Kabel</span>
+                            </label>
+                            <div class="kabelEquipmentDescUsed" style="display: none"><hr>
+                                <input id="kabelEquipmentDesc" type="text" class="form-control" name="kabelEquipmentDesc">
+                            </div>    
+                        </div>
+                        <div class="form-group col-12 col-md-3 col-lg-3">
+                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
+                                <input type="checkbox" name="tasLaptopEquipment" class="tasLaptopEquipment custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Tas Laptop</span>
+                            </label>
+                            <div class="tasLaptopEquipmentDescUsed" style="display: none"><hr>
+                                <input id="tasLaptopEquipmentDesc" type="text" class="form-control" name="tasLaptopEquipmentDesc">
+                            </div>
+                        </div>
+                        <div class="form-group col-12 col-md-3 col-lg-3">
+                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
+                                <input type="checkbox" name="aksesorisEquipment" class="aksesorisEquipment custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Aksesoris</span>
+                            </label>
+                            <div class="aksesorisEquipmentDescUsed" style="display: none"><hr>
+                                <input id="aksesorisEquipmentDesc" type="text" class="form-control" name="aksesorisEquipmentDesc">
+                            </div>
+                        </div>
+                        <div class="form-group col-12 col-md-3 col-lg-3">
+                            <label class="custom-switch mt-2" style="margin-left: -30px !important">
+                                <input type="checkbox" name="lainnyaEquipment" class="lainnyaEquipment custom-switch-input">
+                                <span class="custom-switch-indicator"></span>
+                                <span class="custom-switch-description">Lainnya</span>
+                            </label>
+                            <div class="lainnyaEquipmentDescUsed" style="display: none"><hr>
+                                <input id="lainnyaEquipmentDesc" type="text" class="form-control" name="lainnyaEquipmentDesc">
+                            </div>
+                        </div>
+                        
+                    </div>
                 </div>
             </div>
         </div>
@@ -264,6 +371,316 @@
                         <input id="totalPrice" type="text" value="{{$service->total_price}}" class="form-control cleaveNumeral"
                             name="totalPrice" onchange="sumTotal()" style="text-align: right">
                     </div>
+                </div>
+
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h4>Kondisi Serah Terima Unit</h4>
+
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label class="form-label">LCD</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="LcdCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="LcdCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="LcdCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Touch Screen</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="touchScreenCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="touchScreenCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="touchScreenCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">WIFI</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="wifiCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="wifiCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="wifiCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Charging</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="chargingCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="chargingCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="chargingCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Camera Depan</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="cameraDepanCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="cameraDepanCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="cameraDepanCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Camera Belakang</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="cameraBelakangCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="cameraBelakangCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="cameraBelakangCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Vibrator</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="vibratorCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="vibratorCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="vibratorCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Speaker</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="speakerCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="speakerCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="speakerCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Mic</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="micCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="micCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="micCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Touchpad</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="touchpadCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="touchpadCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="touchpadCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Keyboard</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="keyboardCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="keyboardCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="keyboardCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Tombol Tombol</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="tombolCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="tombolCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="tombolCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Sinyal</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="sinyalCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="sinyalCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="sinyalCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Usb</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="usbCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="usbCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="usbCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Soket Audio</label>
+                        <div class="selectgroup w-100">
+                            <label class="selectgroup-item">
+                                <input type="radio" name="soketAudioCondition" value="Y"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="soketAudioCondition" value="N"
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                            </label>
+                            <label class="selectgroup-item">
+                                <input type="radio" name="soketAudioCondition" value="?" checked
+                                    class="selectgroup-input">
+                                <span class="selectgroup-button"><i class="fas fa-question"></i></span>
+                            </label>
+                        </div>
+                    </div>
+
                 </div>
 
             </div>

@@ -394,6 +394,11 @@ $(document.body).on("change",".tasLaptopEquipment",function(){
     }
 });
 
+function customerChange() {
+     $('#customerName').val($('.customerId').find(':selected').data('name'));
+     $('#customerPhone').val($('.customerId').find(':selected').data('phone'));
+     $('#customerAdress').val($('.customerId').find(':selected').data('address'));
+}
 
 // mengganti item
 $(document.body).on("change",".itemsDetail",function(){
