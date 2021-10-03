@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\Employee;
+use App\Models\AccountData;
 use App\Models\Service;
 use App\Models\ServicePayment;
 use App\Models\ServiceDetail;
@@ -143,11 +144,12 @@ class ServicePaymentController extends Controller
         $items  = Item::where('name','!=','Jasa Service')->get();
         // where('technician_id',$employee->id)
         // ->
+        $account  = AccountData::get();
         $data = Service::where(function ($query) {
             $query->where('payment_status','DownPayment');
             $query->orWhere('payment_status',null);
         })->get();
-        return view('pages.backend.transaction.servicePayment.createServicePayment',compact('employee','code','items','data'));
+        return view('pages.backend.transaction.servicePayment.createServicePayment',compact('employee','code','items','data','account'));
     }
 
     public function store(Request $req)

@@ -42,6 +42,9 @@ class DatabaseSeeder extends Seeder
             SubMenuSeeder::class,
             HistoryPurchaseSeeder::class,
             HistoryDetailPurchaseSeeder::class,
+            accountData::class,
+            accountMain::class,
+            accountMainDetail::class,
         ]);
     }
 }

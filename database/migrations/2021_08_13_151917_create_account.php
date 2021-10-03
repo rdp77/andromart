@@ -13,19 +13,20 @@ class CreateAccount extends Migration
      */
     public function up()
     {
-        Schema::create('account', function (Blueprint $table) {
+        Schema::create('account_data', function (Blueprint $table) {
             $table->id();
-            $table->String('account_id');
+            // $table->String('account_id');
+            $table->String('code');
             $table->String('name');
-            $table->String('parrent_id');
+            // $table->integer('parent_id');
             $table->integer('area_id');
+            $table->integer('branch_id');
             $table->String('debet_kredit');
             $table->String('active');
-            $table->integer('branch_id');
             $table->String('account_type');
-            $table->String('group_neraca');
-            $table->String('main_id');
-            $table->String('main_name');
+            // $table->String('group_neraca');
+            $table->integer('main_id');
+            $table->integer('main_detail_id');
             $table->double('opening_balance');
             $table->date('opening_date');
             $table->timestamps();
@@ -39,6 +40,6 @@ class CreateAccount extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('account_type');
+        Schema::dropIfExists('account_data');
     }
 }

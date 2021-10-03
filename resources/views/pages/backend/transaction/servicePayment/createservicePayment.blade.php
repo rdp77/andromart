@@ -1,10 +1,10 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__('Tambah Service'))
-@section('titleContent', __('Tambah Service'))
+@section('title', __('pages.title').__('Tambah Pembayaran Service'))
+@section('titleContent', __('Tambah Pembayaran Service'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
 <div class="breadcrumb-item active">{{ __('Service') }}</div>
-<div class="breadcrumb-item active">{{ __('Tambah Service') }}</div>
+<div class="breadcrumb-item active">{{ __('Tambah Pembayaran Service') }}</div>
 @endsection
 
 @section('content')
@@ -52,12 +52,34 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="form-group col-12 col-md-6 col-lg-6">
+                            <label for="type">{{ __('Pembayaran') }}<code>*</code></label>
+                            <select class="select2 PaymentMethod" name="PaymentMethod" onchange="paymentMethodChange()">
+                                <option value="">- Select -</option>
+                                <option value="Cash">Cash</option>
+                                <option value="Debit">Debit</option>
+                                <option value="Transfer">Transfer</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-12 col-md-6 col-lg-6">
+                            <label for="type">{{ __('Tipe') }}<code>*</code></label>
+                            <select class="select2 account" name="account">
+                                <option value="">- Select -</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="form-group col-12 col-md-12 col-lg-12">
                             <label for="type">{{ __('Keterangan') }}<code>*</code></label>
                             <textarea name="description" class="form-control" id="description"></textarea>
                         </div>
                     </div>
-
+                    @foreach ($account as $el)
+                        <input class="accountDataHidden" type="hidden"
+                        data-name="{{$el->name}}"
+                        data-code="{{$el->code}}"
+                        value="{{$el->id}}">
+                    @endforeach
                     <h6 style="color: #6777ef">Data Service</h6>
                     <br>
                     <div class="row">

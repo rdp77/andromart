@@ -255,3 +255,20 @@ function choseService() {
         }
     });
 }
+
+function paymentMethodChange() {
+    var value = $('.PaymentMethod').val();
+    var dataItems = [];
+    $('.account').empty();
+    $.each($('.accountDataHidden'), function(){
+        // if (value == $(this).data('brand')) {
+            dataItems += '<option value="'+this.value+'">'+$(this).data('name')+'</option>';
+        // }
+    });
+    
+    $('.account').append('<option value="">- Select -</option>');
+    // if (value == 'Cash') {
+        $('.account').append(dataItems);
+    // }
+    // alert($('.PaymentMethod').val());
+}
