@@ -17,7 +17,7 @@ class CreateRegulationsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('types_id')->nullable();
             $table->unsignedBigInteger('role_id');
-            $table->unsignedBigInteger('branch_id');
+            $table->unsignedBigInteger('branch_id')->nullable();
 
             // user_id date    title   description
             $table->datetime('date');

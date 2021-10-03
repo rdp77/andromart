@@ -15,9 +15,8 @@
 @section('content')
 @php use Illuminate\Support\Facades\Crypt; @endphp
 <div class="card">
-    <form action="{{ route('contents.update', Crypt::encryptString($content->id)) }}" method="POST" class="form-data" enctype="multipart/form-data">
-                @csrf
-                @method('PUT')
+    <form action="{{ route('regulationUpdateVisiMisi', Crypt::encryptString($content->id)) }}" method="POST" class="form-data" enctype="multipart/form-data">
+        @csrf
         <div class="card-body">
             <div class="row">
                 @if($contentType->column_1 == 1)
@@ -80,7 +79,7 @@
                 </div>
                 @endif
                 @if($contentType->column_5 == 1)
-                <div class="form-group col-md-5 col-10">
+                <div class="form-group col-md-6 col-xs-12">
                     <div class="d-block">
                         <label for="icon" class="control-label">{{ __('Ikon') }}<code>*</code></label>
                     </div>
@@ -89,9 +88,9 @@
                     @foreach($icon as $row)
                         <!-- <option data-icon="{{ $row->icon }}" value="{{ $row->icon }}"> -->
                         @if($content->icon == $row->icon)
-                        <option value="{{ $row->icon }}" selected onclick="Icon('{{ $row->icon }}');">{{ $row->icon }}</option>
+                        <option value="{{ $row->icon }}" selected>{{ $row->icon }}</option>
                         @else
-                        <option value="{{ $row->icon }}" onclick="Icon('{{ $row->icon }}');">{{ $row->icon }}</option>
+                        <option value="{{ $row->icon }}">{{ $row->icon }}</option>
                         @endif
                     @endforeach
                     </select>
@@ -101,9 +100,6 @@
                         {{ $message }}
                     </div>
                     @enderror
-                </div>
-                <div class="form-group col-md-1 col-2" style="padding-top: 40px;">
-                    <i id="showIcons" class="{{ $content->icon }}" style="font-size: 20px;"></i>
                 </div>
                 @endif
                 @if($contentType->column_6 == 1)
@@ -157,12 +153,3 @@
     </form>
 </div>
 @endsection
-
-@push('custom-js')
-<script type="text/javascript">
-    function Icon(icons) {
-        var element = document.getElementById("showIcons");
-        element.className = icons;
-    }
-</script>
-@endpush
