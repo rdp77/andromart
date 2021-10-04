@@ -169,32 +169,32 @@ class SubMenuSeeder extends Seeder
                 'url' => route('stockMutation.index')
             ],
             [
-                'menu_id' => '7',
+                'menu_id' => '6',
                 'name' => 'Konten',
                 'url' => route('contents.index')
             ],
             [
-                'menu_id' => '7',
+                'menu_id' => '6',
                 'name' => 'Pesan',
                 'url' => route('message.index')
             ],
             [
-                'menu_id' => '8',
+                'menu_id' => '7',
                 'name' => 'Notulen',
                 'url' => route('notes.index')
             ],
             [
-                'menu_id' => '8',
+                'menu_id' => '7',
                 'name' => 'Visi Misi',
                 'url' => route('visiMisi')
             ],
             [
-                'menu_id' => '8',
+                'menu_id' => '7',
                 'name' => 'Setting SOP',
                 'url' => route('regulation.index')
             ],
             [
-                'menu_id' => '8',
+                'menu_id' => '7',
                 'name' => 'SOP',
                 'url' => route('regulationAll')
             ],
