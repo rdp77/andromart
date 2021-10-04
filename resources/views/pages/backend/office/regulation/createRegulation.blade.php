@@ -27,7 +27,7 @@
                 </div>
                 @enderror
             </div>
-            <div class="form-group col-md-6 col-xs-12">
+            <!-- <div class="form-group col-md-6 col-xs-12">
                 <div class="d-block">
                     <label for="branch" class="control-label">{{ __('Cabang') }}<code>*</code></label>
                 </div>
@@ -44,7 +44,7 @@
                     {{ $message }}
                 </div>
                 @enderror
-            </div>
+            </div> -->
             <div class="form-group col-md-6 col-xs-12">
                 <div class="d-block">
                     <label for="role" class="control-label">{{ __('Untuk Bagian') }}<code>*</code></label>
@@ -72,13 +72,12 @@
                 </div>
                 @enderror
             </div>
-            <div class="form-group col-md-6 col-xs-12">
+            <!-- <div class="form-group col-md-6 col-xs-12">
                 <div class="d-block">
                     <label for="subtitle" class="control-label">{{ __('File') }}<code>*</code></label>
                 </div>
                 <div class="custom-file">
                   <input type="file" class="custom-file-input" id="file" name="file[]" multiple>
-                  <!-- <input type="file" name="photo" class="custom-file-input"> -->
                   <label class="custom-file-label">Pilih File</label>
                 </div>
                 @error('file')
@@ -86,7 +85,7 @@
                     {{ $message }}
                 </div>
                 @enderror
-            </div>
+            </div> -->
         </div>
         <div class="card-footer text-right">
             <a class="btn btn-outline" href="javascript:window.history.go(-1);">{{ __('Kembali') }}</a>

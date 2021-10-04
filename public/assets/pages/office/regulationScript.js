@@ -16,7 +16,7 @@ var table = $("#table").DataTable({
     dom: '<"html5buttons">lBrtip',
     columns: [
         { data: "DT_RowIndex", orderable: false, searchable: false },
-        { data: "branch.name" },
+        // { data: "branch.name" },
         { data: "role.name" },
         // { data: "branch_id" },
         // { data: "role_id" },
