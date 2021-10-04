@@ -47,6 +47,11 @@ Route::group(['prefix' => 'transaction'], function () {
             [ServiceController::class, 'printService']
         )->name('service.printService');
 
+        Route::get(
+            'service-payment/{id}',
+            [ServicePaymentController::class, 'printServicePayment']
+        )->name('service.printServicePayment');
+
         Route::resource('service-payment', ServicePaymentController::class);
 
     });

@@ -57,8 +57,10 @@ class ServicePaymentController extends Controller
                         </button>';
                     $actionBtn .= '<div class="dropdown-menu">
                             <a class="dropdown-item" href="' . route('service-payment.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
+                    $actionBtn .= '<a class="dropdown-item" href="' . route('service.printServicePayment', $row->id) . '"><i class="fas fa-print"></i> Print</a>';
                     $actionBtn .= '<a class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
                     $actionBtn .= '<a onclick="jurnal(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
+                    
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
@@ -343,5 +345,12 @@ class ServicePaymentController extends Controller
     {
         $data = Journal::with('JournalDetail.AccountData')->where('id',$req->id)->first();
         return Response::json(['status' => 'success','jurnal'=>$data]);
+    }
+    public function printServicePayment($id)
+    {
+        $Service = Service::with('ServiceDetail','ServiceDetail.Items','Employee1','Employee2','CreatedByUser','Type','Brand','Brand.Category','ServiceEquipment','ServiceCondition')->find($id);
+        // return $Service;
+        $member = User::get();
+        return view('pages.backend.transaction.servicePayment.printServicePayment', ['service' => $Service,'member'=>$member]);
     }
 }
