@@ -50,7 +50,7 @@ class accountMainDetail extends Seeder
             [
                 'id' => '5',
                 'main_id' => '5',
-                'name' => 'Jasa',
+                'name' => 'Pendapatan Jasa',
                 'code' => '01',
                 'created_at' => date("Y-m-d h:i:s"),
                 'updated_at' => date("Y-m-d h:i:s"),
@@ -58,7 +58,7 @@ class accountMainDetail extends Seeder
             [
                 'id' => '6',
                 'main_id' => '5',
-                'name' => 'Penjualan',
+                'name' => 'Pendapatan Service',
                 'code' => '02',
                 'created_at' => date("Y-m-d h:i:s"),
                 'updated_at' => date("Y-m-d h:i:s"),

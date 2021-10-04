@@ -13,7 +13,7 @@
   }
   @media print { 
     .table th.thred { 
-        background-color: grey !important; 
+        background-color: red !important; 
         color: white !important; 
     } 
   }
@@ -36,7 +36,7 @@
           <div style="width: 400px">
             <p style="font-size: 15px">{{Auth::user()->employee->branch->address}} <b> Tlp : {{Auth::user()->employee->branch->phone}}</b> </p>
           </div>
-          <div class="invoice-number"><h3>Job Order :</h3><h1 style="font-size: 50px;color:red" >{{$service->code}}</h1>
+          <div class="invoice-number"><h3>Job Order :</h3><h1 style="font-size: 50px;color:#eb2390" >{{$service->code}}</h1>
             <br>
             <p style="font-size: 19px;font-weight:lighter">Lacak Perkembangan Service Kamu di : <br> <b>www.andromartindonesia.com</b> 
               {{-- <br> <b> AM care : 0851-5646-2356 --}}
@@ -53,14 +53,14 @@
         <div class="row">
           <div class="col-md-4">
             <address>
-              <strong><p style="font-size: 25px" style="background-color:#1d98d4;color:white;padding:5px;text-align:center">Teknisi</p></strong>
+              <strong><p style="font-size: 25px" style="background-color:#eb2390;color:white;padding:5px;text-align:center">Teknisi</p></strong>
               <p style="font-size: 26px">{{$service->employee1->name}}</p>
               {{-- <p style="font-size: 26px">{{$service->employee1->contact}}</p> --}}
             </address>
           </div>
           <div class="col-md-8 text-md-right">
             <address>
-              <strong><p style="font-size: 25px" style="background-color:#1d98d4;color:white;padding:5px;text-align:center">Customer</p></strong>
+              <strong><p style="font-size: 25px" style="background-color:#eb2390;color:white;padding:5px;text-align:center">Customer</p></strong>
               <p style="font-size: 26px"><b>{{$service->customer_name}}</b></p>
               <p style="font-size: 26px">{{$service->customer_phone}}</p>
               <p style="font-size: 26px;margin: 10px auto;">{{$service->customer_address}}</p>
@@ -340,7 +340,7 @@
         <div class="row">
           <div class="col-md-12">
             <address>
-              <strong><p style="font-size: 25px;background-color:red;color:white;padding:5px;text-align:center">PERHATIAN</p></strong>
+              <strong><p style="font-size: 25px;background-color:#5a5a5a;color:white;padding:5px;text-align:center">PERHATIAN</p></strong>
               <p style="font-size: 16px;line-height:17px;font-weight:600">
               1. Pemberian Masa Garansi Mutlak Keputusan Andromart.
               <br>
@@ -364,14 +364,14 @@
               <br>
               11. Nota Service ini Harus Dibawa / Disertakan saat Pengambilan Unit.
               </p>
-              <strong><p style="font-size: 25px;background-color:red;color:white;padding:5px;text-align:center">!!! Customer Dianggap Telah Membaca dan Menyepakati Ketentuan !!!</p></strong>
+              <strong><p style="font-size: 25px;background-color:#5a5a5a;color:white;padding:5px;text-align:center">!!! Customer Dianggap Telah Membaca dan Menyepakati Ketentuan !!!</p></strong>
             </address>
           </div>
         </div>
         <br>
         <div class="row">
           <div class="col-md-9 text-md-right">
-            <table class="table table-md" style="border: 1px solid grey">
+            <table class="table table-md" style="border: 1px solid red">
               <tr>
                 <th class="text-center thred" colspan="2" style="font-size: 20px"><b> HOT LINE </b></th>
               </tr>

@@ -7,6 +7,8 @@ use App\Models\Item;
 use App\Models\Employee;
 use App\Models\AccountData;
 use App\Models\Service;
+use App\Models\Journal;
+use App\Models\JournalDetail;
 use App\Models\ServicePayment;
 use App\Models\ServiceDetail;
 use App\Models\ServiceStatusMutation;
@@ -55,7 +57,8 @@ class ServicePaymentController extends Controller
                         </button>';
                     $actionBtn .= '<div class="dropdown-menu">
                             <a class="dropdown-item" href="' . route('service-payment.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
-                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
+                    $actionBtn .= '<a class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
+                    $actionBtn .= '<a onclick="jurnal(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
@@ -130,21 +133,33 @@ class ServicePaymentController extends Controller
 
     public function code($type)
     {
+        $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
         $index = DB::table('service')->max('id')+1;
 
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
-        return $code = $type.$year . $month . $index;
+        return $code = $type.$getEmployee->Branch->code.$year . $month . $index;
+    }
+    public function codeJournals($type)
+    {
+        $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
+        $month = Carbon::now()->format('m');
+        $year = Carbon::now()->format('y');
+        // DB::table('service')->max('id')+1;
+        $index = DB::table('journals')->max('id')+1;
+
+        $index = str_pad($index, 3, '0', STR_PAD_LEFT);
+        return $code = $type.$getEmployee->Branch->code.$year . $month . $index;
     }
     public function create()
     {
-        $code   = $this->code('BYR-');
+        $code   = $this->code('BYR');
         $employee = Employee::where('user_id',Auth::user()->id)->first();
         $items  = Item::where('name','!=','Jasa Service')->get();
         // where('technician_id',$employee->id)
         // ->
-        $account  = AccountData::get();
+        $account  = AccountData::with('AccountMain','AccountMainDetail','Branch')->get();
         $data = Service::where(function ($query) {
             $query->where('payment_status','DownPayment');
             $query->orWhere('payment_status',null);
@@ -154,37 +169,115 @@ class ServicePaymentController extends Controller
 
     public function store(Request $req)
     {
-
+        DB::beginTransaction();
+        try {
         // return $req->all();
-        $dateConvert = $this->DashboardController->changeMonthIdToEn($req->date);
-        $id = DB::table('service_payment')->max('id')+1;
+            $dateConvert = $this->DashboardController->changeMonthIdToEn($req->date);
+            $id = DB::table('service_payment')->max('id')+1;
+            $getEmployee =  Employee::where('user_id',Auth::user()->id)->first();
+            $kode = $this->code('BYR');
+            ServicePayment::create([
+                'id' =>$id,
+                'code' =>$kode,
+                'user_id'=>Auth::user()->id,
+                'service_id'=>$req->serviceId,
+                'date'=>$dateConvert,
+                'total'=>str_replace(",", '',$req->totalPayment),
+                'type'=>$req->type,
+                'description'=>$req->description,
+                'created_by' => Auth::user()->name,
+                'created_at' => date('Y-m-d h:i:s'),
+            ]);
+            if($req->type == 'DownPayment'){
+                Service::where('id',$req->serviceId)->update([
+                    'payment_status'=>$req->type,
+                    'downpayment_date'=>$dateConvert,
+                    'total_downpayment'=>str_replace(",", '',$req->totalPayment),
+                ]);
+            }else{
+                Service::where('id',$req->serviceId)->update([
+                    'payment_status'=>$req->type,
+                    'payment_date'=>$dateConvert,
+                    'total_payment'=>str_replace(",", '',$req->totalPayment),
+                ]);
+            }
 
-        ServicePayment::create([
-            'id' =>$id,
-            'code' =>$req->code,
-            'user_id'=>Auth::user()->id,
-            'service_id'=>$req->serviceId,
-            'date'=>$dateConvert,
-            'total'=>str_replace(",", '',$req->totalPayment),
-            'type'=>$req->type,
-            'description'=>$req->description,
-            'created_by' => Auth::user()->name,
-            'created_at' => date('Y-m-d h:i:s'),
-        ]);
-        if($req->type == 'DownPayment'){
-            Service::where('id',$req->serviceId)->update([
-                'payment_status'=>$req->type,
-                'downpayment_date'=>$dateConvert,
-                'total_downpayment'=>str_replace(",", '',$req->totalPayment),
+            // penjurnalan
+            $idJournal = DB::table('journals')->max('id')+1;
+            Journal::create([
+                'id' =>$idJournal,
+                'code'=>$this->code('DD'),
+                'year'=>date('Y'),
+                'date'=>date('Y-m-d'),
+                'type'=>'Pembayaran Service',
+                'total'=>str_replace(",", '',$req->totalPayment),
+                'ref'=>$kode,
+                'description'=>$req->description,
+                'created_at'=>date('Y-m-d h:i:s'),
+                // 'updated_at'=>date('Y-m-d h:i:s'),
             ]);
-        }else{
-            Service::where('id',$req->serviceId)->update([
-                'payment_status'=>$req->type,
-                'payment_date'=>$dateConvert,
-                'total_payment'=>str_replace(",", '',$req->totalPayment),
-            ]);
+            if($req->type == 'DownPayment'){
+
+            }else{
+                $accountService  = AccountData::where('branch_id',$getEmployee->branch_id)
+                                    ->where('active','Y')
+                                    ->where('main_id',5)
+                                    ->where('main_detail_id',6)
+                                    ->first();
+
+                $accountJasa  = AccountData::where('branch_id',$getEmployee->branch_id)
+                                    ->where('active','Y')
+                                    ->where('main_id',5)
+                                    ->where('main_detail_id',5)
+                                    ->first();
+                $accountPembayaran  = AccountData::where('id',$req->account)
+                                    ->first();
+                $accountCode = [
+                    $accountPembayaran->id,
+                    $accountService->id,
+                    $accountJasa->id,
+                ];
+                $totalBayar = [
+                    str_replace(",", '',$req->totalPayment),
+                    str_replace(",", '',$req->totalSparePart),
+                    str_replace(",", '',$req->totalService),
+                ];
+                $description = [
+                    $req->description,
+                    $req->description,
+                    $req->description,
+                ];
+                $DK = [
+                    'D',
+                    'K',
+                    'K',
+                ];
+
+                for ($i=0; $i <count($accountCode) ; $i++) { 
+                    $idDetail = DB::table('journal_details')->max('id')+1;
+                    JournalDetail::create([
+                        'id'=>$idDetail,
+                        'journal_id'=>$idJournal,
+                        'account_id'=>$accountCode[$i],
+                        'total'=>$totalBayar[$i],
+                        'description'=>$description[$i],
+                        'debet_kredit'=>$DK[$i],
+                        'created_at'=>date('Y-m-d h:i:s'),
+                        'updated_at'=>date('Y-m-d h:i:s'),
+                    ]);
+                }
+                
+            }
+            
+            DB::commit();
+            return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return$th;
+            return Response::json(['status' => 'error','message'=>$th]);
         }
-
+        
+        
 
 
         // if($req->verificationPrice == 'N'){
@@ -196,7 +289,6 @@ class ServicePaymentController extends Controller
         //     $req->ip(),
         //     'Membuat Dana Kredit Pagu per PDL'
         // );
-        return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
 
     }
 
@@ -245,5 +337,11 @@ class ServicePaymentController extends Controller
         Service::destroy($id);
         ServiceDetail::where('service_id',$id)->destroy($id);
         return Response::json(['status' => 'success']);
+    }
+
+    public function serviceCheckJournals(Request $req)
+    {
+        $data = Journal::with('JournalDetail.AccountData')->where('id',$req->id)->first();
+        return Response::json(['status' => 'success','jurnal'=>$data]);
     }
 }

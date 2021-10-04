@@ -15,6 +15,11 @@ class CreateJournalDetailsTable extends Migration
     {
         Schema::create('journal_details', function (Blueprint $table) {
             $table->id();
+            $table->String('journal_id');
+            $table->integer('account_id');
+            $table->double('total');
+            $table->String('description');
+            $table->String('debet_kredit');
             $table->timestamps();
         });
     }

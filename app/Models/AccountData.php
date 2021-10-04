@@ -27,4 +27,18 @@ class AccountData extends Model
         // 'created_by',
         // 'updated_by',
     ];
+
+    public function AccountMain()
+    {
+        return $this->belongsTo(AccountMain::class, 'main_id', 'id');
+    }
+    public function AccountMainDetail()
+    {
+        return $this->belongsTo(AccountMainDetail::class, 'main_detail_id', 'id');
+    }
+    public function Branch()
+    {
+        return $this->belongsTo(Branch::class, 'branch_id', 'id');
+    }
+    
 }

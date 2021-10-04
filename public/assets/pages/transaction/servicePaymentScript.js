@@ -144,6 +144,23 @@ function save() {
         dangerMode: true,
     }).then((willSave) => {
         if (willSave) {
+            var validation = 0;
+            console.log(validation);
+            $('.validation').each(function(){
+                if ($(this).val() == '' || $(this).val() == null || $(this).val() == 0) {
+                    validation++;
+                    // alert($(this).data('name'));
+                    iziToast.warning({
+                        type: 'warning',
+                        title: $(this).data('name'),
+                    });
+                }else{
+                    validation-1;
+                }
+            });
+            if (validation != 0) {
+                return false;
+            }
             $.ajax({
                 url: "/transaction/service/service-payment",
                 data: $(".form-data").serialize(),
@@ -246,7 +263,7 @@ function choseService() {
                                 '</tr>'
                             );
                         });
-                }
+                    }
                 sumTotal();
 
             }
@@ -257,18 +274,51 @@ function choseService() {
 }
 
 function paymentMethodChange() {
+    var branch = $('.branchId').val();
     var value = $('.PaymentMethod').val();
     var dataItems = [];
     $('.account').empty();
     $.each($('.accountDataHidden'), function(){
-        // if (value == $(this).data('brand')) {
-            dataItems += '<option value="'+this.value+'">'+$(this).data('name')+'</option>';
-        // }
+        if (value == 'Cash') {
+            if ($(this).data('mainname') == 'Kas' && branch == $(this).data('branch')) {
+                dataItems += '<option value="'+this.value+'">'+$(this).data('code') +' - '+ $(this).data('name')+'</option>';
+            }
+        }
     });
     
     $('.account').append('<option value="">- Select -</option>');
     // if (value == 'Cash') {
-        $('.account').append(dataItems);
+    $('.account').append(dataItems);
     // }
     // alert($('.PaymentMethod').val());
+}
+function jurnal(params) {
+    $('.dropHereJournals').empty();
+    // $('.dropHereJournals').
+    $.ajax({
+        url: "/transaction/service/check-journals",
+        data: {id:params},
+        type: 'POST',
+        success: function(data) {
+
+            if (data.status == 'success'){
+                $.each(data.jurnal.journal_detail, function(index,value){
+                    if (value.debet_kredit == 'K') {
+                        var dk = '<td>0</td><td>'+parseInt(value.total).toLocaleString('en-US')+'</td>';
+                    }else{
+                        var dk = '<td>'+parseInt(value.total).toLocaleString('en-US')+'</td><td>0</td>';
+                    }
+                    $('.dropHereJournals').append(
+                            '<tr>'+
+                                '<td>'+value.account_data.code+'</td>'+
+                                '<td>'+value.account_data.name+'</td>'+
+                                dk+
+                            '</tr>'
+                    );
+                });
+            }
+            $('#exampleModal').modal('show')
+
+        },
+    });
 }

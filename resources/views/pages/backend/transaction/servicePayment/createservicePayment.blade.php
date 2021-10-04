@@ -27,7 +27,7 @@
                                 <label for="serviceId"
                                     class="control-label">{{ __('Service Faktur') }}<code>*</code></label>
                             </div>
-                            <select class="select2 serviceId" name="serviceId" onchange="choseService()">
+                            <select class="select2 serviceId validation" data-name="Service Harus Di isi" name="serviceId" onchange="choseService()">
                                 <option value="">- Select -</option>
                                 @foreach ($data as $element)
                                     <option value="{{$element->id}}">[{{$element->code}}] {{$element->customer_name}} - {{$element->brand}} {{$element->series}} <span><strong>( {{$element->work_status}} )</span></strong></option>
@@ -39,12 +39,11 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="date">{{ __('Tanggal') }}<code>*</code></label>
-                            <input id="date" type="text" class="form-control datepicker"
-                                name="date">
+                            <input id="date" type="text" class="form-control datepicker validation" data-name="Tanggal Harus Di isi" name="date">
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="type">{{ __('Tipe') }}<code>*</code></label>
-                            <select class="select2 type" name="type">
+                            <select class="select2 type validation" data-name="Tipe Harus Di isi"  name="type">
                                 <option value="">- Select -</option>
                                 <option value="Lunas">Lunas</option>
                                 <option value="DownPayment">Down Payment</option>
@@ -54,7 +53,7 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="type">{{ __('Pembayaran') }}<code>*</code></label>
-                            <select class="select2 PaymentMethod" name="PaymentMethod" onchange="paymentMethodChange()">
+                            <select class="select2 PaymentMethod validation" data-name="Metode Pembayaran Harus Di isi"  name="PaymentMethod" onchange="paymentMethodChange()">
                                 <option value="">- Select -</option>
                                 <option value="Cash">Cash</option>
                                 <option value="Debit">Debit</option>
@@ -62,8 +61,8 @@
                             </select>
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="type">{{ __('Tipe') }}<code>*</code></label>
-                            <select class="select2 account" name="account">
+                            <label for="type">{{ __('Akun') }}<code>*</code></label>
+                            <select class="select2 account validation" data-name="Akun Harus Di isi"  name="account">
                                 <option value="">- Select -</option>
                             </select>
                         </div>
@@ -71,11 +70,17 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-12 col-lg-12">
                             <label for="type">{{ __('Keterangan') }}<code>*</code></label>
-                            <textarea name="description" class="form-control" id="description"></textarea>
+                            <textarea name="description" class="form-control validation" data-name="Deskripsi Harus Di isi"  id="description"></textarea>
                         </div>
                     </div>
+                    <input type="hidden" class="branchId" value="{{Auth::user()->employee->branch_id}}">
+                    {{-- <input type="hidden" class="branchId" value="{{}}"> --}}
+                    {{-- <input type="hidden" class="branchId" value="{{}}"> --}}
                     @foreach ($account as $el)
                         <input class="accountDataHidden" type="hidden"
+                        data-mainName="{{$el->AccountMain->name}}"
+                        data-mainDetailName="{{$el->AccountMainDetail->name}}"
+                        data-branch="{{$el->branch_id}}"
                         data-name="{{$el->name}}"
                         data-code="{{$el->code}}"
                         value="{{$el->id}}">
