@@ -149,6 +149,11 @@ class SubMenuSeeder extends Seeder
                 'url' => 'javascript:void(0)'
             ],
             [
+                'menu_id' => '4',
+                'name' => 'Menu',
+                'url' => route('menu.index')
+            ],
+            [
                 'menu_id' => '5',
                 'name' => 'Stok',
                 'url' => route('stock.index')

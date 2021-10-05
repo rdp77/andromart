@@ -19,7 +19,7 @@ class MenuSeeder extends Seeder
                 'name' => 'Dashboard',
                 'icon' => 'fa-fire',
                 'url' => route('dashboard'),
-                'hover' => '["https://andromart.local/dashboard","https://andromart.local/log"]'
+                'hover' => '["' . route('dashboard') . '","' . route('dashboard.log') . '"]'
             ],
             [
                 'name' => 'Transaksi',
