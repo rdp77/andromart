@@ -184,10 +184,13 @@ class ItemController extends Controller
     {
         $category = Category::get();
         $brand = Brand::get();
-        $item = Item::find($id);
-        $supplier = Supplier::where('id', '!=', Item::find($id)->supplier_id)->get();
+        $item = Item::with('stock.unit')->find($id);
+        // $unitItem = Stock::where('item_id', '=', $id)->get();
+        $supplier = Supplier::get();
         $unit = Unit::get();
-        $warranty = Warranty::where('id', '!=', Item::find($id)->warranty_id)->get();
+        // return [$item,$unit];
+
+        $warranty = Warranty::get();
         return view('pages.backend.master.item.updateItem', compact('item', 'category', 'brand', 'brand', 'supplier', 'unit', 'warranty'));
     }
 
@@ -228,6 +231,12 @@ class ItemController extends Controller
             'updated_by' => Auth::user()->name,
             ]);
 
+        Stock::where('item_id', $id)
+            ->update([
+                'unit_id' => $req->unit_id,
+                // 'min_stock' => $req->unit_id,
+            ]);
+
         $item = Item::find($id);
         $this->DashboardController->createLog(
             $req->header('user-agent'),
@@ -246,12 +255,10 @@ class ItemController extends Controller
 
     public function destroy(Request $req, $id)
     {
-        $transaction = StockMutation::where('item_id', '=', $id)->get();
-        $checkTransaction = count($transaction);
         $stock = Stock::where('item_id', '=', $id)->get();
         $checkStock = collect($stock)->sum('stock');
-        // dd($checkStock);
-        // dd($checkTransaction);
+        $transaction = StockMutation::where('item_id', '=', $id)->get();
+        $checkTransaction = count($transaction);
         if ($checkStock > 0) {
             return Response::json(['status' => 'error', 'message' => "Data tidak bisa dihapus, Sisa Stok = $checkStock"]);
         }

@@ -76,10 +76,19 @@
                         </div>
                     </div>
                     <div class="profile-widget-name text-right">
+                        <a onclick="del({{$employee->id}})" class="btn btn-outline-danger btn-md" style="cursor: pointer;">
+                            <i class="fas fa-trash"></i>
+                        </a>
+                        <span>&emsp;</span>
                         <a href="{{ route('employee.edit', $employee->id)}}" class="btn btn-outline-primary btn-md">
-                            <i class="fa fa-user-edit"></i>
+                            <i class="fas fa-user-edit"></i>
                         </a>
                     </div>
+                    {{-- <div class="profile-widget-name text-right">
+                        <a href="{{ route('employee.edit', $employee->id)}}" class="btn btn-outline-primary btn-md">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </div> --}}
                 </div>
                 {{-- <div class="card-footer text-center">
                     <div class="font-weight-bold mb-2">
@@ -103,8 +112,6 @@
         @endforeach
     </div>
 </div>
-
-
 @endsection
 @section('script')
 <script src="{{ asset('assets/pages/master/employeeScript.js') }}"></script>

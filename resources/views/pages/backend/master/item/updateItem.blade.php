@@ -40,9 +40,14 @@
                 <div class="form-group col-12 col-md-4 col-lg-4">
                     <label for="unit_id">{{ __('Satuan') }}<code>*</code></label>
                     <select class="select2" name="unit_id" required>
-                        {{-- <option value="{{$item->stock->unit->id}}">{{$item->stock->unit->code}} - {{$item->stock->unit->name}}</option> --}}
                         @foreach ($unit as $unit)
-                            <option value="{{$unit->id}}">{{$unit->code}} - {{$unit->name}}</option>
+                            <option
+                            @foreach ($item->stock as $el1)
+                                @if ($el1->unit_id == $unit->id && $el1->branch_id == Auth::user()->employee->branch_id)
+                                    selected=""
+                                @endif
+                            @endforeach
+                            value="{{$unit->id}}">{{$unit->code}} - {{$unit->name}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -82,9 +87,13 @@
                 <div class="form-group col-12 col-md-4 col-lg-4">
                     <label for="warranty_id">{{ __('Garansi') }}<code>*</code></label>
                     <select class="select2" name="warranty_id" required>
-                        <option value="{{$item->warranty->id}}">{{$item->warranty->periode}} {{$item->warranty->name}}</option>
+                        {{-- <option value="{{$item->warranty->id}}">{{$item->warranty->periode}} {{$item->warranty->name}}</option> --}}
                         @foreach ($warranty as $warranty)
-                            <option value="{{$warranty->id}}">{{$warranty->periode}} {{$warranty->name}}</option>
+                            <option
+                            @if ($warranty->id == $item->warranty_id)
+                                selected=""
+                            @endif
+                            value="{{$warranty->id}}">{{$warranty->periode}} {{$warranty->name}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -93,9 +102,13 @@
                 <div class="form-group col-md-3 col-xs-12">
                     <label for="supplier_id">{{ __('Supplier') }}<code>*</code></label>
                     <select name="supplier_id" id="supplier_id" class="form-control select2" required>
-                        <option value="{{ $item->supplier->id }}">{{ $item->supplier->name }}</option>
+                        {{-- <option value="{{ $item->supplier->id }}">{{ $item->supplier->name }}</option> --}}
                         @foreach ($supplier as $supplier)
-                        <option value="{{ $supplier->id }}">{{ $supplier->name }}</option>
+                        <option
+                        @if ($supplier->id == $item->supplier_id)
+                            selected=""
+                        @endif
+                        value="{{ $supplier->id }}">{{ $supplier->name }}</option>
                         @endforeach
                     </select>
                     @error('supplier_id')

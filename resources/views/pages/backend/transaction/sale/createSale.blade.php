@@ -63,29 +63,33 @@
                     <br>
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="customer_name">{{ __('Nama') }}<code>*</code></label>
-                            <input id="customer_name" type="text" class="form-control validation" name="customer_name" data-name="Nama Customer">
+                            <label for="customerName">{{ __('Nama') }}</label>
+                            <input id="customerName" type="text" class="form-control" name="customer_name" data-name="Nama Customer">
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="series">{{ __('Member') }}<code>*</code></label>
-                            <select class="select2" name="customer_id">
+                            <label for="customer_id">{{ __('Member') }}</label>
+                            <select class="select2 customerId" name="customer_id" onchange="customerChange()">
                                 <option value="">- Select -</option>
                                 @foreach ($customer as $customer)
-                                <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                <option value="{{$customer->id}}"
+                                    data-name="{{$customer->name}}"
+                                    data-address="{{$customer->address}}"
+                                    data-phone="{{$customer->contact}}"
+                                    >{{$customer->name}}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-5 col-lg-5">
-                            <label for="customer_phone">{{ __('No. Telp.') }}<code>*</code></label>
+                            <label for="customerPhone">{{ __('No. Telp.') }}</label>
                             <div class="input-group">
                                 <div class="input-group-prepend">
                                 <div class="input-group-text">
                                     <i class="fas fa-phone"></i>
                                 </div>
                                 </div>
-                                <input id="customer_phone" type="text" class="form-control @error('customer_phone') is-invalid @enderror"
+                                <input id="customerPhone" type="text" class="form-control"
                                     name="customer_phone" value="{{ old('customer_phone') }}">
                                 @error('customer_telephone')
                                 <div class="invalid-feedback">
@@ -95,8 +99,8 @@
                             </div>
                         </div>
                         <div class="form-group col-12 col-md-7 col-lg-7">
-                            <label for="customer_address">{{ __('Alamat') }}<code>*</code></label>
-                            <input id="customer_address" type="text" class="form-control validation" data-name="Alamat" name="customer_address">
+                            <label for="customerAdress">{{ __('Alamat') }}</label>
+                            <input id="customerAdress" type="text" class="form-control" data-name="Alamat" name="customer_address">
                         </div>
                     </div>
 
@@ -197,13 +201,10 @@
                     <thead>
                         <tr>
                             <th style="width: 20%">Barang</th>
-                            {{-- <th style="width: 15%">Supplier</th> --}}
                             <th style="width: 9%">Qty | Stock</th>
                             <th style="width: 12%">Harga | Jumlah</th>
-                            {{-- <th style="width: 9%">Stok</th> --}}
-                            {{-- <th style="width: 11%">Jumlah</th> --}}
                             <th style="width: 20%">Operator</th>
-                            <th style="width: 10%">P.S. %</th>
+                            <th style="width: 10%">Profit Sharing %</th>
                             <th>Deskripsi</th>
                             <th style="width: 15%" hidden>tipe</th>
                             <th>Action</th>

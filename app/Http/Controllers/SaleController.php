@@ -45,8 +45,9 @@ class SaleController extends Controller
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>';
                     $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('sale.edit', $row->id) . '" >Edit</a>';
-                    $actionBtn .= '<a class="dropdown-item" href="' . route('sale.printSale', $row->id) . '" target="output"><i class="fas fa-print"></i> Cetak</a>';
+                            <a class="dropdown-item" href="' . route('sale.edit', $row->id) . '" ><i class="fas fa-pencil-alt"></i> Edit</a>';
+                    $actionBtn .= '<a class="dropdown-item" href="' . route('sale.printSale', $row->id) . '" target="output"><i class="fas fa-print"></i> Nota Besar</a>';
+                    $actionBtn .= '<a class="dropdown-item" href="' . route('sale.printSmallSale', $row->id) . '" target="output"><i class="fas fa-print"></i> Nota Kecil</a>';
                     // $actionBtn .= '<a onclick="" class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
                     // $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
@@ -82,8 +83,9 @@ class SaleController extends Controller
                 ->addColumn('dataItem', function ($row) {
                     $htmlAdd = '<table>';
                     foreach ($row->SaleDetail as $key => $value) {
+                        // $item = $value->Item()->withTrashed()->get('name');
                         $htmlAdd .=   '<tr>';
-                        $htmlAdd .=      '<th>'.$value->Item->name.'</th>';
+                        $htmlAdd .=      '<th>'.$value->item->name.'</th>';
                         $htmlAdd .=      '<th>'.$value->qty.'</th>';
                         $htmlAdd .=   '</tr>';
                     }
@@ -124,82 +126,88 @@ class SaleController extends Controller
 
     public function code($type)
     {
+        $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
         $index = DB::table('sales')->max('id')+1;
 
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
-        return $code = $type.$year . $month . $index;
+        return $code = $type.$getEmployee->Branch->code.$year . $month . $index;
     }
 
     public function create()
     {
-        $getEmployee =  Employee::where('user_id',Auth::user()->id)->first();
-        $code = $this->code('PJT-');
-        $sales = Employee::where('id', '!=', '1')->get();
-        $cash = Cash::get();
-        $buyer = Employee::where('id', '!=', '1')->get();
-        $warranty = Warranty::get();
-        $customer = Customer::get();
+        $code = $this->code('PJT');
         $userBranch = Auth::user()->employee->branch_id;
-        $stock = Stock::where('branch_id', '=', 1)
-        ->where('item_id', '!=', 1)->get();
-        // $item = Item::with('stock')->where('name','!=','Jasa Service')->get();
-        // return($stock);
-        return view('pages.backend.transaction.sale.createSale', compact('code', 'cash', 'buyer', 'sales', 'stock', 'warranty', 'customer'));
+        $sales = Employee::where('id', '!=', '1')->where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
+        $buyer = Employee::where('id', '!=', '1')->where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
+        $cash = Cash::get();
+        $customer = Customer::where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
+        $stock = Stock::where('branch_id', '=', $userBranch)->where('item_id', '!=', 1)->get();
+
+        return view('pages.backend.transaction.sale.createSale', compact('code', 'cash', 'buyer', 'sales', 'stock', 'customer'));
     }
 
     public function store(Request $req)
     {
             // return [$req->profitSharingBuyer,$req->profitSharingSales,$req->totalPriceDetail];
-            DB::beginTransaction();
-        try {
-            $id = DB::table('sales')->max('id')+1;
-            $getEmployee =  Employee::where('user_id',Auth::user()->id)->first();
-            for ($i=0; $i <count($req->itemsDetail) ; $i++) {
-                // $total_profit[$i] = (str_replace(",", '',$req->totalPriceDetail[$i])) - ($req->qtyDetail[$i]*$req->profitDetail[$i]);
-                $sharing_profit_store[$i] = (100-($req->profitSharingBuyer[$i]+$req->profitSharingSales[$i]))*((str_replace(",", '',$req->totalPriceDetail[$i])) - ($req->qtyDetail[$i]*$req->profitDetail[$i]))/100;
-                $sharing_profit_sales[$i] = $req->profitSharingSales[$i]*((str_replace(",", '',$req->totalPriceDetail[$i])) - ($req->qtyDetail[$i]*$req->profitDetail[$i]))/100;
-                $sharing_profit_buyer[$i] = $req->profitSharingBuyer[$i]*((str_replace(",", '',$req->totalPriceDetail[$i])) - ($req->qtyDetail[$i]*$req->profitDetail[$i]))/100;
-                $total_profit_store = collect($sharing_profit_store)->sum();
-                $total_profit_sales = collect($sharing_profit_sales)->sum();
-                $total_profit_buyer = collect($sharing_profit_buyer)->sum();
-            }
-            // return($total_profit_store);
-            Sale::create([
-                'id' => $id,
-                'code' => $this->code('PJT-'),
-                'user_id' => Auth::user()->id,
-                'sales_id' => $req->sales_id,
-                'cash_id' => $req->cash_id,
-                'branch_id' => $getEmployee->branch_id,
-                'customer_id' => $req->customer_id,
-                'customer_name' => $req->customer_name,
-                'customer_address' => $req->customer_address,
-                'customer_phone' => $req->customer_phone,
-                'payment_method' => $req->payment_method,
-                'date' => date('Y-m-d'),
-                'warranty_id' => $req->warranty,
-                'discount_type' => $req->typeDiscount,
-                'discount_price' => str_replace(",", '',$req->totalDiscountValue),
-                'discount_percent' => str_replace(",", '',$req->totalDiscountPercent),
-                'item_price' => str_replace(",", '',$req->totalSparePart),
-                'total_price' => str_replace(",", '',$req->totalPrice),
-                'total_profit_store' => $total_profit_store,
-                'total_profit_sales' => $total_profit_sales,
-                'total_profit_buyer' => $total_profit_buyer,
-                'description' => $req->description,
-                'created_at' =>date('Y-m-d h:i:s'),
-                'created_by' => Auth::user()->name,
-            ]);
+        //     DB::beginTransaction();
+        // try {
+                $id = DB::table('sales')->max('id')+1;
+                $getEmployee =  Employee::where('user_id',Auth::user()->id)->first();
+                $code = $this->code('PJT');
+                if ($req->customer_name != null) {
+                    $customerName = $req->customer_name;
+                    $customerPhone = $req->customer_phone;
+                    $customerAddress = $req->customer_address;
+                }
+                else {
+                    $customerName = 'Umum';
+                    $customerPhone = null;
+                    $customerAddress = null;
+                }
 
-            // return $req->qtyDetail*$req->profitDetail;
+                for ($i=0; $i <count($req->itemsDetail) ; $i++) {
+                    $sharing_profit_store[$i] = (100-($req->profitSharingBuyer[$i]+$req->profitSharingSales[$i]))*((str_replace(",", '',$req->totalPriceDetail[$i])) - ($req->qtyDetail[$i]*(str_replace(",", '',$req->profitDetail[$i]))))/100;
+                    $sharing_profit_sales[$i] = $req->profitSharingSales[$i]*((str_replace(",", '',$req->totalPriceDetail[$i])) - ($req->qtyDetail[$i]*(str_replace(",", '',$req->profitDetail[$i]))))/100;
+                    $sharing_profit_buyer[$i] = $req->profitSharingBuyer[$i]*((str_replace(",", '',$req->totalPriceDetail[$i])) - ($req->qtyDetail[$i]*(str_replace(",", '',$req->profitDetail[$i]))))/100;
+                    $total_profit_store = collect($sharing_profit_store)->sum();
+                    $total_profit_sales = collect($sharing_profit_sales)->sum();
+                    $total_profit_buyer = collect($sharing_profit_buyer)->sum();
+                }
+
+                Sale::create([
+                    'id' => $id,
+                    'code' => $code,
+                    'user_id' => Auth::user()->id,
+                    'sales_id' => $req->sales_id,
+                    'cash_id' => $req->cash_id,
+                    'branch_id' => $getEmployee->branch_id,
+                    'customer_id' => $req->customer_id,
+                    'customer_name' => $customerName,
+                    'customer_address' => $customerAddress,
+                    'customer_phone' => $customerPhone,
+                    'payment_method' => $req->payment_method,
+                    'date' => date('Y-m-d'),
+                    'warranty_id' => $req->warranty,
+                    'discount_type' => $req->typeDiscount,
+                    'discount_price' => str_replace(",", '',$req->totalDiscountValue),
+                    'discount_percent' => str_replace(",", '',$req->totalDiscountPercent),
+                    'item_price' => str_replace(",", '',$req->totalSparePart),
+                    'total_price' => str_replace(",", '',$req->totalPrice),
+                    'total_profit_store' => $total_profit_store,
+                    'total_profit_sales' => $total_profit_sales,
+                    'total_profit_buyer' => $total_profit_buyer,
+                    'description' => $req->description,
+                    'created_at' =>date('Y-m-d h:i:s'),
+                    'created_by' => Auth::user()->name,
+                ]);
+
             $checkStock = [];
             for ($i=0; $i <count($req->itemsDetail) ; $i++) {
-                // $total_profit[$i] = (str_replace(",", '',$req->totalPriceDetail[$i])) - ($req->qtyDetail[$i]*$req->profitDetail[$i]);
-                $sharing_profit_store[$i] = (100-($req->profitSharingBuyer[$i]+$req->profitSharingSales[$i]))*((str_replace(",", '',$req->totalPriceDetail[$i])) - ($req->qtyDetail[$i]*$req->profitDetail[$i]))/100;
-                $sharing_profit_sales[$i] = $req->profitSharingSales[$i]*((str_replace(",", '',$req->totalPriceDetail[$i])) - ($req->qtyDetail[$i]*$req->profitDetail[$i]))/100;
-                $sharing_profit_buyer[$i] = $req->profitSharingBuyer[$i]*((str_replace(",", '',$req->totalPriceDetail[$i])) - ($req->qtyDetail[$i]*$req->profitDetail[$i]))/100;
+                $sharing_profit_store[$i] = (100-($req->profitSharingBuyer[$i]+$req->profitSharingSales[$i]))*((str_replace(",", '',$req->totalPriceDetail[$i])) - ($req->qtyDetail[$i]*(str_replace(",", '',$req->profitDetail[$i]))))/100;
+                $sharing_profit_sales[$i] = $req->profitSharingSales[$i]*((str_replace(",", '',$req->totalPriceDetail[$i])) - ($req->qtyDetail[$i]*(str_replace(",", '',$req->profitDetail[$i]))))/100;
+                $sharing_profit_buyer[$i] = $req->profitSharingBuyer[$i]*((str_replace(",", '',$req->totalPriceDetail[$i])) - ($req->qtyDetail[$i]*(str_replace(",", '',$req->profitDetail[$i]))))/100;
 
                 SaleDetail::create([
                     'sale_id'=> $id,
@@ -228,24 +236,26 @@ class SaleController extends Controller
                                             'message'=>'Stock Item Ada yang 0. Harap Cek Kembali']);
                         }
                         if($req->typeDetail[$i] == 'SparePart'){
-                            $desc[$i] = 'Pengeluaran Barang Pada Penjualan '.$this->code('PJT-');
+                            $desc[$i] = 'Pengeluaran Barang Pada Penjualan '.$code;
                         }else{
-                            $desc[$i] = 'Pengeluaran Barang Loss Pada Penjualan '.$this->code('PJT-');
+                            $desc[$i] = 'Pengeluaran Barang Loss Pada Penjualan '.$code;
                         }
                         Stock::where('item_id',$req->itemsDetail[$i])
                         ->where('branch_id', $getEmployee->branch_id)->update([
                             'stock'      =>$checkStock[$i][0]->stock-$req->qtyDetail[$i],
                         ]);
                         StockMutation::create([
-                            'item_id'    =>$req->itemsDetail[$i],
-                            'unit_id'    =>$checkStock[$i][0]->unit_id,
-                            'branch_id'  =>$checkStock[$i][0]->branch_id,
-                            'qty'      =>$req->qtyDetail[$i],
-                            'code'       =>$this->code('PJT-'),
-                            'type'       =>'Out',
-                            'created_by'=> Auth::user()->name,
-                            'created_at'=> date('Y-m-d h:i:s'),
-                            'description'=>$desc[$i],
+                            'item_id'    => $req->itemsDetail[$i],
+                            'unit_id'    => $checkStock[$i][0]->unit_id,
+                            'branch_id'  => $checkStock[$i][0]->branch_id,
+                            'qty'        => $req->qtyDetail[$i],
+                            'code'       => $code,
+                            'type'       => 'Out',
+                            'created_by' => Auth::user()->name,
+                            'created_at' => date('Y-m-d h:i:s'),
+                            'updated_by' => Auth::user()->name,
+                            'updated_at' => date('Y-m-d h:i:s'),
+                            'description'=> $desc[$i],
                         ]);
                     }else{
                         return Response::json(['status' => 'fail',
@@ -253,13 +263,13 @@ class SaleController extends Controller
                     }
                 }
             }
-            DB::commit();
+            // DB::commit();
             return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
-        } catch (\Throwable $th) {
-            DB::rollback();
-            return $th;
-            return Response::json(['status' => 'error','message'=>$th]);
-        }
+        // } catch (\Throwable $th) {
+        //     DB::rollback();
+        //     return $th;
+        //     return Response::json(['status' => 'error','message'=>$th]);
+        // }
         // return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
     }
 
@@ -270,51 +280,87 @@ class SaleController extends Controller
 
     public function edit($id)
     {
-        $sale = Sale::with(['SaleDetail', 'Sales', 'Buyer', 'Customer'])->find($id);
-        $sales = Employee::where('id', '!=', Sale::find($id)->sales_id)->get();
-        // $buyer = Employee::where('id', '!=', Sale::find($id)->sales_id)->get();
-        // return $sales;
-        $warranty = Warranty::where('id', '!=', Sale::find($id)->warranty_id)->get();
-        $customer = Customer::where('id', '!=', Sale::find($id)->customer_id)->get();
+        $code = $this->code('PJT');
         $userBranch = Auth::user()->employee->branch_id;
+        $sales = Employee::where('id', '!=', '1')->where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
+        $buyer = Employee::where('id', '!=', '1')->where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
+        $cash = Cash::get();
+        $customer = Customer::where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
+        $stock = Stock::where('branch_id', '=', $userBranch)->where('item_id', '!=', 1)->get();
+
+        $sale = Sale::with(['SaleDetail', 'Customer'])->find($id);
         $item = Item::with('stock')->where('name','!=','Jasa Service')->get();
-        return view('pages.backend.transaction.sale.updateSale', compact('sale', 'item', 'warranty', 'customer', 'sales'));
+
+        return view('pages.backend.transaction.sale.updateSale', compact('sale', 'cash', 'stock', 'buyer', 'customer', 'sales'));
 
     }
 
     public function update(Request $req, $id)
     {
-        DB::beginTransaction();
-        try{
+        // return $req->all();
+        // return $req->itemsDetail;
+        // DB::beginTransaction();
+        // try{
             // $checkData = Sale::where('id',$id)->first();
             $date = $this->DashboardController->changeMonthIdToEn($req->date);
             $getEmployee =  Employee::where('user_id',Auth::user()->id)->first();
 
+            if ($req->customer_name != null) {
+                $customerName = $req->customer_name;
+                $customerPhone = $req->customer_phone;
+                $customerAddress = $req->customer_address;
+            }
+            else {
+                $customerName = 'Umum';
+                $customerPhone = null;
+                $customerAddress = null;
+            }
+            $sharing_profit_store = [];
+            $sharing_profit_sales = [];
+            $sharing_profit_buyer = [];
+            $sharing_profit_storeOld = [];
+            $sharing_profit_salesOld = [];
+            $sharing_profit_buyerOld = [];
+
+            if($req->itemsDetail != null){
+                for ($i=0; $i <count($req->itemsDetail) ; $i++) {
+                    $sharing_profit_store[$i] = (100-($req->profitSharingBuyer[$i]+$req->profitSharingSales[$i]))*((str_replace(",", '',$req->totalPriceDetail[$i])) - ($req->qtyDetail[$i]*(str_replace(",", '',$req->profitDetail[$i]))))/100;
+                    $sharing_profit_sales[$i] = $req->profitSharingSales[$i]*((str_replace(",", '',$req->totalPriceDetail[$i])) - ($req->qtyDetail[$i]*(str_replace(",", '',$req->profitDetail[$i]))))/100;
+                    $sharing_profit_buyer[$i] = $req->profitSharingBuyer[$i]*((str_replace(",", '',$req->totalPriceDetail[$i])) - ($req->qtyDetail[$i]*(str_replace(",", '',$req->profitDetail[$i]))))/100;
+                }
+            }
+            if($req->itemsDetailOld != null){
+                for ($i=0; $i <count($req->itemsDetailOld) ; $i++) {
+                    $sharing_profit_storeOld[$i] = (100-($req->profitSharingBuyerOld[$i]+$req->profitSharingSalesOld[$i]))*((str_replace(",", '',$req->totalPriceDetailOld[$i])) - ($req->qtyDetailOld[$i]*(str_replace(",", '',$req->profitDetailOld[$i]))))/100;
+
+                    $sharing_profit_salesOld[$i] = $req->profitSharingSalesOld[$i]*((str_replace(",", '',$req->totalPriceDetailOld[$i])) - ($req->qtyDetailOld[$i]*(str_replace(",", '',$req->profitDetailOld[$i]))))/100;
+                    $sharing_profit_buyerOld[$i] = $req->profitSharingBuyerOld[$i]*((str_replace(",", '',$req->totalPriceDetailOld[$i])) - ($req->qtyDetailOld[$i]*(str_replace(",", '',$req->profitDetailOld[$i]))))/100;
+                }
+            }
+
+            $total_profit_store = collect($sharing_profit_store)->sum()+collect($sharing_profit_storeOld)->sum();
+            $total_profit_sales = collect($sharing_profit_sales)->sum()+collect($sharing_profit_salesOld)->sum();
+            $total_profit_buyer = collect($sharing_profit_buyer)->sum()+collect($sharing_profit_buyerOld)->sum();
+            // return [$total_profit_store,collect($sharing_profit_store)->sum(),collect($sharing_profit_storeOld)->sum()];
             Sale::where('id', $id)->update([
-                // 'id' => $id,
-                // 'code' => $this->code('PJT-'),
                 'user_id' => Auth::user()->id,
                 'sales_id' => $req->sales_id,
-                'buyer_id' => $req->sales_id,
                 'branch_id' => $getEmployee->branch_id,
                 'customer_id' => $req->customer_id,
-                'customer_name' => $req->customer_name,
-                'customer_address' => $req->customer_address,
-                'customer_phone' => $req->customer_phone,
+                'customer_name' => $customerName,
+                'customer_address' => $customerAddress,
+                'customer_phone' => $customerPhone,
                 'date' => $date,
-                'warranty_id' => $req->warranty,
                 'discount_type' => $req->typeDiscount,
                 'discount_price' => str_replace(",", '',$req->totalDiscountValue),
                 'discount_percent' => str_replace(",", '',$req->totalDiscountPercent),
                 'item_price' => str_replace(",", '',$req->totalSparePart),
                 'total_price' => str_replace(",", '',$req->totalPrice),
-                // 'sharing_profit_store' => str_replace(",", '',$req->sharing_profit_store),
-                // 'sharing_profit_sales' => str_replace(",", '',$req->sharing_profit_sales),
-                'sharing_profit_store' => '0',
-                'sharing_profit_sales' => '0',
-                'sharing_profit_buyer' => '0',
+                'total_profit_store' => $total_profit_store,
+                'total_profit_sales' => $total_profit_sales,
+                'total_profit_buyer' => $total_profit_buyer,
                 'description' => $req->description,
-                'updated_at' =>date('Y-m-d h:i:s'),
+                'updated_at' => date('Y-m-d h:i:s'),
                 'updated_by' => Auth::user()->name,
             ]);
 
@@ -331,7 +377,8 @@ class SaleController extends Controller
                     if($checkDataDeleted[$i]->type == 'SparePart'){
                         $desc[$i] = '(Update Penjualan) Pengembalian Barang Pada Penjualan '.$req->code;
                     }else{
-                        $desc[$i] = '(Update Penjualan) Pengembalian Barang Loss Pada Penjualan '.$req->code;
+                        $desc[$i] = '(Update Penjualan) Pengembalian Barang Pada Penjualan '.$req->code;
+                        // $desc[$i] = '(Update Penjualan) Pengembalian Barang Loss Pada Penjualan '.$req->code;
                     }
                     // return $desc;
                     Stock::where('item_id',$checkDataDeleted[$i]->item_id)
@@ -346,25 +393,41 @@ class SaleController extends Controller
                         'code'       =>$req->code,
                         'type'       =>'In',
                         'description'=>$desc[$i],
+                        'created_by'=> Auth::user()->name,
+                        'created_at'=> date('Y-m-d h:i:s'),
+                        'updated_by'=> Auth::user()->name,
+                        'updated_at'=> date('Y-m-d h:i:s'),
                     ]);
                 }
-                $destroyExistingData = DB::table('sale_detail')->whereIn('id',$req->deletedExistingData)->delete();
+                // return $req->deletedExistingData;
+                $destroyExistingData = DB::table('sale_details')->whereIn('id',$req->deletedExistingData)->delete();
             }
 
-            // menyimpan data baru dan memperbaru stock
+            // menyimpan data baru dan memperbarui stock
             if($req->itemsDetail != null){
                 $checkStock = [];
                 for ($i=0; $i <count($req->itemsDetail) ; $i++) {
+                    $sharing_profit_store[$i] = (100-($req->profitSharingBuyer[$i]+$req->profitSharingSales[$i]))*((str_replace(",", '',$req->totalPriceDetail[$i])) - ($req->qtyDetail[$i]*$req->profitDetail[$i]))/100;
+                    $sharing_profit_sales[$i] = $req->profitSharingSales[$i]*((str_replace(",", '',$req->totalPriceDetail[$i])) - ($req->qtyDetail[$i]*$req->profitDetail[$i]))/100;
+                    $sharing_profit_buyer[$i] = $req->profitSharingBuyer[$i]*((str_replace(",", '',$req->totalPriceDetail[$i])) - ($req->qtyDetail[$i]*$req->profitDetail[$i]))/100;
+
                     SaleDetail::create([
                         'sale_id'=>$id,
                         'item_id'=>$req->itemsDetail[$i],
+                        'sales_id'=> $req->sales_id,
+                        'buyer_id'=> $req->buyerDetail[$i],
+                        'sharing_profit_store'=> $sharing_profit_store[$i],
+                        'sharing_profit_sales'=> $sharing_profit_sales[$i],
+                        'sharing_profit_buyer'=> $sharing_profit_buyer[$i],
                         'price'=>str_replace(",", '',$req->priceDetail[$i]),
                         'qty'=>$req->qtyDetail[$i],
                         'total'=>str_replace(",", '',$req->totalPriceDetail[$i]),
                         'description' =>str_replace(",", '',$req->descriptionDetail[$i]),
                         // 'type' =>$req->typeDetail[$i],
-                        'created_by'=>Auth::user()->name,
-                        'created_at'=>date('Y-m-d h:i:s'),
+                        'created_by'=> Auth::user()->name,
+                        'created_at'=> date('Y-m-d h:i:s'),
+                        'updated_by'=> Auth::user()->name,
+                        'updated_at'=> date('Y-m-d h:i:s'),
                     ]);
                     if($req->typeDetail[$i] != 'Jasa'){
                         $checkStock[$i] = Stock::where('item_id',$req->itemsDetail[$i])
@@ -381,7 +444,7 @@ class SaleController extends Controller
                             $desc[$i] = '(Update Penjualan) Pengeluaran Barang Loss Pada Penjualan '.$req->code;
                         }
                         Stock::where('item_id',$req->itemsDetail[$i])
-                        ->where('branch_id',Auth::user()->id)->update([
+                        ->where('branch_id',$getEmployee->branch_id)->update([
                             'stock'      =>$checkStock[$i][0]->stock-$req->qtyDetail[$i],
                         ]);
                         StockMutation::create([
@@ -389,9 +452,13 @@ class SaleController extends Controller
                             'unit_id'    =>$checkStock[$i][0]->unit_id,
                             'branch_id'  =>$checkStock[$i][0]->branch_id,
                             'qty'        =>$req->qtyDetail[$i],
-                            'code'       =>$this->code('SRV-'),
+                            'code'       =>$this->code('PJT'),
                             'type'       =>'Out',
                             'description'=>$desc[$i],
+                            'created_by'=> Auth::user()->name,
+                            'created_at'=> date('Y-m-d h:i:s'),
+                            'updated_by'=> Auth::user()->name,
+                            'updated_at'=> date('Y-m-d h:i:s'),
                         ]);
                     }
                 }
@@ -436,7 +503,7 @@ class SaleController extends Controller
                                     }else{
                                         // Jika Type berbeda maka perlu melakukan update stock mutasi dengan type yaitu MUTATION
                                         // return 'masuk 4.2';
-                                        $desc[$i] = '(Update Penjualan) Perubahan Barang dari '.$checkDataOld[$i]->type.' Menjadi '.$req->typeDetailOld[$i].' Pada Penjualan '.$req->code;
+                                        $desc[$i] = '(Update Penjualan) Perubahan Barang Pada Penjualan '.$req->code;
 
                                         StockMutation::create([
                                             'item_id'    =>$req->itemsDetailOld[$i],
@@ -446,6 +513,10 @@ class SaleController extends Controller
                                             'code'       =>$req->code,
                                             'type'       =>'Mutation',
                                             'description'=>$desc[$i],
+                                            'created_by'=> Auth::user()->name,
+                                            'created_at'=> date('Y-m-d h:i:s'),
+                                            'updated_by'=> Auth::user()->name,
+                                            'updated_at'=> date('Y-m-d h:i:s'),
                                         ]);
                                     }
                                     // mengupdate service detail jika item sama + qty sama + perubahan tipe sparepart / loss
@@ -478,6 +549,10 @@ class SaleController extends Controller
                                         'code'       =>$req->code,
                                         'type'       =>'In',
                                         'description'=>$descPengembalian[$i],
+                                        'created_by'=> Auth::user()->name,
+                                        'created_at'=> date('Y-m-d h:i:s'),
+                                        'updated_by'=> Auth::user()->name,
+                                        'updated_at'=> date('Y-m-d h:i:s'),
                                     ]);
 
                                     // Pegeluaran atas data item yang dirubah
@@ -494,6 +569,10 @@ class SaleController extends Controller
                                         'code'       =>$req->code,
                                         'type'       =>'Out',
                                         'description'=>$descPengeluaran[$i],
+                                        'created_by'=> Auth::user()->name,
+                                        'created_at'=> date('Y-m-d h:i:s'),
+                                        'updated_by'=> Auth::user()->name,
+                                        'updated_at'=> date('Y-m-d h:i:s'),
                                     ]);
 
                                     Stock::where('item_id',$checkDataOld[$i]->item_id)
@@ -537,6 +616,10 @@ class SaleController extends Controller
                                     'code'       =>$req->code,
                                     'type'       =>'In',
                                     'description'=>$descPengembalian[$i],
+                                    'created_by'=> Auth::user()->name,
+                                    'created_at'=> date('Y-m-d h:i:s'),
+                                    'updated_by'=> Auth::user()->name,
+                                    'updated_at'=> date('Y-m-d h:i:s'),
                                 ]);
 
                                 // Pegeluaran atas data item yang dirubah
@@ -557,11 +640,20 @@ class SaleController extends Controller
                                     'code'       =>$req->code,
                                     'type'       =>'Out',
                                     'description'=>$descPengeluaran[$i],
+                                    'created_by'=> Auth::user()->name,
+                                    'created_at'=> date('Y-m-d h:i:s'),
+                                    'updated_by'=> Auth::user()->name,
+                                    'updated_at'=> date('Y-m-d h:i:s'),
                                 ]);
 
                                 SaleDetail::where('id',$req->idDetailOld[$i])->update([
                                     // 'service_id'=>$id,
                                     'item_id'=>$req->itemsDetailOld[$i],
+                                    'sales_id'=> $req->sales_id,
+                                    'buyer_id'=> $req->buyerDetailOld[$i],
+                                    'sharing_profit_store'=> $sharing_profit_storeOld[$i],
+                                    'sharing_profit_sales'=> $sharing_profit_salesOld[$i],
+                                    'sharing_profit_buyer'=> $sharing_profit_buyerOld[$i],
                                     'price'=>str_replace(",", '',$req->priceDetailOld[$i]),
                                     'qty'=>$req->qtyDetailOld[$i],
                                     'total'=>str_replace(",", '',$req->totalPriceDetailOld[$i]),
@@ -577,13 +669,14 @@ class SaleController extends Controller
                     }
                 }
 
-            DB::commit();
+            // DB::commit();
             return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
-        } catch (\Throwable $th) {
+        // } catch (\Throwable $th) {
             //throw $th;
-            DB::rollback();
-            return Response::json(['status' => 'error','message'=>$th]);
-        }
+            // DB::rollback();
+            // return $th;
+            // return Response::json(['status' => 'error','message'=> 'keliru']);
+        // }
     }
 
     public function destroy(Request $req, $id)
@@ -606,6 +699,14 @@ class SaleController extends Controller
     }
 
     public function printSale($id)
+    {
+        $sale = Sale::with('SaleDetail', 'Sales', 'SaleDetail.Item', 'SaleDetail.Item.Warranty', 'SaleDetail.Item.Brand', 'SaleDetail.Item.Brand.Category', 'CreatedByUser')->find($id);
+        // return $Service;
+        $member = User::get();
+        return view('pages.backend.transaction.sale.printSales', ['sale' => $sale,'member'=>$member]);
+    }
+
+    public function printSmallSale($id)
     {
         $sale = Sale::with('SaleDetail', 'Sales', 'SaleDetail.Item', 'SaleDetail.Item.Brand', 'SaleDetail.Item.Brand.Category', 'CreatedByUser')->find($id);
         // return $Service;

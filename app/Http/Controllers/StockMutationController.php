@@ -30,8 +30,6 @@ class StockMutationController extends Controller
 {
     public function index(Request $req)
     {
-        // $mutation = StockMutation::with('item', 'item.brand', 'item.stock.branch', 'item.stock.unit' )->get();
-
         if ($req->ajax()) {
             $data = StockMutation::with('branch')->get();
             return Datatables::of($data)
@@ -54,7 +52,6 @@ class StockMutationController extends Controller
                     $htmlAdd = '<table>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<th>'.$row->code.'</th>';
-                    // $htmlAdd .=      '<th>'.$row->branch->name.'</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .= '<table>';
 

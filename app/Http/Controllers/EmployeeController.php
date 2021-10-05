@@ -94,6 +94,7 @@ class EmployeeController extends Controller
         $branch = Branch::where('id', '!=', Employee::find($id)->branch_id)->get();
         $employee = Employee::find($id);
         $role = Role::where('id', '!=', $employee->user->role_id)->get();
+
         return view('pages.backend.master.employee.updateEmployee', compact('branch', 'employee', 'role'));
     }
 
@@ -118,8 +119,31 @@ class EmployeeController extends Controller
         }
 
         $birthday = $this->DashboardController->changeMonthIdToEn($req->birthday);
+// return $req->all();
+        if ($req->hasFile('avatar')) {
+            $req->file('avatar')->move('assetsmaster/avatar/',$req->file('avatar')->getClientOriginalName());
+            Employee::where('id', $id)
+            ->update([
+                'avatar' => $req->file('avatar')->getClientOriginalName(),
+                'branch_id' => $req->branch_id,
+                'level' => $req->level,
+                'identity' => $req->identity,
+                'name' => $req->name,
+                'birthday' => $birthday,
+                'contact' => $req->contact,
+                'gender' => $req->gender,
+                'address' => $req->address,
+                'updated_by' => Auth::user()->name,
+            ]);
 
-        Employee::where('id', $id)
+            User::where('id', Employee::find($id)->user_id)
+            ->update([
+                'name' => $req->name,
+                'role_id' => $req->role_id,
+            ]);
+        }
+        else {
+            Employee::where('id', $id)
             ->update([
                 'branch_id' => $req->branch_id,
                 'level' => $req->level,
@@ -132,11 +156,12 @@ class EmployeeController extends Controller
                 'updated_by' => Auth::user()->name,
             ]);
 
-        User::where('id', Employee::find($id)->user_id)
+            User::where('id', Employee::find($id)->user_id)
             ->update([
                 'name' => $req->name,
                 'role_id' => $req->role_id,
             ]);
+        }
 
         $employee = Employee::find($id);
         $this->DashboardController->createLog(
@@ -154,8 +179,21 @@ class EmployeeController extends Controller
             ]);
     }
 
-    public function destroy(Employee $employee)
+    public function destroy(Request $req, $id)
     {
-        //
+        $employee = Employee::find($id);
+        $user = User::where('id', '=', $employee->user_id)->get();
+
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Menghapus master karyawan ' . Employee::find($id)->name
+        );
+
+        Employee::destroy($id);
+        User::destroy($user);
+
+        return Response::json(['status' => 'success', 'message' => 'Data master berhasil dihapus !']);
+
     }
 }

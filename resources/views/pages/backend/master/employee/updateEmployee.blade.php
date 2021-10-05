@@ -108,9 +108,6 @@
                       <div class="form-group col-md-7 col-12">
                         <label for="address">{{ __('Alamat') }}<code>*</code></label>
                         <input type="text" class="form-control" value="{{ $employee->address }}" name="address" required>
-                        <div class="invalid-feedback">
-                          Please fill in the first name
-                        </div>
                       </div>
                     </div>
                     <div class="row">

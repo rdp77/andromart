@@ -29,7 +29,7 @@ class StockMutation extends Model
 
     public function item()
     {
-        return $this->belongsTo('App\Models\Item');
+        return $this->belongsTo('App\Models\Item')->withTrashed();
     }
 
     public function unit()

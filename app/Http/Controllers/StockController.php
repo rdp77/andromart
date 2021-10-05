@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
 use App\Models\Stock;
 use App\Models\Item;
 use App\Models\Unit;
@@ -47,12 +48,35 @@ class StockController extends Controller
 
     public function create()
     {
-        //
+        $item = Item::where('id', '!=', '1')->orderBy('name', 'asc')->get();
+        $branch = Branch::get();
+        $unit = Unit::orderBy('name', 'asc')->get();
+        return view('pages.backend.warehouse.stock.createStock', compact('item', 'branch', 'unit'));
     }
 
-    public function store(Request $request)
+    public function store(Request $req)
     {
-        //
+        Stock::create([
+            'item_id'   => $req->item_id,
+            'unit_id'   => $req->unit_id,
+            'branch_id' => $req->branch_id,
+            'stock'     => 0,
+            'min_stock' => $req->min_stock,
+            'description' => $req->description,
+            'created_by' => Auth::user()->name
+        ]);
+
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Membuat stok baru'
+        );
+
+        return Redirect::route('stock.index')
+            ->with([
+                'status' => 'Berhasil membuat stock baru',
+                'type' => 'success'
+            ]);
     }
 
     public function show(Stock $stock)
@@ -60,9 +84,12 @@ class StockController extends Controller
         //
     }
 
-    public function edit(Stock $stock)
+    public function edit($id)
     {
-        //
+        $branch = Branch::get();
+        $unit = Unit::get();
+        $stock = Stock::find($id);
+        return view('pages.backend.warehouse.stock.updateStock', compact('stock', 'branch', 'unit'));
     }
 
     public function update(Request $request, Stock $stock)
