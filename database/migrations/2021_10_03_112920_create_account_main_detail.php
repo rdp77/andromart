@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateJournalDetailsTable extends Migration
+class CreateAccountMainDetail extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,11 @@ class CreateJournalDetailsTable extends Migration
      */
     public function up()
     {
-        Schema::create('journal_details', function (Blueprint $table) {
+        Schema::create('account_main_detail', function (Blueprint $table) {
             $table->id();
-            $table->String('journal_id');
-            $table->integer('account_id');
-            $table->double('total');
-            $table->String('description');
-            $table->String('debet_kredit');
+            $table->String('code');
+            $table->integer('main_id');
+            $table->String('name');
             $table->timestamps();
         });
     }
@@ -31,6 +29,6 @@ class CreateJournalDetailsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('journal_details');
+        Schema::dropIfExists('account_main_detail');
     }
 }

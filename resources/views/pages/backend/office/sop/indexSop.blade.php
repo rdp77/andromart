@@ -8,38 +8,32 @@
 
 @section('content')
 <div class="section-body">
-<!-- <h2 class="section-title">Articles</h2>
-<p class="section-lead">This article component is based on card and flexbox.</p> -->
-    <div class="row">
-        @foreach($models as $row)
-        <a href="/office/regulation/select-sop/{{ $row->id }}">
-          <div class="col-12 col-md-4 col-lg-4">
-            <article class="article article-style-c">
-              <div class="article-header">
-                <div class="article-image" data-background="{{ asset('assetsfrontend/img/andromart.png') }}">
+  <!-- <h2 class="section-title">Overview</h2>
+  <p class="section-lead">
+    Organize and adjust all settings about this site.
+  </p> -->
+
+  <div class="row">
+    @foreach($models as $row)
+    <div class="col-lg-4 col-sm-6 col-12">
+      <a href="/office/regulation/select-sop/{{ $row->id }}">
+        <div class="card card-statistic-2">
+            <div class="card-icon bg-primary text-white">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="card-wrap">
+                <div class="card-header">
+                    <h4>{{ $row->title }}</h4>
                 </div>
-              </div>
-              <div class="article-details">
-                <!-- <div class="article-category"><a href="#">News</a> <div class="bullet"></div> <a href="#">Date</a></div> -->
-                <div class="article-title">
-                  <h2><a href="/office/regulation/select-sop/{{ $row->id }}">{{ $row->title }}</a></h2>
+                <div class="card-body">
+                  <p>{{ $row->roleName }}</p>
                 </div>
-                <?php $row->description ?>
-                <div class="article-user">
-                  <img alt="image" src="{{ asset('assets/img/avatar.png') }}">
-                  <div class="article-user-details">
-                    <div class="user-detail-name">
-                      {{ $row->roleName }}
-                    </div>
-                    <div class="text-job">{{ $row->branchName }}</div>
-                  </div>
-                </div>
-              </div>
-            </article>
-          </div>
-        </a>
-        @endforeach
+            </div>
+        </div>
+      </a>
     </div>
+    @endforeach
+  </div>
 </div>
 @endsection
 @section('script')

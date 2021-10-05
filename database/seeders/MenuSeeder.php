@@ -45,12 +45,12 @@ class MenuSeeder extends Seeder
                 'url' => 'javascript:void(0)',
                 'hover' => null
             ],
-            [
-                'name' => 'Kantor',
-                'icon' => 'fa-building',
-                'url' => 'javascript:void(0)',
-                'hover' => null
-            ],
+            // [
+            //     'name' => 'Kantor',
+            //     'icon' => 'fa-building',
+            //     'url' => 'javascript:void(0)',
+            //     'hover' => null
+            // ],
             [
                 'name' => 'Konten',
                 'icon' => 'fa-file-alt',

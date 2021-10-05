@@ -27,7 +27,7 @@
                     <div class="col-sm-6">
                         <div class="feature-box align-items-center mb-2" data-appear-animation="fadeInRightShorter" data-appear-animation-delay="{{ $delay+=100 }}">
                             <div class="feature-box-icon">
-                                <i class="{{ $row->icon }} icons"></i>
+                                <i class="{{ $row->icon }}"></i>
                             </div>
                             <div class="feature-box-info">
                                 <p class="opacity-9 mb-0">{{ $row->title }}</p>

@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-4">
+    <div class="col-12 col-lg-4">
         <div class="card mb-3">
             <div class="card-header">
                 <label>
@@ -19,7 +19,7 @@
             </div>
         </div>
     </div>
-    <div class="col-8">
+    <div class="col-12 col-lg-8">
         <div class="card mb-3">
             <div class="card-header">
                 Hubungi Untuk melakukan service
@@ -30,12 +30,11 @@
                 <div class="col-lg-3">
                     <h4 class="mt-3 mb-0">Cabang {{ $row->name }}</h4>
                     <ul class="list list-icons mt-3">
-                        <li><i class="fas fa-map-marker-alt"></i>{{ $row->address }}</li>
                         @if($row->phone != null)
                         <li>
                             <a href="https://api.whatsapp.com/send?phone=62{{$row->phone}}&text=Hai, Saya ingin service HP/Laptop di Andromart" target="_blank">
-                                <i class="fab fa-whatsapp"></i>
-                            </a> 0{{ $row->phone }}
+                                <i class="fab fa-whatsapp" style="font-size: 50px;"></i><p style="margin-left: 25px; padding-top: 15px; font-size: 15px;">0{{ $row->phone }}</p>
+                            </a> 
                         </li>
                         @endif
                         @if($row->email != null)

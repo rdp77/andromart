@@ -76,7 +76,7 @@
                 </div>
                 @endif
                 @if($contentType->column_5 == 1)
-                <div class="form-group col-md-6 col-xs-12">
+                <div class="form-group col-md-4 col-10">
                     <div class="d-block">
                         <label for="icon" class="control-label">{{ __('Ikon') }}<code>*</code></label>
                     </div>
@@ -85,7 +85,7 @@
                     <!-- <select name='icon' class="selectpicker form-control" data-live-search="true"> -->
                     @foreach($icon as $row)
                         <!-- <option data-icon="{{ $row->icon }}" value="{{ $row->icon }}"> -->
-                        <option value="{{ $row->icon }}">
+                        <option value="{{ $row->icon }}" onclick="Icon('{{ $row->icon }}');">
                             {{ $row->icon }}
                         </option>
                     @endforeach
@@ -96,6 +96,9 @@
                         {{ $message }}
                     </div>
                     @enderror
+                </div>
+                <div class="form-group col-md-1 col-2" style="padding-top: 40px;">
+                    <i id="showIcons" class="fas fa-ad" style="font-size: 20px;"></i>
                 </div>
                 @endif
                 @if($contentType->column_6 == 1)
@@ -150,9 +153,10 @@
 </div>
 @endsection
 @push('custom-js')
-<!-- new js -->
-
-    <!-- <script src="http://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="http://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
-    <script src="http://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.js"></script> -->
+<script type="text/javascript">
+    function Icon(icons) {
+        var element = document.getElementById("showIcons");
+        element.className = icons;
+    }
+</script>
 @endpush

@@ -103,6 +103,8 @@ function del(id) {
     });
 }
 
+
+
 // function dropValueCost() {
 //     var costValue = $('.costValue').find(':selected').data('cost');
 //     // alert(costValue);

@@ -21,9 +21,6 @@
                     <th class="text-center">
                         {{ __('NO') }}
                     </th>
-                    <th>
-                        {{ __('Cabang') }}
-                    </th>
                     <th>{{ __('Bagian') }}</th>
                     <th>{{ __('Judul') }}</th>
                     <th>{{ __('Aksi') }}</th>

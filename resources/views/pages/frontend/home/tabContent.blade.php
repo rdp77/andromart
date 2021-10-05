@@ -11,7 +11,7 @@
                             <span class="featured-boxes featured-boxes-style-6 p-0 m-0">
                                 <span class="featured-box featured-box-primary featured-box-effect-6 p-0 m-0">
                                     <span class="box-content p-0 m-0">
-                                        <i class="icon-featured icon-bulb icons"></i>
+                                        <i class="{{ $row->icon }}"></i>
                                     </span>
                                 </span>
                             </span>

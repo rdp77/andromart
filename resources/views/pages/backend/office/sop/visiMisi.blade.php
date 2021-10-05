@@ -9,6 +9,12 @@
 @section('content')
 <div class="section-body">
 <div class="card">
+  <div class="card-header">
+      <a href="{{ route('regulationVisi') }}" class="btn btn-icon icon-left btn-primary">
+          <i class="far fa-edit"></i>{{ __(' Ubah Visi') }}</a>
+      <a href="{{ route('regulationMisi') }}" class="btn btn-icon icon-left btn-primary" style="margin-left: 10px;">
+          <i class="far fa-edit"></i>{{ __(' Ubah Misi') }}</a>
+  </div>
   <div class="card-body">
   <div class="row">
     <div class="col-12">

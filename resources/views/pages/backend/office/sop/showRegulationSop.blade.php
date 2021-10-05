@@ -24,7 +24,32 @@
               <div class="font-weight-600">{{ $model->roleName }}</div>
               <div class="bullet"></div>
               <div class="font-weight-600">{{ $model->roleBranch }}</div>
+              @if($imageLength <= 1)
+                <div class="gallery gallery-fw" data-item-height="500">
+                  <div class="gallery-item" data-image="{{ asset($image[0]) }}" data-title="Image 1"></div>
+                </div>
+              @else
+                <div class="gallery gallery-fw" data-item-height="500">
+                  <div class="gallery-item" data-image="{{ asset($image[0]) }}" data-title="Image 1"></div>
+                </div>
+                <div class="gallery">
+                @foreach($image as $i => $row)
+                  @if($i != 0)
+                    <div class="gallery-item" data-image="{{ asset($row) }}" data-title="Image 1"></div>
+                  @endif
+                @endforeach
+                </div>
+              @endif
               <?php echo $model->description ?>
+              <h6>File tambahan : </h6>
+              <div class="row">
+              @foreach($file as $key => $value)
+                <div class="col-2">
+                  <center><i class="fas fa-file-alt" style="font-size: 20px;"></i></center>
+                  <center><a href="{{ asset($value) }}"> Unduh</a></center>
+                </div>
+              @endforeach
+              </div>
             </div>
             <div class="col-1"></div>
           </div>

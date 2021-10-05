@@ -18,7 +18,7 @@ class ContentTypeSeeder extends Seeder
         ContentType::create(['name' => 'Carousel About', 'type' => 'carousel_about', 'status' => false, 'column_1'=> true, 'column_3'=> true, 'column_4' => true]);
         ContentType::create(['name' => 'Carousel Services', 'type' => 'carousel_services', 'status' => false, 'column_1'=> true, 'column_3'=> true, 'column_4' => true]);
         ContentType::create(['deleted' => true, 'name' => 'Carousel Work', 'type' => 'carousel_work', 'status' => false, 'column_1'=> true, 'column_3'=> true, 'column_4' => true]);
-        ContentType::create(['name' => 'Home Tab', 'type' => 'home_tab', 'status' => true, 'column_1'=> true, 'column_3'=> true, 'column_6'=> true, 'column_7' => true]);
+        ContentType::create(['name' => 'Home Tab', 'type' => 'home_tab', 'status' => true, 'column_1'=> true, 'column_3'=> true, 'column_5'=>true, 'column_6'=> true, 'column_7' => true]);
         ContentType::create(['name' => 'Home About Us', 'type' => 'home_about_us', 'status' => false, 'column_1'=> true, 'column_2'=> true, 'column_3'=> true, 'column_6' => true]);
         ContentType::create(['name' => 'Home Hire Us', 'type' => 'home_hire_us', 'status' => true, 'column_1'=> true, 'column_5' => true]);
         ContentType::create(['name' => 'Home Testimonial Title', 'type' => 'home_testimonial_title', 'status' => false, 'column_1'=> true, 'column_2' => true]);

@@ -102,7 +102,7 @@ function del(id) {
         }
     });
 }
-
+var idSaved = '';
 function save() {
     swal({
         title: "Apakah Anda Yakin?",
@@ -138,7 +138,10 @@ function save() {
                         swal(data.message, {
                             icon: "success",
                         });
+                        $('.tombolSave').css('display','none')
+                        $('.tombolPrint').css('display','block');
                         // location.reload();
+                        idSaved = data.id;
                     }else{
                         swal(data.message, {
                             icon: "warning",
@@ -155,6 +158,10 @@ function save() {
         }
     });
 
+}
+
+function print(params) {
+    window.open(params+'/transaction/service/service/'+idSaved);   
 }
 
 function updateData(params) {
@@ -330,11 +337,11 @@ function addItem() {
     }
 }
 
-$(document.body).on("change",".laptopPcEquipment",function(){
+$(document.body).on("change",".lainnyaEquipment",function(){
     if ($(this).is(':checked') == true) {
-        $('.laptopPcEquipmentDescUsed').css('display','block');
+        $('.lainnyaEquipmentDescUsed').css('display','block');
     }else{
-        $('.laptopPcEquipmentDescUsed').css('display','none');
+        $('.lainnyaEquipmentDescUsed').css('display','none');
     }
 });
 $(document.body).on("change",".chargerEquipment",function(){
@@ -365,18 +372,18 @@ $(document.body).on("change",".RamEquipment",function(){
         $('.RamEquipmentDescUsed').css('display','none');
     }
 });
-$(document.body).on("change",".HandphoneEquipment",function(){
+$(document.body).on("change",".aksesorisEquipment",function(){
     if ($(this).is(':checked') == true) {
-        $('.HandphoneEquipmentDescUsed').css('display','block');
+        $('.aksesorisEquipmentDescUsed').css('display','block');
     }else{
-        $('.HandphoneEquipmentDescUsed').css('display','none');
+        $('.aksesorisEquipmentDescUsed').css('display','none');
     }
 });
-$(document.body).on("change",".printerEquipment",function(){
+$(document.body).on("change",".kabelEquipment",function(){
     if ($(this).is(':checked') == true) {
-        $('.printerEquipmentDescUsed').css('display','block');
+        $('.kabelEquipmentDescUsed').css('display','block');
     }else{
-        $('.printerEquipmentDescUsed').css('display','none');
+        $('.kabelEquipmentDescUsed').css('display','none');
     }
 });
 $(document.body).on("change",".tasLaptopEquipment",function(){
@@ -387,6 +394,11 @@ $(document.body).on("change",".tasLaptopEquipment",function(){
     }
 });
 
+function customerChange() {
+     $('#customerName').val($('.customerId').find(':selected').data('name'));
+     $('#customerPhone').val($('.customerId').find(':selected').data('phone'));
+     $('#customerAdress').val($('.customerId').find(':selected').data('address'));
+}
 
 // mengganti item
 $(document.body).on("change",".itemsDetail",function(){

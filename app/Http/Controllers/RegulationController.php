@@ -9,6 +9,8 @@ use App\Models\NotesPhoto;
 use App\Models\Regulation;
 use App\Models\RegulationDetail;
 use App\Models\Content;
+use App\Models\ContentType;
+use App\Models\Icon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -69,14 +71,14 @@ class RegulationController extends Controller
         Validator::make($req->all(), [
             // 'code' => ['required', 'string', 'max:255', 'unique:areas'],
             'role' => ['required', 'integer'],
-            'branch' => ['required', 'integer'],
+            // 'branch' => ['required', 'integer'],
             'titles' => ['required', 'string', 'max:255'],
             'description' => ['string'],
         ])->validate();
 
         $regulation = new Regulation;
         $regulation->role_id = $req->role;
-        $regulation->branch_id = $req->branch;
+        // $regulation->branch_id = 0;
         $regulation->date = date('Y-m-d');
         $regulation->title = $req->titles;
         $regulation->description = $req->description;
@@ -89,36 +91,36 @@ class RegulationController extends Controller
             'Membuat Peraturan Baru'
         );
         // dd($req->file('file'));
-        if($files = $req->file('file')){
-            // dd($files[0]->getClientOriginalName());
-            foreach($files as $file){
-                $dir = 'file_regulation';
-                $allowed = array("jpeg", "gif", "png", "jpg", "pdf", "doc", "docx");
-                if (!is_dir($dir)){
-                    mkdir( $dir );       
-                }
-                $size = filesize($file);
-                $input_file = $file->getClientOriginalName();
-                $filename = pathinfo($input_file, PATHINFO_FILENAME);
-                $md5Name = date("Y-m-d H-i-s")."_".$filename."_".md5($file->getRealPath());
-                $guessExtension = $file->guessExtension();
-                $data = $md5Name.".".$guessExtension;
+        // if($files = $req->file('file')){
+        //     // dd($files[0]->getClientOriginalName());
+        //     foreach($files as $file){
+        //         $dir = 'file_regulation';
+        //         $allowed = array("jpeg", "gif", "png", "jpg", "pdf", "doc", "docx");
+        //         if (!is_dir($dir)){
+        //             mkdir( $dir );       
+        //         }
+        //         $size = filesize($file);
+        //         $input_file = $file->getClientOriginalName();
+        //         $filename = pathinfo($input_file, PATHINFO_FILENAME);
+        //         $md5Name = date("Y-m-d H-i-s")."_".$filename."_".md5($file->getRealPath());
+        //         $guessExtension = $file->guessExtension();
+        //         $data = $md5Name.".".$guessExtension;
 
-                if($size > 5000000){
-                    // return Redirect::route('notes.index')->with(['status' => 'Ukuran File Terlalu Besar','type' => 'danger']);
-                } else if (!in_array($guessExtension, $allowed)){
-                    // return redirect('/operator/berkas-pengajuan/insert-foto/'.$id_encrypt)->with('danger', 'Tipe file berkas salah');
-                } else {
-                    $file->move($dir, $data);
+        //         if($size > 5000000){
+        //             // return Redirect::route('notes.index')->with(['status' => 'Ukuran File Terlalu Besar','type' => 'danger']);
+        //         } else if (!in_array($guessExtension, $allowed)){
+        //             // return redirect('/operator/berkas-pengajuan/insert-foto/'.$id_encrypt)->with('danger', 'Tipe file berkas salah');
+        //         } else {
+        //             $file->move($dir, $data);
 
-                    $regulationFile = new RegulationDetail;
-                    $regulationFile->regulation_id = $regulation->id;
-                    $regulationFile->name = $filename;
-                    $regulationFile->file = "file_regulation/".$data;
-                    $regulationFile->save();
-                }
-            }
-        }
+        //             $regulationFile = new RegulationDetail;
+        //             $regulationFile->regulation_id = $regulation->id;
+        //             $regulationFile->name = $filename;
+        //             $regulationFile->file = "file_regulation/".$data;
+        //             $regulationFile->save();
+        //         }
+        //     }
+        // }
 
         return Redirect::route('regulation.index')
             ->with([
@@ -135,7 +137,39 @@ class RegulationController extends Controller
         // dd($modelsFile);
         return view('pages.backend.office.regulation.showRegulation', compact('models', 'modelsFile'));
     }
+    public function visi()
+    {
 
+        $content = Content::where('content_types_id', 12)->first();
+        $contentType = ContentType::where('id', $content->content_types_id)->first();
+        $icon = Icon::get();
+        return view('pages.backend.office.sop.editVisiMisi')->with('content', $content)->with('contentType', $contentType)->with('icon', $icon);
+    }
+    public function misi()
+    {
+        $content = Content::where('content_types_id', 13)->first();
+        $contentType = ContentType::where('id', $content->content_types_id)->first();
+        $icon = Icon::get();
+        return view('pages.backend.office.sop.editVisiMisi')->with('content', $content)->with('contentType', $contentType)->with('icon', $icon);
+    }
+    public function updateVisiMisi(Request $req, $id)
+    {
+        $id = Crypt::decryptString($id);
+        $content = Content::where('id', $id)->first();
+        $content->title = $req->title;
+        $content->subtitle = $req->subtitle;
+        $content->description = $req->description;
+        $content->icon = $req->icon;
+        $content->url = $req->url;
+        $content->class = $req->class;
+        $content->position = $req->position;
+        $content->save();
+        return Redirect::route('visiMisi')
+            ->with([
+                'status' => 'Berhasil mengubah ',
+                'type' => 'success'
+            ]);
+    }
     public function edit($id)
     {
         $id = Crypt::decryptString($id);
@@ -253,8 +287,8 @@ class RegulationController extends Controller
     public function all()
     {
         $models = Regulation::join('roles', 'regulations.role_id', 'roles.id')
-        ->join('branches', 'regulations.branch_id', 'branches.id')
-        ->select('regulations.id as id','regulations.title as title', 'regulations.description as description', 'regulations.date as date', 'branches.name as branchName', 'roles.name as roleName')
+        // ->join('branches', 'regulations.branch_id', 'branches.id')
+        ->select('regulations.id as id','regulations.title as title', 'regulations.description as description', 'regulations.date as date', 'roles.name as roleName')
         ->get();
         // $models = [];
         return view('pages.backend.office.sop.indexSop', compact('models'));
@@ -262,26 +296,26 @@ class RegulationController extends Controller
     public function select($id)
     {
         $model = Regulation::join('roles', 'regulations.role_id', 'roles.id')
-        ->join('branches', 'regulations.branch_id', 'branches.id')
-        ->select('regulations.id as id','regulations.title as title', 'regulations.description as description', 'regulations.date as date', 'branches.name as branchName', 'roles.name as roleName')
+        // ->join('branches', 'regulations.branch_id', 'branches.id')
+        ->select('regulations.id as id','regulations.title as title', 'regulations.description as description', 'regulations.date as date', 'roles.name as roleName')
         ->where('regulations.id', $id)
         ->first();
-        $file = [];
-        $image = [];
-        $models = RegulationDetail::where('regulation_id', $id)->get();
-        foreach($models as $row) {
-            $ext = substr($row->file,-3);
-            if($ext == 'jpg' || $ext == 'png' || $ext == 'peg') {
-                $image[] = $row->file;
-            } else {
-                $file[$row->name] = $row->file;
-            }
-        }
-        $imageLength = count($image);
-        if($imageLength == 0){
-            $image[] = 'assetsfrontend/img/andromart.png';
-        }
-        return view('pages.backend.office.sop.showSop', compact('model', 'file', 'image', 'imageLength'));
+        // $file = [];
+        // $image = [];
+        // $models = RegulationDetail::where('regulation_id', $id)->get();
+        // foreach($models as $row) {
+        //     $ext = substr($row->file,-3);
+        //     if($ext == 'jpg' || $ext == 'png' || $ext == 'peg') {
+        //         $image[] = $row->file;
+        //     } else {
+        //         $file[$row->name] = $row->file;
+        //     }
+        // }
+        // $imageLength = count($image);
+        // if($imageLength == 0){
+        //     $image[] = 'assetsfrontend/img/andromart.png';
+        // }
+        return view('pages.backend.office.sop.showSop', compact('model'));
     }
     public function visiMisi()
     {
