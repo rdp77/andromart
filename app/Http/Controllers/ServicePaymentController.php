@@ -159,8 +159,6 @@ class ServicePaymentController extends Controller
         $code   = $this->code('BYR');
         $employee = Employee::where('user_id',Auth::user()->id)->first();
         $items  = Item::where('name','!=','Jasa Service')->get();
-        // where('technician_id',$employee->id)
-        // ->
         $account  = AccountData::with('AccountMain','AccountMainDetail','Branch')->get();
         $data = Service::where(function ($query) {
             $query->where('payment_status','DownPayment');
@@ -348,7 +346,7 @@ class ServicePaymentController extends Controller
     }
     public function printServicePayment($id)
     {
-        return $service = Service::with('ServiceDetail','ServiceDetail.Items','Employee1','Employee2','CreatedByUser','Type','Brand','Brand.Category','ServiceEquipment','ServiceCondition')->find($id);
+        $service = Service::with('ServiceDetail','ServiceDetail.Items','Employee1','Employee2','CreatedByUser','Type','Brand','Brand.Category','ServiceEquipment','ServiceCondition')->find($id);
         // return $Service;
         $member = User::get();
         return view('pages.backend.transaction.servicePayment.printServicePayment', ['service' => $service,'member'=>$member]);
