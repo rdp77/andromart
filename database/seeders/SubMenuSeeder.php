@@ -80,6 +80,21 @@ class SubMenuSeeder extends Seeder
             // Master Data
             [
                 'menu_id' => '4',
+                'name' => 'Akun Dasar',
+                'url' => route('item.index')
+            ],
+            [
+                'menu_id' => '4',
+                'name' => 'Akun Detail',
+                'url' => route('item.index')
+            ],
+            [
+                'menu_id' => '4',
+                'name' => 'Akun Kode',
+                'url' => route('item.index')
+            ],
+            [
+                'menu_id' => '4',
                 'name' => 'Barang',
                 'url' => route('item.index'),
                 'hover' => '["' . route('item.create') . '","' . route('item.index') . '"]'

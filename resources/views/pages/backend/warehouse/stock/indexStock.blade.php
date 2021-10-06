@@ -10,10 +10,10 @@
 @include('pages.backend.components.filterSearch')
 @include('layouts.backend.components.notification')
 <div class="card">
-    {{-- <div class="card-header">
-        <a href="#" class="btn btn-icon icon-left btn-primary">
-            <i class="far fa-edit"></i>{{ __(' Stok') }}</a>
-    </div> --}}
+    <div class="card-header">
+        <a href="{{ route('stock.create')}}" class="btn btn-icon icon-left btn-primary">
+            <i class="far fa-edit"></i>{{ __('Tambah Stok') }}</a>
+    </div>
     <div class="card-body">
         <table class="table-striped table" id="table" width="100%">
             <thead>

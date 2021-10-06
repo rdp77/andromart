@@ -77,10 +77,11 @@ $.ajaxSetup({
     },
 });
 
+
 function del(id) {
     swal({
         title: "Apakah Anda Yakin?",
-        text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus data pengguna Anda.",
+        text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus data master Anda.",
         icon: "warning",
         buttons: true,
         dangerMode: true,
@@ -89,15 +90,21 @@ function del(id) {
             $.ajax({
                 url: "/master/employee/employee/" + id,
                 type: "DELETE",
-                success: function () {
-                    swal("Data pengguna berhasil dihapus", {
-                        icon: "success",
-                    });
-                    table.draw();
+                success: function(data) {
+                    if (data.status == 'success'){
+                        swal(data.message, {
+                            icon: "success",
+                        });
+                        location.reload();
+                    }else{
+                        swal(data.message, {
+                            icon: "warning",
+                        });
+                    }
                 },
             });
         } else {
-            swal("Data pengguna Anda tidak jadi dihapus!");
+            swal("Data master Anda tidak jadi dihapus!");
         }
     });
 }

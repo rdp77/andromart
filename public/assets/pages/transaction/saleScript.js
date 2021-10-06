@@ -209,6 +209,12 @@ function updateData(params) {
 
 }
 
+function customerChange() {
+    $('#customerName').val($('.customerId').find(':selected').data('name'));
+    $('#customerPhone').val($('.customerId').find(':selected').data('phone'));
+    $('#customerAdress').val($('.customerId').find(':selected').data('address'));
+}
+
 function changeDiscount(params) {
     if (params == 'percent') {
         $('#totalDiscountValue').css('pointer-events','none');
@@ -267,7 +273,7 @@ function addItem() {
                     '<option value="" data-index="'+(index+1)+'">- Select Buyer -</option>'+
                     dataBuyer+
                 '</select>' +
-                '<input type="text" class="form-control name="salesDetail[]" value="Sales" readonly>'+
+                '<input type="text" class="form-control" name="salesDetail[]" value="Sales" readonly>'+
             '</td>'+
             '<td>'+
                 '<input type="number" class="form-control" name="profitSharingBuyer[]" value="0">'+

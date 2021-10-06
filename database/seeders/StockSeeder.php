@@ -73,7 +73,7 @@ class StockSeeder extends Seeder
                 'item_id' => '7',
                 'unit_id' => '1',
                 'branch_id' => '1',
-                'stock' => '1',
+                'stock' => '0',
                 'description' => ' ',
                 'created_at' => date("Y-m-d h:i:s"),
                 'updated_at' => date("Y-m-d h:i:s"),

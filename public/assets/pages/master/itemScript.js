@@ -102,12 +102,6 @@ function del(id) {
                         });
                     }
                 },
-                // success: function () {
-                //     swal("Data master berhasil dihapus", {
-                //         icon: "success",
-                //     });
-                //     table.draw();
-                // },
             });
         } else {
             swal("Data master Anda tidak jadi dihapus!");

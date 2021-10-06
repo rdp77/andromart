@@ -1,10 +1,10 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__(' | Tambah Penjualan'))
-@section('titleContent', __('Tambah Penjualan'))
+@section('title', __('pages.title').__(' | Edit Penjualan'))
+@section('titleContent', __('Edit Penjualan'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
 <div class="breadcrumb-item active">{{ __('Penjualan') }}</div>
-<div class="breadcrumb-item active">{{ __('Tambah Penjualan') }}</div>
+<div class="breadcrumb-item active">{{ __('Edit Penjualan') }}</div>
 @endsection
 
 @section('content')
@@ -30,23 +30,42 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
-                            <div class="d-block">
-                                <label for="sales"
-                                    class="control-label">{{ __('Sales') }}<code>*</code></label>
-                            </div>
+                            <label for="sales" class="control-label">{{ __('Sales') }}<code>*</code></label>
                             <select class="select2 validation" name="sales_id" data-name="Sales">
-                                <option value="{{$sale->sales->id}}">{{$sale->sales->name}}</option>
                                 @foreach ($sales as $sales)
-                                <option value="{{$sales->id}}">{{$sales->name}}</option>
+                                <option value="{{$sales->id}}"
+                                    @if ($sales->id == $sale->sales_id)
+                                        selected=""
+                                    @endif>{{$sales->name}}</option>
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="warranty">{{ __('Garansi') }}<code>*</code></label>
-                            <select class="select2 validation" name="warranty" data-name="Masa Garansi">
-                                <option value="{{$sale->warranty->id}}">{{$sale->warranty->periode}} {{$sale->warranty->name}}</option>
-                                @foreach ($warranty as $warranty)
-                                <option value="{{ $warranty->id }}">{{ $warranty->periode }} {{ $warranty->name }}</option>
+                        <div class="form-group col-12 col-md-4 col-xs-12">
+                            <label for="payment_method" class="control-label">{{ __('Metode Pembayaran') }}<code>*</code></label>
+                            <select class="select2 validation" name="payment_method" data-name="Metode Pembayaran" required>
+                                <option value="">- Select -</option>
+                                <option value="Cash"
+                                    @if ($sale->payment_method == 'Cash')
+                                        selected
+                                    @endif>Cash / Tunai
+                                </option>
+                                <option value="Transfer"
+                                    @if ($sale->payment_method == 'Transfer')
+                                        selected
+                                    @endif>Transfer
+                                </option>
+                            </select>
+                        </div>
+                        <div class="form-group col-12 col-md-4 col-xs-12">
+                            <label for="cash_id">{{ __('Kode Kas') }}<code>*</code></label>
+                            <select class="select2 validation" name="cash_id" data-name="Kode Kas">
+                                <option value="">- Select -</option>
+                                @foreach ($cash as $cash)
+                                <option value="{{ $cash->id }}"
+                                    @if ($sale->cash_id == $cash->id)
+                                        selected
+                                    @endif>{{ $cash->code }} - {{ $cash->name }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
@@ -63,10 +82,13 @@
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="series">{{ __('Member') }}<code>*</code></label>
                             <select class="select2" name="customer_id">
-                                {{-- <option value="{{ $sale->customer->id }}">{{ $sale->customer->name }}</option> --}}
                                 <option value=""> -Select- </option>
                                 @foreach ($customer as $customer)
-                                <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                <option value="{{ $customer->id }}"
+                                    @if ($sale->customer_id == $customer->id)
+                                        selected
+                                    @endif>{{ $customer->name }}
+                                </option>
                                 @endforeach
                             </select>
                         </div>
@@ -169,20 +191,20 @@
             </div>
         </div>
         <div class="card-body">
-
-            @foreach ($item as $el)
-                <input class="itemsData" type="hidden"
-                data-price="{{$el->sell - $el->discount}}"
-                data-supplier="{{$el->supplier->name}}"
-                @foreach ($el->stock as $el1)
-                    @if (Auth::user()->employee->branch_id == $el1->branch_id)
-                        data-stock="{{$el1->stock}}"
-                    @else
-                        data-stock="0"
-                    @endif
-                @endforeach
+            @foreach ($buyer as $el)
+                <input class="buyerData" type="hidden"
                 data-name="{{$el->name}}"
                 value="{{$el->id}}">
+            @endforeach
+
+            @foreach ($stock as $el)
+                <input class="itemsData" type="hidden"
+                data-stock="{{$el->stock}}"
+                data-price="{{$el->item->sell - $el->item->discount}}"
+                data-profit="{{$el->item->buy}}"
+                data-name="{{$el->item->name}}"
+                data-supplier="{{$el->item->supplier->name}}"
+                value="{{$el->item->id}}">
             @endforeach
 
             <div class="table-responsive">
@@ -190,13 +212,11 @@
                     <thead>
                         <tr>
                             <th style="width: 20%">Barang</th>
-                            <th>Supplier</th>
-                            <th>Harga</th>
-                            <th style="width: 9%">Qty</th>
-                            <th style="width: 9%">Stok</th>
-                            <th>Jumlah</th>
+                            <th style="width: 9%">Qty | Stock</th>
+                            <th style="width: 12%">Harga | Jumlah</th>
+                            <th style="width: 20%">Operator</th>
+                            <th style="width: 10%">Profit Sharing %</th>
                             <th>Deskripsi</th>
-                            <th style="width: 10%" hidden>P.S. Sales %</th>
                             <th style="width: 15%" hidden>tipe</th>
                             <th>Action</th>
                         </tr>
@@ -208,13 +228,12 @@
                                 <td style="display:none" >
                                     <input type="hidden" name="idDetailOld[]" value="{{$el->id}}">
                                     <input type="text" class="form-control priceDetailSparePart priceDetailSparePart_{{$i}} cleaveNumeral"
-                                        name="priceDetailSparePartOld[]"
-                                        @if ($el->type == 'SparePart')
-                                            value="{{$el->total_price}}"
-                                        @else
-                                            value="0"
-                                        @endif
-                                    >
+                                        name="priceDetailSparePartOld[]" value="{{$el->total}}">
+                                        {{-- @if ($el->type == 'SparePart') --}}
+
+                                        {{-- @else --}}
+                                            {{-- value="0" --}}
+                                        {{-- @endifs --}}
                                     <input type="text" class="form-control priceDetailLoss priceDetailLoss_{{$i}} cleaveNumeral"
                                         name="priceDetailLossOld[]"
                                         @if ($el->type == 'Loss')
@@ -227,45 +246,53 @@
                                 <td>
                                     <select class="select2 itemsDetail" name="itemsDetailOld[]">
                                         <option value="-" data-index="">- Select -</option>
-                                        @foreach ($item as $el0)
-                                            <option data-index="{{$i}}"  data-price="{{$el0->sell}}"
-                                            @foreach ($el0->stock as $el1)
-                                                @if ((Auth::user()->employee->branch_id == $el1->branch_id))
-                                                    data-stock="{{$el1->stock}}"
-                                                    data-supplier="{{$el1->item->supplier->name}}"
-                                                @endif
-                                            @endforeach
-                                            @if ($el0->id == $el->item_id)
+                                        @foreach ($stock as $el0)
+                                            <option data-index="{{$i}}"
+                                            data-price="{{$el0->item->sell}}"
+                                            data-stock="{{$el0->stock}}"
+                                            data-supplier="{{$el0->item->supplier->name}}"
+                                            data-profit="{{$el0->item->buy}}"
+                                            @if ($el0->item->id == $el->item_id)
                                                 selected
                                             @endif
-                                            value="{{$el0->id}}">{{$el0->name}}</option>
+                                            value="{{$el0->item->id}}">{{$el0->item->name}}</option>
                                         @endforeach
                                     </select>
-                                </td>
-                                <td>
                                     <input type="text" readonly class="form-control  supplier supplier_{{$i}}" name="supplierDetailOld[]" data-index="{{$i}}"" value="{{$el->item->supplier->name}}">
                                 </td>
                                 <td>
-                                    <input type="text" class="form-control cleaveNumeral  priceDetail priceDetail_{{$i}}" name="priceDetailOld[]" data-index="{{$i}}" style="text-align: right" value="{{$el->price}}">
-                                </td>
-                                <td>
                                     <input type="text" class="form-control qtyDetail qtyDetail_{{$i}}" name="qtyDetailOld[]" value="{{$el->qty}}" data-index="{{$i}}" style="text-align: right">
-                                </td>
-                                <td>
-                                    <input readonly type="text" class="form-control stockDetail stock_{{$i}}" name="stockDetailOld[]"
-                                    @foreach ($item as $el0)
-                                        @foreach ($el0->stock as $el1)
-                                            @if ((Auth::user()->employee->branch_id == $el1->branch_id))
-                                                value="{{$el1->stock}}"
-                                            @endif
-                                        @endforeach
+                                    <input readonly type="text" class="form-control stockDetail stock_{{$i}}" data-index="{{$i}}" name="stockDetailOld[]"
+                                    @foreach ($stock as $el0)
+                                        value="{{$el0->stock}}"
                                     @endforeach
                                     style="text-align: right">
                                 </td>
                                 <td>
+                                    <input type="text" class="form-control cleaveNumeral  priceDetail priceDetail_{{$i}}" name="priceDetailOld[]" data-index="{{$i}}" style="text-align: right" value="{{$el->price}}">
                                     <input readonly type="text" class="form-control totalPriceDetail cleaveNumeral totalPriceDetail_{{$i}}" name="totalPriceDetailOld[]" style="text-align: right" value="{{$el->total}}">
                                 </td>
                                 <td>
+                                    <select class="select2 buyerDetail" name="buyerDetailOld[]">
+                                        <option value="" data-index="">- Select Buyer -</option>
+                                        @foreach ($buyer as $els)
+                                        <option value="{{$els->id}}" data-index="{{$i}}"
+                                            @if ($els->id == $el->buyer_id)
+                                                selected=""
+                                            @endif>{{$els->name}}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    <input type="text" class="form-control" name="salesDetail[]" value="Sales" readonly>
+                                </td>
+                                <td>
+                                    <input type="number" class="form-control" name="profitSharingBuyerOld[]"
+                                        value="{{($el->sharing_profit_buyer/($el->sharing_profit_store+$el->sharing_profit_sales+$el->sharing_profit_buyer)*100)}}">
+                                    <input type="number" class="form-control" name="profitSharingSalesOld[]"
+                                        value="{{($el->sharing_profit_sales/($el->sharing_profit_store+$el->sharing_profit_sales+$el->sharing_profit_buyer)*100)}}">
+                                </td>
+                                <td>
+                                    <input hidden type="text" class="form-control cleaveNumeral profitDetail profitDetail_{{$i}}" name="profitDetailOld[]" value="{{$el->item->buy}}" style="text-align: right">
                                     <input type="text" class="form-control" name="descriptionDetailOld[]" value="{{$el->description}}">
                                 </td>
                                 <td style="display: none">

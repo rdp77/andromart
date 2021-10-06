@@ -25,5 +25,10 @@ Route::group(['prefix' => 'transaction'], function () {
             'sale/{id}',
             [SaleController::class, 'printSale']
         )->name('sale.printSale');
+
+        Route::get(
+            'sale-print/{id}',
+            [SaleController::class, 'printSmallSale']
+        )->name('sale.printSmallSale');
     });
 });

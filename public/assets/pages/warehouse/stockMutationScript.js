@@ -19,7 +19,7 @@ var table = $("#table").DataTable({
         { data: "dataBranch" },
         { data: "dataItem" },
         { data: "dataQty" },
-        { data: "created_by" },
+        { data: "updated_by" },
         { data: "description" },
         // { data: "action", orderable: false, searchable: true },
     ],

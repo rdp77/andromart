@@ -5,19 +5,19 @@
       -webkit-print-color-adjust: exact !important;
     }
   }
-  @media print { 
-    .table th { 
-        background-color: #1d98d4 !important; 
-        color: white !important; 
-    } 
+  @media print {
+    .table th {
+        background-color: #1d98d4 !important;
+        color: white !important;
+    }
   }
-  @media print { 
-    .table th.thred { 
-        background-color: red !important; 
-        color: white !important; 
-    } 
+  @media print {
+    .table th.thred {
+        background-color: red !important;
+        color: white !important;
+    }
   }
-  
+
   .invoice-number{
     margin-top: -230px !important;
   }
@@ -34,17 +34,17 @@
           {{-- <h2>Invoice</h2> --}}
           <h2><img alt="Porto" height="150" src="{{ asset('assetsfrontend/img/andromart.png') }}" style="margin-top: 10px;"></h2>
           <div style="width: 400px">
-            <p style="font-size: 15px">{{Auth::user()->employee->branch->address}} <b> Tlp : {{Auth::user()->employee->branch->phone}}</b> </p>
+            <p style="font-size: 15px">{{Auth::user()->employee->branch->address}} <b> Tlp : 0{{Auth::user()->employee->branch->phone}}</b> </p>
           </div>
           <div class="invoice-number"><h3>Job Order :</h3><h1 style="font-size: 50px;color:#eb2390" >{{$service->code}}</h1>
             <br>
-            <p style="font-size: 19px;font-weight:lighter">Lacak Perkembangan Service Kamu di : <br> <b>www.andromartindonesia.com</b> 
+            <p style="font-size: 19px;font-weight:lighter">Lacak Perkembangan Service Kamu di : <br> <b>www.andromartindonesia.com</b>
               {{-- <br> <b> AM care : 0851-5646-2356 --}}
               {{-- <br>Konsultasi Service --}}
             </p>
           {{-- </b> --}}
           </div>
-          
+
         </div>
         {{-- <div style="border: 1px solid #1d98d4"></div> --}}
 
@@ -97,7 +97,7 @@
     </div>
     <div style="border: 1px solid gray"></div>
 
-    
+
     <div class="row mt-4" style="margin-top: 0px !important">
       <div class="col-md-12">
         {{-- <div class="section-title"><h3>Service Detail</h3></div> --}}
@@ -111,7 +111,7 @@
                 <th class="text-center" style="font-size: 25px;padding:0px !important" width="40%">Kesepakatan Bersama</th>
               </tr>
               <tr>
-                <td style="border-right: 1px solid #1d98d4"  style="font-size: 17px">{{$service->Brand->Category->name}} : 
+                <td style="border-right: 1px solid #1d98d4"  style="font-size: 17px">{{$service->Brand->Category->name}} :
                 <b>{{$service->Brand->name}} {{$service->Type->name}} [ {{$service->no_imei}} ] </b> </td>
                 <td style="border-right: 1px solid #1d98d4" class="text-center" rowspan="4" style="font-size: 17px">{{$service->complaint}}</td>
                 <td  class="text-center" rowspan="4" style="font-size: 17px">{{$service->description}}</td>
@@ -301,7 +301,7 @@
               </tbody>
             </table>
           </div>
-          <div class="col-lg-12 col-md-12 col-sm-12" 
+          <div class="col-lg-12 col-md-12 col-sm-12"
           {{-- style="border-left: 2px solid gray"  --}}
           >
             <table class="table table-sm">
@@ -314,7 +314,7 @@
                   @foreach ($service->ServiceEquipment as $i => $el)
                   @if ($i <= 3)
                     @if ($el->status == 'Y')
-                        <td @if ($i < 3) style="border-right: 1px solid #1d98d4" @endif width="25%" style="font-size: 18px"><b>{{$el->name}}</b>  
+                        <td @if ($i < 3) style="border-right: 1px solid #1d98d4" @endif width="25%" style="font-size: 18px"><b>{{$el->name}}</b>
                         <br>{{$el->description}}
                         </td>
                     @endif
@@ -325,7 +325,7 @@
                   @foreach ($service->ServiceEquipment as $i => $el)
                   @if ($i > 3)
                     @if ($el->status == 'Y')
-                        <td width="25%" @if ($i > 3 && $i < 8) style="border-right: 1px solid #1d98d4;border-top: 1px solid #1d98d4;" @endif style="font-size: 18px"><b>{{$el->name}}</b>  
+                        <td width="25%" @if ($i > 3 && $i < 8) style="border-right: 1px solid #1d98d4;border-top: 1px solid #1d98d4;" @endif style="font-size: 18px"><b>{{$el->name}}</b>
                         <br>{{$el->description}}
                         </td>
                     @endif
