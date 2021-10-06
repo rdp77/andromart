@@ -25,19 +25,19 @@ class MenuSeeder extends Seeder
                 'name' => 'Transaksi',
                 'icon' => 'fa-exchange-alt',
                 'url' => 'javascript:void(0)',
-                'hover' => null
+                'hover' => '["service.edit","purchase.edit","sale.edit","reception.edit","payment.edit"]'
             ],
             [
                 'name' => 'Finance',
                 'icon' => 'fa-money-bill',
                 'url' => 'javascript:void(0)',
-                'hover' => null
+                'hover' => '["sharing-profit.edit","service-payment.edit","loss-items.edit"]'
             ],
             [
                 'name' => 'Master Data',
                 'icon' => 'fa-database',
                 'url' => 'javascript:void(0)',
-                'hover' => null
+                'hover' => '["item.edit","employee.edit","customer.edit","presentase.edit","warranty.edit","supplier.edit","unit.edit","type.edit","brand.edit","category.edit","cost.edit","cash.edit","branch.edit","area.edit","menu.edit"]'
             ],
             [
                 'name' => 'Gudang',
@@ -45,12 +45,6 @@ class MenuSeeder extends Seeder
                 'url' => 'javascript:void(0)',
                 'hover' => null
             ],
-            // [
-            //     'name' => 'Kantor',
-            //     'icon' => 'fa-building',
-            //     'url' => 'javascript:void(0)',
-            //     'hover' => null
-            // ],
             [
                 'name' => 'Konten',
                 'icon' => 'fa-file-alt',

@@ -18,7 +18,7 @@
             </li>
             @else
             <li class="nav-item dropdown @if ($m->hover != null)
-                @foreach (json_decode($m->hover) as $h){{ URL::current() == $h ? 'active' : '' }}@endforeach
+                @foreach (json_decode($m->hover) as $h){{ Request::route()->getName() == $h ? 'active' : '' }}@endforeach
                 @endif
                 @foreach ($m->SubMenu as $s)@if ($s->hover != null)@foreach (json_decode($s->hover) as $sub)
                 {{ URL::current() == $sub ? 'active' : '' }}
