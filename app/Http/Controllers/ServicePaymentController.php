@@ -217,8 +217,67 @@ class ServicePaymentController extends Controller
                 // 'updated_at'=>date('Y-m-d h:i:s'),
             ]);
             if($req->type == 'DownPayment'){
+                $accountData  = AccountData::where('branch_id',$getEmployee->branch_id)
+                                    ->where('active','Y')
+                                    ->where('main_id',4)
+                                    ->where('main_detail_id',4)
+                                    ->first();
+                if($accountData == null){
+                    DB::rollback();
+                    return Response::json(['status' => 'error','message'=>'Akun Pembayran Dimuka Kosong']);
+                }
 
+                $accountPembayaran  = AccountData::where('id',$req->account)
+                                    ->first();
+                $accountCode = [
+                    $accountPembayaran->id,
+                    $accountData->id,
+                ];  
+                $totalBayar = [
+                    str_replace(",", '',$req->totalPayment),
+                    str_replace(",", '',$req->totalPayment),
+                ];
+                $description = [
+                    $req->description,
+                    $req->description,
+                ];
+                $DK = [
+                    'D',
+                    'K',
+                ];
+            
+
+                for ($i=0; $i <count($accountCode) ; $i++) { 
+                    $idDetail = DB::table('journal_details')->max('id')+1;
+                    JournalDetail::create([
+                        'id'=>$idDetail,
+                        'journal_id'=>$idJournal,
+                        'account_id'=>$accountCode[$i],
+                        'total'=>$totalBayar[$i],
+                        'description'=>$description[$i],
+                        'debet_kredit'=>$DK[$i],
+                        'created_at'=>date('Y-m-d h:i:s'),
+                        'updated_at'=>date('Y-m-d h:i:s'),
+                    ]);
+                }
             }else{
+                $checkService = ServicePayment::where('service_id','!=',$id)
+                                       ->where('service_id',$req->serviceId)
+                                       ->where('type','DownPayment')
+                                       ->first();
+
+                $accountDimuka  = AccountData::where('branch_id',$getEmployee->branch_id)
+                                    ->where('active','Y')
+                                    ->where('main_id',4)
+                                    ->where('main_detail_id',4)
+                                    ->first();
+
+                if($accountDimuka == null){
+                    DB::rollback();
+                    return Response::json(['status' => 'error','message'=>'Akun Pembayran Dimuka Kosong']);
+                }
+
+
                 $accountService  = AccountData::where('branch_id',$getEmployee->branch_id)
                                     ->where('active','Y')
                                     ->where('main_id',5)
@@ -232,11 +291,12 @@ class ServicePaymentController extends Controller
                                     ->first();
                 $accountPembayaran  = AccountData::where('id',$req->account)
                                     ->first();
+
                 $accountCode = [
                     $accountPembayaran->id,
                     $accountService->id,
                     $accountJasa->id,
-                ];
+                ];  
                 $totalBayar = [
                     str_replace(",", '',$req->totalPayment),
                     str_replace(",", '',$req->totalSparePart),
@@ -253,18 +313,28 @@ class ServicePaymentController extends Controller
                     'K',
                 ];
 
-                for ($i=0; $i <count($accountCode) ; $i++) { 
-                    $idDetail = DB::table('journal_details')->max('id')+1;
-                    JournalDetail::create([
-                        'id'=>$idDetail,
-                        'journal_id'=>$idJournal,
-                        'account_id'=>$accountCode[$i],
-                        'total'=>$totalBayar[$i],
-                        'description'=>$description[$i],
-                        'debet_kredit'=>$DK[$i],
-                        'created_at'=>date('Y-m-d h:i:s'),
-                        'updated_at'=>date('Y-m-d h:i:s'),
-                    ]);
+                if($checkService != null){
+                    array_unshift($accountCode, $accountDimuka->id);
+                    array_unshift($totalBayar, str_replace(",", '',$checkService->total));
+                    array_unshift($description, $req->description);
+                    array_unshift($DK, "D");
+                }
+
+                for ($i=0; $i <count($accountCode) ; $i++) {
+                    if($totalBayar[$i] != 0){
+                        $idDetail = DB::table('journal_details')->max('id')+1;
+                        JournalDetail::create([
+                            'id'=>$idDetail,
+                            'journal_id'=>$idJournal,
+                            'account_id'=>$accountCode[$i],
+                            'total'=>$totalBayar[$i],
+                            'description'=>$description[$i],
+                            'debet_kredit'=>$DK[$i],
+                            'created_at'=>date('Y-m-d h:i:s'),
+                            'updated_at'=>date('Y-m-d h:i:s'),
+                        ]);
+                    }
+                    
                 }
                 
             }
@@ -329,14 +399,65 @@ class ServicePaymentController extends Controller
 
     public function destroy(Request $req, $id)
     {
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Menghapus Data Kredit'
-        );
-        Service::destroy($id);
-        ServiceDetail::where('service_id',$id)->destroy($id);
-        return Response::json(['status' => 'success']);
+        DB::beginTransaction();
+        try {
+            $this->DashboardController->createLog(
+                $req->header('user-agent'),
+                $req->ip(),
+                'Menghapus Data Kredit'
+            );
+            $checkServicePayment = DB::table('service_payment')->where('id',$id)->first();
+            $checkService = Service::where('id',$checkServicePayment->service_id)->first();
+            $checkJournals = DB::table('journals')->where('ref',$checkServicePayment->code)->first();
+            if($checkServicePayment->type == 'Lunas'){
+                $checkServicePaymentDP = DB::table('service_payment')
+                                    ->where('service_id',$checkService->id)
+                                    ->where('type', 'DownPayment')
+                                    ->first();
+                if($checkServicePaymentDP != null){
+                    Service::where('id',$checkService->id)->update([
+                        'payment_status'=>'DownPayment',
+                        'payment_date'=>null,
+                        'total_payment'=>0,
+                    ]);
+                }else{
+                    Service::where('id',$checkService->id)->update([
+                        'payment_status'=>null,
+                        'payment_date'=>null,
+                        'total_payment'=>0,
+                    ]);
+                }
+
+            }else{
+
+                $checkServicePaymentLunas = DB::table('service_payment')
+                                    ->where('service_id',$checkService->id)
+                                    ->where('type', 'Lunas')
+                                    ->first();
+                if($checkServicePaymentLunas != null){
+                    return Response::json(['status' => 'error','message'=>'Data Lunas Harus Dihapus Baru menghapus Data DP']);
+                }
+
+                Service::where('id',$checkService->id)->update([
+                    'payment_status'=>null,
+                    'downpayment_date'=>null,
+                    'total_downpayment'=>0,
+                ]);
+            }
+        
+
+            
+            DB::table('service_payment')->where('id',$id)->delete();
+            DB::table('journals')->where('id',$checkJournals->id)->delete();
+            DB::table('journal_details')->where('id',$checkJournals->id)->delete();
+        
+            DB::commit();
+            return Response::json(['status' => 'success','message'=>'Data Terhapus']);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            // return$th;
+            return Response::json(['status' => 'error','message'=>$th]);
+        }
     }
 
     public function serviceCheckJournals(Request $req)

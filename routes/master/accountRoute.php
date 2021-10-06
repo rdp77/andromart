@@ -1,6 +1,8 @@
 <?php
 
-use App\Http\Controllers\AreaController;
+use App\Http\Controllers\AccountMainController;
+use App\Http\Controllers\AccountMainDetailController;
+use App\Http\Controllers\AccountDataController;
 use Illuminate\Support\Facades\Route;
 
 /*

@@ -88,13 +88,20 @@ function del(id) {
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url: "/transaction/service/service/" + id,
+                url: "/transaction/service/service-payment/" + id,
                 type: "DELETE",
-                success: function () {
-                    swal("Data pengguna berhasil dihapus", {
-                        icon: "success",
-                    });
-                    table.draw();
+                success: function (data) {
+                    if(data){
+                        swal("Data pengguna berhasil dihapus", {
+                            icon: "success",
+                        });
+                        table.draw();
+                    }else{
+                        swal(data.message, {
+                            icon: "warning",
+                        });
+                    }
+                    
                 },
             });
         } else {
@@ -206,8 +213,13 @@ function sumTotal() {
         var totalDiscountValue =  0;
     }else{
         var totalDiscountValue = $('#totalDiscountValue').val().replace(/,/g, ''),asANumber = +totalDiscountValue;}
+
+    if(isNaN(parseInt($('#totalDownPayment').val()))){
+        var totalDownPayment =  0;
+    }else{
+        var totalDownPayment = $('#totalDownPayment').val().replace(/,/g, ''),asANumber = +totalDownPayment;}
         
-    var sumTotal = parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDiscountValue)-parseInt(totalPayment);
+    var sumTotal = parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDiscountValue)-parseInt(totalDownPayment)-parseInt(totalPayment);
 
     if (sumTotal < 0) {
         $('#totalPrice').val(parseInt(0).toLocaleString('en-US'));
@@ -280,9 +292,18 @@ function paymentMethodChange() {
     $('.account').empty();
     $.each($('.accountDataHidden'), function(){
         if (value == 'Cash') {
-            if ($(this).data('mainname') == 'Kas' && branch == $(this).data('branch')) {
+            if ($(this).data('maindetailname') == 'Kas Kecil' && branch == $(this).data('branch')) {
+                dataItems += '<option value="'+this.value+'">'+$(this).data('code') +' - '+ $(this).data('name')+'</option>';
+            }else if($(this).data('maindetailname') == 'Kas Besar' && branch == $(this).data('branch')){
+                dataItems += '<option value="'+this.value+'">'+$(this).data('code') +' - '+ $(this).data('name')+'</option>';
+
+            }
+        }else if(value == 'Debit' || value == 'Transfer'){
+            if ($(this).data('maindetailname') == 'Kas Bank' && branch == $(this).data('branch')) {
                 dataItems += '<option value="'+this.value+'">'+$(this).data('code') +' - '+ $(this).data('name')+'</option>';
             }
+        }else{
+
         }
     });
     

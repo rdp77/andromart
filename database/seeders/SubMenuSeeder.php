@@ -81,17 +81,20 @@ class SubMenuSeeder extends Seeder
             [
                 'menu_id' => '4',
                 'name' => 'Akun Dasar',
-                'url' => route('item.index')
+                'url' => route('account-main.index'),
+                'hover' => '["' . route('account-main.create') . '","' . route('account-main.index') . '"]'
             ],
             [
                 'menu_id' => '4',
                 'name' => 'Akun Detail',
-                'url' => route('item.index')
+                'url' => route('account-main-detail.index'),
+                'hover' => '["' . route('account-main-detail.create') . '","' . route('account-main-detail.index') . '"]'
             ],
             [
                 'menu_id' => '4',
-                'name' => 'Akun Kode',
-                'url' => route('item.index')
+                'name' => 'Akun Data',
+                'url' => route('account-data.index'),
+                'hover' => '["' . route('account-data.create') . '","' . route('account-data.index') . '"]'
             ],
             [
                 'menu_id' => '4',
