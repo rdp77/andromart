@@ -348,9 +348,9 @@ class ServicePaymentController extends Controller
     }
     public function printServicePayment($id)
     {
-        $Service = Service::with('ServiceDetail','ServiceDetail.Items','Employee1','Employee2','CreatedByUser','Type','Brand','Brand.Category','ServiceEquipment','ServiceCondition')->find($id);
+        $service = Service::with('ServiceDetail','ServiceDetail.Items','Employee1','Employee2','CreatedByUser','Type','Brand','Brand.Category','ServiceEquipment','ServiceCondition')->find($id);
         // return $Service;
         $member = User::get();
-        return view('pages.backend.transaction.servicePayment.printServicePayment', ['service' => $Service,'member'=>$member]);
+        return view('pages.backend.transaction.servicePayment.printServicePayment', ['service' => $service,'member'=>$member]);
     }
 }
