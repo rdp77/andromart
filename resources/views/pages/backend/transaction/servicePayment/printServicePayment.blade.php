@@ -199,6 +199,25 @@
                   <td class="text-right" style="font-size: 20px">Total Service</td>
                   <td class="text-right" style="font-size: 20px"><b>{{number_format($service->Service->total_price,0,".",",")}}</b></td>
                 </tr>
+                @if ($service->Service->payment_status == 'DownPayment')
+                <tr>
+                  <td class="text-right" style="font-size: 20px">Total Bayar</td>
+                  <td class="text-right" style="font-size: 20px"><b>{{number_format($service->total,0,".",",")}}</b></td>
+                </tr>
+                <tr>
+                  <td class="text-right" style="font-size: 20px">Sisa</td>
+                  <td class="text-right" style="font-size: 20px"><b>{{number_format($service->Service->total_price-$service->total,0,".",",")}}</b></td>
+                </tr>
+                @else
+                <tr>
+                  <td class="text-right" style="font-size: 20px">Total DownPayment</td>
+                  <td class="text-right" style="font-size: 20px"><b>{{number_format($service->Service->total_downpayment,0,".",",")}}</b></td>
+                </tr>
+                <tr>
+                  <td class="text-right" style="font-size: 20px">Total Bayar</td>
+                  <td class="text-right" style="font-size: 20px"><b>{{number_format($service->Service->total_payment,0,".",",")}}</b></td>
+                </tr>
+                @endif
               </tbody>
             </table>
           </div>
