@@ -49,7 +49,9 @@ Route::group(['prefix' => 'transaction'], function () {
 
         
 
-        Route::resource('service-payment', ServicePaymentController::class);
+        Route::resource('service-payment', ServicePaymentController::class)->except([
+            'show',
+        ]);
 
         Route::get(
             'service-payment/{id}',
