@@ -267,6 +267,8 @@ function choseService() {
                         $('.DownPaymentHidden').css('display','none');
                     }
 
+                    
+
                     $.each(data.result.service_detail, function(index,value){
                         $('.dropHereItem').append(
                                 '<tr>'+

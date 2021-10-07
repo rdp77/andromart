@@ -30,7 +30,7 @@
                             <select class="select2 serviceId validation" data-name="Service Harus Di isi" name="serviceId" onchange="choseService()">
                                 <option value="">- Select -</option>
                                 @foreach ($data as $element)
-                                    <option value="{{$element->id}}">[{{$element->code}}] {{$element->customer_name}} - {{$element->brand}} {{$element->series}} <span><strong>( {{$element->work_status}} )</span></strong></option>
+                                    <option value="{{$element->id}}">[{{$element->code}}] {{$element->customer_name}} - {{$element->Brand->name}} {{$element->Type->name}} <span><strong>( {{$element->work_status}} )</span></strong></option>
                                 @endforeach
                             </select>
                         </div>
@@ -85,14 +85,14 @@
                         data-code="{{$el->code}}"
                         value="{{$el->id}}">
                     @endforeach
-                    <h6 style="color: #6777ef">Data Service</h6>
+                    {{-- <h6 style="color: #6777ef">Data Service</h6>
                     <br>
                     <div class="row">
                         <div class="form-group col-12 col-md-12 col-lg-12">
                           
                         </div>
 
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>
