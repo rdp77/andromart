@@ -91,7 +91,7 @@ function del(id) {
                 url: "/transaction/service/service-payment/" + id,
                 type: "DELETE",
                 success: function (data) {
-                    if(data){
+                    if(data.status == 'success'){
                         swal("Data pengguna berhasil dihapus", {
                             icon: "success",
                         });
@@ -173,11 +173,15 @@ function save() {
                 data: $(".form-data").serialize(),
                 type: 'POST',
                 success: function(data) {
-                    if (data.status == 'success'){
+                    if(data.status == 'success'){
                         swal(data.message, {
                             icon: "success",
                         });
-                        location.reload();
+                        location.reload;
+                    }else{
+                        swal(data.message, {
+                            icon: "warning",
+                        });
                     }
                 },
                 error: function(data) {

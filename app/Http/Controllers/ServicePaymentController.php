@@ -58,8 +58,8 @@ class ServicePaymentController extends Controller
                     $actionBtn .= '<div class="dropdown-menu">
                             <a class="dropdown-item" href="' . route('service-payment.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
                     $actionBtn .= '<a class="dropdown-item" href="' . route('service.printServicePayment', $row->id) . '"><i class="fas fa-print"></i> Print</a>';
-                    $actionBtn .= '<a class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
-                    $actionBtn .= '<a onclick="jurnal(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
+                    // $actionBtn .= '<a class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
+                    $actionBtn .= '<a onclick="jurnal(' ."'". $row->code ."'". ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
                     
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
                     $actionBtn .= '</div></div>';
@@ -133,30 +133,26 @@ class ServicePaymentController extends Controller
         return view('pages.backend.transaction.servicePayment.indexServicePayment');
     }
 
-    public function code($type)
+    public function code($type,$id)
     {
         $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
-        $index = DB::table('service')->max('id')+1;
-
-        $index = str_pad($index, 3, '0', STR_PAD_LEFT);
+        $index = str_pad($id, 3, '0', STR_PAD_LEFT);
         return $code = $type.$getEmployee->Branch->code.$year . $month . $index;
     }
-    public function codeJournals($type)
+    public function codeJournals($type,$id)
     {
         $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
-        // DB::table('service')->max('id')+1;
-        $index = DB::table('journals')->max('id')+1;
-
-        $index = str_pad($index, 3, '0', STR_PAD_LEFT);
+        $index = str_pad($id, 3, '0', STR_PAD_LEFT);
         return $code = $type.$getEmployee->Branch->code.$year . $month . $index;
     }
     public function create()
     {
-        $code   = $this->code('BYR');
+        $id = DB::table('service_payment')->max('id')+1;
+        $code   = $this->code('BYR',$id);
         $employee = Employee::where('user_id',Auth::user()->id)->first();
         $items  = Item::where('name','!=','Jasa Service')->get();
         $account  = AccountData::with('AccountMain','AccountMainDetail','Branch')->get();
@@ -175,7 +171,7 @@ class ServicePaymentController extends Controller
             $dateConvert = $this->DashboardController->changeMonthIdToEn($req->date);
             $id = DB::table('service_payment')->max('id')+1;
             $getEmployee =  Employee::where('user_id',Auth::user()->id)->first();
-            $kode = $this->code('BYR');
+            $kode = $this->code('BYR',$id);
             ServicePayment::create([
                 'id' =>$id,
                 'code' =>$kode,
@@ -206,7 +202,7 @@ class ServicePaymentController extends Controller
             $idJournal = DB::table('journals')->max('id')+1;
             Journal::create([
                 'id' =>$idJournal,
-                'code'=>$this->code('DD'),
+                'code'=>$this->code('DD',$idJournal),
                 'year'=>date('Y'),
                 'date'=>date('Y-m-d'),
                 'type'=>'Pembayaran Service',
@@ -261,10 +257,11 @@ class ServicePaymentController extends Controller
                     ]);
                 }
             }else{
-                $checkService = ServicePayment::where('service_id','!=',$id)
-                                       ->where('service_id',$req->serviceId)
-                                       ->where('type','DownPayment')
-                                       ->first();
+                // DB::rollback();
+                $checkService = ServicePayment::where('id','!=',$id)
+                                    ->where('service_id',$req->serviceId)
+                                    ->where('type','DownPayment')
+                                    ->first();
 
                 $accountDimuka  = AccountData::where('branch_id',$getEmployee->branch_id)
                                     ->where('active','Y')
@@ -344,7 +341,7 @@ class ServicePaymentController extends Controller
         } catch (\Throwable $th) {
             DB::rollback();
             return$th;
-            return Response::json(['status' => 'error','message'=>$th]);
+            return Response::json(['status' => 'error','message'=>'Error Hubungi Mas Rizal Taufiq']);
         }
         
         
@@ -449,7 +446,7 @@ class ServicePaymentController extends Controller
             
             DB::table('service_payment')->where('id',$id)->delete();
             DB::table('journals')->where('id',$checkJournals->id)->delete();
-            DB::table('journal_details')->where('id',$checkJournals->id)->delete();
+            DB::table('journal_details')->where('journal_id',$checkJournals->id)->delete();
         
             DB::commit();
             return Response::json(['status' => 'success','message'=>'Data Terhapus']);
@@ -462,7 +459,7 @@ class ServicePaymentController extends Controller
 
     public function serviceCheckJournals(Request $req)
     {
-        $data = Journal::with('JournalDetail.AccountData')->where('id',$req->id)->first();
+        $data = Journal::with('JournalDetail.AccountData')->where('ref',$req->id)->first();
         return Response::json(['status' => 'success','jurnal'=>$data]);
     }
     public function printServicePayment($id)

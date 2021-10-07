@@ -49,12 +49,10 @@ Route::group(['prefix' => 'transaction'], function () {
 
         
 
-        Route::resource('service-payment', ServicePaymentController::class)->except([
-            'show',
-        ]);
+        Route::resource('service-payment', ServicePaymentController::class);
 
         Route::get(
-            'service-payment/{id}',
+            'print-service-payment/{id}',
             [ServicePaymentController::class, 'printServicePayment']
         )->name('service.printServicePayment');
 
