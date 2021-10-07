@@ -36,7 +36,7 @@
           <div style="width: 400px">
             <p style="font-size: 15px">{{Auth::user()->employee->branch->address}} <b> Tlp : {{Auth::user()->employee->branch->phone}}</b> </p>
           </div>
-          <div class="invoice-number"><h3>Job Order :</h3><h1 style="font-size: 50px;color:#eb2390" >{{$service->code}}</h1>
+          <div class="invoice-number"><h3>Job Order :</h3><h1 style="font-size: 50px;color:#eb2390" >{{$service->$Service->code}}</h1>
             <br>
             <p style="font-size: 19px;font-weight:lighter">Lacak Perkembangan Service Kamu di : <br> <b>www.andromartindonesia.com</b> 
               {{-- <br> <b> AM care : 0851-5646-2356 --}}
@@ -54,16 +54,16 @@
           <div class="col-md-4">
             <address>
               <strong><p style="font-size: 25px" style="background-color:#eb2390;color:white;padding:5px;text-align:center">Teknisi</p></strong>
-              <p style="font-size: 26px">{{$service->employee1->name}}</p>
-              {{-- <p style="font-size: 26px">{{$service->employee1->contact}}</p> --}}
+              <p style="font-size: 26px">{{$service->$Service->employee1->name}}</p>
+              {{-- <p style="font-size: 26px">{{$service->$Service->employee1->contact}}</p> --}}
             </address>
           </div>
           <div class="col-md-8 text-md-right">
             <address>
               <strong><p style="font-size: 25px" style="background-color:#eb2390;color:white;padding:5px;text-align:center">Customer</p></strong>
-              <p style="font-size: 26px"><b>{{$service->customer_name}}</b></p>
-              <p style="font-size: 26px">{{$service->customer_phone}}</p>
-              <p style="font-size: 26px;margin: 10px auto;">{{$service->customer_address}}</p>
+              <p style="font-size: 26px"><b>{{$service->$Service->customer_name}}</b></p>
+              <p style="font-size: 26px">{{$service->$Service->customer_phone}}</p>
+              <p style="font-size: 26px;margin: 10px auto;">{{$service->$Service->customer_address}}</p>
             </address>
           </div>
         </div>
@@ -74,14 +74,14 @@
           <address>
               <br>
               <p style="font-size: 30px"><strong><o >Bayar :</strong></o>
-              @if ($service->payment_status == null)
-                @if ($service->verification_price == 'Y')
+              @if ($service->$Service->payment_status == null)
+                @if ($service->$Service->verification_price == 'Y')
                   <o style="font-size:30px"> Perlu Konfirmasi</o>
                 @else
                   <o style="font-size:30px"> Belum Bayar</o>
                 @endif
               @else
-                {{$service->payment_status}}
+                {{$service->$Service->payment_status}}
               @endif</p>
               {{-- <strong><h3 style="color:#28a745"> </h3></strong>s --}}
             </address>
@@ -89,7 +89,7 @@
           <div class="col-md-6 text-md-right">
             <address>
               <br>
-              <strong><p style="font-size: 30px">Tanggal : {{date('d F Y',strtotime($service->date))}}</p></strong>
+              <strong><p style="font-size: 30px">Tanggal : {{date('d F Y',strtotime($service->$Service->date))}}</p></strong>
             </address>
           </div>
         </div>
@@ -109,25 +109,25 @@
                 {{-- <th class="text-center" style="font-weight:700;font-size: 25px;padding:0px !important" width="40%">Service Detail</th> --}}
               </tr>
               <tr>
-                {{-- <td style="border-right: 1px solid #1d98d4"  style="font-size: 17px">{{$service->Brand->Category->name}} :  --}}
-                {{-- <b>{{$service->Brand->name}} {{$service->Type->name}} [ {{$service->no_imei}} ] </b> </td> --}}
+                {{-- <td style="border-right: 1px solid #1d98d4"  style="font-size: 17px">{{$service->$Service->Brand->Category->name}} :  --}}
+                {{-- <b>{{$service->$Service->Brand->name}} {{$service->$Service->Type->name}} [ {{$service->$Service->no_imei}} ] </b> </td> --}}
                 {{-- <td>Pembayaran</td> --}}
               </tr>
               <tr>
-                {{-- <td style="font-size: 17px">Imei : {{$service->no_imei}}</td> --}}
-                {{-- <td style="border-right: 1px solid #1d98d4" style="font-size: 17px">Analisa : <b>{{$service->estimate_day}}</b> --}}
+                {{-- <td style="font-size: 17px">Imei : {{$service->$Service->no_imei}}</td> --}}
+                {{-- <td style="border-right: 1px solid #1d98d4" style="font-size: 17px">Analisa : <b>{{$service->$Service->estimate_day}}</b> --}}
               </tr>
               {{-- <tr>
                 <td style="font-size: 20px">Merk</td>
-                <td style="border-right: 1px solid #1d98d4" style="font-size: 20px">{{$service->Brand->name}}</td>
+                <td style="border-right: 1px solid #1d98d4" style="font-size: 20px">{{$service->$Service->Brand->name}}</td>
               </tr>
               <tr>
                 <td style="font-size: 20px">Series</td>
-                <td style="border-right: 1px solid #1d98d4" style="font-size: 20px">{{$service->Type->name}}</td>
+                <td style="border-right: 1px solid #1d98d4" style="font-size: 20px">{{$service->$Service->Type->name}}</td>
               </tr>
               <tr>
                 <td  style="font-size: 20px">Estimasi Analisa</td>
-                <td style="border-right: 1px solid #1d98d4" style="font-size: 20px">{{$service->estimate_day}}</td>
+                <td style="border-right: 1px solid #1d98d4" style="font-size: 20px">{{$service->$Service->estimate_day}}</td>
               </tr> --}}
             </tbody>
           </table>
@@ -147,7 +147,7 @@
                 $qty = 0;
                 $totalPrice = 0;
             @endphp
-            @foreach ($service->ServiceDetail as $i => $el)
+            @foreach ($service->$Service->ServiceDetail as $i => $el)
               @if ($el->Items->id == '1')
               <tr>
                 <td style="font-size: 20px">{{$i+1}}</td>
@@ -185,19 +185,19 @@
               <tbody>
                 <tr>
                   <td class="text-right" style="font-size: 20px">Jasa</td>
-                  <td class="text-right" style="font-size: 20px"><b>{{number_format($service->total_service,0,".",",")}}</b></td>
+                  <td class="text-right" style="font-size: 20px"><b>{{number_format($service->$Service->total_service,0,".",",")}}</b></td>
                 </tr>
                 <tr>
                   <td class="text-right" style="font-size: 20px">Spare Part</td>
-                  <td class="text-right" style="font-size: 20px"><b>{{number_format($service->total_part,0,".",",")}}</b></td>
+                  <td class="text-right" style="font-size: 20px"><b>{{number_format($service->$Service->total_part,0,".",",")}}</b></td>
                 </tr>
                 <tr>
                   <td class="text-right" style="font-size: 20px">Discount</td>
-                  <td class="text-right" style="font-size: 20px"><b>{{number_format($service->discount_price,0,".",",")}}</b></td>
+                  <td class="text-right" style="font-size: 20px"><b>{{number_format($service->$Service->discount_price,0,".",",")}}</b></td>
                 </tr>
                 <tr>
                   <td class="text-right" style="font-size: 20px">Total Service</td>
-                  <td class="text-right" style="font-size: 20px"><b>{{number_format($service->total_price,0,".",",")}}</b></td>
+                  <td class="text-right" style="font-size: 20px"><b>{{number_format($service->$Service->total_price,0,".",",")}}</b></td>
                 </tr>
               </tbody>
             </table>
