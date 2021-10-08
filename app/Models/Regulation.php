@@ -32,6 +32,6 @@ class Regulation extends Model
 
     public function role()
     {
-        return $this->belongsTo('App\Models\role');
+        return $this->belongsTo(Role::class);
     }
 }
