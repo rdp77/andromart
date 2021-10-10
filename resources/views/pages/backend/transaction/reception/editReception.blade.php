@@ -49,6 +49,28 @@
                     </div>
                 </div>
             </div>
+            <div class="card">
+                <div class="card-header">
+                    <h4>Ambil Foto</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group col-12 col-md-12 col-lg-12">
+                            <div id="my_camera"></div>
+                            <br/>
+                            <div class="row">
+                                <div class="form-group col-md-3">
+                                    <input type=button class="btn btn-primary" value="Take Snapshot" onClick="take_snapshot()">
+                                    <input type="hidden" name="image" class="image-tag">
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#exampleModal">Lihat Gambar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-lg-4">
             <div class="card">
@@ -108,7 +130,7 @@
                                             <input type="text" class="form-control" value="{{ $row->itemName }}" readonly>
                                         </td>
                                         <td>
-                                            <input type="text" class="form-control cleaveNumeral qtyOld_{{ $i }}" value="{{ $row->qty }}" name="qtyOld[]" readonly>
+                                            <input type="text" class="form-control qtyOld_{{ $i }}" value="{{ $row->qty }}" name="qtyOld[]" readonly>
                                         </td>
                                         <td>
                                             <input type="text" class="form-control cleaveNumeral qtyNew_{{ $i }}" name="qtyNew[]" style="text-align: right" value="0" onkeyup="checkQty({{ $i }})">
@@ -163,6 +185,14 @@
             <div class="card">
                 <div class="card-header">
                     <h4>{{ date('d F Y H:i:s', strtotime($row->date)) }}</h4>
+                    @if($row->image != null)
+                        <a href="{{ $row->image }}" target="_blank">
+                            <img src="{{ asset($row->image) }}" style="width: 200px; height: 10; object-fit: contain;" />
+                        </a>
+                    @else
+                    
+                    @endif
+                    
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -238,4 +268,35 @@
         position: relative !important;
     }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
+<style>
+    .modal-backdrop{
+        position: relative !important;
+    }
+</style>
+<script language="JavaScript">
+$( document ).ready(function() {
+    Webcam.set({
+        width: 700,
+        height: 420,
+        // dest_width:1000,
+        // dest_height:1000,
+        image_format: 'jpeg',
+        jpeg_quality: 100
+    });
+
+    Webcam.attach( '#my_camera' );
+});
+function take_snapshot() {
+            swal('Berhasil Mengambil Foto', {
+                icon: "success",
+            });
+    Webcam.snap( function(data_uri) {
+        $(".image-tag").val(data_uri);
+
+        document.getElementById('results').innerHTML = '<img name="image" id="sortpicture" class="image" src="'+data_uri+'"/>';
+    } );
+
+}
+</script>
 @endsection

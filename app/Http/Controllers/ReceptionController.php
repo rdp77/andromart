@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Crypt;
 use Yajra\DataTables\DataTables;
@@ -103,7 +104,7 @@ class ReceptionController extends Controller
         ->where('purchasing_details.qty', '>', 0)
         ->select('purchasing_details.id as id', 'qty', 'items.name as itemName', 'branches.name as branchName', 'units.name as unitName', 'items.id as item_id', 'units.id as unit_id', 'branches.id as branch_id')
         ->get();
-        $history = HistoryPurchase::where('purchasing_id', $id)->get();
+        $history = HistoryPurchase::where('purchasing_id', $id)->orderBy('id', 'DESC')->get();
         foreach($history as $row) {
             $historyDetail = HistoryDetailPurchase::where('history_purchase_id', $row->id)
             ->join('purchasing_details', 'purchasing_detail_id', 'purchasing_details.id')
@@ -117,8 +118,30 @@ class ReceptionController extends Controller
         return view('pages.backend.transaction.reception.editReception', compact('model', 'models', 'id', 'history'));
     }
 
+    function base64_to_jpeg($base64_string, $output_file) {
+        // open the output file for writing
+        $ifp = fopen( $output_file, 'wb' ); 
+
+        // split the string on commas
+        // $data[ 0 ] == "data:image/png;base64"
+        // $data[ 1 ] == <actual base64 string>
+        $data = explode( ',', $base64_string );
+
+        // we could add validation here with ensuring count( $data ) > 1
+        fwrite( $ifp, base64_decode( $data[1] ) );
+
+        // clean up the file resource
+        fclose( $ifp ); 
+
+        return $output_file; 
+    }
     public function update(Request $req, $id)
     {
+        define('UPLOAD_DIR', 'images/');
+        $image = $req->image;
+        $file = 'assetstransaction/Reception_' . date('YmdHis') . '.png';
+        $images = $this->base64_to_jpeg($image, $file);
+
         $date = date('Y-m-d H:i:s');
         $purchase = Purchasing::where('id', $id)->first();
         $purchase->done = 1;
@@ -126,6 +149,7 @@ class ReceptionController extends Controller
 
         $historyPurchase = new HistoryPurchase;
         $historyPurchase->purchasing_id = $id;
+        $historyPurchase->image = $file;
         $historyPurchase->date = $date;
         $historyPurchase->save();
 

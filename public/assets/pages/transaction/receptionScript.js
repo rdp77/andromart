@@ -103,8 +103,8 @@ function del(id) {
 function checkQty(length) {
     var qtyOld = $('.qtyOld_' + length).val();
     var qtyNew = $('.qtyNew_' + length).val();
-    var intOld = parseInt(qtyOld);
-    var intNew = parseInt(qtyNew);
+    var intOld = parseInt(qtyOld.replace(',', ''));
+    var intNew = parseInt(qtyNew.replace(',', ''));
     if(intNew > intOld) {
         $('.qtyNew_' + length).val(0);
         alert("Jumlah yang diambil lebih banyak");

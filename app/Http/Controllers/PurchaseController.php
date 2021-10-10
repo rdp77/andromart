@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Crypt;
 use Yajra\DataTables\DataTables;
@@ -77,14 +78,15 @@ class PurchaseController extends Controller
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
 
+        $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
         $now = Purchasing::whereBetween("created_at", [$date.' 00:00:00', $date.' 23:59:59'])->count();
         $index = $now + 1;
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
-        return $code = $type.$year . $month . $index;
+        return $code = $type.$getEmployee->Branch->code.$year . $month . $index;
     }
     public function create()
     {
-        $code     = $this->code('PCS-');
+        $code     = $this->code('PCS');
         $employee = Employee::get();
         // $items    = Item::where('name','!=','Jasa Service')->get();
         $item     = Item::with('stock')->where('items.name','!=','Jasa Service')
@@ -96,9 +98,32 @@ class PurchaseController extends Controller
         return view('pages.backend.transaction.purchase.createPurchase',compact('employee','code','item', 'unit', 'branch'));
         // return view('pages.backend.transaction.purchase.createPurchase');
     }
+    function base64_to_jpeg($base64_string, $output_file) {
+        // open the output file for writing
+        $ifp = fopen( $output_file, 'wb' ); 
+
+        // split the string on commas
+        // $data[ 0 ] == "data:image/png;base64"
+        // $data[ 1 ] == <actual base64 string>
+        $data = explode( ',', $base64_string );
+
+        // we could add validation here with ensuring count( $data ) > 1
+        fwrite( $ifp, base64_decode( $data[1] ) );
+
+        // clean up the file resource
+        fclose( $ifp ); 
+
+        return $output_file; 
+    }
 
     public function store(Request $req)
     {
+        $image = $req->image;
+        // $file = 'assetstransaction/Reception_' . date('YmdHis') . '.png';
+        $fileSave = 'assetstransaction/Purchasing_' . $this->code('PCS') . '.' .'png';
+        $fileName = 'Purchasing_' . $this->code('PCS') . '.' .'png';
+        $images = $this->base64_to_jpeg($image, $fileSave);
+
         $date = date('Y-m-d H:i:s');
         $purchasing = new Purchasing;
         $purchasing->code = $req->code;
@@ -109,13 +134,16 @@ class PurchaseController extends Controller
         $purchasing->discount = str_replace(",", '',$req->discountTotal);
         $purchasing->price = str_replace(",", '',$req->grandTotal);
         $purchasing->created_by = Auth::user()->name;
+
+        $purchasing->image = $fileName;
         $purchasing->save();
 
         foreach($req->idDetail as $row) {
+            // dd($req->qtyDetail);
             $purchasingDetail = new PurchasingDetail;
             $purchasingDetail->purchasing_id = $purchasing->id;
             $purchasingDetail->item_id = $req->itemsDetail[$row];
-            $purchasingDetail->unit_id = $req->unitsDetail[$row];
+            // $purchasingDetail->unit_id = $req->unitsDetail[$row];
             $purchasingDetail->branch_id = $req->branchesDetail[$row];
             $purchasingDetail->price = str_replace(",", '',$req->priceDetail[$row]);
             $purchasingDetail->qty_start = str_replace(",", '',$req->qtyDetail[$row]);
@@ -127,7 +155,7 @@ class PurchaseController extends Controller
         }
         return Redirect::route('purchase.index')
             ->with([
-                'status' => 'Berhasil membuat menambah notulensi',
+                'status' => 'Berhasil membuat menambah pembelian',
                 'type' => 'success'
             ]);
     }

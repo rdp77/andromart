@@ -149,13 +149,10 @@ function addItem() {
             '</select>'+
             '</td>'+
             '<td>'+
-            '<select class="select2 itemsDetail" name="itemsDetail[]">'+
-                '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
-                dataItems+
-            '</select>'+
+                '<input type="text" class="form-control cleaveNumeral priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
             '</td>'+
             '<td>'+
-                '<input type="text" class="form-control cleaveNumeral priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
+                '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="0" style="text-align: right">'+
             '</td>'+
             '<td>'+
                 '<button type="button" class="btn btn-danger removeDataDetail" value="'+(index+1)+'" >X</button>'+
@@ -164,16 +161,13 @@ function addItem() {
          // class="dataDetail dataDetail_'+(dataDet)+'"
         '<tr class="dataDetail_'+(dataDet)+'">'+
             '<td>'+
-            '<select class="select2 itemsDetail" name="unitsDetail[]">'+
-                '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
-                dataUnits+
-            '</select>'+
+                '<select class="select2 itemsDetail" name="itemsDetail[]">'+
+                    '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
+                    dataItems+
+                '</select>'+
             '</td>'+
             '<td>'+
                 '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="1" style="text-align: right;">'+
-            '</td>'+
-            '<td>'+
-                '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="0" style="text-align: right">'+
             '</td>'+
             // '<td>'+
             //     '<button type="button" class="btn btn-danger removeDataDetail" value="'+(index+1)+'" >X</button>'+

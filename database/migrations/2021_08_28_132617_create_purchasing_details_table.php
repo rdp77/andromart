@@ -18,7 +18,7 @@ class CreatePurchasingDetailsTable extends Migration
 
             $table->unsignedBigInteger('purchasing_id');
             $table->unsignedBigInteger('item_id');
-            $table->unsignedBigInteger('unit_id');
+            $table->unsignedBigInteger('unit_id')->nullable();
             $table->unsignedBigInteger('branch_id');
 
             $table->string('price')->default(0);
