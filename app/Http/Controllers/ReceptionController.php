@@ -6,6 +6,7 @@ use App\Models\Purchasing;
 use App\Models\PurchasingDetail;
 use App\Models\HistoryPurchase;
 use App\Models\HistoryDetailPurchase;
+use App\Models\Employee;
 use App\Models\Stock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -137,10 +138,16 @@ class ReceptionController extends Controller
     }
     public function update(Request $req, $id)
     {
-        define('UPLOAD_DIR', 'images/');
+        // define('UPLOAD_DIR', 'images/');
         $image = $req->image;
-        $file = 'assetstransaction/Reception_' . date('YmdHis') . '.png';
-        $images = $this->base64_to_jpeg($image, $file);
+        if($image != null) {
+            $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
+            $fileSave = 'assetstransaction/Reception_'. $getEmployee->Branch->code . date('YmdHis') . '.png';
+            $fileName = 'Reception_'. $getEmployee->Branch->code . date('YmdHis') . '.png';
+            $images = $this->base64_to_jpeg($image, $fileSave);
+        } else {
+            $fileName = null;
+        }
 
         $date = date('Y-m-d H:i:s');
         $purchase = Purchasing::where('id', $id)->first();
@@ -149,19 +156,20 @@ class ReceptionController extends Controller
 
         $historyPurchase = new HistoryPurchase;
         $historyPurchase->purchasing_id = $id;
-        $historyPurchase->image = $file;
+        $historyPurchase->image = $fileName;
         $historyPurchase->date = $date;
         $historyPurchase->save();
 
         foreach($req->idDetail as $row) {
+            $qtyNew = (int)str_replace(",", "", $req->qtyNew[$row]);
             $purchasing = PurchasingDetail::where('id', $req->idPurchasing[$row])
             ->first();
             $historyDetailPurchase = new HistoryDetailPurchase;
             $historyDetailPurchase->history_purchase_id = $historyPurchase->id;
             $historyDetailPurchase->purchasing_detail_id = $purchasing->id;
-            $historyDetailPurchase->qty = $req->qtyNew[$row];
+            $historyDetailPurchase->qty = $qtyNew;
             $historyDetailPurchase->save();
-            $purchasing->qty -= $req->qtyNew[$row];
+            $purchasing->qty -= $qtyNew;
             $purchasing->edit = 1;
             $purchasing->save();
 
@@ -169,7 +177,7 @@ class ReceptionController extends Controller
             ->where('unit_id', $req->idUnit[$row])
             ->where('branch_id', $req->idBranch[$row])
             ->first();
-            $stocks->stock += $req->qtyNew[$row];
+            $stocks->stock += $qtyNew;
             $stocks->save();
         }
 

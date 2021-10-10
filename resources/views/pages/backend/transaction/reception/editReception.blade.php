@@ -187,7 +187,7 @@
                     <h4>{{ date('d F Y H:i:s', strtotime($row->date)) }}</h4>
                     @if($row->image != null)
                         <a href="{{ $row->image }}" target="_blank">
-                            <img src="{{ asset($row->image) }}" style="width: 200px; height: 10; object-fit: contain;" />
+                            <img src="{{ asset('assetstransaction/'.$row->image) }}" style="width: 200px; height: 10; object-fit: contain;" />
                         </a>
                     @else
                     

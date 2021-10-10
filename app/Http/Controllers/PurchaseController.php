@@ -119,10 +119,13 @@ class PurchaseController extends Controller
     public function store(Request $req)
     {
         $image = $req->image;
-        // $file = 'assetstransaction/Reception_' . date('YmdHis') . '.png';
-        $fileSave = 'assetstransaction/Purchasing_' . $this->code('PCS') . '.' .'png';
-        $fileName = 'Purchasing_' . $this->code('PCS') . '.' .'png';
-        $images = $this->base64_to_jpeg($image, $fileSave);
+        if($image != null) {
+            $fileSave = 'assetstransaction/Purchasing_' . $this->code('PCS') . '.' .'png';
+            $fileName = 'Purchasing_' . $this->code('PCS') . '.' .'png';
+            $images = $this->base64_to_jpeg($image, $fileSave);
+        } else {
+            $fileName = null;
+        }
 
         $date = date('Y-m-d H:i:s');
         $purchasing = new Purchasing;
