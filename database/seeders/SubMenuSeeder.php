@@ -189,8 +189,8 @@ class SubMenuSeeder extends Seeder
             [
                 'menu_id' => '4',
                 'name' => 'Ikon',
-                'url' => 'javascript:void(0)',
-                'hover' => null
+                'url' => route('icon.index'),
+                'hover' => '["' . route('icon.create') . '","' . route('icon.index') . '"]'
             ],
             [
                 'menu_id' => '4',
