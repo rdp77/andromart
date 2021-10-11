@@ -51,8 +51,11 @@
                     <div class="d-block">
                         <label for="description" class="control-label">{{ __('Deskripsi') }}<code>*</code></label>
                     </div>
+                    @if($contentType->id == 1)
+                    <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{ $content->description }}" required autofocus/>
+                    @else
                     <textarea class="summernote @error('description') is-invalid @enderror" id="description" name="description">{{ $content->description }}</textarea>
-                    <!-- <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" value="{{ $content->description }}" required autofocus/> -->
+                    @endif
                     @error('description')
                     <div class="invalid-feedback">
                         {{ $message }}

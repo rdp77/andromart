@@ -58,6 +58,7 @@ require __DIR__ . '/master/unitRoute.php';
 require __DIR__ . '/master/warrantyRoute.php';
 require __DIR__ . '/master/menuRoute.php';
 require __DIR__ . '/master/accountRoute.php';
+require __DIR__ . '/master/iconRoute.php';
 
 require __DIR__ . '/transaction/serviceRoute.php';
 require __DIR__ . '/transaction/serviceRoute.php';
