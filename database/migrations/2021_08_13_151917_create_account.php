@@ -29,6 +29,10 @@ class CreateAccount extends Migration
             $table->integer('main_detail_id');
             $table->double('opening_balance');
             $table->date('opening_date');
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
+            $table->string('deleted_by')->nullable();
+            $table->softDeletesTz($column = 'deleted_at', $precision = 0);
             $table->timestamps();
         });
     }

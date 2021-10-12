@@ -106,7 +106,7 @@ class TypeController extends Controller
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Mengubah masrter tipe ' . Type::find($id)->name
+            'Mengubah master tipe ' . Type::find($id)->name
         );
 
         $type->save();
@@ -128,6 +128,6 @@ class TypeController extends Controller
 
         Type::destroy($id);
 
-        return Response::json(['status' => 'success']);
+        return Response::json(['status' => 'success', 'message' => 'Data master berhasil dihapus !']);
     }
 }

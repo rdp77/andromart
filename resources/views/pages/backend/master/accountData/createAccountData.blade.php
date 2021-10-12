@@ -1,10 +1,10 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__(' | Tambah Master Cabang'))
-@section('titleContent', __('Tambah Master Cabang'))
+@section('title', __('pages.title').__(' | Tambah Master Akun Data'))
+@section('titleContent', __('Tambah Master Akun Data'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
-<div class="breadcrumb-item active">{{ __('Master Cabang') }}</div>
-<div class="breadcrumb-item active">{{ __('Tambah Master Cabang') }}</div>
+<div class="breadcrumb-item active">{{ __('Master Akun Data') }}</div>
+<div class="breadcrumb-item active">{{ __('Tambah Master Akun Data') }}</div>
 @endsection
 
 @section('content')
@@ -33,7 +33,7 @@
                 </div>
             </div>
             <div class="row">
-                
+
                 <div class="form-group col-md-6 col-xs-12">
                     <div class="d-block">
                         <label for="email" class="control-label">{{ __('Nama') }}</label>

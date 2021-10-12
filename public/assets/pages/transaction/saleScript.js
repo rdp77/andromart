@@ -579,3 +579,54 @@ function sumTotal() {
         $('#totalDiscountValue').val(0);
     }
 }
+
+function paymentMethodChange() {
+    var branch = $('.branchId').val();
+    var value = $('.PaymentMethod').val();
+    var dataItems = [];
+    $('.account').empty();
+    $.each($('.accountDataHidden'), function(){
+        if (value == 'Cash') {
+            if ($(this).data('mainname') == 'Kas' && branch == $(this).data('branch')) {
+                dataItems += '<option value="'+this.value+'">'+$(this).data('code') +' - '+ $(this).data('name')+'</option>';
+            }
+        }
+    });
+
+    $('.account').append('<option value="">- Select -</option>');
+    // if (value == 'Cash') {
+    $('.account').append(dataItems);
+    // }
+    // alert($('.PaymentMethod').val());
+}
+
+function jurnal(params) {
+    $('.dropHereJournals').empty();
+    // $('.dropHereJournals').
+    $.ajax({
+        url: "/transaction/service/check-journals",
+        data: {id:params},
+        type: 'POST',
+        success: function(data) {
+
+            if (data.status == 'success'){
+                $.each(data.jurnal.journal_detail, function(index,value){
+                    if (value.debet_kredit == 'K') {
+                        var dk = '<td>0</td><td>'+parseInt(value.total).toLocaleString('en-US')+'</td>';
+                    }else{
+                        var dk = '<td>'+parseInt(value.total).toLocaleString('en-US')+'</td><td>0</td>';
+                    }
+                    $('.dropHereJournals').append(
+                            '<tr>'+
+                                '<td>'+value.account_data.code+'</td>'+
+                                '<td>'+value.account_data.name+'</td>'+
+                                dk+
+                            '</tr>'
+                    );
+                });
+            }
+            $('#exampleModal').modal('show')
+
+        },
+    });
+}

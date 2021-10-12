@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\Item;
+use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -104,7 +106,7 @@ class BrandController extends Controller
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Mengubah masrter merk ' . Brand::find($id)->name
+            'Mengubah master merk ' . Brand::find($id)->name
         );
 
         $brand->save();
@@ -118,14 +120,29 @@ class BrandController extends Controller
 
     public function destroy(Request $req, $id)
     {
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Menghapus master merk ' . Brand::find($id)->name
-        );
+        $item = Item::where('brand_id', '=', $id)->get();
+        $checkItem = count($item);
+        $type = Type::where('brand_id', '=', $id)->get();
+        $checkType = count($type);
 
-        Brand::destroy($id);
+        if($checkItem > 0){
+            return Response::json(['status' => 'error', 'message' => 'Data terrelasi dengan Item, data tidak bisa dihapus !']);
+        }
+        else{
+            if($checkType > 0){
+                return Response::json(['status' => 'error', 'message' => 'Data terrelasi dengan Tipe, data tidak bisa dihapus !']);
+            }
+            else{
+                $this->DashboardController->createLog(
+                    $req->header('user-agent'),
+                    $req->ip(),
+                    'Menghapus master merk ' . Brand::find($id)->name
+                );
 
-        return Response::json(['status' => 'success']);
+                Brand::destroy($id);
+
+                return Response::json(['status' => 'success', 'message' => 'Data master berhasil dihapus !']);
+            }
+        }
     }
 }

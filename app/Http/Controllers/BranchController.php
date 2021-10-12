@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Area;
 use App\Models\Branch;
+use App\Models\Employee;
+use App\Models\Stock;
+use App\Models\Supplier;
+use App\Models\Sale;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -162,14 +166,37 @@ class BranchController extends Controller
 
     public function destroy(Request $req, $id)
     {
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Menghapus master cabang ' . Branch::find($id)->name
-        );
+        $stock = Stock::where('branch_id', '=', $id)->where('stock', '<', 1)->get();
+        $checkStock = count($stock);
+        $employee = Employee::where('branch_id', '=', $id)->get();
+        $checkEmployee = count($employee);
+        $sale = Sale::where('branch_id', '=', $id)->get();
+        $checkSale = count($sale);
 
-        Branch::destroy($id);
+        if($checkStock > 0){
+            return Response::json(['status' => 'error', 'message' => "Masih ada stock item pada cabang tersebut !"]);
+        }
+        else {
+            if ($checkEmployee > 0) {
+                return Response::json(['status' => 'error', 'message' => "Masih ada data crew pada cabang tersebut !"]);
+            }
+            else {
+                if($checkSale > 0)
+                {
+                    return Response::json(['status' => 'error', 'message' => "Data yang sudah di transaksikan tidak bisa dihapus !"]);
+                }
+                else {
+                    $this->DashboardController->createLog(
+                        $req->header('user-agent'),
+                        $req->ip(),
+                        'Menghapus master cabang ' . Branch::find($id)->name
+                    );
 
-        return Response::json(['status' => 'success']);
+                    Branch::destroy($id);
+
+                    return Response::json(['status' => 'success', 'message' => 'Data master berhasil dihapus !']);
+                }
+            }
+        }
     }
 }

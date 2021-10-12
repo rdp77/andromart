@@ -40,7 +40,32 @@ class StockController extends Controller
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
-                ->rawColumns(['action'])
+
+                ->addColumn('dataItem', function ($row) {
+                    $htmlAdd = '<table>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<td>'.$row->item->brand->category->code.'</td>';
+                    $htmlAdd .=      '<th>'.$row->item->name.'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .= '<table>';
+
+                    return $htmlAdd;
+                })
+                ->addColumn('dataQty', function ($row) {
+                    $htmlAdd = '<table>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<td>Stock</td>';
+                    $htmlAdd .=      '<th>'.$row->stock.'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<td>Min. Stock</td>';
+                    $htmlAdd .=      '<th>'.$row->min_stock.'</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .= '<table>';
+
+                    return $htmlAdd;
+                })
+                ->rawColumns(['action', 'dataItem', 'dataQty'])
                 ->make(true);
         }
         return view('pages.backend.warehouse.stock.indexStock');
@@ -92,9 +117,29 @@ class StockController extends Controller
         return view('pages.backend.warehouse.stock.updateStock', compact('stock', 'branch', 'unit'));
     }
 
-    public function update(Request $request, Stock $stock)
+    public function update(Request $req, $id)
     {
-        //
+        Stock::where('id', $id)
+        ->update([
+            'min_stock' => $req->min_stock,
+            'unit_id' => $req->unit_id,
+            'description' => $req->description,
+        ]);
+
+        $stock = Stock::find($id);
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Mengubah stock barang ' . Stock::find($id)->item->name
+        );
+
+        $stock->save();
+
+        return Redirect::route('stock.index')
+            ->with([
+                'status' => 'Berhasil merubah stock barang ',
+                'type' => 'success'
+            ]);
     }
 
     public function destroy(Stock $stock)

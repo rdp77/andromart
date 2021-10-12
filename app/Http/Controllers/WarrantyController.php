@@ -125,6 +125,6 @@ class WarrantyController extends Controller
 
         Warranty::destroy($id);
 
-        return Response::json(['status' => 'success']);
+        return Response::json(['status' => 'success', 'message' => 'Data master berhasil dihapus !']);
     }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Brand;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -124,14 +125,22 @@ class CategoryController extends Controller
 
     public function destroy(Request $req, $id)
     {
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Menghapus master kategori ' . Category::find($id)->name
-        );
+        $brand = Brand::where('category_id', '=', $id)->get();
+        $checkBrand = count($brand);
 
-        Category::destroy($id);
+        if ($checkBrand > 0) {
+            return Response::json(['status' => 'error', 'message' => 'Data terrelasi dengan Merk, data master tidak bisa dihapus !']);
+        }
+        else {
+            $this->DashboardController->createLog(
+                $req->header('user-agent'),
+                $req->ip(),
+                'Menghapus master kategori ' . Category::find($id)->name
+            );
 
-        return Response::json(['status' => 'success']);
+            Category::destroy($id);
+
+            return Response::json(['status' => 'success', 'message' => 'Data master berhasil dihapus !']);
+        }
     }
 }

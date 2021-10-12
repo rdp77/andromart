@@ -260,11 +260,11 @@ class ItemController extends Controller
         $transaction = StockMutation::where('item_id', '=', $id)->get();
         $checkTransaction = count($transaction);
         if ($checkStock > 0) {
-            return Response::json(['status' => 'error', 'message' => "Data tidak bisa dihapus, Sisa Stok = $checkStock"]);
+            return Response::json(['status' => 'error', 'message' => "Data tidak bisa dihapus ! Sisa Stok = $checkStock"]);
         }
         else {
             if ($checkTransaction > 0) {
-                return Response::json(['status' => 'error', 'message' => "Data yang sudah di transaksikan tidak bisa dihapus"]);
+                return Response::json(['status' => 'error', 'message' => "Data yang sudah di transaksikan tidak bisa dihapus !"]);
             }
             else {
                 $this->DashboardController->createLog(

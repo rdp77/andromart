@@ -132,6 +132,6 @@ class UnitController extends Controller
 
         Unit::destroy($id);
 
-        return Response::json(['status' => 'success']);
+        return Response::json(['status' => 'success', 'message' => 'Data master berhasil dihapus !']);
     }
 }

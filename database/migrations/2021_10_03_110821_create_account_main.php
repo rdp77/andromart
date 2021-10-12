@@ -17,6 +17,10 @@ class CreateAccountMain extends Migration
             $table->id();
             $table->String('code');
             $table->String('name');
+            $table->string('created_by')->nullable();
+            $table->string('updated_by')->nullable();
+            $table->string('deleted_by')->nullable();
+            $table->softDeletesTz($column = 'deleted_at', $precision = 0);
             $table->timestamps();
         });
     }

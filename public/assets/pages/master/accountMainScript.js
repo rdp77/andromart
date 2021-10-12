@@ -10,15 +10,14 @@ var table = $("#table").DataTable({
         [10, 25, 50, "Semua"],
     ],
     ajax: {
-        url: "/master/supplier/supplier",
+        url: "/master/account-main/account-main",
         type: "GET",
     },
     dom: '<"html5buttons">lBrtip',
     columns: [
         { data: "DT_RowIndex", orderable: false, searchable: false },
+        { data: "code" },
         { data: "name" },
-        { data: "address" },
-        { data: "contact" },
         { data: "action", orderable: false, searchable: true },
     ],
     buttons: [
@@ -85,19 +84,13 @@ function del(id) {
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url: "/master/supplier/supplier/" + id,
+                url: "/master/account-main/account-main/" + id,
                 type: "DELETE",
-                success: function (data) {
-                    if (data.status == 'success'){
-                        swal(data.message, {
-                            icon: "success",
-                        });
-                        location.reload();
-                    }else{
-                        swal(data.message, {
-                            icon: "warning",
-                        });
-                    }
+                success: function () {
+                    swal("Data master berhasil dihapus", {
+                        icon: "success",
+                    });
+                    table.draw();
                 },
             });
         } else {

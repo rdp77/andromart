@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Area;
+use App\Models\Branch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -110,7 +111,7 @@ class AreaController extends Controller
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Mengubah masrter area ' . Area::find($id)->name
+            'Mengubah master area ' . Area::find($id)->name
         );
 
         $area->save();
@@ -124,6 +125,14 @@ class AreaController extends Controller
 
     public function destroy(Request $req, $id)
     {
+        $branch = Branch::where('area_id', '=', $id)->get();
+        $checkBranch = count($branch);
+
+        if($checkBranch > 0){
+            return Response::json(['status' => 'error', 'message' => "Data yang sudah di transaksikan tidak bisa dihapus ! "]);
+        }
+        else{
+
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
@@ -132,6 +141,7 @@ class AreaController extends Controller
 
         Area::destroy($id);
 
-        return Response::json(['status' => 'success']);
+        return Response::json(['status' => 'success', 'message' => 'Data master berhasil dihapus !']);
+        }
     }
 }

@@ -9,12 +9,12 @@ use App\Models\AccountMain;
 use App\Models\AccountMainDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 use Carbon\carbon;
-use DB;
 
 class AccountDataController extends Controller
 {
@@ -37,7 +37,7 @@ class AccountDataController extends Controller
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>';
                     $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('area.edit', $row->id) . '">Edit</a>';
+                            <a class="dropdown-item" href="' . route('account-data.edit', $row->id) . '">Edit</a>';
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
@@ -66,9 +66,9 @@ class AccountDataController extends Controller
         $AccountMain       = AccountMain::where('id',$AccountMainDetail->main_id)->first();
         $Branch            = Branch::where('id',$req->branch_id)->first();
         $Area              = Area::where('id',$Branch->area_id)->first();
-        
+
         $code = $AccountMain->code.$AccountMainDetail->code.$Area->code.$Branch->code;
-        
+
         $id = DB::table('account_data')->max('id')+1;
         AccountData::create([
             'id'=>$id,
