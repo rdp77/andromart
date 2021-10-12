@@ -20,6 +20,7 @@ use App\Http\Controllers\FrontEnd\FrontendController;
 // 	return view('pages.frontend.index');
 // });
 Route::get('/', [FrontendController::class, 'home'])->name('frontendHome');
+Route::get('/produk-detail/{id}', [FrontendController::class, 'product'])->name('frontendProduct');
 Route::get('/about', [FrontendController::class, 'about'])->name('frontendAbout');
 Route::get('/services', [FrontendController::class, 'services'])->name('frontendServices');
 Route::get('/work', [FrontendController::class, 'work'])->name('frontendWork');

@@ -47,7 +47,7 @@ class ContentTypeSeeder extends Seeder
         ContentType::create(['name' => 'Contacts Message Title', 'type' => 'contacts_message_title', 'status' => false, 'column_1'=> true, 'column_2' => true]);
 // tambahan baru
 
-        ContentType::create(['name' => 'Hot Item', 'type' => 'home_hot_item', 'status' => true, 'column_1'=> true, 'column_3' => true, 'column_4' => true]);
+        ContentType::create(['name' => 'Hot Item', 'type' => 'home_hot_item', 'status' => true, 'column_1'=> true, 'column_2' => true, 'column_3' => true, 'column_4' => true]);
         ContentType::create(['name' => 'Service Unit', 'type' => 'home_service_unit', 'status' => true, 'column_1'=> true, 'column_2' => true, 'column_4' => true]);
     }
 }
