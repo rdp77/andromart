@@ -127,24 +127,29 @@ function addItem() {
     $.each($('.itemsData'), function(){
         dataItems += '<option data-index="'+(index+1)+'"  data-price="'+$(this).data('price')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
     });
-    var dataUnits = [];
-    $.each($('.unitsData'), function(){
-        dataUnits += '<option data-index="'+(index+1)+'"  data-price="'+$(this).data('price')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
-    });
+    // var dataUnits = [];
+    // $.each($('.unitsData'), function(){
+    //     dataUnits += '<option data-index="'+(index+1)+'"  data-price="'+$(this).data('price')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
+    // });
+    // data-index="'+(index+1)+'"
     var dataBranches = [];
     $.each($('.branchesData'), function(){
-        dataBranches += '<option data-index="'+(index+1)+'"  data-code="'+$(this).data('code')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
+        dataBranches += '<option data-code="'+$(this).data('code')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
     });
     var dataDet = dataDetail+1;
-    console.log(dataDet);
+    // console.log(dataDet);
     $('.dropHereItem').append(
         '<tr class="dataDetail dataDetail_'+(dataDet)+'">'+
             '<td style="display:none">'+
                 '<input type="hidden" class="form-control priceDetailSparePart priceDetailSparePart_'+(index+1)+'" name="idDetail[]" value="'+(index)+'">'+
             '</td>'+
             '<td>'+
+            // '<select class="select2 itemsDetail" name="branchesDetail[]">'+
+            //     '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
+            //     dataBranches+
+            // '</select>'+
             '<select class="select2 itemsDetail" name="branchesDetail[]">'+
-                '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
+                '<option value="-">- Select -</option>'+
                 dataBranches+
             '</select>'+
             '</td>'+
@@ -169,6 +174,7 @@ function addItem() {
             '<td>'+
                 '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="1" style="text-align: right;">'+
             '</td>'+
+            // '<td>'+(index+1)+'</td>'+
             // '<td>'+
             //     '<button type="button" class="btn btn-danger removeDataDetail" value="'+(index+1)+'" >X</button>'+
             // '</td>'+
@@ -194,6 +200,93 @@ function addItem() {
 
     // var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
     // sumTotal();
+}
+function addItems(branch_id, item_id, qty, price) {
+    // console.log("coba", branch_id, item_id, qty, price);
+    var total = qty * price;
+    var index = $('.priceDetail').length;
+    var dataDetail = $('.dataDetail').length;
+
+    var dataItems = [];
+    $.each($('.itemsData'), function(){
+        if(item_id == this.value){
+            dataItems += '<option data-index="'+(index+1)+'" data-price="'+$(this).data('price')+'" value="'+this.value+'" selected>'+$(this).data('name')+'</option>';
+        } else {
+            dataItems += '<option data-index="'+(index+1)+'" data-price="'+$(this).data('price')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
+        }
+    });
+    var dataBranches = [];
+    $.each($('.branchesData'), function(){
+        if(branch_id == this.value){
+            dataBranches += '<option data-code="'+$(this).data('code')+'" value="'+this.value+'" selected>'+$(this).data('name')+'</option>';
+        } else {
+            dataBranches += '<option data-code="'+$(this).data('code')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
+        }
+    });
+    var dataDet = dataDetail+1;
+    // console.log(dataDet);
+    $('.dropHereItem').append(
+        '<tr class="dataDetail dataDetail_'+(dataDet)+'">'+
+            '<td style="display:none">'+
+                '<input type="hidden" class="form-control priceDetailSparePart priceDetailSparePart_'+(index+1)+'" name="idDetail[]" value="'+(index)+'">'+
+            '</td>'+
+            '<td>'+
+            // '<select class="select2 itemsDetail" name="branchesDetail[]">'+
+            //     '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
+            //     dataBranches+
+            // '</select>'+
+            '<select class="select2 itemsDetail" name="branchesDetail[]">'+
+                '<option value="-">- Select -</option>'+
+                dataBranches+
+            '</select>'+
+            '</td>'+
+            '<td>'+
+                '<input type="text" class="form-control cleaveNumeral priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="'+price+'" style="text-align: right">'+
+            '</td>'+
+            '<td>'+
+                '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="'+total+'" style="text-align: right">'+
+            '</td>'+
+            '<td>'+
+                '<button type="button" class="btn btn-danger removeDataDetail" value="'+(index+1)+'" >X</button>'+
+            '</td>'+
+        '</tr>' +
+         // class="dataDetail dataDetail_'+(dataDet)+'"
+        '<tr class="dataDetail_'+(dataDet)+'">'+
+            '<td>'+
+                '<select class="select2 itemsDetail" name="itemsDetail[]">'+
+                    '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
+                    dataItems+
+                '</select>'+
+            '</td>'+
+            '<td>'+
+                '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="'+qty+'" style="text-align: right;">'+
+            '</td>'+
+            // '<td>'+(index+1)+'</td>'+
+            // '<td>'+
+            //     '<button type="button" class="btn btn-danger removeDataDetail" value="'+(index+1)+'" >X</button>'+
+            // '</td>'+
+        '</tr>' +
+        '<tr class="dataDetail_'+(dataDet)+'" style="border-bottom: solid 2px #ddd; margin-bottom: 5px;">'+
+            '<td colspan="4">'+
+                '<input type="text" class="form-control desDetail desDetail_'+(index+1)+'" name="desDetail[]" placeholder="Deskripsi">'+
+            '</td>'+
+        '</tr>' +
+        '<tr class="dataDetail_'+(dataDet)+'" height="50px">'+
+        '</tr>'
+
+    );
+    $('.select2').select2();
+    $(".cleaveNumeral")
+    .toArray()
+    .forEach(function (field) {
+        new Cleave(field, {
+            numeral: true,
+            numeralThousandsGroupStyle: "thousand",
+        });
+    });
+
+    // var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
+    sumTotal();
 }
 
 // mengganti item

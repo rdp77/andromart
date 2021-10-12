@@ -57,7 +57,7 @@ class PurchaseController extends Controller
                     if($row->done == 'Belum Proses'){
                         $actionBtn .= '<div class="dropdown-menu">
                             <a class="dropdown-item" href="' . route('purchaseApprove', Crypt::encryptString($row->id)) . '">Setujui</a>';
-                        // $actionBtn .= '<a class="dropdown-item" href="' . route('purchase.edit', Crypt::encryptString($row->id)) . '">Ubah</a>';
+                        $actionBtn .= '<a class="dropdown-item" href="' . route('purchase.edit', Crypt::encryptString($row->id)) . '">Ubah</a>';
                         $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     } else {
                         $actionBtn .= '<div class="dropdown-menu">
@@ -118,6 +118,7 @@ class PurchaseController extends Controller
 
     public function store(Request $req)
     {
+        // dd($req->idDetail);
         $image = $req->image;
         if($image != null) {
             $fileSave = 'assetstransaction/Purchasing_' . $this->code('PCS') . '.' .'png';
@@ -181,17 +182,63 @@ class PurchaseController extends Controller
         $model = Purchasing::where('id', $id)->first();
         $models = PurchasingDetail::where('purchasing_id', $id)
         ->join('items', 'purchasing_details.item_id', 'items.id')
-        ->join('units', 'purchasing_details.unit_id', 'units.id')
         ->join('branches', 'purchasing_details.branch_id', 'branches.id')
-        ->select('purchasing_details.id as id', 'qty', 'items.id as item_id', 'items.name as item_name', 'units.id as unit_id', 'units.name as unit_name', 'branches.id as branch_id', 'branches.name as branch_name', 'purchasing_details.description as description')
+        ->select('purchasing_details.id as id', 'qty', 'price', 'items.id as item_id', 'items.name as item_name', 'branches.id as branch_id', 'branches.name as branch_name', 'purchasing_details.description as description')
         ->get();
-        // dd($models);
         $jumlah = PurchasingDetail::where('purchasing_id', $id)->count();
+        // dd($model);
         return view('pages.backend.transaction.purchase.editPurchase',compact('employee','item', 'unit', 'branch', 'model', 'models', 'jumlah'));
     }
 
     public function update(Request $req, $id)
     {
+        // $idDetails = $req->idDetail;
+        // dd($idDetails);
+        $image = $req->image;
+        if($image != null) {
+            $fileSave = 'assetstransaction/Purchasing_' . $this->code('PCS') . '.' .'png';
+            $fileName = 'Purchasing_' . $this->code('PCS') . '.' .'png';
+            $images = $this->base64_to_jpeg($image, $fileSave);
+        } else {
+            $fileName = null;
+        }
+
+        $date = date('Y-m-d H:i:s');
+        $purchasing = Purchasing::where('id', $id)->first();
+        $purchasing->code = $req->code;
+        // $purchasing->date = $date;
+        $purchasing->employee_id = $req->buyer;
+        $purchasing->status = $req->pay;
+        
+        $purchasing->discount = str_replace(",", '',$req->discountTotal);
+        $purchasing->price = str_replace(",", '',$req->grandTotal);
+        $purchasing->created_by = Auth::user()->name;
+
+        $purchasing->image = $fileName;
+        $purchasing->save();
+
+        $delPurchasingDetail = purchasingDetail::where('purchasing_id', $id)->truncate();
+        foreach($req->idDetail as $row => $value) {
+            // dd($req->qtyDetail);
+            // $row = $rows - 1;
+            $purchasingDetail = new PurchasingDetail;
+            $purchasingDetail->purchasing_id = $purchasing->id;
+            $purchasingDetail->item_id = $req->itemsDetail[$row];
+            // $purchasingDetail->unit_id = $req->unitsDetail[$row];
+            $purchasingDetail->branch_id = $req->branchesDetail[$row];
+            $purchasingDetail->price = str_replace(",", '',$req->priceDetail[$row]);
+            $purchasingDetail->qty_start = str_replace(",", '',$req->qtyDetail[$row]);
+            $purchasingDetail->qty = str_replace(",", '',$req->qtyDetail[$row]);
+            $purchasingDetail->total = str_replace(",", '',$req->totalPriceDetail[$row]);
+            $purchasingDetail->description = $req->desDetail[$row];
+            $purchasingDetail->created_by = Auth::user()->name;
+            $purchasingDetail->save();
+        }
+        return Redirect::route('purchase.index')
+        ->with([
+            'status' => 'Berhasil membuat mengubah pembelian',
+            'type' => 'success'
+        ]);
     }
 
     public function destroy(Request $req, $id)

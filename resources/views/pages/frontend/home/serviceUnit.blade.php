@@ -37,4 +37,15 @@
 		</div>
     </div>
 </section>
+<script type="text/javascript">
+    function show() {
+    	var serviceId = document.getElementById("nameText").value;
+    	var urls = /trackingService/ + serviceId;
+    	console.log(urls);
+    	window.open(urls, "_blank");
+        // var a = document.getElementById('hrefUrls'); //or grab it by tagname etc
+        // a.href = urls;
+        // $("#form_id").attr("action", urls);
+    }
+</script>
 @endif

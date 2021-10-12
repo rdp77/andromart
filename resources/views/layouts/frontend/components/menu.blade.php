@@ -6,7 +6,7 @@
 					<div class="header-row">
 						<div class="header-logo">
 							<a href="/">
-								<img alt="Porto" height="75" src="{{ asset('assetsfrontend/img/andromart.png') }}" style="margin-top: 10px;">
+								<img alt="Porto" src="{{ asset('assetsfrontend/img/andromart.png') }}" style="height: 70px; object-fit: cover;">
 							</a>
 						</div>
 					</div>

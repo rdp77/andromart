@@ -110,7 +110,10 @@ class FrontendController extends Controller
         // $models = ServiceStatusMutation::
         // join('service', 'service_status_mutation.service_id', '=', 'service.id')->where('service.code', $id)
         // ->get();
-        $models = ServiceStatusMutation::get();
+        $models = ServiceStatusMutation::
+        join('service', 'service_status_mutation.service_id', '=', 'service.id')->where('service.code', $id)
+        ->get();
+        // dd($models);
         return view('pages.frontend.statusService', compact('models', 'id'));
     }
 
