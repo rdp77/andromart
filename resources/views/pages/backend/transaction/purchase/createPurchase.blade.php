@@ -38,7 +38,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-12">
+                        <!-- <div class="form-group col-12">
                             <label class="form-label">Pembayaran</label>
                             <div class="selectgroup w-100">
                                 <label class="selectgroup-item">
@@ -50,7 +50,7 @@
                                     <span class="selectgroup-button">Belum Dibayar</span>
                                 </label>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group col-12">
                             <label for="descriptionPurchase">{{ __('Keterangan') }}<code>*</code></label>
                             <input id="descriptionPurchase" type="text" class="form-control" name="descriptionPurchase">

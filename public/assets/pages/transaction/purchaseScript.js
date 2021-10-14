@@ -100,6 +100,31 @@ function del(id) {
     });
 }
 
+function approve(id) {
+    swal({
+        title: "Apakah Anda Yakin?",
+        text: "Menyetujui pembelian ini berarti anda telah melakukan pembayaran ke supplier",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                url: "/transaction/purchasing/approve/" + id,
+                type: "GET",
+                success: function () {
+                    swal("Pembelian berhasil disetujui", {
+                        icon: "success",
+                    });
+                    table.draw();
+                },
+            });
+        } else {
+            swal("Pembelian Anda tidak jadi disetujui!");
+        }
+    });
+}
+
 
 
 function changeDiscount(params) {

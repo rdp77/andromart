@@ -56,7 +56,7 @@ class PurchaseController extends Controller
                         </button>';
                     if($row->done == 'Belum Proses'){
                         $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('purchaseApprove', Crypt::encryptString($row->id)) . '">Setujui</a>';
+                            <a onclick="approve(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Setujui</a>';
                         $actionBtn .= '<a class="dropdown-item" href="' . route('purchase.edit', Crypt::encryptString($row->id)) . '">Ubah</a>';
                         $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     } else {
@@ -118,7 +118,15 @@ class PurchaseController extends Controller
 
     public function store(Request $req)
     {
-        // dd($req->idDetail);
+        $typeDiscount = $req->typeDiscount;
+        $discountType = 0; $discountValue = 0;
+        if($typeDiscount == "percent") {
+            $discountType = 0;
+            $discountValue = $req->totalDiscountPercent;
+        } else {
+            $discountType = 1;
+            $discountValue = $req->totalDiscountValue;
+        }
         $image = $req->image;
         if($image != null) {
             $fileSave = 'assetstransaction/Purchasing_' . $this->code('PCS') . '.' .'png';
@@ -133,7 +141,10 @@ class PurchaseController extends Controller
         $purchasing->code = $req->code;
         $purchasing->date = $date;
         $purchasing->employee_id = $req->buyer;
-        $purchasing->status = $req->pay;
+        // $purchasing->status = $req->pay;
+
+        $purchasing->discountType = $discountType;
+        $purchasing->discountValue = str_replace(",", '',$discountValue);
         
         $purchasing->discount = str_replace(",", '',$req->discountTotal);
         $purchasing->price = str_replace(",", '',$req->grandTotal);
@@ -332,8 +343,9 @@ class PurchaseController extends Controller
 
     public function approve($id)
     {
-        $id = Crypt::decryptString($id);
+        // $id = Crypt::decryptString($id);
         $purchase = Purchasing::where('id', $id)->first();
+        $purchase->status = 'paid';
         $purchase->done = 3;
         $purchase->updated_by = Auth::user()->name;
         $purchase->save();

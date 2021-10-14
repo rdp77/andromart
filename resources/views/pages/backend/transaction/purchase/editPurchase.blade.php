@@ -43,7 +43,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-12">
+                        <!-- <div class="form-group col-12">
                             <label class="form-label">Pembayaran</label>
                             <div class="selectgroup w-100">
                                 <label class="selectgroup-item">
@@ -63,7 +63,7 @@
                                     <span class="selectgroup-button">Belum Dibayar</span>
                                 </label>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group col-12">
                             <label for="descriptionPurchase">{{ __('Keterangan') }}<code>*</code></label>
                             <input id="descriptionPurchase" type="text" class="form-control" name="descriptionPurchase">
@@ -82,17 +82,24 @@
                         <label for="priceTotal">{{ __('Harga Total') }}<code>*</code></label>
                         <input readonly id="priceTotal" onchange="sumTotal()" type="text" value="0" class="form-control cleaveNumeral" name="priceTotal" style="text-align: right">
                     </div>
+                    <?php
+                        $discountPercent = 0;
+                        $discountValue = 0;
+                        if($model->discountType == 0) {
+                            $discountPercent = $model->discountValue;
+                        } else {
+                            $discountValue = $model->discountValue;
+                        }
+                    ?>
                     <div class="form-group">
                         <label class="form-label">Satuan Diskon Yang Dipakai</label>
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item">
-                                <input type="radio" name="typeDiscount" value="percent" onchange="changeDiscount('percent')" checked
-                                    class="selectgroup-input">
+                                <input type="radio" name="typeDiscount" value="percent" onchange="changeDiscount('percent')" class="selectgroup-input" <?php if($model->discountType == 0) { echo "checked"; } ?>>
                                 <span class="selectgroup-button">Persentase (%)</span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="typeDiscount" value="value" onchange="changeDiscount('value')" 
-                                    class="selectgroup-input">
+                                <input type="radio" name="typeDiscount" value="value" onchange="changeDiscount('value')" class="selectgroup-input" <?php if($model->discountType == 1) { echo "checked"; } ?>>
                                 <span class="selectgroup-button">Harga (RP)</span>
                             </label>
                         </div>
@@ -100,11 +107,11 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="totalDiscountPercent">{{ __('Diskon %') }}<code>*</code></label>
-                            <input id="totalDiscountPercent" type="text" value="0" class="form-control cleaveNumeral" name="totalDiscountPercent" onkeyup="sumTotal(), sumDiscount()" style="text-align: right">
+                            <input id="totalDiscountPercent" type="text" value="{{ $discountPercent }}" class="form-control cleaveNumeral" name="totalDiscountPercent" onkeyup="sumTotal(), sumDiscount()" style="text-align: right">
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="totalDiscountValue">{{ __('Diskon') }}<code>*</code></label>
-                            <input id="totalDiscountValue" type="text" value="0" class="form-control cleaveNumeral" name="totalDiscountValue" onkeyup="sumTotal()" style="pointer-events: none;background-color:#e9ecef; text-align: right">
+                            <input id="totalDiscountValue" type="text" value="{{ $discountValue }}" class="form-control cleaveNumeral" name="totalDiscountValue" onkeyup="sumTotal()" style="pointer-events: none;background-color:#e9ecef; text-align: right">
                         </div>
                     </div>
                     <div class="form-group">

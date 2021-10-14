@@ -22,6 +22,8 @@ class CreatePurchasingsTable extends Migration
             $table->string('discount')->nullable();
             $table->string('code')->unique();
             $table->mediumText('image')->nullable();
+            $table->tinyInteger('discountType')->nullable()->comment('0 percent 1 value');
+            $table->bigInteger('discountValue')->nullable();
             $table->string('status')->nullable()->comment('paid = bayar, dept = hutang');
             $table->integer('done')->default(0)->comment('0 baru, 1 proses, 2 selesai, 3 disetujui');
             $table->mediumText('description')->nullable();
