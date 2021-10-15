@@ -24,7 +24,13 @@ class SubMenuSeeder extends Seeder
             ],
             [
                 'menu_id' => '2',
-                'name' => 'Update WO Service',
+                'name' => 'Service Return',
+                'url' => route('service-return.index'),
+                'hover' => '["' . route('service-return.create') . '","' . route('service-return.index') . '"]'
+            ],
+            [
+                'menu_id' => '2',
+                'name' => 'Service Update Status',
                 'url' => route('service.serviceFormUpdateStatus'),
                 'hover' => '["' . route('service.serviceFormUpdateStatus') . '"]'
             ],
