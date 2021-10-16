@@ -62,7 +62,7 @@ require __DIR__ . '/master/accountRoute.php';
 require __DIR__ . '/master/iconRoute.php';
 
 require __DIR__ . '/transaction/serviceRoute.php';
-require __DIR__ . '/transaction/serviceRoute.php';
+require __DIR__ . '/transaction/serviceReturnRoute.php';
 require __DIR__ . '/finance/sharingProfitRoute.php';
 require __DIR__ . '/finance/lossItemsRoute.php';
 require __DIR__ . '/transaction/saleRoute.php';
