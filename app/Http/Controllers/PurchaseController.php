@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Purchasing;
 use App\Models\PurchasingDetail;
+use App\Models\HistoryDetailPurchase;
 use App\Models\Stock;
 use App\Models\Employee;
 use App\Models\Item;
