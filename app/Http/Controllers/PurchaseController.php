@@ -228,7 +228,12 @@ class PurchaseController extends Controller
         $purchasing->image = $fileName;
         $purchasing->save();
 
+        $deletes = purchasingDetail::where('purchasing_id', $id)->get();
+        foreach($deletes as $row) {
+            $history = HistoryDetailPurchase::where('purchasing_detail_id', $row->id)->truncate();
+        }
         $delPurchasingDetail = purchasingDetail::where('purchasing_id', $id)->truncate();
+
         foreach($req->idDetail as $row => $value) {
             // dd($req->qtyDetail);
             // $row = $rows - 1;
