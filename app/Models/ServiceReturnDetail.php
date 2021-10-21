@@ -18,7 +18,7 @@ class ServiceReturnDetail extends Model
 
     protected $fillable = [
         'id',
-        'service_return_id', 
+        'service_id', 
         'item_id',
         'price',
         'qty',

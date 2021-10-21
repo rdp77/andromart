@@ -12,6 +12,7 @@ use App\Models\JournalDetail;
 use App\Models\ServicePayment;
 use App\Models\ServiceDetail;
 use App\Models\ServiceReturn;
+use App\Models\SettingPresentase;
 use App\Models\ServiceReturnDetail;
 use App\Models\ServiceStatusMutation;
 use Illuminate\Http\Request;
@@ -157,11 +158,13 @@ class ServiceReturnController extends Controller
     {
         DB::beginTransaction();
         try {
-        // return $req->all();
+            // return $req->all();
             $dateConvert = $this->DashboardController->changeMonthIdToEn($req->date);
-            $id = DB::table('service_payment')->max('id')+1;
+            $id = DB::table('service_return')->max('id')+1;
             $getEmployee =  Employee::where('user_id',Auth::user()->id)->first();
-            $kode = $this->code('BYR',$id);
+            $kode = $this->code('RTNS',$id);
+            $checkService = Service::where('id',$req->serviceId)->first();
+            
             ServiceReturn::create([
                 'id' =>$id,
                 'code' =>$kode,
@@ -174,157 +177,291 @@ class ServiceReturnController extends Controller
                 'created_by' => Auth::user()->name,
                 'created_at' => date('Y-m-d h:i:s'),
             ]);
-            if($req->type == 'DownPayment'){
-                Service::where('id',$req->serviceId)->update([
-                    'payment_status'=>$req->type,
-                    'downpayment_date'=>$dateConvert,
-                    'total_downpayment'=>str_replace(",", '',$req->totalPayment),
-                ]);
-            }else{
-                Service::where('id',$req->serviceId)->update([
-                    'payment_status'=>$req->type,
-                    'payment_date'=>$dateConvert,
-                    'total_payment'=>str_replace(",", '',$req->totalPayment),
+
+            Service::where('id',$req->serviceId)->update([
+                'work_status'=>$req->type,
+            ]);
+
+            for ($i=0; $i <count($req->itemsDetail) ; $i++) {
+                ServiceReturnDetail::create([
+                    'service_id'=>$req->serviceId,
+                    'item_id'=>$req->itemsDetail[$i],
+                    'price'=>str_replace(",", '',$req->priceDetail[$i]),
+                    'qty'=>$req->qtyDetail[$i],
+                    'total_price'=>str_replace(",", '',$req->totalPriceDetail[$i]),
+                    'description' =>str_replace(",", '',$req->descriptionDetail[$i]),
+                    'type' =>$req->typeDetail[$i],
+                    'treatment' =>$req->perlakuan[$i],
+                    'created_by'=>Auth::user()->name,
+                    'created_at'=>date('Y-m-d h:i:s'),
                 ]);
             }
-
-            // penjurnalan
-            $idJournal = DB::table('journals')->max('id')+1;
-            Journal::create([
-                'id' =>$idJournal,
-                'code'=>$this->code('DD',$idJournal),
-                'year'=>date('Y'),
-                'date'=>date('Y-m-d'),
-                'type'=>'Pembayaran Service',
-                'total'=>str_replace(",", '',$req->totalPayment),
-                'ref'=>$kode,
-                'description'=>$req->description,
+          
+            
+            $indexSSM = ServiceStatusMutation::where('service_id', $req->serviceId)->count()+1;
+            ServiceStatusMutation::create([
+                'service_id'=>$req->serviceId,
+                'technician_id'=>$checkService->technician_id,
+                'index'=>$indexSSM,
+                'status'=>$req->type,
+                'description'=>$req->type .' Service' ,
+                'created_by'=>Auth::user()->name,
                 'created_at'=>date('Y-m-d h:i:s'),
-                // 'updated_at'=>date('Y-m-d h:i:s'),
             ]);
-            if($req->type == 'DownPayment'){
-                $accountData  = AccountData::where('branch_id',$getEmployee->branch_id)
+            
+            // DB::rollback();
+            // return 'asd';
+            // penjurnalan
+            if($req->totalService != 0){
+                $idJournal = DB::table('journals')->max('id')+1;
+                Journal::create([
+                    'id' =>$idJournal,
+                    'code'=>$this->code('KK',$idJournal),
+                    'year'=>date('Y'),
+                    'date'=>date('Y-m-d'),
+                    'type'=>$req->type.' Service',
+                    'total'=>str_replace(",", '',$req->totalService),
+                    'ref'=>$kode,
+                    'description'=>$req->description,
+                    'created_at'=>date('Y-m-d h:i:s'),
+                ]);
+                $accountReturn  = AccountData::where('branch_id',$getEmployee->branch_id)
                                     ->where('active','Y')
-                                    ->where('main_id',4)
-                                    ->where('main_detail_id',4)
+                                    ->where('main_id',6)
+                                    ->where('main_detail_id',7)
                                     ->first();
-                if($accountData == null){
+                if($accountReturn == null){
                     DB::rollback();
-                    return Response::json(['status' => 'error','message'=>'Akun Pembayran Dimuka Kosong']);
+                    return Response::json(['status' => 'error','message'=>'Akun Return Service Dimuka Kosong']);
                 }
-
-                $accountPembayaran  = AccountData::where('id',$req->account)
+                $accountKas  = AccountData::where('branch_id',$getEmployee->branch_id)
+                                    ->where('active','Y')
+                                    ->where('main_id',1)
+                                    ->where('main_detail_id',1)
                                     ->first();
-                $accountCode = [
-                    $accountPembayaran->id,
-                    $accountData->id,
+                if($accountKas == null){
+                    DB::rollback();
+                    return Response::json(['status' => 'error','message'=>'Akun Kas Detail Kosong']);
+                }
+                $accountCodeReturnJasa = [
+                    $accountReturn->id,
+                    $accountKas->id,
                 ];  
-                $totalBayar = [
-                    str_replace(",", '',$req->totalPayment),
-                    str_replace(",", '',$req->totalPayment),
+                $totalBayarReturnJasa = [
+                    str_replace(",", '',$req->totalService),
+                    str_replace(",", '',$req->totalService),
                 ];
-                $description = [
+                $descriptionReturnJasa = [
                     $req->description,
                     $req->description,
                 ];
-                $DK = [
+                $DKReturnJasa = [
                     'D',
                     'K',
                 ];
-            
+                // return [
+                // $accountCodeReturnJasa,
+                // $totalBayarReturnJasa,
+                // $descriptionReturnJasa,
+                // $DKReturnJasa];
 
-                for ($i=0; $i <count($accountCode) ; $i++) { 
+                for ($i=0; $i <count($accountCodeReturnJasa) ; $i++) {
                     $idDetail = DB::table('journal_details')->max('id')+1;
                     JournalDetail::create([
                         'id'=>$idDetail,
                         'journal_id'=>$idJournal,
-                        'account_id'=>$accountCode[$i],
-                        'total'=>$totalBayar[$i],
-                        'description'=>$description[$i],
-                        'debet_kredit'=>$DK[$i],
+                        'account_id'=>$accountCodeReturnJasa[$i],
+                        'total'=>$totalBayarReturnJasa[$i],
+                        'description'=>$descriptionReturnJasa[$i],
+                        'debet_kredit'=>$DKReturnJasa[$i],
                         'created_at'=>date('Y-m-d h:i:s'),
                         'updated_at'=>date('Y-m-d h:i:s'),
                     ]);
                 }
-            }else{
-                // DB::rollback();
-                $checkService = ServiceReturn::where('id','!=',$id)
-                                    ->where('service_id',$req->serviceId)
-                                    ->where('type','DownPayment')
-                                    ->first();
+            }
 
-                $accountDimuka  = AccountData::where('branch_id',$getEmployee->branch_id)
-                                    ->where('active','Y')
-                                    ->where('main_id',4)
-                                    ->where('main_detail_id',4)
-                                    ->first();
+            // total uang masuk stock
+            $totalUangMasukStock = 0;
+            for ($i=0; $i <count($req->perlakuan) ; $i++) { 
+                if($req->perlakuan[$i] != '-' && $req->perlakuan[$i] == 'Masuk Stock'){
+                    $totalUangMasukStock += $req->priceDetail[$i];
+                }
+            }
+            // return $totalUangMasukStock;
 
-                if($accountDimuka == null){
+            if($totalUangMasukStock != 0){
+                $idJournal = DB::table('journals')->max('id')+1;
+                Journal::create([
+                    'id' =>$idJournal,
+                    'code'=>$this->code('DD',$idJournal),
+                    'year'=>date('Y'),
+                    'date'=>date('Y-m-d'),
+                    'type'=>'Pengembalian Barang Ke Stock Dari '.$req->type.' Service',
+                    'total'=>$totalUangMasukStock,
+                    'ref'=>$kode,
+                    'description'=>$req->description,
+                    'created_at'=>date('Y-m-d h:i:s'),
+                ]);
+
+                $accountReturn  = AccountData::where('branch_id',$getEmployee->branch_id)
+                                ->where('active','Y')
+                                ->where('main_id',6)
+                                ->where('main_detail_id',7)
+                                ->first();
+
+                if($accountReturn == null){
                     DB::rollback();
-                    return Response::json(['status' => 'error','message'=>'Akun Pembayran Dimuka Kosong']);
+                    return Response::json(['status' => 'error','message'=>'Akun Return Service Kosong']);
                 }
 
 
-                $accountService  = AccountData::where('branch_id',$getEmployee->branch_id)
+                $accountInventaris  = AccountData::where('branch_id',$getEmployee->branch_id)
                                     ->where('active','Y')
-                                    ->where('main_id',5)
-                                    ->where('main_detail_id',6)
+                                    ->where('main_id',3)
+                                    ->where('main_detail_id',8)
                                     ->first();
 
-                $accountJasa  = AccountData::where('branch_id',$getEmployee->branch_id)
-                                    ->where('active','Y')
-                                    ->where('main_id',5)
-                                    ->where('main_detail_id',5)
-                                    ->first();
-                $accountPembayaran  = AccountData::where('id',$req->account)
-                                    ->first();
+                if($accountInventaris == null){
+                    DB::rollback();
+                    return Response::json(['status' => 'error','message'=>'Akun Kas Detail Kosong']);
+                }
 
-                $accountCode = [
-                    $accountPembayaran->id,
-                    $accountService->id,
-                    $accountJasa->id,
+                $accountCodeMasukStock = [
+                    $accountInventaris->id,
+                    $accountReturn->id,
                 ];  
-                $totalBayar = [
-                    str_replace(",", '',$req->totalPayment),
-                    str_replace(",", '',$req->totalSparePart),
-                    str_replace(",", '',$req->totalService),
+                $totalBayarMasukStock = [
+                    $totalUangMasukStock,
+                    $totalUangMasukStock,
                 ];
-                $description = [
-                    $req->description,
+                $descriptionMasukStock = [
                     $req->description,
                     $req->description,
                 ];
-                $DK = [
+                $DKMasukStock = [
                     'D',
                     'K',
-                    'K',
                 ];
+                for ($i=0; $i <count($accountCodeMasukStock) ; $i++) {
+                    $idDetail = DB::table('journal_details')->max('id')+1;
+                    JournalDetail::create([
+                        'id'=>$idDetail,
+                        'journal_id'=>$idJournal,
+                        'account_id'=>$accountCodeMasukStock[$i],
+                        'total'=>$totalBayarMasukStock[$i],
+                        'description'=>$descriptionMasukStock[$i],
+                        'debet_kredit'=>$DKMasukStock[$i],
+                        'created_at'=>date('Y-m-d h:i:s'),
+                        'updated_at'=>date('Y-m-d h:i:s'),
+                    ]);
+                }
+            }
 
-                if($checkService != null){
-                    array_unshift($accountCode, $accountDimuka->id);
-                    array_unshift($totalBayar, str_replace(",", '',$checkService->total));
-                    array_unshift($description, $req->description);
-                    array_unshift($DK, "D");
+            $totalUangBarangLoss = 0;
+            for ($i=0; $i <count($req->perlakuan) ; $i++) { 
+                if($req->perlakuan[$i] != '-'  && $req->perlakuan[$i] == 'Loss'){
+                    $totalUangBarangLoss += $req->priceDetail[$i];
+                }
+            }
+
+            if($totalUangBarangLoss != 0){
+                $idJournal = DB::table('journals')->max('id')+1;
+                Journal::create([
+                    'id' =>$idJournal,
+                    'code'=>$this->code('DD',$idJournal),
+                    'year'=>date('Y'),
+                    'date'=>date('Y-m-d'),
+                    'type'=>'Barang Loss Dari '.$req->type.' Service',
+                    'total'=>$totalUangBarangLoss,
+                    'ref'=>$kode,
+                    'description'=>$req->description,
+                    'created_at'=>date('Y-m-d h:i:s'),
+                ]);
+
+                $accountReturn  = AccountData::where('branch_id',$getEmployee->branch_id)
+                                ->where('active','Y')
+                                ->where('main_id',6)
+                                ->where('main_detail_id',7)
+                                ->first();
+
+                if($accountReturn == null){
+                    DB::rollback();
+                    return Response::json(['status' => 'error','message'=>'Akun Return Service Kosong']);
                 }
 
-                for ($i=0; $i <count($accountCode) ; $i++) {
-                    if($totalBayar[$i] != 0){
-                        $idDetail = DB::table('journal_details')->max('id')+1;
-                        JournalDetail::create([
-                            'id'=>$idDetail,
-                            'journal_id'=>$idJournal,
-                            'account_id'=>$accountCode[$i],
-                            'total'=>$totalBayar[$i],
-                            'description'=>$description[$i],
-                            'debet_kredit'=>$DK[$i],
-                            'created_at'=>date('Y-m-d h:i:s'),
-                            'updated_at'=>date('Y-m-d h:i:s'),
-                        ]);
-                    }
-                    
+
+                $accountSharingLossToko  = AccountData::where('branch_id',$getEmployee->branch_id)
+                                    ->where('active','Y')
+                                    ->where('main_id',6)
+                                    ->where('main_detail_id',9)
+                                    ->first();
+                
+                $accountSharingLossTeknisi  = AccountData::where('branch_id',$getEmployee->branch_id)
+                                    ->where('active','Y')
+                                    ->where('main_id',6)
+                                    ->where('main_detail_id',10)
+                                    ->first();
+
+                if($accountInventaris == null){
+                    DB::rollback();
+                    return Response::json(['status' => 'error','message'=>'Akun Kas Detail Kosong']);
                 }
                 
+                $settingPresentase =  SettingPresentase::get();
+
+                // return $req->all();
+                for ($i=0; $i <count($settingPresentase) ; $i++) {
+                    if($settingPresentase[$i]->name == 'Presentase Loss Toko'){
+                        $lossStore = $settingPresentase[$i]->total;
+                    }
+                    if($settingPresentase[$i]->name == 'Presentase Loss Teknisi'){
+                        $lossTechnician = $settingPresentase[$i]->total;
+                    }
+                    if($settingPresentase[$i]->name == 'Presentase Loss Teknisi 1'){
+                        $lossTechnician1 = $settingPresentase[$i]->total;
+                    }
+                    if($settingPresentase[$i]->name == 'Presentase Loss Teknisi 2'){
+                        $lossTechnician2 = $settingPresentase[$i]->total;
+                    }
+                }
+
+                $accountCodeBarangLoss = [
+                    $accountSharingLossToko->id,
+                    $accountSharingLossTeknisi->id,
+                    $accountReturn->id,
+                ];  
+                $totalBayarBarangLoss = [
+                    $lossStore/100*$totalUangBarangLoss,
+                    $lossTechnician/100*$totalUangBarangLoss,
+                    $totalUangBarangLoss,
+                ];
+                $descriptionBarangLoss = [
+                    $req->description,
+                    $req->description,
+                    $req->description,
+                ];
+                $DKBarangLoss = [
+                    'D',
+                    'D',
+                    'K',
+                ];
+                for ($i=0; $i <count($accountCodeBarangLoss) ; $i++) {
+                    $idDetail = DB::table('journal_details')->max('id')+1;
+                    JournalDetail::create([
+                        'id'=>$idDetail,
+                        'journal_id'=>$idJournal,
+                        'account_id'=>$accountCodeBarangLoss[$i],
+                        'total'=>$totalBayarBarangLoss[$i],
+                        'description'=>$descriptionBarangLoss[$i],
+                        'debet_kredit'=>$DKBarangLoss[$i],
+                        'created_at'=>date('Y-m-d h:i:s'),
+                        'updated_at'=>date('Y-m-d h:i:s'),
+                    ]);
+                }
             }
+
+                
+            // }
             
             DB::commit();
             return Response::json(['status' => 'success','message'=>'Data Tersimpan']);

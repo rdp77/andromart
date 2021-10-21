@@ -220,7 +220,7 @@ class ServicePaymentController extends Controller
                                     ->first();
                 if($accountData == null){
                     DB::rollback();
-                    return Response::json(['status' => 'error','message'=>'Akun Pembayran Dimuka Kosong']);
+                    return Response::json(['status' => 'error','message'=>'Akun Pembayaran Dimuka Kosong']);
                 }
 
                 $accountPembayaran  = AccountData::where('id',$req->account)

@@ -134,13 +134,13 @@
                     </div>
                     <div class="form-group">
                         <label for="totalPayment">{{ __('Total Bayar') }}<code>*</code></label>
-                        <input id="totalPayment" type="text" value="0" class="form-control cleaveNumeral"
+                        <input readonly id="totalPayment" type="text" value="0" class="form-control cleaveNumeral"
                             name="totalPayment" style="text-align: right" onkeyup="sumTotal()">
                     </div>
                     
                     <div class="form-group">
                         <label for="totalPrice">{{ __('Total Harga') }}<code>*</code></label>
-                        <input id="totalPrice" type="text" value="0" class="form-control cleaveNumeral"
+                        <input readonly id="totalPrice" type="text" value="0" class="form-control cleaveNumeral"
                             name="totalPrice" onchange="sumTotal()" style="text-align: right">
                     </div>
                 </div>
@@ -165,6 +165,7 @@
                             <th>Total</th>
                             <th>Deskripsi</th>
                             <th style="width: 15%">tipe</th>
+                            <th style="width: 15%">Perlakuan</th>
                         </tr>
                     </thead>
                     <tbody class="dropHereItem" style="border: none !important">

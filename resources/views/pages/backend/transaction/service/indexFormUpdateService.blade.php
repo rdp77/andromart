@@ -24,7 +24,7 @@
                         <select class="select2 serviceId" name="serviceId" onchange="choseService()">
                         <option value="">- Select -</option>
                         @foreach ($data as $element)
-                            <option value="{{$element->id}}">[{{$element->code}}] {{$element->customer_name}} - {{$element->brand}} {{$element->series}} <span><strong>( {{$element->work_status}} )</span></strong></option>
+                            <option value="{{$element->id}}">[{{$element->code}}] {{$element->customer_name}} - {{$element->Brand->name}} {{$element->Type->name}} <span><strong>( {{$element->work_status}} )</span></strong></option>
                         @endforeach
                         </select>
                     </div>
@@ -42,7 +42,7 @@
                                 <option value="Mutasi">Mutasi</option>
                                 <option value="Selesai">Selesai</option>
                                 <option value="Diambil">Sudah Diambil</option>
-                                <option value="Batal">Batal</option>
+                                {{-- <option value="Batal">Batal</option> --}}
                             </select>
                         </div>
                         <div class="form-group col-12 col-md-12 col-lg-12 technicianFields" style="display: none">

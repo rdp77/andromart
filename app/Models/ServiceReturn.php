@@ -23,7 +23,7 @@ class ServiceReturn extends Model
         'date',
         'service_id',
         'description',
-        'image',
+        'type',
         'created_by',
         'updated_by',
         'created_at' ,
