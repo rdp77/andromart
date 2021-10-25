@@ -54,11 +54,11 @@ class ItemController extends Controller
                     $htmlAdd = '<table>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Kategori</td>';
-                    $htmlAdd .=      '<th>'.$row->brand->category->code.'</th>';
+                    $htmlAdd .=      '<th>' . $row->brand->category->code . '</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Merk</td>';
-                    $htmlAdd .=      '<th>'.$row->brand->name.'</th>';
+                    $htmlAdd .=      '<th>' . $row->brand->name . '</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .= '<table>';
 
@@ -69,11 +69,11 @@ class ItemController extends Controller
                     $htmlAdd = '<table>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Kondisi</td>';
-                    $htmlAdd .=      '<th>'.$row->condition.'</th>';
+                    $htmlAdd .=      '<th>' . $row->condition . '</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Garansi</td>';
-                    $htmlAdd .=      '<th>'.$row->warranty->periode. $row->warranty->name.'</th>';
+                    $htmlAdd .=      '<th>' . $row->warranty->periode . $row->warranty->name . '</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .= '<table>';
 
@@ -84,18 +84,17 @@ class ItemController extends Controller
                     $htmlAdd = '<table>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Beli</td>';
-                    $htmlAdd .=      '<th>'.number_format($row->buy,0,".",",").'</th>';
+                    $htmlAdd .=      '<th>' . number_format($row->buy, 0, ".", ",") . '</th>';
                     $htmlAdd .=      '<td>Profit</td>';
-                    $htmlAdd .=      '<th>'.number_format($row->sell - $row->buy,0,".",",").'</th>';
+                    $htmlAdd .=      '<th>' . number_format($row->sell - $row->buy, 0, ".", ",") . '</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Jual</td>';
-                    $htmlAdd .=      '<th>'.number_format($row->sell,0,".",",").'</th>';
+                    $htmlAdd .=      '<th>' . number_format($row->sell, 0, ".", ",") . '</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .= '<table>';
 
                     return $htmlAdd;
-
                 })
 
                 ->rawColumns(['action', 'brand', 'price', 'condition'])
@@ -127,34 +126,34 @@ class ItemController extends Controller
         //     'sell' => ['required', 'string', 'max:255'],
         // ])->validate();
 
-        $id = DB::table('items')->max('id')+1;
+        $id = DB::table('items')->max('id') + 1;
         $image = $req->image;
-            $image = str_replace('data:image/jpeg;base64,','', $image);
-            $image = base64_decode($image);
-            if ($image != null) {
-                $fileSave = 'public/assetsmaster/image/item/IMG_' . $id . '.' .'png';
-                $fileName = 'IMG_' . $id . '.' .'png';
-                Storage::put($fileSave, $image);
-            }else{
-                $fileName = null;
-            }
+        $image = str_replace('data:image/jpeg;base64,', '', $image);
+        $image = base64_decode($image);
+        if ($image != null) {
+            $fileSave = 'public/assetsmaster/image/item/IMG_' . $id . '.' . 'png';
+            $fileName = 'IMG_' . $id . '.' . 'png';
+            Storage::put($fileSave, $image);
+        } else {
+            $fileName = null;
+        }
 
-            Item::create([
-                'id' => $id,
-                'name' => $req->name,
-                'brand_id' => $req->brand,
-                'supplier_id' => $req->supplier_id,
-                'warranty_id' => $req->warranty_id,
-                'buy' => str_replace(",", '',$req->buy),
-                'sell' => str_replace(",", '',$req->sell),
-                'discount' => str_replace(",", '',$req->discount),
-                'condition' => $req->condition,
-                'image' => $fileName,
-                'description' => $req->description,
-                'created_by' => Auth::user()->name,
-            ]);
+        Item::create([
+            'id' => $id,
+            'name' => $req->name,
+            'brand_id' => $req->brand,
+            'supplier_id' => $req->supplier_id,
+            'warranty_id' => $req->warranty_id,
+            'buy' => str_replace(",", '', $req->buy),
+            'sell' => str_replace(",", '', $req->sell),
+            'discount' => str_replace(",", '', $req->discount),
+            'condition' => $req->condition,
+            'image' => $fileName,
+            'description' => $req->description,
+            'created_by' => Auth::user()->name,
+        ]);
 
-        for ($i=0; $i <count($req->branch_id) ; $i++){
+        for ($i = 0; $i < count($req->branch_id); $i++) {
             Stock::create([
                 'item_id' => $id,
                 'unit_id' => $req->unit_id,
@@ -204,31 +203,31 @@ class ItemController extends Controller
         //     'sell' => ['required', 'string', 'max:255'],
         //     'condition' => ['required', 'string', 'max:10'],
         // ])->validate();
-        $checkData = Item::where('id',$id)->first();
+        $checkData = Item::where('id', $id)->first();
         $image = $req->image;
-        $image = str_replace('data:image/jpeg;base64,','', $image);
+        $image = str_replace('data:image/jpeg;base64,', '', $image);
         $image = base64_decode($image);
         if ($image != null) {
-            $fileSave = 'public/assetsmaster/image/item/IMG_' . $checkData->id . '.' .'png';
-            $fileName = 'IMG_' . $checkData->id . '.' .'png';
+            $fileSave = 'public/assetsmaster/image/item/IMG_' . $checkData->id . '.' . 'png';
+            $fileName = 'IMG_' . $checkData->id . '.' . 'png';
             Storage::put($fileSave, $image);
-        }else{
+        } else {
             $fileName = $checkData->image;
         }
 
         Item::where('id', $id)
             ->update([
-            'name' => $req->name,
-            'brand_id' => $req->brand,
-            'supplier_id' => $req->supplier_id,
-            'warranty_id' => $req->warranty_id,
-            'buy' => str_replace(",", '',$req->buy),
-            'sell' => str_replace(",", '',$req->sell),
-            'discount' => str_replace(",", '',$req->discount),
-            'condition' => $req->condition,
-            'description' => $req->description,
-            'image' => $fileName,
-            'updated_by' => Auth::user()->name,
+                'name' => $req->name,
+                'brand_id' => $req->brand,
+                'supplier_id' => $req->supplier_id,
+                'warranty_id' => $req->warranty_id,
+                'buy' => str_replace(",", '', $req->buy),
+                'sell' => str_replace(",", '', $req->sell),
+                'discount' => str_replace(",", '', $req->discount),
+                'condition' => $req->condition,
+                'description' => $req->description,
+                'image' => $fileName,
+                'updated_by' => Auth::user()->name,
             ]);
 
         Stock::where('item_id', $id)
@@ -261,12 +260,10 @@ class ItemController extends Controller
         $checkTransaction = count($transaction);
         if ($checkStock > 0) {
             return Response::json(['status' => 'error', 'message' => "Data tidak bisa dihapus, Sisa Stok = $checkStock"]);
-        }
-        else {
+        } else {
             if ($checkTransaction > 0) {
                 return Response::json(['status' => 'error', 'message' => "Data yang sudah di transaksikan tidak bisa dihapus"]);
-            }
-            else {
+            } else {
                 $this->DashboardController->createLog(
                     $req->header('user-agent'),
                     $req->ip(),

@@ -91,8 +91,7 @@ class UnitController extends Controller
             Validator::make($req->all(), [
                 'name' => ['required', 'string', 'max:255'],
             ])->validate();
-        }
-        else {
+        } else {
             Validator::make($req->all(), [
                 'code' => ['required', 'string', 'max:255', 'unique:units'],
                 'name' => ['required', 'string', 'max:255'],
@@ -101,9 +100,9 @@ class UnitController extends Controller
 
         Unit::where('id', $id)
             ->update([
-            'code' => $req->code,
-            'name' => $req->name,
-            'updated_by' => Auth::user()->name,
+                'code' => $req->code,
+                'name' => $req->name,
+                'updated_by' => Auth::user()->name,
             ]);
 
         $unit = Unit::find($id);

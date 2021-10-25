@@ -68,7 +68,7 @@ class DashboardController extends Controller
     }
     public function changeMonthIdToEn($dateLocale)
     {
-        $separateString = explode(' ',$dateLocale);
+        $separateString = explode(' ', $dateLocale);
         $day    = $separateString[0];
         $monthLocale  = $separateString[1];
         $year   = $separateString[2];
@@ -100,7 +100,6 @@ class DashboardController extends Controller
             $month = 12;
         }
 
-        return $date = $year.'-'.$month.'-'.$day;
-
+        return $date = $year . '-' . $month . '-' . $day;
     }
 }

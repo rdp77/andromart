@@ -53,7 +53,7 @@ class AccountDataController extends Controller
         $AccountMain = AccountMain::get();
         $Branch = Branch::get();
         $AccountMainDetail = AccountMainDetail::get();
-        return view('pages.backend.master.accountData.createAccountData',compact('AccountMain','AccountMainDetail','Branch'));
+        return view('pages.backend.master.accountData.createAccountData', compact('AccountMain', 'AccountMainDetail', 'Branch'));
     }
 
     public function store(Request $req)
@@ -62,27 +62,27 @@ class AccountDataController extends Controller
         //     'code' => ['required', 'string', 'max:255', 'unique:areas'],
         //     'name' => ['required', 'string', 'max:255'],
         // ])->validate();
-        $AccountMainDetail = AccountMainDetail::where('id',$req->account_detail_id)->first();
-        $AccountMain       = AccountMain::where('id',$AccountMainDetail->main_id)->first();
-        $Branch            = Branch::where('id',$req->branch_id)->first();
-        $Area              = Area::where('id',$Branch->area_id)->first();
-        
-        $code = $AccountMain->code.$AccountMainDetail->code.$Area->code.$Branch->code;
-        
-        $id = DB::table('account_data')->max('id')+1;
+        $AccountMainDetail = AccountMainDetail::where('id', $req->account_detail_id)->first();
+        $AccountMain       = AccountMain::where('id', $AccountMainDetail->main_id)->first();
+        $Branch            = Branch::where('id', $req->branch_id)->first();
+        $Area              = Area::where('id', $Branch->area_id)->first();
+
+        $code = $AccountMain->code . $AccountMainDetail->code . $Area->code . $Branch->code;
+
+        $id = DB::table('account_data')->max('id') + 1;
         AccountData::create([
-            'id'=>$id,
-            'code'=>$code,
-            'name'=>$req->name,
-            'area_id'=>$Branch->area_id,
-            'branch_id'=>$req->branch_id,
-            'debet_kredit'=>$req->debet_kredit,
-            'active'=>$req->active,
-            'account_type'=>'-',
-            'main_id'=>$AccountMainDetail->main_id,
-            'main_detail_id'=>$req->account_detail_id,
-            'opening_balance'=>$req->opening_balance,
-            'opening_date'=>date('Y-m-d'),
+            'id' => $id,
+            'code' => $code,
+            'name' => $req->name,
+            'area_id' => $Branch->area_id,
+            'branch_id' => $req->branch_id,
+            'debet_kredit' => $req->debet_kredit,
+            'active' => $req->active,
+            'account_type' => '-',
+            'main_id' => $AccountMainDetail->main_id,
+            'main_detail_id' => $req->account_detail_id,
+            'opening_balance' => $req->opening_balance,
+            'opening_date' => date('Y-m-d'),
             'created_by' => Auth::user()->name,
         ]);
 
@@ -112,12 +112,11 @@ class AccountDataController extends Controller
 
     public function update(Request $req, $id)
     {
-        if($req->code == Area::find($id)->code){
+        if ($req->code == Area::find($id)->code) {
             Validator::make($req->all(), [
                 'name' => ['required', 'string', 'max:255'],
             ])->validate();
-        }
-        else{
+        } else {
             Validator::make($req->all(), [
                 'code' => ['required', 'string', 'max:255', 'unique:areas'],
                 'name' => ['required', 'string', 'max:255'],

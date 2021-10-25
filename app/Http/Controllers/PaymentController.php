@@ -30,16 +30,16 @@ class PaymentController extends Controller
             $data = Payment::with('cost', 'branch', 'cash')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('date', function ($row){
+                ->addColumn('date', function ($row) {
                     $htmlAdd =   '<tr>';
-                    $htmlAdd .=      '<td>'.Carbon::parse($row->date)->locale('id')->isoFormat('LL').'</td>';
+                    $htmlAdd .=      '<td>' . Carbon::parse($row->date)->locale('id')->isoFormat('LL') . '</td>';
                     $htmlAdd .=   '</tr>';
 
                     return $htmlAdd;
                 })
-                ->addColumn('price', function ($row){
+                ->addColumn('price', function ($row) {
                     $htmlAdd =   '<tr>';
-                    $htmlAdd .=      '<td>'.number_format($row->price,0,".",",").'</td>';
+                    $htmlAdd .=      '<td>' . number_format($row->price, 0, ".", ",") . '</td>';
                     $htmlAdd .=   '</tr>';
 
                     return $htmlAdd;
@@ -66,10 +66,10 @@ class PaymentController extends Controller
     {
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
-        $index = DB::table('payments')->max('id')+1;
+        $index = DB::table('payments')->max('id') + 1;
 
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
-        return $code = $type.$year . $month . $index;
+        return $code = $type . $year . $month . $index;
     }
 
     public function create()
@@ -92,7 +92,7 @@ class PaymentController extends Controller
             'cost_id' => $req->cost_id,
             'branch_id' => $req->branch_id,
             'cash_id' => $req->cash_id,
-            'price' => str_replace(",", '',$req->price),
+            'price' => str_replace(",", '', $req->price),
             'description' => $req->description,
             'created_by' => Auth::user()->name,
         ]);
@@ -116,7 +116,6 @@ class PaymentController extends Controller
 
     public function show($id)
     {
-
     }
 
     public function edit($id)
@@ -126,19 +125,21 @@ class PaymentController extends Controller
         $cash = Cash::where('id', '!=', Payment::find($id)->cash_id)->get();
         $payment = Payment::find($id);
 
-        return view('pages.backend.transaction.payment.updatePayment',
-        ['payment' => $payment, 'branch' => $branch, 'cash' => $cash, 'cost' => $cost]);
+        return view(
+            'pages.backend.transaction.payment.updatePayment',
+            ['payment' => $payment, 'branch' => $branch, 'cash' => $cash, 'cost' => $cost]
+        );
     }
 
     public function update(Request $req, $id)
     {
         Type::where('id', $id)
-        ->update([
-            'cost_id' => $req->cost_id,
-            'branch_id' => $req->branch_id,
-            'description' => $req->description,
-            'updated_by' => Auth::user()->name,
-        ]);
+            ->update([
+                'cost_id' => $req->cost_id,
+                'branch_id' => $req->branch_id,
+                'description' => $req->description,
+                'updated_by' => Auth::user()->name,
+            ]);
     }
 
     public function destroy(Request $req, $id)
