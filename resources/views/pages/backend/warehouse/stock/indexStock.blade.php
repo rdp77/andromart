@@ -24,8 +24,7 @@
                     <th>{{ __('Barang') }}</th>
                     <th>{{ __('Kondisi') }}</th>
                     <th>{{ __('Cabang') }}</th>
-                    <th>{{ __('Stok') }}</th>
-                    <th>{{ __('Stok Min.') }}</th>
+                    <th>{{ __('Qty') }}</th>
                     <th>{{ __('Satuan') }}</th>
                     <th>{{ __('Keterangan') }}</th>
                     <th>{{ __('Aksi') }}</th>

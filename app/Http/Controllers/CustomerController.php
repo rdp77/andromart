@@ -150,6 +150,6 @@ class CustomerController extends Controller
 
         Customer::destroy($id);
 
-        return Response::json(['status' => 'success']);
+        return Response::json(['status' => 'success', 'message' => 'Data master berhasil dihapus !']);
     }
 }

@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AccountData;
 use App\Models\Branch;
 use App\Models\Brand;
 use App\Models\Cash;
 use App\Models\Customer;
 use App\Models\Employee;
 use App\Models\Item;
+use App\Models\Journal;
+use App\Models\JournalDetail;
 use App\Models\Sale;
 use App\Models\SaleDetail;
 use App\Models\Stock;
@@ -135,9 +138,22 @@ class SaleController extends Controller
         return $code = $type.$getEmployee->Branch->code.$year . $month . $index;
     }
 
+    public function codeJournals($type)
+    {
+        $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
+        $month = Carbon::now()->format('m');
+        $year = Carbon::now()->format('y');
+        // DB::table('service')->max('id')+1;
+        $index = DB::table('journals')->max('id')+1;
+
+        $index = str_pad($index, 3, '0', STR_PAD_LEFT);
+        return $code = $type.$getEmployee->Branch->code.$year . $month . $index;
+    }
+
     public function create()
     {
         $code = $this->code('PJT');
+        $account  = AccountData::with('AccountMain','AccountMainDetail','Branch')->get();
         $userBranch = Auth::user()->employee->branch_id;
         $sales = Employee::where('id', '!=', '1')->where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
         $buyer = Employee::where('id', '!=', '1')->where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
@@ -145,7 +161,7 @@ class SaleController extends Controller
         $customer = Customer::where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
         $stock = Stock::where('branch_id', '=', $userBranch)->where('item_id', '!=', 1)->get();
 
-        return view('pages.backend.transaction.sale.createSale', compact('code', 'cash', 'buyer', 'sales', 'stock', 'customer'));
+        return view('pages.backend.transaction.sale.createSale', compact('code', 'cash', 'buyer', 'sales', 'stock', 'customer', 'account'));
     }
 
     public function store(Request $req)
@@ -156,6 +172,8 @@ class SaleController extends Controller
                 $id = DB::table('sales')->max('id')+1;
                 $getEmployee =  Employee::where('user_id',Auth::user()->id)->first();
                 $code = $this->code('PJT');
+
+
                 if ($req->customer_name != null) {
                     $customerName = $req->customer_name;
                     $customerPhone = $req->customer_phone;
@@ -261,6 +279,72 @@ class SaleController extends Controller
                         return Response::json(['status' => 'fail',
                         'message'=>'Item Tidak Ditemukan Di STOCK dengan cabang .....']);
                     }
+                }
+            }
+
+            // penjurnalan
+            $idJournal = DB::table('journals')->max('id')+1;
+            Journal::create([
+                'id' =>$idJournal,
+                'code'=>$this->code('DD'),
+                'year'=>date('Y'),
+                'date'=>date('Y-m-d'),
+                'type'=>'Pembayaran Service',
+                'total'=>str_replace(",", '',$req->totalPrice),
+                'ref'=> $code,
+                'description'=>$req->description,
+                'created_at'=>date('Y-m-d h:i:s'),
+                // 'updated_at'=>date('Y-m-d h:i:s'),
+            ]);
+            if($req->type == 'DownPayment'){
+
+            }else{
+                $accountService  = AccountData::where('branch_id',$getEmployee->branch_id)
+                                    ->where('active','Y')
+                                    ->where('main_id',5)
+                                    ->where('main_detail_id',6)
+                                    ->first();
+
+                $accountJasa  = AccountData::where('branch_id',$getEmployee->branch_id)
+                                    ->where('active','Y')
+                                    ->where('main_id',5)
+                                    ->where('main_detail_id',5)
+                                    ->first();
+                $accountPembayaran  = AccountData::where('id',$req->account)
+                                    ->first();
+                $accountCode = [
+                    $accountPembayaran->id,
+                    $accountService->id,
+                    $accountJasa->id,
+                ];
+                $totalBayar = [
+                    str_replace(",", '',$req->totalPayment),
+                    str_replace(",", '',$req->totalSparePart),
+                    str_replace(",", '',$req->totalService),
+                ];
+                $description = [
+                    $req->description,
+                    $req->description,
+                    $req->description,
+                ];
+                $DK = [
+                    'D',
+                    'K',
+                    'K',
+                ];
+
+                for ($i=0; $i <count($accountCode) ; $i++) {
+                    $idDetail = DB::table('journal_details')->max('id')+1;
+                    JournalDetail::create([
+                        'id'=>$idDetail,
+                        'journal_id'=>$idJournal,
+                        'account_id'=>$accountCode[$i],
+                        'total'=>$totalBayar[$i],
+                        'description'=>$description[$i],
+                        'debet_kredit'=>$DK[$i],
+                        'created_at'=>date('Y-m-d h:i:s'),
+                        'updated_at'=>date('Y-m-d h:i:s'),
+                    ]);
                 }
             }
             // DB::commit();

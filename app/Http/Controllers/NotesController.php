@@ -90,7 +90,7 @@ class NotesController extends Controller
                 $dir = 'photo_notes';
                 $allowed = array("jpeg", "gif", "png", "jpg", "pdf", "doc", "docx");
                 if (!is_dir($dir)){
-                    mkdir( $dir );       
+                    mkdir( $dir );
                 }
                 $size = filesize($file);
                 $input_file = $file->getClientOriginalName();
@@ -166,7 +166,7 @@ class NotesController extends Controller
         // $this->DashboardController->createLog(
         //     $req->header('user-agent'),
         //     $req->ip(),
-        //     'Mengubah masrter area ' . Area::find($id)->name
+        //     'Mengubah master area ' . Area::find($id)->name
         // );
 
         // $area->save();

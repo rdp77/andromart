@@ -86,11 +86,17 @@ function del(id) {
             $.ajax({
                 url: "/master/category/category/" + id,
                 type: "DELETE",
-                success: function () {
-                    swal("Data master berhasil dihapus", {
-                        icon: "success",
-                    });
-                    table.draw();
+                success: function (data) {
+                    if (data.status == 'success'){
+                        swal(data.message, {
+                            icon: "success",
+                        });
+                        location.reload();
+                    }else{
+                        swal(data.message, {
+                            icon: "warning",
+                        });
+                    }
                 },
             });
         } else {

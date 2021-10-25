@@ -1,15 +1,15 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__(' | Edit Master Cabang'))
-@section('titleContent', __('Edit Master Cabang'))
+@section('title', __('pages.title').__(' | Edit Master Akun Data'))
+@section('titleContent', __('Edit Master Akun Data'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
-<div class="breadcrumb-item active">{{ __('Master Cabang') }}</div>
-<div class="breadcrumb-item active">{{ __('Edit Master Cabang') }}</div>
+<div class="breadcrumb-item active">{{ __('Master Akun Data') }}</div>
+<div class="breadcrumb-item active">{{ __('Edit Master Akun Data') }}</div>
 @endsection
 
 @section('content')
 <div class="card">
-    <form method="POST" action="{{ route('branch.update',$branch->id) }}">
+    <form method="POST" action="{{ route('account-data.update',$branch->id) }}">
         @csrf
         @method('PUT')
         <div class="card-body">

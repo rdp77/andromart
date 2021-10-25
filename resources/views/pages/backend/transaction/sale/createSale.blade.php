@@ -41,24 +41,33 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-12 col-md-4 col-xs-12">
+                        <div class="form-group col-12 col-md-3 col-xs-12">
                             <label for="payment_method" class="control-label">{{ __('Metode Pembayaran') }}<code>*</code></label>
-                            <select class="select2 validation" name="payment_method" data-name="Metode Pembayaran" required>
+                            <select class="select2 PaymentMethod validation" data-name="Metode Pembayaran Harus Di isi"  name="PaymentMethod" onchange="paymentMethodChange()">
                                 <option value="">- Select -</option>
-                                <option value="Cash">Cash / Tunai</option>
+                                <option value="Cash">Cash</option>
+                                <option value="Debit">Debit</option>
                                 <option value="Transfer">Transfer</option>
                             </select>
                         </div>
-                        <div class="form-group col-12 col-md-4 col-xs-12">
-                            <label for="cash_id">{{ __('Kode Kas') }}<code>*</code></label>
-                            <select class="select2 validation" name="cash_id" data-name="Kode Kas">
+                        <div class="form-group col-12 col-md-5 col-xs-12">
+                            <label for="cash_id">{{ __('Akun') }}<code>*</code></label>
+                            <select class="select2 account validation" data-name="Akun Harus Di isi"  name="cash_id">
                                 <option value="">- Select -</option>
-                                @foreach ($cash as $cash)
-                                <option value="{{ $cash->id }}">{{ $cash->code }} - {{ $cash->name }}</option>
-                                @endforeach
                             </select>
                         </div>
                     </div>
+                    <input type="hidden" class="branchId" value="{{Auth::user()->employee->branch_id}}">
+                    @foreach ($account as $el)
+                        <input class="accountDataHidden" type="hidden"
+                        data-mainName="{{$el->AccountMain->name}}"
+                        data-mainDetailName="{{$el->AccountMainDetail->name}}"
+                        data-branch="{{$el->branch_id}}"
+                        data-name="{{$el->name}}"
+                        data-code="{{$el->code}}"
+                        value="{{$el->id}}">
+                    @endforeach
+
                     <h6 style="color: #6777ef">Data Customer</h6>
                     <br>
                     <div class="row">

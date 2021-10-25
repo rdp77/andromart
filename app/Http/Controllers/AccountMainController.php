@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Area;
+use App\Models\AccountMain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -22,7 +22,7 @@ class AccountMainController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Area::all();
+            $data = AccountMain::get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
@@ -32,7 +32,7 @@ class AccountMainController extends Controller
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>';
                     $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('area.edit', $row->id) . '">Edit</a>';
+                            <a class="dropdown-item" href="' . route('account-main.edit', $row->id) . '">Edit</a>';
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
@@ -40,22 +40,22 @@ class AccountMainController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
         }
-        return view('pages.backend.master.area.indexArea');
+        return view('pages.backend.master.accountMain.indexAccountMain');
     }
 
     public function create()
     {
-        return view('pages.backend.master.area.createArea');
+        return view('pages.backend.master.accountMain.createAccountMain');
     }
 
     public function store(Request $req)
     {
         Validator::make($req->all(), [
-            'code' => ['required', 'string', 'max:255', 'unique:areas'],
+            'code' => ['required', 'string', 'max:255', 'unique:account_main'],
             'name' => ['required', 'string', 'max:255'],
         ])->validate();
 
-        Area::create([
+        AccountMain::create([
             'code' => $req->code,
             'name' => $req->name,
             'created_by' => Auth::user()->name,
@@ -64,59 +64,59 @@ class AccountMainController extends Controller
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Membuat master area baru'
+            'Membuat master akun dasar baru'
         );
 
-        return Redirect::route('area.index')
+        return Redirect::route('account-main.index')
             ->with([
-                'status' => 'Berhasil membuat master area baru',
+                'status' => 'Berhasil membuat master akun dasar baru',
                 'type' => 'success'
             ]);
     }
 
-    public function show(Area $area)
+    public function show()
     {
         //
     }
 
     public function edit($id)
     {
-        $area = Area::find($id);
-        return view('pages.backend.master.area.updateArea', ['area' => $area]);
+        $accountMain = AccountMain::find($id);
+        return view('pages.backend.master.accountMain.updateAccountMain', ['accountMain' => $accountMain]);
     }
 
     public function update(Request $req, $id)
     {
-        if ($req->code == Area::find($id)->code) {
+        if ($req->code == AccountMain::find($id)->code) {
             Validator::make($req->all(), [
                 'name' => ['required', 'string', 'max:255'],
             ])->validate();
         } else {
             Validator::make($req->all(), [
-                'code' => ['required', 'string', 'max:255', 'unique:areas'],
+                'code' => ['required', 'string', 'max:255', 'unique:account_main'],
                 'name' => ['required', 'string', 'max:255'],
             ])->validate();
         }
 
-        Area::where('id', $id)
+        AccountMain::where('id', $id)
             ->update([
                 'code' => $req->code,
                 'name' => $req->name,
                 'updated_by' => Auth::user()->name,
             ]);
 
-        $area = Area::find($id);
+        $accountMain = AccountMain::find($id);
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Mengubah masrter area ' . Area::find($id)->name
+            'Mengubah master akun dasar ' . AccountMain::find($id)->name
         );
 
-        $area->save();
+        $accountMain->save();
 
-        return Redirect::route('area.index')
+        return Redirect::route('account-main.index')
             ->with([
-                'status' => 'Berhasil merubah master area ',
+                'status' => 'Berhasil merubah master akun dasar ',
                 'type' => 'success'
             ]);
     }
@@ -126,10 +126,10 @@ class AccountMainController extends Controller
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Menghapus master area ' . Area::find($id)->name
+            'Menghapus master akun dasar ' . AccountMain::find($id)->name
         );
 
-        Area::destroy($id);
+        AccountMain::destroy($id);
 
         return Response::json(['status' => 'success']);
     }

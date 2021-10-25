@@ -13,7 +13,7 @@
     @csrf
     @method('PUT')
     <div class="row">
-        <div class="col-lg-12">
+        <div class="col-lg-8">
             <div class="card">
                 <div class="card-header">
                     <h4>Informasi</h4>
@@ -43,7 +43,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-12">
+                        <!-- <div class="form-group col-12">
                             <label class="form-label">Pembayaran</label>
                             <div class="selectgroup w-100">
                                 <label class="selectgroup-item">
@@ -63,7 +63,7 @@
                                     <span class="selectgroup-button">Belum Dibayar</span>
                                 </label>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="form-group col-12">
                             <label for="descriptionPurchase">{{ __('Keterangan') }}<code>*</code></label>
                             <input id="descriptionPurchase" type="text" class="form-control" name="descriptionPurchase">
@@ -72,7 +72,7 @@
                 </div>
             </div>
         </div>
-        <!-- <div class="col-lg-4">
+        <div class="col-lg-4">
             <div class="card">
                 <div class="card-header">
                     <h4>Harga</h4>
@@ -82,17 +82,24 @@
                         <label for="priceTotal">{{ __('Harga Total') }}<code>*</code></label>
                         <input readonly id="priceTotal" onchange="sumTotal()" type="text" value="0" class="form-control cleaveNumeral" name="priceTotal" style="text-align: right">
                     </div>
+                    <?php
+                        $discountPercent = 0;
+                        $discountValue = 0;
+                        if($model->discountType == 0) {
+                            $discountPercent = $model->discountValue;
+                        } else {
+                            $discountValue = $model->discountValue;
+                        }
+                    ?>
                     <div class="form-group">
                         <label class="form-label">Satuan Diskon Yang Dipakai</label>
                         <div class="selectgroup w-100">
                             <label class="selectgroup-item">
-                                <input type="radio" name="typeDiscount" value="percent" onchange="changeDiscount('percent')" checked
-                                    class="selectgroup-input">
+                                <input type="radio" name="typeDiscount" value="percent" onchange="changeDiscount('percent')" class="selectgroup-input" <?php if($model->discountType == 0) { echo "checked"; } ?>>
                                 <span class="selectgroup-button">Persentase (%)</span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="typeDiscount" value="value" onchange="changeDiscount('value')" 
-                                    class="selectgroup-input">
+                                <input type="radio" name="typeDiscount" value="value" onchange="changeDiscount('value')" class="selectgroup-input" <?php if($model->discountType == 1) { echo "checked"; } ?>>
                                 <span class="selectgroup-button">Harga (RP)</span>
                             </label>
                         </div>
@@ -100,11 +107,11 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="totalDiscountPercent">{{ __('Diskon %') }}<code>*</code></label>
-                            <input id="totalDiscountPercent" type="text" value="0" class="form-control cleaveNumeral" name="totalDiscountPercent" onkeyup="sumTotal(), sumDiscount()" style="text-align: right">
+                            <input id="totalDiscountPercent" type="text" value="{{ $discountPercent }}" class="form-control cleaveNumeral" name="totalDiscountPercent" onkeyup="sumTotal(), sumDiscount()" style="text-align: right">
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="totalDiscountValue">{{ __('Diskon') }}<code>*</code></label>
-                            <input id="totalDiscountValue" type="text" value="0" class="form-control cleaveNumeral" name="totalDiscountValue" onkeyup="sumTotal()" style="pointer-events: none;background-color:#e9ecef; text-align: right">
+                            <input id="totalDiscountValue" type="text" value="{{ $discountValue }}" class="form-control cleaveNumeral" name="totalDiscountValue" onkeyup="sumTotal()" style="pointer-events: none;background-color:#e9ecef; text-align: right">
                         </div>
                     </div>
                     <div class="form-group">
@@ -117,7 +124,7 @@
                     </div>
                 </div>
             </div>
-        </div> -->
+        </div>
     </div>
 
 
@@ -125,10 +132,10 @@
     <div class="card">
         <div class="card-header">
             <h4>Barang</h4>
-            <!-- <div class="card-header-action">
+            <div class="card-header-action">
                 <button onclick="addItem()" type="button" class="btn btn-warning">Tambah Barang <i
                         class="fas fa-add"></i></button>
-            </div> -->
+            </div>
         </div>
         <div class="card-body">
 
@@ -138,105 +145,21 @@
                 data-name="{{$el->name}} | {{$el->supplier}}"
                 value="{{$el->id}}">
             @endforeach
-            @foreach ($unit as $el)
-                <input class="unitsData" type="hidden"
-                data-name="{{$el->name}}"
-                data-code="{{$el->code}}"
-                value="{{$el->id}}">
-            @endforeach
             @foreach ($branch as $el)
                 <input class="branchesData" type="hidden"
                 data-name="{{$el->name}}"
                 value="{{$el->id}}">
             @endforeach
-
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
-                        <!-- <tr>
-                            <th style="width: 20%">Item</th>
-                            <th>Harga Beli</th>
-                            <th style="width: 9%">Qty</th>
-                            <th>Total</th>
-                            <th>Unit</th>
-                            <th>Cabang</th>
-                            <th>Action</th>
-                        </tr> -->
                         <tr>
-                            <th>Cabang / Unit</th>
-                            <th>Item / QTY</th>
-                            <!-- <th>Harga Beli / Total</th> -->
-                            <!-- <th>Action</th> -->
+                            <th>Cabang / item</th>
+                            <th>Harga Beli / QTY</th>
+                            <th>Total</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        @php $i = 0 @endphp
-                        @foreach($models as $row)
-                        <tr class="dataDetail dataDetail_{{ $i }}">
-                            <td style="display:none">
-                                <input type="hidden" class="form-control priceDetailSparePart priceDetailSparePart_" name="idDetail[]" value="{{ $i }}">
-                            </td>
-                            <td>
-                            <select class="select2 branchesDetail" name="branchesDetail[]">
-                                <option value="-" data-index="">- Select -</option>
-                                @foreach($branch as $rows)
-                                    @if($row->branch_id == $rows->id)
-                                    <option value="{{ $rows->id }}" selected>{{ $rows->name }}</option>
-                                    @else
-                                    <option value="{{ $rows->id }}">{{ $rows->name }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                            </td>
-                            <td>
-                            <select class="select2 itemsDetail" name="itemsDetail[]">
-                                <option value="-" data-index="">- Select -</option>
-                                @foreach($item as $rows)
-                                    @if($row->item_id == $rows->id)
-                                    <option value="{{ $rows->id }}" selected>{{ $rows->name }}</option>
-                                    @else
-                                    <option value="{{ $rows->id }}">{{ $rows->name }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                            </td>
-                            <!-- <td>
-                                <input type="text" class="form-control cleaveNumeral priceDetail priceDetail_" name="priceDetail[]" data-index="" value="0" style="text-align: right">
-                            </td> -->
-                            <!-- <td>
-                                <button type="button" class="btn btn-danger removeDataDetail" value="{{ $i }}" >X</button>
-                            </td> -->
-                        </tr> 
-                        <tr class="dataDetail_{{ $i }}">
-                            <td>
-                            <select class="select2 unitsDetail" name="unitsDetail[]">
-                                <option value="-" data-index="">- Select -</option>
-                                @foreach($unit as $rows)
-                                    @if($row->unit_id == $rows->id)
-                                    <option value="{{ $rows->id }}" selected>{{ $rows->name }}</option>
-                                    @else
-                                    <option value="{{ $rows->id }}">{{ $rows->name }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                            </td>
-                            <td>
-                                <input type="text" class="form-control qtyDetail qtyDetail_" name="qtyDetail[]" data-index="" value="{{ $row->qty }}" style="text-align: right;">
-                            </td>
-                            <!-- <td>
-                                <input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_" name="totalPriceDetail[]" value="0" style="text-align: right">
-                            </td> -->
-                        </tr> 
-                        <tr class="dataDetail_{{ $i }}" style="border-bottom: solid 2px #ddd; margin-bottom: 5px;">
-                            <td colspan="4">
-                                <input type="text" class="form-control desDetail desDetail_" name="desDetail[]" placeholder="Deskripsi">
-                            </td>
-                        </tr> 
-                        <tr class="dataDetail_{{ $i }}" height="50px">
-                        </tr>
-                        @php $i++ @endphp
-                        @endforeach
-                    </tbody>
                     <tbody class="dropHereItem" style="border: none !important">
                     </tbody>
                 </table>
@@ -246,7 +169,7 @@
             <!-- <button class="btn btn-primary mr-1" type="button" onclick="save()"><i class="far fa-save"></i>
                 {{ __('Simpan Data') }}</button> -->
             <button class="btn btn-primary mr-1" type="submit"><i class="far fa-save"></i>
-                {{ __('Simpan Data') }}</button>
+                {{ __('Ubah Data') }}</button>
         </div>
     </div>
     <div class="modal fade" tabindex="1" role="dialog" id="exampleModal" aria-hidden="true" style="display: none;">
@@ -267,7 +190,7 @@
             </div>
           </div>
         </div>
-      </div>
+    </div>
 </form>
 
 @endsection
@@ -275,6 +198,26 @@
 
 @section('script')
 <script src="{{ asset('assets/pages/transaction/purchaseScript.js') }}"></script>
+<script type="text/javascript">
+    var arrModels = <?php echo json_encode($models);?>;
+    // console.log(arrModels);
+    arrModels.forEach(myFunction);
+    function myFunction(item, index, arr) {
+        var branch_id = 0;
+        var item_id = 0;
+        var qty = 0;
+        var price = 0; 
+        Object.entries(arr[index]).forEach(entry2 => {
+            var [key2, value2] = entry2;
+
+            if(key2 == 'branch_id') { branch_id = value2 }
+            if(key2 == 'item_id') { item_id = value2 }
+            if(key2 == 'qty') { qty = value2 }
+            if(key2 == 'price') { price = value2 }
+        });
+        addItems(branch_id, item_id, qty, price);
+    }
+</script>
 <style>
     .modal-backdrop{
         position: relative !important;

@@ -29,6 +29,12 @@ class FrontendController extends Controller
         }        
         $this->globalContent = $varcontents;
     }
+    public function product($id)
+    {
+        $carouselHome = $this->library->contentGet(1); // 1
+        $content = Content::where('id', $id)->first();
+        return view('pages.frontend.home.itemDetail', compact('content', 'carouselHome'));
+    }
     public function home()
     {
         $carouselHome = $this->library->contentGet(1); // 1
@@ -39,9 +45,12 @@ class FrontendController extends Controller
         $homeTestimonial = $this->library->contentGet(9); // 6
         $homeAchievement = $this->library->contentGet(10); // 7
         $homeVendor = $this->library->contentGet(11); // 8
+        $homeHotItem = $this->library->contentGet(32);
+        $homeServiceUnit = $this->library->contentGet(33);
         $contents = $this->globalContent;
+        // dd($homeHotItem);
         $branch = Branch::get();
-        return view('pages.frontend.home.indexHome', compact('contents', 'carouselHome', 'homeTab', 'homeAboutUs', 'homeHireUs', 'homeTestimonialTitle', 'homeTestimonial', 'homeAchievement', 'homeVendor', 'branch'));
+        return view('pages.frontend.home.indexHome', compact('contents', 'carouselHome', 'homeTab', 'homeAboutUs', 'homeHireUs', 'homeTestimonialTitle', 'homeTestimonial', 'homeAchievement', 'homeVendor', 'homeHotItem', 'homeServiceUnit', 'branch'));
     }
     public function about()
     {
@@ -101,7 +110,10 @@ class FrontendController extends Controller
         // $models = ServiceStatusMutation::
         // join('service', 'service_status_mutation.service_id', '=', 'service.id')->where('service.code', $id)
         // ->get();
-        $models = ServiceStatusMutation::get();
+        $models = ServiceStatusMutation::
+        join('service', 'service_status_mutation.service_id', '=', 'service.id')->where('service.code', $id)
+        ->get();
+        // dd($models);
         return view('pages.frontend.statusService', compact('models', 'id'));
     }
 

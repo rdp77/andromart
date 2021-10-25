@@ -112,7 +112,15 @@ class ItemController extends Controller
         $type = Type::get();
         $unit = Unit::get();
         $warranty = Warranty::get();
-        return view('pages.backend.master.item.createItem', compact('branch', 'category', 'brand', 'type', 'supplier', 'unit', 'warranty'));
+        return view('pages.backend.master.item.createItem', compact(
+            'branch',
+            'category',
+            'brand',
+            'type',
+            'supplier',
+            'unit',
+            'warranty'
+        ));
     }
 
     public function store(Request $req)
@@ -190,7 +198,15 @@ class ItemController extends Controller
         // return [$item,$unit];
 
         $warranty = Warranty::get();
-        return view('pages.backend.master.item.updateItem', compact('item', 'category', 'brand', 'brand', 'supplier', 'unit', 'warranty'));
+        return view('pages.backend.master.item.updateItem', compact(
+            'item',
+            'category',
+            'brand',
+            'brand',
+            'supplier',
+            'unit',
+            'warranty'
+        ));
     }
 
     public function update($id, Request $req)
@@ -259,10 +275,16 @@ class ItemController extends Controller
         $transaction = StockMutation::where('item_id', '=', $id)->get();
         $checkTransaction = count($transaction);
         if ($checkStock > 0) {
-            return Response::json(['status' => 'error', 'message' => "Data tidak bisa dihapus, Sisa Stok = $checkStock"]);
+            return Response::json([
+                'status' => 'error',
+                'message' => "Data tidak bisa dihapus ! Sisa Stok = $checkStock"
+            ]);
         } else {
             if ($checkTransaction > 0) {
-                return Response::json(['status' => 'error', 'message' => "Data yang sudah di transaksikan tidak bisa dihapus"]);
+                return Response::json([
+                    'status' => 'error',
+                    'message' => "Data yang sudah di transaksikan tidak bisa dihapus !"
+                ]);
             } else {
                 $this->DashboardController->createLog(
                     $req->header('user-agent'),
@@ -273,7 +295,10 @@ class ItemController extends Controller
                 Item::destroy($id);
                 Stock::destroy($stock);
                 // Stock::where('item_id', '=', $id)->delete();
-                return Response::json(['status' => 'success', 'message' => 'Data master berhasil dihapus !']);
+                return Response::json([
+                    'status' => 'success',
+                    'message' => 'Data master berhasil dihapus !'
+                ]);
             }
         }
     }

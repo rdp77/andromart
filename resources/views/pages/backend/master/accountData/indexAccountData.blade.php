@@ -1,5 +1,5 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__('Master Akun Data'))
+@section('title', __('pages.title').__(' | Master Akun Data'))
 @section('titleContent', __('Master Akun Data'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')

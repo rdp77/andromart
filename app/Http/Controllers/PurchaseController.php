@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Purchasing;
 use App\Models\PurchasingDetail;
+use App\Models\HistoryDetailPurchase;
 use App\Models\Stock;
 use App\Models\Employee;
 use App\Models\Item;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Crypt;
 use Yajra\DataTables\DataTables;
@@ -55,8 +57,8 @@ class PurchaseController extends Controller
                         </button>';
                     if($row->done == 'Belum Proses'){
                         $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('purchaseApprove', Crypt::encryptString($row->id)) . '">Setujui</a>';
-                        // $actionBtn .= '<a class="dropdown-item" href="' . route('purchase.edit', Crypt::encryptString($row->id)) . '">Ubah</a>';
+                            <a onclick="approve(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Setujui</a>';
+                        $actionBtn .= '<a class="dropdown-item" href="' . route('purchase.edit', Crypt::encryptString($row->id)) . '">Ubah</a>';
                         $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     } else {
                         $actionBtn .= '<div class="dropdown-menu">
@@ -77,14 +79,15 @@ class PurchaseController extends Controller
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
 
+        $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
         $now = Purchasing::whereBetween("created_at", [$date.' 00:00:00', $date.' 23:59:59'])->count();
         $index = $now + 1;
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
-        return $code = $type.$year . $month . $index;
+        return $code = $type.$getEmployee->Branch->code.$year . $month . $index;
     }
     public function create()
     {
-        $code     = $this->code('PCS-');
+        $code     = $this->code('PCS');
         $employee = Employee::get();
         // $items    = Item::where('name','!=','Jasa Service')->get();
         $item     = Item::with('stock')->where('items.name','!=','Jasa Service')
@@ -96,26 +99,67 @@ class PurchaseController extends Controller
         return view('pages.backend.transaction.purchase.createPurchase',compact('employee','code','item', 'unit', 'branch'));
         // return view('pages.backend.transaction.purchase.createPurchase');
     }
+    function base64_to_jpeg($base64_string, $output_file) {
+        // open the output file for writing
+        $ifp = fopen( $output_file, 'wb' ); 
+
+        // split the string on commas
+        // $data[ 0 ] == "data:image/png;base64"
+        // $data[ 1 ] == <actual base64 string>
+        $data = explode( ',', $base64_string );
+
+        // we could add validation here with ensuring count( $data ) > 1
+        fwrite( $ifp, base64_decode( $data[1] ) );
+
+        // clean up the file resource
+        fclose( $ifp ); 
+
+        return $output_file; 
+    }
 
     public function store(Request $req)
     {
+        $typeDiscount = $req->typeDiscount;
+        $discountType = 0; $discountValue = 0;
+        if($typeDiscount == "percent") {
+            $discountType = 0;
+            $discountValue = $req->totalDiscountPercent;
+        } else {
+            $discountType = 1;
+            $discountValue = $req->totalDiscountValue;
+        }
+        $image = $req->image;
+        if($image != null) {
+            $fileSave = 'assetstransaction/Purchasing_' . $this->code('PCS') . '.' .'png';
+            $fileName = 'Purchasing_' . $this->code('PCS') . '.' .'png';
+            $images = $this->base64_to_jpeg($image, $fileSave);
+        } else {
+            $fileName = null;
+        }
+
         $date = date('Y-m-d H:i:s');
         $purchasing = new Purchasing;
         $purchasing->code = $req->code;
         $purchasing->date = $date;
         $purchasing->employee_id = $req->buyer;
-        $purchasing->status = $req->pay;
+        // $purchasing->status = $req->pay;
+
+        $purchasing->discountType = $discountType;
+        $purchasing->discountValue = str_replace(",", '',$discountValue);
         
         $purchasing->discount = str_replace(",", '',$req->discountTotal);
         $purchasing->price = str_replace(",", '',$req->grandTotal);
         $purchasing->created_by = Auth::user()->name;
+
+        $purchasing->image = $fileName;
         $purchasing->save();
 
         foreach($req->idDetail as $row) {
+            // dd($req->qtyDetail);
             $purchasingDetail = new PurchasingDetail;
             $purchasingDetail->purchasing_id = $purchasing->id;
             $purchasingDetail->item_id = $req->itemsDetail[$row];
-            $purchasingDetail->unit_id = $req->unitsDetail[$row];
+            // $purchasingDetail->unit_id = $req->unitsDetail[$row];
             $purchasingDetail->branch_id = $req->branchesDetail[$row];
             $purchasingDetail->price = str_replace(",", '',$req->priceDetail[$row]);
             $purchasingDetail->qty_start = str_replace(",", '',$req->qtyDetail[$row]);
@@ -127,7 +171,7 @@ class PurchaseController extends Controller
         }
         return Redirect::route('purchase.index')
             ->with([
-                'status' => 'Berhasil membuat menambah notulensi',
+                'status' => 'Berhasil membuat menambah pembelian',
                 'type' => 'success'
             ]);
     }
@@ -150,17 +194,68 @@ class PurchaseController extends Controller
         $model = Purchasing::where('id', $id)->first();
         $models = PurchasingDetail::where('purchasing_id', $id)
         ->join('items', 'purchasing_details.item_id', 'items.id')
-        ->join('units', 'purchasing_details.unit_id', 'units.id')
         ->join('branches', 'purchasing_details.branch_id', 'branches.id')
-        ->select('purchasing_details.id as id', 'qty', 'items.id as item_id', 'items.name as item_name', 'units.id as unit_id', 'units.name as unit_name', 'branches.id as branch_id', 'branches.name as branch_name', 'purchasing_details.description as description')
+        ->select('purchasing_details.id as id', 'qty', 'price', 'items.id as item_id', 'items.name as item_name', 'branches.id as branch_id', 'branches.name as branch_name', 'purchasing_details.description as description')
         ->get();
-        // dd($models);
         $jumlah = PurchasingDetail::where('purchasing_id', $id)->count();
+        // dd($model);
         return view('pages.backend.transaction.purchase.editPurchase',compact('employee','item', 'unit', 'branch', 'model', 'models', 'jumlah'));
     }
 
     public function update(Request $req, $id)
     {
+        // $idDetails = $req->idDetail;
+        // dd($idDetails);
+        $image = $req->image;
+        if($image != null) {
+            $fileSave = 'assetstransaction/Purchasing_' . $this->code('PCS') . '.' .'png';
+            $fileName = 'Purchasing_' . $this->code('PCS') . '.' .'png';
+            $images = $this->base64_to_jpeg($image, $fileSave);
+        } else {
+            $fileName = null;
+        }
+
+        $date = date('Y-m-d H:i:s');
+        $purchasing = Purchasing::where('id', $id)->first();
+        $purchasing->code = $req->code;
+        // $purchasing->date = $date;
+        $purchasing->employee_id = $req->buyer;
+        $purchasing->status = $req->pay;
+        
+        $purchasing->discount = str_replace(",", '',$req->discountTotal);
+        $purchasing->price = str_replace(",", '',$req->grandTotal);
+        $purchasing->created_by = Auth::user()->name;
+
+        $purchasing->image = $fileName;
+        $purchasing->save();
+
+        $deletes = purchasingDetail::where('purchasing_id', $id)->get();
+        foreach($deletes as $row) {
+            $history = HistoryDetailPurchase::where('purchasing_detail_id', $row->id)->truncate();
+        }
+        $delPurchasingDetail = purchasingDetail::where('purchasing_id', $id)->truncate();
+
+        foreach($req->idDetail as $row => $value) {
+            // dd($req->qtyDetail);
+            // $row = $rows - 1;
+            $purchasingDetail = new PurchasingDetail;
+            $purchasingDetail->purchasing_id = $purchasing->id;
+            $purchasingDetail->item_id = $req->itemsDetail[$row];
+            // $purchasingDetail->unit_id = $req->unitsDetail[$row];
+            $purchasingDetail->branch_id = $req->branchesDetail[$row];
+            $purchasingDetail->price = str_replace(",", '',$req->priceDetail[$row]);
+            $purchasingDetail->qty_start = str_replace(",", '',$req->qtyDetail[$row]);
+            $purchasingDetail->qty = str_replace(",", '',$req->qtyDetail[$row]);
+            $purchasingDetail->total = str_replace(",", '',$req->totalPriceDetail[$row]);
+            $purchasingDetail->description = $req->desDetail[$row];
+            $purchasingDetail->created_by = Auth::user()->name;
+            $purchasingDetail->save();
+        }
+        return Redirect::route('purchase.index')
+        ->with([
+            'status' => 'Berhasil membuat mengubah pembelian',
+            'type' => 'success'
+        ]);
     }
 
     public function destroy(Request $req, $id)
@@ -254,8 +349,9 @@ class PurchaseController extends Controller
 
     public function approve($id)
     {
-        $id = Crypt::decryptString($id);
+        // $id = Crypt::decryptString($id);
         $purchase = Purchasing::where('id', $id)->first();
+        $purchase->status = 'paid';
         $purchase->done = 3;
         $purchase->updated_by = Auth::user()->name;
         $purchase->save();

@@ -18,6 +18,7 @@ class CreateHistoryPurchasesTable extends Migration
             $table->unsignedBigInteger('purchasing_id')->nullable();
 
             $table->datetime('date')->nullable();
+            $table->mediumText('image')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();

@@ -6,12 +6,14 @@ use App\Models\Purchasing;
 use App\Models\PurchasingDetail;
 use App\Models\HistoryPurchase;
 use App\Models\HistoryDetailPurchase;
+use App\Models\Employee;
 use App\Models\Stock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Contracts\Encryption\DecryptException;
 use Illuminate\Support\Facades\Crypt;
 use Yajra\DataTables\DataTables;
@@ -28,7 +30,8 @@ class ReceptionController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Purchasing::with('employee')->get();
+            // ORDER BY FIND_IN_SET(column, 'Yellow,Blue,Red')
+            $data = Purchasing::with('employee')->whereIn("done", [1,3,0,2])->get();
             foreach($data as $row) {
                 $tanggal = date("d F Y", strtotime($row->date));
                 $row->date = $tanggal;
@@ -103,7 +106,7 @@ class ReceptionController extends Controller
         ->where('purchasing_details.qty', '>', 0)
         ->select('purchasing_details.id as id', 'qty', 'items.name as itemName', 'branches.name as branchName', 'units.name as unitName', 'items.id as item_id', 'units.id as unit_id', 'branches.id as branch_id')
         ->get();
-        $history = HistoryPurchase::where('purchasing_id', $id)->get();
+        $history = HistoryPurchase::where('purchasing_id', $id)->orderBy('id', 'DESC')->get();
         foreach($history as $row) {
             $historyDetail = HistoryDetailPurchase::where('history_purchase_id', $row->id)
             ->join('purchasing_details', 'purchasing_detail_id', 'purchasing_details.id')
@@ -117,8 +120,36 @@ class ReceptionController extends Controller
         return view('pages.backend.transaction.reception.editReception', compact('model', 'models', 'id', 'history'));
     }
 
+    function base64_to_jpeg($base64_string, $output_file) {
+        // open the output file for writing
+        $ifp = fopen( $output_file, 'wb' ); 
+
+        // split the string on commas
+        // $data[ 0 ] == "data:image/png;base64"
+        // $data[ 1 ] == <actual base64 string>
+        $data = explode( ',', $base64_string );
+
+        // we could add validation here with ensuring count( $data ) > 1
+        fwrite( $ifp, base64_decode( $data[1] ) );
+
+        // clean up the file resource
+        fclose( $ifp ); 
+
+        return $output_file; 
+    }
     public function update(Request $req, $id)
     {
+        // define('UPLOAD_DIR', 'images/');
+        $image = $req->image;
+        if($image != null) {
+            $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
+            $fileSave = 'assetstransaction/Reception_'. $getEmployee->Branch->code . date('YmdHis') . '.png';
+            $fileName = 'Reception_'. $getEmployee->Branch->code . date('YmdHis') . '.png';
+            $images = $this->base64_to_jpeg($image, $fileSave);
+        } else {
+            $fileName = null;
+        }
+
         $date = date('Y-m-d H:i:s');
         $purchase = Purchasing::where('id', $id)->first();
         $purchase->done = 1;
@@ -126,18 +157,20 @@ class ReceptionController extends Controller
 
         $historyPurchase = new HistoryPurchase;
         $historyPurchase->purchasing_id = $id;
+        $historyPurchase->image = $fileName;
         $historyPurchase->date = $date;
         $historyPurchase->save();
 
         foreach($req->idDetail as $row) {
+            $qtyNew = (int)str_replace(",", "", $req->qtyNew[$row]);
             $purchasing = PurchasingDetail::where('id', $req->idPurchasing[$row])
             ->first();
             $historyDetailPurchase = new HistoryDetailPurchase;
             $historyDetailPurchase->history_purchase_id = $historyPurchase->id;
             $historyDetailPurchase->purchasing_detail_id = $purchasing->id;
-            $historyDetailPurchase->qty = $req->qtyNew[$row];
+            $historyDetailPurchase->qty = $qtyNew;
             $historyDetailPurchase->save();
-            $purchasing->qty -= $req->qtyNew[$row];
+            $purchasing->qty -= $qtyNew;
             $purchasing->edit = 1;
             $purchasing->save();
 
@@ -145,7 +178,7 @@ class ReceptionController extends Controller
             ->where('unit_id', $req->idUnit[$row])
             ->where('branch_id', $req->idBranch[$row])
             ->first();
-            $stocks->stock += $req->qtyNew[$row];
+            $stocks->stock += $qtyNew;
             $stocks->save();
         }
 

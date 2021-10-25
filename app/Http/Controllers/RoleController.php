@@ -91,7 +91,7 @@ class RoleController extends Controller
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Mengubah masrter role ' . Role::find($id)->name
+            'Mengubah master role ' . Role::find($id)->name
         );
 
         $role->save();

@@ -16,11 +16,10 @@ var table = $("#table").DataTable({
     dom: '<"html5buttons">lBrtip',
     columns: [
         { data: "DT_RowIndex", orderable: false, searchable: false },
-        { data: "item.name" },
+        { data: "dataItem" },
         { data: "item.condition" },
         { data: "branch.name" },
-        { data: "stock" },
-        { data: "min_stock" },
+        { data: "dataQty" },
         { data: "unit.code" },
         { data: "description" },
         { data: "action", orderable: false, searchable: true },
@@ -91,11 +90,17 @@ function del(id) {
             $.ajax({
                 url: "/warehouse/stock/stock/" + id,
                 type: "DELETE",
-                success: function () {
-                    swal("Data master berhasil dihapus", {
-                        icon: "success",
-                    });
-                    table.draw();
+                success: function (data) {
+                    if (data.status == 'success'){
+                        swal(data.message, {
+                            icon: "success",
+                        });
+                        location.reload();
+                    }else{
+                        swal(data.message, {
+                            icon: "warning",
+                        });
+                    }
                 },
             });
         } else {

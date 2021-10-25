@@ -14,7 +14,9 @@ class IconController extends Controller
      */
     public function index()
     {
-        //
+        $icon = Icon::get();
+        // dd($icon);
+        return view('pages.backend.master.icon.indexIcon', compact('icon'));
     }
 
     /**

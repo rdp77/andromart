@@ -121,7 +121,7 @@ class MessageController extends Controller
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
-            'Mengubah masrter area ' . Area::find($id)->name
+            'Mengubah master area ' . Area::find($id)->name
         );
 
         $area->save();
