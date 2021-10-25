@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SaleController;
+use App\Http\Controllers\SaleReturnController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,6 +21,8 @@ Route::group(['prefix' => 'transaction'], function () {
             ->except([
                 'show',
             ]);
+
+        Route::resource('sale-return', SaleReturnController::class);
 
         Route::get(
             'sale/{id}',
