@@ -4,9 +4,13 @@ namespace App\Http\Controllers;
 
 use App\Models\Payment;
 use App\Models\Branch;
-use App\Models\Cash;
+use App\Modcels\Cash;
+use App\Models\AccountData;
 use App\Models\Cost;
 use App\Models\Type;
+use App\Models\Journal;
+use App\Models\Employee;
+use App\Models\JournalDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -62,21 +66,40 @@ class PaymentController extends Controller
         return view('pages.backend.transaction.payment.indexPayment');
     }
 
+    // public function code($type)
+    // {
+    //     $month = Carbon::now()->format('m');
+    //     $year = Carbon::now()->format('y');
+    //     $index = DB::table('payments')->max('id')+1;
+
+    //     $index = str_pad($index, 3, '0', STR_PAD_LEFT);
+    //     return $code = $type.$year . $month . $index;
+    // }
     public function code($type)
     {
+        $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
         $index = DB::table('payments')->max('id')+1;
 
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
-        return $code = $type.$year . $month . $index;
+        return $code = $type.$getEmployee->Branch->code.$year . $month . $index;
     }
+    public function codeJournals($type)
+    {
+        $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
+        $month = Carbon::now()->format('m');
+        $year = Carbon::now()->format('y');
+        $index = DB::table('journals')->max('id')+1;
 
+        $index = str_pad($index, 3, '0', STR_PAD_LEFT);
+        return $code = $type.$getEmployee->Branch->code.$year . $month . $index;
+    }
     public function create()
     {
-        $code = $this->code('PGN-');
+        $code = $this->code('SPND');
         $branch = Branch::get();
-        $cash = Cash::get();
+        $cash = AccountData::get();
         $cost = Cost::get();
 
         return view('pages.backend.transaction.payment.createPayment', compact('cash', 'code', 'branch', 'cost'));
@@ -84,6 +107,11 @@ class PaymentController extends Controller
 
     public function store(Request $req)
     {
+        // return $req->all();
+        DB::beginTransaction();
+        try {
+            //code...
+        
         $date = $this->DashboardController->changeMonthIdToEn($req->date);
 
         Payment::create([
@@ -96,10 +124,55 @@ class PaymentController extends Controller
             'description' => $req->description,
             'created_by' => Auth::user()->name,
         ]);
+        
 
-        // $biaya = Cash::findOrFail($req->cash_id);
-        // $biaya->balance -= str_replace(",", '',$req->price);
-        // $biaya->save();
+        $idJournal = DB::table('journals')->max('id')+1;
+        Journal::create([
+            'id' =>$idJournal,
+            'code'=>$this->codeJournals('KK',$idJournal),
+            'year'=>date('Y'),
+            'date'=>date('Y-m-d'),
+            'type'=>'Biaya',
+            'total'=>str_replace(",", '',$req->price),
+            'ref'=>$req->code,
+            'description'=>$req->description,
+            'created_at'=>date('Y-m-d h:i:s'),
+            // 'updated_at'=>date('Y-m-d h:i:s'),
+        ]);
+
+        $accountPembayaran  = AccountData::where('id',$req->account)
+                            ->first();
+        $accountCode = [
+            $req->cost_id,
+            $req->cash_id,
+        ];  
+        $totalBayar = [
+            str_replace(",", '',$req->price),
+            str_replace(",", '',$req->price),
+        ];
+        $description = [
+            $req->description,
+            $req->description,
+        ];
+        $DK = [
+            'D',
+            'K',
+        ];
+    
+
+        for ($i=0; $i <count($accountCode) ; $i++) { 
+            $idDetail = DB::table('journal_details')->max('id')+1;
+            JournalDetail::create([
+                'id'=>$idDetail,
+                'journal_id'=>$idJournal,
+                'account_id'=>$accountCode[$i],
+                'total'=>$totalBayar[$i],
+                'description'=>$description[$i],
+                'debet_kredit'=>$DK[$i],
+                'created_at'=>date('Y-m-d h:i:s'),
+                'updated_at'=>date('Y-m-d h:i:s'),
+            ]);
+        }
 
         $this->DashboardController->createLog(
             $req->header('user-agent'),
@@ -107,11 +180,20 @@ class PaymentController extends Controller
             'Membuat transaksi pembayaran baru'
         );
 
-        return Redirect::route('payment.index')
+            DB::commit();
+            return Redirect::route('payment.index')
             ->with([
                 'status' => 'Berhasil membuat transaksi pembayaran baru',
                 'type' => 'success'
             ]);
+       
+
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return$th;
+            //throw $th;
+        }
+        
     }
 
     public function show($id)

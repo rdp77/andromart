@@ -1,10 +1,10 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__('Tambah Pembayaran Service'))
-@section('titleContent', __('Tambah Pembayaran Service'))
+@section('title', __('pages.title').__('Tambah Service Return '))
+@section('titleContent', __('Tambah Service Return '))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
 <div class="breadcrumb-item active">{{ __('Service') }}</div>
-<div class="breadcrumb-item active">{{ __('Tambah Pembayaran Service') }}</div>
+<div class="breadcrumb-item active">{{ __('Tambah Service Return ') }}</div>
 @endsection
 
 @section('content')

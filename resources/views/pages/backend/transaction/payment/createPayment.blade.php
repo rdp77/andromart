@@ -24,8 +24,7 @@
                             </div>
                             <div class="form-group col-md-3 col-lg-3">
                                 <label for="date">{{ __('Tanggal') }}<code>*</code></label>
-                                <input id="date" type="text" class="form-control" readonly="" value="{{date('d F Y')}}"
-                                    name="date">
+                                <input id="date" type="text" class="form-control datepicker" readonly="" name="date">
                             </div>
                         </div>
                         <div class="row">
@@ -34,7 +33,7 @@
                                     <label for="branch_id"
                                         class="control-label">{{ __('Cabang') }}<code>*</code></label>
                                 </div>
-                                <select class="select2 @error('branch_id') is-invalid @enderror" name="branch_id" required>
+                                <select onchange="branchChange()" class="select2 branch @error('branch_id') is-invalid @enderror" name="branch_id" required>
                                     <option value="">- Select -</option>
                                     @foreach ($branch as $branch)
                                     <option value="{{$branch->id}}">{{$branch->code}} - {{$branch->name}}</option>
@@ -53,23 +52,21 @@
                                 </div>
                                 <select class="select2" name="cash_id" required>
                                     <option value="">- Select -</option>
-                                    @foreach ($cash as $cash)
-                                    <option  data-cost="{{$cash->balance}}" value="{{$cash->id}}">{{$cash->code}} - {{$cash->name}}</option>
-                                    @endforeach
+                                    @foreach ($cash as $el)
+                                        @if ($el->main_id == 1)
+                                            <option value="{{$el->id}}">{{$el->code}} - {{$el->name}}</option>
+                                        @endif
+                                    @endforeach 
                                 </select>
                             </div>
-                            {{-- <div class="form-group col-md-3 col-xs-12">
-                                <label for="balance">{{ __('Saldo Kas') }}<code>*</code></label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">
-                                        Rp.
-                                        </div>
-                                    </div>
-                                    <input id="rupiah" type="text" class="form-control currency"
-                                        name="balance" value="" readonly style="text-align: right">
-                                </div>
-                            </div> --}}
+                            @foreach ($cash as $el)
+                                @if ($el->debet_kredit == 'K')
+                                    <input class="accountData" type="hidden"
+                                    data-branch="{{$el->branch_id}}"
+                                    data-name="{{$el->code}} - {{$el->name}}"
+                                    value="{{$el->id}}">
+                                @endif
+                            @endforeach
                         </div>
                         <div class="row">
                             <div class="form-group col-md-3 col-xs-12">
@@ -77,7 +74,7 @@
                                     <label for="cost_id"
                                         class="control-label">{{ __('Jenis Biaya') }}<code>*</code></label>
                                 </div>
-                                <select class="select2  @error('cost_id') is-invalid @enderror"  name="cost_id" required>
+                                <select class="select2 cost @error('cost_id') is-invalid @enderror"  name="cost_id" required>
                                     <option value="">- Select -</option>
                                     @foreach ($cost as $cost)
                                     <option value="{{$cost->id}}">{{$cost->code}} - {{$cost->name}}</option>

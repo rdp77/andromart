@@ -24,8 +24,7 @@
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="date">{{ __('Tanggal') }}<code>*</code></label>
-                            <input id="date" type="text" class="form-control" readonly="" value="{{date('d F Y')}}"
-                                name="date">
+                            <input id="date" type="text" class="form-control datepicker" readonly="" name="date">
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="warranty">{{ __('Garansi') }}</label>
