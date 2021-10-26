@@ -107,8 +107,7 @@ class EmployeeController extends Controller
                 'role_id' => ['required', 'integer'],
                 'level' => ['required', 'integer', 'max:5'],
             ])->validate();
-        }
-        else {
+        } else {
             Validator::make($req->all(), [
                 'identity' => ['required', 'string', 'max:255', 'unique:employees'],
                 'name' => ['required', 'string', 'max:255'],
@@ -119,48 +118,47 @@ class EmployeeController extends Controller
         }
 
         $birthday = $this->DashboardController->changeMonthIdToEn($req->birthday);
-// return $req->all();
+        // return $req->all();
         if ($req->hasFile('avatar')) {
-            $req->file('avatar')->move('assetsmaster/avatar/',$req->file('avatar')->getClientOriginalName());
+            $req->file('avatar')->move('assetsmaster/avatar/', $req->file('avatar')->getClientOriginalName());
             Employee::where('id', $id)
-            ->update([
-                'avatar' => $req->file('avatar')->getClientOriginalName(),
-                'branch_id' => $req->branch_id,
-                'level' => $req->level,
-                'identity' => $req->identity,
-                'name' => $req->name,
-                'birthday' => $birthday,
-                'contact' => $req->contact,
-                'gender' => $req->gender,
-                'address' => $req->address,
-                'updated_by' => Auth::user()->name,
-            ]);
+                ->update([
+                    'avatar' => $req->file('avatar')->getClientOriginalName(),
+                    'branch_id' => $req->branch_id,
+                    'level' => $req->level,
+                    'identity' => $req->identity,
+                    'name' => $req->name,
+                    'birthday' => $birthday,
+                    'contact' => $req->contact,
+                    'gender' => $req->gender,
+                    'address' => $req->address,
+                    'updated_by' => Auth::user()->name,
+                ]);
 
             User::where('id', Employee::find($id)->user_id)
-            ->update([
-                'name' => $req->name,
-                'role_id' => $req->role_id,
-            ]);
-        }
-        else {
+                ->update([
+                    'name' => $req->name,
+                    'role_id' => $req->role_id,
+                ]);
+        } else {
             Employee::where('id', $id)
-            ->update([
-                'branch_id' => $req->branch_id,
-                'level' => $req->level,
-                'identity' => $req->identity,
-                'name' => $req->name,
-                'birthday' => $birthday,
-                'contact' => $req->contact,
-                'gender' => $req->gender,
-                'address' => $req->address,
-                'updated_by' => Auth::user()->name,
-            ]);
+                ->update([
+                    'branch_id' => $req->branch_id,
+                    'level' => $req->level,
+                    'identity' => $req->identity,
+                    'name' => $req->name,
+                    'birthday' => $birthday,
+                    'contact' => $req->contact,
+                    'gender' => $req->gender,
+                    'address' => $req->address,
+                    'updated_by' => Auth::user()->name,
+                ]);
 
             User::where('id', Employee::find($id)->user_id)
-            ->update([
-                'name' => $req->name,
-                'role_id' => $req->role_id,
-            ]);
+                ->update([
+                    'name' => $req->name,
+                    'role_id' => $req->role_id,
+                ]);
         }
 
         $employee = Employee::find($id);
@@ -194,6 +192,5 @@ class EmployeeController extends Controller
         User::destroy($user);
 
         return Response::json(['status' => 'success', 'message' => 'Data master berhasil dihapus !']);
-
     }
 }

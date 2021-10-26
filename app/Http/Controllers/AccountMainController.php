@@ -87,12 +87,11 @@ class AccountMainController extends Controller
 
     public function update(Request $req, $id)
     {
-        if($req->code == AccountMain::find($id)->code){
+        if ($req->code == AccountMain::find($id)->code) {
             Validator::make($req->all(), [
                 'name' => ['required', 'string', 'max:255'],
             ])->validate();
-        }
-        else{
+        } else {
             Validator::make($req->all(), [
                 'code' => ['required', 'string', 'max:255', 'unique:account_main'],
                 'name' => ['required', 'string', 'max:255'],

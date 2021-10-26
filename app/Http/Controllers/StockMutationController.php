@@ -51,7 +51,7 @@ class StockMutationController extends Controller
                 ->addColumn('invoice', function ($row) {
                     $htmlAdd = '<table>';
                     $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<th>'.$row->code.'</th>';
+                    $htmlAdd .=      '<th>' . $row->code . '</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .= '<table>';
 
@@ -60,8 +60,8 @@ class StockMutationController extends Controller
                 ->addColumn('dataBranch', function ($row) {
                     $htmlAdd = '<table>';
                     $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>'.$row->branch->area->name.'</td>';
-                    $htmlAdd .=      '<th>'.$row->branch->name.'</th>';
+                    $htmlAdd .=      '<td>' . $row->branch->area->name . '</td>';
+                    $htmlAdd .=      '<th>' . $row->branch->name . '</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .= '<table>';
 
@@ -69,10 +69,10 @@ class StockMutationController extends Controller
                 })
                 ->addColumn('dataItem', function ($row) {
                     $htmlAdd = '<table>';
-                        $htmlAdd .=   '<tr>';
-                        $htmlAdd .=      '<td>'.$row->item->brand->name.'</td>';
-                        $htmlAdd .=      '<th>'.$row->item->name.'</th>';
-                        $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<td>' . $row->item->brand->name . '</td>';
+                    $htmlAdd .=      '<th>' . $row->item->name . '</th>';
+                    $htmlAdd .=   '</tr>';
                     $htmlAdd .= '<table>';
 
                     return $htmlAdd;
@@ -81,19 +81,19 @@ class StockMutationController extends Controller
                     $htmlAdd = '<table>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Tipe</td>';
-                    $htmlAdd .=      '<th>'.$row->type.'</th>';
+                    $htmlAdd .=      '<th>' . $row->type . '</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Qty</td>';
-                    $htmlAdd .=      '<th>'.$row->qty.'</th>';
-                    $htmlAdd .=      '<th>'.$row->unit->code.'</th>';
+                    $htmlAdd .=      '<th>' . $row->qty . '</th>';
+                    $htmlAdd .=      '<th>' . $row->unit->code . '</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .= '<table>';
 
                     return $htmlAdd;
                 })
 
-                ->rawColumns(['invoice','dataBranch','dataItem','dataQty'])
+                ->rawColumns(['invoice', 'dataBranch', 'dataItem', 'dataQty'])
                 ->make(true);
         }
         return view('pages.backend.warehouse.stockMutation.indexStockMutation');

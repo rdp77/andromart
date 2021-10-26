@@ -42,6 +42,12 @@ class SubMenuSeeder extends Seeder
             ],
             [
                 'menu_id' => '2',
+                'name' => 'Return Penjualan',
+                'url' => route('sale-return.index'),
+                'hover' => '["' . route('sale-return.create') . '","' . route('sale-return.index') . '"]'
+            ],
+            [
+                'menu_id' => '2',
                 'name' => 'Pembelian',
                 'url' => route('purchase.index'),
                 'hover' => '["' . route('purchase.create') . '","' . route('purchase.index') . '"]'

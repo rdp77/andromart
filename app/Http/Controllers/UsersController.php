@@ -110,8 +110,7 @@ class UsersController extends Controller
                 'name' => ['required', 'string', 'max:255'],
                 'address' => ['required', 'string', 'max:255',],
             ])->validate();
-        }
-        else {
+        } else {
             Validator::make($req->all(), [
                 'identity' => ['required', 'string', 'max:255', 'unique:employees'],
                 'name' => ['required', 'string', 'max:255'],
@@ -122,30 +121,29 @@ class UsersController extends Controller
         $birthday = $this->DashboardController->changeMonthIdToEn($req->birthday);
 
         if ($req->hasFile('avatar')) {
-            $req->file('avatar')->move('assetsmaster/avatar/',$req->file('avatar')->getClientOriginalName());
+            $req->file('avatar')->move('assetsmaster/avatar/', $req->file('avatar')->getClientOriginalName());
             Employee::where('id', User::find($id)->employee->id)
-            ->update([
-                'identity' => $req->identity,
-                'name' => $req->name,
-                'birthday' => $birthday,
-                'contact' => $req->contact,
-                'gender' => $req->gender,
-                'address' => $req->address,
-                'avatar' => $req->file('avatar')->getClientOriginalName(),
-                'updated_by' => Auth::user()->name,
-            ]);
-        }
-        else {
+                ->update([
+                    'identity' => $req->identity,
+                    'name' => $req->name,
+                    'birthday' => $birthday,
+                    'contact' => $req->contact,
+                    'gender' => $req->gender,
+                    'address' => $req->address,
+                    'avatar' => $req->file('avatar')->getClientOriginalName(),
+                    'updated_by' => Auth::user()->name,
+                ]);
+        } else {
             Employee::where('id', User::find($id)->employee->id)
-            ->update([
-                'identity' => $req->identity,
-                'name' => $req->name,
-                'birthday' => $birthday,
-                'contact' => $req->contact,
-                'gender' => $req->gender,
-                'address' => $req->address,
-                'updated_by' => Auth::user()->name,
-            ]);
+                ->update([
+                    'identity' => $req->identity,
+                    'name' => $req->name,
+                    'birthday' => $birthday,
+                    'contact' => $req->contact,
+                    'gender' => $req->gender,
+                    'address' => $req->address,
+                    'updated_by' => Auth::user()->name,
+                ]);
         }
 
         User::where('id', $id)

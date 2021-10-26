@@ -82,10 +82,10 @@ class RoleController extends Controller
     public function update(Request $req, $id)
     {
         Role::where('id', $id)
-        ->update([
-            'name' => $req->name,
-            'updated_by' => Auth::user()->name,
-        ]);
+            ->update([
+                'name' => $req->name,
+                'updated_by' => Auth::user()->name,
+            ]);
 
         $role = Role::find($id);
         $this->DashboardController->createLog(

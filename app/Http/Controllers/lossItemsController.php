@@ -45,74 +45,74 @@ class lossItemsController extends Controller
 
     public function index(Request $req)
     {
-        $data = Service::where('technician_id',Auth::user()->id)->get();
+        $data = Service::where('technician_id', Auth::user()->id)->get();
         $employee = Employee::get();
-        return view('pages.backend.finance.loss_items.lossItems',compact('data','employee'));
+        return view('pages.backend.finance.loss_items.lossItems', compact('data', 'employee'));
     }
     public function lossItemsLoadDataService(Request $req)
     {
         // return $req->all();
-        $data = Service::with(['ServiceDetail','ServiceDetail.Items','ServiceStatusMutation','ServiceStatusMutation.Technician','LossItemsDetail','LossItemsDetail.LossItems'])
-        ->whereBetween('date', [$this->DashboardController->changeMonthIdToEn($req->dateS), $this->DashboardController->changeMonthIdToEn($req->dateE)])
-        ->where('work_status','Diambil')
-        ->where('total_loss','!=',0)
-        ->where(function ($query) use ($req) {
-            $query->where('technician_id',$req->id)
-                  ->orWhere('technician_replacement_id', $req->id);
-        })
-        ->get();
+        $data = Service::with(['ServiceDetail', 'ServiceDetail.Items', 'ServiceStatusMutation', 'ServiceStatusMutation.Technician', 'LossItemsDetail', 'LossItemsDetail.LossItems'])
+            ->whereBetween('date', [$this->DashboardController->changeMonthIdToEn($req->dateS), $this->DashboardController->changeMonthIdToEn($req->dateE)])
+            ->where('work_status', 'Diambil')
+            ->where('total_loss', '!=', 0)
+            ->where(function ($query) use ($req) {
+                $query->where('technician_id', $req->id)
+                    ->orWhere('technician_replacement_id', $req->id);
+            })
+            ->get();
 
-        if(count($data) == 0){
+        if (count($data) == 0) {
             $message = 'empty';
-        }else{
+        } else {
             $message = 'exist';
         }
 
-        return Response::json(['status' => 'success','result'=>$data,'message'=>$message]);
+        return Response::json(['status' => 'success', 'result' => $data, 'message' => $message]);
     }
     public function code($type)
     {
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
-        $index = DB::table('service')->max('id')+1;
+        $index = DB::table('service')->max('id') + 1;
 
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
-        return $code = $type.$year . $month . $index;
+        return $code = $type . $year . $month . $index;
     }
 
     public function store(Request $req)
     {
         // return $req->all();
-        $checkData = LossItems::where('date_start',$this->DashboardController->changeMonthIdToEn($req->startDate))
-                                  ->where('date_end',$this->DashboardController->changeMonthIdToEn($req->endDate))
-                                  ->where('employe_id',$req->technicianId)
-                                  ->get();
-        if(count($checkData) != 0){
-           return Response::json(['status' => 'fail','message'=>'Data Sudah Ada']);
+        $checkData = LossItems::where('date_start', $this->DashboardController->changeMonthIdToEn($req->startDate))
+            ->where('date_end', $this->DashboardController->changeMonthIdToEn($req->endDate))
+            ->where('employe_id', $req->technicianId)
+            ->get();
+        if (count($checkData) != 0) {
+            return Response::json(['status' => 'fail', 'message' => 'Data Sudah Ada']);
         }
-        $index = DB::table('sharing_profit')->max('id')+1;
+        $index = DB::table('sharing_profit')->max('id') + 1;
         LossItems::create([
-            'id'=>$index,
-            'date'=>date('Y-m-d'),
-            'date_start'=>$this->DashboardController->changeMonthIdToEn($req->startDate),
-            'date_end'=>$this->DashboardController->changeMonthIdToEn($req->endDate),
-            'employe_id'=>$req->technicianId,
-            'total'=>$req->totalValue,
-            'created_by'=>Auth::user()->name,
-            'created_at'=>date('Y-m-d h:i:s'),
+            'id' => $index,
+            'date' => date('Y-m-d'),
+            'date_start' => $this->DashboardController->changeMonthIdToEn($req->startDate),
+            'date_end' => $this->DashboardController->changeMonthIdToEn($req->endDate),
+            'employe_id' => $req->technicianId,
+            'total' => $req->totalValue,
+            'created_by' => Auth::user()->name,
+            'created_at' => date('Y-m-d h:i:s'),
         ]);
-        
-        for ($i=0; $i <count($req->idDetail) ; $i++) {
+
+        for ($i = 0; $i < count($req->idDetail); $i++) {
             LossItemsDetail::create([
-                'id'=>$i+1,
-                'sharing_profit_id'=>$index,
-                'service_id'=>$req->idDetail[$i],
-                'total'=>$req->totalDetail[$i],
-                'created_by'=>Auth::user()->name,
-                'created_at'=>date('Y-m-d h:i:s'),
+                'id' => $i + 1,
+                'sharing_profit_id' => $index,
+                'service_id' => $req->idDetail[$i],
+                'total' => $req->totalDetail[$i],
+                'created_by' => Auth::user()->name,
+                'created_at' => date('Y-m-d h:i:s'),
             ]);
         }
-        return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
+        return Response::json(['status' => 'success', 'message' => 'Data Tersimpan']);
     }
     public function destroy(Request $req, $id)
     {
@@ -121,56 +121,56 @@ class lossItemsController extends Controller
             $req->ip(),
             'Menghapus Data Kredit'
         );
-        ServiceDetail::where('service_id',$id)->destroy($id);
+        ServiceDetail::where('service_id', $id)->destroy($id);
         return Response::json(['status' => 'success']);
     }
     public function serviceFormUpdateStatus()
     {
-        $data     = Service::where('technician_id',Auth::user()->id)->get();
+        $data     = Service::where('technician_id', Auth::user()->id)->get();
         $employee = Employee::get();
-        return view('pages.backend.transaction.service.indexFormUpdateService',compact('data','employee'));
+        return view('pages.backend.transaction.service.indexFormUpdateService', compact('data', 'employee'));
     }
     public function serviceFormUpdateStatusLoadData(Request $req)
     {
-        $data = Service::with(['ServiceDetail','ServiceDetail.Items','ServiceStatusMutation','ServiceStatusMutation.Technician'])->where('id',$req->id)->first();
+        $data = Service::with(['ServiceDetail', 'ServiceDetail.Items', 'ServiceStatusMutation', 'ServiceStatusMutation.Technician'])->where('id', $req->id)->first();
 
-        if($data == null){
+        if ($data == null) {
             $message = 'empty';
-        }else{
+        } else {
             $message = 'exist';
         }
 
-        return Response::json(['status' => 'success','result'=>$data,'message'=>$message]);
+        return Response::json(['status' => 'success', 'result' => $data, 'message' => $message]);
     }
 
     public function serviceFormUpdateStatusSaveData(Request $req)
     {
         try {
             // return $req->all();
-            $index = ServiceStatusMutation::where('service_id', $req->id)->count()+1;
-            if($req->status == 'Mutasi'){
+            $index = ServiceStatusMutation::where('service_id', $req->id)->count() + 1;
+            if ($req->status == 'Mutasi') {
                 $technician_replacement_id = $req->technicianId;
-            }else{
+            } else {
                 $technician_replacement_id = null;
             }
-            
-            
+
+
             Service::where('id', $req->id)->update([
-                'work_status'=>$req->status,
-                'technician_replacement_id'=>$technician_replacement_id,
+                'work_status' => $req->status,
+                'technician_replacement_id' => $technician_replacement_id,
             ]);
             ServiceStatusMutation::create([
-                'service_id'=>$req->id,
-                'technician_id'=>Auth::user()->id,
-                'index'=>$index,
-                'status'=>$req->status,
-                'description'=>$req->description,
-                'created_by'=>Auth::user()->name,
-                'created_at'=>date('Y-m-d h:i:s'),
+                'service_id' => $req->id,
+                'technician_id' => Auth::user()->id,
+                'index' => $index,
+                'status' => $req->status,
+                'description' => $req->description,
+                'created_by' => Auth::user()->name,
+                'created_at' => date('Y-m-d h:i:s'),
             ]);
-            return Response::json(['status' => 'success','message'=>'Sukses Menyimpan Data']);
+            return Response::json(['status' => 'success', 'message' => 'Sukses Menyimpan Data']);
         } catch (\Throwable $th) {
-            return Response::json(['status' => 'error','message'=>$th]);
+            return Response::json(['status' => 'error', 'message' => $th]);
         }
     }
 }

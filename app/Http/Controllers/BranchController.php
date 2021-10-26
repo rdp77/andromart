@@ -108,7 +108,7 @@ class BranchController extends Controller
 
     public function update(Request $req, $id)
     {
-        if($req->code == Branch::find($id)->code){
+        if ($req->code == Branch::find($id)->code) {
             Validator::make($req->all(), [
                 'area_id' => ['required', 'integer'],
                 'name' => ['required', 'string', 'max:255'],
@@ -119,8 +119,7 @@ class BranchController extends Controller
                 // 'latitude' => ['double', 'max:255'],
                 // 'longitude' => ['double', 'max:255'],
             ])->validate();
-        }
-        else{
+        } else {
             Validator::make($req->all(), [
                 'area_id' => ['required', 'integer'],
                 'code' => ['required', 'string', 'max:255', 'unique:branches'],
@@ -136,16 +135,16 @@ class BranchController extends Controller
 
         Branch::where('id', $id)
             ->update([
-            'area_id' => $req->area_id,
-            'code' => $req->code,
-            'name' => $req->name,
-            'title' => $req->title,
-            'address' => $req->address,
-            'phone' => $req->phone,
-            'email' => $req->email,
-            'latitude' => $req->latitude,
-            'longitude' => $req->longitude,
-            'updated_by' => Auth::user()->name,
+                'area_id' => $req->area_id,
+                'code' => $req->code,
+                'name' => $req->name,
+                'title' => $req->title,
+                'address' => $req->address,
+                'phone' => $req->phone,
+                'email' => $req->email,
+                'latitude' => $req->latitude,
+                'longitude' => $req->longitude,
+                'updated_by' => Auth::user()->name,
             ]);
 
         $branch = Branch::find($id);

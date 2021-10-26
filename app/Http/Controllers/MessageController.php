@@ -49,20 +49,20 @@ class MessageController extends Controller
     {
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
-        $index = DB::table('purchasings')->max('id')+1;
+        $index = DB::table('purchasings')->max('id') + 1;
 
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
-        return $code = $type.$year . $month . $index;
+        return $code = $type . $year . $month . $index;
     }
     public function create()
     {
         $code     = $this->code('PCS-');
         $employee = Employee::get();
         // $items    = Item::where('name','!=','Jasa Service')->get();
-        $item     = Item::with('stock')->where('name','!=','Jasa Service')->get();
+        $item     = Item::with('stock')->where('name', '!=', 'Jasa Service')->get();
         $unit     = Unit::get();
         $branch   = Branch::get();
-        return view('pages.backend.transaction.purchase.createPurchase',compact('employee','code','item', 'unit', 'branch'));
+        return view('pages.backend.transaction.purchase.createPurchase', compact('employee', 'code', 'item', 'unit', 'branch'));
         // return view('pages.backend.transaction.purchase.createPurchase');
     }
 
@@ -99,12 +99,11 @@ class MessageController extends Controller
 
     public function update(Request $req, $id)
     {
-        if($req->code == Area::find($id)->code){
+        if ($req->code == Area::find($id)->code) {
             Validator::make($req->all(), [
                 'name' => ['required', 'string', 'max:255'],
             ])->validate();
-        }
-        else{
+        } else {
             Validator::make($req->all(), [
                 'code' => ['required', 'string', 'max:255', 'unique:areas'],
                 'name' => ['required', 'string', 'max:255'],
