@@ -34,11 +34,11 @@ class Payment extends Model
 
     public function cost()
     {
-        return $this->belongsTo('App\Models\Cost');
+        return $this->belongsTo('App\Models\AccountData');
     }
 
     public function cash()
     {
-        return $this->belongsTo('App\Models\Cash');
+        return $this->belongsTo('App\Models\AccountData');
     }
 }

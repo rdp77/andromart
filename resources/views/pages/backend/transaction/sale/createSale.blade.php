@@ -52,8 +52,8 @@
                             </select>
                         </div>
                         <div class="form-group col-12 col-md-5 col-xs-12">
-                            <label for="cash_id">{{ __('Akun') }}<code>*</code></label>
-                            <select class="select2 account validation" data-name="Akun Harus Di isi" name="cash_id">
+                            <label for="account">{{ __('Akun') }}<code>*</code></label>
+                            <select class="select2 account validation" data-name="Akun Harus Di isi" name="account">
                                 <option value="">- Select -</option>
                             </select>
                         </div>

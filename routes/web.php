@@ -65,6 +65,7 @@ require __DIR__ . '/transaction/serviceRoute.php';
 require __DIR__ . '/transaction/serviceReturnRoute.php';
 require __DIR__ . '/finance/sharingProfitRoute.php';
 require __DIR__ . '/finance/lossItemsRoute.php';
+require __DIR__ . '/finance/ReportRoute.php';
 require __DIR__ . '/transaction/saleRoute.php';
 require __DIR__ . '/transaction/paymentRoute.php';
 require __DIR__ . '/transaction/purchasingRoute.php';

@@ -287,9 +287,9 @@ function save() {
                         location.reload;
                     }else{
                         console.log(data);
-                        // swal(data.message, {
-                            // icon: "warning",
-                        // });
+                        swal(data.message, {
+                            icon: "warning",
+                        });
                     }
                 },
                 error: function(data) {

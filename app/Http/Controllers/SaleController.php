@@ -173,15 +173,32 @@ class SaleController extends Controller
         $getEmployee =  Employee::where('user_id', Auth::user()->id)->first();
         $code = $this->code('PJT');
 
-        if ($req->customer_name != null) {
-            $customerName = $req->customer_name;
-            $customerPhone = $req->customer_phone;
-            $customerAddress = $req->customer_address;
-        } else {
-            $customerName = 'Umum';
-            $customerPhone = null;
-            $customerAddress = null;
-        }
+                Sale::create([
+                    'id' => $id,
+                    'code' => $code,
+                    'user_id' => Auth::user()->id,
+                    'sales_id' => $req->sales_id,
+                    'account' => $req->account,
+                    'branch_id' => $getEmployee->branch_id,
+                    'customer_id' => $req->customer_id,
+                    'customer_name' => $customerName,
+                    'customer_address' => $customerAddress,
+                    'customer_phone' => $customerPhone,
+                    'payment_method' => $req->payment_method,
+                    'date' => date('Y-m-d'),
+                    'warranty_id' => $req->warranty,
+                    'discount_type' => $req->typeDiscount,
+                    'discount_price' => str_replace(",", '',$req->totalDiscountValue),
+                    'discount_percent' => str_replace(",", '',$req->totalDiscountPercent),
+                    'item_price' => str_replace(",", '',$req->totalSparePart),
+                    'total_price' => str_replace(",", '',$req->totalPrice),
+                    'total_profit_store' => $total_profit_store,
+                    'total_profit_sales' => $total_profit_sales,
+                    'total_profit_buyer' => $total_profit_buyer,
+                    'description' => $req->description,
+                    'created_at' =>date('Y-m-d h:i:s'),
+                    'created_by' => Auth::user()->name,
+                ]);
 
         for ($i = 0; $i < count($req->itemsDetail); $i++) {
             $sharing_profit_store[$i] = (100 - ($req->profitSharingBuyer[$i] + $req->profitSharingSales[$i])) * ((str_replace(",", '', $req->totalPriceDetail[$i])) - ($req->qtyDetail[$i] * (str_replace(",", '', $req->profitDetail[$i])))) / 100;
@@ -284,68 +301,70 @@ class SaleController extends Controller
             }
         }
 
-        // penjurnalan
-        $idJournal = DB::table('journals')->max('id') + 1;
-        Journal::create([
-            'id' => $idJournal,
-            'code' => $this->code('DD'),
-            'year' => date('Y'),
-            'date' => date('Y-m-d'),
-            'type' => 'Pembayaran Service',
-            'total' => str_replace(",", '', $req->totalPrice),
-            'ref' => $code,
-            'description' => $req->description,
-            'created_at' => date('Y-m-d h:i:s'),
-            // 'updated_at'=>date('Y-m-d h:i:s'),
-        ]);
-        if ($req->type == 'DownPayment') {
-        } else {
-            $accountService  = AccountData::where('branch_id', $getEmployee->branch_id)
-                ->where('active', 'Y')
-                ->where('main_id', 5)
-                ->where('main_detail_id', 6)
-                ->first();
+            // penjurnalan
+            $idJournal = DB::table('journals')->max('id')+1;
+            Journal::create([
+                'id' =>$idJournal,
+                'code'=>$this->code('DD'),
+                'year'=>date('Y'),
+                'date'=>date('Y-m-d'),
+                'type'=>'Pembayaran Service',
+                'total'=>str_replace(",", '',$req->totalPrice),
+                'ref'=> $code,
+                'description'=> 'Kosong',
+                'created_at'=>date('Y-m-d h:i:s'),
+                // 'updated_at'=>date('Y-m-d h:i:s'),
+            ]);
+            if($req->type == 'DownPayment'){
 
-            $accountJasa  = AccountData::where('branch_id', $getEmployee->branch_id)
-                ->where('active', 'Y')
-                ->where('main_id', 5)
-                ->where('main_detail_id', 5)
-                ->first();
-            $accountPembayaran  = AccountData::where('id', $req->account)
-                ->first();
-            $accountCode = [
-                $accountPembayaran->id,
-                $accountService->id,
-                $accountJasa->id,
-            ];
-            $totalBayar = [
-                str_replace(",", '', $req->totalPayment),
-                str_replace(",", '', $req->totalSparePart),
-                str_replace(",", '', $req->totalService),
-            ];
-            $description = [
-                $req->description,
-                $req->description,
-                $req->description,
-            ];
-            $DK = [
-                'D',
-                'K',
-                'K',
-            ];
+            }else{
+                $accountService  = AccountData::where('branch_id',$getEmployee->branch_id)
+                                    ->where('active','Y')
+                                    ->where('main_id',5)
+                                    ->where('main_detail_id',6)
+                                    ->first();
 
-            for ($i = 0; $i < count($accountCode); $i++) {
-                $idDetail = DB::table('journal_details')->max('id') + 1;
-                JournalDetail::create([
-                    'id' => $idDetail,
-                    'journal_id' => $idJournal,
-                    'account_id' => $accountCode[$i],
-                    'total' => $totalBayar[$i],
-                    'description' => $description[$i],
-                    'debet_kredit' => $DK[$i],
-                    'created_at' => date('Y-m-d h:i:s'),
-                    'updated_at' => date('Y-m-d h:i:s'),
-                ]);
+                $accountJasa  = AccountData::where('branch_id',$getEmployee->branch_id)
+                                    ->where('active','Y')
+                                    ->where('main_id',5)
+                                    ->where('main_detail_id',5)
+                                    ->first();
+                $accountPembayaran  = AccountData::where('id',$req->account)
+                                    ->first();
+                $accountCode = [
+                    $accountPembayaran->id,
+                    $accountService->id,
+                    $accountJasa->id,
+                ];
+                $totalBayar = [
+                    str_replace(",", '',$req->totalPayment),
+                    str_replace(",", '',$req->totalSparePart),
+                    str_replace(",", '',$req->totalService),
+                ];
+                $description = [
+                    $req->description,
+                    $req->description,
+                    $req->description,
+                ];
+                $DK = [
+                    'D',
+                    'K',
+                    'K',
+                ];
+
+                for ($i=0; $i <count($accountCode) ; $i++) {
+                    $idDetail = DB::table('journal_details')->max('id')+1;
+                    JournalDetail::create([
+                        'id'=>$idDetail,
+                        'journal_id'=>$idJournal,
+                        'account_id'=>$accountCode[$i],
+                        'total'=>$req->totalSparePart[$i],
+                        'description'=> 'kosong',
+                        'debet_kredit'=>$DK[$i],
+                        'created_at'=>date('Y-m-d h:i:s'),
+                        'updated_at'=>date('Y-m-d h:i:s'),
+                    ]);
+                }
             }
         }
         // DB::commit();

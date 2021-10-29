@@ -17,9 +17,9 @@ var table = $("#table").DataTable({
     columns: [
         { data: "code" },
         { data: "date" },
-        { data: "cost.code" },
-        { data: "branch.code" },
-        { data: "cash.code" },
+        { data: "cost.name" },
+        { data: "branch.name" },
+        { data: "cash.name" },
         { data: "price" },
         { data: "description" },
         { data: "action", orderable: false, searchable: true },
@@ -105,10 +105,23 @@ function del(id) {
 
 
 
-// function dropValueCost() {
-//     var costValue = $('.costValue').find(':selected').data('cost');
-//     // alert(costValue);
-//     $('#rupiah').val(parseInt(costValue).toLocaleString('en-US'));
-// }
+function dropValueCost() {
+    var costValue = $('.costValue').find(':selected').data('cost');
+    // alert(costValue);
+    $('#rupiah').val(parseInt(costValue).toLocaleString('en-US'));
+}
 
-
+function branchChange() {
+    var dataItems = [];
+    $('.cost').empty();
+    
+    var params = $('.branch').find(':selected').val();
+    $.each($('.accountData'), function(){
+        if (params == $(this).data('branch')) {
+            dataItems += '<option value="'+this.value+'">'+$(this).data('name')+'</option>';
+        }
+    });
+    $('.cost').append('<option value="">- Select -</option>');
+    $('.cost').append(dataItems);
+    // Reset Series
+}

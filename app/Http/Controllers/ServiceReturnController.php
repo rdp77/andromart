@@ -88,6 +88,8 @@ class ServiceReturnController extends Controller
                         $work_status = '<div class="badge badge-primary">Barang Diterima</div>';
                     }elseif($row->Service->work_status == 'Diambil'){
                         $work_status = '<div class="badge badge-success">Sudah Diambil</div>';
+                    }else{
+                        $work_status = '<div class="badge badge-secondary">-</div>';
                     }
 
                     if($row->Service->payment_status == 'Lunas'){
@@ -232,7 +234,7 @@ class ServiceReturnController extends Controller
                                     ->first();
                 if($accountReturn == null){
                     DB::rollback();
-                    return Response::json(['status' => 'error','message'=>'Akun Return Service Dimuka Kosong']);
+                    return Response::json(['status' => 'error','message'=>'Akun Return Service Kosong']);
                 }
                 $accountKas  = AccountData::where('branch_id',$getEmployee->branch_id)
                                     ->where('active','Y')
