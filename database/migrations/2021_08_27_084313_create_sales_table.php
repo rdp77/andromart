@@ -19,6 +19,7 @@ class CreateSalesTable extends Migration
             $table->string('code');
             $table->integer('user_id');
             $table->integer('branch_id');
+            // $table->foreignId('cash_id');
             $table->integer('customer_id')->nullable();
             $table->string('customer_name')->nullable();
             $table->string('customer_address')->nullable();
