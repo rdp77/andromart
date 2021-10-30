@@ -89,6 +89,12 @@ class SubMenuSeeder extends Seeder
                 'url' => route('loss-items.index'),
                 'hover' => '["' . route('loss-items.create') . '","' . route('loss-items.index') . '"]'
             ],
+            [
+                'menu_id' => '3',
+                'name' => 'Barang Loss Trans',
+                'url' => route('report-income-spending.reportIncomeSpending'),
+                'hover' => '["' . route('report-income-spending.reportIncomeSpending') . '"]'
+            ],
             // Master Data
             [
                 'menu_id' => '4',
