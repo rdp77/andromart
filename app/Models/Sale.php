@@ -16,15 +16,16 @@ class Sale extends Model
 
     protected $fillable = [
         'id',
+        'account',
         'code',
         'user_id',
+        // 'cash_id',
         'branch_id',
         'customer_id',
         'customer_name',
         'customer_address',
         'customer_phone',
         'date',
-        'cash_id',
         'discount_type',
         'discount_price',
         'discount_percent',
