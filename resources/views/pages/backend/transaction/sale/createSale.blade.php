@@ -58,6 +58,12 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="form-group col-12 col-md-12 col-lg-12">
+                            <label for="description">{{ __('Deskripsi') }}<code>*</code></label>
+                            <input id="description" type="text" class="form-control" name="description">
+                        </div>
+                    </div>
                     <input type="hidden" class="branchId" value="{{Auth::user()->employee->branch_id}}">
                     @foreach ($account as $el)
                     <input class="accountDataHidden" type="hidden" data-mainName="{{$el->AccountMain->name}}"

@@ -172,7 +172,7 @@ class SaleController extends Controller
         $id = DB::table('sales')->max('id') + 1;
         $getEmployee =  Employee::where('user_id', Auth::user()->id)->first();
         $code = $this->code('PJT');
-
+        // return($req);
         if ($req->customer_name != null) {
             $customerName = $req->customer_name;
             $customerPhone = $req->customer_phone;
@@ -198,42 +198,6 @@ class SaleController extends Controller
             'user_id' => Auth::user()->id,
             'sales_id' => $req->sales_id,
             'account' => $req->account,
-            'branch_id' => $getEmployee->branch_id,
-            'customer_id' => $req->customer_id,
-            'customer_name' => $customerName,
-            'customer_address' => $customerAddress,
-            'customer_phone' => $customerPhone,
-            'payment_method' => $req->payment_method,
-            'date' => date('Y-m-d'),
-            'warranty_id' => $req->warranty,
-            'discount_type' => $req->typeDiscount,
-            'discount_price' => str_replace(",", '', $req->totalDiscountValue),
-            'discount_percent' => str_replace(",", '', $req->totalDiscountPercent),
-            'item_price' => str_replace(",", '', $req->totalSparePart),
-            'total_price' => str_replace(",", '', $req->totalPrice),
-            'total_profit_store' => $total_profit_store,
-            'total_profit_sales' => $total_profit_sales,
-            'total_profit_buyer' => $total_profit_buyer,
-            'description' => $req->description,
-            'created_at' => date('Y-m-d h:i:s'),
-            'created_by' => Auth::user()->name,
-        ]);
-
-        for ($i = 0; $i < count($req->itemsDetail); $i++) {
-            $sharing_profit_store[$i] = (100 - ($req->profitSharingBuyer[$i] + $req->profitSharingSales[$i])) * ((str_replace(",", '', $req->totalPriceDetail[$i])) - ($req->qtyDetail[$i] * (str_replace(",", '', $req->profitDetail[$i])))) / 100;
-            $sharing_profit_sales[$i] = $req->profitSharingSales[$i] * ((str_replace(",", '', $req->totalPriceDetail[$i])) - ($req->qtyDetail[$i] * (str_replace(",", '', $req->profitDetail[$i])))) / 100;
-            $sharing_profit_buyer[$i] = $req->profitSharingBuyer[$i] * ((str_replace(",", '', $req->totalPriceDetail[$i])) - ($req->qtyDetail[$i] * (str_replace(",", '', $req->profitDetail[$i])))) / 100;
-            $total_profit_store = collect($sharing_profit_store)->sum();
-            $total_profit_sales = collect($sharing_profit_sales)->sum();
-            $total_profit_buyer = collect($sharing_profit_buyer)->sum();
-        }
-
-        Sale::create([
-            'id' => $id,
-            'code' => $code,
-            'user_id' => Auth::user()->id,
-            'sales_id' => $req->sales_id,
-            'cash_id' => $req->cash_id,
             'branch_id' => $getEmployee->branch_id,
             'customer_id' => $req->customer_id,
             'customer_name' => $customerName,
@@ -327,10 +291,10 @@ class SaleController extends Controller
             'code' => $this->code('DD'),
             'year' => date('Y'),
             'date' => date('Y-m-d'),
-            'type' => 'Pembayaran Service',
+            'type' => 'Penjualan',
             'total' => str_replace(",", '', $req->totalPrice),
             'ref' => $code,
-            'description' => 'Kosong',
+            'description' => $req->description,
             'created_at' => date('Y-m-d h:i:s'),
             // 'updated_at'=>date('Y-m-d h:i:s'),
         ]);
@@ -339,34 +303,20 @@ class SaleController extends Controller
             $accountService  = AccountData::where('branch_id', $getEmployee->branch_id)
                 ->where('active', 'Y')
                 ->where('main_id', 5)
-                ->where('main_detail_id', 6)
-                ->first();
-
-            $accountJasa  = AccountData::where('branch_id', $getEmployee->branch_id)
-                ->where('active', 'Y')
-                ->where('main_id', 5)
-                ->where('main_detail_id', 5)
+                ->where('main_detail_id', 7)
                 ->first();
             $accountPembayaran  = AccountData::where('id', $req->account)
                 ->first();
             $accountCode = [
                 $accountPembayaran->id,
                 $accountService->id,
-                $accountJasa->id,
-            ];
-            $totalBayar = [
-                str_replace(",", '', $req->totalPayment),
-                str_replace(",", '', $req->totalSparePart),
-                str_replace(",", '', $req->totalService),
             ];
             $description = [
-                $req->description,
                 $req->description,
                 $req->description,
             ];
             $DK = [
                 'D',
-                'K',
                 'K',
             ];
 
@@ -376,8 +326,8 @@ class SaleController extends Controller
                     'id' => $idDetail,
                     'journal_id' => $idJournal,
                     'account_id' => $accountCode[$i],
-                    'total' => $req->totalSparePart[$i],
-                    'description' => 'kosong',
+                    'total' => str_replace(",", '', $req->totalPrice),
+                    'description' => $description[$i],
                     'debet_kredit' => $DK[$i],
                     'created_at' => date('Y-m-d h:i:s'),
                     'updated_at' => date('Y-m-d h:i:s'),
