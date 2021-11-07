@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 use App\Models\Employee;
 use App\Models\Service;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
 
@@ -63,5 +64,7 @@ class AppServiceProvider extends ServiceProvider
                 ]);
             }
         });
+        config(['app.locale' => 'id']);
+        Carbon::setLocale('id');
     }
 }

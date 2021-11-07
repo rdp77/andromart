@@ -11,9 +11,8 @@
 @include('layouts.backend.components.notification')
 <div class="card">
     <div class="card-header">
-        <a href="{{ route('sale.create') }}" class="btn btn-icon icon-left btn-primary mr-2">
-            <i class="far fa-edit"></i>{{ __(' Tambah Penjualan') }}</a>
-
+        <a href="{{ route('sale-return.create') }}" class="btn btn-icon icon-left btn-primary mr-2">
+            <i class="far fa-edit"></i>{{ __(' Tambah Return Penjualan') }}</a>
         <a href="#" onclick="" class="btn btn-icon icon-left btn-danger">
             <i class="far fa-trash-alt"></i>{{ __('Recycle Bin') }}</a>
     </div>

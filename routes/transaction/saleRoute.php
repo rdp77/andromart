@@ -23,6 +23,10 @@ Route::group(['prefix' => 'transaction'], function () {
             ]);
 
         Route::resource('sale-return', SaleReturnController::class);
+        Route::get(
+            'get-sale-return',
+            [SaleReturnController::class, 'getData']
+        )->name('sale.return.data');
 
         Route::get(
             'sale/{id}',

@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
 use App\Models\Sale;
+use App\Models\SaleDetail;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\DataTables;
 
 class SaleReturnController extends Controller
@@ -120,10 +124,27 @@ class SaleReturnController extends Controller
 
     public function create()
     {
+        $item = SaleDetail::with('Sale', 'Item')->get();
+        return view('pages.backend.transaction.sale.return.createReturn', [
+            'item' => $item
+        ]);
     }
 
-    public function store()
+    public function store(Request $req)
     {
+        $warranty = Item::with('warranty')
+            ->find(SaleDetail::find($req->item)->item_id)->warranty;
+        $date = Carbon::parse(SaleDetail::with('Sale')->find($req->item)->Sale->date);
+        $dayWarranty = $this->getDayWarranty($warranty->name, $warranty->periode);
+        $warranty = $date->addDays($dayWarranty);
+
+        // dd($dayWarranty);
+        // dd($warranty->diffInDays(Carbon::now()));
+        // dd(Carbon::now()->diffInDays($warranty));
+        // dd($date->diffInDays());
+
+
+        // dd($item->warranty);
     }
 
     public function show()
@@ -140,5 +161,33 @@ class SaleReturnController extends Controller
 
     public function destroy()
     {
+    }
+
+    public function getData(Request $req)
+    {
+        $item = SaleDetail::with('Sale', 'Item')->find($req->item_id);
+
+        $data = [
+            'date' => Carbon::parse($item->Sale->date)->format('d F Y'),
+            'qty' => $item->qty,
+            'price' => number_format($item->price),
+            'total' => number_format($item->total),
+            'operator' => User::find($item->Sale->user_id)->name
+        ];
+
+        return Response::json([
+            'status' => 'success',
+            'result' => $data
+        ]);
+    }
+
+    function getDayWarranty($type, $periode)
+    {
+        if ($type == 'Minggu') {
+            $day = 7;
+        } elseif ($type == 'Bulan') {
+            $day = 30;
+        }
+        return $day + $periode;
     }
 }
