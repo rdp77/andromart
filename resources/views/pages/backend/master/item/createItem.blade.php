@@ -105,7 +105,7 @@
                     <div class="selectgroup selectgroup-pills">
                         @foreach($branch as $branch)
                         <label class="selectgroup-item">
-                          <input type="checkbox" name="branch_id[]" value="{{ $branch->id }}" class="selectgroup-input" checked="">
+                          <input type="checkbox" name="branch_id[]" value="{{ $branch->id }}" class="selectgroup-input">
                           <span class="selectgroup-button">{{ $branch->name }}</span>
                         </label>
                         @endforeach

@@ -88,8 +88,9 @@ class SaleController extends Controller
                     foreach ($row->SaleDetail as $key => $value) {
                         // $item = $value->Item()->withTrashed()->get('name');
                         $htmlAdd .=   '<tr>';
+                        $htmlAdd .=      '<th>x' . $value->qty . '</th>';
                         $htmlAdd .=      '<th>' . $value->item->name . '</th>';
-                        $htmlAdd .=      '<th>' . $value->qty . '</th>';
+                        $htmlAdd .=      '<th>(' . $value->item->warranty->periode . $value->item->warranty->name . ')</th>';
                         $htmlAdd .=   '</tr>';
                     }
                     $htmlAdd .= '<table>';
@@ -303,7 +304,7 @@ class SaleController extends Controller
             $accountService  = AccountData::where('branch_id', $getEmployee->branch_id)
                 ->where('active', 'Y')
                 ->where('main_id', 5)
-                ->where('main_detail_id', 7)
+                ->where('main_detail_id', 27)
                 ->first();
             $accountPembayaran  = AccountData::where('id', $req->account)
                 ->first();
@@ -781,6 +782,6 @@ class SaleController extends Controller
         $sale = Sale::with('SaleDetail', 'Sales', 'SaleDetail.Item', 'SaleDetail.Item.Brand', 'SaleDetail.Item.Brand.Category', 'CreatedByUser')->find($id);
         // return $Service;
         $member = User::get();
-        return view('pages.backend.transaction.sale.printSale', ['sale' => $sale, 'member' => $member]);
+        return view('pages.backend.transaction.sale.printSmallSale', ['sale' => $sale, 'member' => $member]);
     }
 }

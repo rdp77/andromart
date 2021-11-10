@@ -27,7 +27,7 @@
                         {{ __('Tanggal & operator') }}
                     </th>
                     <th>{{ __('Pelanggan') }}</th>
-                    <th>{{ __('Barang / QTY') }}</th>
+                    <th>{{ __('Qty | Barang | Garansi') }}</th>
                     <th>{{ __('Harga') }}</th>
                     <th>{{ __('Action') }}</th>
                 </tr>
