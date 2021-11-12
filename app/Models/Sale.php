@@ -94,4 +94,9 @@ class Sale extends Model
     {
         return $this->belongsTo('App\Models\Cash');
     }
+
+    public function Return()
+    {
+        return $this->hasOne(SaleReturn::class, 'sale', 'id');
+    }
 }

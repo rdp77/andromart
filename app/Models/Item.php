@@ -57,10 +57,10 @@ class Item extends Model
 
     public function getImage()
     {
-        if(!$this->avatar){
+        if (!$this->avatar) {
             return asset('assetsmaster/avatar/avatar.png');
         }
-        return asset('assetsmaster/image/item/'. $this->image);
+        return asset('assetsmaster/image/item/' . $this->image);
     }
 
     public function SaleDetail()
@@ -71,5 +71,10 @@ class Item extends Model
     public function warranty()
     {
         return $this->belongsTo('App\Models\Warranty');
+    }
+
+    public function Return()
+    {
+        return $this->hasOne(SaleReturn::class, 'item', 'id');
     }
 }

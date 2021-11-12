@@ -9,6 +9,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    <input type="hidden" name="sale" id="sale">
+                    <input type="hidden" name="item_id" id="item_id">
                     <div class="form-group">
                         <div class="d-block">
                             <label class="control-label">{{ __('Pilihan Return') }}<code>*</code></label>
@@ -21,6 +23,10 @@
                             <option value="3">{{ __('Ganti Uang') }}</option>
                             <option value="4">{{ __('Ganti Atribut') }}</option>
                         </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">{{ __('Keterangan') }}<code>*</code></label>
+                        <textarea class="form-control" name="desc" style="height: 100px"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer bg-whitesmoke br">

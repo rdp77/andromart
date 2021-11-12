@@ -20,14 +20,16 @@
         <table class="table-striped table" id="table" width="100%">
             <thead>
                 <tr>
-
-                    <th>{{ __('Faktur') }}</th>
                     <th>
-                        {{ __('Tanggal & operator') }}
+                        {{ __('No Faktur') }}
                     </th>
-                    <th>{{ __('Pelanggan') }}</th>
-                    <th>{{ __('Barang / QTY') }}</th>
-                    <th>{{ __('Harga') }}</th>
+                    <th>
+                        {{ __('Nama Barang') }}
+                    </th>
+                    <th>
+                        {{ __('Tipe') }}
+                    </th>
+                    <th>{{ __('Keterangan') }}</th>
                     <th>{{ __('Aksi') }}</th>
                 </tr>
             </thead>
@@ -38,5 +40,8 @@
 </div>
 @endsection
 @section('script')
-<script src="{{ asset('assets/pages/transaction/saleScript.js') }}"></script>
+<script>
+    var index = '{{ route('sale-return.index') }}';    
+</script>
+<script src="{{ asset('assets/pages/transaction/saleReturnIndex.js') }}"></script>
 @endsection

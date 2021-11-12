@@ -15,8 +15,9 @@ class CreateSaleReturnTable extends Migration
     {
         Schema::create('sale_return', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sale_details');
-            $table->enum('status', ['Diterima', 'Ditolak']);
+            $table->foreignId('sale');
+            $table->foreignId('item');
+            $table->string('type');
             $table->text('desc');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

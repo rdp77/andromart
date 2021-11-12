@@ -13,8 +13,9 @@ class SaleReturn extends Model
     protected $table = 'sale_return';
 
     protected $fillable = [
-        'sale_details',
-        'status',
+        'sale',
+        'item',
+        'type',
         'desc',
         'created_at',
         'updated_at',
@@ -23,4 +24,14 @@ class SaleReturn extends Model
         'updated_by',
         'deleted_by',
     ];
+
+    public function Sale()
+    {
+        return $this->belongsTo(Sale::class, 'sale', 'id');
+    }
+
+    public function Item()
+    {
+        return $this->belongsTo(Item::class, 'item', 'id');
+    }
 }

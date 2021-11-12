@@ -20,6 +20,8 @@
 <div class="card">
     <form id="stored">
         <div class="card-body">
+            <input type="hidden" name="sale" id="sale_id">
+            <input type="hidden" id="item_id_create">
             <div class="form-group">
                 <div class="d-block">
                     <label for="name" class="control-label">{{ __('Nama Barang') }}<code>*</code></label>
@@ -27,7 +29,9 @@
                 <select class="select2" name="item" id="item">
                     <option value="">{{ __('- Select -') }}</option>
                     @foreach ($item as $i)
-                    <option value="{{ $i->id }}">{{ $i->Item->name.__(' - ').$i->Sale->code }}</option>
+                    <option value="{{ $i->id.__(',').$i->Item->id }}">
+                        {{ $i->Item->name.__(' - ').$i->Sale->code }}
+                    </option>
                     @endforeach
                 </select>
             </div>
@@ -92,6 +96,7 @@
     var index = '{{ route('sale-return.index') }}';
     var service = '{{ route('service.index') }}';
     var returnURL = '{{ route('sale.return.type') }}';
+    var buy = '{{ route('purchase.create') }}';
 </script>
 <script src="{{ asset('assets/pages/transaction/sale-return.js') }}"></script>
 @endsection

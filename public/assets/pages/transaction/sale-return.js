@@ -21,6 +21,8 @@ $("#item").on("change", function () {
             $("#price").val(data.result.price);
             $("#total").val(data.result.total);
             $("#operator").val(data.result.operator);
+            $("#sale_id").val(data.result.sale);
+            $("#item_id_create").val(data.result.item);
         },
     });
 });
@@ -57,6 +59,8 @@ function save() {
 
 function returnType() {
     var form = $("#return");
+    $("#sale").val($("#sale_id").val());
+    $("#item_id").val($("#item_id_create").val());
     var formdata = new FormData(form[0]);
     $.ajax({
         url: returnURL,
@@ -87,8 +91,15 @@ function returnType() {
                 swal(data.data, {
                     icon: "info",
                 }).then(function () {
-                    window.location = index;
+                    window.location = buy;
                 });
+            } else if (data.status == "error") {
+                for (var number in data.data) {
+                    iziToast.error({
+                        title: "Error",
+                        message: data.data[number],
+                    });
+                }
             }
         },
     });
