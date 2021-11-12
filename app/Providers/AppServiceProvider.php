@@ -10,7 +10,6 @@ use App\Models\Service;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
-use Carbon\carbon;
 class AppServiceProvider extends ServiceProvider
 {
     /**
