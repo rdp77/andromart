@@ -210,12 +210,12 @@ class SubMenuSeeder extends Seeder
                 'url' => route('icon.index'),
                 'hover' => '["' . route('icon.create') . '","' . route('icon.index') . '"]'
             ],
-            [
-                'menu_id' => '4',
-                'name' => 'Menu',
-                'url' => route('menu.index'),
-                'hover' => '["' . route('menu.create') . '","' . route('menu.index') . '"]'
-            ],
+            // [
+            //     'menu_id' => '4',
+            //     'name' => 'Menu',
+            //     'url' => route('menu.index'),
+            //     'hover' => '["' . route('menu.create') . '","' . route('menu.index') . '"]'
+            // ],
             [
                 'menu_id' => '5',
                 'name' => 'Stok',

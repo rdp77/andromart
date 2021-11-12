@@ -22,8 +22,6 @@ Route::group(['prefix' => 'transaction'], function () {
                 'show',
             ]);
 
-        Route::resource('sale-return', SaleReturnController::class);
-
         Route::get(
             'sale/{id}',
             [SaleController::class, 'printSale']
@@ -33,5 +31,16 @@ Route::group(['prefix' => 'transaction'], function () {
             'sale-print/{id}',
             [SaleController::class, 'printSmallSale']
         )->name('sale.printSmallSale');
+
+        // Return
+        Route::resource('sale-return', SaleReturnController::class);
+        Route::get(
+            'get-sale-return',
+            [SaleReturnController::class, 'getData']
+        )->name('sale.return.data');
+        Route::post(
+            'sale-type-return',
+            [SaleReturnController::class, 'getType']
+        )->name('sale.return.type');
     });
 });

@@ -102,4 +102,13 @@ class DashboardController extends Controller
 
         return $date = $year . '-' . $month . '-' . $day;
     }
+
+    public function validator($validator)
+    {
+        $data = array();
+        foreach ($validator as $message) {
+            array_push($data, $message);
+        }
+        return $data;
+    }
 }

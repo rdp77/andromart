@@ -25,6 +25,5 @@ Route::group(['prefix' => 'transaction'], function () {
             'service-get-data',
             [ServiceReturnController::class, 'serviceGetData']
         )->name('service-return.serviceGetData');
-
     });
 });
