@@ -57,7 +57,10 @@ class ReportIncomeSpendingController extends Controller
     public function searchReportIncomeSpending(Request $req)
     {
         // return $req->all();
-        $data = Journal::with('JournalDetail','JournalDetail.AccountData')->whereBetween('date', [$this->DashboardController->changeMonthIdToEn($req->dateS), $this->DashboardController->changeMonthIdToEn($req->dateE)])
+        $data = Journal::with('JournalDetail','JournalDetail.AccountData')
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($req->dateS))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($req->dateE))
+        // ->whereBetween('date', [$this->DashboardController->changeMonthIdToEn($req->dateS), $this->DashboardController->changeMonthIdToEn($req->dateE)])
         ->get();
 
         if(count($data) == 0){

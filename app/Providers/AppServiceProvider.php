@@ -9,7 +9,7 @@ use App\Models\Employee;
 use App\Models\Service;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
-
+use Carbon\carbon;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -29,6 +29,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        config(['app.locale' => 'id']);
+	    Carbon::setLocale('id');
+
         if (Schema::hasTable('menu') and Schema::hasTable('submenu')) {
             View::share('menu', Menu::with('SubMenu')->get());
         }

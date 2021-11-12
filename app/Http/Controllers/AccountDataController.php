@@ -58,45 +58,57 @@ class AccountDataController extends Controller
 
     public function store(Request $req)
     {
-        // Validator::make($req->all(), [
-        //     'code' => ['required', 'string', 'max:255', 'unique:areas'],
-        //     'name' => ['required', 'string', 'max:255'],
-        // ])->validate();
-        $AccountMainDetail = AccountMainDetail::where('id', $req->account_detail_id)->first();
-        $AccountMain       = AccountMain::where('id', $AccountMainDetail->main_id)->first();
-        $Branch            = Branch::where('id', $req->branch_id)->first();
-        $Area              = Area::where('id', $Branch->area_id)->first();
+        DB::beginTransaction();
+        try {
 
-        $code = $AccountMain->code . $AccountMainDetail->code . $Area->code . $Branch->code;
+            $AccountMainDetail = AccountMainDetail::where('id', $req->account_detail_id)->first();
+            $AccountMain       = AccountMain::where('id', $AccountMainDetail->main_id)->first();
+            $Branch            = Branch::where('id', $req->branch_id)->first();
+            $Area              = Area::where('id', $Branch->area_id)->first();
 
-        $id = DB::table('account_data')->max('id') + 1;
-        AccountData::create([
-            'id' => $id,
-            'code' => $code,
-            'name' => $req->name,
-            'area_id' => $Branch->area_id,
-            'branch_id' => $req->branch_id,
-            'debet_kredit' => $req->debet_kredit,
-            'active' => $req->active,
-            'account_type' => '-',
-            'main_id' => $AccountMainDetail->main_id,
-            'main_detail_id' => $req->account_detail_id,
-            'opening_balance' => $req->opening_balance,
-            'opening_date' => date('Y-m-d'),
-            'created_by' => Auth::user()->name,
-        ]);
+            $code = $AccountMain->code . $AccountMainDetail->code . $Area->code . $Branch->code;
 
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Membuat master area baru'
-        );
 
-        return Redirect::route('account-data.index')
-            ->with([
-                'status' => 'Berhasil membuat master akun baru',
-                'type' => 'success'
+            $checkCode = AccountData::where('code', $code)->get();
+
+            if(count($checkCode) != 0){
+                return Response::json(['status' => 'fail','message'=>'Data Sudah Ada','result'=>$checkCode]);
+            }
+
+            $id = DB::table('account_data')->max('id') + 1;
+            AccountData::create([
+                'id' => $id,
+                'code' => $code,
+                'name' => $req->name,
+                'area_id' => $Branch->area_id,
+                'branch_id' => $req->branch_id,
+                'debet_kredit' => $req->debet_kredit,
+                'active' => $req->active,
+                'account_type' => '-',
+                'main_id' => $AccountMainDetail->main_id,
+                'main_detail_id' => $req->account_detail_id,
+                'opening_balance' => $req->opening_balance,
+                'opening_date' => date('Y-m-d'),
+                'created_by' => Auth::user()->name,
             ]);
+
+            $this->DashboardController->createLog(
+                $req->header('user-agent'),
+                $req->ip(),
+                'Membuat master area baru'
+            );
+
+            DB::commit();
+            return Redirect::route('account-data.index')
+                ->with([
+                    'status' => 'Berhasil membuat master akun baru',
+                    'type' => 'success'
+                ]);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return $th;
+            //throw $th;
+        }
     }
 
     public function show(Area $area)

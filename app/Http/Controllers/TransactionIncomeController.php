@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Payment;
+use App\Models\Income;
 use App\Models\Branch;
 use App\Modcels\Cash;
 use App\Models\AccountData;
@@ -20,7 +21,7 @@ use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 use Carbon\carbon;
 
-class PaymentController extends Controller
+class TransactionIncomeController extends Controller
 {
     public function __construct(DashboardController $DashboardController)
     {
@@ -31,7 +32,7 @@ class PaymentController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Payment::with('cost', 'branch', 'cash')->get();
+            $data = Income::with('cost', 'branch', 'cash')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('date', function ($row) {
@@ -64,14 +65,14 @@ class PaymentController extends Controller
                 ->rawColumns(['action', 'date', 'price'])
                 ->make(true);
         }
-        return view('pages.backend.transaction.payment.indexPayment');
+        return view('pages.backend.transaction.income.indexIncome');
     }
 
     // public function code($type)
     // {
     //     $month = Carbon::now()->format('m');
     //     $year = Carbon::now()->format('y');
-    //     $index = DB::table('payments')->max('id')+1;
+    //     $index = DB::table('transaction_income')->max('id')+1;
 
     //     $index = str_pad($index, 3, '0', STR_PAD_LEFT);
     //     return $code = $type.$year . $month . $index;
@@ -81,7 +82,7 @@ class PaymentController extends Controller
         $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
-        $index = DB::table('payments')->max('id') + 1;
+        $index = DB::table('transaction_income')->max('id') + 1;
 
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
         return $code = $type.$getEmployee->Branch->code.$year . $month . $index;
@@ -98,12 +99,12 @@ class PaymentController extends Controller
     }
     public function create()
     {
-        $code = $this->code('SPND');
+        $code = $this->code('INCM');
         $branch = Branch::get();
         $cash = AccountData::get();
         $cost = Cost::get();
 
-        return view('pages.backend.transaction.payment.createPayment', compact('cash', 'code', 'branch', 'cost'));
+        return view('pages.backend.transaction.income.createIncome', compact('cash', 'code', 'branch', 'cost'));
     }
 
     public function store(Request $req)
@@ -115,10 +116,10 @@ class PaymentController extends Controller
         
         $date = $this->DashboardController->changeMonthIdToEn($req->date);
 
-        Payment::create([
+        Income::create([
             'code' => $req->code,
             'date' => $date,
-            'cost_id' => $req->cost_id,
+            'income_id' => $req->income_id,
             'branch_id' => $req->branch_id,
             'cash_id' => $req->cash_id,
             'price' => str_replace(",", '', $req->price),
@@ -144,7 +145,7 @@ class PaymentController extends Controller
         $accountPembayaran  = AccountData::where('id',$req->account)
                             ->first();
         $accountCode = [
-            $req->cost_id,
+            $req->income_id,
             $req->cash_id,
         ];  
         $totalBayar = [
@@ -181,12 +182,12 @@ class PaymentController extends Controller
             'Membuat transaksi pembayaran baru'
         );
 
-            DB::commit();
-            return Redirect::route('payment.index')
-            ->with([
-                'status' => 'Berhasil membuat transaksi pembayaran baru',
-                'type' => 'success'
-            ]);
+        DB::commit();
+        return Redirect::route('income.index')
+        ->with([
+            'status' => 'Berhasil membuat transaksi pembayaran baru',
+            'type' => 'success'
+        ]);
        
 
         } catch (\Throwable $th) {
@@ -203,13 +204,13 @@ class PaymentController extends Controller
 
     public function edit($id)
     {
-        $branch = Branch::where('id', '!=', Payment::find($id)->branch_id)->get();
-        $cost = Cost::where('id', '!=', Payment::find($id)->cost_id)->get();
-        $cash = Cash::where('id', '!=', Payment::find($id)->cash_id)->get();
-        $payment = Payment::find($id);
+        $branch = Branch::where('id', '!=', Income::find($id)->branch_id)->get();
+        $cost = Cost::where('id', '!=', Income::find($id)->income_id)->get();
+        $cash = Cash::where('id', '!=', Income::find($id)->cash_id)->get();
+        $payment = Income::find($id);
 
         return view(
-            'pages.backend.transaction.payment.updatePayment',
+            'pages.backend.transaction.income.updateIncome',
             ['payment' => $payment, 'branch' => $branch, 'cash' => $cash, 'cost' => $cost]
         );
     }
@@ -218,7 +219,7 @@ class PaymentController extends Controller
     {
         Type::where('id', $id)
             ->update([
-                'cost_id' => $req->cost_id,
+                'income_id' => $req->income_id,
                 'branch_id' => $req->branch_id,
                 'description' => $req->description,
                 'updated_by' => Auth::user()->name,
@@ -232,7 +233,7 @@ class PaymentController extends Controller
             $req->ip(),
             'Menghapus Data Pengeluaran'
         );
-        Payment::destroy($id);
+        Income::destroy($id);
         return Response::json(['status' => 'success']);
     }
     

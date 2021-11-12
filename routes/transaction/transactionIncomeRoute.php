@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\TransactionIncomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,15 +15,15 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'transaction'], function () {
-    Route::group(['prefix' => 'payment'], function () {
-        Route::resource('payment', PaymentController::class)
+    Route::group(['prefix' => 'income'], function () {
+        Route::resource('income', TransactionIncomeController::class)
             ->except([
                 'show',
             ]);
 
         Route::post(
             'check-journals',
-            [PaymentController::class, 'paymentCheckJournals']
+            [TransactionIncomeController::class, 'paymentCheckJournals']
         )->name('payment.paymentCheckJournals');
     });
 });

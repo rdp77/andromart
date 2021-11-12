@@ -47,23 +47,23 @@
                             @endforeach
 
                             @php
-                            $total = 0;
-                        @endphp
-                        @foreach ($sharingProfit as $i => $el)
-                            <li class="media">
-                                <i class="fas fa-phone" style="font-size: 50px;margin-right:20px"></i>
-                                <div class="media-body">
-                                    <div class="media-title">{{ $el->name }}</div>
-                                    <div class="mt-1">
-                                        <div class="budget-price">
-                                            <div class="budget-price-square bg-primary" data-width="64%"
-                                                style="width: 64%;"></div>
-                                            <div class="budget-price-label">{{ $sharingProfit1[$i] }}</div>
+                                $total = 0;
+                            @endphp
+                            @foreach ($sharingProfit as $i => $el)
+                                <li class="media">
+                                    <i class="fas fa-phone" style="font-size: 50px;margin-right:20px"></i>
+                                    <div class="media-body">
+                                        <div class="media-title">{{ $el->name }}</div>
+                                        <div class="mt-1">
+                                            <div class="budget-price">
+                                                <div class="budget-price-square bg-primary" data-width="64%"
+                                                    style="width: 64%;"></div>
+                                                <div class="budget-price-label">{{ $sharingProfit1[$i] }}</div>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                            </li>
-                        @endforeach
+                                </li>
+                            @endforeach
                         </ul>
                     </div>
                     <div class="card-footer pt-3 d-flex justify-content-center">
