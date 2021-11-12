@@ -48,6 +48,47 @@ function save() {
                         message: data.data[number],
                     });
                 }
+            } else if (data.status == "service") {
+                $("#exampleModal").modal("show");
+            }
+        },
+    });
+}
+
+function returnType() {
+    var form = $("#return");
+    var formdata = new FormData(form[0]);
+    $.ajax({
+        url: returnURL,
+        data: formdata ? formdata : form.serialize(),
+        type: "POST",
+        processData: false,
+        contentType: false,
+        success: function (data) {
+            if (data.status == "loss") {
+                swal(data.data, {
+                    icon: "info",
+                }).then(function () {
+                    window.location = service;
+                });
+            } else if (data.status == "new") {
+                swal(data.data, {
+                    icon: "info",
+                }).then(function () {
+                    window.location = index;
+                });
+            } else if (data.status == "money") {
+                swal(data.data, {
+                    icon: "info",
+                }).then(function () {
+                    window.location = index;
+                });
+            } else if (data.status == "att") {
+                swal(data.data, {
+                    icon: "info",
+                }).then(function () {
+                    window.location = index;
+                });
             }
         },
     });

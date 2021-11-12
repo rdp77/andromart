@@ -82,11 +82,16 @@
     </form>
 </div>
 @endsection
+@section('modal')
+@include('pages.backend.transaction.sale.return.components.modalReturn')
+@endsection
 @section('script')
 <script>
     var getdata = '{{ route('sale.return.data') }}';
     var url = '{{ route('sale-return.store') }}';
     var index = '{{ route('sale-return.index') }}';
+    var service = '{{ route('service.index') }}';
+    var returnURL = '{{ route('sale.return.type') }}';
 </script>
 <script src="{{ asset('assets/pages/transaction/sale-return.js') }}"></script>
 @endsection

@@ -134,17 +134,26 @@ class SaleReturnController extends Controller
     {
         $warranty = Item::with('warranty')
             ->find(SaleDetail::find($req->item)->item_id)->warranty;
+        // Mengambil Tanggal Faktur Dikeluarkan
         $date = Carbon::parse(SaleDetail::with('Sale')->find($req->item)->Sale->date);
+        // Mengambil Jarak Garansi
         $dayWarranty = $this->getDayWarranty($warranty->name, $warranty->periode);
+        // Mengambil Tanggal Garansi
         $warranty = $date->addDays($dayWarranty);
-
-        // dd($dayWarranty);
-        // dd($warranty->diffInDays(Carbon::now()));
-        // dd(Carbon::now()->diffInDays($warranty));
-        // dd($date->diffInDays());
-
-
-        // dd($item->warranty);
+        // Check Garansi
+        if (Carbon::now()->diffInDays($warranty) < 0) {
+            return Response::json([
+                'status' => 'error',
+                'data' => array(
+                    "Barang tidak bisa di return, karena melewati masa garansi"
+                )
+            ]);
+        } else {
+            return Response::json([
+                'status' => 'service',
+                'data' => 'Barang masih ada garansi, pilih metode return!'
+            ]);
+        }
     }
 
     public function show()
@@ -189,5 +198,40 @@ class SaleReturnController extends Controller
             $day = 30;
         }
         return $day + $periode;
+    }
+
+    public function getType(Request $req)
+    {
+        switch ($req->type) {
+            case 1:
+                return Response::json([
+                    'status' => 'loss',
+                    'data' => "Barang akan diservice dan barang yang digantikan akan dijadikan barang loss sales!"
+                ]);
+                break;
+            case 2:
+                // Sedangkan ssd rusak iku maeng akan di return ng supplier. Dadi mutasi barang ssd dengan keterangan barang direturn ng supplier.
+                return Response::json([
+                    'status' => 'new',
+                    'data' => "Barang akan diganti baru dan barang lama akan di return ke supplier!"
+                ]);
+                break;
+            case 3:
+                return Response::json([
+                    'status' => 'money',
+                    'data' => "Barang akan direturn menggunakan uang!"
+                ]);
+                break;
+            case 4:
+                return Response::json([
+                    'status' => 'att',
+                    'data' => "Barang akan diganti sesuai keinginan dan barang lama akan dibeli toko dan masuk ke dalam st!"
+                ]);
+                break;
+        }
+    }
+
+    function storedReturn()
+    {
     }
 }
