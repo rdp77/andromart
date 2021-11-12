@@ -392,7 +392,7 @@ class ServiceController extends Controller
                         $desc[$i] = 'Pengeluaran Barang Loss Pada Service ' . $codeNota;
                     }
                     Stock::where('item_id', $req->itemsDetail[$i])
-                        ->where('branch_id', Auth::user()->id)->update([
+                        ->where('branch_id', $getEmployee->branch_id)->update([
                             'stock'      => $checkStock[$i][0]->stock - $req->qtyDetail[$i],
                         ]);
                     StockMutation::create([

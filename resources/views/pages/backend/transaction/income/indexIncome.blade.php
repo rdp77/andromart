@@ -1,9 +1,9 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__(' | Pengeluaran'))
-@section('titleContent', __('Pengeluaran'))
+@section('title', __('pages.title').__(' | Pemasukan'))
+@section('titleContent', __('Pemasukan'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
-<div class="breadcrumb-item active">{{ __('Pengeluaran') }}</div>
+<div class="breadcrumb-item active">{{ __('Pemasukan') }}</div>
 @endsection
 
 @section('content')
@@ -11,8 +11,8 @@
 @include('layouts.backend.components.notification')
 <div class="card">
     <div class="card-header">
-        <a href="{{ route('payment.create') }}" class="btn btn-icon icon-left btn-primary">
-            <i class="far fa-edit"></i>{{ __(' Tambah Pengeluaran') }}</a>
+        <a href="{{ route('income.create') }}" class="btn btn-icon icon-left btn-primary">
+            <i class="far fa-edit"></i>{{ __(' Tambah Pemasukan') }}</a>
     </div>
     <div class="card-body">
         <table class="table-striped table" id="table" width="100%">
@@ -22,7 +22,7 @@
                         {{ __('Kode') }}
                     </th>
                     <th style = "width: 12%">{{ __('Tanggal') }}</th>
-                    <th>{{ __('Biaya') }}</th>
+                    <th>{{ __('Masuk') }}</th>
                     <th>{{ __('Cabang') }}</th>
                     <th>{{ __('Kass') }}</th>
                     <th>{{ __('Total') }}</th>
@@ -67,5 +67,5 @@
 </div>
 @endsection
 @section('script')
-<script src="{{ asset('assets/pages/transaction/paymentScript.js') }}"></script>
+<script src="{{ asset('assets/pages/transaction/incomeScript.js') }}"></script>
 @endsection

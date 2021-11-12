@@ -10,7 +10,7 @@ var table = $("#table").DataTable({
         [10, 25, 50, "Semua"],
     ],
     ajax: {
-        url: "/transaction/payment/payment",
+        url: "/transaction/income/income",
         type: "GET",
     },
     dom: '<"html5buttons">lBrtip',
@@ -88,7 +88,7 @@ function del(id) {
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url: "/transaction/payment/payment/" + id,
+                url: "/transaction/income/income/" + id,
                 type: "DELETE",
                 success: function () {
                     swal("Data master berhasil dihapus", {
@@ -130,7 +130,7 @@ function jurnal(params) {
     $('.dropHereJournals').empty();
     // $('.dropHereJournals').
     $.ajax({
-        url: "/transaction/payment/check-journals",
+        url: "/transaction/income/check-journals",
         data: {id:params},
         type: 'POST',
         success: function(data) {

@@ -11,6 +11,7 @@ class SharingProfit extends Model
     protected $table = 'sharing_profit';
     protected $fillable = [
         'id',
+        'code',
         'date',
         'date_start',
         'date_end',
