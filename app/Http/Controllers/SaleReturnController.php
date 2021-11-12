@@ -96,6 +96,14 @@ class SaleReturnController extends Controller
 
     public function store(Request $req)
     {
+        // Validator
+        if ($req->item == null) {
+            return Response::json([
+                'status' => 'error',
+                'data' => array("Pilih barang terlebih dahulu!")
+            ]);
+        }
+        // Initialization
         $warranty = Item::with('warranty')
             ->find(SaleDetail::find($req->item)->item_id)->warranty;
         // Mengambil Tanggal Faktur Dikeluarkan

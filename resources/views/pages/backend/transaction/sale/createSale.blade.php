@@ -217,7 +217,6 @@
                         </tr>
                     </thead>
                     <tbody class="dropHereItem" style="border: none !important">
-
                     </tbody>
                 </table>
             </div>
