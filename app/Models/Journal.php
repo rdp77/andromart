@@ -27,4 +27,12 @@ class Journal extends Model
     {
         return $this->hasMany('App\Models\JournalDetail', 'journal_id', 'id');
     }
+    public function ServicePayment()
+    {
+        return $this->belongsTo('App\Models\ServicePayment', 'ref', 'code');
+    }
+    public function Sale()
+    {
+        return $this->belongsTo('App\Models\Sale', 'ref', 'code');
+    }
 }

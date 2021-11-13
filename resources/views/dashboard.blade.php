@@ -32,7 +32,7 @@
                             @endphp
                             @foreach ($sharingProfit as $i => $el)
                                 <li class="media">
-                                    <i class="fas fa-phone" style="font-size: 50px;margin-right:20px"></i>
+                                    {{-- <i class="fas fa-phone" style="font-size: 50px;margin-right:20px"></i> --}}
                                     <div class="media-body">
                                         <div class="media-title">{{ $el->name }}</div>
                                         <div class="mt-1">
@@ -51,7 +51,7 @@
                             @endphp
                             @foreach ($sharingProfit as $i => $el)
                                 <li class="media">
-                                    <i class="fas fa-phone" style="font-size: 50px;margin-right:20px"></i>
+                                    {{-- <i class="fas fa-phone" style="font-size: 50px;margin-right:20px"></i> --}}
                                     <div class="media-body">
                                         <div class="media-title">{{ $el->name }}</div>
                                         <div class="mt-1">
@@ -119,40 +119,110 @@
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12">
             <div class="card card-statistic-2">
-                <div class="card-chart">
-                    <canvas id="balance-chart" height="80"></canvas>
-                </div>
                 <div class="card-icon shadow-primary bg-primary">
-                    <i class="fas fa-dollar-sign"></i>
+                    <i class="fas fa-shopping-bag"></i>
                 </div>
                 <div class="card-wrap">
                     <div class="card-header">
-                        <h4>Balance</h4>
+                        <h4>Pendapatan Kotor</h4>
                     </div>
                     <div class="card-body">
-                        $187,13
+                        @php
+                            $totalKeseluruhanPendapatan = 0;
+                            $totalCash = 0;
+                            $totalDebit = 0;
+                            $totalTransfer = 0;
+                        @endphp
+                        @foreach ($dataPendapatan as $i => $el)
+                            @php
+                                $totalKeseluruhanPendapatan+=$el->total;
+                            @endphp
+                            @if ($el->type == 'Pembayaran Service')
+                                @if ($el->ServicePayment->payment_method == 'Cash')
+                                    @php
+                                        $totalCash+=$el->total;
+                                    @endphp
+                                @elseif ($el->ServicePayment->payment_method == 'Debit')
+                                    @php
+                                        $totalDebit+=$el->total;
+                                    @endphp
+                                @elseif ($el->ServicePayment->payment_method == 'Transfer')
+                                    @php
+                                        $totalTransfer+=$el->total;
+                                    @endphp
+                                @endif 
+                            @elseif($el->type == 'Penjualan')
+
+                             @php
+                                 
+                             @endphp
+                            @endif
+
+                        @endforeach
+                        {{number_format($totalKeseluruhanPendapatan,0,',','.')}}
+                    </div>
+                    <div class="card-footer">
+                        <table class="table">
+                            <tr>
+                                <th>Cash</th>
+                                <th><b>{{number_format($totalCash,0,',','.')}}</b></th>
+                            </tr>
+                            <tr>
+                                <th>Debet</th>
+                                <th><b>{{number_format($totalDebit,0,',','.')}}</b></th>
+                            </tr>
+                            <tr>
+                                <th>Transfer</th>
+                                <th><b>{{number_format($totalTransfer,0,',','.')}}</b></th>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
         <div class="col-lg-4 col-md-4 col-sm-12">
             <div class="card card-statistic-2">
-                <div class="card-chart">
-                    <canvas id="sales-chart" height="80"></canvas>
-                </div>
+                
                 <div class="card-icon shadow-primary bg-primary">
                     <i class="fas fa-shopping-bag"></i>
                 </div>
                 <div class="card-wrap">
                     <div class="card-header">
-                        <h4>Sales</h4>
+                        <h4>Traffic</h4>
                     </div>
                     <div class="card-body">
                         4,732
                     </div>
                 </div>
             </div>
+            <div class="card card-statistic-2">
+                
+                <div class="card-icon shadow-primary bg-primary">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <div class="card-wrap">
+                    <div class="card-header">
+                        <h4>Service In</h4>
+                      </div>
+                    <div class="card-body">
+                        {{$dataServiceTotal}}
+                    </div>
+                    <div class="card-footer">
+                        <table class="table">
+                            <tr>
+                                <th>Handphone</th>
+                                <th><b>{{number_format($dataServiceHandphone,0,',','.')}}</b></th>
+                            </tr>
+                            <tr>
+                                <th>Laptop</th>
+                                <th><b>{{number_format($dataServiceLaptop,0,',','.')}}</b></th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
+        
     </div>
     <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6 col-12">

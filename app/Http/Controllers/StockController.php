@@ -73,7 +73,7 @@ class StockController extends Controller
 
     public function create()
     {
-        $item = Item::where('id', '!=', '1')->orderBy('name', 'asc')->get();
+        $item = Item::where('id', '!=', '1')->orderBy('brand_id', 'asc')->get();
         $branch = Branch::get();
         $unit = Unit::orderBy('name', 'asc')->get();
         return view('pages.backend.warehouse.stock.createStock', compact('item', 'branch', 'unit'));

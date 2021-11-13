@@ -180,6 +180,8 @@ class ServicePaymentController extends Controller
                 'date'=>$dateConvert,
                 'total'=>str_replace(",", '',$req->totalPayment),
                 'type'=>$req->type,
+                'payment_method'=>$req->paymentMethod,
+                'account'=>$req->account,
                 'description'=>$req->description,
                 'created_by' => Auth::user()->name,
                 'created_at' => date('Y-m-d h:i:s'),

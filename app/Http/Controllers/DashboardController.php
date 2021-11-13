@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Log;
 use App\Models\User;
+use App\Models\Journal;
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\URL;
@@ -29,6 +31,19 @@ class DashboardController extends Controller
 
     public function index()
     {
+        // return 'asd';
+        $dataServiceTotal = Service::count();
+        $dataServiceHandphone = Service::where('type','2')->count();
+        $dataServiceLaptop = Service::where('type','3')->count();
+
+        $dataPendapatan = Journal::with('ServicePayment','Sale')
+        ->where('journals.date',date('Y-m-d'))
+        ->where(function ($query) {
+            $query->where('journals.type', 'Pembayaran Service')
+                ->orWhere('journals.type', 'Penjualan');
+        })
+        ->get();
+        //   return $dataPendapatan;
         $log = Log::limit(7)->get();
         $users = User::count();
         $logCount = Log::where('u_id', Auth::user()->id)
@@ -36,7 +51,11 @@ class DashboardController extends Controller
         return view('dashboard', [
             'log' => $log,
             'users' => $users,
-            'logCount' => $logCount
+            'logCount' => $logCount,
+            'dataPendapatan'=>$dataPendapatan,
+            'dataServiceTotal'=>$dataServiceTotal,
+            'dataServiceHandphone'=>$dataServiceHandphone,
+            'dataServiceLaptop'=>$dataServiceLaptop,
         ]);
     }
 

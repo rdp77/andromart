@@ -53,7 +53,7 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="type">{{ __('Pembayaran') }}<code>*</code></label>
-                            <select class="select2 PaymentMethod validation" data-name="Metode Pembayaran Harus Di isi"  name="PaymentMethod" onchange="paymentMethodChange()">
+                            <select class="select2 PaymentMethod validation" data-name="Metode Pembayaran Harus Di isi"  name="paymentMethod" onchange="paymentMethodChange()">
                                 <option value="">- Select -</option>
                                 <option value="Cash">Cash</option>
                                 <option value="Debit">Debit</option>

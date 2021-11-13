@@ -37,38 +37,37 @@
                                     @endforeach
                                 </select>
                             </div>
+                            <select class="select2 validation" name="sales_id" data-name="Sales">
+                                <option value="">- Select -</option>
+                                @foreach ($sales as $sales)
+                                <option value="{{$sales->id}}">{{$sales->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label for="date">{{ __('Tanggal') }}<code>*</code></label>
-                                <input id="date" type="text" class="form-control" value="{{date('d F Y')}}" name="date"
-                                    readonly>
-                            </div>
-                            <div class="form-group">
-                                <label for="payment_method" class="control-label">
-                                    {{ __('Metode Pembayaran') }}<code>*</code>
-                                </label>
-                                <select class="select2 PaymentMethod validation"
-                                    data-name="Metode Pembayaran Harus Di isi" name="PaymentMethod"
-                                    onchange="paymentMethodChange()">
-                                    <option value="">{{ __('- Select -') }}</option>
-                                    <option value="Cash">{{ __('Cash') }}</option>
-                                    <option value="Debit">{{ __('Debit') }}</option>
-                                    <option value="Transfer">{{ __('Transfer') }}</option>
-                                </select>
-                            </div>
+                        <div class="form-group col-12 col-md-3 col-xs-12">
+                            <label for="payment_method" class="control-label">{{ __('Metode Pembayaran')
+                                }}<code>*</code></label>
+                            <select class="select2 PaymentMethod validation" data-name="Metode Pembayaran"
+                                name="PaymentMethod" onchange="paymentMethodChange()">
+                                <option value="">- Select -</option>
+                                <option value="Cash">Cash</option>
+                                <option value="Debit">Debit</option>
+                                <option value="Transfer">Transfer</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-12 col-md-5 col-xs-12">
+                            <label for="account">{{ __('Akun Kas') }}<code>*</code></label>
+                            <select class="select2 account validation" data-name="Akun Kas" name="account">
+                                <option value="">- Select -</option>
+                            </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="account">{{ __('Akun') }}<code>*</code></label>
-                        <select class="select2 account validation" data-name="Akun Harus Di isi" name="account">
-                            <option value="">{{ __('- Select -') }}</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="description">{{ __('Deskripsi') }}<code>*</code></label>
-                        <textarea name="description" class="form-control" id="description" style="height: 100px">
-                        </textarea>
+                    <div class="row">
+                        <div class="form-group col-12 col-md-12 col-lg-12">
+                            <label for="description">{{ __('Deskripsi') }}<code>*</code></label>
+                            <input id="description" type="text" data-name="Deskripsi" class="form-control validation"
+                                name="description">
+                        </div>
                     </div>
                     <input type="hidden" class="branchId" value="{{Auth::user()->employee->branch_id}}">
                     @foreach ($account as $el)
