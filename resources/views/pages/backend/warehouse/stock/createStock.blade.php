@@ -25,7 +25,7 @@
                     <label for="item_id">{{ __('Item') }}</label><code>*</code>
                     <select name="item_id" id="item_id" class="select2">
                         @foreach ($item as $item)
-                        <option value="{{ $item->id }}">{{ $item->brand->name }} - {{ $item->name }}</option>
+                        <option value="{{ $item->id }}">{{ $item->brand->category->code }} - {{ $item->brand->name }} {{ $item->name }}</option>
                         @endforeach
                     </select>
                 </div>
@@ -44,9 +44,11 @@
                     </select>
                 </div>
             </div>
-            <div class="form-group col-md-6 col-xs-12">
-                <label for="description" class="control-label">{{ __('Description') }}</label>
-                <input id="description" type="text" class="form-control" name="description">
+            <div class="row">
+                <div class="form-group col-md-6 col-xs-12">
+                    <label for="description" class="control-label">{{ __('Description') }}</label>
+                    <input id="description" type="text" class="form-control" name="description">
+                </div>
             </div>
         </div>
         <div class="card-footer text-right">

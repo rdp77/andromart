@@ -168,8 +168,8 @@ class SaleController extends Controller
     public function store(Request $req)
     {
         // return [$req->profitSharingBuyer,$req->profitSharingSales,$req->totalPriceDetail];
-        //     DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
         $id = DB::table('sales')->max('id') + 1;
         $getEmployee =  Employee::where('user_id', Auth::user()->id)->first();
         $code = $this->code('PJT');
@@ -335,13 +335,13 @@ class SaleController extends Controller
                 ]);
             }
         }
-        // DB::commit();
+        DB::commit();
         return Response::json(['status' => 'success', 'message' => 'Data Tersimpan']);
-        // } catch (\Throwable $th) {
-        //     DB::rollback();
-        //     return $th;
-        //     return Response::json(['status' => 'error','message'=>$th]);
-        // }
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return $th;
+            return Response::json(['status' => 'error','message'=>$th]);
+        }
         // return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
     }
 

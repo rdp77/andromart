@@ -1,7 +1,7 @@
 @extends('layouts.backend.default')
 @section('title', __('pages.title').__(' | Transaksi Penjualan'))
 @section('titleContent', __('Penjualan'))
-@section('breadcrumb', __('Data'))
+@section('breadcrumb', __('Transaksi'))
 @section('morebreadcrumb')
 <div class="breadcrumb-item active">{{ __('Penjualan') }}</div>
 @endsection
@@ -11,11 +11,10 @@
 @include('layouts.backend.components.notification')
 <div class="card">
     <div class="card-header">
-        <a href="{{ route('sale.create') }}" class="btn btn-icon icon-left btn-primary">
+        <a href="{{ route('sale.create') }}" class="btn btn-icon icon-left btn-primary mr-3">
             <i class="far fa-edit"></i>{{ __(' Tambah Penjualan') }}</a>
-
         <a href="#" onclick="" class="btn btn-icon icon-left btn-danger">
-                <i class="far fa-trash-alt"></i>{{ __('Recycle Bin') }}</a>
+            <i class="far fa-trash-alt"></i>{{ __('Recycle Bin') }}</a>
     </div>
     <div class="card-body">
         <table class="table-striped table" id="table" width="100%">

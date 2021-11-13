@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Payment;
 use App\Models\Branch;
-use App\Modcels\Cash;
+use App\Models\Cash;
 use App\Models\AccountData;
 use App\Models\Cost;
 use App\Models\Type;
@@ -112,7 +112,7 @@ class PaymentController extends Controller
         DB::beginTransaction();
         try {
             //code...
-        
+
         $date = $this->DashboardController->changeMonthIdToEn($req->date);
 
         Payment::create([
@@ -125,7 +125,7 @@ class PaymentController extends Controller
             'description' => $req->description,
             'created_by' => Auth::user()->name,
         ]);
-        
+
 
         $idJournal = DB::table('journals')->max('id')+1;
         Journal::create([
@@ -146,7 +146,7 @@ class PaymentController extends Controller
         $accountCode = [
             $req->cost_id,
             $req->cash_id,
-        ];  
+        ];
         $totalBayar = [
             str_replace(",", '',$req->price),
             str_replace(",", '',$req->price),
@@ -159,9 +159,9 @@ class PaymentController extends Controller
             'D',
             'K',
         ];
-    
 
-        for ($i=0; $i <count($accountCode) ; $i++) { 
+
+        for ($i=0; $i <count($accountCode) ; $i++) {
             $idDetail = DB::table('journal_details')->max('id')+1;
             JournalDetail::create([
                 'id'=>$idDetail,
@@ -187,14 +187,14 @@ class PaymentController extends Controller
                 'status' => 'Berhasil membuat transaksi pembayaran baru',
                 'type' => 'success'
             ]);
-       
+
 
         } catch (\Throwable $th) {
             DB::rollback();
             return$th;
             //throw $th;
         }
-        
+
     }
 
     public function show($id)
@@ -235,7 +235,7 @@ class PaymentController extends Controller
         Payment::destroy($id);
         return Response::json(['status' => 'success']);
     }
-    
+
     function paymentCheckJournals(Request $req)
     {
         $data = Journal::with('JournalDetail.AccountData')->where('ref',$req->id)->first();
