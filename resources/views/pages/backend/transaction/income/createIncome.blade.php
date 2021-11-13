@@ -11,24 +11,24 @@
     <div class="card">
         <div class="row">
             <div class="col-md-12">
-                <form method="POST" action="{{ route('payment.store') }}">
+                <form method="POST" action="{{ route('income.store') }}">
                     @csrf
                     <div class="card-header">
                         <h4>Form Data</h4>
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-6">
                                 <label for="code">{{ __('Kode Faktur') }}<code>*</code></label>
                                 <input id="code" type="text" class="form-control" readonly="" value="{{$code}}" name="code">
                             </div>
-                            <div class="form-group col-md-3 col-lg-3">
+                            <div class="form-group col-md-6 col-lg-6">
                                 <label for="date">{{ __('Tanggal') }}<code>*</code></label>
                                 <input id="date" type="text" class="form-control datepicker" readonly="" name="date">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-3 col-xs-12">
+                            <div class="form-group col-md-4 col-xs-12">
                                 <div class="d-block">
                                     <label for="branch_id"
                                         class="control-label">{{ __('Cabang') }}<code>*</code></label>
@@ -45,7 +45,7 @@
                                 </div>
                                 @enderror
                             </div>
-                            <div class="form-group col-md-3 col-xs-12">
+                            <div class="form-group col-md-4 col-xs-12">
                                 <div class="d-block">
                                     <label for="cash_id"
                                         class="control-label">{{ __('Kass') }}<code>*</code></label>
@@ -67,9 +67,7 @@
                                     value="{{$el->id}}">
                                 @endif
                             @endforeach
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-3 col-xs-12">
+                            <div class="form-group col-md-4 col-xs-12">
                                 <div class="d-block">
                                     <label for="income_id"
                                         class="control-label">{{ __('Jenis Pendapatan') }}<code>*</code></label>
@@ -86,7 +84,10 @@
                                 </div>
                                 @enderror
                             </div>
-                            <div class="form-group col-md-3 col-xs-12">
+                        </div>
+                        <div class="row">
+                            
+                            <div class="form-group col-md-6 col-xs-12">
                                 <label for="price">{{ __('Jumlah Pendapatan') }}<code>*</code></label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
@@ -103,12 +104,13 @@
                                     @enderror
                                 </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-4">
+                            <div class="form-group col-md-6">
                                 <label for="description">{{ __('Keterangan') }}</label>
                                 <input id="description" type="text" class="form-control" name="description">
                             </div>
+                        </div>
+                        <div class="row">
+                            
                         </div>
                     </div>
                     <div class="card-footer text-right">
@@ -121,5 +123,5 @@
     </div>
 @endsection
 @section('script')
-<script src="{{ asset('assets/pages/transaction/paymentScript.js') }}"></script>
+<script src="{{ asset('assets/pages/transaction/incomeScript.js') }}"></script>
 @endsection

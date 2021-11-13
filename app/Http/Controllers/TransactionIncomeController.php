@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Payment;
 use App\Models\Income;
 use App\Models\Branch;
-use App\Modcels\Cash;
+use App\Models\Cash;
 use App\Models\AccountData;
 use App\Models\Cost;
 use App\Models\Type;
@@ -32,7 +31,7 @@ class TransactionIncomeController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Income::with('cost', 'branch', 'cash')->get();
+            $data = Income::with('income','branch', 'cash')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('date', function ($row) {
@@ -56,7 +55,7 @@ class TransactionIncomeController extends Controller
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>';
                     $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('payment.edit', $row->id) . '">Edit</a>';
+                            <a class="dropdown-item" href="' . route('income.edit', $row->id) . '">Edit</a>';
                     $actionBtn .= '<a onclick="jurnal(' ."'". $row->code ."'". ')" class="dropdown-item" style="cursor:pointer;">Jurnal</a>';
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
@@ -207,11 +206,11 @@ class TransactionIncomeController extends Controller
         $branch = Branch::where('id', '!=', Income::find($id)->branch_id)->get();
         $cost = Cost::where('id', '!=', Income::find($id)->income_id)->get();
         $cash = Cash::where('id', '!=', Income::find($id)->cash_id)->get();
-        $payment = Income::find($id);
+        $income = Income::find($id);
 
         return view(
             'pages.backend.transaction.income.updateIncome',
-            ['payment' => $payment, 'branch' => $branch, 'cash' => $cash, 'cost' => $cost]
+            ['income' => $income, 'branch' => $branch, 'cash' => $cash, 'cost' => $cost]
         );
     }
 
@@ -233,11 +232,15 @@ class TransactionIncomeController extends Controller
             $req->ip(),
             'Menghapus Data Pengeluaran'
         );
-        Income::destroy($id);
+        $income = Income::find($id);
+        $checkJurnal = DB::table('journals')->where('ref',$income->code)->first();
+        DB::table('journal_details')->where('journal_id',$checkJurnal->id)->delete();
+        DB::table('journals')->where('id',$checkJurnal->id)->delete();
+        DB::table('transaction_income')->where('id',$id)->delete();
         return Response::json(['status' => 'success']);
     }
     
-    function paymentCheckJournals(Request $req)
+    function incomeCheckJournals(Request $req)
     {
         $data = Journal::with('JournalDetail.AccountData')->where('ref',$req->id)->first();
         return Response::json(['status' => 'success','jurnal'=>$data]);

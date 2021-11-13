@@ -8,6 +8,8 @@ use App\Models\Service;
 use App\Models\SharingProfit;
 use App\Models\SharingProfitDetail;
 use App\Models\ServiceDetail;
+use App\Models\SaleDetail;
+
 use App\Models\AccountData;
 use App\Models\Journal;
 use App\Models\JournalDetail;
@@ -47,10 +49,11 @@ class SharingProfitController extends Controller
     public function sharingProfitLoadDataService(Request $req)
     {
         // return $req->all();
+        $date1 = $this->DashboardController->changeMonthIdToEn($req->dateS);
+        $date2 = $this->DashboardController->changeMonthIdToEn($req->dateE);
         $data = Service::with(['ServiceDetail', 'ServiceDetail.Items', 'ServiceStatusMutation', 'ServiceStatusMutation.Technician', 'SharingProfitDetail', 'SharingProfitDetail.SharingProfit'])
-            // ->whereBetween('date', [$this->DashboardController->changeMonthIdToEn($req->dateS), $this->DashboardController->changeMonthIdToEn($req->dateE)])
-            ->where('date','>=',$this->DashboardController->changeMonthIdToEn($req->dateS))
-            ->where('date','<=',$this->DashboardController->changeMonthIdToEn($req->dateE))
+            ->where('date', '>=', $this->DashboardController->changeMonthIdToEn($req->dateS))
+            ->where('date', '<=', $this->DashboardController->changeMonthIdToEn($req->dateE))
             ->where('work_status', 'Diambil')
             ->where('payment_status', 'Lunas')
             ->where(function ($query) use ($req) {
@@ -59,13 +62,30 @@ class SharingProfitController extends Controller
             })
             ->get();
 
-        if (count($data) == 0) {
+        $sharingProfitSaleSales = SaleDetail::with(['sale'])
+            ->whereHas('sale', function ($q) use ($date1, $date2) {
+                $q->where('date', '>=', $date1); // '=' is optional
+                $q->where('date', '<=', $date2); // '=' is optional
+            })->with('sale.SharingProfitDetail', 'sale.SharingProfitDetail.SharingProfit')
+            ->where('sales_id', $req->id)
+            ->get();
+
+        $sharingProfitSaleBuyer = SaleDetail::with('sale')
+            ->whereHas('sale', function ($q) use ($date1, $date2) {
+                $q->where('date', '>=', $date1); // '=' is optional
+                $q->where('date', '<=', $date2); // '=' is optional
+            })->with('sale.SharingProfitDetail', 'sale.SharingProfitDetail.SharingProfit')
+            ->where('buyer_id', $req->id)
+            ->get();
+        // return $sharingProfitSaleSales;
+        $checkdataExist = count($data) + count($sharingProfitSaleSales) + count($sharingProfitSaleBuyer);
+        if ($checkdataExist == 0) {
             $message = 'empty';
         } else {
             $message = 'exist';
         }
 
-        return Response::json(['status' => 'success', 'result' => $data, 'message' => $message]);
+        return Response::json(['status' => 'success', 'result' => $data, 'message' => $message, 'sharingProfitSaleSales' => $sharingProfitSaleSales, 'sharingProfitSaleBuyer' => $sharingProfitSaleBuyer]);
     }
     public function code($type, $index)
     {
@@ -92,7 +112,19 @@ class SharingProfitController extends Controller
         // return $req->all();
         DB::beginTransaction();
         try {
+            $checkTotalBelumBayar = 0;
+            for ($i = 0; $i < count($req->payDetail); $i++) {
+                if ($req->payDetail[$i] == 'Belum Bayar') {
+                    $checkTotalBelumBayar+=$i;
+                }
+            }
+            
+            if ($checkTotalBelumBayar == 0) {
+                DB::rollback();
+                return Response::json(['status' => 'fail', 'message' => 'Semua Telah dibayar']);
+            }
 
+            // return $req->all();
             $checkData = SharingProfit::where('date_start', $this->DashboardController->changeMonthIdToEn($req->startDate))
                 ->where('date_end', $this->DashboardController->changeMonthIdToEn($req->endDate))
                 ->where('employe_id', $req->technicianId)
@@ -154,19 +186,22 @@ class SharingProfitController extends Controller
                 'D',
             ];
 
-            for ($i = 0; $i < count($req->idDetail); $i++) {
-                SharingProfitDetail::create([
-                    'id' => $i + 1,
-                    'sharing_profit_id' => $index,
-                    'service_id' => $req->idDetail[$i],
-                    'total' => $req->totalDetail[$i],
-                    'created_by' => Auth::user()->name,
-                    'created_at' => date('Y-m-d h:i:s'),
-                ]);
-                array_push($accountCode, $accountSharingProfit->id);
-                array_push($totalBayar, $req->totalDetail[$i]);
-                array_push($description, 'Pembagian Sharing Profit Detail');
-                array_push($DK, 'K');
+            for ($i = 0; $i < count($req->codeDetail); $i++) {
+                if ($req->payDetail[$i] == 'Belum Bayar') {
+                    SharingProfitDetail::create([
+                        'id' => $i + 1,
+                        'sharing_profit_id' => $index,
+                        'type' => $req->typeDetail[$i],
+                        'ref' => $req->codeDetail[$i],
+                        'total' => $req->totalDetail[$i],
+                        'created_by' => Auth::user()->name,
+                        'created_at' => date('Y-m-d h:i:s'),
+                    ]);
+                    array_push($accountCode, $accountSharingProfit->id);
+                    array_push($totalBayar, $req->totalDetail[$i]);
+                    array_push($description, 'Pembagian Sharing Profit Detail');
+                    array_push($DK, 'K');
+                }
             }
             // return [$DK, $description,$totalBayar,$accountCode];
 

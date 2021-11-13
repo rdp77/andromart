@@ -23,6 +23,8 @@ class CreateServicePaymentTable extends Migration
             $table->string('type')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
+            $table->string('payment_method')->nullable();
+            $table->integer('account');
             $table->string('created_by')->nullable();   
             $table->string('updated_by')->nullable();
             $table->softDeletesTz($column = 'deleted_at', $precision = 0);

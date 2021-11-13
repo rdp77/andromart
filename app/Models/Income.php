@@ -33,7 +33,7 @@ class Income extends Model
         return $this->belongsTo('App\Models\Branch');
     }
 
-    public function cost()
+    public function income()
     {
         return $this->belongsTo('App\Models\AccountData');
     }

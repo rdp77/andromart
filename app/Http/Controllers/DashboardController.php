@@ -6,8 +6,11 @@ use App\Models\Log;
 use App\Models\User;
 use App\Models\Journal;
 use App\Models\Service;
+use App\Models\Employee;
+use App\Models\SaleDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 use Yajra\DataTables\DataTables;
 
@@ -31,32 +34,103 @@ class DashboardController extends Controller
 
     public function index()
     {
-        // return 'asd';
-        $dataServiceTotal = Service::count();
-        $dataServiceHandphone = Service::where('type','2')->count();
-        $dataServiceLaptop = Service::where('type','3')->count();
-
-        $dataPendapatan = Journal::with('ServicePayment','Sale')
-        ->where('journals.date',date('Y-m-d'))
-        ->where(function ($query) {
-            $query->where('journals.type', 'Pembayaran Service')
-                ->orWhere('journals.type', 'Penjualan');
-        })
-        ->get();
-        //   return $dataPendapatan;
+        $dataTrafficToday = DB::table('traffic')->where('date', date('Y-m-d'))->count();
+        $dataServiceTotal = Service::where('date', date('Y-m-d'))->count();
+        $dataServiceHandphone = Service::where('type', '2')->where('date', date('Y-m-d'))->count();
+        $dataServiceLaptop = Service::where('type', '3')->where('date', date('Y-m-d'))->count();
+        $checkDataSharingProfit =  $this->checkSharingProfit();
+        $sharingProfit1Service = $checkDataSharingProfit[0];
+        $sharingProfit2Service = $checkDataSharingProfit[1];
+        $sharingProfitSaleSales = $checkDataSharingProfit[2];
+        $sharingProfitSaleBuyer = $checkDataSharingProfit[3];
+        $karyawan = $checkDataSharingProfit[4];
+        $checkServiceStatus = $checkDataSharingProfit[5];
+        // return $checkServiceStatus;
+        $dataPendapatan = Journal::with('ServicePayment', 'Sale')
+            ->where('journals.date', date('Y-m-d'))
+            ->where(function ($query) {
+                $query->where('journals.type', 'Pembayaran Service')
+                    ->orWhere('journals.type', 'Penjualan');
+            })
+            ->get();
         $log = Log::limit(7)->get();
         $users = User::count();
         $logCount = Log::where('u_id', Auth::user()->id)
             ->count();
+        
+        $totalSharingProfit = 0;
+        $totalServiceProgress = [];
+        $totalServiceDone = [];
+        $totalServiceCancel = [];
+
+        for ($i = 0; $i < count($karyawan); $i++) {
+            $totalSharingProfit += $sharingProfit1Service[$i] + $sharingProfit2Service[$i] + $sharingProfitSaleSales[$i] + $sharingProfitSaleBuyer[$i];
+
+            $totalServiceProgress[$i] = 0;
+            $totalServiceDone[$i] = 0;
+            $totalServiceCancel[$i] = 0;
+            for ($j=0; $j <count($checkServiceStatus[$i]) ; $j++) { 
+                if ($checkServiceStatus[$i][$j]->work_status == 'Proses' || $checkServiceStatus[$i][$j]->work_status == 'Mutasi' || $checkServiceStatus[$i][$j]->work_status == 'Manifest') {
+                    $totalServiceProgress[$i] +=1;
+                }
+                if ($checkServiceStatus[$i][$j]->work_status == 'Selesai' || $checkServiceStatus[$i][$j]->work_status == 'Diambil') {
+                    $totalServiceDone[$i]+=1;
+                }
+                if ($checkServiceStatus[$i][$j]->work_status == 'Cancel' || $checkServiceStatus[$i][$j]->work_status == 'Return') {
+                    $totalServiceCancel[$i] +=1;
+                }
+            }
+        }
+        // return [$totalServiceProgress,$totalServiceDone,$totalServiceCancel];
         return view('dashboard', [
             'log' => $log,
             'users' => $users,
             'logCount' => $logCount,
-            'dataPendapatan'=>$dataPendapatan,
-            'dataServiceTotal'=>$dataServiceTotal,
-            'dataServiceHandphone'=>$dataServiceHandphone,
-            'dataServiceLaptop'=>$dataServiceLaptop,
+            'dataPendapatan' => $dataPendapatan,
+            'dataServiceTotal' => $dataServiceTotal,
+            'dataServiceHandphone' => $dataServiceHandphone,
+            'dataServiceLaptop' => $dataServiceLaptop,
+            'dataTrafficToday' => $dataTrafficToday,
+            'karyawan' => $karyawan,
+            'sharingProfit1Service' => $sharingProfit1Service,
+            'sharingProfit2Service' => $sharingProfit2Service,
+            'sharingProfitSaleSales' => $sharingProfitSaleSales,
+            'sharingProfitSaleBuyer' => $sharingProfitSaleBuyer,
+            'totalSharingProfit' => number_format($totalSharingProfit, 0, ',', '.'),
+            // 'checkServiceStatus' => $checkServiceStatus
+            'totalServiceProgress'=>$totalServiceProgress,
+            'totalServiceDone'=>$totalServiceDone,
+            'totalServiceCancel'=>$totalServiceCancel,
         ]);
+    }
+
+    public function checkSharingProfit()
+    {
+        $chekSales = Employee::with('Service1', 'Service2')->where('id', '!=', 1)->get();
+        for ($i = 0; $i < count($chekSales); $i++) {
+            $sharingProfit1Service[$i] = Service::where('work_status', 'Diambil')
+                ->where('date', date('Y-m-d'))
+                ->where('payment_status', 'Lunas')
+                ->where('technician_id', $chekSales[$i]->id)
+                ->sum('sharing_profit_technician_1');
+            $sharingProfit2Service[$i] = Service::where('work_status', 'Diambil')
+                ->where('date', date('Y-m-d'))
+                ->where('payment_status', 'Lunas')
+                ->where('technician_replacement_id', $chekSales[$i]->id)
+                ->sum('sharing_profit_technician_2');
+            $sharingProfitSaleSales[$i] = SaleDetail::where('sales_id', $chekSales[$i]->id)
+                ->where('created_at', date('Y-m-d'))
+                ->sum('sharing_profit_sales');
+            $sharingProfitSaleBuyer[$i] = SaleDetail::where('buyer_id', $chekSales[$i]->id)
+                ->where('created_at', date('Y-m-d'))
+                ->sum('sharing_profit_buyer');
+
+
+            $checkServiceStatus[$i] = Service::where('date', date('Y-m-d'))
+                ->where('technician_id', $chekSales[$i]->id)
+                ->get();
+        }
+        return [$sharingProfit1Service, $sharingProfit2Service, $sharingProfitSaleSales, $sharingProfitSaleBuyer, $chekSales, $checkServiceStatus];
     }
 
     public function log(Request $req)

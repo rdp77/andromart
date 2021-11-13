@@ -17,7 +17,7 @@ var table = $("#table").DataTable({
     columns: [
         { data: "code" },
         { data: "date" },
-        { data: "cost.name" },
+        { data: "income.name" },
         { data: "branch.name" },
         { data: "cash.name" },
         { data: "price" },

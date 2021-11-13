@@ -23,7 +23,7 @@ Route::group(['prefix' => 'transaction'], function () {
 
         Route::post(
             'check-journals',
-            [TransactionIncomeController::class, 'paymentCheckJournals']
-        )->name('payment.paymentCheckJournals');
+            [TransactionIncomeController::class, 'incomeCheckJournals']
+        )->name('income.incomeCheckJournals');
     });
 });

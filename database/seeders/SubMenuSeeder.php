@@ -36,6 +36,12 @@ class SubMenuSeeder extends Seeder
             ],
             [
                 'menu_id' => '2',
+                'name' => 'Service Pembyaran',
+                'url' => route('service-payment.index'),
+                'hover' => '["' . route('service-payment.create') . '","' . route('service-payment.index') . '"]'
+            ],
+            [
+                'menu_id' => '2',
                 'name' => 'Penjualan',
                 'url' => route('sale.index'),
                 'hover' => '["' . route('sale.create') . '","' . route('sale.index') . '"]'
@@ -61,8 +67,8 @@ class SubMenuSeeder extends Seeder
             [
                 'menu_id' => '2',
                 'name' => 'Pemasukan',
-                'url' => 'javascript:void(0)',
-                'hover' => null
+                'url' => route('income.index'),
+                'hover' => '["' . route('income.create') . '","' . route('income.index') . '"]'
             ],
             [
                 'menu_id' => '2',
@@ -77,12 +83,7 @@ class SubMenuSeeder extends Seeder
                 'url' => route('sharing-profit.index'),
                 'hover' => '["' . route('sharing-profit.create') . '","' . route('sharing-profit.index') . '"]'
             ],
-            [
-                'menu_id' => '3',
-                'name' => 'Pelunasan Service',
-                'url' => route('service-payment.index'),
-                'hover' => '["' . route('service-payment.create') . '","' . route('service-payment.index') . '"]'
-            ],
+            
             [
                 'menu_id' => '3',
                 'name' => 'Barang Loss Trans',
@@ -91,10 +92,16 @@ class SubMenuSeeder extends Seeder
             ],
             [
                 'menu_id' => '3',
-                'name' => 'Barang Loss Trans',
+                'name' => 'Laporan In/Outcome',
                 'url' => route('report-income-spending.reportIncomeSpending'),
                 'hover' => '["' . route('report-income-spending.reportIncomeSpending') . '"]'
             ],
+            // [
+            //     'menu_id' => '3',
+            //     'name' => 'Laporan Transaksi Kas',
+            //     'url' => route('report-income-spending.reportIncomeSpending'),
+            //     'hover' => '["' . route('report-income-spending.reportIncomeSpending') . '"]'
+            // ],
             // Master Data
             [
                 'menu_id' => '4',

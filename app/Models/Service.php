@@ -90,7 +90,7 @@ class Service extends Model
     }
     public function SharingProfitDetail()
     {
-        return $this->hasMany('App\Models\SharingProfitDetail', 'service_id', 'id');
+        return $this->hasMany('App\Models\SharingProfitDetail', 'ref', 'code');
     }
     public function LossItemsDetail()
     {

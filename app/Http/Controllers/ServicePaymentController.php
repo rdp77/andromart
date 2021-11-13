@@ -88,11 +88,13 @@ class ServicePaymentController extends Controller
                         $work_status = '<div class="badge badge-warning">Perpindahan Teknisi</div>';
                     }elseif($row->Service->work_status == 'Selesai'){
                         $work_status = '<div class="badge badge-success">Selesai</div>';
-                    }elseif($row->Service->work_status == 'Batal'){
+                    }elseif($row->Service->work_status == 'Cancel'){
                         $work_status = '<div class="badge badge-danger">Service Batal</div>';
                     }elseif($row->Service->work_status == 'Manifest'){
                         $work_status = '<div class="badge badge-primary">Barang Diterima</div>';
                     }elseif($row->Service->work_status == 'Diambil'){
+                        $work_status = '<div class="badge badge-success">Sudah Diambil</div>';
+                    }elseif ($row->work_status == 'Return') {
                         $work_status = '<div class="badge badge-success">Sudah Diambil</div>';
                     }
 

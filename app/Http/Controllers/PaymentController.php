@@ -232,7 +232,11 @@ class PaymentController extends Controller
             $req->ip(),
             'Menghapus Data Pengeluaran'
         );
-        Payment::destroy($id);
+        $payment = Payment::find($id);
+        $checkJurnal = DB::table('journals')->where('ref',$payment->code)->first();
+        DB::table('journal_details')->where('journal_id',$checkJurnal->id)->delete();
+        DB::table('journals')->where('id',$checkJurnal->id)->delete();
+        DB::table('payments')->where('id',$id)->delete();
         return Response::json(['status' => 'success']);
     }
 

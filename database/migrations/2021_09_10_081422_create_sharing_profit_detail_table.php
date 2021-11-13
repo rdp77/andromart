@@ -16,7 +16,8 @@ class CreateSharingProfitDetailTable extends Migration
         Schema::create('sharing_profit_detail', function (Blueprint $table) {
             $table->id();
             $table->integer('sharing_profit_id');
-            $table->integer('service_id');
+            $table->string('type');
+            $table->string('ref');
             $table->integer('total');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();

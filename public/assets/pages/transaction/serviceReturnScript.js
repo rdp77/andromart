@@ -16,10 +16,10 @@ var table = $("#table").DataTable({
     dom: '<"html5buttons">lBrtip',
     columns: [
         { data: "code" },
+        { data: "informationService" },
+        { data: "dateData" },
         { data: "description" },
-        { data: "description" },
-        { data: "description" },
-        { data: "description" },
+        { data: "totalValue" },
         { data: "action", orderable: false, searchable: true },
     ],
     buttons: [
