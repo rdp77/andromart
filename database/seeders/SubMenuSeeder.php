@@ -181,18 +181,18 @@ class SubMenuSeeder extends Seeder
                 'url' => route('category.index'),
                 'hover' => '["' . route('category.create') . '","' . route('category.index') . '"]'
             ],
-            [
-                'menu_id' => '4',
-                'name' => 'Biaya',
-                'url' => route('cost.index'),
-                'hover' => '["' . route('cost.create') . '","' . route('cost.index') . '"]'
-            ],
-            [
-                'menu_id' => '4',
-                'name' => 'Kas',
-                'url' => route('cash.index'),
-                'hover' => '["' . route('cash.create') . '","' . route('cash.index') . '"]'
-            ],
+            // [
+            //     'menu_id' => '4',
+            //     'name' => 'Biaya',
+            //     'url' => route('cost.index'),
+            //     'hover' => '["' . route('cost.create') . '","' . route('cost.index') . '"]'
+            // ],
+            // [
+            //     'menu_id' => '4',
+            //     'name' => 'Kas',
+            //     'url' => route('cash.index'),
+            //     'hover' => '["' . route('cash.create') . '","' . route('cash.index') . '"]'
+            // ],
             [
                 'menu_id' => '4',
                 'name' => 'Hak Akses',

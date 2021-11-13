@@ -98,5 +98,5 @@
     var returnURL = '{{ route('sale.return.type') }}';
     var buy = '{{ route('purchase.create') }}';
 </script>
-<script src="{{ asset('assets/pages/transaction/sale-return.js') }}"></script>
+<script src="{{ asset('assets/pages/transaction/sale/return/saleReturn.js') }}"></script>
 @endsection

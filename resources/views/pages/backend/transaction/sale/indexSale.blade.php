@@ -38,5 +38,5 @@
 </div>
 @endsection
 @section('script')
-<script src="{{ asset('assets/pages/transaction/saleScript.js') }}"></script>
+<script src="{{ asset('assets/pages/transaction/sale/saleIndex.js') }}"></script>
 @endsection
