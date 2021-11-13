@@ -43,5 +43,5 @@
 <script>
     var index = '{{ route('sale-return.index') }}';    
 </script>
-<script src="{{ asset('assets/pages/transaction/saleReturnIndex.js') }}"></script>
+<script src="{{ asset('assets/pages/transaction/sale/return/saleReturnIndex.js') }}"></script>
 @endsection
