@@ -43,7 +43,7 @@
                         <div class="form-group col-12 col-md-3 col-xs-12">
                             <label for="payment_method" class="control-label">{{ __('Metode Pembayaran')
                                 }}<code>*</code></label>
-                            <select class="select2 PaymentMethod validation" data-name="Metode Pembayaran Harus Di isi"
+                            <select class="select2 PaymentMethod validation" data-name="Metode Pembayaran"
                                 name="PaymentMethod" onchange="paymentMethodChange()">
                                 <option value="">- Select -</option>
                                 <option value="Cash">Cash</option>
@@ -52,8 +52,8 @@
                             </select>
                         </div>
                         <div class="form-group col-12 col-md-5 col-xs-12">
-                            <label for="account">{{ __('Akun') }}<code>*</code></label>
-                            <select class="select2 account validation" data-name="Akun Harus Di isi" name="account">
+                            <label for="account">{{ __('Akun Kas') }}<code>*</code></label>
+                            <select class="select2 account validation" data-name="Akun Kas" name="account">
                                 <option value="">- Select -</option>
                             </select>
                         </div>
@@ -61,7 +61,7 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-12 col-lg-12">
                             <label for="description">{{ __('Deskripsi') }}<code>*</code></label>
-                            <input id="description" type="text" class="form-control" name="description">
+                            <input id="description" type="text" data-name="Deskripsi" class="form-control validation" name="description">
                         </div>
                     </div>
                     <input type="hidden" class="branchId" value="{{Auth::user()->employee->branch_id}}">
