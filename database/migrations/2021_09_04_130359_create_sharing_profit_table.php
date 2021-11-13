@@ -15,6 +15,7 @@ class CreateSharingProfitTable extends Migration
     {
         Schema::create('sharing_profit', function (Blueprint $table) {
             $table->id();
+            $table->string('code');
             $table->date('date');
             $table->date('date_start');
             $table->date('date_end');

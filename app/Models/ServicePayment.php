@@ -24,6 +24,8 @@ class ServicePayment extends Model
         'date',
         'total',
         'type',
+        'payment_method',
+        'account',
         'description',
         'created_by',
         'updated_by',

@@ -51,7 +51,11 @@ class ServiceController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
+
             $data = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])->get();
+            // for ($i=0; $i < ; $i++) { 
+                # code...
+            // }
 
             return Datatables::of($data)
                 ->addIndexColumn()
