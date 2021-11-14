@@ -119,26 +119,26 @@ class SharingProfitController extends Controller
                 }
             }
             
-            if ($checkTotalBelumBayar == 0) {
-                DB::rollback();
-                return Response::json(['status' => 'fail', 'message' => 'Semua Telah dibayar']);
-            }
+            // if ($checkTotalBelumBayar == 0) {
+            //     DB::rollback();
+            //     return Response::json(['status' => 'fail', 'message' => 'Semua Telah dibayar']);
+            // }
 
             // return $req->all();
-            $checkData = SharingProfit::where('date_start', $this->DashboardController->changeMonthIdToEn($req->startDate))
-                ->where('date_end', $this->DashboardController->changeMonthIdToEn($req->endDate))
-                ->where('employe_id', $req->technicianId)
-                ->get();
-            if (count($checkData) != 0) {
-                DB::rollback();
-                return Response::json(['status' => 'fail', 'message' => 'Data Sudah Ada']);
-            }
+            // $checkData = SharingProfit::where('date_start', $this->DashboardController->changeMonthIdToEn($req->startDate))
+            //     ->where('date_end', $this->DashboardController->changeMonthIdToEn($req->endDate))
+            //     ->where('employe_id', $req->technicianId)
+            //     ->get();
+            // if (count($checkData) != 0) {
+            //     DB::rollback();
+            //     return Response::json(['status' => 'fail', 'message' => 'Data Sudah Ada']);
+            // }
             $getEmployee =  Employee::with('branch')->where('user_id', $req->technicianId)->first();
 
             $index = DB::table('sharing_profit')->max('id') + 1;
             $kode = $this->code('SHP', $index);
             SharingProfit::create([
-                'id' => $index,
+                // 'id' => $index,
                 'code' => $kode,
                 'date' => date('Y-m-d'),
                 'date_start' => $this->DashboardController->changeMonthIdToEn($req->startDate),
@@ -189,7 +189,7 @@ class SharingProfitController extends Controller
             for ($i = 0; $i < count($req->codeDetail); $i++) {
                 if ($req->payDetail[$i] == 'Belum Bayar') {
                     SharingProfitDetail::create([
-                        'id' => $i + 1,
+                        // 'id' => $i + 1,
                         'sharing_profit_id' => $index,
                         'type' => $req->typeDetail[$i],
                         'ref' => $req->codeDetail[$i],
