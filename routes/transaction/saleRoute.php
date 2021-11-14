@@ -32,6 +32,11 @@ Route::group(['prefix' => 'transaction'], function () {
             [SaleController::class, 'printSmallSale']
         )->name('sale.printSmallSale');
 
+        Route::get(
+            'payment-method',
+            [SaleController::class, 'getPaymentMethod']
+        )->name('sale.getPaymentMethod');
+
         // Return
         Route::resource('sale-return', SaleReturnController::class);
         Route::get(
