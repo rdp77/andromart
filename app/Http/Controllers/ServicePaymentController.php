@@ -60,7 +60,7 @@ class ServicePaymentController extends Controller
                     $actionBtn .= '<a class="dropdown-item" href="' . route('service.printServicePayment', $row->id) . '"><i class="fas fa-print"></i> Print</a>';
                     // $actionBtn .= '<a class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
                     $actionBtn .= '<a onclick="jurnal(' ."'". $row->code ."'". ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
-                    
+
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
@@ -232,7 +232,7 @@ class ServicePaymentController extends Controller
                 $accountCode = [
                     $accountPembayaran->id,
                     $accountData->id,
-                ];  
+                ];
                 $totalBayar = [
                     str_replace(",", '',$req->totalPayment),
                     str_replace(",", '',$req->totalPayment),
@@ -245,9 +245,9 @@ class ServicePaymentController extends Controller
                     'D',
                     'K',
                 ];
-            
 
-                for ($i=0; $i <count($accountCode) ; $i++) { 
+
+                for ($i=0; $i <count($accountCode) ; $i++) {
                     $idDetail = DB::table('journal_details')->max('id')+1;
                     JournalDetail::create([
                         'id'=>$idDetail,
@@ -297,7 +297,7 @@ class ServicePaymentController extends Controller
                     $accountPembayaran->id,
                     $accountService->id,
                     $accountJasa->id,
-                ];  
+                ];
                 $totalBayar = [
                     str_replace(",", '',$req->totalPayment),
                     str_replace(",", '',$req->totalSparePart),
@@ -335,11 +335,11 @@ class ServicePaymentController extends Controller
                             'updated_at'=>date('Y-m-d h:i:s'),
                         ]);
                     }
-                    
+
                 }
-                
+
             }
-            
+
             DB::commit();
             return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
         } catch (\Throwable $th) {
@@ -347,8 +347,8 @@ class ServicePaymentController extends Controller
             return$th;
             return Response::json(['status' => 'error','message'=>'Error Hubungi Mas Rizal Taufiq']);
         }
-        
-        
+
+
 
 
         // if($req->verificationPrice == 'N'){
@@ -445,13 +445,13 @@ class ServicePaymentController extends Controller
                     'total_downpayment'=>0,
                 ]);
             }
-        
 
-            
+
+
             DB::table('service_payment')->where('id',$id)->delete();
             DB::table('journals')->where('id',$checkJournals->id)->delete();
             DB::table('journal_details')->where('journal_id',$checkJournals->id)->delete();
-        
+
             DB::commit();
             return Response::json(['status' => 'success','message'=>'Data Terhapus']);
         } catch (\Throwable $th) {

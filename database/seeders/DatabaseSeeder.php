@@ -45,6 +45,8 @@ class DatabaseSeeder extends Seeder
             accountData::class,
             accountMain::class,
             accountMainDetail::class,
+            TypeProductSeeder::class,
+            ProductSeeder::class,
         ]);
     }
 }
