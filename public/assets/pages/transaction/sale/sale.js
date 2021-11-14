@@ -1,5 +1,11 @@
 "use strict";
 
+$.ajaxSetup({
+    headers: {
+        "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+    },
+});
+
 function save() {
     swal({
         title: "Apakah Anda Yakin?",
@@ -661,7 +667,19 @@ function paymentMethodChange() {
     $.each($(".accountDataHidden"), function () {
         if (value == "Cash") {
             if (
-                $(this).data("mainname") == "Kas" &&
+                $(this).data("maindetailname") == "Kas Kecil" &&
+                branch == $(this).data("branch")
+            ) {
+                dataItems +=
+                    '<option value="' +
+                    this.value +
+                    '">' +
+                    $(this).data("code") +
+                    " - " +
+                    $(this).data("name") +
+                    "</option>";
+            } else if (
+                $(this).data("maindetailname") == "Kas Besar" &&
                 branch == $(this).data("branch")
             ) {
                 dataItems +=
@@ -721,3 +739,25 @@ function jurnal(params) {
         },
     });
 }
+
+// $("#paymentMethod").on("change", function () {
+//     $("#account").empty();
+//     var payment = this.value;
+//     $.ajax({
+//         url: getPayment,
+//         type: "GET",
+//         data: {
+//             payment: payment,
+//         },
+//         dataType: "json",
+//         success: function (data) {
+//             $("#saleDate").text(data.result.date);
+//             $("#qty").val(data.result.qty);
+//             $("#price").val(data.result.price);
+//             $("#total").val(data.result.total);
+//             $("#operator").val(data.result.operator);
+//             $("#sale_id").val(data.result.sale);
+//             $("#item_id_create").val(data.result.item);
+//         },
+//     });
+// });

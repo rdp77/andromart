@@ -53,7 +53,8 @@
                             </div>
                             <div class="form-group">
                                 <label for="account">{{ __('Akun Kas') }}<code>*</code></label>
-                                <select class="select2 account validation" data-name="Akun Kas" name="account">
+                                <select class="select2 account validation" data-name="Akun Kas" name="account"
+                                    id="account">
                                     <option value="">{{ __('- Select -') }}</option>
                                 </select>
                             </div>
@@ -62,8 +63,8 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-12 col-lg-12">
                             <label for="description">{{ __('Deskripsi') }}<code>*</code></label>
-                            <input id="description" type="text" data-name="Deskripsi" class="form-control validation"
-                                style="height: 100px" name="description">
+                            <textarea data-name="Deskripsi" name="description" class="form-control validation"
+                                id="description" style="height: 100px"></textarea>
                         </div>
                     </div>
                     <input type="hidden" class="branchId" value="{{Auth::user()->employee->branch_id}}">
@@ -224,5 +225,8 @@
 </form>
 @endsection
 @section('script')
+<script>
+    var getPayment = '{{ route('sale.getPaymentMethod') }}';
+</script>
 <script src="{{ asset('assets/pages/transaction/sale/sale.js') }}"></script>
 @endsection
