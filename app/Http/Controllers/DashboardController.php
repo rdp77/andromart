@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Journal;
 use App\Models\Service;
 use App\Models\Employee;
+use App\Models\Sale;
 use App\Models\SaleDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -34,6 +35,12 @@ class DashboardController extends Controller
 
     public function index()
     {
+        // $dataSale = SaleDetail::select('item_id')
+        // ->where('created_at', date('Y-m-01'))
+        // ->where('created_at', date('Y-m-t'))
+        // ->sum('qty');
+        // return $dataSale;
+
         $dataTrafficToday = DB::table('traffic')->where('date', date('Y-m-d'))->count();
         $dataServiceTotal = Service::where('date', date('Y-m-d'))->count();
         $dataServiceHandphone = Service::where('type', '2')->where('date', date('Y-m-d'))->count();
@@ -57,7 +64,7 @@ class DashboardController extends Controller
         $users = User::count();
         $logCount = Log::where('u_id', Auth::user()->id)
             ->count();
-        
+
         $totalSharingProfit = 0;
         $totalServiceProgress = [];
         $totalServiceDone = [];
@@ -69,7 +76,7 @@ class DashboardController extends Controller
             $totalServiceProgress[$i] = 0;
             $totalServiceDone[$i] = 0;
             $totalServiceCancel[$i] = 0;
-            for ($j=0; $j <count($checkServiceStatus[$i]) ; $j++) { 
+            for ($j=0; $j <count($checkServiceStatus[$i]) ; $j++) {
                 if ($checkServiceStatus[$i][$j]->work_status == 'Proses' || $checkServiceStatus[$i][$j]->work_status == 'Mutasi' || $checkServiceStatus[$i][$j]->work_status == 'Manifest') {
                     $totalServiceProgress[$i] +=1;
                 }
