@@ -43,7 +43,7 @@
                         </div>
                         <div class="col">
                             <div class="form-group">
-                                <label for="sales" class="control-label">{{ __('Sales') }}<code>*</code></label>
+                                <label for="sales" class="control-label">{{ __('Penjual') }}<code>*</code></label>
                                 <select class="select2 validation" name="sales_id" data-name="Sales">
                                     <option value="">{{ __('- Select -') }}</option>
                                     @foreach ($sales as $sales)

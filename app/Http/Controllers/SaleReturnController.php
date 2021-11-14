@@ -242,13 +242,26 @@ class SaleReturnController extends Controller
     function storedReturn($sale, $item, $type, $dsc)
     {
         SaleReturn::create([
-            'sale' => $sale,
-            'item' => $item,
+            'sale_id' => $sale,
+            'item_id' => $item,
             'type' => $type,
             'desc' => $dsc,
             'created_by' => Auth::user()->name,
             'updated_by' => '',
             'deleted_by' => ''
         ]);
+    }
+
+    // Tindakan Ketika Return
+    public function dataLoss()
+    {
+    }
+
+    public function toSupplier()
+    {
+    }
+
+    public function toStock()
+    {
     }
 }
