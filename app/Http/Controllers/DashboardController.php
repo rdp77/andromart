@@ -124,11 +124,13 @@ class DashboardController extends Controller
             $sharingProfitSaleBuyer[$i] = SaleDetail::where('buyer_id', $chekSales[$i]->id)
                 ->where('created_at', date('Y-m-d'))
                 ->sum('sharing_profit_buyer');
-
-
             $checkServiceStatus[$i] = Service::where('date', date('Y-m-d'))
                 ->where('technician_id', $chekSales[$i]->id)
                 ->get();
+
+
+
+               
         }
         return [$sharingProfit1Service, $sharingProfit2Service, $sharingProfitSaleSales, $sharingProfitSaleBuyer, $chekSales, $checkServiceStatus];
     }
