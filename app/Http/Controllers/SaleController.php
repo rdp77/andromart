@@ -51,6 +51,7 @@ class SaleController extends Controller
                             <a class="dropdown-item" href="' . route('sale.edit', $row->id) . '" ><i class="fas fa-pencil-alt"></i> Edit</a>';
                     $actionBtn .= '<a class="dropdown-item" href="' . route('sale.printSale', $row->id) . '" target="output"><i class="fas fa-print"></i> Nota Besar</a>';
                     $actionBtn .= '<a class="dropdown-item" href="' . route('sale.printSmallSale', $row->id) . '" target="output"><i class="fas fa-print"></i> Nota Kecil</a>';
+                    $actionBtn .= '<a onclick="jurnal(' ."'". $row->code ."'". ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
                     // $actionBtn .= '<a onclick="" class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
                     // $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
@@ -785,5 +786,11 @@ class SaleController extends Controller
         // return $Service;
         $member = User::get();
         return view('pages.backend.transaction.sale.printSmallSale', ['sale' => $sale, 'member' => $member]);
+    }
+
+    public function checkjournals(Request $req)
+    {
+        $data = Journal::with('JournalDetail.AccountData')->where('ref',$req->id)->first();
+        return Response::json(['status' => 'success', 'jurnal'=>$data]);
     }
 }

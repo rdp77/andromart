@@ -147,7 +147,37 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-9 col-md-9 col-sm-12">
+    </div>
+    <div class="row">
+        <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="card card-statistic-2">
+                <div class="card-icon shadow-primary bg-primary">
+                    <i class="fas fa-shopping-bag"></i>
+                </div>
+                <div class="card-wrap">
+                    <div class="card-header">
+                        <h4>Top Chart Penjualan ACC</h4>
+                    </div>
+                    <div class="card-body">
+                        {{-- {{ $dataServiceTotal }} --}}
+                    </div>
+                    <div class="card-footer">
+                        <table class="table">
+                            <tr>
+                                <th>Handphone</th>
+                                {{-- <th><b>{{ number_format($dataServiceHandphone, 0, ',', '.') }}</b></th> --}}
+                            </tr>
+                            <tr>
+                                <th>Laptop</th>
+                                {{-- <th><b>{{ number_format($dataServiceLaptop, 0, ',', '.') }}</b></th> --}}
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-12">
             <div class="card card-statistic-2">
                 <div class="card-icon shadow-primary bg-primary">
                     <i class="fas fa-dollar-sign"></i>
@@ -197,7 +227,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-3 col-md-3 col-sm-3 col-12">
+        <div class="col-lg-2 col-md-2 col-sm-2 col-12">
             <div class="card card-statistic-2">
                 <div onclick="countTrafic()" class="card-icon shadow-primary bg-primary">
                     <i class="fas fa-chart-line"></i>
@@ -212,7 +242,6 @@
                 </div>
             </div>
         </div>
-
     </div>
     {{-- <div class="row">
         <div class="col-lg-6 col-md-6 col-sm-6 col-12">
