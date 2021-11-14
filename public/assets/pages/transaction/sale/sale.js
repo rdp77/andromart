@@ -691,6 +691,21 @@ function paymentMethodChange() {
                     $(this).data("name") +
                     "</option>";
             }
+        } else if (value == "Debit" || value == "Transfer") {
+            if (
+                $(this).data("maindetailname") == "Kas Bank" &&
+                branch == $(this).data("branch")
+            ) {
+                dataItems +=
+                    '<option value="' +
+                    this.value +
+                    '">' +
+                    $(this).data("code") +
+                    " - " +
+                    $(this).data("name") +
+                    "</option>";
+            }
+        } else {
         }
     });
 

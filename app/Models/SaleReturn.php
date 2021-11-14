@@ -13,8 +13,8 @@ class SaleReturn extends Model
     protected $table = 'sale_return';
 
     protected $fillable = [
-        'sale',
-        'item',
+        'sale_id',
+        'item_id',
         'type',
         'desc',
         'created_at',
