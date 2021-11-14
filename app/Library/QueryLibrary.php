@@ -3,6 +3,8 @@ namespace App\Library;
 
 use App\Models\Content;
 use App\Models\ContentType;
+use App\Models\TypeProduct;
+use App\Models\Product;
 
 use Carbon\Carbon;
 
@@ -36,5 +38,13 @@ class QueryLibrary
         ->select('contents.id as id', 'title', 'subtitle', 'description', 'image', 'icon', 'url', 'class', 'position')
         ->get();
         return $data;
+    }
+    public function productTypeGet() {
+        $data = TypeProduct::get();
+        return $data;
+    }
+    public function productGet($id, $show) {
+        $data = Product::where('type_products_id', $id)->take($show);
+        return array($data->get(), $data->count());
     }
 }

@@ -799,13 +799,26 @@ class SaleController extends Controller
         $data = array();
         $branchID = Auth::user()->employee->branch_id;
         $cash = AccountData::with('AccountMainDetail')
-            ->where('branch_id', $branchID)
-            ->orWhere('name', 'like', '%Kas Kecil%')
-            ->orWhere('name', 'like', '%Kas Besar%')
+            ->Where(function ($query, $branchID) {
+                $query->AccountMainDetail->where('branch_id', $branchID);
+            })
+            ->orWhere(function ($query, $branchID) {
+                $query->AccountMainDetail->where('branch_id', $branchID);
+            })
+            ->orWhere(function ($query, $branchID) {
+                $query->AccountMainDetail->where('name', 'like', 'Kas Kecil%');
+            })
+            ->orWhere(function ($query, $branchID) {
+                $query->AccountMainDetail->where('name', 'like', 'Kas Besar%');
+            })
             ->get();
 
-        $html = '<option value="">' + " - " + "</option>";
+        foreach ($cash as $c) {
+            array_push($data, $c->AccountMainDetail->name);
+        }
 
-        dd($cash);
+        // $html = '<option value="">' + " - " + "</option>";
+
+        dd($data);
     }
 }

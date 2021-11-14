@@ -243,38 +243,57 @@
             </div>
         </div>
     </div>
-    {{-- <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-            <div class="card card-statistic-1">
-                <div class="card-icon bg-info">
-                    <i class="far fa-user"></i>
+    {{-- <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="card card-statistic-2">
+            <div class="card-icon shadow-primary bg-primary">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="card-wrap">
+                <div class="card-header">
+                    <h4>Data Service</h4>
                 </div>
-                <div class="card-wrap">
-                    <div class="card-header">
-                        <h4>{{ __('Total Admin') }}</h4>
-                    </div>
-                    <div class="card-body">
-                        {{ $users }}
+                <div class="card-body">
+                    <h4>KPI Karyawan</h4>
+                </div>
+                <div class="card-footer">
+                    <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar" style="position: relative;
+                        height: 300px;
+                        overflow: auto;display: block;">
+                        <table class="table table-bordered table-striped mb-0" style="text-align: center;">
+                            <thead>
+                                <tr>
+                                    <th scope="col">#</th>
+                                    <th scope="col">Nama</th>
+                                    <th scope="col" >Progress</th>
+                                    <th scope="col" >Selesai / Diterima</th>
+                                    <th scope="col" >Cancel / Return</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                @foreach ($karyawan as $i => $el)
+                                    <tr>
+                                        <th scope="row">{{ $i + 1 }}</th>
+                                        <td>{{ $el->name }}</td>
+                                        <td style="font-size: 17px;font-weight:bold" >
+                                            {{$totalServiceProgress[$i]}}
+                                        </td>
+                                        <td style="font-size: 17px;font-weight:bold" >
+                                            {{$totalServiceDone[$i]}}
+                                        </td>
+                                        <td style="font-size: 17px;font-weight:bold" >
+                                            {{$totalServiceCancel[$i]}}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-            <div class="card card-statistic-1">
-                <div class="card-icon bg-warning">
-                    <i class="far fa-list-alt"></i>
-                </div>
-                <div class="card-wrap">
-                    <div class="card-header">
-                        <h4>{{ __('Total Aktivitas') }}</h4>
-                    </div>
-                    <div class="card-body">
-                        {{ $logCount }}
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    </div> --}}
+    {{-- 
     <div class="card card-hero">
         <div class="card-header">
             <div class="card-icon">

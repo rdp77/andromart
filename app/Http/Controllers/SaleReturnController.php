@@ -231,12 +231,6 @@ class SaleReturnController extends Controller
                 ]);
                 break;
             case 4:
-                $this->storedReturn(
-                    $req->sale,
-                    $req->item_id,
-                    $req->type,
-                    $req->desc
-                );
                 return Response::json([
                     'status' => 'att',
                     'data' => "Barang akan diganti sesuai keinginan dan barang lama akan dibeli toko dan masuk ke dalam stok!"

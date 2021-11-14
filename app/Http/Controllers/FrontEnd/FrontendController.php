@@ -8,6 +8,7 @@ use App\Models\ContentType;
 use App\Models\Message;
 use App\Models\Service;
 use App\Models\ServiceStatusMutation;
+use App\Models\Product;
 
 use App\Library\QueryLibrary;
 use Illuminate\Support\Facades\Redirect;
@@ -29,11 +30,39 @@ class FrontendController extends Controller
         }        
         $this->globalContent = $varcontents;
     }
-    public function product($id)
+    public function productDetail($id)
     {
         $carouselHome = $this->library->contentGet(1); // 1
         $content = Content::where('id', $id)->first();
         return view('pages.frontend.home.itemDetail', compact('content', 'carouselHome'));
+    }
+    public function product()
+    {
+        $carouselProduct = $this->library->contentGet(1); // 1
+        $typeProduct = $this->library->productTypeGet();
+        // $itemProduct = $this->library->productGet(1);
+        $contents = $this->globalContent;
+        return view('pages.frontend.product.indexProduct', compact('contents', 'carouselProduct', 'typeProduct'));
+    }
+    public function productShow($id, $sort=1)
+    {
+        $sort = intval($sort);
+        $carouselProduct = $this->library->contentGet(1); // 1
+        $show = $sort * 12;
+        $queryProduct = $this->library->productGet($id, $show);
+        $itemProduct = $queryProduct[0];
+        $itemProductCount = $queryProduct[1];
+        $itemProductRound = intval(ceil($itemProductCount / 12));
+        $contents = $this->globalContent;
+        return view('pages.frontend.product.indexItemProduct', compact('contents', 'carouselProduct', 'itemProduct', 'itemProductCount', 'itemProductRound', 'id', 'sort'));
+    }
+    public function productShowDetail($id)
+    {
+        $carouselProduct = $this->library->contentGet(1); // 1
+        $itemProduct = Product::where('id', $id)->first();
+        // dd($itemProduct);
+        $contents = $this->globalContent;
+        return view('pages.frontend.product.productDetail', compact('contents', 'carouselProduct', 'itemProduct'));
     }
     public function home()
     {

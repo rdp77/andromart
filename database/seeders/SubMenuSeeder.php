@@ -260,6 +260,12 @@ class SubMenuSeeder extends Seeder
                 'hover' => '["' . route('message.create') . '","' . route('message.index') . '"]'
             ],
             [
+                'menu_id' => '6',
+                'name' => 'Produk',
+                'url' => route('product.index'),
+                'hover' => '["' . route('product.create') . '","' . route('product.index') . '"]'
+            ],
+            [
                 'menu_id' => '7',
                 'name' => 'Notulen',
                 'url' => route('notes.index'),

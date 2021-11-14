@@ -29,7 +29,52 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-12 col-md-6 col-lg-6">
+                        <div class="form-group col-12 col-md-6 col-xs-12">
+                            <label for="warranty">{{ __('Pembeli') }}<code>*</code></label>
+                            <select class="select2 validation" name="buyer" data-name="Buyer" required>
+                                <option value="">- Select -</option>
+                                @foreach ($employee as $row)
+                                    <option value="{{$row->id}}">{{$row->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="form-group col-12 col-md-6 col-xs-12">
+                            <label for="warranty">{{ __('Cabang') }}<code>*</code></label>
+                            <select class="select2 validation" name="branch" data-name="Branch" onchange="branchChange()" required>
+                                <option value="">- Select -</option>
+                                @foreach ($branch as $row)
+                                    <option value="{{$row->id}}">{{$row->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <input type="hidden" class="branchId" value="{{Auth::user()->employee->branch_id}}">
+                        @foreach ($account as $el)
+                        <input class="accountDataHidden" type="hidden" data-mainName="{{$el->AccountMain->name}}"
+                            data-mainDetailName="{{$el->AccountMainDetail->name}}" data-branch="{{$el->branch_id}}"
+                            data-name="{{$el->name}}" data-code="{{$el->code}}" value="{{$el->id}}">
+                        @endforeach
+                        <div class="form-group col-12 col-md-6 col-xs-12">
+                            <label for="payment_method" class="control-label">{{ __('Metode Pembayaran')
+                                }}<code>*</code></label>
+                            <select class="select2 PaymentMethod validation" data-name="Metode Pembayaran Harus Di isi"
+                                name="PaymentMethod" onchange="paymentMethodChange()" required>
+                                <option value="">- Select -</option>
+                                <option value="Cash">Cash</option>
+                                <option value="Debit">Debit</option>
+                                <option value="Transfer">Transfer</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-12 col-md-6 col-xs-12">
+                            <label for="account">{{ __('Akun') }}<code>*</code></label>
+                            <select class="select2 account validation" data-name="Akun Harus Di isi" name="account" required>
+                                <option value="">- Select -</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <!-- <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="warranty">{{ __('Pembeli') }}<code>*</code></label>
                             <select class="select2 validation" name="buyer" data-name="Buyer">
                                 <option value="">- Select -</option>
@@ -37,7 +82,7 @@
                                     <option value="{{$row->id}}">{{$row->name}}</option>
                                 @endforeach
                             </select>
-                        </div>
+                        </div> -->
                         <!-- <div class="form-group col-12">
                             <label class="form-label">Pembayaran</label>
                             <div class="selectgroup w-100">
@@ -172,8 +217,9 @@
                             <th>Action</th>
                         </tr> -->
                         <tr>
-                            <th>Cabang / item</th>
-                            <th>Harga Beli / QTY</th>
+                            <th>item</th>
+                            <th>Harga Beli</th>
+                            <th>QTY</th>
                             <th>Total</th>
                             <th>Action</th>
                         </tr>
@@ -232,8 +278,8 @@ $( document ).ready(function() {
     Webcam.set({
         width: 700,
         height: 420,
-        // dest_width:1000,
-        // dest_height:1000,
+        dest_width:1000,
+        dest_height:1000,
         image_format: 'jpeg',
         jpeg_quality: 100
     });

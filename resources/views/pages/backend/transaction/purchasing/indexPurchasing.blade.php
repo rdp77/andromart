@@ -14,14 +14,13 @@
         <a href="{{ route('purchasing.create') }}" class="btn btn-icon icon-left btn-primary">
             <i class="far fa-edit"></i>{{ __(' Create Purchasing') }}</a>
 
-        <a href="#" onclick="" class="btn btn-icon icon-left btn-danger">
+    <a href="#" onclick="" class="btn btn-icon icon-left btn-danger">
                 <i class="far fa-trash-alt"></i>{{ __('Recycle Bin') }}</a>
     </div>
     <div class="card-body">
         <table class="table-striped table" id="table" width="100%">
             <thead>
                 <tr>
-                    
                     <th>{{ __('Faktur') }}</th>
                     <th>
                         {{ __('Tanggal & operator') }}
