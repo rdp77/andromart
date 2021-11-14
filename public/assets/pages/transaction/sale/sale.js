@@ -231,10 +231,10 @@ function addItem() {
             '<select class="select2 buyerDetail" name="buyerDetail[]">' +
             '<option value="" data-index="' +
             (index + 1) +
-            '">- Select Buyer -</option>' +
+            '">- Pengambil Barang -</option>' +
             dataBuyer +
             "</select>" +
-            '<input type="text" class="form-control" name="salesDetail[]" value="Sales" readonly>' +
+            '<input type="text" class="form-control" name="salesDetail[]" value="Penjual" readonly>' +
             "</td>" +
             "<td>" +
             '<input type="number" class="form-control" name="profitSharingBuyer[]" value="0">' +
