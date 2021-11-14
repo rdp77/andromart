@@ -27,6 +27,12 @@ Route::group(['prefix' => 'transaction'], function () {
             [ServiceController::class, 'serviceFormUpdateStatus']
         )->name('service.serviceFormUpdateStatus');
 
+
+        Route::get(
+            'traffic-count',
+            [ServiceController::class, 'trafficCount']
+        )->name('service.trafficCount');
+
         Route::post(
             'service-form-update-status-load-data',
             [ServiceController::class, 'serviceFormUpdateStatusLoadData']

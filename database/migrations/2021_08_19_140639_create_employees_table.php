@@ -23,6 +23,7 @@ class CreateEmployeesTable extends Migration
             $table->string('address');
             $table->string('level');
             $table->string('gender');
+            $table->string('status');
             $table->date('birthday')->nullable();
             $table->string('avatar')->nullable();
             $table->string('created_by')->nullable();

@@ -68,6 +68,7 @@ class EmployeeController extends Controller
             'contact' => $req->contact,
             'gender' => $req->gender,
             'address' => $req->address,
+            'status' => 'aktif',
             'created_by' => Auth::user()->name,
         ]);
 
@@ -118,7 +119,7 @@ class EmployeeController extends Controller
         }
 
         $birthday = $this->DashboardController->changeMonthIdToEn($req->birthday);
-        // return $req->all();
+        // return $req->file('avatar')->getClientOriginalName();
         if ($req->hasFile('avatar')) {
             $req->file('avatar')->move('assetsmaster/avatar/', $req->file('avatar')->getClientOriginalName());
             Employee::where('id', $id)
@@ -132,6 +133,7 @@ class EmployeeController extends Controller
                     'contact' => $req->contact,
                     'gender' => $req->gender,
                     'address' => $req->address,
+                    'status' => $req->status,
                     'updated_by' => Auth::user()->name,
                 ]);
 
@@ -151,6 +153,7 @@ class EmployeeController extends Controller
                     'contact' => $req->contact,
                     'gender' => $req->gender,
                     'address' => $req->address,
+                    'status' => $req->status,
                     'updated_by' => Auth::user()->name,
                 ]);
 

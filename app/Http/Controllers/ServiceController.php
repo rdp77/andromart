@@ -194,11 +194,13 @@ class ServiceController extends Controller
                         $workStatus = '<div class="badge badge-warning">Perpindahan Teknisi</div>';
                     } elseif ($row->work_status == 'Selesai') {
                         $workStatus = '<div class="badge badge-success">Selesai</div>';
-                    } elseif ($row->work_status == 'Batal') {
+                    } elseif ($row->work_status == 'Cancel') {
                         $workStatus = '<div class="badge badge-danger">Service Batal</div>';
                     } elseif ($row->work_status == 'Manifest') {
                         $workStatus = '<div class="badge badge-primary">Barang Diterima</div>';
                     } elseif ($row->work_status == 'Diambil') {
+                        $workStatus = '<div class="badge badge-success">Sudah Diambil</div>';
+                    }elseif ($row->work_status == 'Return') {
                         $workStatus = '<div class="badge badge-success">Sudah Diambil</div>';
                     }
 
@@ -1373,4 +1375,20 @@ class ServiceController extends Controller
             return Response::json(['status' => 'error', 'message' => $th]);
         }
     }
+
+
+    public function trafficCount()
+    {
+        DB::table('traffic')->insert([
+            'date'=>date('Y-m-d'),
+            'total'=>1,
+            'created_at'=>date('Y-m-d h:i:s'),
+            'updated_at'=>date('Y-m-d h:i:s'),
+        ]);
+        return Response::json(['status' => 'success', 'message' => 'Sukses Menyimpan Data']);
+    }
+
+
+
 }
+

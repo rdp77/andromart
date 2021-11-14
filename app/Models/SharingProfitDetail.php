@@ -11,7 +11,8 @@ class SharingProfitDetail extends Model
     protected $table = 'sharing_profit_detail';
     protected $fillable = [
         'id',
-        'service_id',
+        'type',
+        'ref',
         'sharing_profit_id',
         'total',
         'created_at',

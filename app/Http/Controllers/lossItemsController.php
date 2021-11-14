@@ -53,8 +53,9 @@ class lossItemsController extends Controller
     {
         // return $req->all();
         $data = Service::with(['ServiceDetail', 'ServiceDetail.Items', 'ServiceStatusMutation', 'ServiceStatusMutation.Technician', 'LossItemsDetail', 'LossItemsDetail.LossItems'])
-            ->whereBetween('date', [$this->DashboardController->changeMonthIdToEn($req->dateS), $this->DashboardController->changeMonthIdToEn($req->dateE)])
-            ->where('work_status', 'Diambil')
+            ->where('date', '>=', $this->DashboardController->changeMonthIdToEn($req->dateS))
+            ->where('date', '<=', $this->DashboardController->changeMonthIdToEn($req->dateE))
+            // ->where('work_status', 'Diambil')
             ->where('total_loss', '!=', 0)
             ->where(function ($query) use ($req) {
                 $query->where('technician_id', $req->id)

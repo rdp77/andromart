@@ -167,17 +167,21 @@ function checkEmploye() {
                         }else{
                             var totalProfit = value.sharing_profit_technician_2;
                         }
-                        if (value.sharing_profit_detail.service_id == null) {
+                        if (value.sharing_profit_detail == null) {
                             var pay = '<div class="badge badge-danger">Belum Bayar</div>';
+                            var payDetail = 'Belum Bayar';
                         }else{
                             var pay = '<div class="badge badge-success">Sudah Dibayarkan</div>';
+                            var payDetail = 'Sudah Dibayarkan';
                         }
                         totalAkhir+=totalProfit;
                         $('.dropHere').append(
                             '<tr>'+
                                 '<td style="display:none">'+
-                                    '<input type="text" class="form-control" name="idDetail[]" value="'+value.id+'">'+
+                                    '<input type="text" class="form-control" name="typeDetail[]" value="Service">'+
+                                    '<input type="text" class="form-control" name="codeDetail[]" value="'+value.code+'">'+
                                     '<input type="text" class="form-control" name="totalDetail[]" value="'+totalProfit+'">'+
+                                    '<input type="text" class="form-control" name="payDetail[]" value="'+payDetail+'">'+
                                 '</td>'+
                                 '<td>'+
                                     moment(value.date).format('DD MMMM YYYY')+
@@ -187,6 +191,73 @@ function checkEmploye() {
                                 '</td>'+
                                 '<td>'+
                                     parseInt(totalProfit).toLocaleString('en-US')+
+                                '</td>'+
+                                '<td>'+
+                                    pay+
+                                '</td>'+
+                            '</tr>'
+                        );
+                    });
+
+                    $.each(data.sharingProfitSaleSales, function(index,value){
+                        
+                        if (value.sale.sharing_profit_detail == null) {
+                            var pay = '<div class="badge badge-danger">Belum Bayar</div>';                            
+                            var payDetail = 'Belum Bayar';
+                        }else{
+                            var pay = '<div class="badge badge-success">Sudah Dibayarkan</div>';                            
+                            var payDetail = 'Sudah Dibayarkan';
+                        }
+                        totalAkhir+=value.sharing_profit_sales;
+                        $('.dropHere').append(
+                            '<tr>'+
+                                '<td style="display:none">'+
+                                    '<input type="text" class="form-control" name="typeDetail[]" value="Penjualan">'+
+                                    '<input type="text" class="form-control" name="codeDetail[]" value="'+value.sale.code+'">'+
+                                    '<input type="text" class="form-control" name="totalDetail[]" value="'+value.sharing_profit_sales+'">'+
+                                    '<input type="text" class="form-control" name="payDetail[]" value="'+payDetail+'">'+
+                                    '</td>'+
+                                '<td>'+
+                                    moment(value.sale.date).format('DD MMMM YYYY')+
+                                '</td>'+
+                                '<td>'+
+                                    value.sale.customer_name+
+                                '</td>'+
+                                '<td>'+
+                                    parseInt(value.sharing_profit_sales).toLocaleString('en-US')+
+                                '</td>'+
+                                '<td>'+
+                                    pay+
+                                '</td>'+
+                            '</tr>'
+                        );
+                    });
+                    $.each(data.sharingProfitSaleBuyer, function(index,value){
+                        
+                        if (value.sale.sharing_profit_detail == null) {
+                            var pay = '<div class="badge badge-danger">Belum Bayar</div>';                            
+                            var payDetail = 'Belum Bayar';
+                        }else{
+                            var pay = '<div class="badge badge-success">Sudah Dibayarkan</div>';                            
+                            var payDetail = 'Sudah Dibayarkan';
+                        }
+                        totalAkhir+=value.sharing_profit_buyer;
+                        $('.dropHere').append(
+                            '<tr>'+
+                                '<td style="display:none">'+
+                                    '<input type="text" class="form-control" name="typeDetail[]" value="Penjualan">'+
+                                    '<input type="text" class="form-control" name="codeDetail[]" value="'+value.sale.code+'">'+
+                                    '<input type="text" class="form-control" name="totalDetail[]" value="'+value.sharing_profit_buyer+'">'+
+                                    '<input type="text" class="form-control" name="payDetail[]" value="'+payDetail+'">'+
+                                    '</td>'+
+                                '<td>'+
+                                    moment(value.sale.date).format('DD MMMM YYYY')+
+                                '</td>'+
+                                '<td>'+
+                                    value.sale.customer_name+
+                                '</td>'+
+                                '<td>'+
+                                    parseInt(value.sharing_profit_buyer).toLocaleString('en-US')+
                                 '</td>'+
                                 '<td>'+
                                     pay+
@@ -223,6 +294,10 @@ function saveSharingProfit() {
                             icon: "success",
                         });
                         location.reload();
+                    }else{
+                        swal(data.message, {
+                            icon: "warning",
+                        });
                     }
                 },
                 error: function(data) {
