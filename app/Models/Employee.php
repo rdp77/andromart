@@ -21,6 +21,7 @@ class Employee extends Model
         'gender',
         'birthday',
         'avatar',
+        'status',
         'created_at',
         'updated_at',
         'deleted_at',

@@ -24,11 +24,15 @@
                       {{-- <div class="profile-widget-item-label">Posts</div>
                       <div class="profile-widget-item-value">187</div> --}}
                       <div class="profile-widget-item-value"> {{ $employee->name }}
-                        {{-- <div class="text-muted d-inline font-weight-normal">
-                            <div class="slash"></div>
-                            {{ $employee->level }}
-                            {{ $employee->branch->code }}
-                        </div> --}}
+                        @if ($employee->status == 'aktif')
+                        <div class="badge badge-success">
+                            Aktif
+                        </div>
+                        @else
+                        <div class="badge badge-secondary">
+                            Non Aktif
+                        </div>
+                        @endif
                       </div>
                     </div>
                   </div>
@@ -76,10 +80,10 @@
                         </div>
                     </div>
                     <div class="profile-widget-name text-right">
-                        <a onclick="del({{$employee->id}})" class="btn btn-outline-danger btn-md" style="cursor: pointer;">
+                        {{-- <a onclick="del({{$employee->id}})" class="btn btn-outline-danger btn-md" style="cursor: pointer;">
                             <i class="fas fa-trash"></i>
                         </a>
-                        <span>&emsp;</span>
+                        <span>&emsp;</span> --}}
                         <a href="{{ route('employee.edit', $employee->id)}}" class="btn btn-outline-primary btn-md">
                             <i class="fas fa-user-edit"></i>
                         </a>

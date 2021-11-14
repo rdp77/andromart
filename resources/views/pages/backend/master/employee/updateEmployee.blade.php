@@ -12,7 +12,7 @@
     @csrf
     @method('PUT')
     <div class="row">
-        <div class="col-md-7">
+        <div class="col-md-12">
             <div class="card">
                 <form method="POST" action="{{ route('employee.update', $employee->id) }}" enctype="multipart/form-data">
                   @csrf
@@ -22,7 +22,7 @@
                   </div>
                   <div class="card-body">
                       <div class="row">
-                        <div class="form-group col-md-5 col-xs-12">
+                        <div class="form-group col-md-4 col-xs-12">
                             <label for="branch_id">{{ __('Cabang') }}<code>*</code></label>
                             <select name="branch_id" id="branch_id" class="form-control select2" required>
                                 <option value="{{ $employee->branch->id }}"> {{ $employee->branch->code }} - {{ $employee->branch->name }} </option>
@@ -31,7 +31,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-md-5 col-xs-12">
+                        <div class="form-group col-md-4 col-xs-12">
                             <label for="role_id">{{ __('Pekerjaan') }}<code>*</code></label>
                             <select name="role_id" id="role_id" class="form-control select2" required>
                                 <option value="{{ $employee->user->role->id }}"> {{ $employee->user->role->name }} </option>
@@ -40,7 +40,7 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-md-2 col-xs-12">
+                        <div class="form-group col-md-1 col-xs-12">
                             <label for="level">{{ __('Level') }}<code>*</code></label>
                             <input id="level" type="text" class="form-control @error('level') is-invalid @enderror" name="level" value="{{ $employee->level }}" required>
                             @error('level')
@@ -48,6 +48,19 @@
                               {{ $message }}
                             </div>
                           @enderror
+                        </div>
+                        <div class="form-group col-md-3 col-xs-12">
+                            <label for="status">{{ __('Status') }}<code>*</code></label>
+                            <div class="selectgroup w-100">
+                                <label class="selectgroup-item">
+                                    <input type="radio" name="status" value="aktif" class="selectgroup-input" @if ($employee->status == 'aktif') checked @endif>
+                                    <span class="selectgroup-button">Aktif</span>
+                                </label>
+                                <label class="selectgroup-item">
+                                    <input type="radio" name="status" value="nonaktif" class="selectgroup-input" @if ($employee->status == 'nonaktif') checked @endif>
+                                    <span class="selectgroup-button">Non Aktif</span>
+                                </label>
+                            </div>
                         </div>
                       </div>
                     <div class="row">
@@ -71,7 +84,7 @@
                         <input id="birthday" type="text" class="form-control datepicker" name="birthday"
                           value="{{ \Carbon\Carbon::parse($employee->birthday)->locale('id')->isoFormat('LL') }}">
                       </div>
-                      <div class="form-group col-md-6 col-12">
+                      <div class="form-group col-md-4 col-12">
                         <label for="gender">{{ __('Jenis Kelamin') }}<code>*</code></label>
                         <div class="selectgroup w-100">
                           <label class="selectgroup-item">
@@ -84,6 +97,13 @@
                             'P') checked="" @endif>
                             <span class="selectgroup-button selectgroup-button-icon"><i class="fas fa-female"></i></span>
                           </label>
+                        </div>
+                      </div>
+                      <div class="form-group col-md-4 col-xs-12">
+                        <label for="avatar">{{ __('Avatar') }}</label>
+                        <div class="custom-file">
+                          <input type="file" class="custom-file-input" id="avatar" name="avatar">
+                          <label class="custom-file-label" for="avatar">Pilih Gambar</label>
                         </div>
                       </div>
                     </div>
@@ -111,13 +131,7 @@
                       </div>
                     </div>
                     <div class="row">
-                      <div class="form-group col-md-4 col-xs-12">
-                        <label for="avatar">{{ __('Avatar') }}</label>
-                        <div class="custom-file">
-                          <input type="file" class="custom-file-input" id="avatar" name="avatar">
-                          <label class="custom-file-label" for="avatar">Pilih Gambar</label>
-                        </div>
-                      </div>
+
                     </div>
                   </div>
                   <div class="card-footer text-right">
