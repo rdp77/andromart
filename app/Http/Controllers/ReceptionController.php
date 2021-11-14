@@ -8,6 +8,11 @@ use App\Models\HistoryPurchase;
 use App\Models\HistoryDetailPurchase;
 use App\Models\Employee;
 use App\Models\Stock;
+use App\Models\Journal;
+use App\Models\JournalDetail;
+use App\Models\AccountData;
+use App\Models\Cash;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -139,6 +144,12 @@ class ReceptionController extends Controller
     }
     public function update(Request $req, $id)
     {
+        $total = 0;
+        foreach($req->idDetail as $row) {
+            $qtyNew = (int)str_replace(",", "", $req->qtyNew[$row]);
+            $purchasing = PurchasingDetail::where('id', $req->idPurchasing[$row])->first();
+            $total += $qtyNew * $purchasing->price;
+        }
         // define('UPLOAD_DIR', 'images/');
         $image = $req->image;
         if($image != null) {
@@ -159,12 +170,38 @@ class ReceptionController extends Controller
         $historyPurchase->purchasing_id = $id;
         $historyPurchase->image = $fileName;
         $historyPurchase->date = $date;
-        $historyPurchase->save();
+        $saveHistoryPurchase = $historyPurchase->save();
+
+        $account = AccountData::find(14);
+        $years = date("Y");
+        $dates = date("Y-m-d");
+
+        if($saveHistoryPurchase) {
+            $codeJournal = array("KK".$account->code, "DD".$account->code);
+            $debetKredit = array("K", "D");
+            $accountId = array($account->id, $account->id);
+            $descriptionJournal = array("Uang Dimuka Kredit", "Penerimaan Persediaan Barang Dagang Debet");
+            $journalId = [];
+            foreach ($codeJournal as $key => $value) {
+                $journal = new Journal;
+                $journal->code = $value;
+                $journal->year = $years; 
+                $journal->date = $dates;
+                // $journal->total = str_replace(",", '',$req->grandTotal);
+                $journal->total = $total;
+                $journal->type = $account->name;
+                $journal->ref = $req->code;
+                $journal->description = "Kosong";
+                // $journal->description = $descriptionJournal[$key];
+                $journal->save();
+                $journalId[] = $journal->id;
+            }
+        }
 
         foreach($req->idDetail as $row) {
             $qtyNew = (int)str_replace(",", "", $req->qtyNew[$row]);
-            $purchasing = PurchasingDetail::where('id', $req->idPurchasing[$row])
-            ->first();
+            $purchasing = PurchasingDetail::where('id', $req->idPurchasing[$row])->first();
+            $totalPriceDetail = $qtyNew * $purchasing->price;
             $historyDetailPurchase = new HistoryDetailPurchase;
             $historyDetailPurchase->history_purchase_id = $historyPurchase->id;
             $historyDetailPurchase->purchasing_detail_id = $purchasing->id;
@@ -180,6 +217,16 @@ class ReceptionController extends Controller
             ->first();
             $stocks->stock += $qtyNew;
             $stocks->save();
+
+            foreach ($journalId as $key => $value) {
+                $journalDetail = new JournalDetail;
+                $journalDetail->journal_id = $value;
+                $journalDetail->account_id = $accountId[$key];
+                $journalDetail->total = $totalPriceDetail;
+                $journalDetail->description = "Kosong";
+                $journalDetail->debet_kredit = $debetKredit[$key];
+                $journalDetail->save();
+            }
         }
 
         // foreach($req->idDetail as $row) {

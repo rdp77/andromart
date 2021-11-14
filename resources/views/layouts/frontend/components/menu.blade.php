@@ -28,12 +28,18 @@
 											@endif
 										</li>
 										<li>
+											@if($menuActive == 'product')
+												<a class="nav-link active" href="{{ route('frontendProduct') }}">Product</a>
+											@else
+												<a class="nav-link" href="{{ route('frontendProduct') }}">Product</a>
+											@endif
+										</li>
+										<li>
 											@if($menuActive == 'about')
 												<a class="nav-link active" href="{{ route('frontendAbout') }}">About</a>
 											@else
 												<a class="nav-link" href="{{ route('frontendAbout') }}">About</a>
 											@endif
-											
 										</li>
 										<li>
 											@if($menuActive == 'services')

@@ -17,10 +17,10 @@ use App\Http\Controllers\FrontEnd\FrontendController;
 
 // Front End
 // Route::get('/', function () {
-// 	return view('pages.frontend.index');
+//  return view('pages.frontend.index');
 // });
 Route::get('/', [FrontendController::class, 'home'])->name('frontendHome');
-Route::get('/produk-detail/{id}', [FrontendController::class, 'product'])->name('frontendProduct');
+Route::get('/produk-detail/{id}', [FrontendController::class, 'productDetail'])->name('frontendProductDetail');
 Route::get('/about', [FrontendController::class, 'about'])->name('frontendAbout');
 Route::get('/services', [FrontendController::class, 'services'])->name('frontendServices');
 Route::get('/work', [FrontendController::class, 'work'])->name('frontendWork');
@@ -28,6 +28,9 @@ Route::get('/contact', [FrontendController::class, 'contact'])->name('frontendCo
 Route::post('/message', [FrontendController::class, 'message'])->name('frontendMessage');
 Route::get('/login', [FrontendController::class, 'login'])->name('frontendLogin');
 Route::get('/trackingService/{id}', [FrontendController::class, 'tracking'])->name('frontendTracking');
+Route::get('/product', [FrontendController::class, 'product'])->name('frontendProduct');
+Route::get('/product-show/{id}/{sort?}', [FrontendController::class, 'productShow'])->name('frontendProductShow');
+Route::get('/product-show-detail/{id}', [FrontendController::class, 'productShowDetail'])->name('frontendProductShowDetail');
 // Route::get('/login', function () {
 //     return view('home');
 // });
@@ -67,7 +70,6 @@ require __DIR__ . '/finance/sharingProfitRoute.php';
 require __DIR__ . '/finance/lossItemsRoute.php';
 require __DIR__ . '/finance/ReportRoute.php';
 require __DIR__ . '/transaction/saleRoute.php';
-require __DIR__ . '/transaction/transactionIncomeRoute.php';
 require __DIR__ . '/transaction/paymentRoute.php';
 require __DIR__ . '/transaction/purchasingRoute.php';
 
@@ -80,6 +82,7 @@ require __DIR__ . '/warehouse/stockMutationRoute.php';
 // require __DIR__ . '/content/notes.php';
 require __DIR__ . '/content/contentsRoute.php';
 require __DIR__ . '/content/messageRoute.php';
+require __DIR__ . '/content/productRoute.php';
 
 require __DIR__ . '/office/regulationRoute.php';
 require __DIR__ . '/office/notesRoute.php';

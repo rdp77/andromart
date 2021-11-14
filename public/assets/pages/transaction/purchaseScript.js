@@ -144,6 +144,88 @@ function changeDiscount(params) {
 }
 
 
+function printItems() {
+    var index = $('.priceDetail').length;
+    var dataDetail = $('.dataDetail').length;
+
+    var dataItems = [];
+    $.each($('.itemsData'), function(){
+        dataItems += '<option data-index="'+(index+1)+'"  data-price="'+$(this).data('price')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
+    });
+    // var dataUnits = [];
+    // $.each($('.unitsData'), function(){
+    //     dataUnits += '<option data-index="'+(index+1)+'"  data-price="'+$(this).data('price')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
+    // });
+    // data-index="'+(index+1)+'"
+    // var dataBranches = [];
+    // $.each($('.branchesData'), function(){
+    //     dataBranches += '<option data-code="'+$(this).data('code')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
+    // });
+    var dataDet = dataDetail+1;
+    // console.log(dataDet);
+    $('.dropHereItem').append(
+        '<tr class="dataDetail dataDetail_'+(dataDet)+'">'+
+            '<td style="display:none">'+
+                '<input type="hidden" class="form-control priceDetailSparePart priceDetailSparePart_'+(index+1)+'" name="idDetail[]" value="'+(index)+'">'+
+            '</td>'+
+            '<td>'+
+                '<select class="select2 itemsDetail" name="itemsDetail[]">'+
+                    '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
+                    dataItems+
+                '</select>'+
+            '</td>'+
+            // '<td>'+
+            // // '<select class="select2 itemsDetail" name="branchesDetail[]">'+
+            // //     '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
+            // //     dataBranches+
+            // // '</select>'+
+            // '<select class="select2 itemsDetail" name="branchesDetail[]">'+
+            //     '<option value="-">- Select -</option>'+
+            //     dataBranches+
+            // '</select>'+
+            // '</td>'+
+            '<td>'+
+                '<input type="text" class="form-control cleaveNumeral priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
+            '</td>'+
+            '<td>'+
+                '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="1" style="text-align: right;">'+
+            '</td>'+
+            '<td>'+
+                '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="0" style="text-align: right">'+
+            '</td>'+
+            '<td>'+
+                '<button type="button" class="btn btn-danger removeDataDetail" value="'+(index+1)+'" >X</button>'+
+            '</td>'+
+        '</tr>' +
+         // class="dataDetail dataDetail_'+(dataDet)+'"
+        // '<tr class="dataDetail_'+(dataDet)+'">'+
+        //     // '<td>'+(index+1)+'</td>'+
+        //     // '<td>'+
+        //     //     '<button type="button" class="btn btn-danger removeDataDetail" value="'+(index+1)+'" >X</button>'+
+        //     // '</td>'+
+        // '</tr>' +
+        '<tr class="dataDetail_'+(dataDet)+'" style="border-bottom: solid 2px #ddd; margin-bottom: 5px;">'+
+            '<td colspan="5">'+
+                '<input type="text" class="form-control desDetail desDetail_'+(index+1)+'" name="desDetail[]" placeholder="Deskripsi">'+
+            '</td>'+
+        '</tr>' +
+        '<tr class="dataDetail_'+(dataDet)+'" height="50px">'+
+        '</tr>'
+
+    );
+    $('.select2').select2();
+    $(".cleaveNumeral")
+    .toArray()
+    .forEach(function (field) {
+        new Cleave(field, {
+            numeral: true,
+            numeralThousandsGroupStyle: "thousand",
+        });
+    });
+
+    // var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
+    // sumTotal();
+}
 function addItem() {
     var index = $('.priceDetail').length;
     var dataDetail = $('.dataDetail').length;
@@ -157,10 +239,10 @@ function addItem() {
     //     dataUnits += '<option data-index="'+(index+1)+'"  data-price="'+$(this).data('price')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
     // });
     // data-index="'+(index+1)+'"
-    var dataBranches = [];
-    $.each($('.branchesData'), function(){
-        dataBranches += '<option data-code="'+$(this).data('code')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
-    });
+    // var dataBranches = [];
+    // $.each($('.branchesData'), function(){
+    //     dataBranches += '<option data-code="'+$(this).data('code')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
+    // });
     var dataDet = dataDetail+1;
     // console.log(dataDet);
     $('.dropHereItem').append(
@@ -169,17 +251,26 @@ function addItem() {
                 '<input type="hidden" class="form-control priceDetailSparePart priceDetailSparePart_'+(index+1)+'" name="idDetail[]" value="'+(index)+'">'+
             '</td>'+
             '<td>'+
+                '<select class="select2 itemsDetail" name="itemsDetail[]">'+
+                    '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
+                    dataItems+
+                '</select>'+
+            '</td>'+
+            // '<td>'+
+            // // '<select class="select2 itemsDetail" name="branchesDetail[]">'+
+            // //     '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
+            // //     dataBranches+
+            // // '</select>'+
             // '<select class="select2 itemsDetail" name="branchesDetail[]">'+
-            //     '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
+            //     '<option value="-">- Select -</option>'+
             //     dataBranches+
             // '</select>'+
-            '<select class="select2 itemsDetail" name="branchesDetail[]">'+
-                '<option value="-">- Select -</option>'+
-                dataBranches+
-            '</select>'+
-            '</td>'+
+            // '</td>'+
             '<td>'+
                 '<input type="text" class="form-control cleaveNumeral priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
+            '</td>'+
+            '<td>'+
+                '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="1" style="text-align: right;">'+
             '</td>'+
             '<td>'+
                 '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="0" style="text-align: right">'+
@@ -189,23 +280,17 @@ function addItem() {
             '</td>'+
         '</tr>' +
          // class="dataDetail dataDetail_'+(dataDet)+'"
-        '<tr class="dataDetail_'+(dataDet)+'">'+
-            '<td>'+
-                '<select class="select2 itemsDetail" name="itemsDetail[]">'+
-                    '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
-                    dataItems+
-                '</select>'+
-            '</td>'+
-            '<td>'+
-                '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="1" style="text-align: right;">'+
-            '</td>'+
-            // '<td>'+(index+1)+'</td>'+
-            // '<td>'+
-            //     '<button type="button" class="btn btn-danger removeDataDetail" value="'+(index+1)+'" >X</button>'+
-            // '</td>'+
-        '</tr>' +
+        // '<tr class="dataDetail_'+(dataDet)+'">'+
+        //     '<td>'+
+        //         '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="1" style="text-align: right;">'+
+        //     '</td>'+
+        //     // '<td>'+(index+1)+'</td>'+
+        //     // '<td>'+
+        //     //     '<button type="button" class="btn btn-danger removeDataDetail" value="'+(index+1)+'" >X</button>'+
+        //     // '</td>'+
+        // '</tr>' +
         '<tr class="dataDetail_'+(dataDet)+'" style="border-bottom: solid 2px #ddd; margin-bottom: 5px;">'+
-            '<td colspan="4">'+
+            '<td colspan="5">'+
                 '<input type="text" class="form-control desDetail desDetail_'+(index+1)+'" name="desDetail[]" placeholder="Deskripsi">'+
             '</td>'+
         '</tr>' +
@@ -240,14 +325,14 @@ function addItems(branch_id, item_id, qty, price) {
             dataItems += '<option data-index="'+(index+1)+'" data-price="'+$(this).data('price')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
         }
     });
-    var dataBranches = [];
-    $.each($('.branchesData'), function(){
-        if(branch_id == this.value){
-            dataBranches += '<option data-code="'+$(this).data('code')+'" value="'+this.value+'" selected>'+$(this).data('name')+'</option>';
-        } else {
-            dataBranches += '<option data-code="'+$(this).data('code')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
-        }
-    });
+    // var dataBranches = [];
+    // $.each($('.branchesData'), function(){
+    //     if(branch_id == this.value){
+    //         dataBranches += '<option data-code="'+$(this).data('code')+'" value="'+this.value+'" selected>'+$(this).data('name')+'</option>';
+    //     } else {
+    //         dataBranches += '<option data-code="'+$(this).data('code')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
+    //     }
+    // });
     var dataDet = dataDetail+1;
     // console.log(dataDet);
     $('.dropHereItem').append(
@@ -256,17 +341,26 @@ function addItems(branch_id, item_id, qty, price) {
                 '<input type="hidden" class="form-control priceDetailSparePart priceDetailSparePart_'+(index+1)+'" name="idDetail[]" value="'+(index)+'">'+
             '</td>'+
             '<td>'+
+                '<select class="select2 itemsDetail" name="itemsDetail[]">'+
+                    '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
+                    dataItems+
+                '</select>'+
+            '</td>'+
+            // '<td>'+
+            // // '<select class="select2 itemsDetail" name="branchesDetail[]">'+
+            // //     '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
+            // //     dataBranches+
+            // // '</select>'+
             // '<select class="select2 itemsDetail" name="branchesDetail[]">'+
-            //     '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
+            //     '<option value="-">- Select -</option>'+
             //     dataBranches+
             // '</select>'+
-            '<select class="select2 itemsDetail" name="branchesDetail[]">'+
-                '<option value="-">- Select -</option>'+
-                dataBranches+
-            '</select>'+
-            '</td>'+
+            // '</td>'+
             '<td>'+
                 '<input type="text" class="form-control cleaveNumeral priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="'+price+'" style="text-align: right">'+
+            '</td>'+
+            '<td>'+
+                '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="'+qty+'" style="text-align: right;">'+
             '</td>'+
             '<td>'+
                 '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="'+total+'" style="text-align: right">'+
@@ -276,23 +370,14 @@ function addItems(branch_id, item_id, qty, price) {
             '</td>'+
         '</tr>' +
          // class="dataDetail dataDetail_'+(dataDet)+'"
-        '<tr class="dataDetail_'+(dataDet)+'">'+
-            '<td>'+
-                '<select class="select2 itemsDetail" name="itemsDetail[]">'+
-                    '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
-                    dataItems+
-                '</select>'+
-            '</td>'+
-            '<td>'+
-                '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="'+qty+'" style="text-align: right;">'+
-            '</td>'+
-            // '<td>'+(index+1)+'</td>'+
-            // '<td>'+
-            //     '<button type="button" class="btn btn-danger removeDataDetail" value="'+(index+1)+'" >X</button>'+
-            // '</td>'+
-        '</tr>' +
+        // '<tr class="dataDetail_'+(dataDet)+'">'+
+        //     // '<td>'+(index+1)+'</td>'+
+        //     // '<td>'+
+        //     //     '<button type="button" class="btn btn-danger removeDataDetail" value="'+(index+1)+'" >X</button>'+
+        //     // '</td>'+
+        // '</tr>' +
         '<tr class="dataDetail_'+(dataDet)+'" style="border-bottom: solid 2px #ddd; margin-bottom: 5px;">'+
-            '<td colspan="4">'+
+            '<td colspan="5">'+
                 '<input type="text" class="form-control desDetail desDetail_'+(index+1)+'" name="desDetail[]" placeholder="Deskripsi">'+
             '</td>'+
         '</tr>' +
@@ -476,5 +561,75 @@ function save() {
         } else {
             swal("Belum Disimpan !");
         }
+    });
+}
+
+function paymentMethodChange() {
+    var branch = $('.branchId').val();
+    var value = $('.PaymentMethod').val();
+    var dataItems = [];
+    $('.account').empty();
+    $.each($('.accountDataHidden'), function(){
+        if (value == 'Cash') {
+            if ($(this).data('mainname') == 'Kas' && branch == $(this).data('branch')) {
+                dataItems += '<option value="'+this.value+'">'+$(this).data('code') +' - '+ $(this).data('name')+'</option>';
+            }
+        }
+    });
+
+    $('.account').append('<option value="">- Select -</option>');
+    // if (value == 'Cash') {
+    $('.account').append(dataItems);
+    // }
+    // alert($('.PaymentMethod').val());
+}
+
+function branchChange() {
+    var branch = $('.branchId').val();
+    var value = $('.PaymentMethod').val();
+    var dataItems = [];
+    $('.account').empty();
+    $.each($('.accountDataHidden'), function(){
+        if (value == 'Cash') {
+            if ($(this).data('mainname') == 'Kas' && branch == $(this).data('branch')) {
+                dataItems += '<option value="'+this.value+'">'+$(this).data('code') +' - '+ $(this).data('name')+'</option>';
+            }
+        }
+    });
+
+    $('.account').append('<option value="">- Select -</option>');
+    // if (value == 'Cash') {
+    $('.account').append(dataItems);
+    // }
+    // alert($('.PaymentMethod').val());
+}
+
+function jurnal(params) {
+    $('.dropHereJournals').empty();
+    // $('.dropHereJournals').
+    $.ajax({
+        url: "/transaction/service/check-journals",
+        data: {id:params},
+        type: 'POST',
+        success: function(data) {
+            if (data.status == 'success'){
+                $.each(data.jurnal.journal_detail, function(index,value){
+                    if (value.debet_kredit == 'K') {
+                        var dk = '<td>0</td><td>'+parseInt(value.total).toLocaleString('en-US')+'</td>';
+                    }else{
+                        var dk = '<td>'+parseInt(value.total).toLocaleString('en-US')+'</td><td>0</td>';
+                    }
+                    $('.dropHereJournals').append(
+                            '<tr>'+
+                                '<td>'+value.account_data.code+'</td>'+
+                                '<td>'+value.account_data.name+'</td>'+
+                                dk+
+                            '</tr>'
+                    );
+                });
+            }
+            $('#exampleModal').modal('show')
+
+        },
     });
 }
