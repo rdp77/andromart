@@ -16,6 +16,7 @@ class CreatePurchasingsTable extends Migration
         Schema::create('purchasings', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('employee_id')->nullable();
+            $table->unsignedBigInteger('branch_id')->nullable();
 
             $table->datetime('date')->nullable();
             $table->string('price')->nullable();
@@ -34,6 +35,7 @@ class CreatePurchasingsTable extends Migration
             $table->softDeletesTz($column = 'deleted_at', $precision = 0);
             
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
+            $table->foreign('branch_id')->references('id')->on('branches')->onDelete('cascade');
             $table->timestamps();
         });
     }
