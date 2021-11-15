@@ -1293,11 +1293,20 @@ class ServiceController extends Controller
 
     public function serviceFormUpdateStatusSaveData(Request $req)
     {
-        try {
             // return $req->all();
-            $checkData = Service::where('id', $req->id)->first();
+        try {
+            $checkData = Service::where('id', $req->serviceId)->first();
+            $image = $req->image;
+            $image = str_replace('data:image/jpeg;base64,', '', $image);
+            $image = base64_decode($image);
+            $index = ServiceStatusMutation::where('service_id', $req->serviceId)->count() + 1;
+            if ($image != null) {
+                $fileSave = 'public/Service_Update_Status_'.$req->status.'_'.$index.'_' . $checkData->code . '.' . 'png';
+                $fileName = 'Service_Update_Status_'.$req->status.'_'.$index.'_' . $checkData->code . '.' . 'png';
+                Storage::put($fileSave, $image);
+            }
+            // return 'asd';
             // return $checkData;
-            $index = ServiceStatusMutation::where('service_id', $req->id)->count() + 1;
             $settingPresentase =  SettingPresentase::get();
 
             // return $req->all();
@@ -1353,7 +1362,7 @@ class ServiceController extends Controller
                     $sharing_profit_technician_2 = 0;
                 }
             }
-            Service::where('id', $req->id)->update([
+            Service::where('id', $req->serviceId)->update([
                 'work_status' => $req->status,
                 'technician_replacement_id' => $technician_replacement_id,
                 'total_loss_technician_1' => $total_loss_technician_1,
@@ -1362,9 +1371,10 @@ class ServiceController extends Controller
                 'sharing_profit_technician_2' => $sharing_profit_technician_2,
             ]);
             ServiceStatusMutation::create([
-                'service_id' => $req->id,
+                'service_id' => $req->serviceId,
                 'technician_id' => Auth::user()->id,
                 'index' => $index,
+                'image' => $fileName,
                 'status' => $req->status,
                 'description' => $req->description,
                 'created_by' => Auth::user()->name,
@@ -1372,6 +1382,7 @@ class ServiceController extends Controller
             ]);
             return Response::json(['status' => 'success', 'message' => 'Sukses Menyimpan Data']);
         } catch (\Throwable $th) {
+            return $th;
             return Response::json(['status' => 'error', 'message' => $th]);
         }
     }

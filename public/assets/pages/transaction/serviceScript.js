@@ -744,6 +744,8 @@ function updateStatusService() {
     var status = $('.status').find(':selected').val();
     var technicianId = $('.technicianId').find(':selected').val();
     var description = $('.description').val();
+    var files = $('.image')[0].files;
+
     swal({
         title: "Apakah Anda Yakin?",
         text: "Aksi ini tidak dapat dikembalikan, dan akan menyimpan data Anda.",
@@ -754,7 +756,8 @@ function updateStatusService() {
         if (willSave) {
             $.ajax({
                 url: "/transaction/service/service-form-update-status-save-data",
-                data: {id:serviceId,status:status,description:description,technicianId:technicianId},
+                // data: {id:serviceId,status:status,description:description,technicianId:technicianId,files:files,conk:'asdasd'},
+                data: $(".form-data").serialize(),
                 type: 'POST',
                 success: function(data) {
                     if (data.status == 'success'){
@@ -777,7 +780,18 @@ function updateStatusService() {
                             '</div>'
                         );
                         if (status == 'Diambil') {
-                            location.reload();
+                            // location.reload();
+                            swal({
+                                title: "Apakah Anda Ingin Membayar Service Ini?",
+                                text: "Aksi ini membuat anda akan berpindah halaman.",
+                                icon: "warning",
+                                buttons: true,
+                                dangerMode: true,
+                            }).then((red) => {
+                                if (red) {
+                                    window.location.href = window.location.origin+'/transaction/service/service-payment/create';
+                                }
+                            });
                         }
                     }else{
                         swal(data.message, {
