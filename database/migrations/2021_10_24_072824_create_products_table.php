@@ -19,9 +19,11 @@ class CreateProductsTable extends Migration
 
             $table->string('name');
             $table->integer('prize')->nullable();
+            $table->integer('discount')->nullable();
             $table->string('image')->nullable();
             $table->longText('description')->nullable();
             $table->mediumText('detail')->nullable();
+            $table->tinyInteger('hot_item')->default(0)->nullable();
             
             $table->string('shopee')->nullable();
             $table->string('tokopedia')->nullable();

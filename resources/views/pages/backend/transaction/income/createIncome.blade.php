@@ -1,10 +1,10 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__(' | Tambah Pengeluaran'))
-@section('titleContent', __('Tambah Pengeluaran'))
+@section('title', __('pages.title').__(' | Tambah Pendapatan'))
+@section('titleContent', __('Tambah Pendapatan'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
-<div class="breadcrumb-item active">{{ __('Pengeluaran') }}</div>
-<div class="breadcrumb-item active">{{ __('Tambah Pengeluaran') }}</div>
+<div class="breadcrumb-item active">{{ __('Pendapatan') }}</div>
+<div class="breadcrumb-item active">{{ __('Tambah Pendapatan') }}</div>
 @endsection
 
 @section('content')

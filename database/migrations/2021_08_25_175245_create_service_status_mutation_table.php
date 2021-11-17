@@ -18,6 +18,7 @@ class CreateServiceStatusMutationTable extends Migration
             $table->integer('service_id');
             $table->integer('technician_id');
             $table->String('index');
+            $table->String('image')->nullable();
             $table->String('status');
             $table->String('description');
             $table->string('created_by')->nullable();   

@@ -48,6 +48,7 @@ class ContentTypeSeeder extends Seeder
 // tambahan baru
 
         ContentType::create(['name' => 'Hot Item', 'type' => 'home_hot_item', 'status' => true, 'column_1'=> true, 'column_2' => true, 'column_3' => true, 'column_4' => true]);
-        ContentType::create(['name' => 'Service Unit', 'type' => 'home_service_unit', 'status' => true, 'column_1'=> true, 'column_2' => true, 'column_4' => true]);
+        ContentType::create(['name' => 'Service Unit', 'type' => 'home_service_unit', 'status' => true, 'column_1'=> true, 'column_2' => true, 'column_4' => true, 'column_6' => true]);
+        ContentType::create(['name' => 'Carousel Product', 'type' => 'carousel_home', 'status' => true, 'column_1' => true, 'column_2' => true, 'column_3' => true, 'column_4' => true, 'column_8' => true]);
     }
 }

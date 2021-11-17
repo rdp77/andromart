@@ -167,7 +167,7 @@ function checkEmploye() {
                         }else{
                             var totalProfit = value.sharing_profit_technician_2;
                         }
-                        if (value.sharing_profit_detail == null) {
+                        if (value.sharing_profit_detail.length == 0) {
                             var pay = '<div class="badge badge-danger">Belum Bayar</div>';
                             var payDetail = 'Belum Bayar';
                         }else{
@@ -201,7 +201,7 @@ function checkEmploye() {
 
                     $.each(data.sharingProfitSaleSales, function(index,value){
                         
-                        if (value.sale.sharing_profit_detail == null) {
+                        if (value.sale.sharing_profit_detail.length == 0) {
                             var pay = '<div class="badge badge-danger">Belum Bayar</div>';                            
                             var payDetail = 'Belum Bayar';
                         }else{
@@ -234,7 +234,7 @@ function checkEmploye() {
                     });
                     $.each(data.sharingProfitSaleBuyer, function(index,value){
                         
-                        if (value.sale.sharing_profit_detail == null) {
+                        if (value.sale.sharing_profit_detail.length == 0) {
                             var pay = '<div class="badge badge-danger">Belum Bayar</div>';                            
                             var payDetail = 'Belum Bayar';
                         }else{

@@ -21,6 +21,7 @@ class ServiceStatusMutation extends Model
         'technician_id',
         'index',
         'status',
+        'image',
         'description' ,
         'created_by',
         'updated_by',

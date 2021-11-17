@@ -34,7 +34,7 @@
                         <li>
                             <a href="https://api.whatsapp.com/send?phone=62{{$row->phone}}&text=Hai, Saya ingin service HP/Laptop di Andromart" target="_blank">
                                 <i class="fab fa-whatsapp" style="font-size: 50px;"></i><p style="margin-left: 25px; padding-top: 15px; font-size: 15px;">0{{ $row->phone }}</p>
-                            </a> 
+                            </a>
                         </li>
                         @endif
                         @if($row->email != null)
