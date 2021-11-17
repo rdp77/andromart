@@ -8,6 +8,8 @@ $.ajaxSetup({
 
 $("#item").on("change", function () {
     var idItem = this.value;
+    $("#discount_value").addClass("d-none");
+    $("#discount_percent").addClass("d-none");
     $.ajax({
         url: getdata,
         type: "GET",
@@ -23,6 +25,18 @@ $("#item").on("change", function () {
             $("#operator").val(data.result.operator);
             $("#sale_id").val(data.result.sale);
             $("#item_id_create").val(data.result.item);
+            $("#sp_taker").val(data.result.sp_taker);
+            $("#sp_seller").val(data.result.sp_seller);
+            $("#taker").val(data.result.taker);
+            $("#seller").val(data.result.seller);
+            $("#faktur").val(data.result.faktur);
+            if (data.result.discount_type == "percent") {
+                $("#faktur").val(data.result.discount);
+                $("#discount_percent").removeClass("d-none");
+            } else {
+                $("#faktur").val(data.result.discount);
+                $("#discount_value").removeClass("d-none");
+            }
         },
     });
 });
