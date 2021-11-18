@@ -32,13 +32,13 @@ class FrontendController extends Controller
     }
     public function productDetail($id)
     {
-        $carouselHome = $this->library->contentGet(1); // 1
+        $carouselHome = $this->library->contentGet(34); // 1
         $content = Content::where('id', $id)->first();
         return view('pages.frontend.home.itemDetail', compact('content', 'carouselHome'));
     }
     public function product()
     {
-        $carouselProduct = $this->library->contentGet(1); // 1
+        $carouselProduct = $this->library->contentGet(34); // 1
         $typeProduct = $this->library->productTypeGet();
         // $itemProduct = $this->library->productGet(1);
         $contents = $this->globalContent;
@@ -47,7 +47,7 @@ class FrontendController extends Controller
     public function productShow($id, $sort=1)
     {
         $sort = intval($sort);
-        $carouselProduct = $this->library->contentGet(1); // 1
+        $carouselProduct = $this->library->contentGet(34); // 1
         $show = $sort * 12;
         $queryProduct = $this->library->productGet($id, $show);
         $itemProduct = $queryProduct[0];
@@ -58,7 +58,7 @@ class FrontendController extends Controller
     }
     public function productShowDetail($id)
     {
-        $carouselProduct = $this->library->contentGet(1); // 1
+        $carouselProduct = $this->library->contentGet(34); // 1
         $itemProduct = Product::where('id', $id)->first();
         // dd($itemProduct);
         $contents = $this->globalContent;
@@ -74,9 +74,10 @@ class FrontendController extends Controller
         $homeTestimonial = $this->library->contentGet(9); // 6
         $homeAchievement = $this->library->contentGet(10); // 7
         $homeVendor = $this->library->contentGet(11); // 8
-        $homeHotItem = $this->library->contentGet(32);
+        // $homeHotItem = $this->library->contentGet(32);
         $homeServiceUnit = $this->library->contentGet(33);
         $contents = $this->globalContent;
+        $homeHotItem = Product::where('hot_item', 1)->get();
         // dd($homeHotItem);
         $branch = Branch::get();
         return view('pages.frontend.home.indexHome', compact('contents', 'carouselHome', 'homeTab', 'homeAboutUs', 'homeHireUs', 'homeTestimonialTitle', 'homeTestimonial', 'homeAchievement', 'homeVendor', 'homeHotItem', 'homeServiceUnit', 'branch'));

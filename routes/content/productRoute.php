@@ -20,5 +20,8 @@ Route::group(['prefix' => 'content'], function () {
         Route::resource('type-product', TypeProductController::class);
         Route::resource('product', ProductController::class);
         Route::get('product-created/{id}', [ProductController::class, 'created'])->name('product.created');
+
+        Route::get('product-deleted/{id}', [ProductController::class, 'deleted'])->name('product.deleted');
+        Route::get('type-product-deleted/{id}', [TypeProductController::class, 'deleted'])->name('type-product.deleted');
     });
 });

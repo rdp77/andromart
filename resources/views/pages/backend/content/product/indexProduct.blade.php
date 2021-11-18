@@ -41,10 +41,10 @@
                                     <span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div class="dropdown-menu">
-                                <a class="dropdown-item" href="{{ route('type-product.edit', $row->id) }}">
+                                <a class="dropdown-item" href="{{ route('product.edit', $row->id) }}">
                                     <i class="far fa-edit"></i> Edit
                                 </a>
-                                <a onclick="del('{{ $row->id }}')" class="dropdown-item" style="cursor:pointer;">
+                                <a class="dropdown-item" href="{{ route('product.deleted', $row->id) }}">
                                     <i class="far fa-trash-alt"></i> Hapus
                                 </a>
                             </div>

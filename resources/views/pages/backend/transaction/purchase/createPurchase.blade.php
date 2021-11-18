@@ -218,11 +218,15 @@
                 </table>
             </div>
         </div>
-        <div class="card-footer text-right">
-            <!-- <button class="btn btn-primary mr-1" type="button" onclick="save()"><i class="far fa-save"></i>
-                {{ __('Simpan Data') }}</button> -->
-            <button class="btn btn-primary mr-1" type="submit"><i class="far fa-save"></i>
+        <div class="card-footer">
+            <div style="float: left;">
+                <a href="{{ Route('purchase.item.create') }}" class="btn btn-primary mr-1"><i class="far fa-plus"></i>
+                {{ __('Tambah Barang') }}</a>
+            </div>
+            <div style="float: right;">
+                <button class="btn btn-primary mr-1" type="submit"><i class="far fa-save"></i>
                 {{ __('Simpan Data') }}</button>
+            </div>
         </div>
     </div>
     <div class="modal fade" tabindex="1" role="dialog" id="exampleModal" aria-hidden="true" style="display: none;">
