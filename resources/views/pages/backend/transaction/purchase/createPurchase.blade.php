@@ -29,7 +29,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-12 col-md-6 col-xs-12">
+                        <div class="form-group col-12 col-md-4 col-xs-12">
                             <label for="warranty">{{ __('Pembeli') }}<code>*</code></label>
                             <select class="select2 validation" name="buyer" data-name="Buyer" required>
                                 <option value="">- Select -</option>
@@ -38,24 +38,13 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-12 col-md-6 col-xs-12">
-                            <label for="warranty">{{ __('Cabang') }}<code>*</code></label>
-                            <select class="select2 validation" name="branch" data-name="Branch" onchange="branchChange()" required>
-                                <option value="">- Select -</option>
-                                @foreach ($branch as $row)
-                                    <option value="{{$row->id}}">{{$row->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
                         <input type="hidden" class="branchId" value="{{Auth::user()->employee->branch_id}}">
                         @foreach ($account as $el)
                         <input class="accountDataHidden" type="hidden" data-mainName="{{$el->AccountMain->name}}"
                             data-mainDetailName="{{$el->AccountMainDetail->name}}" data-branch="{{$el->branch_id}}"
                             data-name="{{$el->name}}" data-code="{{$el->code}}" value="{{$el->id}}">
                         @endforeach
-                        <div class="form-group col-12 col-md-6 col-xs-12">
+                        <div class="form-group col-12 col-md-4 col-xs-12">
                             <label for="payment_method" class="control-label">{{ __('Metode Pembayaran')
                                 }}<code>*</code></label>
                             <select class="select2 PaymentMethod validation" data-name="Metode Pembayaran Harus Di isi"
@@ -66,7 +55,7 @@
                                 <option value="Transfer">Transfer</option>
                             </select>
                         </div>
-                        <div class="form-group col-12 col-md-6 col-xs-12">
+                        <div class="form-group col-12 col-md-4 col-xs-12">
                             <label for="account">{{ __('Akun') }}<code>*</code></label>
                             <select class="select2 account validation" data-name="Akun Harus Di isi" name="account" required>
                                 <option value="">- Select -</option>
@@ -229,11 +218,15 @@
                 </table>
             </div>
         </div>
-        <div class="card-footer text-right">
-            <!-- <button class="btn btn-primary mr-1" type="button" onclick="save()"><i class="far fa-save"></i>
-                {{ __('Simpan Data') }}</button> -->
-            <button class="btn btn-primary mr-1" type="submit"><i class="far fa-save"></i>
+        <div class="card-footer">
+            <div style="float: left;">
+                <a href="{{ Route('purchase.item.create') }}" class="btn btn-primary mr-1"><i class="far fa-plus"></i>
+                {{ __('Tambah Barang') }}</a>
+            </div>
+            <div style="float: right;">
+                <button class="btn btn-primary mr-1" type="submit"><i class="far fa-save"></i>
                 {{ __('Simpan Data') }}</button>
+            </div>
         </div>
     </div>
     <div class="modal fade" tabindex="1" role="dialog" id="exampleModal" aria-hidden="true" style="display: none;">

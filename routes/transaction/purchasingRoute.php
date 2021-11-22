@@ -26,6 +26,9 @@ Route::group(['prefix' => 'transaction'], function () {
         Route::get('/approve/{id}', [PurchaseController::class, 'approve'])->name('purchaseApprove');
         Route::get('/reception/updated/{id}/{history}/{qty?}', [ReceptionController::class, 'updateHistory'])->name('receptionUpdatedHistory');
         Route::post('/reception/updated', [ReceptionController::class, 'updated'])->name('receptionUpdated');
+
+        Route::get('/purchase/item/create', [PurchaseController::class, 'itemCreate'])->name('purchase.item.create');
+        Route::post('/purchase/item', [PurchaseController::class, 'itemStore'])->name('purchase.item.store');
         // Route::get('/posts/{post}/comments/{comment}', function ($postId, $commentId) {});
         // Route::get('/user/{id}', [UserController::class, 'index']);
     });

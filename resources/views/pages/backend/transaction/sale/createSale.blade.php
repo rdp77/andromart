@@ -194,8 +194,8 @@
             @endforeach
             @foreach ($stock as $el)
             <input class="itemsData" type="hidden" data-stock="{{$el->stock}}"
-                data-price="{{$el->item->sell - $el->item->discount}}" data-profit="{{$el->item->buy}}"
-                data-name="{{$el->item->name}}" data-supplier="{{$el->item->supplier->name}}" value="{{$el->item->id}}">
+                data-supplier="{{$el->item->supplier->name}}" data-price="{{$el->item->sell - $el->item->discount}}"
+                data-profit="{{$el->item->buy}}" data-name="{{$el->item->name}}" value="{{$el->item->id}}">
             @endforeach
             <div class="table-responsive">
                 <table class="table table-striped">

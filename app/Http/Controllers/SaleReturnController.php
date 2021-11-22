@@ -148,15 +148,25 @@ class SaleReturnController extends Controller
     {
         $dataItems = explode(",", $req->item_id);
         $item = SaleDetail::with('Sale', 'Item')->find($dataItems[0]);
+        $discountType = $item->Sale->discount_type;
+        $discount = $discountType == "percent" ? $item->Sale->discount_percent
+            : $item->Sale->discount_price;
 
         $data = [
+            'faktur' => $item->Sale->code,
             'date' => Carbon::parse($item->Sale->date)->format('d F Y'),
             'qty' => $item->qty,
             'price' => number_format($item->price),
             'total' => number_format($item->total),
             'operator' => User::find($item->Sale->user_id)->name,
             'sale' => $item->Sale->id,
-            'item' => $dataItems[1]
+            'item' => $dataItems[1],
+            'sp_taker' => $item->sharing_profit_sales,
+            'sp_seller' => $item->sharing_profit_buyer,
+            'taker' => User::find($item->buyer_id)->name,
+            'seller' => User::find($item->sales_id)->name,
+            'discount_type' => $discountType,
+            'discount' => $discount
         ];
 
         return Response::json([

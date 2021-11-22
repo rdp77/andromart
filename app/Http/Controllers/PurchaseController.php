@@ -12,6 +12,11 @@ use App\Models\Item;
 use App\Models\Unit;
 use App\Models\User;
 use App\Models\Branch;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Supplier;
+use App\Models\Type;
+use App\Models\Warranty;
 use App\Models\Journal;
 use App\Models\JournalDetail;
 use App\Models\AccountData;
@@ -112,7 +117,11 @@ class PurchaseController extends Controller
         $code     = $this->code('PCS');
         $employee = Employee::get();
         // $items    = Item::where('name','!=','Jasa Service')->get();
+
+        $branch_id = Auth::user()->employee->branch_id;
         $item     = Item::with('stock')->where('items.name','!=','Jasa Service')
+        ->join('stocks', 'items.id', 'stocks.item_id')
+        ->where('stocks.branch_id', $branch_id)
         ->join('suppliers', 'items.supplier_id', 'suppliers.id')
         ->select('items.id as id', 'items.name as name', 'buy', 'suppliers.name as supplier')
         ->get();
@@ -168,6 +177,7 @@ class PurchaseController extends Controller
     public function store(Request $req)
     {
         $account = AccountData::find($req->account);
+        $branch_id = Auth::user()->employee->branch_id;
         $years = date("Y");
         $dates = date("Y-m-d");
 
@@ -198,6 +208,7 @@ class PurchaseController extends Controller
         $purchasing->code = $req->code;
         $purchasing->date = $date;
         $purchasing->employee_id = $req->buyer;
+        $purchasing->branch_id = $branch_id;
         // $purchasing->status = $req->pay;
 
         $purchasing->discountType = $discountType;
@@ -212,23 +223,32 @@ class PurchaseController extends Controller
         $savePurchasing = $purchasing->save();
 
         if($savePurchasing) {
-            $codeJournal = array("KK".$account->code, "DD".$account->code);
             $debetKredit = array("K", "D");
-            $accountId = array($account->id, $account->id);
+            $accountId = array([$account->main_id, $account->main_detail_id], [4, 12]);
             $descriptionJournal = array("Pembelian Kredit", "Pembelian Debit");
-            $journalId = [];
-            foreach ($codeJournal as $key => $value) {
-                $journal = new Journal;
-                $journal->code = $value;
-                $journal->year = $years; 
-                $journal->date = $dates;
-                $journal->total = str_replace(",", '',$req->grandTotal);
-                $journal->type = $account->name;
-                $journal->ref = $req->code;
-                $journal->description = $descriptionPurchase;
-                // $journal->description = $descriptionJournal[$key];
-                $journal->save();
-                $journalId[] = $journal->id;
+
+            $journal = new Journal;
+            $journal->code = "KK".$account->code;
+            $journal->year = $years; 
+            $journal->date = $dates;
+            $journal->total = str_replace(",", '',$req->grandTotal);
+            $journal->type = $account->name;
+            $journal->ref = $req->code;
+            $journal->description = $descriptionPurchase;
+            // $journal->description = $descriptionJournal[$key];
+            $saveJournal = $journal->save();
+
+            if ($saveJournal) {
+                foreach ($debetKredit as $key => $value) {
+                    $journalDetail = new JournalDetail;
+                    $accountData = AccountData::where('main_id', $accountId[$key][0])->where('main_detail_id', $accountId[$key][1])->where('branch_id', $branch_id)->first();
+                    $journalDetail->journal_id = $journal->id;
+                    $journalDetail->account_id = $accountData->id;
+                    $journalDetail->total = str_replace(",", '',$req->grandTotal);
+                    $journalDetail->description = $descriptionPurchase . " " . $descriptionJournal[$key];
+                    $journalDetail->debet_kredit = $debetKredit[$key];
+                    $journalDetail->save();
+                }
             }
         }
 
@@ -239,7 +259,7 @@ class PurchaseController extends Controller
             $purchasingDetail->item_id = $req->itemsDetail[$row];
             // $purchasingDetail->unit_id = $req->unitsDetail[$row];
             // $purchasingDetail->branch_id = $req->branchesDetail[$row];
-            $purchasingDetail->branch_id = $req->branch;
+            $purchasingDetail->branch_id = $branch_id;
             $purchasingDetail->price = str_replace(",", '',$req->priceDetail[$row]);
             $purchasingDetail->qty_start = str_replace(",", '',$req->qtyDetail[$row]);
             $purchasingDetail->qty = str_replace(",", '',$req->qtyDetail[$row]);
@@ -248,21 +268,6 @@ class PurchaseController extends Controller
             $purchasingDetail->created_by = Auth::user()->name;
             $purchasingDetail->save();
             // journal_details (journal_id, account_id, total, description, debet_kredit)
-
-            foreach ($journalId as $key => $value) {
-                if($req->desDetail[$row] == null) {
-                    $descriptionDetail = "kosong";
-                } else {
-                    $descriptionDetail = $req->desDetail[$row];
-                }
-                $journalDetail = new JournalDetail;
-                $journalDetail->journal_id = $value;
-                $journalDetail->account_id = $accountId[$key];
-                $journalDetail->total = str_replace(",", '',$req->totalPriceDetail[$row]);
-                $journalDetail->description = $descriptionDetail;
-                $journalDetail->debet_kredit = $debetKredit[$key];
-                $journalDetail->save();
-            }
         }
         return Redirect::route('purchase.index')
             ->with([
@@ -507,5 +512,81 @@ class PurchaseController extends Controller
                 'status' => 'Berhasil disetujui',
                 'type' => 'success'
             ]);
+    }
+
+
+    public function itemCreate()
+    {
+        $branch = Branch::get();
+        $brand = Brand::get();
+        $category = Category::get();
+        $supplier = Supplier::get();
+        $type = Type::get();
+        $unit = Unit::get();
+        $warranty = Warranty::get();
+        return view('pages.backend.transaction.purchase.createItem', compact(
+            'branch',
+            'category',
+            'brand',
+            'type',
+            'supplier',
+            'unit',
+            'warranty'
+        ));
+    }
+
+    public function itemStore(Request $req)
+    {
+        $id = DB::table('items')->max('id') + 1;
+        $image = $req->image;
+        $image = str_replace('data:image/jpeg;base64,', '', $image);
+        $image = base64_decode($image);
+        if ($image != null) {
+            $fileSave = 'public/assetsmaster/image/item/IMG_' . $id . '.' . 'png';
+            $fileName = 'IMG_' . $id . '.' . 'png';
+            Storage::put($fileSave, $image);
+        } else {
+            $fileName = null;
+        }
+
+        Item::create([
+            'id' => $id,
+            'name' => $req->name,
+            'brand_id' => $req->brand,
+            'supplier_id' => $req->supplier_id,
+            'warranty_id' => $req->warranty_id,
+            'buy' => str_replace(",", '', $req->buy),
+            'sell' => str_replace(",", '', $req->sell),
+            'discount' => str_replace(",", '', $req->discount),
+            'condition' => $req->condition,
+            'image' => $fileName,
+            'description' => $req->description,
+            'created_by' => Auth::user()->name,
+        ]);
+
+        for ($i = 0; $i < count($req->branch_id); $i++) {
+            Stock::create([
+                'item_id' => $id,
+                'unit_id' => $req->unit_id,
+                'branch_id' => $req->branch_id[$i],
+                'stock' => '0',
+                'min_stock' => '0',
+                'description' => $req->description,
+                'created_by' => Auth::user()->name,
+                'created_at' => date('Y-m-d h:i:s'),
+            ]);
+        }
+
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Membuat barang baru'
+        );
+
+        return Redirect::route('purchase.create')
+        ->with([
+            'status' => 'Berhasil membuat barang baru',
+            'type' => 'success'
+        ]);
     }
 }

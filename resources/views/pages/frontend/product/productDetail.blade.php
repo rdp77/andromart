@@ -2,6 +2,13 @@
 @section('title', 'Home')
 @section('menu-active', 'product')
 @section('content')
+<style type="text/css">
+    .imageShop {
+        max-width: 100px;
+        max-height: 100px;
+        margin:  10px;
+    }
+</style>
 <div style="height: 100px;"></div>
 <div role="main" class="main">
     <div role="main" class="main shop py-4">
@@ -14,12 +21,18 @@
                     <img alt="" class="img-fluid" src="{{ asset('photo_product/1.jpg') }}">
 
                 </div>
-
                 <div class="col-lg-6">
-
                     <div class="summary entry-summary">
-
+                        @php 
+                            $harga = $itemProduct->prize - $itemProduct->discount; 
+                            $hasil_rupiah = "Rp " . number_format($harga,2,',','.');
+                            $harga_rupiah = "Rp " . number_format($itemProduct->prize,2,',','.');
+                        @endphp
                         <h1 class="mb-0 font-weight-bold text-7">{{ $itemProduct->name }}</h1>
+                        <h2 class="mb-0 text-7">Harga : {{ $hasil_rupiah }}</h2>
+                        @if($itemProduct->discount != 0)
+                            <del><span class="amount">{{ $harga_rupiah }}</span></del><br />
+                        @endif
 
                         <div class="pb-0 clearfix">
                             <div title="Rated 3 out of 5" class="float-left">
@@ -40,10 +53,35 @@
                         <!-- <div class="product-meta">
                             <span class="posted-in">Categories: <a rel="tag" href="#">Accessories</a>, <a rel="tag" href="#">Bags</a>.</span>
                         </div> -->
-
                     </div>
-
-
+                     <!-- style="position: absolute; bottom: 10px;" -->
+                     <br /><br /><br />
+                    <div>
+                        <h6>Temukan kami di: </h6>
+                        <a href="https://api.whatsapp.com/send/?phone=6289662425357&text&app_absent=0">
+                            <img class="imageShop" src="https://assets.stickpng.com/images/5ae21cc526c97415d3213554.png">
+                        </a>
+                        @if($itemProduct->tokopedia != null)
+                            <a href="{{ $itemProduct->tokopedia }}">
+                                <img class="imageShop" src="https://ecs7.tokopedia.net/assets-tokopedia-lite/v2/zeus/production/e5b8438b.svg">
+                            </a>
+                        @endif
+                        @if($itemProduct->shopee != null)
+                            <a href="{{ $itemProduct->shopee }}">
+                                <img class="imageShop" src="https://res.cloudinary.com/crunchbase-production/image/upload/c_lpad,f_auto,q_auto:eco,dpr_1/itxiuybmyrbkkhrykvzi">
+                            </a>
+                        @endif
+                        @if($itemProduct->lazada != null)
+                            <a href="{{ $itemProduct->lazada }}">
+                                <img class="imageShop" src="https://laz-img-cdn.alicdn.com/images/ims-web/TB1Hs8GaMFY.1VjSZFnXXcFHXXa.png">
+                            </a>
+                        @endif
+                        @if($itemProduct->bukalapak != null)
+                            <a href="{{ $itemProduct->bukalapak }}">
+                                <img class="imageShop" src="https://assets.bukalapak.com/sigil/bukalapak-logo-primary.svg">
+                            </a>
+                        @endif
+                    </div>
                 </div>
             </div>
 

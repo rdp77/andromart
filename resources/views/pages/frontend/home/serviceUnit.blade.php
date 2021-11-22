@@ -29,9 +29,13 @@
 		<div class="row">
 			@foreach($homeServiceUnit as $row)
 				<div class="col-12 col-lg-3" style="text-align: center;">
+				<a href="{{ $row->url }}" style="text-decoration: none;">
 					<img src="{{ asset($row->image) }}" style="width: 200px; height: 200px; object-fit: cover; margin-bottom: 10px;">
 					<h3 style="color: white;">{{ $row->title }}</h3>
-					<h3 style="color: #ed3b9d; margin-top: -30px;"><b>{{ $row->subtitle }}</b></h3>
+					@if($row->subtitle != "kosong")
+						<h3 style="color: #ed3b9d; margin-top: -30px;"><b>{{ $row->subtitle }}</b></h3>
+					@endif
+				</a>
 				</div>
 			@endforeach
 		</div>
