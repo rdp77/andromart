@@ -55,7 +55,7 @@
             <address>
               <strong><p style="font-size: 25px" style="background-color:#eb2390;color:white;padding:5px;text-align:center">Teknisi</p></strong>
               <p style="font-size: 26px">{{$service->employee1->name}}</p>
-              {{-- <p style="font-size: 26px">{{$service->employee1->contact}}</p> --}}
+              <p style="font-size: 26px">{{date('d F Y',strtotime($service->estimate_day))}}</p>
             </address>
           </div>
           <div class="col-md-8 text-md-right">
@@ -81,7 +81,7 @@
                   <o style="font-size:30px"> Belum Bayar</o>
                 @endif
               @else
-                {{$service->payment_status}}
+              <o style="font-size:30px">{{$service->payment_status}}</o>
               @endif</p>
               {{-- <strong><h3 style="color:#28a745"> </h3></strong>s --}}
             </address>

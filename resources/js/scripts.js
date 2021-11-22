@@ -394,6 +394,9 @@ $(function () {
             nativeOnMobile: false,
         });
     }
+    
+    
+    
 
     $(".notification-toggle").dropdown();
     $(".notification-toggle")
@@ -769,11 +772,17 @@ $(function () {
 
     // Cleave
     $(".cleaveNumeral")
-        .toArray()
-        .forEach(function (field) {
-            new Cleave(field, {
-                numeral: true,
-                numeralThousandsGroupStyle: "thousand",
+            .toArray()
+            .forEach(function (field) {
+                new Cleave(field, {
+                    numeral: true,
+                    numeralThousandsGroupStyle: "thousand",
+                });
             });
-        });
+
+            
+
+
+
+
 });

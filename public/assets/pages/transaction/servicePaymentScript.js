@@ -177,7 +177,19 @@ function save() {
                         swal(data.message, {
                             icon: "success",
                         });
-                        location.reload;
+                        swal({
+                            title: "Apakah Anda Ingin Mengupdate Service Ini?",
+                            text: "Aksi ini membuat anda akan berpindah halaman.",
+                            icon: "warning",
+                            buttons: true,
+                            dangerMode: true,
+                        }).then((red) => {
+                            if (red) {
+                                window.location.href = window.location.origin+'/transaction/service/service-form-update-status';
+                            }else{
+                                location.reload;
+                            }
+                        });
                     }else{
                         swal(data.message, {
                             icon: "warning",
@@ -224,6 +236,7 @@ function sumTotal() {
         var totalDownPayment = $('#totalDownPayment').val().replace(/,/g, ''),asANumber = +totalDownPayment;}
         
     var sumTotal = parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDiscountValue)-parseInt(totalDownPayment)-parseInt(totalPayment);
+    // changeTypePay();
 
     if (sumTotal < 0) {
         $('#totalPrice').val(parseInt(0).toLocaleString('en-US'));
@@ -348,4 +361,18 @@ function jurnal(params) {
 
         },
     });
+}
+
+function changeTypePay() {
+    var type = $('.type').find(':selected').val();
+    if (type == 'Lunas') {
+        $('#totalPayment').val(parseInt($('#totalPriceHidden').val()).toLocaleString('en-US'));
+        $('#totalPrice').val(0);
+    }else if(type == 'DownPayment'){
+        $('#totalPayment').val(0);
+        $('#totalPrice').val(parseInt($('#totalPriceHidden').val()).toLocaleString('en-US'));
+    }else{
+        $('#totalPayment').val(0);
+        $('#totalPrice').val(parseInt($('#totalPriceHidden').val()).toLocaleString('en-US'));
+    }
 }

@@ -56,7 +56,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-12 col-lg-12">
-                            <label for="estimateDay">{{ __('Estimasi Cek') }}<code>*</code></label>
+                            <label for="estimateDay">{{ __('Analisa') }}<code>*</code></label>
                             <input id="estimateDay" type="text" class="form-control" name="estimateDay">
                         </div>
                     </div>
@@ -83,7 +83,7 @@
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="brand">{{ __('Merk') }}<code>*</code></label>
-                            <select class="select2 brand" name="brand">
+                            <select class="brand form-control" id="brandService" name="brand">
                                 <option value="">- Select -</option>
                                 {{-- @foreach ($brand as $element)
                                 <option value="{{$element->id}}">{{$element->name}}</option>
@@ -93,7 +93,7 @@
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="series">{{ __('Seri') }}<code>*</code></label>
-                            <select class="select2 series" name="series">
+                            <select class="series form-control" id="seriesService" name="series">
                                 <option value="">- Select -</option>
                                 {{-- @foreach ($type as $element)
                                 <option value="{{$element->id}}">{{$element->name}}</option>
@@ -133,7 +133,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-12 col-lg-12">
-                            <label for="description">{{ __('Keterangan') }}<code>*</code></label>
+                            <label for="description">{{ __('Kesepakatan Bersamas') }}<code>*</code></label>
                             <input id="description" type="text" class="form-control validation" data-name="Deskripsi" name="description">
                         </div>
                     </div>
@@ -828,5 +828,8 @@ function take_snapshot() {
     } );
 
 }
+
+
 </script>
+
 @endsection

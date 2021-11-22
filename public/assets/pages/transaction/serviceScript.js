@@ -248,6 +248,19 @@ function category() {
     // Reset Series
     $('.series').empty();
     $('.series').append('<option value="">- Select -</option>');
+
+    $("#brandService").select2({
+        allowClear: true,
+        escapeMarkup: function (markup) {
+            return markup;
+        },
+        placeholder: "- Select -",
+        language: {
+            noResults: function () {
+                return "<a href='/master/brand/brand/create' target='_blank'>Tambah Merk</a>";
+            },
+        },
+    });
 }
 
 $(document.body).on("change",".brand",function(){
@@ -261,6 +274,20 @@ $(document.body).on("change",".brand",function(){
     });
     $('.series').append('<option value="">- Select -</option>');
     $('.series').append(dataItems);
+
+    $("#seriesService").select2({
+        allowClear: true,
+        escapeMarkup: function (markup) {
+            return markup;
+        },
+        placeholder: "- Select -",
+        language: {
+            noResults: function () {
+                return "<a href='/master/type/type/create' target='_blank'>Tambah Seri</a>";
+            },
+        },
+    });
+    
 });
 
 
