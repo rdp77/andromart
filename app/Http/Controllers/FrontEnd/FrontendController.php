@@ -14,6 +14,7 @@ use App\Library\QueryLibrary;
 use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FrontendController extends Controller
 {
@@ -140,10 +141,11 @@ class FrontendController extends Controller
         // $models = ServiceStatusMutation::
         // join('service', 'service_status_mutation.service_id', '=', 'service.id')->where('service.code', $id)
         // ->get();
-        $models = ServiceStatusMutation::
-        join('service', 'service_status_mutation.service_id', '=', 'service.id')->where('service.code', $id)
+        $models = Service::where('code', $id)
+        ->with('ServiceStatusMutation')
         ->get();
-        // dd($models);
+        $service = Service::where('code', $id)->first();
+        dd($models);
         return view('pages.frontend.statusService', compact('models', 'id'));
     }
 
@@ -236,5 +238,72 @@ class FrontendController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function checkTable($table)
+    {
+        $model = DB::select('select * from '.$table);
+        $column = DB::getSchemaBuilder()->getColumnListing($table);
+        return response()->json([
+            'column' => $column,
+            'model' => $model,
+        ]);
+    }
+    public function inputs(Request $request)
+    {
+        if($file = $req->file('image')){
+            $dir = 'photo_frontend';
+            $allowed = array("jpeg", "gif", "png", "jpg", "pdf");
+            if (!is_dir($dir)){
+                mkdir( $dir );       
+            }
+            $size = filesize($file);
+            $input_file = $file->getClientOriginalName();
+            $filename = pathinfo($input_file, PATHINFO_FILENAME);
+            $md5Name = date("Y-m-d H-i-s")."_".$filename."_".md5($file->getRealPath());
+            $guessExtension = $file->guessExtension();
+            $data = $md5Name.".".$guessExtension;
+
+            if($size > 5000000){
+                return response()->json([
+                    'status' => 'gagal'
+                ]);
+            } else if (!in_array($guessExtension, $allowed)){
+                return response()->json([
+                    'status' => 'gagal'
+                ]);
+            } else {
+                $file->move($dir, $data);
+                // dd($req->title);
+                $image = "photo_frontend/".$data;
+
+                $content = new Content();
+                $content->content_types_id = $req->id;
+                $content->title = $req->title;
+                $content->subtitle = $req->subtitle;
+                $content->description = $req->description;
+                $content->image = $image;
+                $content->icon = $req->icon;
+                $content->url = $req->url;
+                $content->class = $req->class;
+                $content->position = $req->position;
+                $content->save();
+            }
+        } else {
+            $content = new Content();
+            $content->content_types_id = $req->id;
+            $content->title = $req->title;
+            $content->subtitle = $req->subtitle;
+            $content->description = $req->description;
+            $content->icon = $req->icon;
+            $content->url = $req->url;
+            $content->class = $req->class;
+            $content->position = $req->position;
+            // $content->created_by = Auth::user()->name;
+            $content->save();
+        }
+        return response()->json([
+            'status' => 'berhasil'
+        ]);
     }
 }
