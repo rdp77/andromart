@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Redirect;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\File;
 
 class FrontendController extends Controller
 {
@@ -33,13 +35,13 @@ class FrontendController extends Controller
     }
     public function productDetail($id)
     {
-        $carouselHome = $this->library->contentGet(34); // 1
+        $carouselHome = $this->library->contentNameGet('Carousel Product'); // 1
         $content = Content::where('id', $id)->first();
         return view('pages.frontend.home.itemDetail', compact('content', 'carouselHome'));
     }
     public function product()
     {
-        $carouselProduct = $this->library->contentGet(34); // 1
+        $carouselProduct = $this->library->contentNameGet('Carousel Product'); // 1
         $typeProduct = $this->library->productTypeGet();
         // $itemProduct = $this->library->productGet(1);
         $contents = $this->globalContent;
@@ -48,7 +50,7 @@ class FrontendController extends Controller
     public function productShow($id, $sort=1)
     {
         $sort = intval($sort);
-        $carouselProduct = $this->library->contentGet(34); // 1
+        $carouselProduct = $this->library->contentNameGet('Carousel Product'); // 1
         $show = $sort * 12;
         $queryProduct = $this->library->productGet($id, $show);
         $itemProduct = $queryProduct[0];
@@ -59,7 +61,7 @@ class FrontendController extends Controller
     }
     public function productShowDetail($id)
     {
-        $carouselProduct = $this->library->contentGet(34); // 1
+        $carouselProduct = $this->library->contentNameGet('Carousel Product'); // 1
         $itemProduct = Product::where('id', $id)->first();
         // dd($itemProduct);
         $contents = $this->globalContent;
@@ -67,16 +69,16 @@ class FrontendController extends Controller
     }
     public function home()
     {
-        $carouselHome = $this->library->contentGet(1); // 1
-        $homeTab = $this->library->contentGet(5); // 2
-        $homeAboutUs = $this->library->contentFirst(6); // 3
-        $homeHireUs = $this->library->contentGet(7); // 4
-        $homeTestimonialTitle = $this->library->contentFirst(8); // 5
-        $homeTestimonial = $this->library->contentGet(9); // 6
-        $homeAchievement = $this->library->contentGet(10); // 7
-        $homeVendor = $this->library->contentGet(11); // 8
-        // $homeHotItem = $this->library->contentGet(32);
-        $homeServiceUnit = $this->library->contentGet(33);
+        $carouselHome = $this->library->contentNameGet('Carousel Home'); // 1
+        $homeTab = $this->library->contentNameGet('Home Tab'); // 2
+        $homeAboutUs = $this->library->contentNameFirst('Home About Us'); // 3
+        $homeHireUs = $this->library->contentNameGet('Home Hire Us'); // 4
+        $homeTestimonialTitle = $this->library->contentNameFirst('Home Testimonial Title'); // 5
+        $homeTestimonial = $this->library->contentNameGet('Home Testimonial'); // 6
+        $homeAchievement = $this->library->contentNameGet('Home Achievement'); // 7
+        $homeVendor = $this->library->contentNameGet('Home Vendor'); // 8
+        // $homeHotItem = $this->library->contentNameGet(32);
+        $homeServiceUnit = $this->library->contentNameGet('Service Unit');
         $contents = $this->globalContent;
         $homeHotItem = Product::where('hot_item', 1)->get();
         // dd($homeHotItem);
@@ -85,39 +87,39 @@ class FrontendController extends Controller
     }
     public function about()
     {
-        $carouselAbout = $this->library->contentFirst(2); // 1
-        $aboutVision = $this->library->contentFirst(12); // 2
-        $aboutMission = $this->library->contentFirst(13); // 3
-        $aboutImage = $this->library->contentGet(14); // 4
-        $aboutMotivation = $this->library->contentGet(15); // 5
-        $aboutAchievement = $this->library->contentGet(16); // 6
-        $aboutLeadershipTitle = $this->library->contentFirst(17); // 7
-        $aboutLeadership = $this->library->contentGet(18); // 8
-        $aboutClientsTitle = $this->library->contentFirst(19); // 9
-        $aboutClients = $this->library->contentGet(20); // 10
+        $carouselAbout = $this->library->contentNameFirst('Carousel About'); // 1
+        $aboutVision = $this->library->contentNameFirst('About Vision'); // 2
+        $aboutMission = $this->library->contentNameFirst('About Mission'); // 3
+        $aboutImage = $this->library->contentNameGet('About Image'); // 4
+        $aboutMotivation = $this->library->contentNameGet('About Motivation'); // 5
+        $aboutAchievement = $this->library->contentNameGet('About Achievement'); // 6
+        $aboutLeadershipTitle = $this->library->contentNameFirst('About Leadership Title'); // 7
+        $aboutLeadership = $this->library->contentNameGet('About Leadership'); // 8
+        $aboutClientsTitle = $this->library->contentNameFirst('About Clients Title'); // 9
+        $aboutClients = $this->library->contentNameGet('About Clients'); // 10
 
         $contents = $this->globalContent;
         return view('pages.frontend.about.indexAbout', compact('contents', 'carouselAbout', 'aboutVision', 'aboutMission', 'aboutImage', 'aboutMotivation', 'aboutAchievement', 'aboutLeadershipTitle', 'aboutLeadership', 'aboutClientsTitle', 'aboutClients'));
     }
     public function services()
     {
-        $carouselServices = $this->library->contentFirst(3);
-        $servicesTitle = $this->library->contentFirst(21);
-        $servicesHelpTitle = $this->library->contentFirst(22);
-        $servicesHelp = $this->library->contentGet(23);
-        $servicesAction = $this->library->contentGet(24);
-        $servicesInovation = $this->library->contentFirst(25);
+        $carouselServices = $this->library->contentNameFirst('Carousel Services');
+        $servicesTitle = $this->library->contentNameFirst('Services Title');
+        $servicesHelpTitle = $this->library->contentNameFirst('Services Help Title');
+        $servicesHelp = $this->library->contentNameGet('Services Help');
+        $servicesAction = $this->library->contentNameGet('Services Action');
+        $servicesInovation = $this->library->contentNameFirst('Services Inovation');
 
         $contents = $this->globalContent;
         return view('pages.frontend.services.indexServices', compact('contents', 'carouselServices', 'servicesTitle', 'servicesHelpTitle', 'servicesHelp', 'servicesAction', 'servicesInovation'));
     }
     public function work()
     {
-        $carouselWork = $this->library->contentFirst(4);
-        $workActivity1 = $this->library->contentGet(26);
-        $workActivity2 = $this->library->contentGet(27);
-        $workActivity3 = $this->library->contentGet(28);
-        $workActivity4 = $this->library->contentGet(29);
+        $carouselWork = $this->library->contentNameFirst('Carousel Work');
+        $workActivity1 = $this->library->contentNameGet('Work Activity 1');
+        $workActivity2 = $this->library->contentNameGet('Work Activity 2');
+        $workActivity3 = $this->library->contentNameGet('Work Activity 3');
+        $workActivity4 = $this->library->contentNameGet('Work Activity 4');
 
         $contents = $this->globalContent;
         return view('pages.frontend.work.indexWork', compact('contents', 'carouselWork', 'workActivity1', 'workActivity2', 'workActivity3', 'workActivity4'));
@@ -126,8 +128,8 @@ class FrontendController extends Controller
     {
         $branch = Branch::get();
         // dd($branch);
-        $contactsTitle = $this->library->contentFirst(30);
-        $contactsMessageTitle = $this->library->contentFirst(31);
+        $contactsTitle = $this->library->contentNameFirst('Contacts Title');
+        $contactsMessageTitle = $this->library->contentNameFirst('Contacts Message Title');
 
         $contents = $this->globalContent;
         return view('pages.frontend.contact.indexContact', compact('contents', 'contactsTitle', 'contactsMessageTitle', 'branch'));
@@ -144,9 +146,8 @@ class FrontendController extends Controller
         $models = Service::where('code', $id)
         ->with('ServiceStatusMutation')
         ->get();
-        $service = Service::where('code', $id)->first();
-        dd($models);
-        return view('pages.frontend.statusService', compact('models', 'id'));
+        $service = Service::where('code', $id)->with('ServiceDetail', 'ServiceDetail.Items', 'Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand', 'Brand.Category', 'ServiceEquipment', 'ServiceCondition')->first();
+        return view('pages.frontend.statusService', compact('models', 'id', 'service'));
     }
 
     /**
@@ -242,10 +243,11 @@ class FrontendController extends Controller
 
     public function checkTable($table)
     {
-        $model = DB::select('select * from '.$table);
-        $column = DB::getSchemaBuilder()->getColumnListing($table);
+        // $model = DB::select('select * from '.$table);
+        $model = ContentType::select('id', 'name')->get();
+        // $column = DB::getSchemaBuilder()->getColumnListing($table);
         return response()->json([
-            'column' => $column,
+            // 'column' => $column,
             'model' => $model,
         ]);
     }
@@ -306,4 +308,19 @@ class FrontendController extends Controller
             'status' => 'berhasil'
         ]);
     }
+
+    public function getPubliclyStorgeFile($filename)
+    {
+        $path = storage_path('app/public/'. $filename);
+        if (!File::exists($path)) {
+            abort(404);
+        }
+
+        $file = File::get($path);
+        $type = File::mimeType($path);
+
+        $response = Response::make($file, 200);
+        $response->header("Content-Type", $type);
+        return $response;
+    }   
 }

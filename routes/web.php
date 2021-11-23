@@ -31,6 +31,8 @@ Route::get('/trackingService/{id}', [FrontendController::class, 'tracking'])->na
 Route::get('/product', [FrontendController::class, 'product'])->name('frontendProduct');
 Route::get('/product-show/{id}/{sort?}', [FrontendController::class, 'productShow'])->name('frontendProductShow');
 Route::get('/product-show-detail/{id}', [FrontendController::class, 'productShowDetail'])->name('frontendProductShowDetail');
+
+// Route::get('image/{filename}', [FrontendController::class,'getPubliclyStorgeFile'])->name('image.displayImage');
 // Route::get('/login', function () {
 //     return view('home');
 // });

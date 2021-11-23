@@ -91,15 +91,24 @@ class PurchaseController extends Controller
 
     public function code($type)
     {
-        $date = date('Y-m-d');
+        // $date = date('Y-m-d');
+        // $month = Carbon::now()->format('m');
+        // $year = Carbon::now()->format('y');
+
+        // $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
+        // $now = Purchasing::whereBetween("created_at", [$date.' 00:00:00', $date.' 23:59:59'])->count();
+        // $index = $now + 1;
+        // $index = str_pad($index, 3, '0', STR_PAD_LEFT);
+        // return $code = $type.$getEmployee->Branch->code.$year . $month . $index;
+
+
+        $getEmployee =  Employee::with('branch')->where('user_id', Auth::user()->id)->first();
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
+        $index = DB::table('purchasings')->max('id') + 1;
 
-        $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
-        $now = Purchasing::whereBetween("created_at", [$date.' 00:00:00', $date.' 23:59:59'])->count();
-        $index = $now + 1;
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
-        return $code = $type.$getEmployee->Branch->code.$year . $month . $index;
+        return $code = $type . $getEmployee->Branch->code . $year . $month . $index;
     }
     public function codeJournals($type)
     {
