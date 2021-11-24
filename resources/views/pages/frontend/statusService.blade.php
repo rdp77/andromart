@@ -10,7 +10,7 @@
 @endpush
 @section('content')
 <div role="main" class="main">
-@if(count($models) == 0)
+@if($service == null)
   <section class="section">
       <div class="container mt-5">
         <div class="page-error">
@@ -109,7 +109,7 @@
                   <div class="card-header"><h5>Tracking Service</h5></div>
                   <div class="card-body">
                     <div class="activities">
-                        @foreach($models as $row)
+                        @foreach($service->ServiceStatusMutation as $row)
                         @php $tanggal = date('d-M-Y', strtotime($row->created_at)); @endphp
                         <div class="activity">
                           <div class="activity-icon bg-primary text-white shadow-primary">

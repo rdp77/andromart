@@ -143,11 +143,8 @@ class FrontendController extends Controller
         // $models = ServiceStatusMutation::
         // join('service', 'service_status_mutation.service_id', '=', 'service.id')->where('service.code', $id)
         // ->get();
-        $models = Service::where('code', $id)
-        ->with('ServiceStatusMutation')
-        ->get();
-        $service = Service::where('code', $id)->with('ServiceDetail', 'ServiceDetail.Items', 'Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand', 'Brand.Category', 'ServiceEquipment', 'ServiceCondition')->first();
-        return view('pages.frontend.statusService', compact('models', 'id', 'service'));
+        $service = Service::where('code', $id)->with('ServiceDetail', 'ServiceDetail.Items', 'Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand', 'Brand.Category', 'ServiceEquipment', 'ServiceCondition', 'ServiceStatusMutation')->first();
+        return view('pages.frontend.statusService', compact('id', 'service'));
     }
 
     /**
