@@ -14,7 +14,7 @@
     <section class="section">
         <div class="section-body">
             <div class="row">
-                <div class="col-5 col-sm-12">
+                <div class="col-lg-5 col-md-12 col-sm-12">
                     <h2 class="section-title">form </h2>
                     <div class="card">
                         <div class="card-body">
@@ -77,7 +77,7 @@
 
                     </div>
                 </div>
-                <div class="col-7 col-sm-12">
+                <div class="col-lg-7 col-md-12 col-sm-12">
                     <h2 class="section-title">Ambil Foto</h2>
                     <div class="form-group col-12 col-md-12 col-lg-12">
                         <div id="my_camera"></div>
