@@ -122,7 +122,7 @@
                               <p>{{ $row->status }}</p>
                             </div>
                             <p>{{ $row->description }}</p>
-                            <p>{{ asset($row->image) }}</p>
+                            <p><img src="{{ asset('/storage/'.$row->image) }}" alt=""></p>
                           </div>
                         </div>
                         @endforeach
