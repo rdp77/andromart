@@ -122,6 +122,7 @@
                               <p>{{ $row->status }}</p>
                             </div>
                             <p>{{ $row->description }}</p>
+                            <p>{{ asset($row->image) }}</p>
                           </div>
                         </div>
                         @endforeach
