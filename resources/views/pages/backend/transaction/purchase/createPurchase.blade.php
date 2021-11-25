@@ -255,11 +255,6 @@
 
 @section('script')
 <script src="{{ asset('assets/pages/transaction/purchaseScript.js') }}"></script>
-<style>
-    .modal-backdrop{
-        position: relative !important;
-    }
-</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
 <style>
     .modal-backdrop{
@@ -271,8 +266,8 @@ $( document ).ready(function() {
     Webcam.set({
         width: 700,
         height: 420,
-        dest_width:1000,
-        dest_height:1000,
+        // dest_width:1000,
+        // dest_height:1000,
         image_format: 'jpeg',
         jpeg_quality: 100
     });

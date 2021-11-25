@@ -63,6 +63,7 @@ class ReceptionController extends Controller
                     } else {
                         $actionBtn .= '<div class="dropdown-menu">
                             <a class="dropdown-item" href="' . route('reception.edit', Crypt::encryptString($row->id)) . '">Ubah</a>';
+                        $actionBtn .= '<a onclick="jurnal(' ."'". $row->code ."'". ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
                     }
                     // $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
@@ -176,37 +177,35 @@ class ReceptionController extends Controller
         $years = date("Y");
         $dates = date("Y-m-d");
 
-        if($saveHistoryPurchase) {
-            $codeJournal = array("KK".$account->code, "DD".$account->code);
-            $debetKredit = array("K", "D");
-            $accountId = array($account->id, $account->id);
-            $descriptionJournal = array("Uang Dimuka Kredit", "Penerimaan Persediaan Barang Dagang Debet");
-            $journalId = [];
-            foreach ($codeJournal as $key => $value) {
-                $journal = new Journal;
-                $journal->code = $value;
-                $journal->year = $years; 
-                $journal->date = $dates;
-                // $journal->total = str_replace(",", '',$req->grandTotal);
-                $journal->total = $total;
-                $journal->type = $account->name;
-                $journal->ref = $req->code;
-                $journal->description = "Kosong";
-                // $journal->description = $descriptionJournal[$key];
-                $journal->save();
-                $journalId[] = $journal->id;
-            }
+        $jumlahqty = 0;
+        $purchasingDetailQty = PurchasingDetail::where('purchasing_id', $purchase->id)->get();
+        foreach ($purchasingDetailQty as $key => $value) {
+            $jumlahqty += $value->qty_start;
         }
-
+        $finalTotal = 0;
         foreach($req->idDetail as $row) {
             $qtyNew = (int)str_replace(",", "", $req->qtyNew[$row]);
             $purchasing = PurchasingDetail::where('id', $req->idPurchasing[$row])->first();
             $totalPriceDetail = $qtyNew * $purchasing->price;
+
+            $discountType = $purchasing->discountType;
+            $discountValue = $purchasing->discountValue;
+
+            if($discountType == 0) {
+                $penguranganDiscount = $totalPriceDetail / 100 * $discountValue;
+            } else {
+                $penguranganDiscount = ($discountValue / $jumlahqty) * $qtyNew;
+            }
+            $totalHargaJurnal = $totalPriceDetail - $penguranganDiscount;
+            $finalTotal += $totalHargaJurnal;
+
             $historyDetailPurchase = new HistoryDetailPurchase;
             $historyDetailPurchase->history_purchase_id = $historyPurchase->id;
             $historyDetailPurchase->purchasing_detail_id = $purchasing->id;
             $historyDetailPurchase->qty = $qtyNew;
             $historyDetailPurchase->save();
+            $output[] = array($qtyNew);
+            
             $purchasing->qty -= $qtyNew;
             $purchasing->edit = 1;
             $purchasing->save();
@@ -217,31 +216,38 @@ class ReceptionController extends Controller
             ->first();
             $stocks->stock += $qtyNew;
             $stocks->save();
+        }
+        $branch_id = Auth::user()->employee->branch_id;
+        $years = date("Y");
+        $dates = date("Y-m-d");
 
-            foreach ($journalId as $key => $value) {
+        $debetKredit = array("K", "D");
+        $accountId = array([4, 12], [3,11]);
+        $descriptionJournal = array("Pendapatan Dimuka Pembelian", "Persediaan Barang Dagang");
+
+        $journal = new Journal;
+        $journal->code = "DD13010101".$branch_id;
+        $journal->year = $years; 
+        $journal->date = $dates;
+        $journal->total = str_replace(",", '',$finalTotal);
+        $journal->type = "Persediaan Barang Dagang";
+        $journal->ref = $purchase->code;
+        $journal->description = $purchase->description;
+        // $journal->description = $descriptionJournal[$key];
+        $saveJournal = $journal->save();
+
+        if ($saveJournal) {
+            foreach ($debetKredit as $key => $value) {
                 $journalDetail = new JournalDetail;
-                $journalDetail->journal_id = $value;
-                $journalDetail->account_id = $accountId[$key];
-                $journalDetail->total = $totalPriceDetail;
-                $journalDetail->description = "Kosong";
+                $accountData = AccountData::where('main_id', $accountId[$key][0])->where('main_detail_id', $accountId[$key][1])->where('branch_id', $branch_id)->first();
+                $journalDetail->journal_id = $journal->id;
+                $journalDetail->account_id = $accountData->id;
+                $journalDetail->total = str_replace(",", '',$finalTotal);
+                $journalDetail->description = $purchase->description . " " . $descriptionJournal[$key];
                 $journalDetail->debet_kredit = $debetKredit[$key];
                 $journalDetail->save();
             }
         }
-
-        // foreach($req->idDetail as $row) {
-        //     $purchasing = PurchasingDetail::where('id', $req->idPurchasing[$row])
-        //     ->first();
-        //     $purchasing->qty -= $req->qtyNew[$row];
-        //     $purchasing->save();
-
-        //     $stocks = Stock::where('item_id', $req->idItem[$row])
-        //     ->where('unit_id', $req->idUnit[$row])
-        //     ->where('branch_id', $req->idBranch[$row])
-        //     ->first();
-        //     $stocks->stock += $req->qtyNew[$row];
-        //     $stocks->save();
-        // }
 
         $done = 1;
         $purchaseDetail = PurchasingDetail::where('purchasing_id', $id)->get();

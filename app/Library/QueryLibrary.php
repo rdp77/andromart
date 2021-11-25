@@ -15,6 +15,23 @@ use Illuminate\Support\Facades\Auth;
 
 class QueryLibrary
 {
+    public function contentNameGet($name) {
+        $data = ContentType::where('content_types.name', $name)
+        ->join('contents', 'content_types.id', '=', 'contents.content_types_id')
+        ->where('content_types.active', 1)
+        ->select('contents.id as id', 'title', 'subtitle', 'description', 'image', 'icon', 'url', 'class', 'position')
+        ->get();
+        return $data;
+    }
+    public function contentNameFirst($name) {
+        $data = ContentType::where('content_types.name', $name)
+        ->join('contents', 'content_types.id', '=', 'contents.content_types_id')
+        ->where('content_types.active', 1)
+        ->select('contents.id as id', 'title', 'subtitle', 'description', 'image', 'icon', 'url', 'class', 'position')
+        ->first();
+        return $data;
+    }
+
     public function contentGet($id) {
         $data = ContentType::where('content_types.id', $id)
         ->join('contents', 'content_types.id', '=', 'contents.content_types_id')
