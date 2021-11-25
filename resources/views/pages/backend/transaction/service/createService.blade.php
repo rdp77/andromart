@@ -133,7 +133,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-12 col-lg-12">
-                            <label for="description">{{ __('Kesepakatan Bersamas') }}<code>*</code></label>
+                            <label for="description">{{ __('Kesepakatan Bersama') }}<code>*</code></label>
                             <input id="description" type="text" class="form-control validation" data-name="Deskripsi" name="description">
                         </div>
                     </div>

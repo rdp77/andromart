@@ -57,7 +57,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-12 col-lg-12">
-                            <label for="estimateDay">{{ __('Estimasi Cek') }}<code>*</code></label>
+                            <label for="estimateDay">{{ __('Analisa') }}<code>*</code></label>
                             <input id="estimateDay" type="text" value="{{$service->estimate_day}}" class="form-control" name="estimateDay">
                         </div>
                     </div>
@@ -131,7 +131,7 @@
                     <div class="row">
                         
                         <div class="form-group col-12 col-md-12 col-lg-12">
-                            <label for="description">{{ __('Keterangan') }}<code>*</code></label>
+                            <label for="description">{{ __('Kesepakatan Bersama') }}<code>*</code></label>
                             <input id="description" value="{{$service->description}}" type="text" class="form-control validation" data-name="Deskripsi" name="description">
                         </div>
                     </div>

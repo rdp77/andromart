@@ -55,7 +55,7 @@
             <address>
               <strong><p style="font-size: 25px" style="background-color:#eb2390;color:white;padding:5px;text-align:center">Teknisi</p></strong>
               <p style="font-size: 26px">{{$service->employee1->name}}</p>
-              <p style="font-size: 26px">{{date('d F Y',strtotime($service->estimate_day))}}</p>
+              <p style="font-size: 26px">{{date('d F Y',strtotime($service->estimate_date))}}</p>
             </address>
           </div>
           <div class="col-md-8 text-md-right">
