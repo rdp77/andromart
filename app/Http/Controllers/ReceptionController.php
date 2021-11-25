@@ -101,7 +101,7 @@ class ReceptionController extends Controller
     {
         $id = Crypt::decryptString($id);
         $model = Purchasing::where('purchasings.id', $id)
-        // ->join('employees', 'purchasings.employee_id', 'employees.id')
+        ->leftjoin('employees', 'purchasings.employee_id', 'employees.id')
         ->first();
         $models = Purchasing::where('purchasings.id', $id)
         ->join('purchasing_details', 'purchasings.id', 'purchasing_details.purchasing_id')

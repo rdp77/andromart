@@ -33,7 +33,7 @@
                             if($model->employee_id == null) {
                                 $pembeli = "Tanpa Pembeli";
                             } else {
-                                $pembeli = $model->employee_id;
+                                $pembeli = $model->name;
                             }
                         @endphp
                         <!-- @if($model->employee_id == null)

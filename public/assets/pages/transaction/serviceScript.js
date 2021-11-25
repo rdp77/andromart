@@ -746,7 +746,7 @@ function choseService() {
                                         '</div>'+
                                     '<p>'+value.description+'</p>'+
                                     '<br>'+
-                                    '<img src="'+data.url+'/storage/'+value.image+'" alt="">'+
+                                    '<img width="100%" src="'+data.url+'/storage/'+value.image+'" alt="">'+
                                 '</div>'+
                             '</div>'
                         );
