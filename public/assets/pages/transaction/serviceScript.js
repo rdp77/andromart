@@ -745,6 +745,8 @@ function choseService() {
                                         '<a class="text-job" href="#" type="button">[ '+value.status+' ]</a>'+
                                         '</div>'+
                                     '<p>'+value.description+'</p>'+
+                                    '<br>'+
+                                    '<img src="'+data.url+'/storage/'+value.image+'" alt="">'+
                                 '</div>'+
                             '</div>'
                         );
@@ -771,7 +773,11 @@ function updateStatusService() {
     var status = $('.status').find(':selected').val();
     var technicianId = $('.technicianId').find(':selected').val();
     var description = $('.description').val();
-    var files = $('.image')[0].files;
+    if($('.image')[0] === undefined){
+        return swal('Gambar Harus Diambil / Diisi', {
+            icon: "warning",
+        });
+    }
 
     swal({
         title: "Apakah Anda Yakin?",
@@ -783,7 +789,6 @@ function updateStatusService() {
         if (willSave) {
             $.ajax({
                 url: "/transaction/service/service-form-update-status-save-data",
-                // data: {id:serviceId,status:status,description:description,technicianId:technicianId,files:files,conk:'asdasd'},
                 data: $(".form-data").serialize(),
                 type: 'POST',
                 success: function(data) {

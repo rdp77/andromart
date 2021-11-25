@@ -419,6 +419,7 @@ class ServiceController extends Controller
                 'technician_id' => $req->technicianId,
                 'index' => 1,
                 'status' => 'Manifest',
+                'image' => $fileName,
                 'description' => 'Barang Sedang Dicek & Diterima oleh ' . Auth::user()->name,
                 'created_by' => Auth::user()->name,
                 'created_at' => date('Y-m-d h:i:s'),
@@ -1288,7 +1289,7 @@ class ServiceController extends Controller
             $message = 'exist';
         }
 
-        return Response::json(['status' => 'success', 'result' => $data, 'message' => $message]);
+        return Response::json(['status' => 'success', 'result' => $data, 'message' => $message,'url'=>url('/')]);
     }
 
     public function serviceFormUpdateStatusSaveData(Request $req)
