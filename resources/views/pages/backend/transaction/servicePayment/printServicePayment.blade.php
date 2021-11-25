@@ -169,9 +169,9 @@
             <tr>
               <td style="font-size: 20px">2</td>
               <td style="font-size: 20px">Spare Part</td>
-              <td style="font-size: 20px" class="text-center">{{number_format($price,0,".",",")}}</td>
+              {{-- <td style="font-size: 20px" class="text-center">{{number_format($price,0,".",",")}}</td> --}}
               <td style="font-size: 20px" class="text-center">1</td>
-              <td style="font-size: 20px" class="text-right">{{number_format($totalPrice,0,".",",")}}</td>
+              {{-- <td style="font-size: 20px" class="text-right">{{number_format($totalPrice,0,".",",")}}</td> --}}
             </tr>
           </tbody></table>
         </div>
