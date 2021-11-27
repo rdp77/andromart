@@ -56,6 +56,11 @@ class ServiceController extends Controller
 
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->order(function ($query) {
+                    if (request()->has('id')) {
+                        $query->orderBy('id', 'desc');
+                    }
+                })
                 ->addColumn('action', function ($row) {
                     $actionBtn = '<div class="btn-group">';
                     // $actionBtn .= '<a onclick="reset(' . $row->id . ')" class="btn btn-primary text-white" style="cursor:pointer;">Reset Password</a>';
