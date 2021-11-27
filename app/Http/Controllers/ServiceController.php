@@ -271,6 +271,7 @@ class ServiceController extends Controller
         try {
             // return $req->technicianId;
             $tech1 = Service::where('technician_id', $req->technicianId)->where('work_status', '!=', 'Selesai')->where('work_status', '!=', 'Diambil')->count();
+            // $tech1 = 10;
             $tech2 = Service::where('technician_replacement_id', $req->technicianId)->where('work_status', '!=', 'Selesai')->where('work_status', '!=', 'Diambil')->count();
 
 
@@ -294,11 +295,11 @@ class ServiceController extends Controller
                     $MaxHandle = $settingPresentase[$i]->total;
                 }
             }
-            if ($req->technicianId != 1 || $req->technicianId != '1') {
-                if ($tech1 + $tech2 >= $MaxHandle) {
+            if ($req->technicianId != 1) {
+                if (($tech1 + $tech2) >= $MaxHandle) {
                     return Response::json([
                         'status' => 'fail',
-                        'message' => 'Teknisi Memiliki ' + $MaxHandle + ' Pekerjaan Belum Selesai'
+                        'message' => 'Teknisi Memiliki ' . $MaxHandle . ' Pekerjaan Belum Selesai'
                     ]);
                 }
             }
@@ -663,13 +664,13 @@ class ServiceController extends Controller
                     $MaxHandle = $settingPresentase[$i]->total;
                 }
             }
-            return [$tech1
-            ,$tech2,$MaxHandle];
+            // return [$tech1
+            // ,$tech2,$MaxHandle];
             
             if (($tech1 + $tech2) >= $MaxHandle) {
                 return Response::json([
                     'status' => 'fail',
-                    'message' => 'Teknisi Memiliki ' + $MaxHandle + ' Pekerjaan Belum Selesai'
+                    'message' => 'Teknisi Memiliki ' . $MaxHandle . ' Pekerjaan Belum Selesai'
                 ]);
             }
             // return [$sharingProfitStore,
