@@ -158,7 +158,7 @@ class ServicePaymentController extends Controller
         $employee = Employee::where('user_id',Auth::user()->id)->first();
         $items  = Item::where('name','!=','Jasa Service')->get();
         $account  = AccountData::with('AccountMain','AccountMainDetail','Branch')->get();
-        return $data = Service::with('Brand','Type','ServiceDetail')
+        $data = Service::with('Brand','Type','ServiceDetail')
         ->where(function ($query) {
             $query->where('payment_status','DownPayment');
             $query->orWhere('payment_status',null);
