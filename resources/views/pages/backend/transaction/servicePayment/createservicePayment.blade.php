@@ -30,11 +30,17 @@
                             <select class="select2 serviceId validation" data-name="Service Harus Di isi" name="serviceId" onchange="choseService()">
                                 <option value="">- Select -</option>
                                 @foreach ($data as $element)
-                                    <option value="{{$element->id}}" >
-                                        [{{$element->code}}] {{$element->customer_name}} - 
-                                        {{$element->Brand->name}} {{$element->type->name}} 
-                                        <span><strong>( {{$element->work_status}} )</span></strong>
-                                    </option>
+                                    <option value="{{$element->id}}"
+                                    data-technician="{{$element->Employee1->name}}"
+                                    data-customerName="{{$element->customer_name}}"
+                                    data-customerAdress="{{$element->customer_address}}"
+                                    data-customerPhone="{{$element->customer_phone}}"
+                                    data-brand="{{$element->Brand->name}}"
+                                    data-type="{{$element->Type->name}}"
+                                    >
+                                    
+                                    [{{$element->code}}] {{$element->customer_name}} - {{$element->Brand->name}} {{$element->Type->name}} <span><strong>( {{$element->work_status}} )
+                                    </span></strong></option>
                                 @endforeach
                             </select>
                         </div>
