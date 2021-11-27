@@ -185,8 +185,10 @@ function save() {
                             dangerMode: true,
                         }).then((red) => {
                             if (red) {
+                                window.open(window.location.origin+'/transaction/service/print-service-payment'+data.id);
                                 window.location.href = window.location.origin+'/transaction/service/service-form-update-status';
                             }else{
+                                window.open(window.location.origin+'/transaction/service/print-service-payment'+data.id);
                                 location.reload;
                             }
                         });

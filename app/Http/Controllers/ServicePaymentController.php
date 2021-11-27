@@ -341,7 +341,7 @@ class ServicePaymentController extends Controller
             }
 
             DB::commit();
-            return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
+            return Response::json(['status' => 'success','message'=>'Data Tersimpan', 'id' => $id]);
         } catch (\Throwable $th) {
             DB::rollback();
             return$th;
