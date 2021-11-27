@@ -663,7 +663,8 @@ class ServiceController extends Controller
                     $MaxHandle = $settingPresentase[$i]->total;
                 }
             }
-            return $MaxHandle;
+            return [$tech1
+            ,$tech2,$MaxHandle];
             
             if (($tech1 + $tech2) >= $MaxHandle) {
                 return Response::json([
