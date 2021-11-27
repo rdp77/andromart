@@ -52,7 +52,7 @@ class ServiceController extends Controller
     {
         if ($req->ajax()) {
 
-            $data = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])->orderBy('id','desc')->get();
+            $data = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])->orderBy('id', 'DESC')->get();
 
             return Datatables::of($data)
                 ->addIndexColumn()
