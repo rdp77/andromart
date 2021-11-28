@@ -52,13 +52,15 @@ class ServiceController extends Controller
     {
         if ($req->ajax()) {
 
-            $data = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])->get();
-            // for ($i=0; $i < ; $i++) { 
-                # code...
-            // }
+            $data = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])->orderBy('id', 'DESC')->get();
 
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->order(function ($query) {
+                    if (request()->has('id')) {
+                        $query->orderBy('id', 'desc');
+                    }
+                })
                 ->addColumn('action', function ($row) {
                     $actionBtn = '<div class="btn-group">';
                     // $actionBtn .= '<a onclick="reset(' . $row->id . ')" class="btn btn-primary text-white" style="cursor:pointer;">Reset Password</a>';
@@ -68,8 +70,11 @@ class ServiceController extends Controller
                         </button><div class="dropdown-menu">';
                     if ($row->payment_status == null) {
                         $actionBtn .= '<a class="dropdown-item" href="' . route('service.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
-                        $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
+                        $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';    
+                    }else if($row->payment_status == 'DownPayment'){
+                        $actionBtn .= '<a class="dropdown-item" href="' . route('service.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
                     }
+
                     $actionBtn .= '<a class="dropdown-item" href="' . route('service.printService', $row->id) . '"><i class="fas fa-print"></i> Cetak</a>';
 
                     // $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
@@ -269,6 +274,7 @@ class ServiceController extends Controller
         try {
             // return $req->technicianId;
             $tech1 = Service::where('technician_id', $req->technicianId)->where('work_status', '!=', 'Selesai')->where('work_status', '!=', 'Diambil')->count();
+            // $tech1 = 10;
             $tech2 = Service::where('technician_replacement_id', $req->technicianId)->where('work_status', '!=', 'Selesai')->where('work_status', '!=', 'Diambil')->count();
 
 
@@ -292,11 +298,11 @@ class ServiceController extends Controller
                     $MaxHandle = $settingPresentase[$i]->total;
                 }
             }
-            if ($req->technicianId != 1 || $req->technicianId != '1') {
-                if ($tech1 + $tech2 >= $MaxHandle) {
+            if ($req->technicianId != 1) {
+                if (($tech1 + $tech2) >= $MaxHandle) {
                     return Response::json([
                         'status' => 'fail',
-                        'message' => 'Teknisi Memiliki ' + $MaxHandle + ' Pekerjaan Belum Selesai'
+                        'message' => 'Teknisi Memiliki ' . $MaxHandle . ' Pekerjaan Belum Selesai'
                     ]);
                 }
             }
@@ -419,6 +425,7 @@ class ServiceController extends Controller
                 'technician_id' => $req->technicianId,
                 'index' => 1,
                 'status' => 'Manifest',
+                'image' => $fileName,
                 'description' => 'Barang Sedang Dicek & Diterima oleh ' . Auth::user()->name,
                 'created_by' => Auth::user()->name,
                 'created_at' => date('Y-m-d h:i:s'),
@@ -627,6 +634,8 @@ class ServiceController extends Controller
         try {
             $tech1 = Service::where('technician_id', $req->technicianId)->where('work_status', '!=', 'Selesai')->count();
             $tech2 = Service::where('technician_replacement_id', $req->technicianId)->where('work_status', '!=', 'Selesai')->count();
+            $checkData = Service::where('id', $id)->first();
+
 
 
             $getEmployee =  Employee::where('user_id', Auth::user()->id)->first();
@@ -660,19 +669,22 @@ class ServiceController extends Controller
                     $MaxHandle = $settingPresentase[$i]->total;
                 }
             }
-
-            if ($tech1 + $tech2 >= $MaxHandle) {
-                return Response::json([
-                    'status' => 'fail',
-                    'message' => 'Teknisi Memiliki ' + $MaxHandle + ' Pekerjaan Belum Selesai'
-                ]);
+            // return [$tech1
+            // ,$tech2,$MaxHandle];
+            if($checkData->technician_id != $req->technicianId){
+                if (($tech1 + $tech2) >= $MaxHandle) {
+                    return Response::json([
+                        'status' => 'fail',
+                        'message' => 'Teknisi Memiliki ' . $MaxHandle . ' Pekerjaan Belum Selesai'
+                    ]);
+                }
             }
+            
             // return [$sharingProfitStore,
             // $sharingProfitTechnician,
             // $lossStore,$lossTechnician];
             // return [$req->totalService,$req->totalSparePart];
             // return $req->all();
-            $checkData = Service::where('id', $id)->first();
 
             // $id = DB::table('service')->max('id')+1;
             // $sharing_profit_store =  ((str_replace(",", '',$req->totalService)/100)*$sharingProfitStore)+str_replace(",", '',$req->totalSparePart);
@@ -1288,7 +1300,7 @@ class ServiceController extends Controller
             $message = 'exist';
         }
 
-        return Response::json(['status' => 'success', 'result' => $data, 'message' => $message]);
+        return Response::json(['status' => 'success', 'result' => $data, 'message' => $message,'url'=>url('/')]);
     }
 
     public function serviceFormUpdateStatusSaveData(Request $req)

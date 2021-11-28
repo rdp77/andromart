@@ -49,7 +49,7 @@
                     <div class="d-block">
                         <label for="description" class="control-label">{{ __('Deskripsi') }}<code>*</code></label>
                     </div>
-                    @if($contentType->id == 1)
+                    @if($contentType->id == 1 || $contentType->id == 34)
                     <input id="description" type="text" class="form-control @error('description') is-invalid @enderror" name="description" required autofocus/>
                     @else
                     <textarea class="summernote @error('description') is-invalid @enderror" id="description" name="description"></textarea>

@@ -138,9 +138,9 @@
             <tbody><tr>
               <th data-width="40" style="width: 40px;" style="font-size: 25px">#</th>
               <th style="font-size: 25px">Item</th>
-              <th class="text-center" style="font-size: 25px">Harga</th>
+              {{-- <th class="text-center" style="font-size: 25px">Harga</th> --}}
               <th class="text-center" style="font-size: 25px">Qty</th>
-              <th class="text-right" style="font-size: 25px">total</th>
+              {{-- <th class="text-right" style="font-size: 25px">total</th> --}}
             </tr>
             @php
                 $price = 0;
@@ -152,9 +152,9 @@
               <tr>
                 <td style="font-size: 20px">{{$i+1}}</td>
                 <td style="font-size: 20px">{{$el->Items->name}}</td>
-                <td style="font-size: 20px" class="text-center">{{number_format($el->price,0,".",",")}}</td>
+                {{-- <td style="font-size: 20px" class="text-center">{{number_format($el->price,0,".",",")}}</td> --}}
                 <td style="font-size: 20px" class="text-center">{{number_format($el->qty,0,".",",")}}</td>
-                <td style="font-size: 20px" class="text-right">{{number_format($el->total_price,0,".",",")}}</td>
+                {{-- <td style="font-size: 20px" class="text-right">{{number_format($el->total_price,0,".",",")}}</td> --}}
               </tr>
               @else
               @php
@@ -169,9 +169,9 @@
             <tr>
               <td style="font-size: 20px">2</td>
               <td style="font-size: 20px">Spare Part</td>
-              <td style="font-size: 20px" class="text-center">{{number_format($price,0,".",",")}}</td>
+              {{-- <td style="font-size: 20px" class="text-center">{{number_format($price,0,".",",")}}</td> --}}
               <td style="font-size: 20px" class="text-center">1</td>
-              <td style="font-size: 20px" class="text-right">{{number_format($totalPrice,0,".",",")}}</td>
+              {{-- <td style="font-size: 20px" class="text-right">{{number_format($totalPrice,0,".",",")}}</td> --}}
             </tr>
           </tbody></table>
         </div>
@@ -183,14 +183,14 @@
           <div class="col-lg-4 col-md-4 col-sm-4  text-right">
             <table class="table table-striped  table-md">
               <tbody>
-                <tr>
+                {{-- <tr>
                   <td class="text-right" style="font-size: 20px">Jasa</td>
                   <td class="text-right" style="font-size: 20px"><b>{{number_format($service->Service->total_service,0,".",",")}}</b></td>
                 </tr>
                 <tr>
                   <td class="text-right" style="font-size: 20px">Spare Part</td>
                   <td class="text-right" style="font-size: 20px"><b>{{number_format($service->Service->total_part,0,".",",")}}</b></td>
-                </tr>
+                </tr> --}}
                 <tr>
                   <td class="text-right" style="font-size: 20px">Discount</td>
                   <td class="text-right" style="font-size: 20px"><b>{{number_format($service->Service->discount_price,0,".",",")}}</b></td>

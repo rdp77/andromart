@@ -12,6 +12,11 @@ use App\Models\Item;
 use App\Models\Unit;
 use App\Models\User;
 use App\Models\Branch;
+use App\Models\Brand;
+use App\Models\Category;
+use App\Models\Supplier;
+use App\Models\Type;
+use App\Models\Warranty;
 use App\Models\Journal;
 use App\Models\JournalDetail;
 use App\Models\AccountData;
@@ -86,15 +91,24 @@ class PurchaseController extends Controller
 
     public function code($type)
     {
-        $date = date('Y-m-d');
+        // $date = date('Y-m-d');
+        // $month = Carbon::now()->format('m');
+        // $year = Carbon::now()->format('y');
+
+        // $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
+        // $now = Purchasing::whereBetween("created_at", [$date.' 00:00:00', $date.' 23:59:59'])->count();
+        // $index = $now + 1;
+        // $index = str_pad($index, 3, '0', STR_PAD_LEFT);
+        // return $code = $type.$getEmployee->Branch->code.$year . $month . $index;
+
+
+        $getEmployee =  Employee::with('branch')->where('user_id', Auth::user()->id)->first();
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
+        $index = DB::table('purchasings')->max('id') + 1;
 
-        $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
-        $now = Purchasing::whereBetween("created_at", [$date.' 00:00:00', $date.' 23:59:59'])->count();
-        $index = $now + 1;
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
-        return $code = $type.$getEmployee->Branch->code.$year . $month . $index;
+        return $code = $type . $getEmployee->Branch->code . $year . $month . $index;
     }
     public function codeJournals($type)
     {
@@ -507,5 +521,81 @@ class PurchaseController extends Controller
                 'status' => 'Berhasil disetujui',
                 'type' => 'success'
             ]);
+    }
+
+
+    public function itemCreate()
+    {
+        $branch = Branch::get();
+        $brand = Brand::get();
+        $category = Category::get();
+        $supplier = Supplier::get();
+        $type = Type::get();
+        $unit = Unit::get();
+        $warranty = Warranty::get();
+        return view('pages.backend.transaction.purchase.createItem', compact(
+            'branch',
+            'category',
+            'brand',
+            'type',
+            'supplier',
+            'unit',
+            'warranty'
+        ));
+    }
+
+    public function itemStore(Request $req)
+    {
+        $id = DB::table('items')->max('id') + 1;
+        $image = $req->image;
+        $image = str_replace('data:image/jpeg;base64,', '', $image);
+        $image = base64_decode($image);
+        if ($image != null) {
+            $fileSave = 'public/assetsmaster/image/item/IMG_' . $id . '.' . 'png';
+            $fileName = 'IMG_' . $id . '.' . 'png';
+            Storage::put($fileSave, $image);
+        } else {
+            $fileName = null;
+        }
+
+        Item::create([
+            'id' => $id,
+            'name' => $req->name,
+            'brand_id' => $req->brand,
+            'supplier_id' => $req->supplier_id,
+            'warranty_id' => $req->warranty_id,
+            'buy' => str_replace(",", '', $req->buy),
+            'sell' => str_replace(",", '', $req->sell),
+            'discount' => str_replace(",", '', $req->discount),
+            'condition' => $req->condition,
+            'image' => $fileName,
+            'description' => $req->description,
+            'created_by' => Auth::user()->name,
+        ]);
+
+        for ($i = 0; $i < count($req->branch_id); $i++) {
+            Stock::create([
+                'item_id' => $id,
+                'unit_id' => $req->unit_id,
+                'branch_id' => $req->branch_id[$i],
+                'stock' => '0',
+                'min_stock' => '0',
+                'description' => $req->description,
+                'created_by' => Auth::user()->name,
+                'created_at' => date('Y-m-d h:i:s'),
+            ]);
+        }
+
+        $this->DashboardController->createLog(
+            $req->header('user-agent'),
+            $req->ip(),
+            'Membuat barang baru'
+        );
+
+        return Redirect::route('purchase.create')
+        ->with([
+            'status' => 'Berhasil membuat barang baru',
+            'type' => 'success'
+        ]);
     }
 }

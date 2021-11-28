@@ -3,7 +3,7 @@
 		<div class="row align-items-center">
 			@foreach($typeProduct as $row)
 				<div class="col-12 col-lg-6 text-center" style="background-color: #fff;">
-					<a href="{{ Route('frontendProductShow', $row->id) }}">
+					<a href="{{ Route('frontendProductShow', $row->id) }}" style="text-decoration: none;">
 					<div>
 						<img src="{{ asset('photo_product/'.$row->image) }}" style="width: 100%; object-fit: cover;">
 						<br />

@@ -218,11 +218,15 @@
                 </table>
             </div>
         </div>
-        <div class="card-footer text-right">
-            <!-- <button class="btn btn-primary mr-1" type="button" onclick="save()"><i class="far fa-save"></i>
-                {{ __('Simpan Data') }}</button> -->
-            <button class="btn btn-primary mr-1" type="submit"><i class="far fa-save"></i>
+        <div class="card-footer">
+            <div style="float: left;">
+                <a href="{{ Route('purchase.item.create') }}" class="btn btn-primary mr-1"><i class="far fa-plus"></i>
+                {{ __('Tambah Barang') }}</a>
+            </div>
+            <div style="float: right;">
+                <button class="btn btn-primary mr-1" type="submit"><i class="far fa-save"></i>
                 {{ __('Simpan Data') }}</button>
+            </div>
         </div>
     </div>
     <div class="modal fade" tabindex="1" role="dialog" id="exampleModal" aria-hidden="true" style="display: none;">
@@ -251,11 +255,6 @@
 
 @section('script')
 <script src="{{ asset('assets/pages/transaction/purchaseScript.js') }}"></script>
-<style>
-    .modal-backdrop{
-        position: relative !important;
-    }
-</style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
 <style>
     .modal-backdrop{
@@ -267,8 +266,8 @@ $( document ).ready(function() {
     Webcam.set({
         width: 700,
         height: 420,
-        dest_width:1000,
-        dest_height:1000,
+        // dest_width:1000,
+        // dest_height:1000,
         image_format: 'jpeg',
         jpeg_quality: 100
     });

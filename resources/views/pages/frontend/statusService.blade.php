@@ -10,7 +10,7 @@
 @endpush
 @section('content')
 <div role="main" class="main">
-@if(count($models) == 0)
+@if($service == null)
   <section class="section">
       <div class="container mt-5">
         <div class="page-error">
@@ -35,29 +35,99 @@
 	  <div class="main-content">
         <section class="section">
           <div class="section-header">
-            <h1>{{ $id }}</h1>
+            <h1>Kode Service : {{ $id }}</h1>
           </div>
           <div class="section-body">
             <!-- <h2 class="section-title">September 2018</h2> -->
             <div class="row">
+              <div class="col-12 col-lg-6">
+                <div class="card">
+                  <div class="card-body">
+                    <h5>Data Pelanggan</h5>
+                    <table>
+                      <tr>
+                        <td width="100">Nama</td><td width="10"> : </td><td>{{ $service->customer_name }}</td>
+                      </tr>
+                      <tr>
+                        <td>Telepon</td><td> : </td><td>{{ $service->customer_phone }}</td>
+                      </tr>
+                      <tr>
+                        <td>Alamat</td><td> : </td><td>{{ $service->customer_address }}</td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-lg-6">
+                <div class="card">
+                  <div class="card-body">
+                    <h5>Data Barang</h5>
+                    <table>
+                      <tr>
+                        <td width="100">Jenis Barang</td><td width="10"> : </td><td>{{ $service->Brand->Category->name }}</td>
+                      </tr>
+                      <tr>
+                        <td>Merk</td><td> : </td><td>{{ $service->Brand->name }}</td>
+                      </tr>
+                      <tr>
+                        <td>Tipe</td><td> : </td><td>{{ $service->Type->name }}</td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-lg-6">
+                <div class="card">
+                  <div class="card-body">
+                    <h5>Detail Service</h5>
+                    <table>
+                      <tr>
+                        <td width="100">Dikerjakan oleh</td><td width="10"> : </td><td>{{$service->employee1->name}}</td>
+                      </tr>
+                      <tr>
+                        <td>Keluhan</td><td> : </td><td>{{$service->complaint}}</td>
+                      </tr>
+                      <tr>
+                        <td>Analisa</td><td> : </td><td>{{$service->estimate_day}}</td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 col-lg-6">
+                <div class="card">
+                  <div class="card-body">
+                    <h5>Kondisi Barang Awal</h5>
+                    <img src="{{ asset('storage/'.$service->image) }}" style="width: 250px;">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row">
               <div class="col-12">
-                <div class="activities">
-                    @foreach($models as $row)
-                    @php $tanggal = date('d-M-Y', strtotime($row->created_at)); @endphp
-                    <div class="activity">
-                      <div class="activity-icon bg-primary text-white shadow-primary">
-                        <i class="fas fa-comment-alt"></i>
-                      </div>
-                      <div class="activity-detail">
-                        <div class="mb-2">
-                          <span class="text-job text-primary">{{ $tanggal }}</span>
-                          <span class="bullet"></span>
-                          <p>{{ $row->status }}</p>
+                <div class="card">
+                  <div class="card-header"><h5>Tracking Service</h5></div>
+                  <div class="card-body">
+                    <div class="activities">
+                        @foreach($service->ServiceStatusMutation as $row)
+                        @php $tanggal = date('d-M-Y', strtotime($row->created_at)); @endphp
+                        <div class="activity">
+                          <div class="activity-icon bg-primary text-white shadow-primary">
+                            <i class="fas fa-comment-alt"></i>
+                          </div>
+                          <div class="activity-detail">
+                            <div class="mb-2">
+                              <span class="text-job text-primary">{{ $tanggal }}</span>
+                              <span class="bullet"></span>
+                              <p>{{ $row->status }}</p>
+                            </div>
+                            <p>{{ $row->description }}</p>
+                            <p><img src="{{ asset('/storage/'.$row->image) }}" alt=""></p>
+                          </div>
                         </div>
-                        <p>{{ $row->description }}</p>
-                      </div>
+                        @endforeach
                     </div>
-                    @endforeach
+                  </div>
                 </div>
               </div>
             </div>

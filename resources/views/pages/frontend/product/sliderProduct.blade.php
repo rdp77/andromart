@@ -1,5 +1,5 @@
 <div class="slider-container rev_slider_wrapper" style="height: 750px;">
-    <div id="revolutionSlider" class="slider rev_slider" data-version="5.4.8" data-plugin-revolution-slider data-plugin-options="{'delay': 9000, 'gridwidth': 1110, 'gridheight': [750,750,750,1250], 'responsiveLevels': [4096,1200,992,500]}">
+    <div id="revolutionSlider" class="slider rev_slider" data-version="5.4.8" data-plugin-revolution-slider data-plugin-options="{'delay': 9000}">
         <ul>
         @foreach($carouselProduct as $row)
             @if($row->position == "Left")

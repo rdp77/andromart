@@ -19,6 +19,7 @@
         <input type="hidden" name="id" value="{{ $id }}"/>
         <div class="card-body">
             <div class="row">
+                <input type="hidden" name="type_products_id" value="{{ $id }}"/>
                 <div class="form-group col-md-6 col-xs-12">
                     <div class="d-block">
                         <label for="name" class="control-label">{{ __('Name') }}<code>*</code></label>
@@ -44,6 +45,43 @@
                         {{ $message }}
                     </div>
                     @enderror
+                </div>
+                <div class="form-group col-md-6 col-xs-12">
+                    <div class="d-block">
+                        <label for="prize" class="control-label">{{ __('Harga') }}<code>*</code></label>
+                    </div>
+                    <input id="prize" type="number" class="form-control @error('prize') is-invalid @enderror" name="prize" required autofocus/>
+                    @error('prize')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+                <div class="form-group col-md-6 col-xs-12">
+                    <div class="d-block">
+                        <label for="discount" class="control-label">{{ __('Diskon') }}<code>*</code></label>
+                    </div>
+                    <input id="discount" type="number" class="form-control @error('discount') is-invalid @enderror" name="discount" autofocus/>
+                    @error('discount')
+                    <div class="invalid-feedback">
+                        {{ $message }}
+                    </div>
+                    @enderror
+                </div>
+                <div class="form-group col-md-12 col-xs-12">
+                    <label class="form-label">Apa ini termasuk produk hot item?</label>
+                    <div class="selectgroup w-100">
+                        <label class="selectgroup-item">
+                            <input type="radio" name="hot_item" value="1"
+                                class="selectgroup-input">
+                            <span class="selectgroup-button"><i class="fas fa-check"></i></span>
+                        </label>
+                        <label class="selectgroup-item">
+                            <input type="radio" name="hot_item" value="0" checked
+                                class="selectgroup-input">
+                            <span class="selectgroup-button"><i class="fas fa-times"></i></span>
+                        </label>
+                    </div>
                 </div>
                 <div class="form-group col-md-6 col-xs-12">
                     <div class="d-block">

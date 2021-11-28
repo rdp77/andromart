@@ -5,6 +5,11 @@
 		<div class="masonry-loader masonry-loader-showing">
 			<div class="row products product-thumb-info-list" data-plugin-masonry data-plugin-options="{'layoutMode': 'fitRows'}">
 			@foreach($itemProduct as $row)
+				@php 
+					$harga = $row->prize - $row->discount;
+					$harga_rupiah = "Rp " . number_format($row->prize,2,',','.');
+					$hasil_rupiah = "Rp " . number_format($harga,2,',','.');
+				@endphp
 				<div class="col-12 col-sm-6 col-lg-3 product">
 					<span class="product-thumb-info border-0">
 						<a href="{{ Route('frontendProductShowDetail', $row->id) }}" class="add-to-cart-product bg-color-primary">
@@ -19,8 +24,10 @@
 							<a href="shop-product-sidebar-left.html">
 								<h4 class="text-4 text-primary">{{ $row->name }}</h4>
 								<span class="price">
-									<!-- <del><span class="amount">$325</span></del> -->
-									<ins><span class="amount text-dark font-weight-semibold">{{ $row->price }}</span></ins>
+									@if($row->discount != 0)
+										<del><span class="amount">{{ $harga_rupiah }}</span></del><br />
+									@endif
+									<ins><span class="amount text-dark font-weight-semibold">{{ $hasil_rupiah }}</span></ins>
 								</span>
 							</a>
 						</span>

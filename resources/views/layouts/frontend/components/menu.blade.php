@@ -35,13 +35,6 @@
 											@endif
 										</li>
 										<li>
-											@if($menuActive == 'about')
-												<a class="nav-link active" href="{{ route('frontendAbout') }}">About</a>
-											@else
-												<a class="nav-link" href="{{ route('frontendAbout') }}">About</a>
-											@endif
-										</li>
-										<li>
 											@if($menuActive == 'services')
 												<a class="nav-link active" href="{{ route('frontendServices') }}">Services</a>
 											@else
@@ -61,6 +54,13 @@
 												<a class="nav-link active" href="{{ route('frontendContact') }}">Contact</a>
 											@else
 												<a class="nav-link" href="{{ route('frontendContact') }}">Contact</a>
+											@endif
+										</li>
+										<li>
+											@if($menuActive == 'about')
+												<a class="nav-link active" href="{{ route('frontendAbout') }}">About</a>
+											@else
+												<a class="nav-link" href="{{ route('frontendAbout') }}">About</a>
 											@endif
 										</li>
 										<li>

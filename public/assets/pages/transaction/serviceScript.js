@@ -248,6 +248,19 @@ function category() {
     // Reset Series
     $('.series').empty();
     $('.series').append('<option value="">- Select -</option>');
+
+    $("#brandService").select2({
+        allowClear: true,
+        escapeMarkup: function (markup) {
+            return markup;
+        },
+        placeholder: "- Select -",
+        language: {
+            noResults: function () {
+                return "<a href='/master/brand/brand/create' target='_blank'>Tambah Merk</a>";
+            },
+        },
+    });
 }
 
 $(document.body).on("change",".brand",function(){
@@ -261,6 +274,20 @@ $(document.body).on("change",".brand",function(){
     });
     $('.series').append('<option value="">- Select -</option>');
     $('.series').append(dataItems);
+
+    $("#seriesService").select2({
+        allowClear: true,
+        escapeMarkup: function (markup) {
+            return markup;
+        },
+        placeholder: "- Select -",
+        language: {
+            noResults: function () {
+                return "<a href='/master/type/type/create' target='_blank'>Tambah Seri</a>";
+            },
+        },
+    });
+    
 });
 
 
@@ -718,6 +745,8 @@ function choseService() {
                                         '<a class="text-job" href="#" type="button">[ '+value.status+' ]</a>'+
                                         '</div>'+
                                     '<p>'+value.description+'</p>'+
+                                    '<br>'+
+                                    '<img width="100%" src="'+data.url+'/storage/'+value.image+'" alt="">'+
                                 '</div>'+
                             '</div>'
                         );
@@ -744,7 +773,11 @@ function updateStatusService() {
     var status = $('.status').find(':selected').val();
     var technicianId = $('.technicianId').find(':selected').val();
     var description = $('.description').val();
-    var files = $('.image')[0].files;
+    if($('.image')[0] === undefined){
+        return swal('Gambar Harus Diambil / Diisi', {
+            icon: "warning",
+        });
+    }
 
     swal({
         title: "Apakah Anda Yakin?",
@@ -756,7 +789,6 @@ function updateStatusService() {
         if (willSave) {
             $.ajax({
                 url: "/transaction/service/service-form-update-status-save-data",
-                // data: {id:serviceId,status:status,description:description,technicianId:technicianId,files:files,conk:'asdasd'},
                 data: $(".form-data").serialize(),
                 type: 'POST',
                 success: function(data) {

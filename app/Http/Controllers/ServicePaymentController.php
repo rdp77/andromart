@@ -158,10 +158,11 @@ class ServicePaymentController extends Controller
         $employee = Employee::where('user_id',Auth::user()->id)->first();
         $items  = Item::where('name','!=','Jasa Service')->get();
         $account  = AccountData::with('AccountMain','AccountMainDetail','Branch')->get();
-        $data = Service::with('ServiceDetail','Brand','Type')->where(function ($query) {
+        $data = Service::
+        where(function ($query) {
             $query->where('payment_status','DownPayment');
             $query->orWhere('payment_status',null);
-        })->get();
+        })->with('Brand','Type','ServiceDetail')->get();
         return view('pages.backend.transaction.servicePayment.createServicePayment',compact('employee','code','items','data','account'));
     }
 
@@ -184,7 +185,7 @@ class ServicePaymentController extends Controller
                 'type'=>$req->type,
                 'payment_method'=>$req->paymentMethod,
                 'account'=>$req->account,
-                'description'=>$req->description,
+                'description'=>'Pelunasan Service '.$kode,
                 'created_by' => Auth::user()->name,
                 'created_at' => date('Y-m-d h:i:s'),
             ]);
@@ -212,7 +213,7 @@ class ServicePaymentController extends Controller
                 'type'=>'Pembayaran Service',
                 'total'=>str_replace(",", '',$req->totalPayment),
                 'ref'=>$kode,
-                'description'=>$req->description,
+                'description'=>'Pelunasan Service '.$kode,
                 'created_at'=>date('Y-m-d h:i:s'),
                 // 'updated_at'=>date('Y-m-d h:i:s'),
             ]);
@@ -238,8 +239,8 @@ class ServicePaymentController extends Controller
                     str_replace(",", '',$req->totalPayment),
                 ];
                 $description = [
-                    $req->description,
-                    $req->description,
+                    'Pelunasan Service '.$kode,
+                    'Pelunasan Service '.$kode,
                 ];
                 $DK = [
                     'D',
@@ -304,9 +305,9 @@ class ServicePaymentController extends Controller
                     str_replace(",", '',$req->totalService),
                 ];
                 $description = [
-                    $req->description,
-                    $req->description,
-                    $req->description,
+                    'Pelunasan Service '.$kode,
+                    'Pelunasan Service '.$kode,
+                    'Pelunasan Service '.$kode,
                 ];
                 $DK = [
                     'D',
@@ -341,7 +342,7 @@ class ServicePaymentController extends Controller
             }
 
             DB::commit();
-            return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
+            return Response::json(['status' => 'success','message'=>'Data Tersimpan', 'id' => $id]);
         } catch (\Throwable $th) {
             DB::rollback();
             return$th;

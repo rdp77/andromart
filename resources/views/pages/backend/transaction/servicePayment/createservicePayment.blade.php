@@ -30,7 +30,17 @@
                             <select class="select2 serviceId validation" data-name="Service Harus Di isi" name="serviceId" onchange="choseService()">
                                 <option value="">- Select -</option>
                                 @foreach ($data as $element)
-                                    <option value="{{$element->id}}">[{{$element->code}}] {{$element->customer_name}} - {{$element->Brand->name}} {{$element->Type->name}} <span><strong>( {{$element->work_status}} )</span></strong></option>
+                                    <option value="{{$element->id}}"
+                                    data-technician="{{$element->Employee1->name}}"
+                                    data-customerName="{{$element->customer_name}}"
+                                    data-customerAdress="{{$element->customer_address}}"
+                                    data-customerPhone="{{$element->customer_phone}}"
+                                    data-brand="{{$element->Brand->name}}"
+                                    data-type="{{$element->Type->name}}"
+                                    >
+                                    
+                                    [{{$element->code}}] {{$element->customer_name}} - {{$element->Brand->name}} {{$element->Type->name}} <span><strong>( {{$element->work_status}} )
+                                    </span></strong></option>
                                 @endforeach
                             </select>
                         </div>
@@ -43,7 +53,7 @@
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="type">{{ __('Tipe') }}<code>*</code></label>
-                            <select class="select2 type validation" data-name="Tipe Harus Di isi"  name="type">
+                            <select class="select2 type validation" data-name="Tipe Harus Di isi" onchange="changeTypePay()" name="type">
                                 <option value="">- Select -</option>
                                 <option value="Lunas">Lunas</option>
                                 <option value="DownPayment">Down Payment</option>
@@ -67,10 +77,10 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="row" style="display: none">
                         <div class="form-group col-12 col-md-12 col-lg-12">
                             <label for="type">{{ __('Keterangan') }}<code>*</code></label>
-                            <textarea name="description" class="form-control validation" data-name="Deskripsi Harus Di isi"  id="description"></textarea>
+                            <textarea name="description" class="form-control" value="-" data-name="Deskripsi Harus Di isi"  id="description"></textarea>
                         </div>
                     </div>
                     <input type="hidden" class="branchId" value="{{Auth::user()->employee->branch_id}}">
