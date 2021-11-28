@@ -35,7 +35,6 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="invoice-title">
-          {{-- <h2>Invoice</h2> --}}
           <h2><img alt="Porto" height="150" src="{{ asset('assetsfrontend/img/andromart.png') }}"
               style="margin-top: 10px;"></h2>
           <div style="width: 400px">
@@ -44,23 +43,9 @@
           </div>
           <div class="invoice-number">
             <h3>Invoice :</h3>
-            <h1 style="font-size: 50px;color:#eb2390">{{$sale->Return->code}}</h1>
-            {{-- <br> --}}
-            {{-- <p style="font-size: 19px;font-weight:lighter">Lacak Perkembangan Service Kamu di : <br>
-              <b>www.andromartindonesia.com</b> --}}
-              {{-- <br> <b> AM care : 0851-5646-2356 --}}
-                {{-- <br>Konsultasi Service --}}
-                {{--
-            </p> --}}
-            {{-- </b> --}}
+            <h1 style="font-size: 50px;color:#eb2390;">{{ $return->code }}</h1>
           </div>
-
         </div>
-        {{-- <div style="border: 1px solid #1d98d4"></div> --}}
-
-        {{-- <br> --}}
-        {{--
-        <hr> --}}
         <div class="row">
           <div class="col-md-4">
             <address>
@@ -68,19 +53,19 @@
                 <p style="font-size: 25px" style="background-color:#eb2390;color:white;padding:5px;text-align:center">
                   Sales</p>
               </strong>
-              <p style="font-size: 26px">{{$sale->sales->name}}</p>
-              {{-- <p style="font-size: 26px">{{$service->employee1->contact}}</p> --}}
+              <p style="font-size: 26px">{{$return->Sale->Sales->name}}</p>
             </address>
           </div>
           <div class="col-md-8 text-md-right">
             <address>
               <strong>
                 <p style="font-size: 25px" style="background-color:#eb2390;color:white;padding:5px;text-align:center">
-                  Customer</p>
+                  Customer
+                </p>
               </strong>
-              <p style="font-size: 26px"><b>{{$sale->customer_name}}</b></p>
-              <p style="font-size: 26px">{{$sale->customer_phone}}</p>
-              <p style="font-size: 26px;margin: 10px auto;">{{$sale->customer_address}}</p>
+              <p style="font-size: 26px"><b>{{$return->Sale->customer_name}}</b></p>
+              <p style="font-size: 26px">{{$return->Sale->customer_phone}}</p>
+              <p style="font-size: 26px;margin: 10px auto;">{{$return->Sale->customer_address}}</p>
             </address>
           </div>
         </div>
@@ -93,65 +78,65 @@
               <p><strong>
                   <o style="font-size: 30px">Faktur :
                 </strong></o>
-                <o style="font-size:30px"> {{ $sale->code }}</o>
+                <o style="font-size:30px"> {{ $return->Sale->code }}</o>
               </p>
-              {{-- @if ($service->payment_status == null)
-              @if ($service->verification_price == 'Y')
-              <o style="font-size:30px"> Perlu Konfirmasi</o>
-              @else
-              <o style="font-size:30px"> Belum Bayar</o>
-              @endif
-              @else
-              {{$service->payment_status}}
-              @endif</p> --}}
-              {{-- <strong>
-                <h3 style="color:#28a745"> </h3>
-              </strong>s --}}
             </address>
           </div>
           <div class="col-md-6 text-md-right">
             <address>
               <br>
               <strong>
-                <p style="font-size: 30px">Tanggal : {{date('d F Y',strtotime($sale->Return->created_at))}}</p>
+                <p style="font-size: 30px">Tanggal : {{date('d F Y',strtotime($return->created_at))}}</p>
               </strong>
             </address>
           </div>
         </div>
       </div>
     </div>
-    {{-- <div style="border: 1px solid gray"></div> --}}
-
-
     <div class="row mt-4" style="margin-top: 0px !important">
       <div class="col-md-12">
-        {{-- <div class="section-title">
-          <h3>Service Detail</h3>
-        </div> --}}
         <div>
           <table class="table table-striped table-sm">
             <tbody>
               <tr>
                 <th class="text-center" style="font-weight:700;font-size: 25px;padding:0px !important" width="50%">
                   Barang</th>
-                <th class="text-center" style="font-size: 25px;padding:0px !important" width="8%">Qty</th>
+                {{-- <th class="text-center" style="font-size: 25px;padding:0px !important" width="8%">Qty</th> --}}
                 <th class="text-center" style="font-size: 25px;padding:0px !important" width="17%">Tipe</th>
-                <th class="text-center" style="font-size: 25px;padding:0px !important" width="25%">Keterangan</th>
+                {{-- <th class="text-center" style="font-size: 25px;padding:0px !important" width="25%">Keterangan</th>
+                --}}
               </tr>
-              @foreach ($sale->Return as $index => $r)
+              @foreach ($return->SaleReturnDetail as $index => $r)
               <tr>
                 <td style="border-right: 1px solid #1d98d4" style="font-size: 17px">
-                  {{ $r->ReturnDetail->Item->brand->category->name }} :
-                  <b>{{ $r->ReturnDetail->Item->brand->name }} {{$r->ReturnDetail->Item->name}} </b>
+                  {{ $r->Item->brand->category->name }} :
+                  <b>{{ $r->Item->brand->name }} {{$r->Item->name}} </b>
                 </td>
-                <td style="border-right: 1px solid #1d98d4" class="text-center" style="font-size: 17px">{{$r->qty}}
-                </td>
+                {{-- <td style="border-right: 1px solid #1d98d4" class="text-center" style="font-size: 17px">
+                  {{$r->qty}}
+                </td> --}}
                 <td class="text-center" style="font-size: 17px" style="border-right: 1px solid #1d98d4">
-                  {{ $r->ReturnDetail->type }}
+                  @switch($r->type)
+                  @case(1)
+                  {{ __('Diservice') }}
+                  @break
+                  @case(2)
+                  {{ __('Diganti Baru') }}
+                  @break
+                  @case(3)
+                  {{ __('Tukar Tambah') }}
+                  @break
+                  @case(4)
+                  {{ __('Diganti Uang') }}
+                  @break
+                  @case(5)
+                  {{ __('Diganti Barang Lain') }}
+                  @break
+                  @endswitch
                 </td>
-                <td class="text-center" style="font-size: 17px">
-                  {{ $r->ReturnDetail->desc }}
-                </td>
+                {{-- <td class="text-center" style="font-size: 17px">
+                  {{ $r->desc }}
+                </td> --}}
               </tr>
               @endforeach
             </tbody>

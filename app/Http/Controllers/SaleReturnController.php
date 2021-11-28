@@ -85,9 +85,9 @@ class SaleReturnController extends Controller
                     return $row->desc;
                 })
                 ->addColumn('action', function ($row) {
-                    $actionBtn = '<a class="btn btn-primary btn-block" target="_blank" href="' . route('sale.return.print', $row->Sale->id) . '">';
+                    $actionBtn = '<a class="btn btn-primary btn-block" target="_blank" href="' . route('sale.return.print', $row->id) . '">';
                     $actionBtn .= '<i class="fas fa-print"></i> Nota Besar</a>';
-                    $actionBtn .= '<a class="btn btn-primary btn-block" target="_blank" href="' . route('sale.return.printSmall', $row->Sale->id) . '">';
+                    $actionBtn .= '<a class="btn btn-primary btn-block" target="_blank" href="' . route('sale.return.printSmall', $row->id) . '">';
                     $actionBtn .= '<i class="fas fa-print"></i> Nota Kecil</a>';
                     return $actionBtn;
                 })
@@ -356,19 +356,19 @@ class SaleReturnController extends Controller
 
     public function printReturn($id)
     {
-        $sale = Sale::with('SaleDetail', 'Sales', 'SaleDetail.Item', 'SaleDetail.Item.Warranty', 'SaleDetail.Item.Brand', 'SaleDetail.Item.Brand.Category', 'CreatedByUser', 'Return')
+        $return = SaleReturn::with('Sale', 'SaleReturnDetail')
             ->find($id);
-        $member = User::get();
         return view('pages.backend.transaction.sale.return.printReturn', [
-            'sale' => $sale, 'member' => $member
+            'return' => $return
         ]);
     }
 
     public function printSmallReturn($id)
     {
-        $sale = Sale::with('SaleDetail', 'Sales', 'SaleDetail.Item', 'SaleDetail.Item.Brand', 'SaleDetail.Item.Brand.Category', 'CreatedByUser')->find($id);
-        // return $Service;
-        $member = User::get();
-        return view('pages.backend.transaction.sale.return.printSmallReturn', ['sale' => $sale, 'member' => $member]);
+        $return = SaleReturn::with('Sale', 'SaleReturnDetail')
+            ->find($id);
+        return view('pages.backend.transaction.sale.return.printSmallReturn', [
+            'return' => $return
+        ]);
     }
 }
