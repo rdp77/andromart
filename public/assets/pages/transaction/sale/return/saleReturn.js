@@ -8,8 +8,10 @@ $.ajaxSetup({
 
 $("#item").on("change", function () {
     var idItem = this.value;
-    $("#discount_value").addClass("d-none");
-    $("#discount_percent").addClass("d-none");
+    $("#dv").addClass("d-none");
+    $("#dp").addClass("d-none");
+    $("#customerData").empty();
+    $("#itemData").empty();
     $.ajax({
         url: getdata,
         type: "GET",
@@ -19,8 +21,6 @@ $("#item").on("change", function () {
         dataType: "json",
         success: function (data) {
             $("#saleDate").text(data.result.date);
-            $("#qty").val(data.result.qty);
-            $("#price").val(data.result.price);
             $("#total").val(data.result.total);
             $("#operator").val(data.result.operator);
             $("#sale_id").val(data.result.sale);
@@ -29,16 +29,52 @@ $("#item").on("change", function () {
             $("#sp_seller").val(data.result.sp_seller);
             $("#taker").val(data.result.taker);
             $("#seller").val(data.result.seller);
-            $("#faktur").val(data.result.faktur);
+            $("#customerData").append(data.result.customer);
+            $("#itemData").append(data.result.table);
             if (data.result.discount_type == "percent") {
-                $("#faktur").val(data.result.discount);
-                $("#discount_percent").removeClass("d-none");
+                $("#discount_percent").val(data.result.discount);
+                $("#dp").removeClass("d-none");
             } else {
-                $("#faktur").val(data.result.discount);
-                $("#discount_value").removeClass("d-none");
+                $("#discount_value").val(data.result.discount);
+                $("#dv").removeClass("d-none");
             }
         },
     });
+});
+
+function add() {
+    var idItem = $("#item").find(":selected").val();
+    $.ajax({
+        url: addURL,
+        type: "GET",
+        data: {
+            saleDetail: idItem,
+        },
+        dataType: "json",
+        success: function (data) {
+            $("#itemData").append(data.result);
+            $(".select2").select2();
+        },
+    });
+}
+
+function remove_item(argument) {
+    $(".data_" + argument).remove();
+}
+
+$(document.body).on("click", ".removeDataDetail", function () {
+    $(".dataDetail_" + this.value).remove();
+    var checkVerificationDiscount = $(
+        'input[name="typeDiscount"]:checked'
+    ).val();
+
+    sum();
+    sumTotal();
+    if (checkVerificationDiscount == "percent") {
+        sumDiscont();
+    } else {
+        sumDiscontValue();
+    }
 });
 
 function save() {

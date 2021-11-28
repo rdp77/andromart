@@ -15,11 +15,12 @@ var table = $("#table").DataTable({
     },
     dom: '<"html5buttons">lBrtip',
     columns: [
+        { data: "code" },
         { data: "faktur" },
         { data: "name" },
         { data: "type" },
         { data: "desc" },
-        // { data: "action", orderable: false, searchable: true },
+        { data: "action", orderable: false, searchable: true },
     ],
     buttons: [
         {

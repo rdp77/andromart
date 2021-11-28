@@ -10,6 +10,7 @@ use App\Models\Employee;
 use App\Models\Sale;
 use App\Models\SaleDetail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
@@ -76,15 +77,15 @@ class DashboardController extends Controller
             $totalServiceProgress[$i] = 0;
             $totalServiceDone[$i] = 0;
             $totalServiceCancel[$i] = 0;
-            for ($j=0; $j <count($checkServiceStatus[$i]) ; $j++) {
+            for ($j = 0; $j < count($checkServiceStatus[$i]); $j++) {
                 if ($checkServiceStatus[$i][$j]->work_status == 'Proses' || $checkServiceStatus[$i][$j]->work_status == 'Mutasi' || $checkServiceStatus[$i][$j]->work_status == 'Manifest') {
-                    $totalServiceProgress[$i] +=1;
+                    $totalServiceProgress[$i] += 1;
                 }
                 if ($checkServiceStatus[$i][$j]->work_status == 'Selesai' || $checkServiceStatus[$i][$j]->work_status == 'Diambil') {
-                    $totalServiceDone[$i]+=1;
+                    $totalServiceDone[$i] += 1;
                 }
                 if ($checkServiceStatus[$i][$j]->work_status == 'Cancel' || $checkServiceStatus[$i][$j]->work_status == 'Return') {
-                    $totalServiceCancel[$i] +=1;
+                    $totalServiceCancel[$i] += 1;
                 }
             }
         }
@@ -105,9 +106,9 @@ class DashboardController extends Controller
             'sharingProfitSaleBuyer' => $sharingProfitSaleBuyer,
             'totalSharingProfit' => number_format($totalSharingProfit, 0, ',', '.'),
             // 'checkServiceStatus' => $checkServiceStatus
-            'totalServiceProgress'=>$totalServiceProgress,
-            'totalServiceDone'=>$totalServiceDone,
-            'totalServiceCancel'=>$totalServiceCancel,
+            'totalServiceProgress' => $totalServiceProgress,
+            'totalServiceDone' => $totalServiceDone,
+            'totalServiceCancel' => $totalServiceCancel,
         ]);
     }
 
@@ -134,10 +135,6 @@ class DashboardController extends Controller
             $checkServiceStatus[$i] = Service::where('date', date('Y-m-d'))
                 ->where('technician_id', $chekSales[$i]->id)
                 ->get();
-
-
-
-               
         }
         return [$sharingProfit1Service, $sharingProfit2Service, $sharingProfitSaleSales, $sharingProfitSaleBuyer, $chekSales, $checkServiceStatus];
     }
@@ -212,5 +209,16 @@ class DashboardController extends Controller
             array_push($data, $message);
         }
         return $data;
+    }
+
+    public function createCode($string, $table)
+    {
+        $getEmployee =  Employee::with('branch')->where('user_id', Auth::user()->id)->first();
+        $month = Carbon::now()->format('m');
+        $year = Carbon::now()->format('y');
+        $index = DB::table($table)->max('id') + 1;
+
+        $index = str_pad($index, 3, '0', STR_PAD_LEFT);
+        return $string . $getEmployee->Branch->code . $year . $month . $index;
     }
 }

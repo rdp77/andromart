@@ -52,5 +52,17 @@ Route::group(['prefix' => 'transaction'], function () {
             'sale-type-return',
             [SaleReturnController::class, 'getType']
         )->name('sale.return.type');
+        Route::get(
+            'add-sale-return',
+            [SaleReturnController::class, 'add']
+        )->name('sale.return.add');
+        Route::get(
+            'sale-return-print/{id}',
+            [SaleReturnController::class, 'printReturn']
+        )->name('sale.return.print');
+        Route::get(
+            'sale-return-print-small/{id}',
+            [SaleReturnController::class, 'printSmallReturn']
+        )->name('sale.return.printSmall');
     });
 });

@@ -21,6 +21,9 @@
             <thead>
                 <tr>
                     <th>
+                        {{ __('No Pengembalian') }}
+                    </th>
+                    <th>
                         {{ __('No Faktur') }}
                     </th>
                     <th>
@@ -30,7 +33,7 @@
                         {{ __('Tipe') }}
                     </th>
                     <th>{{ __('Keterangan') }}</th>
-                    {{-- <th>{{ __('Aksi') }}</th> --}}
+                    <th>{{ __('Aksi') }}</th>
                 </tr>
             </thead>
             <tbody>

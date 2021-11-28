@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSaleReturnTable extends Migration
+class SaleReturnDetailTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,11 @@ class CreateSaleReturnTable extends Migration
      */
     public function up()
     {
-        Schema::create('sale_return', function (Blueprint $table) {
+        Schema::create('sale_return_dt', function (Blueprint $table) {
             $table->id();
-            $table->string('code');
-            $table->foreignId('sale_id');
-            $table->foreignId('branch_id');
-            $table->text('desc')->nullable();
+            $table->foreignId('sale_return_id');
+            $table->foreignId('item_id');
+            $table->string('type');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();
@@ -34,6 +33,6 @@ class CreateSaleReturnTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sale_return');
+        Schema::dropIfExists('sale_return_dt');
     }
 }

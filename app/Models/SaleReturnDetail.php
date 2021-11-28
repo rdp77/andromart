@@ -6,17 +6,16 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class SaleReturn extends Model
+class SaleReturnDetail extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'sale_return';
+    protected $table = 'sale_return_dt';
 
     protected $fillable = [
-        'code',
-        'sale_id',
-        'branch_id',
-        'desc',
+        'sale_return_id',
+        'item_id',
+        'type',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -25,13 +24,13 @@ class SaleReturn extends Model
         'deleted_by',
     ];
 
-    public function Sale()
+    public function SaleReturn()
     {
-        return $this->belongsTo(Sale::class, 'sale_id', 'id');
+        return $this->belongsTo(SaleReturn::class);
     }
 
-    public function SaleReturnDetail()
+    public function Item()
     {
-        return $this->hasMany(SaleReturnDetail::class, 'sale_return_id', 'id');
+        return $this->belongsTo(Item::class);
     }
 }

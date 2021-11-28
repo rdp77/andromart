@@ -52,7 +52,7 @@ class Sale extends Model
 
     public function SharingProfitDetail()
     {
-        return $this->hasMany('App\Models\SharingProfitDetail','ref','code');
+        return $this->hasMany('App\Models\SharingProfitDetail', 'ref', 'code');
     }
 
     public function user()
@@ -97,6 +97,6 @@ class Sale extends Model
 
     public function Return()
     {
-        return $this->hasOne(SaleReturn::class, 'sale', 'id');
+        return $this->hasOne(SaleReturn::class, 'sale_id', 'id');
     }
 }

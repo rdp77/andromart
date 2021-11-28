@@ -68,13 +68,13 @@ class Item extends Model
         return $this->hasMany('App\Models\SaleDetail');
     }
 
+    public function ReturnDetail()
+    {
+        return $this->hasMany(SaleReturnDetail::class);
+    }
+
     public function warranty()
     {
         return $this->belongsTo('App\Models\Warranty');
-    }
-
-    public function Return()
-    {
-        return $this->hasOne(SaleReturn::class, 'item', 'id');
     }
 }
