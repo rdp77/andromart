@@ -217,9 +217,17 @@
             </div>
         </div>
         <div class="card-footer text-right">
-            <button class="btn btn-primary mr-1" type="button" onclick="save()">
+            <button class="btn btn-primary mr-1 tombolSave" type="button" onclick="save()">
                 <i class="far fa-save"></i>
                 {{ __('Simpan Data') }}</button>
+            <div class="row">
+                <button class="btn btn-warning mr-1 tombolPrintKecil" style="display:none" type="button" onclick="printKecil('{{URL::to('/')}}')">
+                    <i class="fas fa-print"></i>
+                    {{ __('Nota Kecil') }}</button>
+                <button class="btn btn-warning mr-1 tombolPrintBesar" style="display:none" type="button" onclick="printBesar('{{URL::to('/')}}')">
+                    <i class="fas fa-print"></i>
+                    {{ __('Nota Besar') }}</button>
+            </div>
         </div>
     </div>
 </form>

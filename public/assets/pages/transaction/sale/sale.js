@@ -6,6 +6,7 @@ $.ajaxSetup({
     },
 });
 
+var idSaved = '';
 function save() {
     swal({
         title: "Apakah Anda Yakin?",
@@ -45,7 +46,11 @@ function save() {
                         swal(data.message, {
                             icon: "success",
                         });
-                        location.reload();
+                        // location.reload();
+                        $('.tombolSave').css('display','none')
+                        $('.tombolPrintKecil').css('display','block');
+                        $('.tombolPrintBesar').css('display', 'block');
+                        idSaved = data.id;
                     } else {
                         swal(data.message, {
                             icon: "warning",
@@ -60,6 +65,14 @@ function save() {
             swal("Data Belum Disimpan !");
         }
     });
+}
+
+function printBesar(params) {
+    window.open(params + '/transaction/sale/salePrint/' + idSaved);
+}
+
+function printKecil(params) {
+    window.open(params + '/transaction/sale/smallPrint/' + idSaved);
 }
 
 function updateData(params) {

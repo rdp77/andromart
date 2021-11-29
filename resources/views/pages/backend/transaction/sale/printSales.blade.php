@@ -1,4 +1,5 @@
 @include('layouts.components.header')
+{{-- @section('title', __('pages.title').__(' | Nota Besar')) --}}
 <style>
   @media print {
     body{
@@ -115,12 +116,12 @@
               </tr>
               @foreach ($sale->SaleDetail as $i => $sd)
                 <tr>
-                    <td style="border-right: 1px solid #1d98d4"  style="font-size: 17px">{{ $sd->item->brand->category->name }} :
-                        <b>{{ $sd->item->brand->name }} {{$sd->item->name}} </b>
+                    <td style="font-size: 20px; border-right: 1px solid #1d98d4">
+                        {{ $sd->item->brand->category->name }} : <b> {{ $sd->item->brand->name }} {{$sd->item->name}} </b>
                     </td>
-                    <td style="border-right: 1px solid #1d98d4" class="text-center" style="font-size: 17px">{{$sd->qty}}</td>
-                    <td  class="text-center" style="font-size: 17px" style="border-right: 1px solid #1d98d4">{{ number_format($sd->price,0,".",",") }}</td>
-                    <td  class="text-center" style="font-size: 17px">{{ number_format($sd->total,0,".",",") }}</td>
+                    <td style="font-size: 20px; border-right: 1px solid #1d98d4" class="text-center">{{$sd->qty}}</td>
+                    <td  class="text-center" style="font-size: 20px" style="border-right: 1px solid #1d98d4">{{ number_format($sd->price,0,".",",") }}</td>
+                    <td  class="text-center" style="font-size: 20px">{{ number_format($sd->total,0,".",",") }}</td>
                 </tr>
                 @endforeach
             </tbody>
@@ -155,27 +156,13 @@
             <address>
               <strong><p style="font-size: 25px;background-color:#5a5a5a;color:white;padding:5px;text-align:center">PERHATIAN !!</p></strong>
               <p style="font-size: 16px;line-height:17px;font-weight:600">
-              1. Pemberian Masa Garansi Mutlak Keputusan Andromart.
+              1. Pemberian masa garansi mutlak keputusan Andromart.
               <br>
-              2. Garansi Tidak Berlaku Apabila Unit Terjatuh, Terkena Air, Tertindih, dsb.
+              2. Garansi tidak berlaku apabila unit terjatuh, terkena air, tertindih, dsb.
               <br>
-              3. Garansi Tidak Berlaku Jika, Terjadi Kerusakan Lain diluar AWAL Perbaikan / Penggantian Hardware & Software.
+              3. Customer wajib memeriksa dengan seksama, unit & kelengkapan sebelum serah terima unit.
               <br>
-              4. Kami Tidak Bertanggung jawab Atas Kerusakan diluar KELUHAN Customer.
-              <br>
-              5. Garansi Mulai Berlaku SEJAK tanggal Konfirmasi Selesai.
-              <br>
-              6. Kami Tidak Bertanggung jawab Atas Perubahan IMEI / NO SERI HP setelah di service
-              <br>
-              7. Kami Tidak Bertanggung jawab Atas Barang Service yang tidak diambil selama (satu) bulan sejak konfirmasi Pengambilan Unit.
-              <br>
-              8. Kami Tidak Bertanggung jawab Atas Hilangnya Data Atas Pekerjaan Unit Service.
-              <br>
-              9. Kami Tidak Bertanggung jawab Atas Hilang / Rusaknya Unit yang disebabkan oleh Bencana Alam, Kebakaran, Pencurian dll.
-              <br>
-              10. Customer Wajib memeriksa dengan Seksama, Unit & Kelengkapan sebelum Serah Terima Unit.
-              <br>
-              11. Nota Service ini Harus Dibawa / Disertakan saat Pengambilan Unit.
+              4. Barang yang sudah dibeli tidak dapat dikembalikan kecuali ada perjanjian tertulis.
               </p>
               <strong><p style="font-size: 25px;background-color:#5a5a5a;color:white;padding:5px;text-align:center">!!! Customer Dianggap Telah Membaca dan Menyepakati Ketentuan !!!</p></strong>
             </address>

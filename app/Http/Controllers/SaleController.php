@@ -49,6 +49,7 @@ class SaleController extends Controller
                         </button>';
                     $actionBtn .= '<div class="dropdown-menu">
                             <a class="dropdown-item" href="' . route('sale.edit', $row->id) . '" ><i class="fas fa-pencil-alt"></i> Edit</a>';
+                    $actionBtn .= '<a class="dropdown-item" href="' . route('sale.show', $row->id) . '" ><i class="fas fa-list-alt"></i> Detail</a>';
                     $actionBtn .= '<a class="dropdown-item" href="' . route('sale.printSale', $row->id) . '" target="output"><i class="fas fa-print"></i> Nota Besar</a>';
                     $actionBtn .= '<a class="dropdown-item" href="' . route('sale.printSmallSale', $row->id) . '" target="output"><i class="fas fa-print"></i> Nota Kecil</a>';
                     $actionBtn .= '<a onclick="jurnal(' ."'". $row->code ."'". ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
@@ -337,11 +338,11 @@ class SaleController extends Controller
                 }
             }
             DB::commit();
-            return Response::json(['status' => 'success', 'message' => 'Data Tersimpan']);
+            return Response::json(['status' => 'success', 'message' => 'Data Tersimpan', 'id' => $id] );
         } catch (\Throwable $th) {
             DB::rollback();
             return $th;
-            return Response::json(['status' => 'error', 'message' => $th]);
+            return Response::json(['status' => 'error', 'message' => $th ]);
         }
         // return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
     }

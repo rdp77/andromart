@@ -17,13 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'transaction'], function () {
     Route::group(['prefix' => 'sale'], function () {
-        Route::resource('sale', SaleController::class)
-            ->except([
-                'show',
-            ]);
+        Route::resource('sale', SaleController::class);
 
         Route::get(
-            'sale/{id}',
+            'salePrint/{id}',
             [SaleController::class, 'printSale']
         )->name('sale.printSale');
 
@@ -33,7 +30,7 @@ Route::group(['prefix' => 'transaction'], function () {
         )->name('sale.checkJournals');
 
         Route::get(
-            'sale-print/{id}',
+            'smallPrint/{id}',
             [SaleController::class, 'printSmallSale']
         )->name('sale.printSmallSale');
 
