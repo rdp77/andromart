@@ -30,7 +30,7 @@ $("#item").on("change", function () {
             $("#taker").val(data.result.taker);
             $("#seller").val(data.result.seller);
             $("#customerData").append(data.result.customer);
-            $("#itemData").append(data.result.table);
+            $("#itemData").append(data.result.data);
             if (data.result.discount_type == "percent") {
                 $("#discount_percent").val(data.result.discount);
                 $("#dp").removeClass("d-none");
@@ -44,38 +44,71 @@ $("#item").on("change", function () {
 
 function add() {
     var idItem = $("#item").find(":selected").val();
+    var dataParent = $(".dataParent").length;
     $.ajax({
         url: addURL,
         type: "GET",
         data: {
-            saleDetail: idItem,
+            sale: idItem,
         },
         dataType: "json",
         success: function (data) {
-            $("#itemData").append(data.result);
-            $(".select2").select2();
+            var dataItems = [];
+            $.each(data.result, function (index, value) {
+                dataItems +=
+                    '<option value="' +
+                    value.id_item +
+                    '">' +
+                    value.name_item +
+                    "</option>";
+            });
+            $("#itemData").append(
+                '<tr class="dataParent remove_' +
+                    (dataParent + 1) +
+                    '">' +
+                    '<td> <select class="form-control selectric" name="items[]" id="item_data">' +
+                    '<option value="">- Select -</option>' +
+                    dataItems +
+                    '</select> </td><td> <select class="form-control selectric" name="type[]"> <option value="">- Select -</option>' +
+                    '<option value="1">Service Barang</option><option value="2">Ganti Baru</option><option value="3">Tukar Tambah</option>' +
+                    '<option value="4">Ganti Uang</option><option value="5">Ganti Barang Lain</option></select> </td>' +
+                    '<td> <button type="button" onclick="remove_item(\'' +
+                    (dataParent + 1) +
+                    '\')" class="btn btn-danger mt-2 mt-1 btn-block"> <i class="fa fa-times"></i> </button>' +
+                    '<button type="button" onclick="dataModal()" class="btn btn-primary mt-1 mb-2 btn-block"> <i class="fa fa-eye"></i> </button> </td></tr>'
+            );
+            $(".selectric").selectric();
         },
     });
 }
 
 function remove_item(argument) {
-    $(".data_" + argument).remove();
+    $(".remove_" + argument).remove();
 }
 
-$(document.body).on("click", ".removeDataDetail", function () {
-    $(".dataDetail_" + this.value).remove();
-    var checkVerificationDiscount = $(
-        'input[name="typeDiscount"]:checked'
-    ).val();
-
-    sum();
-    sumTotal();
-    if (checkVerificationDiscount == "percent") {
-        sumDiscont();
-    } else {
-        sumDiscontValue();
-    }
-});
+function dataModal() {
+    var sale = $("#item").find(":selected").val();
+    var idItem = $("#item_data").find(":selected").val();
+    $.ajax({
+        url: getDetailURL,
+        type: "GET",
+        data: {
+            sale: sale,
+            item_id: idItem,
+        },
+        dataType: "json",
+        success: function (data) {
+            $("#total_price").text(data.result.total);
+            $("#taker").text(data.result.taker);
+            $("#seller").text(data.result.seller);
+            $("#sp_taker").text(data.result.sp_taker);
+            $("#sp_seller").text(data.result.sp_seller);
+            $("#desc").text(data.result.desc);
+            $("#qty").text(data.result.qty);
+            $("#exampleModal").modal("show");
+        },
+    });
+}
 
 function save() {
     var form = $("#stored");
@@ -150,6 +183,12 @@ function returnType() {
                         message: data.data[number],
                     });
                 }
+            } else if (data.status == "success") {
+                swal(data.data, {
+                    icon: "success",
+                }).then(function () {
+                    window.location = index;
+                });
             }
         },
     });

@@ -1,38 +1,54 @@
 <div class="modal fade" tabindex="-1" role="dialog" id="exampleModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
-            <form id="return">
-                <div class="modal-header">
-                    <h5 class="modal-title">{{ __('Barang masih ada garansi, pilih metode return!') }}</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+            <div class="modal-header">
+                <h5 class="modal-title">{{ __('Detail Barang') }}</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover" width="100%">
+                        <thead>
+                            <tr>
+                                <th width="50%">{{ __('Nama') }}</th>
+                                <th>{{ __('Detail') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th scope="row">{{ __('QTY') }}</th>
+                                <td id="qty"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">{{ __('Total') }}</th>
+                                <td id="total_price"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">{{ __('Pengambil') }}</th>
+                                <td id="taker"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">{{ __('Penjual') }}</th>
+                                <td id="seller"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">{{ __('Sharing Profit Pengambil') }}</th>
+                                <td id="sp_taker"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">{{ __('Sharing Profit Penjual') }}</th>
+                                <td id="sp_seller"></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">{{ __('Deskripsi') }}</th>
+                                <td id="desc"></td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="modal-body">
-                    <input type="hidden" name="sale" id="sale">
-                    <input type="hidden" name="item_id" id="item_id">
-                    <div class="form-group">
-                        <div class="d-block">
-                            <label class="control-label">{{ __('Pilihan Return') }}<code>*</code></label>
-                        </div>
-                        <select class="select2" name="type" id="type">
-                            <option value="">{{ __('- Pilih Metode Return -') }}</option>
-                            <option value="1">{{ __('Service Barang') }}</option>
-                            <option value="2">{{ __('Ganti Baru') }}</option>
-                            {{-- <option value="3">{{ __('Tukar Tambah') }}</option> --}}
-                            <option value="3">{{ __('Ganti Uang') }}</option>
-                            <option value="4">{{ __('Ganti Atribut') }}</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label">{{ __('Keterangan') }}<code>*</code></label>
-                        <textarea class="form-control" name="desc" style="height: 100px"></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer bg-whitesmoke br">
-                    <button type="button" class="btn btn-primary" onclick="returnType()">{{ __('Pilih') }}</button>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
