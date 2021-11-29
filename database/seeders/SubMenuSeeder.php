@@ -83,7 +83,7 @@ class SubMenuSeeder extends Seeder
                 'url' => route('sharing-profit.index'),
                 'hover' => '["' . route('sharing-profit.create') . '","' . route('sharing-profit.index') . '"]'
             ],
-            
+
             [
                 'menu_id' => '3',
                 'name' => 'Barang Loss Trans',
@@ -196,8 +196,8 @@ class SubMenuSeeder extends Seeder
             [
                 'menu_id' => '4',
                 'name' => 'Hak Akses',
-                'url' => 'javascript:void(0)',
-                'hover' => null
+                'url' => route('role.index'),
+                'hover' => '["' . route('role.create') . '","' . route('role.index') . '"]'
             ],
             [
                 'menu_id' => '4',

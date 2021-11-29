@@ -111,7 +111,7 @@ class SaleReturnController extends Controller
     public function store(Request $req)
     {
         // Validator
-        foreach ($req->data_item as $d) {
+        foreach ($req->items as $d) {
             if ($d == null) {
                 return Response::json([
                     'status' => 'error',
@@ -129,15 +129,15 @@ class SaleReturnController extends Controller
             }
         }
 
-        if (count(array_unique($req->data_item)) < count($req->data_item)) {
+        if (count(array_unique($req->items)) < count($req->items)) {
             // Array has duplicates
             return Response::json([
                 'status' => 'error',
-                'data' => array("Data Barang Sama")
+                'data' => array("Data Barang Ada Yang Sama")
             ]);
         }
 
-        foreach ($req->data_item as $d) {
+        foreach ($req->items as $d) {
             // Initialization
             $warranty = Item::with('warranty')
                 ->find($d)->warranty;
@@ -158,35 +158,81 @@ class SaleReturnController extends Controller
             }
         }
 
+        $data = array();
         // Check Return
         foreach ($req->type as $index => $t) {
-            $this->getType($t);
+            switch ($t) {
+                    // Service
+                case 1:
+                    // return Response::json([
+                    //     'status' => 'loss',
+                    //     'data' => "Barang akan diservice dan barang yang digantikan akan dijadikan barang loss sales!"
+                    // ]);
+                    break;
+                case 2:
+                    // Ganti Baru
+                    // Sedangkan ssd rusak iku maeng akan di return ng supplier. Dadi mutasi barang ssd dengan keterangan barang direturn ng supplier.
+                    // return Response::json([
+                    //     'status' => 'new',
+                    //     'data' => "Barang akan diganti baru dan barang lama akan di return ke supplier!"
+                    // ]);
+                    break;
+                case 3:
+                    // Tukar Tambah                
+                    break;
+                case 4:
+                    // Diganti Uang
+                    // return Response::json([
+                    //     'status' => 'money',
+                    //     'data' => "Barang akan direturn menggunakan uang!"
+                    // ]);
+                    break;
+                case 5:
+                    // Diganti Barang Lain
+                    // return Response::json([
+                    //     'status' => 'att',
+                    //     'data' => "Barang akan diganti sesuai keinginan dan barang lama akan dibeli toko dan masuk ke dalam stok!"
+                    // ]);
+                    break;
+            }
         }
+        // array_push($data, (object)[
+        //     'id_item' => $i->id,
+        //     'name_item' => $i->name,
+        //     'qty' => $s->qty,
+        //     'price' => $s->total,
+        //     'sales_id' => $s->sales_id,
+        //     'buyer_id' => $s->buyer_id,
+        //     'sp_buyer' => $s->sharing_profit_sales,
+        //     'sp_sales' => $s->sharing_profit_sales,
+        //     'dsc' => $s->description,
+        //     'sale' => $req->sale
+        // ]);
 
-        $id = DB::table('sale_return')->max('id') + 1;
-        SaleReturn::create([
-            'id' => $id,
-            'code' => $this->DashboardController->createCode('RTNP', 'sale_return'),
-            'sale_id' => $req->item,
-            'branch_id' => Employee::where('user_id', Auth::user()->id)->first()->branch_id,
-            'desc' => $req->description,
-            'created_at' => date('Y-m-d h:i:s'),
-            'created_by' => Auth::user()->name,
-        ]);
+        // $id = DB::table('sale_return')->max('id') + 1;
+        // SaleReturn::create([
+        //     'id' => $id,
+        //     'code' => $this->DashboardController->createCode('RTNP', 'sale_return'),
+        //     'sale_id' => $req->item,
+        //     'branch_id' => Employee::where('user_id', Auth::user()->id)->first()->branch_id,
+        //     'desc' => $req->description,
+        //     'created_at' => date('Y-m-d h:i:s'),
+        //     'created_by' => Auth::user()->name,
+        // ]);
 
-        foreach ($req->data_item as $index => $d) {
-            SaleReturnDetail::create([
-                'sale_return_id' => $id,
-                'item_id' => $d,
-                'type' => $req->type[$index],
-                'created_at' => date('Y-m-d h:i:s'),
-                'created_by' => Auth::user()->name,
-            ]);
-        }
+        // foreach ($req->data_item as $index => $d) {
+        //     SaleReturnDetail::create([
+        //         'sale_return_id' => $id,
+        //         'item_id' => $d,
+        //         'type' => $req->type[$index],
+        //         'created_at' => date('Y-m-d h:i:s'),
+        //         'created_by' => Auth::user()->name,
+        //     ]);
+        // }
 
         return Response::json([
             'status' => 'success',
-            'result' => "Data Pengembalian Penjualan Berhasil Disimpan"
+            'result' => $data
         ]);
     }
 
@@ -208,41 +254,44 @@ class SaleReturnController extends Controller
 
     public function getData(Request $req)
     {
-        // item_id = sale
-        // $item = SaleDetail::with('Sale', 'Item')->find($req->item_id);
         $sale = Sale::with('SaleDetail')->find($req->item_id);
+        $data = array();
         $discountType = $sale->discount_type;
         $discount = $discountType == "percent" ? $sale->discount_percent
             : $sale->discount_price;
-        // $taker = $item->buyer_id != null ? User::find($item->buyer_id)->name : null;
 
         $customer = '<div class="row"><div class="form-group col-12 col-md-6 col-lg-6"><label>Nama Customer</label>';
         $customer .= '<p>' . $sale->customer_name . '</p>';
         $customer .= '</div><div class="form-group col-12 col-md-6 col-lg-6"><label for="type">Alamat & No Telepon</label>';
         $customer .= '<p>' . $sale->customer_address . ' [ ' . $sale->customer_phone . ' ] </p></div></div></div>';
 
-        // $table =  '<tr><td>' . $faktur . '</td>';
-        // $table .= '<td>' . Item::find($dataItems[1])->name . '</td>';
-        // $table .= '<td><select class="form-control" name="type"><option value="">- Pilih Metode Return -</option><option value="1">Service Barang</option>';
-        // $table .= '<option value="2">Ganti Baru</option><option value="4">Tukar Tambah</option><option value="5">Ganti Uang</option>';
-        // $table .= '<option value="6">Ganti Barang Lain</option></select></td></tr>';
+        foreach ($sale->SaleDetail as $s) {
+            foreach (Item::all() as $i) {
+                if ($s->item_id == $i->id) {
+                    array_push($data, (object)[
+                        'id_item' => $i->id,
+                        'name_item' => $i->name,
+                        'qty' => $s->qty,
+                        'price' => $s->total,
+                        'sales_id' => $s->sales_id,
+                        'buyer_id' => $s->buyer_id,
+                        'sp_buyer' => $s->sharing_profit_sales,
+                        'sp_sales' => $s->sharing_profit_sales,
+                        'dsc' => $s->description,
+                    ]);
+                }
+            }
+        }
 
         $data = [
             'date' => Carbon::parse($sale->date)->format('d F Y'),
-            // 'qty' => $item->qty,
-            // 'price' => number_format($item->price),
             'total' => number_format($sale->total_price),
             'operator' => User::find($sale->user_id)->name,
             'sale' => $sale->id,
-            // 'item' => $dataItems[1],
-            // 'sp_taker' => $item->sharing_profit_sales,
-            // 'sp_seller' => $item->sharing_profit_buyer,
-            // 'taker' => $taker,
-            // 'seller' => User::find($item->sales_id)->name,
             'discount_type' => $discountType,
             'discount' => $discount,
             'customer' => $customer,
-            // 'table' => $table
+            'data' => $data
         ];
 
         return Response::json([
@@ -253,30 +302,53 @@ class SaleReturnController extends Controller
 
     public function add(Request $req)
     {
-        $item = Sale::with('SaleDetail')->find($req->saleDetail);
+        $sale = Sale::with('SaleDetail')->find($req->sale);
+        $data = array();
 
-        $table =  '<tr class="data data_+(data+1)+"><td>' . $item->code . '</td>';
-        // $table =  '<tr class="data data_+(data+1)+"><td>qty</td>';
-        // $table .= '<td>harga</td>';
-        $table .= '<td><select class="form-control select2" name="data_item[]"><option value="">- Pilih Barang -</option>';
-        foreach ($item->SaleDetail as $s) {
+        foreach ($sale->SaleDetail as $s) {
             foreach (Item::all() as $i) {
                 if ($s->item_id == $i->id) {
-                    $table .= '<option value="' . $i->id . '">' . $i->name . '</option>';
+                    array_push($data, (object)[
+                        'id_item' => $i->id,
+                        'name_item' => $i->name,
+                        'qty' => $s->qty,
+                        'price' => $s->total,
+                        'sales_id' => $s->sales_id,
+                        'buyer_id' => $s->buyer_id,
+                        'sp_buyer' => $s->sharing_profit_sales,
+                        'sp_sales' => $s->sharing_profit_sales,
+                        'dsc' => $s->description,
+                        'sale' => $req->sale
+                    ]);
                 }
             }
         }
-        $table .= '</select></td>';
-        $table .= '<td><select class="form-control" name="type[]"><option value="">- Pilih Metode Return -</option><option value="1">Service Barang</option>';
-        $table .= '<option value="2">Ganti Baru</option><option value="4">Tukar Tambah</option><option value="5">Ganti Uang</option>';
-        $table .= '<option value="6">Ganti Barang Lain</option></select></td>';
-        // $table .= '<td><button type="button" class="btn btn-danger btn-block" onclick="remove_item(\''+(remove+1)+'\')"><i class="fas fa-trash"></i> Hapus</button>';
-        // $table .='</td></tr>';
-        $table .= '</tr>';
 
         return Response::json([
             'status' => 'success',
-            'result' => $table
+            'result' => $data
+        ]);
+    }
+
+    public function getDetail(Request $req)
+    {
+        $saleDetail = SaleDetail::where('sale_id', $req->sale)
+            ->where('item_id', $req->item_id)
+            ->first();
+
+        $data = [
+            'qty' => $saleDetail->qty,
+            'total' => number_format($saleDetail->total),
+            'taker' => User::find($saleDetail->sales_id)->name,
+            'seller' => User::find($saleDetail->buyer_id)->name,
+            'sp_taker' => $saleDetail->sharing_profit_sales,
+            'sp_seller' => $saleDetail->sharing_profit_buyer,
+            'desc' => $saleDetail->description,
+        ];
+
+        return Response::json([
+            'status' => 'success',
+            'result' => $data
         ]);
     }
 
@@ -295,28 +367,28 @@ class SaleReturnController extends Controller
         switch ($type) {
                 // Service
             case 1:
-                // return Response::json([
-                //     'status' => 'loss',
-                //     'data' => "Barang akan diservice dan barang yang digantikan akan dijadikan barang loss sales!"
-                // ]);
+                return Response::json([
+                    'status' => 'loss',
+                    'data' => "Barang akan diservice dan barang yang digantikan akan dijadikan barang loss sales!"
+                ]);
                 break;
             case 2:
                 // Ganti Baru
                 // Sedangkan ssd rusak iku maeng akan di return ng supplier. Dadi mutasi barang ssd dengan keterangan barang direturn ng supplier.
-                // return Response::json([
-                //     'status' => 'new',
-                //     'data' => "Barang akan diganti baru dan barang lama akan di return ke supplier!"
-                // ]);
+                return Response::json([
+                    'status' => 'new',
+                    'data' => "Barang akan diganti baru dan barang lama akan di return ke supplier!"
+                ]);
                 break;
             case 3:
                 // Tukar Tambah                
                 break;
             case 4:
                 // Diganti Uang
-                // return Response::json([
-                //     'status' => 'money',
-                //     'data' => "Barang akan direturn menggunakan uang!"
-                // ]);
+                return Response::json([
+                    'status' => 'money',
+                    'data' => "Barang akan direturn menggunakan uang!"
+                ]);
                 break;
             case 5:
                 // Diganti Barang Lain

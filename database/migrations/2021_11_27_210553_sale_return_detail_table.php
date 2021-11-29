@@ -16,6 +16,7 @@ class SaleReturnDetailTable extends Migration
         Schema::create('sale_return_dt', function (Blueprint $table) {
             $table->id();
             $table->foreignId('sale_return_id');
+            $table->foreignId('sale_detail_id');
             $table->foreignId('item_id');
             $table->string('type');
             $table->string('created_by')->nullable();

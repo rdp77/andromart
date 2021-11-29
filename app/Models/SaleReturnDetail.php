@@ -14,6 +14,7 @@ class SaleReturnDetail extends Model
 
     protected $fillable = [
         'sale_return_id',
+        'sale_detail_id',
         'item_id',
         'type',
         'created_at',
