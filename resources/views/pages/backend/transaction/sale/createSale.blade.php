@@ -64,7 +64,7 @@
                         <div class="form-group col-12 col-md-12 col-lg-12">
                             <label for="description">{{ __('Deskripsi') }}<code>*</code></label>
                             <textarea data-name="Deskripsi" name="description" class="form-control validation"
-                                id="description" style="height: 100px"></textarea>
+                                id="description" style="height: 50px"></textarea>
                         </div>
                     </div>
                     <input type="hidden" class="branchId" value="{{Auth::user()->employee->branch_id}}">

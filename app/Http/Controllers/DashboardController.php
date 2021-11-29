@@ -36,11 +36,20 @@ class DashboardController extends Controller
 
     public function index()
     {
-        // $dataSale = SaleDetail::select('item_id')
-        // ->where('created_at', date('Y-m-01'))
-        // ->where('created_at', date('Y-m-t'))
-        // ->sum('qty');
-        // return $dataSale;
+        $topSales = DB::table('sale_details')
+        // ->whereYear('created_at', now())
+        // ->whereMonth('created_at', now())->first()
+        ->leftJoin('items','items.id','=','sale_details.item_id')
+        ->select('items.id','items.name', 'items.brand_id', 'sale_details.item_id',
+        DB::raw('SUM(sale_details.qty) as total'))
+        ->groupBy('items.id','sale_details.item_id','items.name', 'items.brand_id',)
+        ->orderBy('total','desc')
+        ->limit(3)
+        ->get();
+        // $topSales = DB::table('sale_details')
+        // ->whereYear('created_at', now())
+        // ->whereMonth('created_at', now())->get();
+        // return $topSales;
 
         $dataTrafficToday = DB::table('traffic')->where('date', date('Y-m-d'))->count();
         $dataServiceTotal = Service::where('date', date('Y-m-d'))->count();
@@ -109,6 +118,7 @@ class DashboardController extends Controller
             'totalServiceProgress' => $totalServiceProgress,
             'totalServiceDone' => $totalServiceDone,
             'totalServiceCancel' => $totalServiceCancel,
+            'topSales' => $topSales,
         ]);
     }
 

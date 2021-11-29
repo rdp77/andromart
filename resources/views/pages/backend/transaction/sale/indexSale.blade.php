@@ -20,11 +20,8 @@
         <table class="table-striped table" id="table" width="100%">
             <thead>
                 <tr>
-
                     <th>{{ __('Faktur') }}</th>
-                    <th>
-                        {{ __('Tanggal & operator') }}
-                    </th>
+                    <th>{{ __('Tanggal & operator') }}</th>
                     <th>{{ __('Pelanggan') }}</th>
                     <th>{{ __('Qty | Barang | Garansi') }}</th>
                     <th>{{ __('Harga') }}</th>

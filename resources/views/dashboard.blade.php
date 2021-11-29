@@ -156,21 +156,16 @@
                 </div>
                 <div class="card-wrap">
                     <div class="card-header">
-                        <h4>Top Chart Penjualan ACC</h4>
-                    </div>
-                    <div class="card-body">
-                        {{-- {{ $dataServiceTotal }} --}}
+                        <h4>Top Chart Penjualan</h4>
                     </div>
                     <div class="card-footer">
-                        <table class="table">
+                        <table class="table table-striped">
+                            @foreach ($topSales as $topSales)
                             <tr>
-                                <th>Handphone</th>
-                                {{-- <th><b>{{ number_format($dataServiceHandphone, 0, ',', '.') }}</b></th> --}}
+                                <th>{{$topSales->name}}</th>
+                                <th>{{$topSales->total}}</th>
                             </tr>
-                            <tr>
-                                <th>Laptop</th>
-                                {{-- <th><b>{{ number_format($dataServiceLaptop, 0, ',', '.') }}</b></th> --}}
-                            </tr>
+                            @endforeach
                         </table>
                     </div>
                 </div>
@@ -293,7 +288,7 @@
             </div>
         </div>
     </div> --}}
-    {{-- 
+    {{--
     <div class="card card-hero">
         <div class="card-header">
             <div class="card-icon">

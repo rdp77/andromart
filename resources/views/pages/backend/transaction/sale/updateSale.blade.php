@@ -22,110 +22,103 @@
             <div class="card card-primary">
                 <div class="card-body">
                     <div class="row">
-                        <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="code">{{ __('Kode Faktur') }}<code>*</code></label>
-                            <input id="code" type="text" class="form-control" readonly="" value="{{$sale->code}}"
-                                name="code">
-                        </div>
-                        <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="date">{{ __('Tanggal') }}<code>*</code></label>
-                            <input id="date" type="text" class="form-control" readonly=""
-                                value="{{ \Carbon\Carbon::parse($sale->date)->locale('id')->isoFormat('LL') }}"
-                                name="date">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="sales" class="control-label">{{ __('Sales') }}<code>*</code></label>
-                            <select class="select2 validation" name="sales_id" data-name="Sales">
-                                @foreach ($sales as $sales)
-                                <option value="{{$sales->id}}" @if ($sales->id == $sale->sales_id)
-                                    selected=""
-                                    @endif>{{$sales->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="form-group col-12 col-md-4 col-xs-12">
-                            <label for="payment_method" class="control-label">{{ __('Metode Pembayaran')
-                                }}<code>*</code></label>
-                            <select class="select2 validation" name="payment_method" data-name="Metode Pembayaran"
-                                required>
-                                <option value="">- Select -</option>
-                                <option value="Cash" @if ($sale->payment_method == 'Cash')
-                                    selected
-                                    @endif>Cash / Tunai
-                                </option>
-                                <option value="Transfer" @if ($sale->payment_method == 'Transfer')
-                                    selected
-                                    @endif>Transfer
-                                </option>
-                            </select>
-                        </div>
-                        <div class="form-group col-12 col-md-4 col-xs-12">
-                            <label for="cash_id">{{ __('Kode Kas') }}<code>*</code></label>
-                            <select class="select2 validation" name="cash_id" data-name="Kode Kas">
-                                <option value="">- Select -</option>
-                                @foreach ($cash as $cash)
-                                <option value="{{ $cash->id }}" @if ($sale->cash_id == $cash->id)
-                                    selected
-                                    @endif>{{ $cash->code }} - {{ $cash->name }}
-                                </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-
-                    <h6 style="color: #6777ef">Data Customer</h6>
-                    <br>
-                    <div class="row">
-                        <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="customer_name">{{ __('Nama') }}<code>*</code></label>
-                            <input id="customer_name" type="text" class="form-control validation" name="customer_name"
-                                data-name="Nama Customer" value="{{$sale->customer_name}}">
-                        </div>
-                        <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="series">{{ __('Member') }}<code>*</code></label>
-                            <select class="select2" name="customer_id">
-                                <option value=""> -Select- </option>
-                                @foreach ($customer as $customer)
-                                <option value="{{ $customer->id }}" @if ($sale->customer_id == $customer->id)
-                                    selected
-                                    @endif>{{ $customer->name }}
-                                </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-12 col-md-5 col-lg-5">
-                            <label for="customer_phone">{{ __('No. Telp.') }}<code>*</code></label>
-                            <div class="input-group">
-                                <div class="input-group-prepend">
-                                    <div class="input-group-text">
-                                        <i class="fas fa-phone"></i>
-                                    </div>
-                                </div>
-                                <input id="customer_phone" type="text"
-                                    class="form-control @error('customer_phone') is-invalid @enderror"
-                                    name="customer_phone" value="{{$sale->customer_phone}}">
-                                @error('customer_telephone')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                                @enderror
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="code">{{ __('Kode Faktur') }}<code>*</code></label>
+                                <input id="code" type="text" class="form-control" readonly="" value="{{$sale->code}}"
+                                    name="code">
+                            </div>
+                            <div class="form-group">
+                                <label for="payment_method" class="control-label">
+                                    {{ __('Metode Pembayaran') }}<code>*</code>
+                                </label>
+                                <select class="select2 PaymentMethod validation" data-name="Metode Pembayaran"
+                                    name="PaymentMethod" onchange="paymentMethodChange()">
+                                    <option value="">{{ __('- Select -') }}</option>
+                                    <option value="Cash" @if($sale->payment_method == 'Cash') selected @endif>{{ __('Cash') }}</option>
+                                    <option value="Debit" @if($sale->payment_method == 'Debit') selected @endif>{{ __('Debit') }}</option>
+                                    <option value="Transfer" @if($sale->payment_method == 'Transfer') selected @endif>{{ __('Transfer') }}</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="form-group col-12 col-md-7 col-lg-7">
-                            <label for="customer_address">{{ __('Alamat') }}<code>*</code></label>
-                            <input id="customer_address" type="text" class="form-control validation" data-name="Alamat"
-                                name="customer_address" value="{{$sale->customer_address}}">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="sales" class="control-label">{{ __('Penjual') }}<code>*</code></label>
+                                <select class="select2 validation" name="sales_id" data-name="Sales">
+                                    @foreach ($sales as $sales)
+                                    <option value="{{$sales->id}}" @if ($sales->id == $sale->sales_id)
+                                        selected=""
+                                        @endif>{{$sales->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="account">{{ __('Akun Kas') }}<code>*</code></label>
+                                <select class="select2 account validation" data-name="Akun Kas" name="account"
+                                    id="account">
+                                    <option value="">{{ __('- Select -') }}</option>
+                                </select>
+                            </div>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="form-group col-12 col-md-12 col-lg-12">
+                            <label for="description">{{ __('Deskripsi') }}<code>*</code></label>
+                            <textarea data-name="Deskripsi" name="description" class="form-control validation"
+                                id="description" style="height: 50px">{{ $sale->description }}</textarea>
+                        </div>
+                    </div>
+                    <input type="hidden" class="branchId" value="{{Auth::user()->employee->branch_id}}">
+                    @foreach ($account as $el)
+                    <input class="accountDataHidden" type="hidden" data-mainName="{{$el->AccountMain->name}}"
+                        data-mainDetailName="{{$el->AccountMainDetail->name}}" data-branch="{{$el->branch_id}}"
+                        data-name="{{$el->name}}" data-code="{{$el->code}}" value="{{$el->id}}">
+                    @endforeach
 
+                    <h2 class="section-title">{{ __('Data Customer') }}</h2>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="customer_name">{{ __('Nama') }}</label>
+                                <input id="customer_name" type="text" class="form-control validation" name="customer_name"
+                                    data-name="Nama Customer" value="{{$sale->customer_name}}">
+                            </div>
+                            <div class="form-group">
+                                <label for="customer_phone">{{ __('No. Telp.') }}</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <div class="input-group-text">
+                                            <i class="fas fa-phone"></i>
+                                        </div>
+                                    </div>
+                                    <input id="customer_phone" type="text" class="form-control" name="customer_phone"
+                                        value="{{$sale->customer_phone}}">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="customer_id">{{ __('Member') }}</label>
+                                <select class="select2" name="customer_id">
+                                    <option value=""> -Select- </option>
+                                    @foreach ($customer as $customer)
+                                    <option value="{{ $customer->id }}" @if ($sale->customer_id == $customer->id)
+                                        selected
+                                        @endif>{{ $customer->name }}
+                                    </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="customer_address">{{ __('Alamat') }}</label>
+                                <input id="customer_address" type="text" class="form-control validation" data-name="Alamat"
+                                    name="customer_address" value="{{$sale->customer_address}}">
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-
         <div class="col-md-5 col-sm-12">
             <div class="card">
                 <div class="card-header">
@@ -134,9 +127,16 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label for="totalSparePart">{{ __('Barang') }}<code>*</code></label>
-                        <input readonly id="totalSparePart" onchange="sumTotal()" type="text"
-                            value="{{ $sale->item_price}}" class="form-control cleaveNumeral validation"
-                            data-name="Barang" name="totalSparePart" style="text-align: right">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    {{ __('Rp.') }}
+                                </div>
+                            </div>
+                            <input readonly id="totalSparePart" onchange="sumTotal()" type="text"
+                                value="{{ $sale->item_price}}" class="form-control cleaveNumeral validation"
+                                data-name="Barang" name="totalSparePart" style="text-align: right">
+                        </div>
                     </div>
                     <div class="form-group">
                         <label class="form-label">Satuan Diskon Yang Dipakai</label>
@@ -156,7 +156,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-12 col-md-6 col-lg-6">
+                        <div class="col form-group">
                             <label for="totalDiscountPercent">{{ __('Diskon %') }}<code>*</code></label>
                             <input id="totalDiscountPercent" @if ($sale->discount_type == 'value')
                             style="pointer-events:none"
@@ -166,7 +166,7 @@
                             name="totalDiscountPercent"
                             onkeyup="sumTotal(),sumDiscont()" style="text-align: right">
                         </div>
-                        <div class="form-group col-12 col-md-6 col-lg-6">
+                        <div class="col form-group">
                             <label for="totalDiscountValue">{{ __('Diskon') }}<code>*</code></label>
                             <input id="totalDiscountValue" @if ($sale->discount_type == 'percent')
                             style="pointer-events:none"
@@ -179,9 +179,16 @@
                     </div>
                     <div class="form-group">
                         <label for="totalPrice">{{ __('Total Harga') }}<code>*</code></label>
-                        <input id="totalPrice" type="text" value="{{$sale->total_price}}"
-                            class="form-control cleaveNumeral" name="totalPrice" onchange="sumTotal()"
-                            style="text-align: right">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    {{ __('Rp.') }}
+                                </div>
+                            </div>
+                            <input id="totalPrice" type="text" value="{{$sale->total_price}}"
+                                class="form-control cleaveNumeral" name="totalPrice" onchange="sumTotal()"
+                                style="text-align: right">
+                        </div>
                     </div>
                 </div>
             </div>
@@ -275,7 +282,7 @@
                             </td>
                             <td>
                                 <select class="select2 buyerDetail" name="buyerDetailOld[]">
-                                    <option value="" data-index="">{{ __('- Select Buyer -') }}</option>
+                                    <option value="" data-index="">{{ __('- Pengambil Barang -') }}</option>
                                     @foreach ($buyer as $els)
                                     <option value="{{$els->id}}" data-index="{{$i}}" @if ($els->id == $el->buyer_id)
                                         selected=""
@@ -283,7 +290,7 @@
                                     </option>
                                     @endforeach
                                 </select>
-                                <input type="text" class="form-control" name="salesDetail[]" value="Sales" readonly>
+                                <input type="text" class="form-control" name="salesDetail[]" value="Penjual" readonly>
                             </td>
                             <td>
                                 <input type="number" class="form-control" name="profitSharingBuyerOld[]"

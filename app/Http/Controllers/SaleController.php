@@ -38,9 +38,14 @@ class SaleController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Sale::with('SaleDetail', 'SaleDetail.Item')->get();
+            $data = Sale::with(['SaleDetail', 'SaleDetail.Item'])->orderBy('id', 'desc')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
+                ->order(function ($query) {
+                    if(request()->has('id')) {
+                        $query->orderBy('id', 'desc');
+                    }
+                })
                 ->addColumn('action', function ($row) {
                     $actionBtn = '<div class="btn-group">';
                     $actionBtn .= '<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
@@ -208,7 +213,6 @@ class SaleController extends Controller
                 'customer_phone' => $customerPhone,
                 'payment_method' => $req->PaymentMethod,
                 'date' => date('Y-m-d'),
-                'warranty_id' => $req->warranty,
                 'discount_type' => $req->typeDiscount,
                 'discount_price' => str_replace(",", '', $req->totalDiscountValue),
                 'discount_percent' => str_replace(",", '', $req->totalDiscountPercent),
@@ -350,7 +354,9 @@ class SaleController extends Controller
 
     public function show($id)
     {
-        //
+        $sale = Sale::with(['SaleDetail', 'Customer'])->find($id);
+
+        return view('pages.backend.transaction.sale.showSale', compact('sale'));
     }
 
     public function edit($id)
@@ -360,13 +366,14 @@ class SaleController extends Controller
         $sales = Employee::where('id', '!=', '1')->where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
         $buyer = Employee::where('id', '!=', '1')->where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
         $cash = Cash::get();
+        $account  = AccountData::with('AccountMain', 'AccountMainDetail', 'Branch')->get();
         $customer = Customer::where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
         $stock = Stock::where('branch_id', '=', $userBranch)->where('item_id', '!=', 1)->get();
 
         $sale = Sale::with(['SaleDetail', 'Customer'])->find($id);
         $item = Item::with('stock')->where('name', '!=', 'Jasa Service')->get();
 
-        return view('pages.backend.transaction.sale.updateSale', compact('sale', 'cash', 'stock', 'buyer', 'customer', 'sales'));
+        return view('pages.backend.transaction.sale.updateSale', compact('account', 'sale', 'cash', 'stock', 'buyer', 'customer', 'sales'));
     }
 
     public function update(Request $req, $id)
@@ -376,7 +383,7 @@ class SaleController extends Controller
         // DB::beginTransaction();
         // try{
         // $checkData = Sale::where('id',$id)->first();
-        $date = $this->DashboardController->changeMonthIdToEn($req->date);
+        // $date = $this->DashboardController->changeMonthIdToEn($req->date);
         $getEmployee =  Employee::where('user_id', Auth::user()->id)->first();
 
         if ($req->customer_name != null) {
@@ -418,14 +425,14 @@ class SaleController extends Controller
         Sale::where('id', $id)->update([
             'user_id' => Auth::user()->id,
             'sales_id' => $req->sales_id,
+            'account' => $req->account,
             'branch_id' => $getEmployee->branch_id,
             'customer_id' => $req->customer_id,
             'customer_name' => $customerName,
             'customer_address' => $customerAddress,
             'customer_phone' => $customerPhone,
-            'date' => $date,
-            'account' => $req->account,
             'payment_method' => $req->PaymentMethod,
+            // 'date' => $date,
             'discount_type' => $req->typeDiscount,
             'discount_price' => str_replace(",", '', $req->totalDiscountValue),
             'discount_percent' => str_replace(",", '', $req->totalDiscountPercent),
@@ -744,6 +751,58 @@ class SaleController extends Controller
             }
         }
 
+        //Jurnal
+        $idJurnal = Journal::where('ref', $req->code)->get('id');
+        // $idj = $idJurnal->get('id');
+        // return $idJurnal('id');
+        Journal::where('ref', $req->code)->update([
+            'code' => $this->code('DD'),
+            'year' => date('Y'),
+            'date' => date('Y-m-d'),
+            'type' => 'Penjualan',
+            'total' => str_replace(",", '', $req->totalPrice),
+            'ref' => $req->code,
+            'description' => $req->description,
+            'updated_at' => date('Y-m-d h:i:s'),
+        ]);
+        $destroyJournalDetail = DB::table('journal_details')->whereIn('journal_id', $idJurnal)->delete();
+
+        if ($req->type == 'DownPayment') {
+        } else {
+            $accountService  = AccountData::where('branch_id', $getEmployee->branch_id)
+                ->where('active', 'Y')
+                ->where('main_id', 5)
+                ->where('main_detail_id', 27)
+                ->first();
+            $accountPembayaran  = AccountData::where('id', $req->account)
+                ->first();
+            $accountCode = [
+                $accountPembayaran->id,
+                $accountService->id,
+            ];
+            $description = [
+                $req->description,
+                $req->description,
+            ];
+            $DK = [
+                'D',
+                'K',
+            ];
+
+            for ($i = 0; $i < count($accountCode); $i++) {
+                $idDetail = DB::table('journal_details')->max('id') + 1;
+                JournalDetail::create([
+                    'id' => $idDetail,
+                    'journal_id' => $idJurnal[0],
+                    'account_id' => $accountCode[$i],
+                    'total' => str_replace(",", '', $req->totalPrice),
+                    'description' => $description[$i],
+                    'debet_kredit' => $DK[$i],
+                    'created_at' => date('Y-m-d h:i:s'),
+                    'updated_at' => date('Y-m-d h:i:s'),
+                ]);
+            }
+        }
         // DB::commit();
         return Response::json(['status' => 'success', 'message' => 'Data Tersimpan']);
         // } catch (\Throwable $th) {

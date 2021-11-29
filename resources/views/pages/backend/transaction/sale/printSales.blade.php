@@ -123,7 +123,7 @@
                     <td  class="text-center" style="font-size: 20px" style="border-right: 1px solid #1d98d4">{{ number_format($sd->price,0,".",",") }}</td>
                     <td  class="text-center" style="font-size: 20px">{{ number_format($sd->total,0,".",",") }}</td>
                 </tr>
-                @endforeach
+              @endforeach
             </tbody>
           </table>
         </div>
