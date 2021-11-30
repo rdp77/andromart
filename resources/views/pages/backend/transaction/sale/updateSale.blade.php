@@ -59,6 +59,12 @@
                                     <option value="">{{ __('- Select -') }}</option>
                                 </select>
                             </div>
+                            <div class="form-group" hidden>
+                                <label for="idJurnal">{{ __('Id Jurnal') }}</label>
+                                @foreach ($idJurnal as $idJurnal)
+                                <input type="text" class="idJurnal" name="idJurnal" value="{{$idJurnal->id}}">
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                     <div class="row">

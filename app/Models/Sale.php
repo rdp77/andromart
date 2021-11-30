@@ -90,13 +90,14 @@ class Sale extends Model
         return $this->belongsTo('App\Models\User', 'user_id', 'id');
     }
 
-    public function Cash()
+    public function accountData()
     {
-        return $this->belongsTo('App\Models\Cash');
+        return $this->belongsTo('App\Models\AccountData', 'account', 'id');
     }
 
     public function Return()
     {
         return $this->hasOne(SaleReturn::class, 'sale_id', 'id');
     }
+
 }

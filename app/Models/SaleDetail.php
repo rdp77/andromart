@@ -43,4 +43,9 @@ class SaleDetail extends Model
     {
         return $this->belongsTo('App\Models\Item');
     }
+
+    public function Buyer()
+    {
+        return $this->belongsTo('App\Models\Employee');
+    }
 }

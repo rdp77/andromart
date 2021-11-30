@@ -1,5 +1,4 @@
 @include('layouts.components.header')
-{{-- @section('title', __('pages.title').__(' | Nota Besar')) --}}
 <style>
   @media print {
     body{
@@ -32,31 +31,18 @@
     <div class="row">
       <div class="col-lg-12">
         <div class="invoice-title">
-          {{-- <h2>Invoice</h2> --}}
           <h2><img alt="Porto" height="150" src="{{ asset('assetsfrontend/img/andromart.png') }}" style="margin-top: 10px;"></h2>
           <div style="width: 400px">
             <p style="font-size: 15px">{{Auth::user()->employee->branch->address}}, <b> Tlp : 0{{Auth::user()->employee->branch->phone}}</b> </p>
           </div>
           <div class="invoice-number"><h3>Invoice :</h3><h1 style="font-size: 50px;color:#eb2390" >{{$sale->code}}</h1>
-            {{-- <br> --}}
-            {{-- <p style="font-size: 19px;font-weight:lighter">Lacak Perkembangan Service Kamu di : <br> <b>www.andromartindonesia.com</b> --}}
-              {{-- <br> <b> AM care : 0851-5646-2356 --}}
-              {{-- <br>Konsultasi Service --}}
-            {{-- </p> --}}
-          {{-- </b> --}}
           </div>
-
         </div>
-        {{-- <div style="border: 1px solid #1d98d4"></div> --}}
-
-        {{-- <br> --}}
-        {{-- <hr> --}}
         <div class="row">
           <div class="col-md-4">
             <address>
               <strong><p style="font-size: 25px" style="background-color:#eb2390;color:white;padding:5px;text-align:center">Sales</p></strong>
               <p style="font-size: 26px">{{$sale->sales->name}}</p>
-              {{-- <p style="font-size: 26px">{{$service->employee1->contact}}</p> --}}
             </address>
           </div>
           <div class="col-md-8 text-md-right">
@@ -78,16 +64,6 @@
                 <o style="font-size:30px"> {{ $sale->payment_method }}</o>
                 <o style="font-size:30px"> Lunas</o>
               </p>
-              {{-- @if ($service->payment_status == null)
-                @if ($service->verification_price == 'Y')
-                  <o style="font-size:30px"> Perlu Konfirmasi</o>
-                @else
-                  <o style="font-size:30px"> Belum Bayar</o>
-                @endif
-              @else
-                {{$service->payment_status}}
-              @endif</p> --}}
-              {{-- <strong><h3 style="color:#28a745"> </h3></strong>s --}}
             </address>
           </div>
           <div class="col-md-6 text-md-right">
@@ -99,12 +75,8 @@
         </div>
       </div>
     </div>
-    {{-- <div style="border: 1px solid gray"></div> --}}
-
-
     <div class="row mt-4" style="margin-top: 0px !important">
       <div class="col-md-12">
-        {{-- <div class="section-title"><h3>Service Detail</h3></div> --}}
         <div>
           <table class="table table-striped table-sm">
             <tbody>

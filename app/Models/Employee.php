@@ -63,6 +63,11 @@ class Employee extends Model
         return $this->belongsTo('App\Models\Role');
     }
 
+    public function SaleDetail()
+    {
+        return $this->hasMany('App\Models\SaleDetail');
+    }
+
     public function getAvatar()
     {
         if(!$this->avatar){

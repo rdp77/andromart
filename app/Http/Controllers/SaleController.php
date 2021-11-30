@@ -95,9 +95,9 @@ class SaleController extends Controller
                     foreach ($row->SaleDetail as $key => $value) {
                         // $item = $value->Item()->withTrashed()->get('name');
                         $htmlAdd .=   '<tr>';
-                        $htmlAdd .=      '<th>x' . $value->qty . '</th>';
+                        $htmlAdd .=      '<td>x' . $value->qty . '</td>';
                         $htmlAdd .=      '<th>' . $value->item->name . '</th>';
-                        $htmlAdd .=      '<th>(' . $value->item->warranty->periode . $value->item->warranty->name . ')</th>';
+                        $htmlAdd .=      '<td>(' . $value->item->warranty->periode . $value->item->warranty->name . ')</td>';
                         $htmlAdd .=   '</tr>';
                     }
                     $htmlAdd .= '<table>';
@@ -351,10 +351,9 @@ class SaleController extends Controller
         // return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
     }
 
-
     public function show($id)
     {
-        $sale = Sale::with(['SaleDetail', 'Customer'])->find($id);
+        $sale = Sale::with(['SaleDetail', 'Customer', 'accountData'])->find($id);
 
         return view('pages.backend.transaction.sale.showSale', compact('sale'));
     }
@@ -369,11 +368,11 @@ class SaleController extends Controller
         $account  = AccountData::with('AccountMain', 'AccountMainDetail', 'Branch')->get();
         $customer = Customer::where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
         $stock = Stock::where('branch_id', '=', $userBranch)->where('item_id', '!=', 1)->get();
-
         $sale = Sale::with(['SaleDetail', 'Customer'])->find($id);
         $item = Item::with('stock')->where('name', '!=', 'Jasa Service')->get();
+        $idJurnal = Journal::where('ref', $sale->code)->get();
 
-        return view('pages.backend.transaction.sale.updateSale', compact('account', 'sale', 'cash', 'stock', 'buyer', 'customer', 'sales'));
+        return view('pages.backend.transaction.sale.updateSale', compact('account', 'sale', 'cash', 'stock', 'buyer', 'customer', 'sales', 'idJurnal'));
     }
 
     public function update(Request $req, $id)
@@ -504,7 +503,7 @@ class SaleController extends Controller
                     'price' => str_replace(",", '', $req->priceDetail[$i]),
                     'qty' => $req->qtyDetail[$i],
                     'total' => str_replace(",", '', $req->totalPriceDetail[$i]),
-                    'description' => str_replace(",", '', $req->descriptionDetail[$i]),
+                    'description' => $req->descriptionDetail[$i],
                     // 'type' =>$req->typeDetail[$i],
                     'created_by' => Auth::user()->name,
                     'created_at' => date('Y-m-d h:i:s'),
@@ -549,9 +548,6 @@ class SaleController extends Controller
         }
 
         if ($req->itemsDetailOld != null) {
-            // return 'asd';
-            // return $req->all();
-            // mengecek data existing
             $checkDataOld = SaleDetail::whereIn('id', $req->idDetailOld)->get();
             $checkStockExisting = [];
 
@@ -603,21 +599,26 @@ class SaleController extends Controller
                                         'updated_at' => date('Y-m-d h:i:s'),
                                     ]);
                                 }
-                                // mengupdate service detail jika item sama + qty sama + perubahan tipe sparepart / loss
+                                // mengupdate sale detail jika item sama + qty sama + perubahan tipe sparepart / loss
                                 SaleDetail::where('id', $req->idDetailOld[$i])->update([
-                                    // 'service_id'=>$id,
                                     // 'item_id'=>$req->itemsDetailOld[$i],
                                     'price' => str_replace(",", '', $req->priceDetailOld[$i]),
+                                    'sales_id' => $req->sales_id,
+                                    'buyer_id' => $req->buyerDetailOld[$i],
+                                    'sharing_profit_store' => $sharing_profit_storeOld[$i],
+                                    'sharing_profit_sales' => $sharing_profit_salesOld[$i],
+                                    'sharing_profit_buyer' => $sharing_profit_buyerOld[$i],
+
                                     // 'qty'=>$req->qtyDetailOld[$i],
                                     'total' => str_replace(",", '', $req->totalPriceDetailOld[$i]),
-                                    'description' => str_replace(",", '', $req->descriptionDetailOld[$i]),
+                                    'description' => $req->descriptionDetailOld[$i],
                                     // 'type' =>$req->typeDetailOld[$i],
                                     'updated_by' => Auth::user()->name,
                                     'updated_at' => date('Y-m-d h:i:s'),
                                 ]);
                             } else {
                                 // return 'masuk 3.2';
-                                // jika qty di service_detail berbeda dengan QTY yang akan di update
+                                // jika qty di sale_detail berbeda dengan QTY yang akan di update
                                 // return $checkDataOld;
                                 if ($req->typeDetailOld[$i] == 'SparePart') {
                                     $descPengembalian[$i] = '(Update Penjualan) Pengembalian Barang Pada Penjualan ' . $req->code;
@@ -666,6 +667,11 @@ class SaleController extends Controller
                                 SaleDetail::where('id', $req->idDetailOld[$i])->update([
                                     // 'service_id'=>$id,
                                     // 'item_id'=>$req->itemsDetailOld[$i],
+                                    'sales_id' => $req->sales_id,
+                                    'buyer_id' => $req->buyerDetailOld[$i],
+                                    'sharing_profit_store' => $sharing_profit_storeOld[$i],
+                                    'sharing_profit_sales' => $sharing_profit_salesOld[$i],
+                                    'sharing_profit_buyer' => $sharing_profit_buyerOld[$i],
                                     'price' => str_replace(",", '', $req->priceDetailOld[$i]),
                                     'qty' => $req->qtyDetailOld[$i],
                                     'total' => str_replace(",", '', $req->totalPriceDetailOld[$i]),
@@ -752,8 +758,7 @@ class SaleController extends Controller
         }
 
         //Jurnal
-        $idJurnal = Journal::where('ref', $req->code)->get('id');
-        // $idj = $idJurnal->get('id');
+        $idJ = Journal::where('ref', $req->code)->get('id');
         // return $idJurnal('id');
         Journal::where('ref', $req->code)->update([
             'code' => $this->code('DD'),
@@ -765,7 +770,8 @@ class SaleController extends Controller
             'description' => $req->description,
             'updated_at' => date('Y-m-d h:i:s'),
         ]);
-        $destroyJournalDetail = DB::table('journal_details')->whereIn('journal_id', $idJurnal)->delete();
+        // return $req->idJurnal;
+        $destroyJournalDetail = DB::table('journal_details')->whereIn('journal_id', $idJ)->delete();
 
         if ($req->type == 'DownPayment') {
         } else {
@@ -793,7 +799,7 @@ class SaleController extends Controller
                 $idDetail = DB::table('journal_details')->max('id') + 1;
                 JournalDetail::create([
                     'id' => $idDetail,
-                    'journal_id' => $idJurnal[0],
+                    'journal_id' => $req->idJurnal,
                     'account_id' => $accountCode[$i],
                     'total' => str_replace(",", '', $req->totalPrice),
                     'description' => $description[$i],
