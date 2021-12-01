@@ -21,26 +21,27 @@ class RoleController extends Controller
 
     public function index(Request $req)
     {
-        if ($req->ajax()) {
-            $data = Role::get();
-            return Datatables::of($data)
-                ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-                    $actionBtn = '<div class="btn-group">';
-                    $actionBtn .= '<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                            data-toggle="dropdown">
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>';
-                    $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('role.edit', $row->id) . '">Edit</a>';
-                    // $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
-                    $actionBtn .= '</div></div>';
-                    return $actionBtn;
-                })
-                ->rawColumns(['action'])
-                ->make(true);
-        }
-        return view('pages.backend.master.role.indexRole');
+        // if ($req->ajax()) {
+        //     $data = Role::get();
+        //     return Datatables::of($data)
+        //         ->addIndexColumn()
+        //         ->addColumn('action', function ($row) {
+        //             $actionBtn = '<div class="btn-group">';
+        //             $actionBtn .= '<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+        //                     data-toggle="dropdown">
+        //                     <span class="sr-only">Toggle Dropdown</span>
+        //                 </button>';
+        //             $actionBtn .= '<div class="dropdown-menu">
+        //                     <a class="dropdown-item" href="' . route('role.edit', $row->id) . '">Edit</a>';
+        //             $actionBtn .= '</div></div>';
+        //             return $actionBtn;
+        //         })
+        //         ->rawColumns(['action'])
+        //         ->make(true);
+        // }
+        $role = Role::get();
+
+        return view('pages.backend.master.role.indexRole', compact('role'));
     }
 
     public function create()

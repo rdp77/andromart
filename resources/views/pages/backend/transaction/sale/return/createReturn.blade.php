@@ -18,9 +18,9 @@
 <h2 class="section-title" id="saleDate">{{ \Carbon\Carbon::now()->format('d F Y') }}</h2>
 <p class="section-lead">{{ __('Tanggal nota penjualan dikeluarkan.') }}</p>
 <form id="stored">
-    <a data-target="#dataSave" data-toggle="modal" data-backdrop="static" data-keyboard="false">
+    {{-- <a data-target="#dataSave" data-toggle="modal" data-backdrop="static" data-keyboard="false">
         Launch demo modal
-    </a>
+    </a> --}}
     <div class="row">
         <div class="col-md-7 col-sm-12">
             <div class="card card-primary">
@@ -161,7 +161,7 @@
     var returnURL = '{{ route('sale.return.type') }}';
     var buy = '{{ route('purchase.create') }}';
     var addURL = '{{ route('sale.return.add') }}';
-    var getDetailURL = '{{ route('sale.return.detail') }}';    
+    var getDetailURL = '{{ route('sale.return.detail') }}';
 </script>
 <script src="{{ asset('assets/pages/transaction/sale/return/saleReturn.js') }}"></script>
 @endsection

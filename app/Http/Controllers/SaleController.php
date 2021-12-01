@@ -301,13 +301,13 @@ class SaleController extends Controller
                 'type' => 'Penjualan',
                 'total' => str_replace(",", '', $req->totalPrice),
                 'ref' => $code,
-                'description' => $req->description,
+                'description' => 'Transaksi Penjualan ' .$code,
                 'created_at' => date('Y-m-d h:i:s'),
-                // 'updated_at'=>date('Y-m-d h:i:s'),
             ]);
+
             if ($req->type == 'DownPayment') {
             } else {
-                $accountService  = AccountData::where('branch_id', $getEmployee->branch_id)
+                $accountData  = AccountData::where('branch_id', $getEmployee->branch_id)
                     ->where('active', 'Y')
                     ->where('main_id', 5)
                     ->where('main_detail_id', 27)
@@ -316,11 +316,11 @@ class SaleController extends Controller
                     ->first();
                 $accountCode = [
                     $accountPembayaran->id,
-                    $accountService->id,
+                    $accountData->id,
                 ];
                 $description = [
-                    $req->description,
-                    $req->description,
+                    'Transaksi Penjualan' .$code,
+                    'Transaksi Penjualan' .$code,
                 ];
                 $DK = [
                     'D',
@@ -341,6 +341,7 @@ class SaleController extends Controller
                     ]);
                 }
             }
+
             DB::commit();
             return Response::json(['status' => 'success', 'message' => 'Data Tersimpan', 'id' => $id] );
         } catch (\Throwable $th) {
@@ -736,7 +737,6 @@ class SaleController extends Controller
                             ]);
 
                             SaleDetail::where('id', $req->idDetailOld[$i])->update([
-                                // 'service_id'=>$id,
                                 'item_id' => $req->itemsDetailOld[$i],
                                 'sales_id' => $req->sales_id,
                                 'buyer_id' => $req->buyerDetailOld[$i],
@@ -759,7 +759,6 @@ class SaleController extends Controller
 
         //Jurnal
         $idJ = Journal::where('ref', $req->code)->get('id');
-        // return $idJurnal('id');
         Journal::where('ref', $req->code)->update([
             'code' => $this->code('DD'),
             'year' => date('Y'),
@@ -767,15 +766,15 @@ class SaleController extends Controller
             'type' => 'Penjualan',
             'total' => str_replace(",", '', $req->totalPrice),
             'ref' => $req->code,
-            'description' => $req->description,
+            'description' => 'Transaksi Penjualan' .$req->code,
             'updated_at' => date('Y-m-d h:i:s'),
         ]);
-        // return $req->idJurnal;
+
         $destroyJournalDetail = DB::table('journal_details')->whereIn('journal_id', $idJ)->delete();
 
         if ($req->type == 'DownPayment') {
         } else {
-            $accountService  = AccountData::where('branch_id', $getEmployee->branch_id)
+            $accountData  = AccountData::where('branch_id', $getEmployee->branch_id)
                 ->where('active', 'Y')
                 ->where('main_id', 5)
                 ->where('main_detail_id', 27)
@@ -784,11 +783,11 @@ class SaleController extends Controller
                 ->first();
             $accountCode = [
                 $accountPembayaran->id,
-                $accountService->id,
+                $accountData->id,
             ];
             $description = [
-                $req->description,
-                $req->description,
+               'Transaksi Penjualan' .$req->code,
+               'Transaksi Penjualan' .$req->code,
             ];
             $DK = [
                 'D',
@@ -821,42 +820,29 @@ class SaleController extends Controller
 
     public function destroy(Request $req, $id)
     {
-        // $tran = SaleDetail::where('item_id', $id);
-        // if(count($tran) != null)
-        // {
-        //     return Response::json(['status' => 'error','message'=>'Data tidak dapat dihapus']);
-        // }
-        // else {
-        //     $this->DashboardController->createLog(
-        //         $req->header('user-agent'),
-        //         $req->ip(),
-        //         'Menghapus Data Kredit'
-        //     );
-        //     Sale::where('id',$id)->destroy($id);
-        //     return Response::json(['status' => 'success']);
-        // }
 
     }
 
     public function printSale($id)
     {
         $sale = Sale::with('SaleDetail', 'Sales', 'SaleDetail.Item', 'SaleDetail.Item.Warranty', 'SaleDetail.Item.Brand', 'SaleDetail.Item.Brand.Category', 'CreatedByUser')->find($id);
-        // return $Service;
         $member = User::get();
+
         return view('pages.backend.transaction.sale.printSales', ['sale' => $sale, 'member' => $member]);
     }
 
     public function printSmallSale($id)
     {
         $sale = Sale::with('SaleDetail', 'Sales', 'SaleDetail.Item', 'SaleDetail.Item.Brand', 'SaleDetail.Item.Brand.Category', 'CreatedByUser')->find($id);
-        // return $Service;
         $member = User::get();
+
         return view('pages.backend.transaction.sale.printSmallSale', ['sale' => $sale, 'member' => $member]);
     }
 
     public function checkjournals(Request $req)
     {
         $data = Journal::with('JournalDetail.AccountData')->where('ref',$req->id)->first();
+
         return Response::json(['status' => 'success', 'jurnal'=>$data]);
     }
 
@@ -882,8 +868,6 @@ class SaleController extends Controller
         foreach ($cash as $c) {
             array_push($data, $c->AccountMainDetail->name);
         }
-
-        // $html = '<option value="">' + " - " + "</option>";
 
         dd($data);
     }
