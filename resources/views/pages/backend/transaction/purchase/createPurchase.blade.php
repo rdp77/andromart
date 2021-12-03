@@ -221,7 +221,7 @@
         <div class="card-footer">
             <div style="float: left;">
                 <a href="{{ Route('purchase.item.create') }}" class="btn btn-primary mr-1"><i class="far fa-plus"></i>
-                {{ __('Tambah Barang') }}</a>
+                {{ __('Tambah Master Barang') }}</a>
             </div>
             <div style="float: right;">
                 <button class="btn btn-primary mr-1" type="submit"><i class="far fa-save"></i>

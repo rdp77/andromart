@@ -71,14 +71,16 @@ class PurchaseController extends Controller
                     if($row->done == 'Belum Proses'){
                         $actionBtn .= '<div class="dropdown-menu">        
                             <a href="/transaction/purchasing/approve/'. $row->id. '" class="dropdown-item" style="cursor:pointer;">Setujui</a>';
-                        $actionBtn .= '<a class="dropdown-item" href="' . route('purchase.show', Crypt::encryptString($row->id)) . '">Lihat</a>';
-                        $actionBtn .= '<a class="dropdown-item" href="' . route('purchase.edit', Crypt::encryptString($row->id)) . '">Ubah</a>';
-                        $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
+                        $actionBtn .= '<a class="dropdown-item" href="' . route('purchase.show', Crypt::encryptString($row->id)) . '"><i class="fas fa-eye"></i> Lihat</a>';
+                        $actionBtn .= '<a class="dropdown-item" href="' . route('purchase.edit', Crypt::encryptString($row->id)) . '"><i class="fas fa-pen"></i> Ubah</a>';
+                        $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-trash-alt"></i> Hapus</a>';
+                    } else if($row->done == 'Telah Selesai') {
+                        $actionBtn .= '<div class="dropdown-menu"><a class="dropdown-item" href="' . route('purchase.show', Crypt::encryptString($row->id)) . '"><i class="fas fa-eye"></i> Lihat</a>';
                     } else {
                         $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('reception.edit', Crypt::encryptString($row->id)) . '">Terima</a>';
+                            <a class="dropdown-item" href="' . route('reception.edit', Crypt::encryptString($row->id)) . '"><i class="fas fa-check-circle"></i> Terima</a>';
                         $actionBtn .= '<a onclick="jurnal(' ."'". $row->code ."'". ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
-                        $actionBtn .= '<a class="dropdown-item" href="' . route('purchase.show', Crypt::encryptString($row->id)) . '">Lihat</a>';
+                        $actionBtn .= '<a class="dropdown-item" href="' . route('purchase.show', Crypt::encryptString($row->id)) . '"><i class="fas fa-eye"></i> Lihat</a>';
                     }
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
@@ -419,6 +421,13 @@ class PurchaseController extends Controller
             $req->ip(),
             'Menghapus Pembelian ' . Purchasing::find($id)->name
         );
+        $purchasing = Purchasing::find($id);
+        $code = $purchasing->code;
+        $jurnal = Journal::where('ref', $code)->get();
+        foreach ($jurnal as $key => $value) {
+            $jurnalDetail = journalDetail::where('journal_id', $value->id)->delete();
+            Journal::destroy($value->id);
+        }
         PurchasingDetail::where('purchasing_id', $id)->delete();
         Purchasing::destroy($id);
 
