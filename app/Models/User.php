@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Auth;
 
 class User extends Authenticatable
 {
@@ -51,5 +52,21 @@ class User extends Authenticatable
     public function Role()
     {
         return $this->belongsTo('App\Models\Role');
+    }
+
+    public function akses($namaFitur,$namaPerintah)
+    {
+        $hak_akses = new \App\Models\RoleDetail();
+
+        $data = $hak_akses
+                  ->where('menu',$namaFitur)
+                  ->where($namaPerintah,'on')
+                  ->where('roles_id',Auth::user()->role_id)
+                  ->first();
+        if (empty($data)) {
+            return 'akses ditolak';
+        }else{
+            return 'akses diterima';
+        }
     }
 }

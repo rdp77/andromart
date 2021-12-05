@@ -28,12 +28,21 @@
                     <span>{{ $m->name }}</span>
                 </a>
                 <ul class="dropdown-menu">
-                    @foreach($m->SubMenu as $sm)
-                    <li class="@if ($sm->hover != null)@foreach (json_decode($sm->hover) as $h)
-                        {{ URL::current() == $h ? 'active' : '' }}@endforeach @endif">
-                        <a class="nav-link" href="{{ $sm->url }}">{{ $sm->name }}</a>
-                    </li>
+                    @foreach($m->SubMenu as $ss)
+                        @foreach($ss->RoleDetail as $ss1)
+                            @if ($ss1->roles_id == Auth::user()->role_id)
+                                @if ($ss1->view == 'on')
+                                    <li class="@if ($ss->hover != null)@foreach (json_decode($ss->hover) as $h)
+                                        {{ URL::current() == $h ? 'active' : '' }}@endforeach @endif">
+                                        <a class="nav-link" href="{{ $ss->url }}">{{ $ss->name }}</a>
+                                    </li>
+                                @endif
+                            @endif
+                        @endforeach
                     @endforeach
+                    {{-- @foreach($m->SubMenu as $sm)
+                    
+                    @endforeach --}}
                 </ul>
             </li>
             @endif

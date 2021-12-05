@@ -50,6 +50,13 @@ class ServiceController extends Controller
 
     public function index(Request $req)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+        // return new User::akses();
+
+
         if ($req->ajax()) {
 
             $data = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])->orderBy('id', 'DESC')->get();
@@ -252,6 +259,10 @@ class ServiceController extends Controller
     }
     public function create()
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         $code     = $this->code('SRV');
         $employee = Employee::orderBy('name', 'ASC')->get();
         // $items    = Item::where('name','!=','Jasa Service')->get();
@@ -607,6 +618,10 @@ class ServiceController extends Controller
 
     public function edit($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         $service  = Service::with('ServiceDetail', 'serviceCondition', 'serviceEquipment')->find($id);
         // return $service;
         $member   = User::orderBy('name', 'ASC')->get();
@@ -1221,6 +1236,11 @@ class ServiceController extends Controller
 
     public function destroy(Request $req, $id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'delete');
+            
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
         // $this->DashboardController->createLog(
         //     $req->header('user-agent'),
         //     $req->ip(),
@@ -1228,6 +1248,8 @@ class ServiceController extends Controller
         // );
         DB::beginTransaction();
         try {
+            
+
             $getEmployee =  Employee::where('user_id', Auth::user()->id)->first();
             $checkDataDeleted = ServiceDetail::where('service_id', $id)->get();
             $checkStockDeleted = [];

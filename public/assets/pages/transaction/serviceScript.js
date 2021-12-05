@@ -81,7 +81,7 @@ $.ajaxSetup({
 function del(id) {
     swal({
         title: "Apakah Anda Yakin?",
-        text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus data pengguna Anda.",
+        text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus data Service Anda.",
         icon: "warning",
         buttons: true,
         dangerMode: true,
@@ -90,11 +90,21 @@ function del(id) {
             $.ajax({
                 url: "/transaction/service/service/" + id,
                 type: "DELETE",
-                success: function () {
-                    swal("Data pengguna berhasil dihapus", {
-                        icon: "success",
-                    });
-                    table.draw();
+                success: function (data) {
+                    if(data.status == 'success'){
+                        swal("Data pengguna berhasil dihapus", {
+                            icon: "success",
+                        });
+                        table.draw();
+                    }else if(data.status == 'restricted'){
+                        swal(data.message, {
+                            icon: "warning",
+                        });
+                    }else{
+                        swal('DATA EROR HUBUNGI DEVELOPER', {
+                            icon: "error",
+                        });
+                    }
                 },
             });
         } else {

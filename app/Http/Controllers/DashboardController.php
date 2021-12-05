@@ -25,6 +25,7 @@ class DashboardController extends Controller
      */
     public function __construct()
     {
+        $this->newvaruser = new User;
         $this->middleware('auth')->except('createLog');
     }
 
@@ -230,5 +231,9 @@ class DashboardController extends Controller
 
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
         return $string . $getEmployee->Branch->code . $year . $month . $index;
+    }
+    public function cekHakAkses($namaFitur,$namaPerintah)
+    {
+        return $this->newvaruser->akses($namaFitur,$namaPerintah);     
     }
 }

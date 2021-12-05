@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
+use App\Models\RoleDetail;
+use App\Models\SubMenu;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\DataTables;
 use Carbon\carbon;
 
@@ -107,5 +109,114 @@ class RoleController extends Controller
     public function destroy(role $role)
     {
         //
+    }
+
+    public function rolesDetailSearch(Request $req)
+    {
+        $menu = SubMenu::with('RoleDetail')->get()->toArray();
+        $menuRoles = [];
+        for ($i=0; $i <count($menu) ; $i++) { 
+            $menuRoles[$i]['name'] = $menu[$i]['name'];
+            $menuRoles[$i]['id'] = $menu[$i]['id'];
+            $menuRoles[$i]['view'] = 'off';
+            $menuRoles[$i]['create'] = 'off';
+            $menuRoles[$i]['edit'] = 'off';
+            $menuRoles[$i]['delete'] = 'off';
+            for ($j=0; $j < count($menu[$i]['role_detail']); $j++) { 
+                if($menu[$i]['role_detail'][$j]['roles_id'] == $req->id){
+                    $menuRoles[$i]['view'] = $menu[$i]['role_detail'][$j]['view'];
+                    $menuRoles[$i]['create'] = $menu[$i]['role_detail'][$j]['create'];
+                    $menuRoles[$i]['edit'] = $menu[$i]['role_detail'][$j]['edit'];
+                    $menuRoles[$i]['delete'] = $menu[$i]['role_detail'][$j]['delete'];
+                }
+            }
+        }
+        // return $menuRoles;
+        // return $menu;
+        $role = RoleDetail::where('roles_id',$req->id)->get();
+        return Response::json([
+            'status' => 'success',
+            'message' => 'berhasil Meload Data',
+            'menu' => $menuRoles,
+            // 'role' => $role,
+        ]);
+    }
+
+    public function rolesDetailSave(Request $req)
+    {
+        // return $req->all();
+        if(!isset($req->delete)){
+            $del = [];
+        }else{
+            $del = $req->delete;
+        }
+        if(!isset($req->view)){
+            $vie = [];
+        }else{
+            $vie = $req->view;
+        }
+        if(!isset($req->create)){
+            $cre = [];
+        }else{
+            $cre = $req->create;
+        }
+        if(!isset($req->edit)){
+            $edi = [];
+        }else{
+            $edi = $req->edit;
+        }
+        // return $del;
+        $arr = [];
+        for ($i=0; $i <count($req->menu) ; $i++) { 
+            $arr[$i]['menu'] =  $req->menu[$i];
+        }
+        for ($i=0; $i <count($req->menu) ; $i++) { 
+            $arr[$i]['menu'] = $req->menu[$i];
+            $arr[$i]['view'] = 'off';
+            $arr[$i]['create'] = 'off';
+            $arr[$i]['edit'] = 'off';
+            $arr[$i]['delete'] = 'off';
+            for ($j=0; $j <count($vie) ; $j++) { 
+                if($req->view[$j] == $req->menu[$i]){
+                    $arr[$i]['view'] =  'on';
+                }
+            }
+            for ($j=0; $j <count($cre) ; $j++) { 
+                if($req->create[$j] == $req->menu[$i]){
+                    $arr[$i]['create'] =  'on';
+                }
+            }
+            for ($j=0; $j <count($edi) ; $j++) { 
+                if($req->edit[$j] == $req->menu[$i]){
+                    $arr[$i]['edit'] =  'on';
+                }
+            }
+            for ($j=0; $j <count($del) ; $j++) { 
+                if($req->delete[$j] == $req->menu[$i]){
+                    $arr[$i]['delete'] =  'on';
+                }
+            }
+        }
+        RoleDetail::where('roles_id',$req->roles)->delete();
+        for ($i=0; $i <count($arr) ; $i++) { 
+            $index = DB::table('roles_detail')->max('id') + 1;
+            RoleDetail::create([
+                'id'=>$index,
+                'roles_id'=>$req->roles,
+                'menu'=>$arr[$i]['menu'],
+                'view'=>$arr[$i]['view'],
+                'create'=>$arr[$i]['create'],
+                'edit'=>$arr[$i]['edit'],
+                'delete'=>$arr[$i]['delete'],
+                // 'branch'=>$req->branch[$i],
+            ]);
+        }
+        return Response::json([
+            'status' => 'success',
+            'message' => 'berhasil Meload Data',
+            // 'role' => $role,
+        ]);
+        // $role = RoleDetail::where('roles_id',$req->id)->get();
+        
     }
 }

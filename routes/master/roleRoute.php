@@ -20,5 +20,15 @@ Route::group(['prefix' => 'master'], function () {
             ->except([
                 'show',
             ]);
+
+            Route::post(
+                'search-roles-detail',
+                [RoleController::class, 'rolesDetailSearch']
+            )->name('role.rolesDetailSearch');
+
+            Route::post(
+                'save-roles-detail',
+                [RoleController::class, 'rolesDetailSave']
+            )->name('role.rolesDetailSave');
     });
 });
