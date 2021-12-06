@@ -37,6 +37,12 @@ class SaleController extends Controller
 
     public function index(Request $req)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         if ($req->ajax()) {
             $data = Sale::with(['SaleDetail', 'SaleDetail.Item'])->orderBy('id', 'desc')->get();
             return Datatables::of($data)
@@ -160,6 +166,12 @@ class SaleController extends Controller
 
     public function create()
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         $code = $this->code('PJT');
         $account  = AccountData::with('AccountMain', 'AccountMainDetail', 'Branch')->get();
         $userBranch = Auth::user()->employee->branch_id;
@@ -361,6 +373,12 @@ class SaleController extends Controller
 
     public function edit($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         $code = $this->code('PJT');
         $userBranch = Auth::user()->employee->branch_id;
         $sales = Employee::where('id', '!=', '1')->where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();

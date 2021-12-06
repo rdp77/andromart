@@ -37,7 +37,7 @@ class AppServiceProvider extends ServiceProvider
         }
         view()->composer('*', function ($view) {
             if (Auth::check()) {
-                
+
                 // $view->with([
                 //     'sharingProfit' => $chekSales, 'sharingProfit1' => $sharingProfit1,
                 //     'sharingProfit2' => $sharingProfit2,
@@ -49,3 +49,4 @@ class AppServiceProvider extends ServiceProvider
         Carbon::setLocale('id');
     }
 }
+

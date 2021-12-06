@@ -30,6 +30,12 @@ class StockMutationController extends Controller
 {
     public function index(Request $req)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         if ($req->ajax()) {
             $data = StockMutation::with('branch')->get();
             return Datatables::of($data)

@@ -47,6 +47,12 @@ class StockTransactionController extends Controller
 
     public function index(Request $req)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         if ($req->ajax()) {
         $data = StockTransaction::with('item','item.stock','item.stock.unit','item.stock.branch'
         )->get();
@@ -94,6 +100,12 @@ class StockTransactionController extends Controller
     }
     public function create()
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         // $code   = $this->code('-');
         // $items  = Item::where('name','!=','Jasa Service')->get();
         $item     = Item::with('stock','supplier')->where('name','!=','Jasa Service')->get();
@@ -108,7 +120,7 @@ class StockTransactionController extends Controller
 
         $dateConvert = $this->DashboardController->changeMonthIdToEn($req->date);
         $id = DB::table('stocks_transaction')->max('id')+1;
-        
+
         $getEmployee =  Employee::where('user_id',Auth::user()->id)->first();
         $checkStock = Stock::where('item_id',$req->item)
                                 ->where('branch_id',$getEmployee->branch_id)
@@ -126,7 +138,7 @@ class StockTransactionController extends Controller
                 'message'=>'Stock Item Kurang Dari yang akan dikeluarkan.']);
             }
         }
-        
+
         StockTransaction::create([
             'id'=>$id,
             'code'=>$code,
@@ -159,13 +171,19 @@ class StockTransactionController extends Controller
             'description'=>$desc,
         ]);
 
-        
+
         return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
 
     }
 
     public function edit($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         $Service = Service::find($id);
         $member = User::get();
         return view('pages.backend.warehouse.stockTransaction.editStockIn', ['Service' => $Service,'member'=>$member]);

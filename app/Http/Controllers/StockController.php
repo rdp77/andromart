@@ -24,6 +24,12 @@ class StockController extends Controller
 
     public function index(Request $req)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         if ($req->ajax()) {
             $data = Stock::with('item', 'unit', 'branch')->where('id', '!=', 1)->get();
             return Datatables::of($data)
@@ -73,6 +79,12 @@ class StockController extends Controller
 
     public function create()
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         $item = Item::where('id', '!=', '1')->orderBy('brand_id', 'asc')->get();
         $branch = Branch::get();
         $unit = Unit::orderBy('name', 'asc')->get();
@@ -111,6 +123,12 @@ class StockController extends Controller
 
     public function edit($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         $branch = Branch::get();
         $unit = Unit::get();
         $stock = Stock::find($id);

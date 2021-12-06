@@ -33,6 +33,12 @@ class ItemController extends Controller
 
     public function index(Request $req)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         if ($req->ajax()) {
             $data = Item::where('id', '!=', 1)->with('brand', 'brand.category', 'supplier', 'warranty')->get();
             return Datatables::of($data)
@@ -105,6 +111,12 @@ class ItemController extends Controller
 
     public function create()
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         $branch = Branch::get();
         $brand = Brand::get();
         $category = Category::get();
@@ -189,6 +201,12 @@ class ItemController extends Controller
 
     public function edit($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         $category = Category::get();
         $brand = Brand::get();
         $item = Item::with('stock.unit')->find($id);
@@ -270,6 +288,12 @@ class ItemController extends Controller
 
     public function destroy(Request $req, $id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'delete');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         $stock = Stock::where('item_id', '=', $id)->get();
         $checkStock = collect($stock)->sum('stock');
         $transaction = StockMutation::where('item_id', '=', $id)->get();

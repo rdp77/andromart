@@ -93,9 +93,13 @@ function del(id) {
                             icon: "success",
                         });
                         location.reload();
-                    }else{
+                    }else if(data.status == 'restricted'){
                         swal(data.message, {
                             icon: "warning",
+                        });
+                    }else{
+                        swal('DATA EROR HUBUNGI DEVELOPER', {
+                            icon: "error",
                         });
                     }
                 },

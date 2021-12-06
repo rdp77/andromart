@@ -25,28 +25,38 @@
         <div class="col-md-7 col-sm-12">
             <div class="card card-primary">
                 <div class="card-body">
-                    <div class="form-group">
-                        <label class="control-label">
-                            {{ __('Kode Faktur')}}<code>*</code>
-                        </label>
-                        <select class="select2" name="item" id="item">
-                            <option value="">{{ __('- Select -') }}</option>
-                            {{-- @foreach ($item as $i)
-                            <option value="{{ $i->id.__(',').$i->Item->id }}">
-                                {{ $i->Item->name.__(' - ').$i->Sale->code }}
-                            </option>
-                            @endforeach --}}
-                            @foreach ($sale as $i)
-                            <option value="{{ $i->id }}">
-                                {{ $i->code }}
-                            </option>
-                            @endforeach
-                        </select>
+                    <div class="row">
+                        <div class="form-group col-md-6 col-xs-12">
+                            <label class="control-label">
+                                {{ __('Kode Faktur')}}<code>*</code>
+                            </label>
+                            <input class="form-control" type="text" value="{{ $code }}" readonly="">
+                        </div>
+                        <div class="form-group col-md-6 col-xs-12">
+                            <label class="control-label">
+                                {{ __('Faktur Penjualan')}}<code>*</code>
+                            </label>
+                            <select class="select2" name="item" id="item">
+                                <option value="">{{ __('- Select -') }}</option>
+                                {{-- @foreach ($item as $i)
+                                <option value="{{ $i->id.__(',').$i->Item->id }}">
+                                    {{ $i->Item->name.__(' - ').$i->Sale->code }}
+                                </option>
+                                @endforeach --}}
+                                @foreach ($sale as $i)
+                                <option value="{{ $i->id }}">
+                                    {{ $i->code }}
+                                </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="description">{{ __('Deskripsi') }}</label>
-                        <textarea data-name="Deskripsi" name="description" class="form-control" id="description"
-                            style="height: 100px"></textarea>
+                    <div class="row">
+                        <div class="form-group col-md-12 col-xs-12">
+                            <label for="description">{{ __('Deskripsi') }}</label>
+                            <textarea data-name="Deskripsi" name="description" class="form-control" id="description"
+                                style="height: 100px"></textarea>
+                        </div>
                     </div>
                     {{-- <div class="row">
                         <div class="col">

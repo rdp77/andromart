@@ -27,6 +27,12 @@ class SaleReturnController extends Controller
 
     public function index(Request $req)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         if ($req->ajax()) {
             $data = SaleReturn::with('Sale', 'SaleReturnDetail')->get();
             return Datatables::of($data)
@@ -87,13 +93,32 @@ class SaleReturnController extends Controller
         return view('pages.backend.transaction.sale.return.indexReturn');
     }
 
+    public function code($type)
+    {
+        $getEmployee =  Employee::with('branch')->where('user_id', Auth::user()->id)->first();
+        $month = Carbon::now()->format('m');
+        $year = Carbon::now()->format('y');
+        $index = DB::table('sale_return')->max('id') + 1;
+
+        $index = str_pad($index, 3, '0', STR_PAD_LEFT);
+        return $code = $type . $getEmployee->Branch->code . $year . $month . $index;
+    }
+
     public function create()
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
+        $code = $this->code('RTP');
         $item = SaleDetail::with('Sale', 'Item')->get();
         $sale = Sale::with('SaleDetail')->get();
         return view('pages.backend.transaction.sale.return.createReturn', [
+            'code' => $code,
             'item' => $item,
-            'sale' => $sale
+            'sale' => $sale,
         ]);
     }
 
