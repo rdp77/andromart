@@ -39,9 +39,8 @@ class EmployeeController extends Controller
     public function create()
     {
         $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
-
         if($checkRoles == 'akses ditolak'){
-            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+            return view('forbidden');
         }
 
         $role = Role::get();
@@ -105,9 +104,8 @@ class EmployeeController extends Controller
     public function edit($id)
     {
         $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
-
         if($checkRoles == 'akses ditolak'){
-            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+            return view('forbidden');
         }
 
         $branch = Branch::where('id', '!=', Employee::find($id)->branch_id)->get();

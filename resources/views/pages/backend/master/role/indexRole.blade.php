@@ -34,10 +34,8 @@
                                     {{-- <button class="btn btn-primary mr-1" type="button">Tambah Role</button> --}}
                                     {{-- <a href="{{ route('role.create') }}" --}}
                                     {{-- class="btn btn-primary mr-1">{{ __(' Tambah Role') }}</a> --}}
-                                    <button class="btn btn-primary mr-1" type="button" onclick="searchRolesDetail()">Cari
-                                        Role</button>
-                                        
-                                    <button class="btn btn-primary mr-1" type="button">Hapus Role</button>
+                                    <button class="btn btn-primary mr-1" type="button" onclick="searchRolesDetail()">Cari Role</button>
+                                    <button class="btn btn-primary mr-1" type="button" onclick="del()">Hapus Role</button>
                                     <button class="btn btn-primary mr-1" onclick="simpanData()" type="button">Simpan Perubahan</button>
                                 </td>
                             </tr>
@@ -89,7 +87,7 @@
                 processData: false,
                 success: function(data) {
                     $('.dropRole').empty();
-                    
+
                     $.each(data.menu, function(index,value){
 
                     if(data.menu[index].view == 'on'){
@@ -97,25 +95,25 @@
                     }else{
                         var checkedView = '';
                     }
-                    
+
                     if(data.menu[index].edit == 'on'){
                         var checkedEdit = 'checked';
                     }else{
                         var checkedEdit = '';
                     }
-                    
+
                     if(data.menu[index].delete == 'on'){
                         var checkedDelete = 'checked';
                     }else{
                         var checkedDelete = '';
                     }
-                    
+
                     if(data.menu[index].create == 'on'){
                         var checkedCreate = 'checked';
                     }else{
                         var checkedCreate = '';
                     }
-                    
+
                     $('.dropRole').append(
                         '<tr>'+
                                 '<td>'+(index+1)+'</td>'+
@@ -179,6 +177,31 @@
                             icon: "error",
                         });
                     }
+                }
+            });
+        }
+
+        function del() {
+            swal({
+                title: "Apakah Anda Yakin?",
+                text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus data master Anda.",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            }).then((willDelete) => {
+                if (willDelete) {
+                    $.ajax({
+                        url: "/master/role/role/"+idRoles,
+                        type: "DELETE",
+                        success: function () {
+                            swal("Data master berhasil dihapus", {
+                                icon: "success",
+                            });
+                            // location.reload();
+                        },
+                    });
+                } else {
+                    swal("Data master Anda tidak jadi dihapus!");
                 }
             });
         }

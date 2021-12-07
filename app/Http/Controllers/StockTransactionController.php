@@ -101,9 +101,8 @@ class StockTransactionController extends Controller
     public function create()
     {
         $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
-
         if($checkRoles == 'akses ditolak'){
-            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+            return view('forbidden');
         }
 
         // $code   = $this->code('-');
@@ -179,9 +178,8 @@ class StockTransactionController extends Controller
     public function edit($id)
     {
         $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
-
         if($checkRoles == 'akses ditolak'){
-            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+            return view('forbidden');
         }
 
         $Service = Service::find($id);
