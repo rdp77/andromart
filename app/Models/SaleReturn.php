@@ -15,8 +15,10 @@ class SaleReturn extends Model
     protected $fillable = [
         'code',
         'sale_id',
-        'branch_id',
-        'desc',
+        'date',
+        'type',
+        'description',
+        'total_price',
         'created_at',
         'updated_at',
         'deleted_at',

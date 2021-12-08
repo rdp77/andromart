@@ -16,9 +16,11 @@ class CreateSaleReturnTable extends Migration
         Schema::create('sale_return', function (Blueprint $table) {
             $table->id();
             $table->string('code');
-            $table->foreignId('sale_id');
-            $table->foreignId('branch_id');
-            $table->text('desc')->nullable();
+            $table->integer('sale_id');
+            $table->date('date');
+            $table->date('type');
+            $table->text('description')->nullable();
+            $table->double('total_price')->nullable();
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();

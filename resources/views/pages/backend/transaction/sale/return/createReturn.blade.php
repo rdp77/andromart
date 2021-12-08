@@ -15,8 +15,8 @@
 @endsection
 
 @section('content')
-<h2 class="section-title" id="saleDate">{{ \Carbon\Carbon::now()->format('d F Y') }}</h2>
-<p class="section-lead">{{ __('Tanggal nota penjualan dikeluarkan.') }}</p>
+{{-- <h2 class="section-title" id="saleDate">{{ \Carbon\Carbon::now()->format('d F Y') }}</h2> --}}
+{{-- <p class="section-lead">{{ __('Tanggal nota penjualan dikeluarkan.') }}</p> --}}
 <form id="stored">
     {{-- <a data-target="#dataSave" data-toggle="modal" data-backdrop="static" data-keyboard="false">
         Launch demo modal
@@ -36,7 +36,8 @@
                             <label class="control-label">
                                 {{ __('Faktur Penjualan')}}<code>*</code>
                             </label>
-                            <select class="select2" name="item" id="item">
+                            {{-- <select class="select2" name="item" id="item"> --}}
+                            <select class="select2" name="saleId" id="saleId" onchange="saleId()">
                                 <option value="">{{ __('- Select -') }}</option>
                                 {{-- @foreach ($item as $i)
                                 <option value="{{ $i->id.__(',').$i->Item->id }}">
@@ -52,31 +53,41 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-md-12 col-xs-12">
-                            <label for="description">{{ __('Deskripsi') }}</label>
-                            <textarea data-name="Deskripsi" name="description" class="form-control" id="description"
-                                style="height: 100px"></textarea>
+                        <div class="form-group col-md-8 col-xs-12" id="itemOld">
+                            <label for="itemOld">{{ __('Barang') }}</label><code>*</code>
+                            <select class="select2" name="itemOld" id="itemOld">
+                                <option value="">{{ __('- Select -') }}</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-4 col-xs-12">
+                            <label for="">{{ __('Qty') }}</label><code>*</code>
+                            <input class="form-control" type="text" value="1" readonly="">
                         </div>
                     </div>
-                    {{-- <div class="row">
-                        <div class="col">
-                            <div class="form-group">
-                                <label class="control-label">
-                                    {{ __('Pengambil Barang') }}
-                                </label>
-                                <input type="text" class="form-control" id="taker" readonly>
-                            </div>
+
+                    {{-- @foreach ($item as $item)
+                        <input type="hidden" class="itemData">
+                    @endforeach --}}
+
+                    <div class="row">
+                        <div class="form-group col-md-8 col-xs-12">
+                            <label for="description">{{ __('Keluhan') }}</label><code>*</code>
+                            <input type="text" class="form-control" name="description" id="description">
+                            {{-- <textarea data-name="Deskripsi" name="description" class="form-control" id="description"
+                                style="height: 50px"></textarea> --}}
                         </div>
-                        <div class="col">
-                            <div class="form-group">
-                                <label class="control-label">
-                                    {{ __('Penjual') }}
-                                </label>
-                                <input type="text" class="form-control" id="seller" readonly>
-                            </div>
+                        <div class="form-group col-md-4 col-xs-12">
+                            <label for="type">{{ __('Tindakan') }}</label><code>*</code>
+                            <select name="type" id="type" class="select2">
+                                <option value="">{{ __('- Select -') }}</option>
+                                <option value="">{{ __('Ganti uang') }}</option>
+                                <option value="">{{ __('Ganti barang serupa') }}</option>
+                                <option value="">{{ __('Tukar tambah') }}</option>
+                                <option value="">{{ __('Servis') }}</option>
+                            </select>
                         </div>
-                    </div> --}}
-                    <h2 class="section-title">{{ __('Data Customer') }}</h2>
+                    </div>
+                    <h6 style="color: #6777ef;">{{ __('Data Customer') }}</h6>
                     <div id="customerData"></div>
                 </div>
             </div>
@@ -84,12 +95,20 @@
         <div class="col-md-5 col-sm-12">
             <div class="card">
                 <div class="card-header">
-                    <h4>{{ __('Detail') }}</h4>
+                    <h4>{{ __('Detail Harga') }}</h4>
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                        <label>{{ __('Diskon') }}</label>
-                        <div class="input-group d-none" id="dv">
+                        <label>{{ __('Harga Barang Lama') }}</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    {{ __('Rp.') }}
+                                </div>
+                            </div>
+                            <input id="item_price_old" type="text" value="0" class="form-control" style="text-align: right" readonly>
+                        </div>
+                        {{-- <div class="input-group d-none" id="dv">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">
                                     {{ __('Rp.') }}
@@ -106,18 +125,28 @@
                                     {{ __('%') }}
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="form-group">
-                        <label>{{ __('Total Harga Barang') }}</label>
+                        <label>{{ __('Harga Barang Baru') }}</label>
                         <div class="input-group">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">
                                     {{ __('Rp.') }}
                                 </div>
                             </div>
-                            <input id="total" type="text" value="0" class="form-control" style="text-align: right"
-                                readonly>
+                            <input id="item_price" type="text" value="0" class="form-control" style="text-align: right" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>{{ __('Total Harga') }}</label>
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">
+                                    {{ __('Rp.') }}
+                                </div>
+                            </div>
+                            <input id="total" type="text" value="0" class="form-control" style="text-align: right" readonly>
                         </div>
                     </div>
                 </div>
@@ -126,7 +155,7 @@
     </div>
     <div class="card card-primary">
         <div class="card-header">
-            <h4>{{ __('Data Return') }}</h4>
+            <h4>{{ __('Data Return Detail') }}</h4>
             <div class="card-header-action">
                 <button onclick="add()" type="button" class="btn btn-icon icon-left btn-warning">
                     <i class="fas fa-plus"></i>{{ __(' Tambah Data') }}

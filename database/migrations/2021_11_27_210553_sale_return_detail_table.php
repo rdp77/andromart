@@ -15,10 +15,19 @@ class SaleReturnDetailTable extends Migration
     {
         Schema::create('sale_return_dt', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sale_return_id');
-            $table->foreignId('sale_detail_id');
-            $table->foreignId('item_id');
+            $table->integer('sale_return_id');
+            $table->integer('sale_detail_id');
+            $table->integer('item_id');
+            $table->integer('sales_id');
+            $table->integer('buyer_id');
+            $table->double('qty');
             $table->string('type');
+            $table->string('description');
+            $table->double('price');
+            $table->double('total_price');
+            $table->double('total_loss_sales');
+            $table->double('total_loss_buyer');
+            $table->double('total_loss_store');
             $table->string('created_by')->nullable();
             $table->string('updated_by')->nullable();
             $table->string('deleted_by')->nullable();

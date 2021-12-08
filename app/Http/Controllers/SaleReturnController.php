@@ -276,7 +276,7 @@ class SaleReturnController extends Controller
         $customer = '<div class="row"><div class="form-group col-12 col-md-6 col-lg-6"><label>Nama Customer</label>';
         $customer .= '<p>' . $sale->customer_name . '</p>';
         $customer .= '</div><div class="form-group col-12 col-md-6 col-lg-6"><label for="type">Alamat & No Telepon</label>';
-        $customer .= '<p>' . $sale->customer_address . ' [ ' . $sale->customer_phone . ' ] </p></div></div></div>';
+        $customer .= '<p>' . $sale->customer_address . ' <br> ' . $sale->customer_phone . ' </p></div></div></div>';
 
         foreach ($sale->SaleDetail as $s) {
             foreach (Item::all() as $i) {
