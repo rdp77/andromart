@@ -21,6 +21,12 @@ class WarrantyController extends Controller
 
     public function index(Request $req)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         if ($req->ajax()) {
             $data = Warranty::all();
             return Datatables::of($data)
@@ -45,6 +51,11 @@ class WarrantyController extends Controller
 
     public function create()
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+
         return view('pages.backend.master.warranty.createWarranty');
     }
 
@@ -81,6 +92,11 @@ class WarrantyController extends Controller
 
     public function edit($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+
         $warranty = Warranty::find($id);
         return view('pages.backend.master.warranty.updateWarranty', ['warranty' => $warranty]);
     }
@@ -117,6 +133,12 @@ class WarrantyController extends Controller
 
     public function destroy(Request $req, $id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'delete');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),

@@ -22,6 +22,12 @@ class SupplierController extends Controller
 
     public function index(Request $req)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         if ($req->ajax()) {
             $data = Supplier::all();
             return Datatables::of($data)
@@ -46,6 +52,11 @@ class SupplierController extends Controller
 
     public function create()
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+
         return view('pages.backend.master.supplier.createSupplier');
     }
 
@@ -84,6 +95,11 @@ class SupplierController extends Controller
 
     public function edit($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+
         $supplier = Supplier::find($id);
         return view('pages.backend.master.supplier.updateSupplier', ['supplier' => $supplier]);
     }
@@ -122,6 +138,12 @@ class SupplierController extends Controller
 
     public function destroy(Request $req, $id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'delete');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         $item = Item::where('supplier_id', '=', $id)->get();
         $checkItem = count($item);
 

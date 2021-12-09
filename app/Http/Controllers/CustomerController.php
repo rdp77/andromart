@@ -22,6 +22,12 @@ class CustomerController extends Controller
 
     public function index(Request $req)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         if ($req->ajax()) {
             $data = Customer::with('branch')->get();
             return Datatables::of($data)
@@ -46,6 +52,11 @@ class CustomerController extends Controller
 
     public function create()
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+
         $branch = Branch::all();
         return view('pages.backend.master.customer.createCustomer', ['branch' => $branch]);
     }
@@ -89,6 +100,11 @@ class CustomerController extends Controller
 
     public function edit($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+
         $customer = Customer::find($id);
         $branch = Branch::where('id', '!=', Customer::find($id)->branch_id)->get();
         return view('pages.backend.master.customer.updateCustomer', ['branch' => $branch, 'customer' => $customer]);
@@ -142,6 +158,12 @@ class CustomerController extends Controller
 
     public function destroy(Request $req, $id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'delete');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),

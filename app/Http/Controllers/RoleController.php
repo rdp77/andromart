@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Employee;
 use App\Models\Role;
 use App\Models\RoleDetail;
 use App\Models\SubMenu;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Response;
@@ -23,24 +25,12 @@ class RoleController extends Controller
 
     public function index(Request $req)
     {
-        // if ($req->ajax()) {
-        //     $data = Role::get();
-        //     return Datatables::of($data)
-        //         ->addIndexColumn()
-        //         ->addColumn('action', function ($row) {
-        //             $actionBtn = '<div class="btn-group">';
-        //             $actionBtn .= '<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-        //                     data-toggle="dropdown">
-        //                     <span class="sr-only">Toggle Dropdown</span>
-        //                 </button>';
-        //             $actionBtn .= '<div class="dropdown-menu">
-        //                     <a class="dropdown-item" href="' . route('role.edit', $row->id) . '">Edit</a>';
-        //             $actionBtn .= '</div></div>';
-        //             return $actionBtn;
-        //         })
-        //         ->rawColumns(['action'])
-        //         ->make(true);
+        // $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+
+        // if($checkRoles == 'akses ditolak'){
+        //     return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
         // }
+
         $role = Role::get();
 
         return view('pages.backend.master.role.indexRole', compact('role'));
@@ -48,6 +38,11 @@ class RoleController extends Controller
 
     public function create()
     {
+        // $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        // if($checkRoles == 'akses ditolak'){
+        //     return view('forbidden');
+        // }
+
         return view('pages.backend.master.role.createRole');
     }
 
@@ -78,6 +73,11 @@ class RoleController extends Controller
 
     public function edit($id)
     {
+        // $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+        // if($checkRoles == 'akses ditolak'){
+        //     return view('forbidden');
+        // }
+
         $role = Role::find($id);
         return view('pages.backend.master.role.updateRole', compact('role'));
     }
@@ -106,23 +106,47 @@ class RoleController extends Controller
             ]);
     }
 
-    public function destroy(role $role)
+    public function destroy(Request $req, $id)
     {
-        //
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'delete');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
+        $user = User::where('role_id', $id)->get();
+        $roleDetail = RoleDetail::where('role_id', $id);
+        $roleUser = count($user);
+
+        if($roleUser > 0){
+            return Response::json(['status' => 'error', 'message' => 'Data terrelasi dengan User, data tidak bisa dihapus !']);
+        }
+        else{
+            // $this->DashboardController->createLog(
+            //     $req->header('user-agent'),
+            //     $req->ip(),
+            //     'Menghapus master role ' . Role::find($id)->name
+            // );
+
+            RoleDetail::destroy($roleDetail);
+            Role::destroy($id);
+
+            return Response::json(['status' => 'success', 'message' => 'Data master berhasil dihapus !']);
+        }
     }
 
     public function rolesDetailSearch(Request $req)
     {
         $menu = SubMenu::with('RoleDetail')->get()->toArray();
         $menuRoles = [];
-        for ($i=0; $i <count($menu) ; $i++) { 
+        for ($i=0; $i <count($menu) ; $i++) {
             $menuRoles[$i]['name'] = $menu[$i]['name'];
             $menuRoles[$i]['id'] = $menu[$i]['id'];
             $menuRoles[$i]['view'] = 'off';
             $menuRoles[$i]['create'] = 'off';
             $menuRoles[$i]['edit'] = 'off';
             $menuRoles[$i]['delete'] = 'off';
-            for ($j=0; $j < count($menu[$i]['role_detail']); $j++) { 
+            for ($j=0; $j < count($menu[$i]['role_detail']); $j++) {
                 if($menu[$i]['role_detail'][$j]['roles_id'] == $req->id){
                     $menuRoles[$i]['view'] = $menu[$i]['role_detail'][$j]['view'];
                     $menuRoles[$i]['create'] = $menu[$i]['role_detail'][$j]['create'];
@@ -167,38 +191,38 @@ class RoleController extends Controller
         }
         // return $del;
         $arr = [];
-        for ($i=0; $i <count($req->menu) ; $i++) { 
+        for ($i=0; $i <count($req->menu) ; $i++) {
             $arr[$i]['menu'] =  $req->menu[$i];
         }
-        for ($i=0; $i <count($req->menu) ; $i++) { 
+        for ($i=0; $i <count($req->menu) ; $i++) {
             $arr[$i]['menu'] = $req->menu[$i];
             $arr[$i]['view'] = 'off';
             $arr[$i]['create'] = 'off';
             $arr[$i]['edit'] = 'off';
             $arr[$i]['delete'] = 'off';
-            for ($j=0; $j <count($vie) ; $j++) { 
+            for ($j=0; $j <count($vie) ; $j++) {
                 if($req->view[$j] == $req->menu[$i]){
                     $arr[$i]['view'] =  'on';
                 }
             }
-            for ($j=0; $j <count($cre) ; $j++) { 
+            for ($j=0; $j <count($cre) ; $j++) {
                 if($req->create[$j] == $req->menu[$i]){
                     $arr[$i]['create'] =  'on';
                 }
             }
-            for ($j=0; $j <count($edi) ; $j++) { 
+            for ($j=0; $j <count($edi) ; $j++) {
                 if($req->edit[$j] == $req->menu[$i]){
                     $arr[$i]['edit'] =  'on';
                 }
             }
-            for ($j=0; $j <count($del) ; $j++) { 
+            for ($j=0; $j <count($del) ; $j++) {
                 if($req->delete[$j] == $req->menu[$i]){
                     $arr[$i]['delete'] =  'on';
                 }
             }
         }
         RoleDetail::where('roles_id',$req->roles)->delete();
-        for ($i=0; $i <count($arr) ; $i++) { 
+        for ($i=0; $i <count($arr) ; $i++) {
             $index = DB::table('roles_detail')->max('id') + 1;
             RoleDetail::create([
                 'id'=>$index,
@@ -217,6 +241,6 @@ class RoleController extends Controller
             // 'role' => $role,
         ]);
         // $role = RoleDetail::where('roles_id',$req->id)->get();
-        
+
     }
 }

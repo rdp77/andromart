@@ -86,11 +86,21 @@ function del(id) {
             $.ajax({
                 url: "/master/warranty/warranty/" + id,
                 type: "DELETE",
-                success: function () {
-                    swal("Data master berhasil dihapus", {
-                        icon: "success",
-                    });
-                    table.draw();
+                success: function (data) {
+                    if(data.status == 'success'){
+                        swal("Data master berhasil dihapus", {
+                            icon: "success",
+                        });
+                        table.draw();
+                    }else if(data.status == 'restricted'){
+                        swal(data.message, {
+                            icon: "warning",
+                        });
+                    }else{
+                        swal('DATA EROR HUBUNGI DEVELOPER', {
+                            icon: "error",
+                        });
+                    }
                 },
             });
         } else {

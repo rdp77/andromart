@@ -16,7 +16,16 @@ class SaleReturnDetail extends Model
         'sale_return_id',
         'sale_detail_id',
         'item_id',
+        'sales_id',
+        'buyer_id',
+        'qty',
         'type',
+        'description',
+        'price',
+        'total_price',
+        'total_loss_store',
+        'total_loss_sales',
+        'total_loss_buyer',
         'created_at',
         'updated_at',
         'deleted_at',
@@ -33,5 +42,15 @@ class SaleReturnDetail extends Model
     public function Item()
     {
         return $this->belongsTo(Item::class);
+    }
+
+    public function Buyer()
+    {
+        return $this->belongsTo('App\Models\Employee', 'buyer_id', 'id');
+    }
+
+    public function Sales()
+    {
+        return $this->belongsTo('App\Models\Employee', 'sales_id', 'id');
     }
 }

@@ -22,6 +22,12 @@ class CategoryController extends Controller
 
     public function index(Request $req)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         if ($req->ajax()) {
             $data = Category::all();
             return Datatables::of($data)
@@ -46,6 +52,11 @@ class CategoryController extends Controller
 
     public function create()
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+
         return view('pages.backend.master.category.createCategory');
     }
 
@@ -82,6 +93,11 @@ class CategoryController extends Controller
 
     public function edit($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+
         $category = Category::find($id);
         return view('pages.backend.master.category.updateCategory', ['category' => $category]);
     }
@@ -125,6 +141,12 @@ class CategoryController extends Controller
 
     public function destroy(Request $req, $id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'delete');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         $brand = Brand::where('category_id', '=', $id)->get();
         $checkBrand = count($brand);
 

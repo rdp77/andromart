@@ -22,6 +22,11 @@ class AreaController extends Controller
 
     public function index(Request $req)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+
         if ($req->ajax()) {
             $data = Area::all();
             return Datatables::of($data)
@@ -46,6 +51,11 @@ class AreaController extends Controller
 
     public function create()
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+
         return view('pages.backend.master.area.createArea');
     }
 
@@ -82,6 +92,11 @@ class AreaController extends Controller
 
     public function edit($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+
         $area = Area::find($id);
         return view('pages.backend.master.area.updateArea', ['area' => $area]);
     }
@@ -124,6 +139,11 @@ class AreaController extends Controller
 
     public function destroy(Request $req, $id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'delete');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+
         $branch = Branch::where('area_id', '=', $id)->get();
         $checkBranch = count($branch);
 

@@ -21,6 +21,11 @@ class AccountMainController extends Controller
 
     public function index(Request $req)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+
         if ($req->ajax()) {
             $data = AccountMain::get();
             return Datatables::of($data)
@@ -45,6 +50,11 @@ class AccountMainController extends Controller
 
     public function create()
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+
         return view('pages.backend.master.accountMain.createAccountMain');
     }
 
@@ -81,6 +91,11 @@ class AccountMainController extends Controller
 
     public function edit($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+
         $accountMain = AccountMain::find($id);
         return view('pages.backend.master.accountMain.updateAccountMain', ['accountMain' => $accountMain]);
     }

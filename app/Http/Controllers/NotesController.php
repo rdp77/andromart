@@ -26,8 +26,10 @@ class NotesController extends Controller
 
     public function index(Request $req)
     {
-        // dd("masuk");
-        // dd(Regulation::get());
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         if ($req->ajax()) {
             // $data = Branch::with('area')->get();
             $data = Notes::with('users')->get();
@@ -58,6 +60,10 @@ class NotesController extends Controller
 
     public function create()
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         return view('pages.backend.office.notes.createNotes');
     }
 
@@ -124,6 +130,10 @@ class NotesController extends Controller
 
     public function show(Notes $notes, $id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         $id = Crypt::decryptString($id);
         $models = Notes::where('id', $id)->first();
         // $models = Notes::where('notes.id', $id)

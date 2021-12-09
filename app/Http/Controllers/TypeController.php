@@ -22,6 +22,12 @@ class TypeController extends Controller
 
     public function index(Request $req)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         if ($req->ajax()) {
             $data = Type::with(['brand', 'brand.category'])->get();
             return Datatables::of($data)
@@ -46,6 +52,11 @@ class TypeController extends Controller
 
     public function create()
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+
         $brand = Brand::all();
         return view('pages.backend.master.type.createType', ['brand' => $brand]);
     }
@@ -83,6 +94,11 @@ class TypeController extends Controller
 
     public function edit($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+
         $type = Type::find($id);
         $brand = Brand::where('id', '!=', Type::find($id)->brand_id)->get();
         return view('pages.backend.master.type.updateType', ['type' => $type, 'brand' => $brand]);
@@ -120,6 +136,12 @@ class TypeController extends Controller
 
     public function destroy(Request $req, $id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'delete');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),

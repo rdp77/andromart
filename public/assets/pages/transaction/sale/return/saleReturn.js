@@ -42,49 +42,53 @@ $("#item").on("change", function () {
     });
 });
 
-function add() {
-    var idItem = $("#item").find(":selected").val();
-    var dataParent = $(".dataParent").length;
-    $.ajax({
-        url: addURL,
-        type: "GET",
-        data: {
-            sale: idItem,
-        },
-        dataType: "json",
-        success: function (data) {
-            var dataItems = [];
-            $.each(data.result, function (index, value) {
-                dataItems +=
-                    '<option value="' +
-                    value.id_item +
-                    '">' +
-                    value.name_item +
-                    "</option>";
-            });
-            $("#itemData").append(
-                '<tr class="dataParent remove_' +
-                    (dataParent + 1) +
-                    '">' +
-                    '<td> <select class="form-control selectric" name="items[]" id="item_data">' +
-                    '<option value="">- Select -</option>' +
-                    dataItems +
-                    '</select> </td><td> <select class="form-control selectric" name="type[]"> <option value="">- Select -</option>' +
-                    '<option value="1">Service Barang</option><option value="2">Ganti Baru</option><option value="3">Tukar Tambah</option>' +
-                    '<option value="4">Ganti Uang</option><option value="5">Ganti Barang Lain</option></select> </td>' +
-                    '<td> <button type="button" onclick="remove_item(\'' +
-                    (dataParent + 1) +
-                    '\')" class="btn btn-danger mt-2 mt-1 btn-block"> <i class="fa fa-times"></i> </button>' +
-                    '<button type="button" onclick="dataModal()" class="btn btn-primary mt-1 mb-2 btn-block"> <i class="fa fa-eye"></i> </button> </td></tr>'
-            );
-            $(".selectric").selectric();
-        },
-    });
+function saleId() {
+
 }
 
-function remove_item(argument) {
-    $(".remove_" + argument).remove();
-}
+// function add() {
+//     var idItem = $("#item").find(":selected").val();
+//     var dataParent = $(".dataParent").length;
+//     $.ajax({
+//         url: addURL,
+//         type: "GET",
+//         data: {
+//             sale: idItem,
+//         },
+//         dataType: "json",
+//         success: function (data) {
+//             var dataItems = [];
+//             $.each(data.result, function (index, value) {
+//                 dataItems +=
+//                     '<option value="' +
+//                     value.id_item +
+//                     '">' +
+//                     value.name_item +
+//                     "</option>";
+//             });
+//             $("#itemData").append(
+//                 '<tr class="dataParent remove_' +
+//                     (dataParent + 1) +
+//                     '">' +
+//                     '<td> <select class="form-control selectric" name="items[]" id="item_data">' +
+//                     '<option value="">- Select -</option>' +
+//                     dataItems +
+//                     '</select> </td><td> <select class="form-control selectric" name="type[]"> <option value="">- Select -</option>' +
+//                     '<option value="1">Service Barang</option><option value="2">Ganti Baru</option><option value="3">Tukar Tambah</option>' +
+//                     '<option value="4">Ganti Uang</option><option value="5">Ganti Barang Lain</option></select> </td>' +
+//                     '<td> <button type="button" onclick="remove_item(\'' +
+//                     (dataParent + 1) +
+//                     '\')" class="btn btn-danger mt-2 mt-1 btn-block"> <i class="fa fa-times"></i> </button>' +
+//                     '<button type="button" onclick="dataModal()" class="btn btn-primary mt-1 mb-2 btn-block"> <i class="fa fa-eye"></i> </button> </td></tr>'
+//             );
+//             $(".selectric").selectric();
+//         },
+//     });
+// }
+
+// function remove_item(argument) {
+//     $(".remove_" + argument).remove();
+// }
 
 function dataModal() {
     var sale = $("#item").find(":selected").val();

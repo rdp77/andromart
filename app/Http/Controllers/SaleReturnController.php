@@ -27,6 +27,12 @@ class SaleReturnController extends Controller
 
     public function index(Request $req)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
+
         if ($req->ajax()) {
             $data = SaleReturn::with('Sale', 'SaleReturnDetail')->get();
             return Datatables::of($data)
@@ -87,13 +93,31 @@ class SaleReturnController extends Controller
         return view('pages.backend.transaction.sale.return.indexReturn');
     }
 
+    public function code($type)
+    {
+        $getEmployee =  Employee::with('branch')->where('user_id', Auth::user()->id)->first();
+        $month = Carbon::now()->format('m');
+        $year = Carbon::now()->format('y');
+        $index = DB::table('sale_return')->max('id') + 1;
+
+        $index = str_pad($index, 3, '0', STR_PAD_LEFT);
+        return $code = $type . $getEmployee->Branch->code . $year . $month . $index;
+    }
+
     public function create()
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+
+        $code = $this->code('RTP');
         $item = SaleDetail::with('Sale', 'Item')->get();
         $sale = Sale::with('SaleDetail')->get();
         return view('pages.backend.transaction.sale.return.createReturn', [
+            'code' => $code,
             'item' => $item,
-            'sale' => $sale
+            'sale' => $sale,
         ]);
     }
 
@@ -252,7 +276,7 @@ class SaleReturnController extends Controller
         $customer = '<div class="row"><div class="form-group col-12 col-md-6 col-lg-6"><label>Nama Customer</label>';
         $customer .= '<p>' . $sale->customer_name . '</p>';
         $customer .= '</div><div class="form-group col-12 col-md-6 col-lg-6"><label for="type">Alamat & No Telepon</label>';
-        $customer .= '<p>' . $sale->customer_address . ' [ ' . $sale->customer_phone . ' ] </p></div></div></div>';
+        $customer .= '<p>' . $sale->customer_address . ' <br> ' . $sale->customer_phone . ' </p></div></div></div>';
 
         foreach ($sale->SaleDetail as $s) {
             foreach (Item::all() as $i) {
