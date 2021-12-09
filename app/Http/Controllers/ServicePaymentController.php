@@ -43,6 +43,10 @@ class ServicePaymentController extends Controller
 
     public function index(Request $req)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(4,'view');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         if ($req->ajax()) {
         $data = ServicePayment::with(['Service','ServiceDetail','user'])->get();
 
@@ -153,6 +157,10 @@ class ServicePaymentController extends Controller
     }
     public function create()
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(4,'create');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         $id = DB::table('service_payment')->max('id')+1;
         $code   = $this->code('BYR',$id);
         $employee = Employee::where('user_id',Auth::user()->id)->first();
@@ -366,6 +374,10 @@ class ServicePaymentController extends Controller
 
     public function edit($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(4,'edit');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         $Service = Service::find($id);
         $member = User::get();
         return view('pages.backend.transaction.servicePayment.editServicePayment', ['Service' => $Service,'member'=>$member]);
@@ -401,6 +413,10 @@ class ServicePaymentController extends Controller
 
     public function destroy(Request $req, $id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(4,'delete');
+        if($checkRoles == 'akses ditolak'){
+            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        }
         DB::beginTransaction();
         try {
             $this->DashboardController->createLog(

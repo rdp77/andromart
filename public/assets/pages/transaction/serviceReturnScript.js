@@ -89,10 +89,20 @@ function del(id) {
                 url: "/transaction/payment/payment/" + id,
                 type: "DELETE",
                 success: function () {
-                    swal("Data master berhasil dihapus", {
-                        icon: "success",
-                    });
-                    table.draw();
+                    if(data.status == 'success'){
+                        swal("Data pengguna berhasil dihapus", {
+                            icon: "success",
+                        });
+                        table.draw();
+                    }else if(data.status == 'restricted'){
+                        swal(data.message, {
+                            icon: "warning",
+                        });
+                    }else{
+                        swal('DATA EROR HUBUNGI DEVELOPER', {
+                            icon: "error",
+                        });
+                    }
                 },
             });
         } else {

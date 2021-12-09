@@ -92,13 +92,17 @@ function del(id) {
                 type: "DELETE",
                 success: function (data) {
                     if(data.status == 'success'){
-                        swal(data.message, {
+                        swal("Data pengguna berhasil dihapus", {
                             icon: "success",
                         });
                         table.draw();
-                    }else{
+                    }else if(data.status == 'restricted'){
                         swal(data.message, {
                             icon: "warning",
+                        });
+                    }else{
+                        swal('DATA EROR HUBUNGI DEVELOPER', {
+                            icon: "error",
                         });
                     }
                     
