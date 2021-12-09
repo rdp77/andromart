@@ -44,6 +44,11 @@ class PurchaseController extends Controller
 
     public function index(Request $req)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+
         if ($req->ajax()) {
             $data = Purchasing::with('employee')->get();
             foreach($data as $row) {
@@ -125,6 +130,10 @@ class PurchaseController extends Controller
     }
     public function create()
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         $code     = $this->code('PCS');
         $employee = Employee::get();
         // $items    = Item::where('name','!=','Jasa Service')->get();
@@ -146,6 +155,10 @@ class PurchaseController extends Controller
 
     public function edit($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         $id = Crypt::decryptString($id);
         $employee = Employee::get();
         // $items    = Item::where('name','!=','Jasa Service')->get();
@@ -289,7 +302,6 @@ class PurchaseController extends Controller
 
     public function update(Request $req, $id)
     {
-        dd($req->idDetail);
         $account = AccountData::find($req->account);
         $years = date("Y");
         $dates = date("Y-m-d");
@@ -394,6 +406,10 @@ class PurchaseController extends Controller
 
     public function show($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         $id = Crypt::decryptString($id);
         $employee = Employee::get();
         // $items    = Item::where('name','!=','Jasa Service')->get();
@@ -416,6 +432,10 @@ class PurchaseController extends Controller
 
     public function destroy(Request $req, $id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'delete');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         $this->DashboardController->createLog(
             $req->header('user-agent'),
             $req->ip(),
@@ -512,6 +532,10 @@ class PurchaseController extends Controller
 
     public function approve($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         $purchase = Purchasing::where('id', $id)->first();
         $purchaseDetail = PurchasingDetail::where('purchasing_id', $purchase->id)->get();
         foreach ($purchaseDetail as $key => $value) {

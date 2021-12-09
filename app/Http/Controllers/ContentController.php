@@ -46,6 +46,11 @@ class ContentController extends Controller
         //         ->rawColumns(['action'])
         //         ->make(true);
         // }
+
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         $content = ContentType::orderBy('id', 'asc')->where('deleted', false)->get();
         return view('pages.backend.content.contents.indexContents')->with('content', $content);
         // return view('pages.backend.master.branch.indexBranch');
@@ -53,6 +58,10 @@ class ContentController extends Controller
 
     public function creates($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         $id = Crypt::decryptString($id);
         $contentType = ContentType::where('id', $id)->first();
         $content = Content::where('content_types_id', $id)->get();
@@ -62,12 +71,20 @@ class ContentController extends Controller
     }
     public function create()
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         $content = ContentType::where('deleted', 0)->get();
         return view('pages.backend.content.contents.createContents')->with('content', $content);
         // return view('pages.backend.master.branch.createBranch', ['area' => $area]);
     }
     public function showContent($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         $id = Crypt::decryptString($id);
         $contentType = ContentType::where('id', $id)->first();
         $content = Content::where('content_types_id', $id)->get();
@@ -146,6 +163,10 @@ class ContentController extends Controller
 
     public function show($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         $id = Crypt::decryptString($id);
         $contentType = ContentType::where('id', $id)->first();
         $content = Content::where('content_types_id', $id)->get();
@@ -155,6 +176,10 @@ class ContentController extends Controller
 
     public function edit($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         $id = Crypt::decryptString($id);
         $content = Content::where('id', $id)->first();
         $contentType = ContentType::where('id', $content->content_types_id)->first();

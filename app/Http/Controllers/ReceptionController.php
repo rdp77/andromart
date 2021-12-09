@@ -34,6 +34,10 @@ class ReceptionController extends Controller
 
     public function index(Request $req)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         if ($req->ajax()) {
             // ORDER BY FIND_IN_SET(column, 'Yellow,Blue,Red')
             $data = Purchasing::with('employee')->whereIn("done", [1,3,0,2])->get();
@@ -99,6 +103,10 @@ class ReceptionController extends Controller
 
     public function edit($id)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
         $id = Crypt::decryptString($id);
         $model = Purchasing::where('purchasings.id', $id)
         ->leftjoin('employees', 'purchasings.employee_id', 'employees.id')
