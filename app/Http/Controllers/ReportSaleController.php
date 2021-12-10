@@ -59,6 +59,19 @@ class ReportSaleController extends Controller
         return $data;
         return Response::json(['status' => 'success','result'=>$data,'message'=>$message]);
     }
+    public function dataLoad(Request $req)
+    {
+        $startDate = $req->startDate;
+        $endDate = $req->endDate;
+        $data = Sale::with(['SaleDetail', 'SaleDetail.Item', 'accountData'])
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->get();
+        return $data;
+
+        // return view('pages.backend.report.reportSaleLoad')->with('data', $data);
+    }
+
 
     public function create()
     {

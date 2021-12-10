@@ -30,7 +30,7 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-12 col-lg-12">
-                            <button class="btn btn-primary" type="button" onclick="checkData()"><i class="fas fa-eye"></i> Cari</button>
+                            <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('report-sale.dataLoad') }}', '#data-load')"><i class="fas fa-eye"></i> Cari</button>
                         </div>
                     </div>
                 </div>
@@ -39,36 +39,53 @@
       </div>
       <div class="col-12">
         <h2 class="section-title">Total Pendapatan & Pengeluaran</h2>
-        <div class="table-responsive">
-          <table class="table table-striped">
-              <thead>
-                  <tr>
-                      <th>Tanggal</th>
-                      <th>Faktur</th>
-                      <th>Barang</th>
-                      <th>Akun Kas</th>
-                      <th>Laba Kotor</th>
-                      <th>Laba Bersih</th>
-                      {{-- <th>total</th> --}}
-                  </tr>
-              </thead>
-              <tbody class="dropHere" style="border: none !important">
-              </tbody>
-              <tfoot>
-                  <tr>
-                      <th colspan="2"><h5>Transaksi : <b class="dropTransaksi">0</b></h5></th>
-                      <th colspan="2"><h5>Pendapatan Kotor : <b class="dropPengeluaran">Rp. 0</b></h5></th>
-                      <th colspan="2"><h5>Pendapatan Bersih : <b class="dropPendapatan">Rp. 0</b></h5></th>
-                  </tr>
-              </tfoot>
-          </table>
-          {{-- <div class="dropHereTotalVal"></div> --}}
+          <div class="table-responsive">
+            <table class="table table-striped" id="data-load">
+                <thead>
+                    <tr>
+                        <th>Tanggal</th>
+                        <th>Faktur</th>
+                        <th>Barang</th>
+                        <th>Akun Kas</th>
+                        <th>Laba Kotor</th>
+                        <th>Laba Bersih</th>
+                        {{-- <th>total</th> --}}
+                    </tr>
+                </thead>
+                <tbody class="dropHere" style="border: none !important">
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="2"><h5>Transaksi : <b class="dropTransaksi">0</b></h5></th>
+                        <th colspan="2"><h5>Pendapatan Kotor : <b class="dropPengeluaran">Rp. 0</b></h5></th>
+                        <th colspan="2"><h5>Pendapatan Bersih : <b class="dropPendapatan">Rp. 0</b></h5></th>
+                    </tr>
+                </tfoot>
+            </table>
+            {{-- <div class="dropHereTotalVal"></div> --}}
 
+        </div>
       </div>
-    </div>
   </section>
 </form>
 @endsection
 @section('script')
 <script src="{{ asset('assets/pages/report/reportSale.js') }}"></script>
+<script type="text/javascript">
+  var loading = `-- sedang memuat data --`;
+  function changes(token, url, target) {
+      var startDate = document.getElementById("startDate").value;
+      var endDate = document.getElementById("endDate").value;
+      $(target).html(loading);
+      $.post(url, {
+          _token: token,
+          startDate,
+          endDate,
+      },
+      function (data) {
+          console.log(data);
+          $(target).html(data);
+      });
+  }
+</script>
 @endsection

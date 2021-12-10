@@ -24,6 +24,7 @@ Route::group(['prefix' => 'report'], function () {
             'search-report-sale',
             [ReportSaleController::class, 'searchReportSale']
         )->name('report-sale.searchReportIncomeSpending');
+        Route::post('refresh-report-sale', [ReportSaleController::class, 'dataLoad'])->name('report-sale.dataLoad');
 
     });
 
