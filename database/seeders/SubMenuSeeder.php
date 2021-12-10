@@ -101,8 +101,8 @@ class SubMenuSeeder extends Seeder
             [
                 'menu_id' => '4',
                 'name' => 'Laporan Service',
-                'url' => route('report-income-spending.reportIncomeSpending'),
-                'hover' => '["' . route('report-income-spending.reportIncomeSpending') . '"]'
+                'url' => '',
+                'hover' => ''
             ],
             [
                 'menu_id' => '4',
