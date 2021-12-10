@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             SupplierSeeder::class,
             StockSeeder::class,
             RoleSeeder::class,
+            RolesDetailSeeder::class,
             UnitSeeder::class,
             User::class,
             IconSeeder::class,
