@@ -101,8 +101,8 @@ class SubMenuSeeder extends Seeder
             [
                 'menu_id' => '4',
                 'name' => 'Laporan Service',
-                'url' => '',
-                'hover' => ''
+                'url' => route('report-sale.reportSale'),
+                'hover' => '["' . route('report-sale.reportSale') . '"]'
             ],
             [
                 'menu_id' => '4',
@@ -113,14 +113,14 @@ class SubMenuSeeder extends Seeder
             [
                 'menu_id' => '4',
                 'name' => 'Laporan Pembelian',
-                'url' => '',
-                'hover' => ''
+                'url' => route('report-sale.reportSale'),
+                'hover' => '["' . route('report-sale.reportSale') . '"]'
             ],
             [
                 'menu_id' => '4',
                 'name' => 'Laporan Laba Rugi',
-                'url' => '',
-                'hover' => ''
+                'url' => route('report-sale.reportSale'),
+                'hover' => '["' . route('report-sale.reportSale') . '"]'
             ],
 
             // Master Data

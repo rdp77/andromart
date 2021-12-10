@@ -46,7 +46,7 @@
                       <th>Tanggal</th>
                       <th>Faktur</th>
                       <th>Barang</th>
-                      <th>Akun</th>
+                      <th>Akun Kas</th>
                       <th>Laba Kotor</th>
                       <th>Laba Bersih</th>
                       {{-- <th>total</th> --}}
