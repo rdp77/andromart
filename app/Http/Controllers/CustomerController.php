@@ -22,10 +22,9 @@ class CustomerController extends Controller
 
     public function index(Request $req)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
-
+        $checkRoles = $this->DashboardController->cekHakAkses(23,'view');
         if($checkRoles == 'akses ditolak'){
-            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+            return view('forbidden');
         }
 
         if ($req->ajax()) {
@@ -52,7 +51,7 @@ class CustomerController extends Controller
 
     public function create()
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        $checkRoles = $this->DashboardController->cekHakAkses(23,'create');
         if($checkRoles == 'akses ditolak'){
             return view('forbidden');
         }
@@ -100,7 +99,7 @@ class CustomerController extends Controller
 
     public function edit($id)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+        $checkRoles = $this->DashboardController->cekHakAkses(23,'edit');
         if($checkRoles == 'akses ditolak'){
             return view('forbidden');
         }
@@ -158,7 +157,7 @@ class CustomerController extends Controller
 
     public function destroy(Request $req, $id)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'delete');
+        $checkRoles = $this->DashboardController->cekHakAkses(23,'delete');
 
         if($checkRoles == 'akses ditolak'){
             return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);

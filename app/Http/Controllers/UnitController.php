@@ -21,10 +21,9 @@ class UnitController extends Controller
 
     public function index(Request $req)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
-
+        $checkRoles = $this->DashboardController->cekHakAkses(27,'view');
         if($checkRoles == 'akses ditolak'){
-            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+            return view('forbidden');
         }
 
         if ($req->ajax()) {
@@ -51,7 +50,7 @@ class UnitController extends Controller
 
     public function create()
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        $checkRoles = $this->DashboardController->cekHakAkses(27,'create');
         if($checkRoles == 'akses ditolak'){
             return view('forbidden');
         }
@@ -92,7 +91,7 @@ class UnitController extends Controller
 
     public function edit($id)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+        $checkRoles = $this->DashboardController->cekHakAkses(27,'edit');
         if($checkRoles == 'akses ditolak'){
             return view('forbidden');
         }
@@ -139,7 +138,7 @@ class UnitController extends Controller
 
     public function destroy(Request $req, $id)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'delete');
+        $checkRoles = $this->DashboardController->cekHakAkses(27,'delete');
 
         if($checkRoles == 'akses ditolak'){
             return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);

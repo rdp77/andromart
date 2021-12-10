@@ -22,7 +22,7 @@ class AccountMainDetailController extends Controller
 
     public function index(Request $req)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+        $checkRoles = $this->DashboardController->cekHakAkses(19,'view');
         if($checkRoles == 'akses ditolak'){
             return view('forbidden');
         }
@@ -51,7 +51,7 @@ class AccountMainDetailController extends Controller
 
     public function create()
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        $checkRoles = $this->DashboardController->cekHakAkses(19,'create');
         if($checkRoles == 'akses ditolak'){
             return view('forbidden');
         }
@@ -95,7 +95,7 @@ class AccountMainDetailController extends Controller
 
     public function edit($id)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+        $checkRoles = $this->DashboardController->cekHakAkses(19,'edit');
         if($checkRoles == 'akses ditolak'){
             return view('forbidden');
         }

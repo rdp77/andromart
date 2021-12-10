@@ -155,6 +155,59 @@
     </div>
     <div class="card card-primary">
         <div class="card-header">
+            <h4>{{ __('Data Detail') }}</h4>
+            <div class="card-header-action">
+                <button onclick="addItem()" type="button" class="btn btn-icon icon-left btn-warning">
+                    <i class="fas fa-plus"></i>{{ __(' Tambah Data') }}
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            {{-- @foreach ($buyer as $buyer)
+            <input class="buyerData" type="hidden" data-name="{{$buyer->name}}" value="{{$buyer->id}}">
+            @endforeach --}}
+            @foreach ($stock as $el)
+            <input class="itemsData" type="hidden" data-stock="{{$el->stock}}"
+                data-supplier="{{$el->item->supplier->name}}" data-price="{{$el->item->sell - $el->item->discount}}"
+                data-profit="{{$el->item->buy}}" data-name="{{$el->item->name}}" value="{{$el->item->id}}">
+            @endforeach
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%">{{ __('Barang') }}</th>
+                            <th style="width: 9%">{{ __('Qty | Stock') }}</th>
+                            <th style="width: 12%">{{ __('Harga | Jumlah') }}</th>
+                            {{-- <th style="width: 10%">{{ __('Profit Sharing %') }}</th> --}}
+                            <th>{{ __('Deskripsi') }}</th>
+                            <th style="width: 15%">{{ __('Tipe') }}</th>
+                            {{-- <th style="width: 15%" hidden>tipe</th> --}}
+                            <th>{{ __('Action') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="dropHereItem" style="border: none !important">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-right">
+            <button class="btn btn-primary mr-1 tombolSave" type="button" onclick="save()">
+                <i class="far fa-save"></i>
+                {{ __('Simpan Data') }}</button>
+            <div class="row">
+                <button class="btn btn-warning mr-1 tombolPrintKecil" style="display:none" type="button" onclick="printKecil('{{URL::to('/')}}')">
+                    <i class="fas fa-print"></i>
+                    {{ __('Nota Kecil') }}</button>
+                <button class="btn btn-warning mr-1 tombolPrintBesar" style="display:none" type="button" onclick="printBesar('{{URL::to('/')}}')">
+                    <i class="fas fa-print"></i>
+                    {{ __('Nota Besar') }}</button>
+            </div>
+        </div>
+    </div>
+
+
+    {{-- <div class="card card-primary">
+        <div class="card-header">
             <h4>{{ __('Data Return Detail') }}</h4>
             <div class="card-header-action">
                 <button onclick="add()" type="button" class="btn btn-icon icon-left btn-warning">
@@ -185,6 +238,7 @@
                     {{ __('Simpan Data') }}</button>
             </div>
         </div>
+    </div> --}}
 </form>
 @endsection
 @section('modal')

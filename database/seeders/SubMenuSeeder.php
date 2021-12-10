@@ -96,195 +96,216 @@ class SubMenuSeeder extends Seeder
                 'url' => route('report-income-spending.reportIncomeSpending'),
                 'hover' => '["' . route('report-income-spending.reportIncomeSpending') . '"]'
             ],
-            // [
-            //     'menu_id' => '3',
-            //     'name' => 'Laporan Transaksi Kas',
-            //     'url' => route('report-income-spending.reportIncomeSpending'),
-            //     'hover' => '["' . route('report-income-spending.reportIncomeSpending') . '"]'
-            // ],
-            // Master Data
+
+            //Laporan - laporan
             [
                 'menu_id' => '4',
+                'name' => 'Laporan Service',
+                'url' => route('report-income-spending.reportIncomeSpending'),
+                'hover' => '["' . route('report-income-spending.reportIncomeSpending') . '"]'
+            ],
+            [
+                'menu_id' => '4',
+                'name' => 'Laporan Penjualan',
+                'url' => route('report-sale.reportSale'),
+                'hover' => '["' . route('report-sale.reportSale') . '"]'
+            ],
+            [
+                'menu_id' => '4',
+                'name' => 'Laporan Pembelian',
+                'url' => '',
+                'hover' => ''
+            ],
+            [
+                'menu_id' => '4',
+                'name' => 'Laporan Laba Rugi',
+                'url' => '',
+                'hover' => ''
+            ],
+
+            // Master Data
+            [
+                'menu_id' => '5',
                 'name' => 'Akun Dasar',
                 'url' => route('account-main.index'),
                 'hover' => '["' . route('account-main.create') . '","' . route('account-main.index') . '"]'
             ],
             [
-                'menu_id' => '4',
+                'menu_id' => '5',
                 'name' => 'Akun Detail',
                 'url' => route('account-main-detail.index'),
                 'hover' => '["' . route('account-main-detail.create') . '","' . route('account-main-detail.index') . '"]'
             ],
             [
-                'menu_id' => '4',
+                'menu_id' => '5',
                 'name' => 'Akun Data',
                 'url' => route('account-data.index'),
                 'hover' => '["' . route('account-data.create') . '","' . route('account-data.index') . '"]'
             ],
             [
-                'menu_id' => '4',
+                'menu_id' => '5',
                 'name' => 'Barang',
                 'url' => route('item.index'),
                 'hover' => '["' . route('item.create') . '","' . route('item.index') . '"]'
             ],
             [
-                'menu_id' => '4',
+                'menu_id' => '5',
                 'name' => 'Karyawan',
                 'url' => route('employee.index'),
                 'hover' => '["' . route('employee.create') . '","' . route('employee.index') . '"]'
             ],
             [
-                'menu_id' => '4',
+                'menu_id' => '5',
                 'name' => 'Pelanggan',
                 'url' => route('customer.index'),
                 'hover' => '["' . route('customer.create') . '","' . route('customer.index') . '"]'
             ],
             [
-                'menu_id' => '4',
+                'menu_id' => '5',
                 'name' => 'Setting Presentase',
                 'url' => route('presentase.index'),
                 'hover' => '["' . route('presentase.create') . '","' . route('presentase.index') . '"]'
             ],
             [
-                'menu_id' => '4',
+                'menu_id' => '5',
                 'name' => 'Garansi',
                 'url' => route('warranty.index'),
                 'hover' => '["' . route('warranty.create') . '","' . route('warranty.index') . '"]'
             ],
             [
-                'menu_id' => '4',
+                'menu_id' => '5',
                 'name' => 'Supplier',
                 'url' => route('supplier.index'),
                 'hover' => '["' . route('supplier.create') . '","' . route('supplier.index') . '"]'
             ],
             [
-                'menu_id' => '4',
+                'menu_id' => '5',
                 'name' => 'Satuan',
                 'url' => route('unit.index'),
                 'hover' => '["' . route('unit.create') . '","' . route('unit.index') . '"]'
             ],
             [
-                'menu_id' => '4',
+                'menu_id' => '5',
                 'name' => 'Tipe',
                 'url' => route('type.index'),
                 'hover' => '["' . route('type.create') . '","' . route('type.index') . '"]'
             ],
             [
-                'menu_id' => '4',
+                'menu_id' => '5',
                 'name' => 'Merk',
                 'url' => route('brand.index'),
                 'hover' => '["' . route('brand.create') . '","' . route('brand.index') . '"]'
             ],
             [
-                'menu_id' => '4',
+                'menu_id' => '5',
                 'name' => 'Kategori',
                 'url' => route('category.index'),
                 'hover' => '["' . route('category.create') . '","' . route('category.index') . '"]'
             ],
             // [
-            //     'menu_id' => '4',
+            //     'menu_id' => '5',
             //     'name' => 'Biaya',
             //     'url' => route('cost.index'),
             //     'hover' => '["' . route('cost.create') . '","' . route('cost.index') . '"]'
             // ],
             // [
-            //     'menu_id' => '4',
+            //     'menu_id' => '5',
             //     'name' => 'Kas',
             //     'url' => route('cash.index'),
             //     'hover' => '["' . route('cash.create') . '","' . route('cash.index') . '"]'
             // ],
             [
-                'menu_id' => '4',
+                'menu_id' => '5',
                 'name' => 'Hak Akses',
                 'url' => route('role.index'),
                 'hover' => '["' . route('role.create') . '","' . route('role.index') . '"]'
             ],
             [
-                'menu_id' => '4',
+                'menu_id' => '5',
                 'name' => 'Cabang',
                 'url' => route('branch.index'),
                 'hover' => '["' . route('branch.create') . '","' . route('branch.index') . '"]'
             ],
             [
-                'menu_id' => '4',
+                'menu_id' => '5',
                 'name' => 'Area',
                 'url' => route('area.index'),
                 'hover' => '["' . route('area.create') . '","' . route('area.index') . '"]'
             ],
             [
-                'menu_id' => '4',
+                'menu_id' => '5',
                 'name' => 'Ikon',
                 'url' => route('icon.index'),
                 'hover' => '["' . route('icon.create') . '","' . route('icon.index') . '"]'
             ],
             // [
-            //     'menu_id' => '4',
+            //     'menu_id' => '5',
             //     'name' => 'Menu',
             //     'url' => route('menu.index'),
             //     'hover' => '["' . route('menu.create') . '","' . route('menu.index') . '"]'
             // ],
             [
-                'menu_id' => '5',
+                'menu_id' => '6',
                 'name' => 'Stok',
                 'url' => route('stock.index'),
                 'hover' => '["' . route('stock.create') . '","' . route('stock.index') . '"]'
             ],
             [
-                'menu_id' => '5',
+                'menu_id' => '6',
                 'name' => 'Stok Transaksi',
                 'url' => route('stockTransaction.index'),
                 'hover' => '["' . route('stockTransaction.create') . '","' . route('stockTransaction.index') . '"]'
             ],
             [
-                'menu_id' => '5',
+                'menu_id' => '6',
                 'name' => 'Stok Opname',
                 'url' => 'javascript:void(0)',
                 'hover' => null
             ],
             [
-                'menu_id' => '5',
+                'menu_id' => '6',
                 'name' => 'Stok Mutasi',
                 'url' => route('stockMutation.index'),
                 'hover' => '["' . route('stockMutation.create') . '","' . route('stockMutation.index') . '"]'
             ],
             [
-                'menu_id' => '6',
+                'menu_id' => '7',
                 'name' => 'Konten',
                 'url' => route('contents.index'),
                 'hover' => '["' . route('contents.create') . '","' . route('contents.index') . '"]'
             ],
             [
-                'menu_id' => '6',
+                'menu_id' => '7',
                 'name' => 'Pesan',
                 'url' => route('message.index'),
                 'hover' => '["' . route('message.create') . '","' . route('message.index') . '"]'
             ],
             [
-                'menu_id' => '6',
+                'menu_id' => '7',
                 'name' => 'Produk',
                 'url' => route('type-product.index'),
                 'hover' => '["' . route('type-product.create') . '","' . route('type-product.index') . '"]'
             ],
             [
-                'menu_id' => '7',
+                'menu_id' => '8',
                 'name' => 'Notulen',
                 'url' => route('notes.index'),
                 'hover' => '["' . route('notes.create') . '","' . route('notes.index') . '"]'
             ],
             [
-                'menu_id' => '7',
+                'menu_id' => '8',
                 'name' => 'Visi Misi',
                 'url' => route('visiMisi'),
                 'hover' => '["' . route('visiMisi') . '"]'
             ],
             [
-                'menu_id' => '7',
+                'menu_id' => '8',
                 'name' => 'Setting SOP',
                 'url' => route('regulation.index'),
                 'hover' => '["' . route('regulation.create') . '","' . route('regulation.index') . '"]'
             ],
             [
-                'menu_id' => '7',
+                'menu_id' => '8',
                 'name' => 'SOP',
                 'url' => route('regulationAll'),
                 'hover' => '["' . route('regulationAll') . '"]'
