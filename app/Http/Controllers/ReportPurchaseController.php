@@ -46,8 +46,11 @@ class ReportPurchaseController extends Controller
     {
         $startDate = $this->changeDate($req->startDate)." 00:00:00";
         $endDate = $this->changeDate($req->endDate)." 23:59:59";
-        $data = Purchasing::whereBetween('date', [$startDate, $endDate])->with('purchasingDetail')->get();
-        return view('pages.backend.report.reportPurchaseLoad')->with('data', $data);
+        $data = Purchasing::whereBetween('date', [$startDate, $endDate])->orderBy('id', 'desc')->with('purchasingDetail')->get();
+        $tr = count($data);
+        $sumBayar = $data->sum('price');
+
+        return view('pages.backend.report.reportPurchaseLoad', compact('data', 'tr', 'sumBayar'));
     }
 
     public function index()

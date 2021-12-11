@@ -1,9 +1,9 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__(' | Laporan Penjualan'))
-@section('titleContent', __('Laporan Penjualan'))
+@section('title', __('pages.title').__(' | Laporan Pembelian'))
+@section('titleContent', __('Laporan Pembelian'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
-<div class="breadcrumb-item active">{{ __('Laporan Penjualan') }}</div>
+<div class="breadcrumb-item active">{{ __('Laporan Pembelian') }}</div>
 @endsection
 
 @section('content')
@@ -19,11 +19,11 @@
           <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="form-group col-6 col-md-6 col-lg-6">
+                        <div class="form-group col-md-3 col-lg-3">
                             <label for="startDate">{{ __('Tanggal Awal') }}<code>*</code></label>
                             <input id="startDate" type="text" class="form-control datepicker" name="startDate">
                         </div>
-                        <div class="form-group col-6 col-md-6 col-lg-6">
+                        <div class="form-group col-md-3 col-lg-3">
                             <label for="endDate">{{ __('Tanggal Akir') }}<code>*</code></label>
                             <input id="endDate" type="text" class="form-control datepicker" name="endDate">
                         </div>
@@ -38,27 +38,30 @@
         </div>
       </div>
       <div class="col-12">
-        <h2 class="section-title">Total Pendapatan & Pengeluaran</h2>
+        {{-- <h2 class="section-title">Total Pendapatan & Pengeluaran</h2> --}}
           <div class="table-responsive" id="data-load">
-            <table class="table table-striped">
+            <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
                         <th>No</th>
                         <th>Tanggal</th>
                         <th>Faktur</th>
-                        <th>Diskon</th>
-                        <th>Total</th>
+                        <th>Barang</th>
+                        <th>Supplier</th>
+                        <th>Akun Kas</th>
+                        <th>Operator</th>
+                        <th>Jumlah</th>
                     </tr>
                 </thead>
                 <tbody class="dropHere" style="border: none !important">
                 </tbody>
-                <!-- <tfoot>
-                    <tr>
-                        <th colspan="2"><h5>Transaksi : <b class="dropTransaksi">0</b></h5></th>
-                        <th colspan="2"><h5>Pendapatan Kotor : <b class="dropPengeluaran">Rp. 0</b></h5></th>
-                        <th colspan="2"><h5>Pendapatan Bersih : <b class="dropPendapatan">Rp. 0</b></h5></th>
+                <tfoot>
+                    <tr style="color: #6777ef">
+                        <th colspan="4"><h5>Jumlah Transaksi : 0</h5></th>
+                        <th colspan="3"><h5>Total Pengeluaran : Rp. 0</h5></th>
+                        {{-- <th colspan="2"><h5>Pendapatan Bersih : <b class="dropPendapatan">Rp. 0</b></h5></th> --}}
                     </tr>
-                </tfoot> -->
+                </tfoot>
             </table>
             {{-- <div class="dropHereTotalVal"></div> --}}
 
