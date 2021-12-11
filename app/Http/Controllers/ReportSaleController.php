@@ -3,21 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\User;
-use App\Models\Item;
-use App\Models\Employee;
-use App\Models\Journal;
-use App\Models\JournalDetail;
 use App\Models\Sale;
-use App\Models\SaleDetail;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Response;
-use Illuminate\Support\Facades\Redirect;
-use Illuminate\Support\Facades\Validator;
-use Yajra\DataTables\DataTables;
-use Carbon\carbon;
 
 class ReportSaleController extends Controller
 {
@@ -34,31 +20,9 @@ class ReportSaleController extends Controller
 
     public function reportSale()
     {
-        // $data = Journal::with('JournalDetail')->get();
-        $data = Sale::with(['SaleDetail', 'SaleDetail.Item', 'accountData'])->get();
-        // return $data;
-
-        return view('pages.backend.report.reportSale', compact('data'));
+        return view('pages.backend.report.reportSale');
     }
 
-    public function searchReportSale(Request $req)
-    {
-        // return $req->all();
-        // $data = Journal::with('JournalDetail','JournalDetail.AccountData')
-        $data = Sale::with(['SaleDetail', 'SaleDetail.Item', 'accountData'])
-        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($req->dateS))
-        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($req->dateE))
-        // ->whereBetween('date', [$this->DashboardController->changeMonthIdToEn($req->dateS), $this->DashboardController->changeMonthIdToEn($req->dateE)])
-        ->get();
-
-        if(count($data) == 0){
-            $message = 'empty';
-        }else{
-            $message = 'exist';
-        }
-        return $data;
-        return Response::json(['status' => 'success','result'=>$data,'message'=>$message]);
-    }
     public function dataLoad(Request $req)
     {
         $startDate = $req->startDate;
@@ -66,10 +30,14 @@ class ReportSaleController extends Controller
         $data = Sale::with(['SaleDetail', 'SaleDetail.Item', 'accountData'])
         ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
         ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
-        ->get();
-        return $data;
+        ->orderBy('id', 'desc')->get();
 
-        // return view('pages.backend.report.reportSaleLoad')->with('data', $data);
+        $sumKotor = $data->sum('total_price');
+        $sumBersih = $data->sum('total_profit_store');
+        $tr = count($data);
+        // return $sum;
+
+        return view('pages.backend.report.reportSaleLoad', compact('data', 'tr', 'sumKotor', 'sumBersih'));
     }
 
 

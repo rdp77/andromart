@@ -1,23 +1,53 @@
-<!-- <table class="table table-striped" id="data-load"> -->
-	<h3>{{ dd($data); }}</h3>
-    <!-- <thead>
+<table class="table table-striped table-bordered">
+    <thead>
         <tr>
-            <th>Tanggal</th>
-            <th>Faktur</th>
-            <th>Barang</th>
-            <th>Akun Kas</th>
-            <th>Laba Kotor</th>
-            <th>Laba Bersih</th>
-            {{-- <th>total</th> --}}
+            <th width="15%">Tanggal</th>
+            <th width="12%">Faktur</th>
+            <th width="25%">Barang</th>
+            <th width="18%">Akun Kas</th>
+            <th width="15%">Laba Kotor</th>
+            <th width="15%">Laba Bersih</th>
         </tr>
     </thead>
+    @foreach($data as $key => $value)
     <tbody class="dropHere" style="border: none !important">
-    </tbody>
-    <tfoot>
-        <tr>
-            <th colspan="2"><h5>Transaksi : <b class="dropTransaksi">0</b></h5></th>
-            <th colspan="2"><h5>Pendapatan Kotor : <b class="dropPengeluaran">Rp. 0</b></h5></th>
-            <th colspan="2"><h5>Pendapatan Bersih : <b class="dropPendapatan">Rp. 0</b></h5></th>
+        <tr role="row" class="odd">
+            <td>{{ \Carbon\Carbon::parse($value->date)->locale('id')->isoFormat('LL') }}</td>
+            <th>{{ $value->code }}</th>
+            <td>
+                <table>
+                    <tbody>
+                        @foreach ($value->SaleDetail as $as => $sd)
+                        <tr>
+                            <td>x{{ $sd->qty }}</td>
+                            <th>{{ $sd->item->name }}</th>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+            </td>
+            <td>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <b>{{ $value->accountData->code }}</b>
+                                <br>{{ $value->accountData->name }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </td>
+            <th class="text-right">Rp. {{ number_format($value->total_price, 0, ".", ",") }}</th>
+            <th class="text-right">Rp. {{ number_format($value->total_profit_store, 0, ".", ",") }}</th>
         </tr>
-    </tfoot> -->
-<!-- </table> -->
+    </tbody>
+    @endforeach
+    <tfoot>
+        <tr style="color: #6777ef;">
+            <th colspan="2"><h5>Jumlah Transaksi : {{ $tr }}</h5></th>
+            <th colspan="2"><h5>Pendapatan Kotor : Rp. {{ number_format($sumKotor, 0, ".", ",") }}</h5></th>
+            <th colspan="2"><h5>Pendapatan Bersih : Rp. {{ number_format($sumBersih, 0, ".", ",") }}</h5></th>
+        </tr>
+    </tfoot>
+</table>

@@ -28,22 +28,11 @@ use Illuminate\Support\Facades\DB;
 
 class StockTransactionController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct(DashboardController $DashboardController)
     {
         $this->middleware('auth');
         $this->DashboardController = $DashboardController;
     }
-
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
 
     public function index(Request $req)
     {

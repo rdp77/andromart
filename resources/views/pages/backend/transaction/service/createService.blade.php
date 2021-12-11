@@ -69,7 +69,7 @@
 
                     <h6 style="color: #6777ef">Data Barang</h6>
                     <br>
-                    <div class="row">   
+                    <div class="row">
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="type">{{ __('Kategori') }}<code>*</code></label>
                             <select class="select2 type" name="type" onchange="category()">
@@ -101,7 +101,7 @@
                             </select>
                             {{-- <input id="series" type="text" class="form-control" name="series"> --}}
                         </div>
-                        
+
                         @foreach ($brand as $el)
                             <input class="brandData" type="hidden"
                             data-category="{{$el->category_id}}"
@@ -137,7 +137,7 @@
                             <input id="description" type="text" class="form-control validation" data-name="Deskripsi" name="description">
                         </div>
                     </div>
-                    
+
                     <h6 style="color: #6777ef">Data Customer</h6>
                     <br>
                     <div class="row">
@@ -150,12 +150,12 @@
                             <select class="select2 customerId" name="customerId" onchange="customerChange()">
                                 <option value="">- Select -</option>
                                 @foreach ($customer as $element)
-                                <option value="{{$element->id}}" 
-                                    data-name="{{$element->name}}" 
+                                <option value="{{$element->id}}"
+                                    data-name="{{$element->name}}"
                                     data-address="{{$element->address}}"
                                     data-phone="{{$element->contact}}"
                                     >{{$element->name}}</option>
-                                @endforeach 
+                                @endforeach
                                 {{-- <option value="Deny">Deny</option>
                                 <option value="Rizal">Rizal</option>
                                 <option value="Alfian">Alfian</option> --}}
@@ -211,7 +211,7 @@
                             </label>
                             <div class="chargerEquipmentDescUsed" style="display: none"><hr>
                                 <input id="chargerEquipmentDesc" type="text" class="form-control" name="chargerEquipmentDesc">
-                            </div>  
+                            </div>
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
@@ -221,7 +221,7 @@
                             </label>
                             <div class="bateraiEquipmentDescUsed" style="display: none"><hr>
                                 <input id="bateraiEquipmentDesc" type="text" class="form-control" name="bateraiEquipmentDesc">
-                            </div> 
+                            </div>
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
@@ -231,7 +231,7 @@
                             </label>
                             <div class="hardiskSsdEquipmentDescUsed" style="display: none"><hr>
                                 <input id="hardiskSsdEquipmentDesc" type="text" class="form-control" name="hardiskSsdEquipmentDesc">
-                            </div> 
+                            </div>
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
@@ -243,9 +243,9 @@
                                 <input id="RamEquipmentDesc" type="text" class="form-control" name="RamEquipmentDesc">
                             </div>
                         </div>
-                        
-                        
-                        
+
+
+
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-3 col-lg-3">
@@ -256,7 +256,7 @@
                             </label>
                             <div class="kabelEquipmentDescUsed" style="display: none"><hr>
                                 <input id="kabelEquipmentDesc" type="text" class="form-control" name="kabelEquipmentDesc">
-                            </div>    
+                            </div>
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
@@ -288,7 +288,7 @@
                                 <input id="lainnyaEquipmentDesc" type="text" class="form-control" name="lainnyaEquipmentDesc">
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -344,7 +344,7 @@
                                 <span class="selectgroup-button">Persentase (%)</span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="typeDiscount" value="value" onchange="changeDiscount('value'),sumTotal()" 
+                                <input type="radio" name="typeDiscount" value="value" onchange="changeDiscount('value'),sumTotal()"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button">Harga (RP)</span>
                             </label>

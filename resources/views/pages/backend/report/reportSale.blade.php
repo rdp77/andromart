@@ -12,25 +12,25 @@
 <form class="form-data">
     @csrf
     <section class="section">
-    <div class="section-body">
       <div class="row">
         <div class="col-12">
           <h2 class="section-title">Search Data </h2>
           <div class="card">
                 <div class="card-body">
                     <div class="row">
-                        <div class="form-group col-6 col-md-6 col-lg-6">
+                        <div class="form-group col-3 col-md-3 col-lg-3">
                             <label for="startDate">{{ __('Tanggal Awal') }}<code>*</code></label>
                             <input id="startDate" type="text" class="form-control datepicker" name="startDate">
                         </div>
-                        <div class="form-group col-6 col-md-6 col-lg-6">
+                        <div class="form-group col-3 col-md-3 col-lg-3">
                             <label for="endDate">{{ __('Tanggal Akir') }}<code>*</code></label>
                             <input id="endDate" type="text" class="form-control datepicker" name="endDate">
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-12 col-lg-12">
-                            <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('report-sale.dataLoad') }}', '#data-load')"><i class="fas fa-eye"></i> Cari</button>
+                            <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('report-sale.dataLoad') }}', '#data-load')">
+                                <i class="fas fa-eye"></i> Cari</button>
                         </div>
                     </div>
                 </div>
@@ -38,31 +38,29 @@
         </div>
       </div>
       <div class="col-12">
-        <h2 class="section-title">Total Pendapatan & Pengeluaran</h2>
-          <div class="table-responsive">
-            <table class="table table-striped" id="data-load">
+        {{-- <h2 class="section-title">Total Pendapatan</h2> --}}
+          <div class="table-responsive" id="data-load">
+            <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
-                        <th>Tanggal</th>
-                        <th>Faktur</th>
-                        <th>Barang</th>
-                        <th>Akun Kas</th>
-                        <th>Laba Kotor</th>
-                        <th>Laba Bersih</th>
-                        {{-- <th>total</th> --}}
+                        <th width="15%">Tanggal</th>
+                        <th width="12%">Faktur</th>
+                        <th width="25%">Barang</th>
+                        <th width="18%">Akun Kas</th>
+                        <th width="15%">Laba Kotor</th>
+                        <th width="15%">Laba Bersih</th>
                     </tr>
                 </thead>
                 <tbody class="dropHere" style="border: none !important">
                 </tbody>
                 <tfoot>
-                    <tr>
-                        <th colspan="2"><h5>Transaksi : <b class="dropTransaksi">0</b></h5></th>
-                        <th colspan="2"><h5>Pendapatan Kotor : <b class="dropPengeluaran">Rp. 0</b></h5></th>
-                        <th colspan="2"><h5>Pendapatan Bersih : <b class="dropPendapatan">Rp. 0</b></h5></th>
+                    <tr style="color: #6777ef;">
+                        <th colspan="2"><h5>Jumlah Transaksi : 0</h5></th>
+                        <th colspan="2"><h5>Pendapatan Kotor : Rp. 0</h5></th>
+                        <th colspan="2"><h5>Pendapatan Bersih : Rp. 0</h5></th>
                     </tr>
                 </tfoot>
             </table>
-            {{-- <div class="dropHereTotalVal"></div> --}}
 
         </div>
       </div>
@@ -70,7 +68,7 @@
 </form>
 @endsection
 @section('script')
-<script src="{{ asset('assets/pages/report/reportSale.js') }}"></script>
+{{-- <script src="{{ asset('assets/pages/report/reportSale.js') }}"></script> --}}
 <script type="text/javascript">
   var loading = `-- sedang memuat data --`;
   function changes(token, url, target) {

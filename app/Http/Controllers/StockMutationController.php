@@ -28,6 +28,12 @@ use Illuminate\Support\Facades\DB;
 
 class StockMutationController extends Controller
 {
+    public function __construct(DashboardController $DashboardController)
+    {
+        $this->middleware('auth');
+        $this->DashboardController = $DashboardController;
+    }
+
     public function index(Request $req)
     {
         $checkRoles = $this->DashboardController->cekHakAkses(38,'view');
