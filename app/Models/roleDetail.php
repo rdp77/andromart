@@ -27,4 +27,8 @@ class RoleDetail extends Model
         // 'deleted_by',
     ];
 
+    public function SubMenu()
+    {
+        return $this->belongsTo(Menu::class, 'menu', 'id');
+    }
 }
