@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
         config(['app.locale' => 'id']);
         Carbon::setLocale('id');
 
-        if (Schema::hasTable('menu') and Schema::hasTable('submenu') and Schema::hasTable('roles_detail')) {
+        if (Schema::hasTable('submenu') and Schema::hasTable('roles_detail')) {
             View::share('menu', Menu::with('SubMenu', 'SubMenu.RoleDetail')->get());
         }
         view()->composer('*', function ($view) {
