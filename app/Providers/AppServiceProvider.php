@@ -10,6 +10,7 @@ use App\Models\Service;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Schema;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -30,10 +31,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         config(['app.locale' => 'id']);
-	    Carbon::setLocale('id');
+        Carbon::setLocale('id');
 
-        if (Schema::hasTable('menu') and Schema::hasTable('submenu')) {
-            View::share('menu', Menu::with('SubMenu','SubMenu.RoleDetail')->get());
+        if (Schema::hasTable('menu') and Schema::hasTable('submenu') and Schema::hasTable('roles_detail')) {
+            View::share('menu', Menu::with('SubMenu', 'SubMenu.RoleDetail')->get());
         }
         view()->composer('*', function ($view) {
             if (Auth::check()) {
@@ -49,4 +50,3 @@ class AppServiceProvider extends ServiceProvider
         Carbon::setLocale('id');
     }
 }
-
