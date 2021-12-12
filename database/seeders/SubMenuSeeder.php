@@ -150,7 +150,7 @@ class SubMenuSeeder extends Seeder
             ],
             [
                 'menu_id' => '5',
-                'name' => 'Karyawan',
+                'name' => 'Crew',
                 'url' => route('employee.index'),
                 'hover' => '["' . route('employee.create') . '","' . route('employee.index') . '"]'
             ],

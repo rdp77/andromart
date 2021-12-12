@@ -34,24 +34,24 @@ class User extends Seeder
                 'created_at' => date("Y-m-d h:i:s"),
                 'updated_at' => date("Y-m-d h:i:s"),
             ],
-            [
-                'id' => '3',
-                'name' => 'Rio',
-                'username' => 'Teknisi 1',
-                'password' => Hash::make('admin'),
-                'role_id' => '5',
-                'created_at' => date("Y-m-d h:i:s"),
-                'updated_at' => date("Y-m-d h:i:s"),
-            ],
-            [
-                'id' => '4',
-                'name' => 'Asep',
-                'username' => 'Teknisi 2',
-                'password' => Hash::make('admin'),
-                'role_id' => '5',
-                'created_at' => date("Y-m-d h:i:s"),
-                'updated_at' => date("Y-m-d h:i:s"),
-            ],
+            // [
+            //     'id' => '3',
+            //     'name' => 'Rio',
+            //     'username' => 'Teknisi 1',
+            //     'password' => Hash::make('admin'),
+            //     'role_id' => '5',
+            //     'created_at' => date("Y-m-d h:i:s"),
+            //     'updated_at' => date("Y-m-d h:i:s"),
+            // ],
+            // [
+            //     'id' => '4',
+            //     'name' => 'Asep',
+            //     'username' => 'Teknisi 2',
+            //     'password' => Hash::make('admin'),
+            //     'role_id' => '5',
+            //     'created_at' => date("Y-m-d h:i:s"),
+            //     'updated_at' => date("Y-m-d h:i:s"),
+            // ],
         ]);
     }
 }

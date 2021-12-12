@@ -15,11 +15,11 @@ class RegulationSeeder extends Seeder
      */
     public function run()
     {
-        Regulation::create([
-            'role_id' => 1,
-            'branch_id' => 1,
-            'date' => date('Y-m-d'),
-            'title' => 'SOP untuk Admin',
-        ]);
+        // Regulation::create([
+        //     'role_id' => 1,
+        //     'branch_id' => 1,
+        //     'date' => date('Y-m-d'),
+        //     'title' => 'SOP untuk Admin',
+        // ]);
     }
 }

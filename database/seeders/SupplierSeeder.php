@@ -14,13 +14,13 @@ class SupplierSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('suppliers')->insert([
-            [
-                'id' => '1',
-                'name' => 'ARTAJAYA',
-                'contact' => '082147777556',
-                'address' => 'Surabaya',
-            ]
-        ]);
+        // DB::table('suppliers')->insert([
+        //     [
+        //         'id' => '1',
+        //         'name' => 'ARTAJAYA',
+        //         'contact' => '082147777556',
+        //         'address' => 'Surabaya',
+        //     ]
+        // ]);
     }
 }

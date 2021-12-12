@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\SubMenu;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -15,7 +16,9 @@ class RolesDetailSeeder extends Seeder
     public function run()
     {
         DB::table('roles_detail')->truncate();
-        for ($id = 1; $id<=45; $id++) {
+        $sub = SubMenu::get('id');
+        $subs = count($sub);
+        for ($id = 1; $id<=$subs; $id++) {
             DB::table('roles_detail')->insert([
                 [
                     'roles_id' => 1,

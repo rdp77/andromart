@@ -22,20 +22,20 @@ class BrandSeeder extends Seeder
                 'created_at' => date("Y-m-d h:i:s"),
                 'updated_at' => date("Y-m-d h:i:s"),
             ],
-            [
-                'id' => '2',
-                'category_id' => '2',
-                'name' => 'APPLE',
-                'created_at' => date("Y-m-d h:i:s"),
-                'updated_at' => date("Y-m-d h:i:s"),
-            ],
-            [
-                'id' => '3',
-                'category_id' => '3',
-                'name' => 'APPLE',
-                'created_at' => date("Y-m-d h:i:s"),
-                'updated_at' => date("Y-m-d h:i:s"),
-            ],
+            // [
+            //     'id' => '2',
+            //     'category_id' => '2',
+            //     'name' => 'APPLE',
+            //     'created_at' => date("Y-m-d h:i:s"),
+            //     'updated_at' => date("Y-m-d h:i:s"),
+            // ],
+            // [
+            //     'id' => '3',
+            //     'category_id' => '3',
+            //     'name' => 'APPLE',
+            //     'created_at' => date("Y-m-d h:i:s"),
+            //     'updated_at' => date("Y-m-d h:i:s"),
+            // ],
         ]);
     }
 }

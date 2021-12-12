@@ -14,32 +14,32 @@ class PurchasingDetailSeeder extends Seeder
      */
     public function run()
     {
-        PurchasingDetail::create([
-            'purchasing_id' => 1,
-            'item_id' => 2,
-            'unit_id' => 1,
-            'branch_id' => 1,
-            'price' => 135000,
-            'qty' => 10,
-            'total' => 1350000,
-        ]);
-        PurchasingDetail::create([
-            'purchasing_id' => 1,
-            'item_id' => 3,
-            'unit_id' => 1,
-            'branch_id' => 1,
-            'price' => 55000,
-            'qty' => 100,
-            'total' => 5500000,
-        ]);
-        PurchasingDetail::create([
-            'purchasing_id' => 1,
-            'item_id' => 4,
-            'unit_id' => 1,
-            'branch_id' => 1,
-            'price' => 400000,
-            'qty' => 30,
-            'total' => 12000000,
-        ]);
+        // PurchasingDetail::create([
+        //     'purchasing_id' => 1,
+        //     'item_id' => 2,
+        //     'unit_id' => 1,
+        //     'branch_id' => 1,
+        //     'price' => 135000,
+        //     'qty' => 10,
+        //     'total' => 1350000,
+        // ]);
+        // PurchasingDetail::create([
+        //     'purchasing_id' => 1,
+        //     'item_id' => 3,
+        //     'unit_id' => 1,
+        //     'branch_id' => 1,
+        //     'price' => 55000,
+        //     'qty' => 100,
+        //     'total' => 5500000,
+        // ]);
+        // PurchasingDetail::create([
+        //     'purchasing_id' => 1,
+        //     'item_id' => 4,
+        //     'unit_id' => 1,
+        //     'branch_id' => 1,
+        //     'price' => 400000,
+        //     'qty' => 30,
+        //     'total' => 12000000,
+        // ]);
     }
 }
