@@ -10,7 +10,8 @@
         </ul>
     </form>
     <?php
-        $alert = DB::select('select * from stocks where stock < min_stock');
+        $branchUser = Auth::user()->employee->branch_id;
+        $alert = DB::select("select * FROM stocks INNER JOIN items ON stocks.item_id = items.id where stock < min_stock and branch_id = $branchUser");
         $blink = count($alert) > 0;
     ?>
     <ul class="navbar-nav navbar-right">
@@ -24,17 +25,17 @@
                     {{ __('Notifikasi') }}
                 </div>
                 <div class="dropdown-list-content dropdown-list-icons">
-                    <a href="#" class="dropdown-item dropdown-item-unread">
+                    @foreach ( $alert as $alert )
+                    <a href="javascript:void(0)" class="dropdown-item dropdown-item-unread">
                         <div class="dropdown-item-icon bg-info text-white">
                             <i class="fas fa-info"></i>
                         </div>
-                        @foreach ( $alert as $alert )
                         <div class="dropdown-item-desc">
-                            {{ $alert->item_id }}
-                            <div class="time text-primary">{{ $alert->stock }}</div>
+                            {{ $alert->name }}
+                            <div class="time text-primary">stock = {{ $alert->stock }}</div>
                         </div>
-                        @endforeach
                     </a>
+                    @endforeach
                 </div>
                 <div class="dropdown-footer text-center">
                     {{ __('Footer') }}
@@ -54,8 +55,8 @@
                             <i class="fas fa-info"></i>
                         </div>
                         <div class="dropdown-item-desc">
-                            {{ __('Kyaaaa') }}
-                            <div class="time text-primary">{{ __('sadsadsadas') }}</div>
+                            {{ _('Kosong') }}
+                            <div class="time text-primary">{{ _('Kosong') }}</div>
                         </div>
                     </a>
                 </div>
@@ -89,7 +90,7 @@
         <li class="dropdown">
             <a href="javascript:void(0)" data-toggle="dropdown"
                 class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                <img alt="image" src="{{ Auth::user()->employee->getAvatar() }}" class="rounded-circle mr-1">
+                <img alt="image" src="{{ Auth::user()->employee->getAvatar() }}" class="rounded-circle mr-1" style="height: 40px; width:40px">
                 <div class="d-sm-none d-lg-inline-block">{{ __('Hai, ') . Auth::user()->name }}</div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">

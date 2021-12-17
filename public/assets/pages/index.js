@@ -8,11 +8,11 @@ $("#tables").dataTable({
     ],
 });
 
-let modal_body =
-    '<form method="GET" action="/change-name"><input type="text" class="form-control" name="name" required></form>';
+// let modal_body =
+//     '<form method="GET" action="/change-name"><input type="text" class="form-control" name="name" required></form>';
 
-$("#name").fireModal({
-    body: modal_body,
-    center: true,
-    title: "Ganti Nama",
-});
+// $("#name").fireModal({
+//     body: modal_body,
+//     center: true,
+//     title: "Ganti Nama",
+// });

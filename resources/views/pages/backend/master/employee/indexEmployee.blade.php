@@ -18,7 +18,7 @@
         <div class="col-lg-3">
             <div class="card profile-widget">
                 <div class="profile-widget-header">
-                  <img alt="image" src="{{ $employee->getAvatar() }}" class="rounded-circle profile-widget-picture">
+                  <img alt="image" src="{{ $employee->getAvatar() }}" class="rounded-circle profile-widget-picture" style="height:100px">
                   <div class="profile-widget-items">
                     <div class="profile-widget-item">
                       {{-- <div class="profile-widget-item-label">Posts</div>
