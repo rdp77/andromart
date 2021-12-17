@@ -12,20 +12,30 @@
         @csrf
         @method('post')
         <div class="card-body">
-            @if (Session::has('status'))
+            @if (Session::has('type1'))
             <div class="alert alert-danger alert-has-icon">
-                <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+                <div class="alert-icon"><i class="fas fa-times"></i></div>
                 <div class="alert-body">
                     <div class="alert-title">{{ __('Error') }}</div>
                     {{ Session::get('status') }}
                 </div>
             </div>
             @endif
+            @if (Session::has('type2'))
+            <div class="alert alert-success alert-has-icon">
+                <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+                <div class="alert-body">
+                    <div class="alert-title">{{ __('Success') }}</div>
+                    {{ Session::get('status') }}
+                </div>
+            </div>
+            {{-- @else --}}
+            @endif
             <div class="row">
                 <div class="form-group col-md-3">
                     <label>{{ __('Username') }}</label><code>*</code>
                     <input id="username" type="username" class="form-control @error('username') is-invalid @enderror"
-                        value="{{ old('username') }}" name="username" required autocomplete="username" autofocus>
+                        value="{{ Auth::user()->username }}" name="username" autofocus disabled>
                     @error('username')
                     <span class="text-danger" role="alert">
                         {{ $message }}

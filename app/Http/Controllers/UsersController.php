@@ -190,7 +190,7 @@ class UsersController extends Controller
     {
         User::where('id', $id)
             ->update([
-                'password' => Hash::make(1234567890),
+                'password' => Hash::make('andromart'),
             ]);
 
         $this->DashboardController->createLog(
@@ -201,7 +201,7 @@ class UsersController extends Controller
 
         return Redirect::route('users.index')
             ->with([
-                'status' => 'Password untuk user ' . User::find($id)->name . ' telah diganti menjadi \'1234567890\'',
+                'status' => 'Password untuk user ' . User::find($id)->name . ' telah diganti menjadi \'andromart\'',
                 'type' => 'success'
             ]);
     }

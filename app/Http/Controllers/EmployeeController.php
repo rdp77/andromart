@@ -31,7 +31,8 @@ class EmployeeController extends Controller
             return view('forbidden');
         }
 
-        $employee = Employee::where('id', '!=', '1')->get();
+        // $employee = Employee::where('id', '!=', '1')->where('status', 'aktif')->get();
+        $employee = Employee::where('id', '!=', '1')->orderBy('status', 'asc')->get();
         return view('pages.backend.master.employee.indexEmployee', compact('employee'));
     }
 

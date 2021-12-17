@@ -96,9 +96,9 @@
                 <a href="{{ route('showUser') }}" class="dropdown-item has-icon">
                     <i class="fas fa-user-tie"></i> {{ __('User Profil') }}
                 </a>
-                <a id="name" class="dropdown-item has-icon" style="cursor: pointer">
+                {{-- <a id="name" class="dropdown-item has-icon" style="cursor: pointer">
                     <i class="fas fa-id-badge"></i> {{ __('Ganti Nama') }}
-                </a>
+                </a> --}}
                 <a href="{{ route('users.password') }}" class="dropdown-item has-icon">
                     <i class="fas fa-key"></i> {{ __('Ganti Password') }}
                 </a>
