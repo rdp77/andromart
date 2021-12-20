@@ -65,11 +65,6 @@ class RoleController extends Controller
             ]);
     }
 
-    public function show(role $role)
-    {
-        //
-    }
-
     public function edit($id)
     {
         // $checkRoles = $this->DashboardController->cekHakAkses(31,'edit');

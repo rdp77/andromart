@@ -84,7 +84,7 @@
                         });
             }
             $.ajax({
-                url: "/master/role/search-roles-detail?&id="+idRoles,
+                url: "/master/roles/search-roles-detail?&id="+idRoles,
                 type: "POST",
                 processData: false,
                 success: function(data) {
@@ -164,11 +164,14 @@
         }
 
         function simpanData() {
+            var form = $(".form-data");    
+            var formdata = new FormData(form[0]);
             $.ajax({
-                url: "/master/role/save-roles-detail/",
+                url: "/master/roles/save-roles-detail/",
                 type: "POST",
-                data: $(".form-data").serialize(),
+                data: formdata ? formdata : form.serialize(),
                 processData: false,
+                contentType: false,
                 success: function(data) {
                     if (data.status == 'success'){
                         swal("Data Telah Tersimpan", {
@@ -193,7 +196,7 @@
             }).then((willDelete) => {
                 if (willDelete) {
                     $.ajax({
-                        url: "/master/role/role/"+idRoles,
+                        url: "/master/roles/role/"+idRoles,
                         type: "DELETE",
                         success: function () {
                             swal("Data master berhasil dihapus", {
