@@ -36,14 +36,8 @@
                             <label class="control-label">
                                 {{ __('Faktur Penjualan')}}<code>*</code>
                             </label>
-                            {{-- <select class="select2" name="item" id="item"> --}}
-                            <select class="select2" name="saleId" id="saleId" onchange="saleId()">
+                            <select class="select2" name="saleId" id="saleId" onchange="itemId('{{ csrf_token() }}','{{ route('sale.return.loadDataItem') }}', '#itemOldDiv')">
                                 <option value="">{{ __('- Select -') }}</option>
-                                {{-- @foreach ($item as $i)
-                                <option value="{{ $i->id.__(',').$i->Item->id }}">
-                                    {{ $i->Item->name.__(' - ').$i->Sale->code }}
-                                </option>
-                                @endforeach --}}
                                 @foreach ($sale as $i)
                                 <option value="{{ $i->id }}">
                                     {{ $i->code }}
@@ -53,7 +47,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-md-8 col-xs-12" id="itemOld">
+                        <div class="form-group col-md-8 col-xs-12" id="itemOldDiv">
                             <label for="itemOld">{{ __('Barang') }}</label><code>*</code>
                             <select class="select2" name="itemOld" id="itemOld">
                                 <option value="">{{ __('- Select -') }}</option>
@@ -246,7 +240,8 @@
 @include('pages.backend.transaction.sale.return.components.successModalReturn')
 @endsection
 @section('script')
-<script>
+<script type="text/javascript">
+    var loading = `-- sedang memuat data --`;
     var getdata = '{{ route('sale.return.data') }}';
     var url = '{{ route('sale-return.store') }}';
     var index = '{{ route('sale-return.index') }}';
@@ -255,6 +250,19 @@
     var buy = '{{ route('purchase.create') }}';
     var addURL = '{{ route('sale.return.add') }}';
     var getDetailURL = '{{ route('sale.return.detail') }}';
+
+    function itemId(token, url, target) {
+      var saleId = document.getElementById("saleId").value;
+      $(target).html(loading);
+      $.post(url, {
+          _token: token,
+          saleId,
+      },
+      function (data) {
+          console.log(data);
+          $(target).html(data);
+      });
+    }
 </script>
 <script src="{{ asset('assets/pages/transaction/sale/return/saleReturn.js') }}"></script>
 @endsection

@@ -133,6 +133,18 @@ class SaleReturnController extends Controller
         ]);
     }
 
+    public function loadDataItem(Request $req)
+    {
+        $id = $req->saleId;
+        $query = Sale::where('id', $id)->with('SaleDetail')->first();
+        return view('pages.backend.transaction.sale.return.loadItemReturn', compact('query'));
+    }
+
+    public function loadDataQty()
+    {
+
+    }
+
     public function store(Request $req)
     {
         // Validator
