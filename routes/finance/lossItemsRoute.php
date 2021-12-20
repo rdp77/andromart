@@ -40,5 +40,4 @@ Route::group(['prefix' => 'finance'], function () {
         // Route::resource('sharing-profit-payment', ServicePaymentController::class);
 
     });
-
 });
