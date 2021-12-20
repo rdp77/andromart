@@ -166,7 +166,7 @@
             var form = $(".form-data");    
             var formdata = new FormData(form[0]);
             $.ajax({
-                url: "/master/roles/save-roles-detail/",
+                url: "{{ route('role.rolesDetailSave') }}",
                 type: "POST",
                 data: formdata ? formdata : form.serialize(),
                 processData: false,
