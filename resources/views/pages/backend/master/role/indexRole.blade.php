@@ -9,8 +9,7 @@
 @section('content')
 {{-- @include('pages.backend.components.filterSearch') --}}
 @include('layouts.backend.components.notification')
-<form action="" method="POST" class="form-data">
-    @csrf
+<form class="form-data">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
