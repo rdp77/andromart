@@ -41,21 +41,22 @@ class DashboardController extends Controller
         // ->whereYear('created_at', now())
         // ->whereMonth('created_at', now())
 
-        ->leftJoin('items', function ($join) {
-            $join->on('item_id','=','items.id')
+        // ->leftJoin('items', function ($join) {
+        //     $join->on('item_id','=','items.id')
             // ->whereDay('created_at', 17)
-            ->select('items.id','items.name', 'items.brand_id', 'sale_details.item_id',
-            DB::raw('SUM(sale_details.qty) as total'))
-            ->groupBy('items.id','sale_details.item_id','items.name', 'items.brand_id',)
-            ->orderBy('total','desc')
-            ->limit(3);
-        })
-        // ->leftJoin('items','items.id','=','sale_details.item_id')
-        // ->select('items.id','items.name', 'items.brand_id', 'sale_details.item_id',
-        // DB::raw('SUM(sale_details.qty) as total'))
-        // ->groupBy('items.id','sale_details.item_id','items.name', 'items.brand_id',)
-        // ->orderBy('total','desc')
-        // ->limit(3)
+        //     ->select('items.id','items.name', 'items.brand_id', 'sale_details.item_id',
+        //     DB::raw('SUM(sale_details.qty) as total'))
+        //     ->groupBy('items.id','sale_details.item_id','items.name', 'items.brand_id',)
+        //     ->orderBy('total','desc')
+        //     ->limit(3);
+        // })
+
+        ->leftJoin('items','items.id','=','sale_details.item_id')
+        ->select('items.id','items.name', 'items.brand_id', 'sale_details.item_id',
+        DB::raw('SUM(sale_details.qty) as total'))
+        ->groupBy('items.id','sale_details.item_id','items.name', 'items.brand_id',)
+        ->orderBy('total','desc')
+        ->limit(3)
         ->get();
 
 
