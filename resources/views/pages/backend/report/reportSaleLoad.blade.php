@@ -20,7 +20,7 @@
                         @foreach ($value->SaleDetail as $as => $sd)
                         <tr>
                             <td>x{{ $sd->qty }}</td>
-                            <th>{{ $sd->item->name }}</th>
+                            <th>{{ $sd->item->brand->name }} <br> {{ $sd->item->name }}</th>
                         </tr>
                         @endforeach
                     </tbody>

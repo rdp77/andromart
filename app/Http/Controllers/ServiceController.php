@@ -77,7 +77,7 @@ class ServiceController extends Controller
                         </button><div class="dropdown-menu">';
                     if ($row->payment_status == null) {
                         $actionBtn .= '<a class="dropdown-item" href="' . route('service.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
-                        $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';    
+                        $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
                     }else if($row->payment_status == 'DownPayment'){
                         $actionBtn .= '<a class="dropdown-item" href="' . route('service.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
                     }
@@ -143,15 +143,15 @@ class ServiceController extends Controller
                     $htmlAdd .=      '<th>' . $row->Type->name . '</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>tipe</td>';
-                    $htmlAdd .=      '<th>' . $row->type . '</th>';
+                    $htmlAdd .=      '<td>Kategori</td>';
+                    $htmlAdd .=      '<th>' . $row->Brand->Category->name . '</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>imei</td>';
+                    $htmlAdd .=      '<td>IMEI</td>';
                     $htmlAdd .=      '<th>' . $row->no_imei . '</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>rusak</td>';
+                    $htmlAdd .=      '<td>Keluhan</td>';
                     $htmlAdd .=      '<th>' . $row->complaint . '</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .= '<table>';
@@ -278,7 +278,7 @@ class ServiceController extends Controller
 
     public function store(Request $req)
     {
-        // return 
+        // return
         // return [$req->bateraiEquipment,$req->ramEquipment];
         // return $req->all();
         DB::beginTransaction();
@@ -694,7 +694,7 @@ class ServiceController extends Controller
                     ]);
                 }
             }
-            
+
             // return [$sharingProfitStore,
             // $sharingProfitTechnician,
             // $lossStore,$lossTechnician];
@@ -867,10 +867,10 @@ class ServiceController extends Controller
                 }
             }
 
-            // mengecek data existing 
+            // mengecek data existing
             if ($req->itemsDetailOld != null) {
                 // return $req->all();
-                // mengecek data existing 
+                // mengecek data existing
                 $checkDataOld = ServiceDetail::whereIn('id', $req->idDetailOld)->get();
                 $checkStockExisting = [];
 
@@ -1237,7 +1237,7 @@ class ServiceController extends Controller
     public function destroy(Request $req, $id)
     {
         $checkRoles = $this->DashboardController->cekHakAkses(1,'delete');
-            
+
         if($checkRoles == 'akses ditolak'){
             return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
         }
@@ -1248,7 +1248,7 @@ class ServiceController extends Controller
         // );
         DB::beginTransaction();
         try {
-            
+
 
             $getEmployee =  Employee::where('user_id', Auth::user()->id)->first();
             $checkDataDeleted = ServiceDetail::where('service_id', $id)->get();

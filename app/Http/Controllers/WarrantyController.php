@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
 use App\Models\Warranty;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -133,19 +134,25 @@ class WarrantyController extends Controller
     public function destroy(Request $req, $id)
     {
         $checkRoles = $this->DashboardController->cekHakAkses(25,'delete');
+        $item = Item::where('warranty_id', $id)->get();
+        $checkItem = count($item);
 
         if($checkRoles == 'akses ditolak'){
             return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
         }
 
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Menghapus master garansi ' . Warranty::find($id)->name
-        );
+        if ($checkItem > 0) {
+            return Response::json(['status' => 'error', 'message' => 'Data terrelasi dengan Item. Data tidak bisa dihapus !']);
+        } else {
+            $this->DashboardController->createLog(
+                $req->header('user-agent'),
+                $req->ip(),
+                'Menghapus master garansi ' . Warranty::find($id)->name
+            );
 
-        Warranty::destroy($id);
+            Warranty::destroy($id);
 
-        return Response::json(['status' => 'success', 'message' => 'Data master berhasil dihapus !']);
+            return Response::json(['status' => 'success', 'message' => 'Data master berhasil dihapus !']);
+        }
     }
 }

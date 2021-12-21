@@ -136,15 +136,15 @@ class BrandController extends Controller
     public function destroy(Request $req, $id)
     {
         $checkRoles = $this->DashboardController->cekHakAkses(29,'delete');
+        $item = Item::where('brand_id', '=', $id)->get();
+        $checkItem = count($item);
+        $type = Type::where('brand_id', '=', $id)->get();
+        $checkType = count($type);
 
         if($checkRoles == 'akses ditolak'){
             return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
         }
 
-        $item = Item::where('brand_id', '=', $id)->get();
-        $checkItem = count($item);
-        $type = Type::where('brand_id', '=', $id)->get();
-        $checkType = count($type);
 
         if($checkItem > 0){
             return Response::json(['status' => 'error', 'message' => 'Data terrelasi dengan Item, data tidak bisa dihapus !']);

@@ -19,11 +19,20 @@
                     <tbody>
                         <tr>
                             <th>
-                                {{ $value->customer_name}}<br><br>
-                                {{ $value->customer_phone}}<br><br>
+                                {{ $value->customer_name}}<br>
+                                {{ $value->customer_phone}}<br>
                                 {{ $value->customer_address}}
                             </th>
                         </tr>
+                        {{-- <tr>
+                            <th>{{ $value->customer_name}}</th>
+                        </tr>
+                        <tr>
+                            <th>{{ $value->customer_phone}}</th>
+                        </tr>
+                        <tr>
+                            <th>{{ $value->customer_address}}</th>
+                        </tr> --}}
                     </tbody>
                 </table>
             </td>
@@ -32,11 +41,11 @@
                     <tbody>
                         <tr>
                             <td>
-                                <b>{{ $value->Brand->name }}</b> {{ $value->Type->name }}
+                                <b>{{ $value->Brand->name }} {{ $value->Type->name }}</b>
                             </td>
                         </tr>
                         <tr>
-                            <td><b>No. IMEI</b> : {{ $value->no_imei}}</td>
+                            <td>No. IMEI : <b>{{ $value->no_imei}}</b></td>
                         </tr>
                     </tbody>
                 </table>

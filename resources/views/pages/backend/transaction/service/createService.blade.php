@@ -1,5 +1,5 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__('Tambah Service'))
+@section('title', __('pages.title').__(' | Tambah Service'))
 @section('titleContent', __('Tambah Service'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
@@ -72,7 +72,7 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="type">{{ __('Kategori') }}<code>*</code></label>
-                            <select class="select2 type" name="type" onchange="category()">
+                            <select class="select2 type validation" data-name="Kategori" name="type" onchange="category()">
                                 <option value="">- Select -</option>
                                 @foreach ($category as $element)
                                     <option value="{{$element->id}}">{{$element->name}}</option>
@@ -83,7 +83,7 @@
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="brand">{{ __('Merk') }}<code>*</code></label>
-                            <select class="brand form-control" id="brandService" name="brand">
+                            <select class="brand form-control validation" data-name="Merk" id="brandService" name="brand">
                                 <option value="">- Select -</option>
                                 {{-- @foreach ($brand as $element)
                                 <option value="{{$element->id}}">{{$element->name}}</option>
@@ -92,8 +92,8 @@
                             {{-- <input id="brand" type="text" class="form-control" name="brand"> --}}
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
-                            <label for="series">{{ __('Seri') }}<code>*</code></label>
-                            <select class="series form-control" id="seriesService" name="series">
+                            <label for="series">{{ __('Tipe') }}<code>*</code></label>
+                            <select class="series form-control validation" data-name="Tipe" id="seriesService" name="series">
                                 <option value="">- Select -</option>
                                 {{-- @foreach ($type as $element)
                                 <option value="{{$element->id}}">{{$element->name}}</option>

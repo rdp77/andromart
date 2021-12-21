@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Item;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -139,19 +140,25 @@ class UnitController extends Controller
     public function destroy(Request $req, $id)
     {
         $checkRoles = $this->DashboardController->cekHakAkses(27,'delete');
+        $item = Item::where('unit_id', $id)->get();
+        $checkItem = count($item);
 
         if($checkRoles == 'akses ditolak'){
             return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
         }
 
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Menghapus master satuan ' . Unit::find($id)->name
-        );
+        if ($checkItem > 0) {
+            return Response::json(['status' => 'error', 'message' => 'Data terrelasi dengan Item, data tidak bisa dihapus !']);
+        } else {
+            $this->DashboardController->createLog(
+                $req->header('user-agent'),
+                $req->ip(),
+                'Menghapus master satuan ' . Unit::find($id)->name
+            );
 
-        Unit::destroy($id);
+            Unit::destroy($id);
 
-        return Response::json(['status' => 'success', 'message' => 'Data master berhasil dihapus !']);
+            return Response::json(['status' => 'success', 'message' => 'Data master berhasil dihapus !']);
+        }
     }
 }

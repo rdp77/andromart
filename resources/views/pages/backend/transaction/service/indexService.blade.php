@@ -1,5 +1,5 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__('Master Service'))
+@section('title', __('pages.title').__(' | Transaksi Service'))
 @section('titleContent', __('Service'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
@@ -21,14 +21,14 @@
         <table class="table-striped table" id="table" width="100%">
             <thead>
                 <tr>
-                    
+
                     {{-- <th>{{ __('Faktur') }}</th> --}}
                     <th>
                         {{ __('Informasi') }}
                     </th>
                     <th>{{ __('Pelanggan') }}</th>
                     <th>{{ __('Barang') }}</th>
-                    <th>{{ __('Biaya / Harga') }}</th>
+                    <th width="25%">{{ __('Biaya / Harga') }}</th>
                     <th>{{ __('Status') }}</th>
                     {{-- <th>{{ __('Jasa') }}</th>
                     <th>{{ __('SparePart') }}</th>
