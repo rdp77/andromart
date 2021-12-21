@@ -78,6 +78,7 @@ require __DIR__ . '/transaction/purchasingRoute.php';
 
 require __DIR__ . '/finance/sharingProfitRoute.php';
 
+require __DIR__ . '/report/reportServiceRoute.php';
 require __DIR__ . '/report/reportSaleRoute.php';
 require __DIR__ . '/report/reportPurchaseRoute.php';
 

@@ -14,6 +14,7 @@ class SubMenuSeeder extends Seeder
      */
     public function run()
     {
+        DB::table('submenu')->truncate();
         DB::table('submenu')->insert([
             // Transaksi
             [
@@ -101,8 +102,8 @@ class SubMenuSeeder extends Seeder
             [
                 'menu_id' => '4',
                 'name' => 'Laporan Service',
-                'url' => 'javasript:void(0)',
-                'hover' => null
+                'url' => route('report-service.reportService'),
+                'hover' => '["' . route('report-service.reportService') . '"]'
             ],
             [
                 'menu_id' => '4',
