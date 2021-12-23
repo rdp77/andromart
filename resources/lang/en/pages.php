@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'title' => 'Wreative',
+    'title' => 'Andromart',
     'brand' => 'WEA',
     'edit' => 'Save Changes',
     'save' => 'Save',

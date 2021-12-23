@@ -1,5 +1,5 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__('Tambah Stock Transaksi'))
+@section('title', __('pages.title').__(' | Tambah Stock Transaksi'))
 @section('titleContent', __('Tambah Stock Transaksi'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
@@ -18,7 +18,7 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="type">{{ __('Kategori') }}<code>*</code></label>
-                            <select class="select2 type" name="type" onchange="category()">
+                            <select class="select2 type validation" name="type" onchange="category()" data-name="Kategori">
                                 <option value="">- Select -</option>
                                 @foreach ($category as $element)
                                     <option value="{{$element->id}}">{{$element->name}}</option>
@@ -29,7 +29,7 @@
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="brand">{{ __('Merk') }}<code>*</code></label>
-                            <select class="select2 brand" name="brand">
+                            <select class="select2 brand validation" name="brand" data-name="Merk">
                                 <option value="">- Select -</option>
                                 {{-- @foreach ($brand as $element)
                                 <option value="{{$element->id}}">{{$element->name}}</option>
@@ -39,7 +39,7 @@
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="itemId">{{ __('Nama Item') }}<code>*</code></label>
-                            <select class="select2 item" name="item">
+                            <select class="select2 item validation" name="item" data-name="Item">
                                 <option value="">- Select -</option>
                                 {{-- @foreach ($type as $element)
                                 <option value="{{$element->id}}">{{$element->name}}</option>
@@ -47,7 +47,7 @@
                             </select>
                             {{-- <input id="series" type="text" class="form-control" name="series"> --}}
                         </div>
-                        
+
                         @foreach ($brand as $el)
                             <input class="brandData" type="hidden"
                             data-category="{{$el->category_id}}"
@@ -72,7 +72,7 @@
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="type">{{ __('Tipe') }}<code>*</code></label>
-                            <select class="select2 type" name="type">
+                            <select class="select2 type validation" name="type" data-name="Tipe">
                                 <option value="">- Select -</option>
                                 <option value="In">In (Masuk)</option>
                                 <option value="Out">Out (Keluar)</option>
@@ -81,21 +81,21 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="reason">{{ __('alasan') }}<code>*</code></label>
+                            <label for="reason">{{ __('Alasan') }}<code>*</code></label>
                             <select class="select2 reason" name="reason">
                                 <option value="">- Select -</option>
                             </select>
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="qty">{{ __('qty') }}<code>*</code></label>
-                            <input id="qty" type="text" class="form-control qty"
-                                name="qty">
+                            <label for="qty">{{ __('Qty') }}<code>*</code></label>
+                            <input id="qty" type="text" class="form-control qty validation"
+                                name="qty" data-name="Qty">
                         </div>
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-12">
                             <label for="type">{{ __('Keterangan') }}<code>*</code></label>
-                            <textarea name="description" class="form-control" id="description"></textarea>
+                            <textarea name="description" class="form-control validation" id="description" data-name="Keterangan"></textarea>
                         </div>
                     </div>
                 </div>
@@ -104,8 +104,8 @@
                         {{ __('Simpan Data') }}</button>
                 </div>
             </div>
-            
-        
+
+
 </form>
 @endsection
 

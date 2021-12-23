@@ -1,7 +1,7 @@
 "use strict";
 var typeIndex = $('.typeIndex').val();
 var table = $("#table").DataTable({
-    
+
     pageLength: 10,
     processing: true,
     serverSide: true,
@@ -17,13 +17,13 @@ var table = $("#table").DataTable({
     dom: '<"html5buttons">lBrtip',
     columns: [
         { data: "code" },
-        { data: "item.name" },
+        { data: "date" },
         { data: "item.stock[0].branch.name" },
-        { data: "item.stock[0].unit.name" },
+        { data: "item.name" },
         { data: "qty" },
+        { data: "item.stock[0].unit.name" },
         { data: "typeInOut" },
         { data: "reason" },
-        { data: "date" },
         { data: "description" },
         { data: "action", orderable: false, searchable: true },
     ],
@@ -31,7 +31,7 @@ var table = $("#table").DataTable({
     {
         "targets": 0, // First Column
         "className": "text-center",
-        "width": "5%"
+        "width": "10%"
     },
     {
         "targets": [ 1, 2, 3, 4, 5, 6, 7 ],
@@ -41,7 +41,7 @@ var table = $("#table").DataTable({
     ],
     // columnDefs: [ {
     //     targets: 2,
-    //     render: $.fn.dataTable.render.moment( 'MM/DD/YYYY' )    
+    //     render: $.fn.dataTable.render.moment( 'MM/DD/YYYY' )
     // }],
     buttons: [
         {
@@ -85,7 +85,7 @@ var table = $("#table").DataTable({
             text: "Sembunyikan Kolom",
         },
     ],
-    
+
 });
 
 
@@ -133,6 +133,21 @@ function save(argument) {
         dangerMode: true,
     }).then((willSave) => {
         if (willSave) {
+            var validation = 0;
+            $('.validation').each(function(){
+                if ($(this).val() == '' || $(this).val() == null || $(this).val() == 0) {
+                    validation++;
+                    iziToast.warning({
+                        type: 'warning',
+                        title: $(this).data('name') +' Harus Di isi'
+                    });
+                }else{
+                    validation-1;
+                }
+            });
+            if (validation != 0) {
+                return false;
+            }
             $.ajax({
                 url: "/warehouse/stock-transaction/stockTransaction",
                 data: $(".form-data").serialize(),
@@ -153,12 +168,12 @@ function save(argument) {
                     // edit(id);
                 }
             });
-            
+
         } else {
             swal("Dibatalkan!");
         }
     });
-    
+
 }
 
 function updateData(argument) {
@@ -184,18 +199,18 @@ function updateData(argument) {
                     // edit(id);
                 }
             });
-            
+
         } else {
             swal("Data Dana Kredit PDL Berhasil Dihapus!");
         }
     });
-    
+
 }
 
 function category() {
     var dataItems = [];
     $('.brand').empty();
-    
+
     var params = $('.type').find(':selected').val();
     $.each($('.brandData'), function(){
         if (params == $(this).data('category')) {
