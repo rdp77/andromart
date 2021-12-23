@@ -55,8 +55,8 @@
                             <i class="fas fa-info"></i>
                         </div>
                         <div class="dropdown-item-desc">
-                            {{ _('Kosong') }}
-                            <div class="time text-primary">{{ _('Kosong') }}</div>
+                            {{ __('Kosong') }}
+                            <div class="time text-primary">{{ __('Kosong') }}</div>
                         </div>
                     </a>
                 </div>
@@ -90,7 +90,8 @@
         <li class="dropdown">
             <a href="javascript:void(0)" data-toggle="dropdown"
                 class="nav-link dropdown-toggle nav-link-lg nav-link-user">
-                <img alt="image" src="{{ Auth::user()->employee->getAvatar() }}" class="rounded-circle mr-1" style="height: 40px; width:40px">
+                <img alt="image" src="{{ Auth::user()->employee->getAvatar() }}" class="rounded-circle mr-1"
+                    style="height: 40px; width:40px">
                 <div class="d-sm-none d-lg-inline-block">{{ __('Hai, ') . Auth::user()->name }}</div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
