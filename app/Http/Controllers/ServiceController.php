@@ -58,10 +58,10 @@ class ServiceController extends Controller
 
 
         if ($req->ajax()) {
-
+            
             $data = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
             ->orderBy('id', 'DESC')
-            ->where('technician_id',Auth::user()->id)
+            // ->where('technician_id',Auth::user()->id)
             ->get();
 
             return Datatables::of($data)
