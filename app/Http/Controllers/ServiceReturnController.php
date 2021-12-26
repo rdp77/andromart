@@ -94,6 +94,8 @@ class ServiceReturnController extends Controller
                         $workStatus = '<div class="badge badge-success">Sudah Diambil</div>';
                     }elseif ($row->work_status == 'Return') {
                         $workStatus = '<div class="badge badge-success">Barang Di Return</div>';
+                    }else{
+                        $workStatus = '';
                     }
 
                     if($row->Service->payment_status == 'Lunas'){
