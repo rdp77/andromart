@@ -284,9 +284,19 @@ class ServiceController extends Controller
         DB::beginTransaction();
         try {
             // return $req->technicianId;
-            $tech1 = Service::where('technician_id', $req->technicianId)->where('work_status', '!=', 'Selesai')->where('work_status', '!=', 'Diambil')->count();
+            $tech1 = Service::where('technician_id', $req->technicianId)
+            ->where('work_status', '!=', 'Selesai')
+            ->where('work_status', '!=', 'Cancel')
+            ->where('work_status', '!=', 'Return')
+            ->where('work_status', '!=', 'Diambil')
+            ->count();
             // $tech1 = 10;
-            $tech2 = Service::where('technician_replacement_id', $req->technicianId)->where('work_status', '!=', 'Selesai')->where('work_status', '!=', 'Diambil')->count();
+            $tech2 = Service::where('technician_replacement_id', $req->technicianId)
+            ->where('work_status', '!=', 'Selesai')
+            ->where('work_status', '!=', 'Cancel')
+            ->where('work_status', '!=', 'Return')
+            ->where('work_status', '!=', 'Diambil')
+            ->count();
 
 
             $getEmployee =  Employee::where('user_id', Auth::user()->id)->first();
@@ -647,8 +657,20 @@ class ServiceController extends Controller
         // return $req->all();
         DB::beginTransaction();
         try {
-            $tech1 = Service::where('technician_id', $req->technicianId)->where('work_status', '!=', 'Selesai')->count();
-            $tech2 = Service::where('technician_replacement_id', $req->technicianId)->where('work_status', '!=', 'Selesai')->count();
+            $tech1 = Service::where('technician_id', $req->technicianId)
+            ->where('work_status', '!=', 'Selesai')
+            ->where('work_status', '!=', 'Cancel')
+            ->where('work_status', '!=', 'Return')
+            // ->where('work_status', '!=', 'Diambil')
+            ->where('work_status', '!=', 'Selesai')
+            ->count();
+            $tech2 = Service::where('technician_replacement_id', $req->technicianId)
+            // ->where('work_status', '!=', 'Selesai')
+            ->where('work_status', '!=', 'Selesai')
+            ->where('work_status', '!=', 'Cancel')
+            ->where('work_status', '!=', 'Return')
+            ->where('work_status', '!=', 'Diambil')
+            ->count();
             $checkData = Service::where('id', $id)->first();
 
 

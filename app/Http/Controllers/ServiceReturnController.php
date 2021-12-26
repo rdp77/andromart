@@ -80,20 +80,20 @@ class ServiceReturnController extends Controller
                 })
 
                 ->addColumn('informationService', function ($row) {
-                    if($row->Service->work_status == 'Proses'){
-                        $work_status = '<div class="badge badge-warning">Proses Pengerjaan</div>';
-                    }elseif($row->Service->work_status == 'Mutasi'){
-                        $work_status = '<div class="badge badge-warning">Perpindahan Teknisi</div>';
-                    }elseif($row->Service->work_status == 'Selesai'){
-                        $work_status = '<div class="badge badge-success">Selesai</div>';
-                    }elseif($row->Service->work_status == 'Cancel'){
-                        $work_status = '<div class="badge badge-danger">Service Batal</div>';
-                    }elseif($row->Service->work_status == 'Manifest'){
-                        $work_status = '<div class="badge badge-primary">Barang Diterima</div>';
-                    }elseif($row->Service->work_status == 'Diambil'){
-                        $work_status = '<div class="badge badge-success">Sudah Diambil</div>';
+                    if ($row->work_status == 'Proses') {
+                        $workStatus = '<div class="badge badge-warning">Proses Pengerjaan</div>';
+                    } elseif ($row->work_status == 'Mutasi') {
+                        $workStatus = '<div class="badge badge-warning">Perpindahan Teknisi</div>';
+                    } elseif ($row->work_status == 'Selesai') {
+                        $workStatus = '<div class="badge badge-success">Selesai</div>';
+                    } elseif ($row->work_status == 'Cancel') {
+                        $workStatus = '<div class="badge badge-danger">Service Batal</div>';
+                    } elseif ($row->work_status == 'Manifest') {
+                        $workStatus = '<div class="badge badge-primary">Barang Diterima</div>';
+                    } elseif ($row->work_status == 'Diambil') {
+                        $workStatus = '<div class="badge badge-success">Sudah Diambil</div>';
                     }elseif ($row->work_status == 'Return') {
-                        $work_status = '<div class="badge badge-success">Sudah Diambil</div>';
+                        $workStatus = '<div class="badge badge-success">Barang Di Return</div>';
                     }
 
                     if($row->Service->payment_status == 'Lunas'){
@@ -115,7 +115,7 @@ class ServiceReturnController extends Controller
                     $htmlAdd .=      '<td>status bayar</td>';
                     $htmlAdd .=      '<th>'.$paymentStatus.'</th>';
                     $htmlAdd .=      '<td>status kerja</td>';
-                    $htmlAdd .=      '<th>'.$work_status.'</th>';
+                    $htmlAdd .=      '<th>'.$workStatus.'</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Total</td>';
