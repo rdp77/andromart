@@ -34,6 +34,12 @@ class MenuSeeder extends Seeder
                 'hover' => '["sharing-profit.edit","service-payment.edit","loss-items.edit"]'
             ],
             [
+                'name' => 'Laporan',
+                'icon' => 'fa-file-alt',
+                'url' => 'javascript:void(0)',
+                'hover' => null
+            ],
+            [
                 'name' => 'Master Data',
                 'icon' => 'fa-database',
                 'url' => 'javascript:void(0)',
@@ -47,7 +53,7 @@ class MenuSeeder extends Seeder
             ],
             [
                 'name' => 'Konten',
-                'icon' => 'fa-file-alt',
+                'icon' => 'fa-globe',
                 'url' => 'javascript:void(0)',
                 'hover' => null
             ],

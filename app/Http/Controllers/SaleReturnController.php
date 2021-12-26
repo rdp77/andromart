@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AccountData;
 use App\Models\Employee;
 use App\Models\Item;
 use App\Models\Sale;
 use App\Models\SaleDetail;
 use App\Models\SaleReturn;
 use App\Models\SaleReturnDetail;
+use App\Models\Stock;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -27,7 +29,7 @@ class SaleReturnController extends Controller
 
     public function index(Request $req)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
+        $checkRoles = $this->DashboardController->cekHakAkses(6,'view');
 
         if($checkRoles == 'akses ditolak'){
             return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
@@ -106,7 +108,7 @@ class SaleReturnController extends Controller
 
     public function create()
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        $checkRoles = $this->DashboardController->cekHakAkses(6,'create');
         if($checkRoles == 'akses ditolak'){
             return view('forbidden');
         }
@@ -114,11 +116,33 @@ class SaleReturnController extends Controller
         $code = $this->code('RTP');
         $item = SaleDetail::with('Sale', 'Item')->get();
         $sale = Sale::with('SaleDetail')->get();
+        $account  = AccountData::with('AccountMain', 'AccountMainDetail', 'Branch')->get();
+        $userBranch = Auth::user()->employee->branch_id;
+        // $sales = Employee::where('id', '!=', '1')->where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
+        // $buyer = Employee::where('id', '!=', '1')->where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
+        // $cash = Cash::get();
+        // $customer = Customer::where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
+        $stock = Stock::where('branch_id', '=', $userBranch)->where('item_id', '!=', 1)->get();
+
         return view('pages.backend.transaction.sale.return.createReturn', [
             'code' => $code,
             'item' => $item,
             'sale' => $sale,
+            'account' => $account,
+            'stock' => $stock,
         ]);
+    }
+
+    public function loadDataItem(Request $req)
+    {
+        $id = $req->saleId;
+        $query = Sale::where('id', $id)->with('SaleDetail')->first();
+        return view('pages.backend.transaction.sale.return.loadItemReturn', compact('query'));
+    }
+
+    public function loadDataQty()
+    {
+
     }
 
     public function store(Request $req)

@@ -13,17 +13,19 @@
         @csrf
         <div class="card-body">
             <div class="row">
-                <div class="form-group col-md-3 col-xs-12">
+                <div class="form-group col-md-6 col-xs-12">
                     <label for="branch_id">{{ __('Cabang') }}</label>
-                    <select class="select2" name="branch_id"><code>*</code>
+                    <select class="select2 validation" name="branch_id" data-name="Cabang" required><code>*</code>
+                        <option value="">- Select -</option>
                         @foreach ($branch as $branch)
                         <option value="{{ $branch->id }}">{{ $branch->code }} - {{ $branch->name }}</option>
                         @endforeach
                     </select>
                 </div>
-                <div class="form-group col-md-4 col-xs-12">
+                <div class="form-group col-md-6 col-xs-12">
                     <label for="item_id">{{ __('Item') }}</label><code>*</code>
-                    <select name="item_id" id="item_id" class="select2">
+                    <select name="item_id" id="item_id" class="select2 validation" data-name="Item" required>
+                        <option value="">- Select -</option>
                         @foreach ($item as $item)
                         <option value="{{ $item->id }}">{{ $item->brand->category->code }} - {{ $item->brand->name }} {{ $item->name }}</option>
                         @endforeach
@@ -31,13 +33,14 @@
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-2 col-xs-6">
+                <div class="form-group col-md-6 col-xs-6">
                     <label for="min_stock" class="control-label">{{ __('Stok Min.') }}</label>
-                    <input id="min_stock" type="number" class="form-control text-right" name="min_stock" value="0">
+                    <input id="min_stock" type="number" class="form-control text-right" name="min_stock" value="0" min="0">
                 </div>
-                <div class="form-group col-md-2 col-xs-6">
+                <div class="form-group col-md-6 col-xs-6">
                     <label for="unit_id">{{ __('Satuan') }}</label><code>*</code>
-                    <select class="select2" name="unit_id">
+                    <select class="select2 validation" name="unit_id" data-name="Satuan" required>
+                        <option value="">- Select -</option>
                         @foreach ($unit as $unit)
                         <option value="{{ $unit->id }}">{{ $unit->code }}</option>
                         @endforeach
@@ -45,7 +48,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="form-group col-md-6 col-xs-12">
+                <div class="form-group col-md-12 col-xs-12">
                     <label for="description" class="control-label">{{ __('Description') }}</label>
                     <input id="description" type="text" class="form-control" name="description">
                 </div>

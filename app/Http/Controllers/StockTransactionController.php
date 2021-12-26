@@ -28,29 +28,17 @@ use Illuminate\Support\Facades\DB;
 
 class StockTransactionController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct(DashboardController $DashboardController)
     {
         $this->middleware('auth');
         $this->DashboardController = $DashboardController;
     }
 
-    /**
-     * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
-     */
-
     public function index(Request $req)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
-
+        $checkRoles = $this->DashboardController->cekHakAkses(36,'view');
         if($checkRoles == 'akses ditolak'){
-            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+            return view('forbidden');
         }
 
         if ($req->ajax()) {
@@ -100,7 +88,7 @@ class StockTransactionController extends Controller
     }
     public function create()
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        $checkRoles = $this->DashboardController->cekHakAkses(36,'create');
         if($checkRoles == 'akses ditolak'){
             return view('forbidden');
         }
@@ -177,7 +165,7 @@ class StockTransactionController extends Controller
 
     public function edit($id)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+        $checkRoles = $this->DashboardController->cekHakAkses(36,'edit');
         if($checkRoles == 'akses ditolak'){
             return view('forbidden');
         }

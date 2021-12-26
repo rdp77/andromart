@@ -36,14 +36,8 @@
                             <label class="control-label">
                                 {{ __('Faktur Penjualan')}}<code>*</code>
                             </label>
-                            {{-- <select class="select2" name="item" id="item"> --}}
-                            <select class="select2" name="saleId" id="saleId" onchange="saleId()">
+                            <select class="select2" name="saleId" id="saleId" onchange="itemId('{{ csrf_token() }}','{{ route('sale.return.loadDataItem') }}', '#itemOldDiv')">
                                 <option value="">{{ __('- Select -') }}</option>
-                                {{-- @foreach ($item as $i)
-                                <option value="{{ $i->id.__(',').$i->Item->id }}">
-                                    {{ $i->Item->name.__(' - ').$i->Sale->code }}
-                                </option>
-                                @endforeach --}}
                                 @foreach ($sale as $i)
                                 <option value="{{ $i->id }}">
                                     {{ $i->code }}
@@ -53,7 +47,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="form-group col-md-8 col-xs-12" id="itemOld">
+                        <div class="form-group col-md-8 col-xs-12" id="itemOldDiv">
                             <label for="itemOld">{{ __('Barang') }}</label><code>*</code>
                             <select class="select2" name="itemOld" id="itemOld">
                                 <option value="">{{ __('- Select -') }}</option>
@@ -155,6 +149,59 @@
     </div>
     <div class="card card-primary">
         <div class="card-header">
+            <h4>{{ __('Data Detail') }}</h4>
+            <div class="card-header-action">
+                <button onclick="addItem()" type="button" class="btn btn-icon icon-left btn-warning">
+                    <i class="fas fa-plus"></i>{{ __(' Tambah Data') }}
+                </button>
+            </div>
+        </div>
+        <div class="card-body">
+            {{-- @foreach ($buyer as $buyer)
+            <input class="buyerData" type="hidden" data-name="{{$buyer->name}}" value="{{$buyer->id}}">
+            @endforeach --}}
+            @foreach ($stock as $el)
+            <input class="itemsData" type="hidden" data-stock="{{$el->stock}}"
+                data-supplier="{{$el->item->supplier->name}}" data-price="{{$el->item->sell - $el->item->discount}}"
+                data-profit="{{$el->item->buy}}" data-name="{{$el->item->name}}" value="{{$el->item->id}}">
+            @endforeach
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 20%">{{ __('Barang') }}</th>
+                            <th style="width: 9%">{{ __('Qty | Stock') }}</th>
+                            <th style="width: 12%">{{ __('Harga | Jumlah') }}</th>
+                            {{-- <th style="width: 10%">{{ __('Profit Sharing %') }}</th> --}}
+                            <th>{{ __('Deskripsi') }}</th>
+                            <th style="width: 15%">{{ __('Tipe') }}</th>
+                            {{-- <th style="width: 15%" hidden>tipe</th> --}}
+                            <th>{{ __('Action') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody class="dropHereItem" style="border: none !important">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="card-footer text-right">
+            <button class="btn btn-primary mr-1 tombolSave" type="button" onclick="save()">
+                <i class="far fa-save"></i>
+                {{ __('Simpan Data') }}</button>
+            <div class="row">
+                <button class="btn btn-warning mr-1 tombolPrintKecil" style="display:none" type="button" onclick="printKecil('{{URL::to('/')}}')">
+                    <i class="fas fa-print"></i>
+                    {{ __('Nota Kecil') }}</button>
+                <button class="btn btn-warning mr-1 tombolPrintBesar" style="display:none" type="button" onclick="printBesar('{{URL::to('/')}}')">
+                    <i class="fas fa-print"></i>
+                    {{ __('Nota Besar') }}</button>
+            </div>
+        </div>
+    </div>
+
+
+    {{-- <div class="card card-primary">
+        <div class="card-header">
             <h4>{{ __('Data Return Detail') }}</h4>
             <div class="card-header-action">
                 <button onclick="add()" type="button" class="btn btn-icon icon-left btn-warning">
@@ -185,6 +232,7 @@
                     {{ __('Simpan Data') }}</button>
             </div>
         </div>
+    </div> --}}
 </form>
 @endsection
 @section('modal')
@@ -192,7 +240,8 @@
 @include('pages.backend.transaction.sale.return.components.successModalReturn')
 @endsection
 @section('script')
-<script>
+<script type="text/javascript">
+    var loading = `-- sedang memuat data --`;
     var getdata = '{{ route('sale.return.data') }}';
     var url = '{{ route('sale-return.store') }}';
     var index = '{{ route('sale-return.index') }}';
@@ -201,6 +250,19 @@
     var buy = '{{ route('purchase.create') }}';
     var addURL = '{{ route('sale.return.add') }}';
     var getDetailURL = '{{ route('sale.return.detail') }}';
+
+    function itemId(token, url, target) {
+      var saleId = document.getElementById("saleId").value;
+      $(target).html(loading);
+      $.post(url, {
+          _token: token,
+          saleId,
+      },
+      function (data) {
+          console.log(data);
+          $(target).html(data);
+      });
+    }
 </script>
 <script src="{{ asset('assets/pages/transaction/sale/return/saleReturn.js') }}"></script>
 @endsection

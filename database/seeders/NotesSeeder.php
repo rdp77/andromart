@@ -14,9 +14,6 @@ class NotesSeeder extends Seeder
      */
     public function run()
     {
-        Notes::create([
-            'users_id' => 1,
-            'title' => 'Coba',
-        ]);
+
     }
 }

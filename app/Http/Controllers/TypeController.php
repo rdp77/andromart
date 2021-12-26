@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Brand;
+use App\Models\Service;
 use App\Models\Type;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,10 +23,9 @@ class TypeController extends Controller
 
     public function index(Request $req)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
-
+        $checkRoles = $this->DashboardController->cekHakAkses(28,'view');
         if($checkRoles == 'akses ditolak'){
-            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+            return view('forbidden');
         }
 
         if ($req->ajax()) {
@@ -52,7 +52,7 @@ class TypeController extends Controller
 
     public function create()
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        $checkRoles = $this->DashboardController->cekHakAkses(28,'create');
         if($checkRoles == 'akses ditolak'){
             return view('forbidden');
         }
@@ -94,7 +94,7 @@ class TypeController extends Controller
 
     public function edit($id)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+        $checkRoles = $this->DashboardController->cekHakAkses(28,'edit');
         if($checkRoles == 'akses ditolak'){
             return view('forbidden');
         }
@@ -136,20 +136,27 @@ class TypeController extends Controller
 
     public function destroy(Request $req, $id)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'delete');
+        $checkRoles = $this->DashboardController->cekHakAkses(28,'delete');
+        $service = Service::where('series', $id)->get();
+        $checkService = count($service);
 
         if($checkRoles == 'akses ditolak'){
             return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
         }
 
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Menghapus master tipe ' . Type::find($id)->name
-        );
+        if ($checkService > 0) {
+            return Response::json(['status' => 'error', 'message' => 'Data yang sudah ditransaksikan tidak bisa dihapus !']);
+        } else {
+            $this->DashboardController->createLog(
+                $req->header('user-agent'),
+                $req->ip(),
+                'Menghapus master tipe ' . Type::find($id)->name
+            );
 
-        Type::destroy($id);
+            Type::destroy($id);
+            return Response::json(['status' => 'success', 'message' => 'Data master berhasil dihapus !']);
+        }
 
-        return Response::json(['status' => 'success', 'message' => 'Data master berhasil dihapus !']);
+
     }
 }

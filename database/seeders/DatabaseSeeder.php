@@ -28,7 +28,6 @@ class DatabaseSeeder extends Seeder
             ServiceSeeder::class,
             SupplierSeeder::class,
             StockSeeder::class,
-            RoleSeeder::class,
             UnitSeeder::class,
             User::class,
             IconSeeder::class,
@@ -47,6 +46,8 @@ class DatabaseSeeder extends Seeder
             accountMainDetail::class,
             TypeProductSeeder::class,
             ProductSeeder::class,
+            RoleSeeder::class,
+            RolesDetailSeeder::class,
         ]);
     }
 }

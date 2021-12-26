@@ -9,8 +9,8 @@ use App\Models\Brand;
 use App\Models\Employee;
 use App\Models\Service;
 use App\Models\Warranty;
-use App\Models\lossItems;
-use App\Models\lossItemsDetail;
+use App\Models\LossItems;
+use App\Models\LossItemsDetail;
 use App\Models\ServiceDetail;
 use App\Models\ServiceStatusMutation;
 use Illuminate\Http\Request;
@@ -24,7 +24,7 @@ use Yajra\DataTables\DataTables;
 use Carbon\carbon;
 // use DB;
 
-class lossItemsController extends Controller
+class LossItemsController extends Controller
 {
     /**
      * Create a new controller instance.

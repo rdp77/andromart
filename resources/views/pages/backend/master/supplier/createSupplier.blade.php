@@ -14,9 +14,7 @@
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-md-4">
-                    <div class="d-block">
-                        <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
-                    </div>
+                    <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
                     <input id="name" type="text" value="{{ old('name') }}" class="form-control @error('name') is-invalid @enderror" name="name"
                         required autofocus>
                     @error('name')

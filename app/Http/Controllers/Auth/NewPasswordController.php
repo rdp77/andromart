@@ -77,16 +77,16 @@ class NewPasswordController extends Controller
         $this->validate($req, [
             'oldPassword' => ['required', 'string', 'min:8'],
             'password' => ['required', 'string', 'min:8'],
-            'username' => ['required', 'string'],
+            // 'username' => ['required', 'string'],
         ]);
 
-        if (Auth::user()->username != $req->username) {
-            return redirect()->route('users.password')
-                ->with([
-                    'status' => 'Username sebelumnya tidak sama silahkan cek kembali',
-                    'type' => 'error'
-                ]);
-        }
+        // if (Auth::user()->username != $req->username) {
+        //     return redirect()->route('users.password')
+        //         ->with([
+        //             'status' => 'Username sebelumnya tidak sama silahkan cek kembali',
+        //             'type' => 'error'
+        //         ]);
+        // }
 
         $user = User::find(Auth::user()->id);
 
@@ -100,14 +100,17 @@ class NewPasswordController extends Controller
                 'Mengganti password'
             );
 
-            Auth::logout();
-
-            return Redirect::route('login');
+            // Auth::logout();
+            return Redirect::route('users.password')
+                ->with([
+                    'status' => 'Berhasil mengubah password',
+                    'type2' => 'success'
+                ]);
         } else {
             return redirect()->route('users.password')
                 ->with([
                     'status' => 'Password sebelumnya tidak sama silahkan cek kembali',
-                    'type' => 'error'
+                    'type1' => 'error'
                 ]);
         }
     }

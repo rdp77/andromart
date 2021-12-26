@@ -14,12 +14,12 @@ class UnitSeeder extends Seeder
      */
     public function run()
     {
-        DB::table('units')->insert([
-            [
-                'id' => '1',
-                'code' => 'PCS',
-                'name' => 'PIECES',
-            ]
-        ]);
+        // DB::table('units')->insert([
+        //     [
+        //         'id' => '1',
+        //         'code' => 'PCS',
+        //         'name' => 'PIECES',
+        //     ]
+        // ]);
     }
 }

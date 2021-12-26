@@ -26,19 +26,19 @@ class EmployeeController extends Controller
 
     public function index(Request $req)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
-
+        $checkRoles = $this->DashboardController->cekHakAkses(22,'view');
         if($checkRoles == 'akses ditolak'){
-            return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+            return view('forbidden');
         }
 
-        $employee = Employee::where('id', '!=', '1')->get();
+        // $employee = Employee::where('id', '!=', '1')->where('status', 'aktif')->get();
+        $employee = Employee::where('id', '!=', '1')->orderBy('status', 'asc')->get();
         return view('pages.backend.master.employee.indexEmployee', compact('employee'));
     }
 
     public function create()
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        $checkRoles = $this->DashboardController->cekHakAkses(22,'create');
         if($checkRoles == 'akses ditolak'){
             return view('forbidden');
         }
@@ -103,7 +103,7 @@ class EmployeeController extends Controller
 
     public function edit($id)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+        $checkRoles = $this->DashboardController->cekHakAkses(22,'edit');
         if($checkRoles == 'akses ditolak'){
             return view('forbidden');
         }
@@ -198,7 +198,7 @@ class EmployeeController extends Controller
 
     public function destroy(Request $req, $id)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'delete');
+        $checkRoles = $this->DashboardController->cekHakAkses(22,'delete');
 
         if($checkRoles == 'akses ditolak'){
             return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);

@@ -25,10 +25,9 @@ class RoleController extends Controller
 
     public function index(Request $req)
     {
-        // $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
-
+        // $checkRoles = $this->DashboardController->cekHakAkses(31,'view');
         // if($checkRoles == 'akses ditolak'){
-        //     return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
+        //     return view('forbidden');
         // }
 
         $role = Role::get();
@@ -38,7 +37,7 @@ class RoleController extends Controller
 
     public function create()
     {
-        // $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
+        // $checkRoles = $this->DashboardController->cekHakAkses(31,'create');
         // if($checkRoles == 'akses ditolak'){
         //     return view('forbidden');
         // }
@@ -66,14 +65,9 @@ class RoleController extends Controller
             ]);
     }
 
-    public function show(role $role)
-    {
-        //
-    }
-
     public function edit($id)
     {
-        // $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
+        // $checkRoles = $this->DashboardController->cekHakAkses(31,'edit');
         // if($checkRoles == 'akses ditolak'){
         //     return view('forbidden');
         // }
@@ -108,9 +102,9 @@ class RoleController extends Controller
 
     public function destroy(Request $req, $id)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'delete');
+        $checkRoles = $this->DashboardController->cekHakAkses(31, 'delete');
 
-        if($checkRoles == 'akses ditolak'){
+        if ($checkRoles == 'akses ditolak') {
             return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
         }
 
@@ -118,10 +112,9 @@ class RoleController extends Controller
         $roleDetail = RoleDetail::where('role_id', $id);
         $roleUser = count($user);
 
-        if($roleUser > 0){
+        if ($roleUser > 0) {
             return Response::json(['status' => 'error', 'message' => 'Data terrelasi dengan User, data tidak bisa dihapus !']);
-        }
-        else{
+        } else {
             // $this->DashboardController->createLog(
             //     $req->header('user-agent'),
             //     $req->ip(),
@@ -139,15 +132,15 @@ class RoleController extends Controller
     {
         $menu = SubMenu::with('RoleDetail')->get()->toArray();
         $menuRoles = [];
-        for ($i=0; $i <count($menu) ; $i++) {
+        for ($i = 0; $i < count($menu); $i++) {
             $menuRoles[$i]['name'] = $menu[$i]['name'];
             $menuRoles[$i]['id'] = $menu[$i]['id'];
             $menuRoles[$i]['view'] = 'off';
             $menuRoles[$i]['create'] = 'off';
             $menuRoles[$i]['edit'] = 'off';
             $menuRoles[$i]['delete'] = 'off';
-            for ($j=0; $j < count($menu[$i]['role_detail']); $j++) {
-                if($menu[$i]['role_detail'][$j]['roles_id'] == $req->id){
+            for ($j = 0; $j < count($menu[$i]['role_detail']); $j++) {
+                if ($menu[$i]['role_detail'][$j]['roles_id'] == $req->id) {
                     $menuRoles[$i]['view'] = $menu[$i]['role_detail'][$j]['view'];
                     $menuRoles[$i]['create'] = $menu[$i]['role_detail'][$j]['create'];
                     $menuRoles[$i]['edit'] = $menu[$i]['role_detail'][$j]['edit'];
@@ -157,7 +150,7 @@ class RoleController extends Controller
         }
         // return $menuRoles;
         // return $menu;
-        $role = RoleDetail::where('roles_id',$req->id)->get();
+        $role = RoleDetail::where('roles_id', $req->id)->get();
         return Response::json([
             'status' => 'success',
             'message' => 'berhasil Meload Data',
@@ -169,69 +162,69 @@ class RoleController extends Controller
     public function rolesDetailSave(Request $req)
     {
         // return $req->all();
-        if(!isset($req->delete)){
+        if (!isset($req->delete)) {
             $del = [];
-        }else{
+        } else {
             $del = $req->delete;
         }
-        if(!isset($req->view)){
+        if (!isset($req->view)) {
             $vie = [];
-        }else{
+        } else {
             $vie = $req->view;
         }
-        if(!isset($req->create)){
+        if (!isset($req->create)) {
             $cre = [];
-        }else{
+        } else {
             $cre = $req->create;
         }
-        if(!isset($req->edit)){
+        if (!isset($req->edit)) {
             $edi = [];
-        }else{
+        } else {
             $edi = $req->edit;
         }
         // return $del;
         $arr = [];
-        for ($i=0; $i <count($req->menu) ; $i++) {
+        for ($i = 0; $i < count($req->menu); $i++) {
             $arr[$i]['menu'] =  $req->menu[$i];
         }
-        for ($i=0; $i <count($req->menu) ; $i++) {
+        for ($i = 0; $i < count($req->menu); $i++) {
             $arr[$i]['menu'] = $req->menu[$i];
             $arr[$i]['view'] = 'off';
             $arr[$i]['create'] = 'off';
             $arr[$i]['edit'] = 'off';
             $arr[$i]['delete'] = 'off';
-            for ($j=0; $j <count($vie) ; $j++) {
-                if($req->view[$j] == $req->menu[$i]){
+            for ($j = 0; $j < count($vie); $j++) {
+                if ($req->view[$j] == $req->menu[$i]) {
                     $arr[$i]['view'] =  'on';
                 }
             }
-            for ($j=0; $j <count($cre) ; $j++) {
-                if($req->create[$j] == $req->menu[$i]){
+            for ($j = 0; $j < count($cre); $j++) {
+                if ($req->create[$j] == $req->menu[$i]) {
                     $arr[$i]['create'] =  'on';
                 }
             }
-            for ($j=0; $j <count($edi) ; $j++) {
-                if($req->edit[$j] == $req->menu[$i]){
+            for ($j = 0; $j < count($edi); $j++) {
+                if ($req->edit[$j] == $req->menu[$i]) {
                     $arr[$i]['edit'] =  'on';
                 }
             }
-            for ($j=0; $j <count($del) ; $j++) {
-                if($req->delete[$j] == $req->menu[$i]){
+            for ($j = 0; $j < count($del); $j++) {
+                if ($req->delete[$j] == $req->menu[$i]) {
                     $arr[$i]['delete'] =  'on';
                 }
             }
         }
-        RoleDetail::where('roles_id',$req->roles)->delete();
-        for ($i=0; $i <count($arr) ; $i++) {
+        RoleDetail::where('roles_id', $req->roles)->delete();
+        for ($i = 0; $i < count($arr); $i++) {
             $index = DB::table('roles_detail')->max('id') + 1;
             RoleDetail::create([
-                'id'=>$index,
-                'roles_id'=>$req->roles,
-                'menu'=>$arr[$i]['menu'],
-                'view'=>$arr[$i]['view'],
-                'create'=>$arr[$i]['create'],
-                'edit'=>$arr[$i]['edit'],
-                'delete'=>$arr[$i]['delete'],
+                'id' => $index,
+                'roles_id' => $req->roles,
+                'menu' => $arr[$i]['menu'],
+                'view' => $arr[$i]['view'],
+                'create' => $arr[$i]['create'],
+                'edit' => $arr[$i]['edit'],
+                'delete' => $arr[$i]['delete'],
                 // 'branch'=>$req->branch[$i],
             ]);
         }

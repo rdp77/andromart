@@ -14,28 +14,28 @@ class WarrantySeeder extends Seeder
      */
     public function run()
     {
-        DB::table('warranties')->insert([
-            [
-                'id' => '1',
-                'name' => 'Minggu',
-                'periode' => '1',
-                'created_at' => date("Y-m-d h:i:s"),
-                'updated_at' => date("Y-m-d h:i:s"),
-            ],
-            [
-                'id' => '2',
-                'name' => 'Minggu',
-                'periode' => '2',
-                'created_at' => date("Y-m-d h:i:s"),
-                'updated_at' => date("Y-m-d h:i:s"),
-            ],
-            [
-                'id' => '3',
-                'name' => 'Bulan',
-                'periode' => '1',
-                'created_at' => date("Y-m-d h:i:s"),
-                'updated_at' => date("Y-m-d h:i:s"),
-            ],
-        ]);
+        // DB::table('warranties')->insert([
+        //     [
+        //         'id' => '1',
+        //         'name' => 'Minggu',
+        //         'periode' => '1',
+        //         'created_at' => date("Y-m-d h:i:s"),
+        //         'updated_at' => date("Y-m-d h:i:s"),
+        //     ],
+        //     [
+        //         'id' => '2',
+        //         'name' => 'Minggu',
+        //         'periode' => '2',
+        //         'created_at' => date("Y-m-d h:i:s"),
+        //         'updated_at' => date("Y-m-d h:i:s"),
+        //     ],
+        //     [
+        //         'id' => '3',
+        //         'name' => 'Bulan',
+        //         'periode' => '1',
+        //         'created_at' => date("Y-m-d h:i:s"),
+        //         'updated_at' => date("Y-m-d h:i:s"),
+        //     ],
+        // ]);
     }
 }

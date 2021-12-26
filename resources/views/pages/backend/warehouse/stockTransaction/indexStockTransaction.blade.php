@@ -1,5 +1,5 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__('Stock Transaksi'))
+@section('title', __('pages.title').__(' | Stock Transaksi'))
 @section('titleContent', __('Stock Transaksi'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
@@ -21,14 +21,14 @@
         <table class="table-striped table" id="table" width="100%">
             <thead>
                 <tr>
-                    <th>Code</th>
-                    <th>Item</th>
-                    <th>Satuan</th>
+                    <th width="30%">Code</th>
+                    <th>Tgl</th>
                     <th>Cabang</th>
+                    <th>Item</th>
                     <th>Qty</th>
+                    <th>Satuan</th>
                     <th>Tipe</th>
                     <th>Alasan</th>
-                    <th>Tgl</th>
                     <th>Keterangan</th>
                     <th>{{ __('Action') }}</th>
                 </tr>

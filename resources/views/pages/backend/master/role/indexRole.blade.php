@@ -3,72 +3,73 @@
 @section('titleContent', __('Master Role'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
-    <div class="breadcrumb-item active">{{ __('Master Role') }}</div>
+<div class="breadcrumb-item active">{{ __('Master Role') }}</div>
 @endsection
 
 @section('content')
-    {{-- @include('pages.backend.components.filterSearch') --}}
-    @include('layouts.backend.components.notification')
-    <form action="" method="POST" class="form-data">
-        @csrf
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-header">
-                        <a href="{{ route('role.create') }}" class="btn btn-icon icon-left btn-primary">
-                            <i class="far fa-edit"></i>{{ __(' Tambah Role') }}</a>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-striped" width="50%">
+{{-- @include('pages.backend.components.filterSearch') --}}
+@include('layouts.backend.components.notification')
+<form class="form-data">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <a href="{{ route('role.create') }}" class="btn btn-icon icon-left btn-primary">
+                        <i class="far fa-edit"></i>{{ __(' Tambah Role') }}</a>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped" width="50%">
+                        <tr>
+                            <td width="5%">Level</td>
+                            <td width="30%">
+                                <select class="select2 level" name="roles">
+                                    <option value="">{{ __('- Select -') }}</option>
+                                    @foreach ($role as $role)
+                                    <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                    @endforeach
+                                </select>
+                            </td>
+                            <td>
+                                {{-- <button class="btn btn-primary mr-1" type="button">Tambah Role</button> --}}
+                                {{-- <a href="{{ route('role.create') }}" --}} {{-- class="btn btn-primary mr-1">{{ __('
+                                    Tambah Role') }}</a> --}}
+                                <button class="btn btn-primary mr-1" type="button" onclick="searchRolesDetail()">Cari
+                                    Role</button>
+                                <button class="btn btn-primary mr-1" type="button" onclick="del()">Hapus Role</button>
+                                <button class="btn btn-primary mr-1" onclick="simpanData()" type="button">Simpan
+                                    Perubahan</button>
+                            </td>
+                        </tr>
+                    </table>
+                    <table class="table-striped table" id="table" width="100%">
+                        <thead>
                             <tr>
-                                <td width="5%">Level</td>
-                                <td width="30%">
-                                    <select class="select2 level" name="roles">
-                                        <option value="">{{ __('- Select -') }}</option>
-                                        @foreach ($role as $role)
-                                            <option value="{{ $role->id }}">{{ $role->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </td>
-                                <td>
-                                    {{-- <button class="btn btn-primary mr-1" type="button">Tambah Role</button> --}}
-                                    {{-- <a href="{{ route('role.create') }}" --}}
-                                    {{-- class="btn btn-primary mr-1">{{ __(' Tambah Role') }}</a> --}}
-                                    <button class="btn btn-primary mr-1" type="button" onclick="searchRolesDetail()">Cari Role</button>
-                                    <button class="btn btn-primary mr-1" type="button" onclick="del()">Hapus Role</button>
-                                    <button class="btn btn-primary mr-1" onclick="simpanData()" type="button">Simpan Perubahan</button>
-                                </td>
+                                <th class="text-center" width="5%">
+                                    {{ __('NO') }}
+                                </th>
+                                <th class="text-center">{{ __('Menu') }}</th>
+                                <th class="text-center">{{ __('Lihat') }}</th>
+                                <th class="text-center">{{ __('Tambah') }}</th>
+                                <th class="text-center">{{ __('Ubah') }}</th>
+                                <th class="text-center">{{ __('Hapus') }}</th>
+                                {{-- <th class="text-center">{{ __('Cabang') }}</th> --}}
+                                {{-- <th>{{ __('Print') }}</th> --}}
                             </tr>
-                        </table>
-                        <table class="table-striped table" id="table" width="100%">
-                            <thead>
-                                <tr>
-                                    <th class="text-center" width="5%">
-                                        {{ __('NO') }}
-                                    </th>
-                                    <th class="text-center">{{ __('Menu') }}</th>
-                                    <th class="text-center">{{ __('Lihat') }}</th>
-                                    <th class="text-center">{{ __('Tambah') }}</th>
-                                    <th class="text-center">{{ __('Ubah') }}</th>
-                                    <th class="text-center">{{ __('Hapus') }}</th>
-                                    {{-- <th class="text-center">{{ __('Cabang') }}</th> --}}
-                                    {{-- <th>{{ __('Print') }}</th> --}}
-                                </tr>
-                            </thead>
-                            <tbody class="dropRole">
-                                {{--  --}}
-                            </tbody>
-                        </table>
-                    </div>
+                        </thead>
+                        <tbody class="dropRole">
+                            {{-- --}}
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
-    </form>
+    </div>
+</form>
 @endsection
 @section('script')
 
-    <script>
-        $.ajaxSetup({
+<script>
+    $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
@@ -82,7 +83,7 @@
                         });
             }
             $.ajax({
-                url: "/master/role/search-roles-detail?&id="+idRoles,
+                url: "/master/roles/search-roles-detail?&id="+idRoles,
                 type: "POST",
                 processData: false,
                 success: function(data) {
@@ -162,11 +163,14 @@
         }
 
         function simpanData() {
+            var form = $(".form-data");    
+            var formdata = new FormData(form[0]);
             $.ajax({
-                url: "/master/role/save-roles-detail/",
+                url: "{{ route('role.rolesDetailSave') }}",
                 type: "POST",
-                data: $(".form-data").serialize(),
+                data: formdata ? formdata : form.serialize(),
                 processData: false,
+                contentType: false,
                 success: function(data) {
                     if (data.status == 'success'){
                         swal("Data Telah Tersimpan", {
@@ -191,7 +195,7 @@
             }).then((willDelete) => {
                 if (willDelete) {
                     $.ajax({
-                        url: "/master/role/role/"+idRoles,
+                        url: "/master/roles/role/"+idRoles,
                         type: "DELETE",
                         success: function () {
                             swal("Data master berhasil dihapus", {
@@ -205,5 +209,5 @@
                 }
             });
         }
-    </script>
+</script>
 @endsection

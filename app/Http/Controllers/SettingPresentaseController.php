@@ -19,6 +19,11 @@ class SettingPresentaseController extends Controller
 
     public function index()
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(24,'view');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+
         $presentase = SettingPresentase::all();
         return view('pages.backend.master.presentase.updatePresentase', compact('presentase'));
     }

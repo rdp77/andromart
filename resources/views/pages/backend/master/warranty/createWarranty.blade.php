@@ -15,7 +15,7 @@
             <div class="form-group col-md-2 col-xs-12">
                 <label for="periode">{{ __('Periode') }}<code>*</code></label>
                 <input id="periode" type="number" class="form-control @error('periode') is-invalid @enderror"
-                    name="periode" value="{{ old('periode') }}" required placeholder="1 - 31" autofocus>
+                    name="periode" value="{{ old('periode') }}" required placeholder="1 - 31" max="31" min="1" autofocus>
                 @error('periode')
                 <div class="invalid-feedback">
                     {{ $message }}

@@ -18,7 +18,7 @@
       <div class="card profile-widget">
         <div class="profile-widget-header">
           <img alt="image" src="{{ Auth::user()->employee->getAvatar() }}" class="rounded-circle profile-widget-picture"
-            title="{{ Auth::user()->name }}">
+            title="{{ Auth::user()->name }}" style="height: 100px">
           <div class="profile-widget-items">
             <div class="profile-widget-item">
               <div class="profile-widget-item-value"> {{ $user->employee->name }}

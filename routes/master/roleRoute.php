@@ -15,20 +15,20 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['prefix' => 'master'], function () {
-    Route::group(['prefix' => 'role'], function () {
+    Route::group(['prefix' => 'roles'], function () {
         Route::resource('role', RoleController::class)
             ->except([
                 'show',
             ]);
 
-            Route::post(
-                'search-roles-detail',
-                [RoleController::class, 'rolesDetailSearch']
-            )->name('role.rolesDetailSearch');
+        Route::post(
+            'search-roles-detail',
+            [RoleController::class, 'rolesDetailSearch']
+        )->name('role.rolesDetailSearch');
 
-            Route::post(
-                'save-roles-detail',
-                [RoleController::class, 'rolesDetailSave']
-            )->name('role.rolesDetailSave');
+        Route::post(
+            'save-roles-detail',
+            [RoleController::class, 'rolesDetailSave']
+        )->name('role.rolesDetailSave');
     });
 });

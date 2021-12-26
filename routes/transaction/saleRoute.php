@@ -65,5 +65,16 @@ Route::group(['prefix' => 'transaction'], function () {
             'sale-return-print-small/{id}',
             [SaleReturnController::class, 'printSmallReturn']
         )->name('sale.return.printSmall');
+
+        // load item id
+        Route::post(
+            'sale-return-load-data-id',
+            [SaleReturnController::class, 'loadDataItem']
+        )->name('sale.return.loadDataItem');
+
+        Route::post(
+            'sale-return-load-data-qty',
+            [SaleReturnController::class, 'loadDataQty']
+        )->name('sale.return.loadDataQty');
     });
 });
