@@ -24,7 +24,7 @@
                 </div>
                 <div class="form-group col-12 col-md-4 col-lg-4">
                     <label for="brand">{{ __('Merk') }}<code>*</code></label>
-                    <select class="select2 brand" name="brand" required>
+                    <select class="select2 brand" name="brand" id="brandService" required>
                         <option value="">- Select -</option>
                     </select>
                 </div>
