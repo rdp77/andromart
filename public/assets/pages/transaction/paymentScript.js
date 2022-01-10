@@ -126,6 +126,14 @@ function branchChange() {
     // Reset Series
 }
 
+function typeChange() {
+    if($('.type_id').val() == 'Transfer'){
+        $('.checkTransfer').css('display','block');
+    }else{
+        $('.checkTransfer').css('display','none');
+    }
+}
+
 function jurnal(params) {
     $('.dropHereJournals').empty();
     // $('.dropHereJournals').

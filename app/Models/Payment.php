@@ -18,6 +18,8 @@ class Payment extends Model
         'cash_id',
         'price',
         'date',
+        'transfer_to',
+        'type',
         'description',
         'created_at',
         'updated_at',

@@ -69,7 +69,7 @@
 @section('script')
 
 <script>
-    $.ajaxSetup({
+        $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
             },
@@ -147,13 +147,6 @@
                                         '</div>'+
                                     '</div>'+
                                 '</td>'+
-                                // '<td class="text-center">'+
-                                //     '<div class="form-group">'+
-                                //         '<div class="form-check">'+
-                                //           '<input class="form-check-input" name="branch[]" type="checkbox" id="defaultCheck1">'+
-                                //         '</div>'+
-                                //     '</div>'+
-                                // '</td>'+
                             '</tr>'
                     );
                 });

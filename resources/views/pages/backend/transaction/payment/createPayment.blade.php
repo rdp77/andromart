@@ -45,7 +45,18 @@
                                 </div>
                                 @enderror
                             </div>
-                            <div class="form-group col-md-4 col-xs-12">
+                            <div class="form-group col-md-8 col-xs-12">
+                                <div class="d-block">
+                                    <label for="type_id"
+                                        class="control-label">{{ __('Type') }}<code>*</code></label>
+                                </div>
+                                <select class="select2 type_id" onchange="typeChange()" name="type_id" required>
+                                    <option value="">- Select -</option>
+                                    <option value="Transfer">Transfer</option>
+                                    <option value="Pengeluaran">Pengeluaran</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6 col-xs-12">
                                 <div class="d-block">
                                     <label for="cash_id"
                                         class="control-label">{{ __('Kass') }}<code>*</code></label>
@@ -67,22 +78,35 @@
                                     value="{{$el->id}}">
                                 @endif
                             @endforeach
-                            <div class="form-group col-md-4 col-xs-12">
+                            <div class="form-group col-md-6 col-xs-12">
                                 <div class="d-block">
                                     <label for="cost_id"
                                         class="control-label">{{ __('Jenis Biaya') }}<code>*</code></label>
                                 </div>
                                 <select class="select2 cost @error('cost_id') is-invalid @enderror"  name="cost_id" required>
                                     <option value="">- Select -</option>
-                                    @foreach ($cost as $cost)
-                                    <option value="{{$cost->id}}">{{$cost->code}} - {{$cost->name}}</option>
-                                    @endforeach
                                 </select>
                                 @error('cost_id')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
                                 @enderror
+                            </div>
+                        </div>
+                        <div class="row checkTransfer" style="display: none">
+                            <div class="form-group col-md-12 col-xs-12">
+                                <div class="d-block">
+                                    <label for="cash_tranfer_id"
+                                        class="control-label">{{ __('Transfer Ke') }}<code>*</code></label>
+                                </div>
+                                <select class="select2" name="cash_tranfer_id">
+                                    <option value="">- Select -</option>
+                                    @foreach ($cash_transfer as $el)
+                                        @if ($el->main_id == 1)
+                                            <option value="{{$el->id}}">{{$el->code}} - {{$el->name}}</option>
+                                        @endif
+                                    @endforeach 
+                                </select>
                             </div>
                         </div>
                         <div class="row">

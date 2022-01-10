@@ -56,7 +56,7 @@ class PaymentController extends Controller
                         </button>';
                     $actionBtn .= '<div class="dropdown-menu">
                             <a class="dropdown-item" href="' . route('payment.edit', $row->id) . '">Edit</a>';
-                    $actionBtn .= '<a onclick="jurnal(' ."'". $row->code ."'". ')" class="dropdown-item" style="cursor:pointer;">Jurnal</a>';
+                    $actionBtn .= '<a onclick="jurnal(' . "'" . $row->code . "'" . ')" class="dropdown-item" style="cursor:pointer;">Jurnal</a>';
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
@@ -78,32 +78,37 @@ class PaymentController extends Controller
     // }
     public function code($type)
     {
-        $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
+        $getEmployee =  Employee::with('branch')->where('user_id', Auth::user()->id)->first();
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
         $index = DB::table('payments')->max('id') + 1;
 
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
-        return $code = $type.$getEmployee->Branch->code.$year . $month . $index;
+        return $code = $type . $getEmployee->Branch->code . $year . $month . $index;
     }
     public function codeJournals($type)
     {
-        $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
+        $getEmployee =  Employee::with('branch')->where('user_id', Auth::user()->id)->first();
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
-        $index = DB::table('journals')->max('id')+1;
+        $index = DB::table('journals')->max('id') + 1;
 
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
-        return $code = $type.$getEmployee->Branch->code.$year . $month . $index;
+        return $code = $type . $getEmployee->Branch->code . $year . $month . $index;
     }
     public function create()
     {
+        $checkBranch = Employee::with('branch')->where('user_id', Auth::user()->id)->first();
         $code = $this->code('SPND');
-        $branch = Branch::get();
-        $cash = AccountData::get();
-        $cost = Cost::get();
-
-        return view('pages.backend.transaction.payment.createPayment', compact('cash', 'code', 'branch', 'cost'));
+        if ($checkBranch->branch_id == 1) {
+            $branch = Branch::get();
+            $cash = AccountData::get();
+        } else {
+            $branch = Branch::where('id', $checkBranch->branch_id)->get();
+            $cash = AccountData::where('branch_id', $checkBranch->branch_id)->get();
+        }
+        $cash_transfer = AccountData::where('branch_id', 1)->get();
+        return view('pages.backend.transaction.payment.createPayment', compact('cash', 'code', 'branch','cash_transfer'));
     }
 
     public function store(Request $req)
@@ -113,88 +118,187 @@ class PaymentController extends Controller
         try {
             //code...
 
-        $date = $this->DashboardController->changeMonthIdToEn($req->date);
+            $date = $this->DashboardController->changeMonthIdToEn($req->date);
 
-        Payment::create([
-            'code' => $req->code,
-            'date' => $date,
-            'cost_id' => $req->cost_id,
-            'branch_id' => $req->branch_id,
-            'cash_id' => $req->cash_id,
-            'price' => str_replace(",", '', $req->price),
-            'description' => $req->description,
-            'created_by' => Auth::user()->name,
-        ]);
-
-
-        $idJournal = DB::table('journals')->max('id')+1;
-        Journal::create([
-            'id' =>$idJournal,
-            'code'=>$this->codeJournals('KK',$idJournal),
-            'year'=>date('Y'),
-            'date'=>date('Y-m-d'),
-            'type'=>'Biaya',
-            'total'=>str_replace(",", '',$req->price),
-            'ref'=>$req->code,
-            'description'=>$req->description,
-            'created_at'=>date('Y-m-d h:i:s'),
-            // 'updated_at'=>date('Y-m-d h:i:s'),
-        ]);
-
-        $accountPembayaran  = AccountData::where('id',$req->account)
-                            ->first();
-        $accountCode = [
-            $req->cost_id,
-            $req->cash_id,
-        ];
-        $totalBayar = [
-            str_replace(",", '',$req->price),
-            str_replace(",", '',$req->price),
-        ];
-        $description = [
-            $req->description,
-            $req->description,
-        ];
-        $DK = [
-            'D',
-            'K',
-        ];
-
-
-        for ($i=0; $i <count($accountCode) ; $i++) {
-            $idDetail = DB::table('journal_details')->max('id')+1;
-            JournalDetail::create([
-                'id'=>$idDetail,
-                'journal_id'=>$idJournal,
-                'account_id'=>$accountCode[$i],
-                'total'=>$totalBayar[$i],
-                'description'=>$description[$i],
-                'debet_kredit'=>$DK[$i],
-                'created_at'=>date('Y-m-d h:i:s'),
-                'updated_at'=>date('Y-m-d h:i:s'),
+            Payment::create([
+                'code' => $req->code,
+                'date' => $date,
+                'cost_id' => $req->cost_id,
+                'branch_id' => $req->branch_id,
+                'type' => $req->type_id,
+                'transfer_to' => $req->cash_tranfer_id,
+                'cash_id' => $req->cash_id,
+                'price' => str_replace(",", '', $req->price),
+                'description' => $req->description,
+                'created_by' => Auth::user()->name,
             ]);
-        }
 
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Membuat transaksi pembayaran baru'
-        );
+            if ($req->type_id == 'Transfer') {
+                $idJournal = DB::table('journals')->max('id') + 1;
+                Journal::create([
+                    'id' => $idJournal,
+                    'code' => $this->codeJournals('KK', $idJournal),
+                    'year' => date('Y'),
+                    'date' => date('Y-m-d'),
+                    'type' => 'Biaya',
+                    'total' => str_replace(",", '', $req->price),
+                    'ref' => $req->code,
+                    'description' => $req->description,
+                    'created_at' => date('Y-m-d h:i:s'),
+                    // 'updated_at'=>date('Y-m-d h:i:s'),
+                ]);
+
+                $accountPembayaran  = AccountData::where('id', $req->account)
+                    ->first();
+                $accountCode = [
+                    $req->cost_id,
+                    $req->cash_id,
+                ];
+                $totalBayar = [
+                    str_replace(",", '', $req->price),
+                    str_replace(",", '', $req->price),
+                ];
+                $description = [
+                    $req->description,
+                    $req->description,
+                ];
+                $DK = [
+                    'D',
+                    'K',
+                ];
+
+
+                for ($i = 0; $i < count($accountCode); $i++) {
+                    $idDetail = DB::table('journal_details')->max('id') + 1;
+                    JournalDetail::create([
+                        'id' => $idDetail,
+                        'journal_id' => $idJournal,
+                        'account_id' => $accountCode[$i],
+                        'total' => $totalBayar[$i],
+                        'description' => $description[$i],
+                        'debet_kredit' => $DK[$i],
+                        'created_at' => date('Y-m-d h:i:s'),
+                        'updated_at' => date('Y-m-d h:i:s'),
+                    ]);
+                }
+
+
+                $idJournalMasuk = DB::table('journals')->max('id') + 1;
+                Journal::create([
+                    'id' => $idJournalMasuk,
+                    'code' => $this->codeJournals('DD', $idJournalMasuk),
+                    'year' => date('Y'),
+                    'date' => date('Y-m-d'),
+                    'type' => 'Transfer Masuk',
+                    'total' => str_replace(",", '', $req->price),
+                    'ref' => $req->code,
+                    'description' => $req->description,
+                    'created_at' => date('Y-m-d h:i:s'),
+                    // 'updated_at'=>date('Y-m-d h:i:s'),
+                ]);
+
+                $accountPembayaran  = AccountData::where('id', $req->cash_tranfer_id)
+                    ->first();
+                    
+                $accountCode = [
+                    $accountPembayaran->id,
+                    $req->cost_id,
+                ];
+                $totalBayar = [
+                    str_replace(",", '', $req->price),
+                    str_replace(",", '', $req->price),
+                ];
+                $description = [
+                    $req->description,
+                    $req->description,
+                ];
+                $DK = [
+                    'D',
+                    'K',
+                ];
+
+
+                for ($i = 0; $i < count($accountCode); $i++) {
+                    $idDetail = DB::table('journal_details')->max('id') + 1;
+                    JournalDetail::create([
+                        'id' => $idDetail,
+                        'journal_id' => $idJournal,
+                        'account_id' => $accountCode[$i],
+                        'total' => $totalBayar[$i],
+                        'description' => $description[$i],
+                        'debet_kredit' => $DK[$i],
+                        'created_at' => date('Y-m-d h:i:s'),
+                        'updated_at' => date('Y-m-d h:i:s'),
+                    ]);
+                }
+            } else {
+                $idJournal = DB::table('journals')->max('id') + 1;
+                Journal::create([
+                    'id' => $idJournal,
+                    'code' => $this->codeJournals('KK', $idJournal),
+                    'year' => date('Y'),
+                    'date' => date('Y-m-d'),
+                    'type' => 'Biaya',
+                    'total' => str_replace(",", '', $req->price),
+                    'ref' => $req->code,
+                    'description' => $req->description,
+                    'created_at' => date('Y-m-d h:i:s'),
+                    // 'updated_at'=>date('Y-m-d h:i:s'),
+                ]);
+
+                $accountPembayaran  = AccountData::where('id', $req->account)
+                    ->first();
+                $accountCode = [
+                    $req->cost_id,
+                    $req->cash_id,
+                ];
+                $totalBayar = [
+                    str_replace(",", '', $req->price),
+                    str_replace(",", '', $req->price),
+                ];
+                $description = [
+                    $req->description,
+                    $req->description,
+                ];
+                $DK = [
+                    'D',
+                    'K',
+                ];
+
+
+                for ($i = 0; $i < count($accountCode); $i++) {
+                    $idDetail = DB::table('journal_details')->max('id') + 1;
+                    JournalDetail::create([
+                        'id' => $idDetail,
+                        'journal_id' => $idJournal,
+                        'account_id' => $accountCode[$i],
+                        'total' => $totalBayar[$i],
+                        'description' => $description[$i],
+                        'debet_kredit' => $DK[$i],
+                        'created_at' => date('Y-m-d h:i:s'),
+                        'updated_at' => date('Y-m-d h:i:s'),
+                    ]);
+                }
+            }
+
+
+            $this->DashboardController->createLog(
+                $req->header('user-agent'),
+                $req->ip(),
+                'Membuat transaksi pembayaran baru'
+            );
 
             DB::commit();
             return Redirect::route('payment.index')
-            ->with([
-                'status' => 'Berhasil membuat transaksi pembayaran baru',
-                'type' => 'success'
-            ]);
-
-
+                ->with([
+                    'status' => 'Berhasil membuat transaksi pembayaran baru',
+                    'type' => 'success'
+                ]);
         } catch (\Throwable $th) {
             DB::rollback();
-            return$th;
+            return $th;
             //throw $th;
         }
-
     }
 
     public function show($id)
@@ -233,16 +337,16 @@ class PaymentController extends Controller
             'Menghapus Data Pengeluaran'
         );
         $payment = Payment::find($id);
-        $checkJurnal = DB::table('journals')->where('ref',$payment->code)->first();
-        DB::table('journal_details')->where('journal_id',$checkJurnal->id)->delete();
-        DB::table('journals')->where('id',$checkJurnal->id)->delete();
-        DB::table('payments')->where('id',$id)->delete();
+        $checkJurnal = DB::table('journals')->where('ref', $payment->code)->first();
+        DB::table('journal_details')->where('journal_id', $checkJurnal->id)->delete();
+        DB::table('journals')->where('id', $checkJurnal->id)->delete();
+        DB::table('payments')->where('id', $id)->delete();
         return Response::json(['status' => 'success']);
     }
 
     function paymentCheckJournals(Request $req)
     {
-        $data = Journal::with('JournalDetail.AccountData')->where('ref',$req->id)->first();
-        return Response::json(['status' => 'success','jurnal'=>$data]);
+        $data = Journal::with('JournalDetail.AccountData')->where('ref', $req->id)->first();
+        return Response::json(['status' => 'success', 'jurnal' => $data]);
     }
 }
