@@ -14,23 +14,181 @@
     <section class="section">
       <div class="row">
         <div class="col-12">
-          <h2 class="section-title">Search Data </h2>
           <div class="card">
                 <div class="card-body">
-                    <div class="row">
-                        <div class="form-group col-3 col-md-3 col-lg-3">
-                            <label for="startDate">{{ __('Tanggal Awal') }}<code>*</code></label>
-                            <input id="startDate" type="text" class="form-control datepicker" name="startDate">
+                    <ul class="nav nav-pills" id="myTab3" role="tablist">
+                        <li class="nav-item">
+                          <a class="nav-link active" id="periode-tab3" data-toggle="tab" href="#periode3" role="tab" aria-controls="periode" aria-selected="true">Periode</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" id="item-tab3" data-toggle="tab" href="#item3" role="tab" aria-controls="item" aria-selected="false">Item</a>
+                        </li>
+                        <li class="nav-item">
+                          <a class="nav-link" id="sales-tab3" data-toggle="tab" href="#sales3" role="tab" aria-controls="sales" aria-selected="false">Sales</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="kas-tab3" data-toggle="tab" href="#kas3" role="tab" aria-controls="kas" aria-selected="false">Kas</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="customer-tab3" data-toggle="tab" href="#customer3" role="tab" aria-controls="customer" aria-selected="false">Customer</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="branch-tab3" data-toggle="tab" href="#branch3" role="tab" aria-controls="branch" aria-selected="false">Cabang</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="myTabContent2">
+                        <div class="tab-pane fade show active" id="periode3" role="tabpanel" aria-labelledby="periode-tab3">
+                            <div class="row">
+                                <div class="form-group col-3 col-md-3 col-lg-3">
+                                    <label for="startDate1">{{ __('Tanggal Awal') }}<code>*</code></label>
+                                    <input id="startDate1" type="text" class="form-control datepicker" name="startDate1">
+                                </div>
+                                <div class="form-group col-3 col-md-3 col-lg-3">
+                                    <label for="endDate1">{{ __('Tanggal Akhir') }}<code>*</code></label>
+                                    <input id="endDate1" type="text" class="form-control datepicker" name="endDate1">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-12 col-md-12 col-lg-12">
+                                    <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('report-sale.dataLoad') }}', '#data-load')">
+                                        <i class="fas fa-eye"></i> Cari</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="form-group col-3 col-md-3 col-lg-3">
-                            <label for="endDate">{{ __('Tanggal Akir') }}<code>*</code></label>
-                            <input id="endDate" type="text" class="form-control datepicker" name="endDate">
+                        <div class="tab-pane fade" id="item3" role="tabpanel" aria-labelledby="item-tab3">
+                            <div class="row">
+                                <div class="form-group col-3 col-md-3 col-lg-3">
+                                    <label for="startDate2">{{ __('Tanggal Awal') }}<code>*</code></label>
+                                    <input id="startDate2" type="text" class="form-control datepicker" name="startDate2">
+                                </div>
+                                <div class="form-group col-3 col-md-3 col-lg-3">
+                                    <label for="endDate2">{{ __('Tanggal Akhir') }}<code>*</code></label>
+                                    <input id="endDate2" type="text" class="form-control datepicker" name="endDate2">
+                                </div>
+                                <div class="form-group col-3 col-md-3 col-lg-3">
+                                    <label>{{ __('Item') }}<code>*</code></label>
+                                    <select name="item" id="item" class="select2 form-control">
+                                        <option value="">- Select -</option>
+                                        @foreach ($stock as $stock)
+                                        <option value="{{ $stock->item->id }}">{{ $stock->item->brand->category->name }} {{ $stock->item->brand->name }} - {{ $stock->item->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-12 col-md-12 col-lg-12">
+                                    <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('report-sale.itemLoad') }}', '#data-load')">
+                                        <i class="fas fa-eye"></i> Cari</button>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-12 col-md-12 col-lg-12">
-                            <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('report-sale.dataLoad') }}', '#data-load')">
-                                <i class="fas fa-eye"></i> Cari</button>
+                        <div class="tab-pane fade" id="sales3" role="tabpanel" aria-labelledby="sales-tab3">
+                            <div class="row">
+                                <div class="form-group col-3 col-md-3 col-lg-3">
+                                    <label for="startDate3">{{ __('Tanggal Awal') }}<code>*</code></label>
+                                    <input id="startDate3" type="text" class="form-control datepicker" name="startDate3">
+                                </div>
+                                <div class="form-group col-3 col-md-3 col-lg-3">
+                                    <label for="endDate3">{{ __('Tanggal Akhir') }}<code>*</code></label>
+                                    <input id="endDate3" type="text" class="form-control datepicker" name="endDate3">
+                                </div>
+                                <div class="form-group col-3 col-md-3 col-lg-3">
+                                    <label>{{ __('Sales') }}<code>*</code></label>
+                                    <select name="sales" id="sales" class="select2 form-control">
+                                        <option value="">- Select -</option>
+                                        @foreach ($sales as $sales)
+                                        <option value="{{ $sales->id }}">{{ $sales->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-12 col-md-12 col-lg-12">
+                                    <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('report-sale.salesLoad') }}', '#data-load')">
+                                        <i class="fas fa-eye"></i> Cari</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="kas3" role="tabpanel" aria-labelledby="kas-tab3">
+                            <div class="row">
+                                <div class="form-group col-3 col-md-3 col-lg-3">
+                                    <label for="startDate4">{{ __('Tanggal Awal') }}<code>*</code></label>
+                                    <input id="startDate4" type="text" class="form-control datepicker" name="startDate4">
+                                </div>
+                                <div class="form-group col-3 col-md-3 col-lg-3">
+                                    <label for="endDate4">{{ __('Tanggal Akhir') }}<code>*</code></label>
+                                    <input id="endDate4" type="text" class="form-control datepicker" name="endDate4">
+                                </div>
+                                <div class="form-group col-3 col-md-3 col-lg-3">
+                                    <label>{{ __('Akun Kas') }}<code>*</code></label>
+                                    <select name="kas" id="kas" class="select2 form-control">
+                                        <option value="">- Select -</option>
+                                        @foreach ($kas as $kas)
+                                        <option value="{{ $kas->id }}">{{ $kas->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-12 col-md-12 col-lg-12">
+                                    <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('report-sale.kasLoad') }}', '#data-load')">
+                                        <i class="fas fa-eye"></i> Cari</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="customer3" role="tabpanel" aria-labelledby="customer-tab3">
+                            <div class="row">
+                                <div class="form-group col-3 col-md-3 col-lg-3">
+                                    <label for="startDate5">{{ __('Tanggal Awal') }}<code>*</code></label>
+                                    <input id="startDate5" type="text" class="form-control datepicker" name="startDate5">
+                                </div>
+                                <div class="form-group col-3 col-md-3 col-lg-3">
+                                    <label for="endDate5">{{ __('Tanggal Akhir') }}<code>*</code></label>
+                                    <input id="endDate5" type="text" class="form-control datepicker" name="endDate5">
+                                </div>
+                                <div class="form-group col-3 col-md-3 col-lg-3">
+                                    <label>{{ __('Customer') }}<code>*</code></label>
+                                    <select name="customer" id="customer" class="select2 form-control">
+                                        <option value="">- Select -</option>
+                                        @foreach ($customer as $customer)
+                                        <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-12 col-md-12 col-lg-12">
+                                    <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('report-sale.customerLoad') }}', '#data-load')">
+                                        <i class="fas fa-eye"></i> Cari</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade" id="branch3" role="tabpanel" aria-labelledby="branch-tab3">
+                            <div class="row">
+                                <div class="form-group col-3 col-md-3 col-lg-3">
+                                    <label for="startDate6">{{ __('Tanggal Awal') }}<code>*</code></label>
+                                    <input id="startDate6" type="text" class="form-control datepicker" name="startDate6">
+                                </div>
+                                <div class="form-group col-3 col-md-3 col-lg-3">
+                                    <label for="endDate6">{{ __('Tanggal Akhir') }}<code>*</code></label>
+                                    <input id="endDate6" type="text" class="form-control datepicker" name="endDate6">
+                                </div>
+                                <div class="form-group col-3 col-md-3 col-lg-3">
+                                    <label>{{ __('Cabang') }}<code>*</code></label>
+                                    <select name="branch" id="branch" class="select2 form-control">
+                                        <option value="">- Select -</option>
+                                        @foreach ($branch as $branch)
+                                        <option value="{{ $branch->id }}">{{ $branch->code }} - {{ $branch->name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="form-group col-12 col-md-12 col-lg-12">
+                                    <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('report-sale.branchLoad') }}', '#data-load')">
+                                        <i class="fas fa-eye"></i> Cari</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -61,7 +219,6 @@
                     </tr>
                 </tfoot>
             </table>
-
         </div>
       </div>
   </section>
@@ -72,13 +229,43 @@
 <script type="text/javascript">
   var loading = `-- sedang memuat data --`;
   function changes(token, url, target) {
-      var startDate = document.getElementById("startDate").value;
-      var endDate = document.getElementById("endDate").value;
+      var startDate1 = document.getElementById("startDate1").value;
+      var startDate2 = document.getElementById("startDate2").value;
+      var startDate3 = document.getElementById("startDate3").value;
+      var startDate4 = document.getElementById("startDate4").value;
+      var startDate5 = document.getElementById("startDate5").value;
+      var startDate6 = document.getElementById("startDate6").value;
+      var endDate1 = document.getElementById("endDate1").value;
+      var endDate2 = document.getElementById("endDate2").value;
+      var endDate3 = document.getElementById("endDate3").value;
+      var endDate4 = document.getElementById("endDate4").value;
+      var endDate5 = document.getElementById("endDate5").value;
+      var endDate6 = document.getElementById("endDate6").value;
+      var item = document.getElementById("item").value;
+      var sales = document.getElementById("sales").value;
+      var kas = document.getElementById("kas").value;
+      var customer = document.getElementById("customer").value;
+      var branch = document.getElementById("branch").value;
       $(target).html(loading);
       $.post(url, {
           _token: token,
-          startDate,
-          endDate,
+          startDate1,
+          startDate2,
+          startDate3,
+          startDate4,
+          startDate5,
+          startDate6,
+          endDate1,
+          endDate2,
+          endDate3,
+          endDate4,
+          endDate5,
+          endDate6,
+          item,
+          sales,
+          kas,
+          customer,
+          branch,
       },
       function (data) {
           console.log(data);

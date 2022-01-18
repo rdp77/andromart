@@ -489,7 +489,6 @@ class DashboardController extends Controller
         $monthLocale  = $separateString[1];
         $year   = $separateString[2];
 
-
         if ($monthLocale == 'Januari') {
             $month = 1;
         } elseif ($monthLocale == 'Februari') {

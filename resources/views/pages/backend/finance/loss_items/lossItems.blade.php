@@ -34,7 +34,7 @@
                         <input id="startDate" type="text" class="form-control datepicker" name="startDate">
                     </div>
                     <div class="form-group col-12 col-md-12 col-lg-12">
-                        <label for="endDate">{{ __('Tanggal Akir') }}<code>*</code></label>
+                        <label for="endDate">{{ __('Tanggal Akhir') }}<code>*</code></label>
                         <input id="endDate" type="text" class="form-control datepicker" name="endDate">
                     </div>
                     <div class="form-group col-12 col-md-12 col-lg-12">

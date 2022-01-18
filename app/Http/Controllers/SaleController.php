@@ -43,7 +43,8 @@ class SaleController extends Controller
         }
 
         if ($req->ajax()) {
-            $data = Sale::with(['SaleDetail', 'SaleDetail.Item'])->orderBy('id', 'desc')->get();
+            $branch = Auth::user()->employee->branch_id;
+            $data = Sale::with(['SaleDetail', 'SaleDetail.Item'])->where('branch_id', $branch)->orderBy('id', 'desc')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->order(function ($query) {

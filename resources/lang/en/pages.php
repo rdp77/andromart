@@ -14,7 +14,7 @@ return [
     */
 
     'title' => 'Andromart',
-    'brand' => 'WEA',
+    'brand' => 'AM',
     'edit' => 'Save Changes',
     'save' => 'Save',
     'delete' => 'Delete',
