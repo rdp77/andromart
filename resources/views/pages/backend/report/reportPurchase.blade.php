@@ -146,12 +146,11 @@
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
-                        <th>No</th>
                         <th>Tanggal</th>
                         <th>Faktur</th>
                         <th>Barang</th>
                         <th>Supplier</th>
-                        <th>Akun Kas</th>
+                        <th>Pembayaran</th>
                         <th>Operator</th>
                         <th>Jumlah</th>
                     </tr>

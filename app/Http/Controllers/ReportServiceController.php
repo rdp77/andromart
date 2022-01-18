@@ -37,11 +37,13 @@ class ReportServiceController extends Controller
 
     public function dataLoad(Request $req)
     {
+        $branchUser = Auth::user()->employee->branch_id;
         $startDate = $req->startDate1;
         $endDate = $req->endDate1;
         $data = Service::with(['Type', 'Brand'])
         ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
         ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('branch_id', $branchUser)
         ->orderBy('id', 'desc')->get();
 
         $sumKotor = $data->sum('total_price');
@@ -53,11 +55,13 @@ class ReportServiceController extends Controller
 
     public function typeLoad(Request $req)
     {
+        $branchUser = Auth::user()->employee->branch_id;
         $startDate = $req->startDate2;
         $endDate = $req->endDate2;
         $data = Service::with(['Type', 'Brand'])
         ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
         ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('branch_id', $branchUser)
         ->where('series', $req->type_id)
         ->orderBy('id', 'desc')->get();
 

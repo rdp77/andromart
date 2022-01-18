@@ -37,11 +37,13 @@ class ReportSaleController extends Controller
 
     public function dataLoad(Request $req)
     {
+        $branchUser = Auth::user()->employee->branch_id;
         $startDate = $req->startDate1;
         $endDate = $req->endDate1;
         $data = Sale::with(['SaleDetail', 'SaleDetail.Item', 'accountData'])
         ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
         ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('branch_id', $branchUser)
         ->orderBy('id', 'desc')->get();
 
         $sumKotor = $data->sum('total_price');

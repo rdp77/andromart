@@ -1,7 +1,6 @@
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <th>No</th>
             <th>Tanggal</th>
             <th>Faktur</th>
             <th>Barang</th>
@@ -14,8 +13,6 @@
     @foreach($data as $key => $value)
     <tbody class="dropHere" style="border: none !important">
         <tr>
-            <td>{{ $key+1 }}</td>
-            {{-- <td>{{ \Carbon\Carbon::parse($value->date)->locale('id')->isoFormat('LL') }}</td> --}}
             <td>{{ $value->date }}</td>
             <th>{{ $value->code }}</th>
             <td>

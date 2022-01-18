@@ -52,9 +52,11 @@ class ReportPurchaseController extends Controller
 
     public function dataLoad(Request $req)
     {
+        $branchUser = Auth::user()->employee->branch_id;
         $startDate = $this->changeDate($req->startDate1)." 00:00:00";
         $endDate = $this->changeDate($req->endDate1)." 23:59:59";
         $data = Purchasing::with('purchasingDetail')
+        ->where('branch_id', $branchUser)
         ->whereBetween('date', [$startDate, $endDate])
         ->orderBy('id', 'desc')->get();
         $tr = count($data);
@@ -70,7 +72,7 @@ class ReportPurchaseController extends Controller
         $endDate = $this->changeDate($req->endDate2)." 23:59:59";
         $data = Purchasing::with('purchasingDetail')
         ->leftJoin('purchasing_details', 'purchasing_details.purchasing_id', '=', 'purchasings.id')
-        ->select('purchasings.id', 'purchasings.date', 'purchasings.code', 'purchasings.price', 'purchasings.status')
+        ->select('purchasings.id', 'purchasings.date', 'purchasings.code', 'purchasings.price', 'purchasings.status', 'purchasings.employee_id')
         ->whereBetween('date', [$startDate, $endDate])
         ->where('purchasing_details.item_id', '=', $item)
         ->orderBy('id', 'desc')->get();
@@ -83,10 +85,21 @@ class ReportPurchaseController extends Controller
 
     public function supplierLoad(Request $req)
     {
+        $supplier = $req->supplier;
         $branchUser = Auth::user()->employee->branch_id;
         $startDate = $this->changeDate($req->startDate3)." 00:00:00";
         $endDate = $this->changeDate($req->endDate3)." 23:59:59";
+        $data = Purchasing::with(['purchasingDetail', 'purchasingDetail.item', 'purchasingDetail.item.supplier'])
+        ->join('purchasing_details', 'purchasing_details.purchasing_id', '=', 'purchasings.id')
+        ->join('items', 'items.id', '=', 'purchasing_details.item_id')
+        ->select('items.supplier_id','purchasings.id', 'purchasings.date', 'purchasings.code', 'purchasings.price', 'purchasings.status', 'purchasings.employee_id')
+        ->where('items.supplier_id', '=', $supplier)
+        ->orderBy('id', 'desc')->get();
 
+        $tr = count($data);
+        $sumBayar = $data->sum('price');
+
+        return view('pages.backend.report.reportPurchaseLoad', compact('data', 'tr', 'sumBayar'));
     }
 
     public function branchLoad(Request $req)
