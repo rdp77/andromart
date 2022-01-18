@@ -21,4 +21,8 @@ class accountMain extends Model
         'created_by',
         'updated_by',
     ];
+    public function accountMainDetail()
+    {
+        return $this->hasMany('App\Models\accountMainDetail', 'main_id', 'id');
+    }
 }

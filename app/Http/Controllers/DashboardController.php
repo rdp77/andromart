@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\URL;
 use Yajra\DataTables\DataTables;
 
@@ -38,26 +39,18 @@ class DashboardController extends Controller
     public function index()
     {
         $topSales = DB::table('sale_details')
-        // ->whereYear('created_at', now())
-        // ->whereMonth('created_at', now())
-
-        // ->leftJoin('items', function ($join) {
-        //     $join->on('item_id','=','items.id')
-            // ->whereDay('created_at', 17)
-        //     ->select('items.id','items.name', 'items.brand_id', 'sale_details.item_id',
-        //     DB::raw('SUM(sale_details.qty) as total'))
-        //     ->groupBy('items.id','sale_details.item_id','items.name', 'items.brand_id',)
-        //     ->orderBy('total','desc')
-        //     ->limit(3);
-        // })
-
-        ->leftJoin('items','items.id','=','sale_details.item_id')
-        ->select('items.id','items.name', 'items.brand_id', 'sale_details.item_id',
-        DB::raw('SUM(sale_details.qty) as total'))
-        ->groupBy('items.id','sale_details.item_id','items.name', 'items.brand_id',)
-        ->orderBy('total','desc')
-        ->limit(3)
-        ->get();
+            ->leftJoin('items', 'items.id', '=', 'sale_details.item_id')
+            ->select(
+                'items.id',
+                'items.name',
+                'items.brand_id',
+                'sale_details.item_id',
+                DB::raw('SUM(sale_details.qty) as total')
+            )
+            ->groupBy('items.id', 'sale_details.item_id', 'items.name', 'items.brand_id',)
+            ->orderBy('total', 'desc')
+            ->limit(3)
+            ->get();
 
 
         // return $topSales;
@@ -130,6 +123,309 @@ class DashboardController extends Controller
             'totalServiceDone' => $totalServiceDone,
             'totalServiceCancel' => $totalServiceCancel,
             'topSales' => $topSales,
+        ]);
+    }
+
+    public function filterDataDashboard(Request $req)
+    {
+        // return $req->all();
+        // return date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year));
+        // return $this->changeMonthIdToEn($req->startDate);
+        $topSales = DB::table('sale_details')
+            ->leftJoin('items', 'items.id', '=', 'sale_details.item_id')
+            ->select(
+                'items.id',
+                'items.name',
+                'items.brand_id',
+                'sale_details.item_id',
+                DB::raw('SUM(sale_details.qty) as total')
+            )
+            ->where(function ($query) use ($req) {
+                if ($req->type == 'Tanggal') {
+                    $query
+                        ->where('sale_details.created_at', '>=', $this->changeMonthIdToEn($req->startDate))
+                        ->where('sale_details.created_at', '<=', $this->changeMonthIdToEn($req->endDate));
+                } else if ($req->type == 'Bulan') {
+                    $query
+                        ->where('sale_details.created_at', '>=', date('Y-m-01 00:i:s', strtotime($req->month)))
+                        ->where('sale_details.created_at', '<=', date('Y-m-t 00:i:s', strtotime($req->month)));
+                } else if ($req->type == 'Tahun') {
+                    $query
+                        ->where('sale_details.created_at', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
+                        ->where('sale_details.created_at', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
+                }
+            })
+            ->groupBy('items.id', 'sale_details.item_id', 'items.name', 'items.brand_id',)
+            ->orderBy('total', 'desc')
+            ->limit(3)
+            ->get();
+
+        $dataTrafficToday = DB::table('traffic')->where(function ($query) use ($req) {
+            if ($req->type == 'Tanggal') {
+                $query
+                    ->where('date', '>=', $this->changeMonthIdToEn($req->startDate))
+                    ->where('date', '<=', $this->changeMonthIdToEn($req->endDate));
+            } else if ($req->type == 'Bulan') {
+                $query
+                    ->where('date', '>=', date('Y-m-01', strtotime($req->month)))
+                    ->where('date', '<=', date('Y-m-t', strtotime($req->month)));
+            } else if ($req->type == 'Tahun') {
+                $query
+                    ->where('date', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
+                    ->where('date', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
+            }
+        })->count();
+        $dataServiceTotal = Service::where(function ($query) use ($req) {
+            if ($req->type == 'Tanggal') {
+                $query
+                    ->where('date', '>=', $this->changeMonthIdToEn($req->startDate))
+                    ->where('date', '<=', $this->changeMonthIdToEn($req->endDate));
+            } else if ($req->type == 'Bulan') {
+                $query
+                    ->where('date', '>=', date('Y-m-01', strtotime($req->month)))
+                    ->where('date', '<=', date('Y-m-t', strtotime($req->month)));
+            } else if ($req->type == 'Tahun') {
+                $query
+                    ->where('date', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
+                    ->where('date', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
+            }
+        })->count();
+        $dataServiceHandphone = Service::where('type', '2')->where(function ($query) use ($req) {
+            if ($req->type == 'Tanggal') {
+                $query
+                    ->where('date', '>=', $this->changeMonthIdToEn($req->startDate))
+                    ->where('date', '<=', $this->changeMonthIdToEn($req->endDate));
+            } else if ($req->type == 'Bulan') {
+                $query
+                    ->where('date', '>=', date('Y-m-01', strtotime($req->month)))
+                    ->where('date', '<=', date('Y-m-t', strtotime($req->month)));
+            } else if ($req->type == 'Tahun') {
+                $query
+                    ->where('date', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
+                    ->where('date', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
+            }
+        })->count();
+        $dataServiceLaptop = Service::where('type', '3')->where(function ($query) use ($req) {
+            if ($req->type == 'Tanggal') {
+                $query
+                    ->where('date', '>=', $this->changeMonthIdToEn($req->startDate))
+                    ->where('date', '<=', $this->changeMonthIdToEn($req->endDate));
+            } else if ($req->type == 'Bulan') {
+                $query
+                    ->where('date', '>=', date('Y-m-01', strtotime($req->month)))
+                    ->where('date', '<=', date('Y-m-t', strtotime($req->month)));
+            } else if ($req->type == 'Tahun') {
+                $query
+                    ->where('date', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
+                    ->where('date', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
+            }
+        })->count();
+
+        $chekSales = Employee::with('Service1', 'Service2')->where('id', '!=', 1)->get();
+        for ($i = 0; $i < count($chekSales); $i++) {
+            $sharingProfit1Service[$i] = Service::where('work_status', 'Diambil')
+                ->where(function ($query) use ($req) {
+                    if ($req->type == 'Tanggal') {
+                        $query
+                            ->where('date', '>=', $this->changeMonthIdToEn($req->startDate))
+                            ->where('date', '<=', $this->changeMonthIdToEn($req->endDate));
+                    } else if ($req->type == 'Bulan') {
+                        $query
+                            ->where('date', '>=', date('Y-m-01', strtotime($req->month)))
+                            ->where('date', '<=', date('Y-m-t', strtotime($req->month)));
+                    } else if ($req->type == 'Tahun') {
+                        $query
+                            ->where('date', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
+                            ->where('date', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
+                    }
+                })
+                ->where('payment_status', 'Lunas')
+                ->where('technician_id', $chekSales[$i]->id)
+                ->sum('sharing_profit_technician_1');
+            $sharingProfit2Service[$i] = Service::where('work_status', 'Diambil')
+                ->where(function ($query) use ($req) {
+                    if ($req->type == 'Tanggal') {
+                        $query
+                            ->where('date', '>=', $this->changeMonthIdToEn($req->startDate))
+                            ->where('date', '<=', $this->changeMonthIdToEn($req->endDate));
+                    } else if ($req->type == 'Bulan') {
+                        $query
+                            ->where('date', '>=', date('Y-m-01', strtotime($req->month)))
+                            ->where('date', '<=', date('Y-m-t', strtotime($req->month)));
+                    } else if ($req->type == 'Tahun') {
+                        $query
+                            ->where('date', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
+                            ->where('date', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
+                    }
+                })
+                ->where('payment_status', 'Lunas')
+                ->where('technician_replacement_id', $chekSales[$i]->id)
+                ->sum('sharing_profit_technician_2');
+            $sharingProfitSaleSales[$i] = SaleDetail::where('sales_id', $chekSales[$i]->id)
+                ->where(function ($query) use ($req) {
+                    if ($req->type == 'Tanggal') {
+                        $query
+                            ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate))
+                            ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate));
+                    } else if ($req->type == 'Bulan') {
+                        $query
+                            ->where('created_at', '>=', date('Y-m-01', strtotime($req->month)))
+                            ->where('created_at', '<=', date('Y-m-t', strtotime($req->month)));
+                    } else if ($req->type == 'Tahun') {
+                        $query
+                            ->where('created_at', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
+                            ->where('created_at', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
+                    }
+                })
+                ->sum('sharing_profit_sales');
+            $sharingProfitSaleBuyer[$i] = SaleDetail::where('buyer_id', $chekSales[$i]->id)
+                ->where(function ($query) use ($req) {
+                    if ($req->type == 'Tanggal') {
+                        $query
+                            ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate))
+                            ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate));
+                    } else if ($req->type == 'Bulan') {
+                        $query
+                            ->where('created_at', '>=', date('Y-m-01', strtotime($req->month)))
+                            ->where('created_at', '<=', date('Y-m-t', strtotime($req->month)));
+                    } else if ($req->type == 'Tahun') {
+                        $query
+                            ->where('created_at', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
+                            ->where('created_at', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
+                    }
+                })
+                ->sum('sharing_profit_buyer');
+            $checkServiceStatus[$i] = Service::where(function ($query) use ($req) {
+                if ($req->type == 'Tanggal') {
+                    $query
+                        ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate))
+                        ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate));
+                } else if ($req->type == 'Bulan') {
+                    $query
+                        ->where('created_at', '>=', date('Y-m-01', strtotime($req->month)))
+                        ->where('created_at', '<=', date('Y-m-t', strtotime($req->month)));
+                } else if ($req->type == 'Tahun') {
+                    $query
+                        ->where('created_at', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
+                        ->where('created_at', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
+                }
+            })
+                ->where('technician_id', $chekSales[$i]->id)
+                ->get();
+        }
+        $sharingProfit1Service = $sharingProfit1Service;
+        $sharingProfit2Service = $sharingProfit2Service;
+        $sharingProfitSaleSales = $sharingProfitSaleSales;
+        $sharingProfitSaleBuyer = $sharingProfitSaleBuyer;
+        $karyawan = $chekSales;
+        $checkServiceStatus = $checkServiceStatus;
+        // return $chekSales;
+        $dataPendapatan = Journal::with('ServicePayment', 'Sale')
+            // ->where('journals.date', date('Y-m-d'))
+            ->where(function ($query) use ($req) {
+                if ($req->type == 'Tanggal') {
+                    $query
+                        ->where('journals.date', '>=', $this->changeMonthIdToEn($req->startDate))
+                        ->where('journals.date', '<=', $this->changeMonthIdToEn($req->endDate));
+                } else if ($req->type == 'Bulan') {
+                    $query
+                        ->where('journals.date', '>=', date('Y-m-01', strtotime($req->month)))
+                        ->where('journals.date', '<=', date('Y-m-t', strtotime($req->month)));
+                } else if ($req->type == 'Tahun') {
+                    $query
+                        ->where('journals.date', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
+                        ->where('journals.date', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
+                }
+            })
+            ->where(function ($query) {
+                $query->where('journals.type', 'Pembayaran Service')
+                    ->orWhere('journals.type', 'Penjualan');
+            })
+            ->get();
+        $log = Log::limit(7)->get();
+        $users = User::count();
+        $logCount = Log::where('u_id', Auth::user()->id)
+            ->count();
+
+        $totalSharingProfit = 0;
+        $totalSharingProfitSplit = [];
+        $totalServiceProgress = [];
+        $totalServiceDone = [];
+        $totalServiceCancel = [];
+
+        for ($i = 0; $i < count($karyawan); $i++) {
+            $totalSharingProfit += $sharingProfit1Service[$i] + $sharingProfit2Service[$i] + $sharingProfitSaleSales[$i] + $sharingProfitSaleBuyer[$i];
+            $totalSharingProfitSplit[$i]['nama'] = $karyawan[$i]->name;
+            $totalSharingProfitSplit[$i]['total'] = $sharingProfit1Service[$i] + $sharingProfit2Service[$i] + $sharingProfitSaleSales[$i] + $sharingProfitSaleBuyer[$i];
+
+            $totalServiceProgress[$i] = 0;
+            $totalServiceDone[$i] = 0;
+            $totalServiceCancel[$i] = 0;
+            $totalServiceFix[$i]['progress'] = 0;
+            $totalServiceFix[$i]['done'] = 0;
+            $totalServiceFix[$i]['cancel'] = 0;
+            $totalServiceFix[$i]['nama'] = $karyawan[$i]->name;
+
+            for ($j = 0; $j < count($checkServiceStatus[$i]); $j++) {
+                if ($checkServiceStatus[$i][$j]->work_status == 'Proses' || $checkServiceStatus[$i][$j]->work_status == 'Mutasi' || $checkServiceStatus[$i][$j]->work_status == 'Manifest') {
+                    $totalServiceProgress[$i] += 1;
+                    $totalServiceFix[$i]['progress'] += 1;
+                }
+                if ($checkServiceStatus[$i][$j]->work_status == 'Selesai' || $checkServiceStatus[$i][$j]->work_status == 'Diambil') {
+                    $totalServiceDone[$i] += 1;
+                    $totalServiceFix[$i]['done'] += 1;
+                }
+                if ($checkServiceStatus[$i][$j]->work_status == 'Cancel' || $checkServiceStatus[$i][$j]->work_status == 'Return') {
+                    $totalServiceCancel[$i] += 1;
+                    $totalServiceFix[$i]['cancel'] += 1;
+                }
+            }
+        }
+
+
+        $totalKeseluruhanPendapatan = 0;
+        $totalCash = 0;
+        $totalDebit = 0;
+        $totalTransfer = 0;
+        foreach ($dataPendapatan as $i => $el) {
+            $totalKeseluruhanPendapatan += $el->total;
+            if ($el->type == 'Pembayaran Service') {
+                if ($el->ServicePayment->payment_method == 'Cash') {
+                    $totalCash += $el->total;
+                } elseif ($el->ServicePayment->payment_method == 'Debit') {
+                    $totalDebit += $el->total;
+                } elseif ($el->ServicePayment->payment_method == 'Transfer') {
+                    $totalTransfer += $el->total;
+                }
+            } elseif ($el->type == 'Penjualan') {
+                if ($el->sale->payment_method == 'Cash') {
+                    $totalCash += $el->total;
+                } elseif ($el->sale->payment_method == 'Debit') {
+                    $totalDebit += $el->total;
+                } elseif ($el->sale->payment_method == 'Transfer') {
+                    $totalTransfer += $el->total;
+                }
+            }
+        }
+        return Response::json([
+            'status' => 'success', 'totalKeseluruhanPendapatan' => number_format($totalKeseluruhanPendapatan, 0, ',', '.'),
+            'totalCash' =>  number_format($totalCash, 0, ',', '.'),
+            'totalDebit' => number_format($totalDebit, 0, ',', '.'),
+            'totalTransfer' => number_format($totalTransfer, 0, ',', '.'), 'topSales' => $topSales,
+            'sharingProfit1Service' => $sharingProfit1Service,
+            'sharingProfit2Service' => $sharingProfit2Service,
+            'sharingProfitSaleSales' => $sharingProfitSaleSales,
+            'sharingProfitSaleBuyer' => $sharingProfitSaleBuyer,
+            'dataTraffic' => $dataTrafficToday,
+            'dataServiceTotal' => $dataServiceTotal,
+            'dataServiceHandphone' => $dataServiceHandphone,
+            'dataServiceLaptop' => $dataServiceLaptop,
+            'totalServiceProgress' => $totalServiceProgress,
+            'totalServiceDone' => $totalServiceDone,
+            'totalServiceCancel' => $totalServiceCancel,
+            'totalServiceFix' => $totalServiceFix,
+            'totalSharingProfitSplit' => $totalSharingProfitSplit,
+            'totalSharingProfit' => number_format($totalSharingProfit, 0, ',', '.'),
         ]);
     }
 
@@ -242,8 +538,8 @@ class DashboardController extends Controller
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
         return $string . $getEmployee->Branch->code . $year . $month . $index;
     }
-    public function cekHakAkses($namaFitur,$namaPerintah)
+    public function cekHakAkses($namaFitur, $namaPerintah)
     {
-        return $this->newvaruser->akses($namaFitur,$namaPerintah);
+        return $this->newvaruser->akses($namaFitur, $namaPerintah);
     }
 }

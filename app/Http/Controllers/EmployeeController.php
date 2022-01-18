@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Branch;
 use App\Models\Employee;
+use App\Models\Service;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -33,7 +34,50 @@ class EmployeeController extends Controller
 
         // $employee = Employee::where('id', '!=', '1')->where('status', 'aktif')->get();
         $employee = Employee::where('id', '!=', '1')->orderBy('status', 'asc')->get();
-        return view('pages.backend.master.employee.indexEmployee', compact('employee'));
+
+        $totalSharingProfit = 0;
+        $totalSharingProfitSplit = [];
+        $totalServiceProgress = [];
+        $totalServiceDone = [];
+        $totalServiceCancel = [];
+
+        for ($i=0; $i <count($employee) ; $i++) { 
+            $checkServiceStatus[$i] = Service::
+            where('technician_id', $employee[$i]->id)
+            ->get();
+        }
+        // return $checkServiceStatus;
+        
+
+        for ($i = 0; $i < count($employee); $i++) {
+
+            $totalServiceProgress[$i] = 0;
+            $totalServiceDone[$i] = 0;
+            $totalServiceCancel[$i] = 0;
+            $totalServiceFix[$i]['progress'] = 0;
+            $totalServiceFix[$i]['done'] = 0;
+            $totalServiceFix[$i]['cancel'] = 0;
+            $totalServiceFix[$i]['nama'] = $employee[$i]->name;
+
+            
+
+            for ($j = 0; $j < count($checkServiceStatus[$i]); $j++) {
+                if ($checkServiceStatus[$i][$j]->work_status == 'Proses' || $checkServiceStatus[$i][$j]->work_status == 'Mutasi' || $checkServiceStatus[$i][$j]->work_status == 'Manifest') {
+                    $totalServiceProgress[$i] += 1;
+                    $totalServiceFix[$i]['progress'] += 1;
+                }
+                if ($checkServiceStatus[$i][$j]->work_status == 'Selesai' || $checkServiceStatus[$i][$j]->work_status == 'Diambil') {
+                    $totalServiceDone[$i] += 1;
+                    $totalServiceFix[$i]['done'] += 1;
+                }
+                if ($checkServiceStatus[$i][$j]->work_status == 'Cancel' || $checkServiceStatus[$i][$j]->work_status == 'Return') {
+                    $totalServiceCancel[$i] += 1;
+                    $totalServiceFix[$i]['cancel'] += 1;
+                }
+            }
+        }
+        // return $employee;
+        return view('pages.backend.master.employee.indexEmployee', compact('employee','totalServiceProgress','totalServiceDone','totalServiceCancel'));
     }
 
     public function create()
@@ -137,6 +181,16 @@ class EmployeeController extends Controller
         $birthday = $this->DashboardController->changeMonthIdToEn($req->birthday);
         // return $req->file('avatar')->getClientOriginalName();
         if ($req->hasFile('avatar')) {
+            // $image = $req->image;
+            // $image = str_replace('data:image/jpeg;base64,', '', $image);
+            // $image = base64_decode($image);
+            // if ($image != null) {
+            //     $fileSave = 'public/Service_' . $avatar->code . '.' . 'png';
+            //     $fileName = 'Service_' . $checkData->code . '.' . 'png';
+            //     Storage::put($fileSave, $image);
+            // } else {
+            //     $fileName = $checkData->image;
+            // }
             $req->file('avatar')->move('assetsmaster/avatar/', $req->file('avatar')->getClientOriginalName());
             Employee::where('id', $id)
                 ->update([

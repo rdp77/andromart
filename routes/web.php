@@ -42,6 +42,8 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 Route::get('/log', [DashboardController::class, 'log'])
     ->name('dashboard.log');
+Route::get('/dashboard/filter-data-dashboard', [DashboardController::class, 'filterDataDashboard'])
+    ->name('dashboard.filterDataDashboard');
 
 require __DIR__ . '/auth.php';
 
@@ -81,6 +83,8 @@ require __DIR__ . '/finance/sharingProfitRoute.php';
 require __DIR__ . '/report/reportServiceRoute.php';
 require __DIR__ . '/report/reportSaleRoute.php';
 require __DIR__ . '/report/reportPurchaseRoute.php';
+require __DIR__ . '/report/reportCashBalanceRoute.php';
+require __DIR__ . '/report/reportPeriodicRoute.php';
 
 require __DIR__ . '/warehouse/stockRoute.php';
 require __DIR__ . '/warehouse/stockTransactionRoute.php';

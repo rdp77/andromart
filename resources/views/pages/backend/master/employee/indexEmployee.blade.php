@@ -14,8 +14,8 @@
             <i class="far fa-edit"></i>{{ __(' Tambah Pengguna') }}</a>
     </div>
     <div class="row">
-        @foreach ($employee as $employee)
-        <div class="col-lg-3">
+        @foreach ($employee as $index => $employee)
+        <div class="col-lg-4">
             <div class="card profile-widget">
                 <div class="profile-widget-header">
                   <img alt="image" src="{{ $employee->getAvatar() }}" class="rounded-circle profile-widget-picture" style="height:100px">
@@ -23,7 +23,7 @@
                     <div class="profile-widget-item">
                       {{-- <div class="profile-widget-item-label">Posts</div>
                       <div class="profile-widget-item-value">187</div> --}}
-                      <div class="profile-widget-item-value"> {{ $employee->name }}
+                      <div class="profile-widget-item-value">
                         @if ($employee->status == 'aktif')
                         <div class="badge badge-success">
                             Aktif
@@ -45,6 +45,13 @@
                             {{ $employee->user->role->name }} {{ $employee->level }} - {{ $employee->branch->name }}
                         </div>
                     </div>
+                    <div class="profile-widget-name">
+                        <i class="fa fa-user"></i> &nbsp;
+                        <div class="text-muted d-inline font-weight-normal">
+                            {{ $employee->name }} 
+                        </div>
+                    </div>
+                    
                     <div class="profile-widget-name">
                         <i class="fa fa-address-card"></i> &nbsp;
                         <div class="text-muted d-inline font-weight-normal">
@@ -88,30 +95,40 @@
                             <i class="fas fa-user-edit"></i>
                         </a>
                     </div>
+                    
                     {{-- <div class="profile-widget-name text-right">
                         <a href="{{ route('employee.edit', $employee->id)}}" class="btn btn-outline-primary btn-md">
                             <i class="fa fa-trash"></i>
                         </a>
                     </div> --}}
                 </div>
-                {{-- <div class="card-footer text-center">
-                    <div class="font-weight-bold mb-2">
-                      <a href="#" class="btn btn-md btn-outline-primary">Edit</a>
+                
+                
+                <div class="card-footer">
+                    <div class="profile-widget-name">
+                        <i class="fa fa-times"></i> &nbsp;
+                        <div class="text-muted d-inline font-weight-normal">
+                            {{$totalServiceCancel[$index]}}
+                        </div>
                     </div>
-                  <a href="#" class="btn btn-lg">
-                    <i class="fab fa-facebook-f"></i>
-                  </a>
-                  <a href="#" class="btn btn-lg">
-                    <i class="fab fa-twitter"></i>
-                  </a>
-                  <a href="#" class="btn btn-lg">
-                    <i class="fab fa-github"></i>
-                  </a>
-                  <a href="#" class="btn btn-lg">
-                    <i class="fab fa-instagram"></i>
-                  </a>
-                </div> --}}
+                    <div class="profile-widget-name">
+                        <i class="fa fa-check"></i> &nbsp;
+                        <div class="text-muted d-inline font-weight-normal">
+                            {{$totalServiceDone[$index]}}
+                            
+                        </div>
+                    </div>
+                    <div class="profile-widget-name">
+                        <i class="fa fa-list"></i> &nbsp;
+                        <div class="text-muted d-inline font-weight-normal">
+                            {{$totalServiceProgress[$index]}}
+                            
+                        </div>
+                    </div>
+                </div>
+              
             </div>
+            
         </div>
         @endforeach
     </div>

@@ -27,4 +27,5 @@ class accountMainDetail extends Model
     {
         return $this->belongsTo('App\Models\AccountMain', 'main_id', 'id');
     }
+    
 }

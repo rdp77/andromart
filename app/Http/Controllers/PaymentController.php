@@ -103,12 +103,14 @@ class PaymentController extends Controller
         if ($checkBranch->branch_id == 1) {
             $branch = Branch::get();
             $cash = AccountData::get();
+            $cash_transfer = AccountData::get();
         } else {
             $branch = Branch::where('id', $checkBranch->branch_id)->get();
             $cash = AccountData::where('branch_id', $checkBranch->branch_id)->get();
+            $cash_transfer = AccountData::where('branch_id', 1)->get();
         }
-        $cash_transfer = AccountData::where('branch_id', 1)->get();
-        return view('pages.backend.transaction.payment.createPayment', compact('cash', 'code', 'branch','cash_transfer'));
+
+        return view('pages.backend.transaction.payment.createPayment', compact('cash', 'code', 'branch', 'cash_transfer'));
     }
 
     public function store(Request $req)
@@ -199,7 +201,7 @@ class PaymentController extends Controller
 
                 $accountPembayaran  = AccountData::where('id', $req->cash_tranfer_id)
                     ->first();
-                    
+
                 $accountCode = [
                     $accountPembayaran->id,
                     $req->cost_id,
