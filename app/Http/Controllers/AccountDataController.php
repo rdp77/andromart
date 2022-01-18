@@ -133,8 +133,8 @@ class AccountDataController extends Controller
             return view('forbidden');
         }
 
-        $area = Area::find($id);
-        return view('pages.backend.master.accountData.updateAccountData', ['AccountData' => $area]);
+        $branch = Area::find($id);
+        return view('pages.backend.master.accountData.updateAccountData', ['branch' => $branch]);
     }
 
     public function update(Request $req, $id)

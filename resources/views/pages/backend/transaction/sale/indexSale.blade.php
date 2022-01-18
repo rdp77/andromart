@@ -13,8 +13,6 @@
     <div class="card-header">
         <a href="{{ route('sale.create') }}" class="btn btn-icon icon-left btn-primary mr-3">
             <i class="far fa-edit"></i>{{ __(' Tambah Penjualan') }}</a>
-        <a href="#" onclick="" class="btn btn-icon icon-left btn-danger">
-            <i class="far fa-trash-alt"></i>{{ __('Recycle Bin') }}</a>
     </div>
     <div class="card-body">
         <table class="table-striped table" id="table" width="100%">

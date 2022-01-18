@@ -24,8 +24,30 @@ Route::group(['prefix' => 'report'], function () {
             'search-report-sale',
             [ReportSaleController::class, 'searchReportSale']
         )->name('report-sale.searchReportIncomeSpending');
-        Route::post('refresh-report-sale', [ReportSaleController::class, 'dataLoad'])->name('report-sale.dataLoad');
-
+        Route::post(
+            'refresh-report-sale',
+            [ReportSaleController::class, 'dataLoad']
+        )->name('report-sale.dataLoad');
+        Route::post(
+            'refresh-report-sale-item',
+            [ReportSaleController::class, 'itemLoad']
+        )->name('report-sale.itemLoad');
+        Route::post(
+            'refresh-report-sale-sales',
+            [ReportSaleController::class, 'salesLoad']
+        )->name('report-sale.salesLoad');
+        Route::post(
+            'refresh-report-sale-kas',
+            [ReportSaleController::class, 'kasLoad']
+        )->name('report-sale.kasLoad');
+        Route::post(
+            'refresh-report-sale-customer',
+            [ReportSaleController::class, 'customerLoad']
+        )->name('report-sale.customerLoad');
+        Route::post(
+            'refresh-report-sale-branch',
+            [ReportSaleController::class, 'branchLoad']
+        )->name('report-sale.branchLoad');
     });
 
 });

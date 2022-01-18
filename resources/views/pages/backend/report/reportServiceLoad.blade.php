@@ -24,15 +24,6 @@
                                 {{ $value->customer_address}}
                             </th>
                         </tr>
-                        {{-- <tr>
-                            <th>{{ $value->customer_name}}</th>
-                        </tr>
-                        <tr>
-                            <th>{{ $value->customer_phone}}</th>
-                        </tr>
-                        <tr>
-                            <th>{{ $value->customer_address}}</th>
-                        </tr> --}}
                     </tbody>
                 </table>
             </td>

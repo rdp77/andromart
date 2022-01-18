@@ -24,7 +24,7 @@
                             <input id="startDate" type="text" class="form-control datepicker" name="startDate">
                         </div>
                         <div class="form-group col-6 col-md-6 col-lg-6">
-                            <label for="endDate">{{ __('Tanggal Akir') }}<code>*</code></label>
+                            <label for="endDate">{{ __('Tanggal Akhir') }}<code>*</code></label>
                             <input id="endDate" type="text" class="form-control datepicker" name="endDate">
                         </div>
                     </div>
@@ -63,7 +63,7 @@
           </table>
           {{-- <div class="dropHereTotalVal"></div> --}}
 
-      </div>    
+      </div>
     </div>
   </section>
 </form>

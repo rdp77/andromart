@@ -13,8 +13,6 @@
     <div class="card-header">
         <a href="{{ route('sale-return.create') }}" class="btn btn-icon icon-left btn-primary mr-2">
             <i class="far fa-edit"></i>{{ __(' Tambah Return Penjualan') }}</a>
-        <a href="#" onclick="" class="btn btn-icon icon-left btn-danger">
-            <i class="far fa-trash-alt"></i>{{ __('Recycle Bin') }}</a>
     </div>
     <div class="card-body">
         <table class="table-striped table" id="table" width="100%">
@@ -44,7 +42,7 @@
 @endsection
 @section('script')
 <script>
-    var index = '{{ route('sale-return.index') }}';    
+    var index = '{{ route('sale-return.index') }}';
 </script>
 <script src="{{ asset('assets/pages/transaction/sale/return/saleReturnIndex.js') }}"></script>
 @endsection

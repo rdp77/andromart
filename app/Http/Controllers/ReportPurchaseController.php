@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Branch;
+use App\Models\Brand;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Item;
@@ -12,6 +14,8 @@ use App\Models\Purchasing;
 use App\Models\PurchasingDetail;
 use App\Models\Sale;
 use App\Models\HistoryDetailPurchase;
+use App\Models\Stock;
+use App\Models\Supplier;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -31,7 +35,11 @@ class ReportPurchaseController extends Controller
 
     public function reportPurchase()
     {
-        return view('pages.backend.report.reportPurchase');
+        $stock = Stock::where('branch_id', Auth::user()->employee->branch_id)->where('id', '!=', 1)->get();
+        $supplier = Supplier::get();
+        $branch = Branch::get();
+
+        return view('pages.backend.report.reportPurchase', compact('stock', 'supplier', 'branch'));
     }
 
     public function changeDate($date) {
@@ -44,28 +52,55 @@ class ReportPurchaseController extends Controller
 
     public function dataLoad(Request $req)
     {
-        $startDate = $this->changeDate($req->startDate)." 00:00:00";
-        $endDate = $this->changeDate($req->endDate)." 23:59:59";
-        $data = Purchasing::whereBetween('date', [$startDate, $endDate])->orderBy('id', 'desc')->with('purchasingDetail')->get();
+        $startDate = $this->changeDate($req->startDate1)." 00:00:00";
+        $endDate = $this->changeDate($req->endDate1)." 23:59:59";
+        $data = Purchasing::with('purchasingDetail')
+        ->whereBetween('date', [$startDate, $endDate])
+        ->orderBy('id', 'desc')->get();
         $tr = count($data);
         $sumBayar = $data->sum('price');
 
         return view('pages.backend.report.reportPurchaseLoad', compact('data', 'tr', 'sumBayar'));
     }
 
-    public function index()
+    public function itemLoad(Request $req)
     {
-        //
+        $item = $req->item;
+        $startDate = $this->changeDate($req->startDate2)." 00:00:00";
+        $endDate = $this->changeDate($req->endDate2)." 23:59:59";
+        $data = Purchasing::with('purchasingDetail')
+        ->leftJoin('purchasing_details', 'purchasing_details.purchasing_id', '=', 'purchasings.id')
+        ->select('purchasings.id', 'purchasings.date', 'purchasings.code', 'purchasings.price', 'purchasings.status')
+        ->whereBetween('date', [$startDate, $endDate])
+        ->where('purchasing_details.item_id', '=', $item)
+        ->orderBy('id', 'desc')->get();
+
+        $tr = count($data);
+        $sumBayar = $data->sum('price');
+
+        return view('pages.backend.report.reportPurchaseLoad', compact('data', 'tr', 'sumBayar'));
     }
 
-    public function create()
+    public function supplierLoad(Request $req)
     {
-        //
+        $branchUser = Auth::user()->employee->branch_id;
+        $startDate = $this->changeDate($req->startDate3)." 00:00:00";
+        $endDate = $this->changeDate($req->endDate3)." 23:59:59";
+
     }
 
-    public function store(Request $request)
+    public function branchLoad(Request $req)
     {
-        //
+        $startDate = $this->changeDate($req->startDate4)." 00:00:00";
+        $endDate = $this->changeDate($req->endDate4)." 23:59:59";
+        $data = Purchasing::with('purchasingDetail')
+        ->whereBetween('date', [$startDate, $endDate])
+        ->where('branch_id', $req->branch_id)
+        ->orderBy('id', 'desc')->get();
+        $tr = count($data);
+        $sumBayar = $data->sum('price');
+
+        return view('pages.backend.report.reportPurchaseLoad', compact('data', 'tr', 'sumBayar'));
     }
 
     public function show($id)
