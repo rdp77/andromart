@@ -1,5 +1,5 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__('Sharing Profit'))
+@section('title', __('pages.title').__(' | Sharing Profit'))
 @section('titleContent', __('Sharing Profit'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')

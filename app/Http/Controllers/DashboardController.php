@@ -344,8 +344,7 @@ class DashboardController extends Controller
             ->get();
         $log = Log::limit(7)->get();
         $users = User::count();
-        $logCount = Log::where('u_id', Auth::user()->id)
-            ->count();
+        $logCount = Log::where('u_id', Auth::user()->id)->count();
 
         $totalSharingProfit = 0;
         $totalSharingProfitSplit = [];
@@ -382,7 +381,6 @@ class DashboardController extends Controller
             }
         }
 
-
         $totalKeseluruhanPendapatan = 0;
         $totalCash = 0;
         $totalDebit = 0;
@@ -408,10 +406,12 @@ class DashboardController extends Controller
             }
         }
         return Response::json([
-            'status' => 'success', 'totalKeseluruhanPendapatan' => number_format($totalKeseluruhanPendapatan, 0, ',', '.'),
-            'totalCash' =>  number_format($totalCash, 0, ',', '.'),
-            'totalDebit' => number_format($totalDebit, 0, ',', '.'),
-            'totalTransfer' => number_format($totalTransfer, 0, ',', '.'), 'topSales' => $topSales,
+            'status' => 'success',
+            'totalKeseluruhanPendapatan' => 'Rp. '.number_format($totalKeseluruhanPendapatan, 0, ',', '.'),
+            'totalCash' =>  'Rp. '.number_format($totalCash, 0, ',', '.'),
+            'totalDebit' => 'Rp. '.number_format($totalDebit, 0, ',', '.'),
+            'totalTransfer' => 'Rp. '.number_format($totalTransfer, 0, ',', '.'),
+            'topSales' => $topSales,
             'sharingProfit1Service' => $sharingProfit1Service,
             'sharingProfit2Service' => $sharingProfit2Service,
             'sharingProfitSaleSales' => $sharingProfitSaleSales,
@@ -425,7 +425,7 @@ class DashboardController extends Controller
             'totalServiceCancel' => $totalServiceCancel,
             'totalServiceFix' => $totalServiceFix,
             'totalSharingProfitSplit' => $totalSharingProfitSplit,
-            'totalSharingProfit' => number_format($totalSharingProfit, 0, ',', '.'),
+            'totalSharingProfit' => 'Rp. '.number_format($totalSharingProfit, 0, ',', '.'),
         ]);
     }
 

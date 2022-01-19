@@ -1,5 +1,5 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title') . __('Update Form Service'))
+@section('title', __('pages.title') . __(' | Update Form Service'))
 @section('titleContent', __('Update Form Service'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
@@ -93,7 +93,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                 </div>
             </div>
             <div class="modal fade" tabindex="1" role="dialog" id="exampleModal" aria-hidden="true"

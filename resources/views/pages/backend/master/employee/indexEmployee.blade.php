@@ -48,10 +48,10 @@
                     <div class="profile-widget-name">
                         <i class="fa fa-user"></i> &nbsp;
                         <div class="text-muted d-inline font-weight-normal">
-                            {{ $employee->name }} 
+                            {{ $employee->name }}
                         </div>
                     </div>
-                    
+
                     <div class="profile-widget-name">
                         <i class="fa fa-address-card"></i> &nbsp;
                         <div class="text-muted d-inline font-weight-normal">
@@ -95,15 +95,14 @@
                             <i class="fas fa-user-edit"></i>
                         </a>
                     </div>
-                    
+
                     {{-- <div class="profile-widget-name text-right">
                         <a href="{{ route('employee.edit', $employee->id)}}" class="btn btn-outline-primary btn-md">
                             <i class="fa fa-trash"></i>
                         </a>
                     </div> --}}
                 </div>
-                
-                
+
                 <div class="card-footer">
                     <div class="profile-widget-name">
                         <i class="fa fa-times"></i> &nbsp;
@@ -115,20 +114,20 @@
                         <i class="fa fa-check"></i> &nbsp;
                         <div class="text-muted d-inline font-weight-normal">
                             {{$totalServiceDone[$index]}}
-                            
+
                         </div>
                     </div>
                     <div class="profile-widget-name">
                         <i class="fa fa-list"></i> &nbsp;
                         <div class="text-muted d-inline font-weight-normal">
                             {{$totalServiceProgress[$index]}}
-                            
+
                         </div>
                     </div>
                 </div>
-              
+
             </div>
-            
+
         </div>
         @endforeach
     </div>

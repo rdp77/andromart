@@ -19,9 +19,10 @@
                     <div class="col-lg-4 col-md-4 col-sm-6">
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Filter dengan :</h4>
+                                {{-- <h4>Filter dengan :</h4> --}}
+                                <label>{{ __('Filter dengan :') }}</label>
                                 <select style="margin-top: 10px" onchange="checkFilter()" name="filter"
-                                    class="filter form-control" id="">
+                                    class="select2 filter form-control" id="">
                                     <option value="">- Select -</option>
                                     <option value="Tanggal">Tanggal</option>
                                     <option value="Bulan">Bulan</option>
@@ -103,7 +104,7 @@
                         <h4>Sharing Profit</h4>
                     </div>
                     <div class="card-body dropHereSharingProfitTotal">
-                        {{ $totalSharingProfit }}
+                        Rp. {{ $totalSharingProfit }}
                     </div>
                     <div class="card-footer">
                         <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar" style="position: relative;
@@ -112,9 +113,9 @@
                             <table class="table table-bordered table-striped mb-0">
                                 <thead>
                                     <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Nama</th>
-                                        <th scope="col">Profit</th>
+                                        <th class="text-center" scope="col" width="10%">#</th>
+                                        <th class="text-center" scope="col" width="55%">Nama</th>
+                                        <th class="text-center" scope="col" width="35%">Profit</th>
                                     </tr>
                                 </thead>
                                 <tbody class="dropHereSharingProfit">
@@ -122,9 +123,9 @@
                                     @foreach ($karyawan as $i => $el)
                                         <tr>
                                             <th scope="row">{{ $i + 1 }}</th>
-                                            <td>{{ $el->name }}</td>
-                                            <td>{{ number_format($sharingProfit1Service[$i] + $sharingProfit2Service[$i] + $sharingProfitSaleSales[$i] + $sharingProfitSaleBuyer[$i], 0, ',', '.') }}
-                                            </td>
+                                            <th>{{ $el->name }}</th>
+                                            <th class="text-right">Rp. {{ number_format($sharingProfit1Service[$i] + $sharingProfit2Service[$i] + $sharingProfitSaleSales[$i] + $sharingProfitSaleBuyer[$i], 0, ',', '.') }}
+                                            </th>
                                         </tr>
                                     @endforeach
                                 </tbody>
@@ -186,23 +187,21 @@
                             @endif
 
                         @endforeach
-                        {{ number_format($totalKeseluruhanPendapatan, 0, ',', '.') }}
+                        Rp. {{ number_format($totalKeseluruhanPendapatan, 0, ',', '.') }}
                     </div>
                     <div class="card-footer">
                         <table class="table">
                             <tr>
                                 <th>Cash</th>
-                                <th><b class="dropPendapatanCash">{{ number_format($totalCash, 0, ',', '.') }}</b></th>
+                                <th class="text-right"><b class="dropPendapatanCash">Rp. {{ number_format($totalCash, 0, ',', '.') }}</b></th>
                             </tr>
                             <tr>
                                 <th>Debet</th>
-                                <th><b class="dropPendapatanDebit">{{ number_format($totalDebit, 0, ',', '.') }}</b></th>
+                                <th class="text-right"><b class="dropPendapatanDebit">Rp. {{ number_format($totalDebit, 0, ',', '.') }}</b></th>
                             </tr>
                             <tr>
                                 <th>Transfer</th>
-                                <th><b
-                                        class="dropPendapatanTransfer">{{ number_format($totalTransfer, 0, ',', '.') }}</b>
-                                </th>
+                                <th class="text-right"><b class="dropPendapatanTransfer">Rp. {{ number_format($totalTransfer, 0, ',', '.') }}</b></th>
                             </tr>
                         </table>
                     </div>
@@ -222,6 +221,16 @@
                         {{ $dataServiceTotal }}
                     </div>
                     <div class="card-footer">
+                        {{-- <div class="row">
+                            <div class="card-icon shadow-primary bg-warning">
+                                <i class="fas fa-mobile-alt"></i>
+                                <h4><b class="dataServiceHandphone">{{ number_format($dataServiceHandphone, 0, ',', '.') }}</b></h4>
+                            </div>
+                            <div class="card-icon shadow-primary bg-success">
+                                <i class="fas fa-laptop"></i>
+                                <h4><b class="dataServiceLaptop">{{ number_format($dataServiceLaptop, 0, ',', '.') }}</b></h4>
+                            </div>
+                        </div> --}}
                         <table class="table">
                             <tr>
                                 <th>Handphone</th>
@@ -277,9 +286,8 @@
                         {{ $dataServiceTotal }}
                     </div>
                     <div class="card-footer">
-                        <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar" style="position: relative;
-                                                    height: 300px;
-                                                    overflow: auto;display: block;">
+                        <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar"
+                            style="position: relative; height: 300px; overflow: auto;display: block;">
                             <table class="table table-bordered table-striped mb-0" style="text-align: center;">
                                 <thead>
                                     <tr>
@@ -413,8 +421,6 @@
         </div>
     </div> --}}
 @endsection
-
-
 @section('script')
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js"></script>
@@ -483,12 +489,11 @@
                     $('.dropPendapatanKotor').html(data.totalKeseluruhanPendapatan);
                     $('.dropPendapatanCash').html(data.totalCash);
                     $('.dropPendapatanDebit').html(data.totalDebit);
-                    $('.dropPendapatanTransfer').html(data.totalKeseluruhanPendapatan);
+                    $('.dropPendapatanTransfer').html(data.totalTransfer);
                     $('.dataServiceHandphone').html(data.dataServiceHandphone);
                     $('.dataServiceLaptop').html(data.dataServiceLaptop);
                     $('.dataServiceTotal').html(data.dataServiceTotal);
                     $('.dataTraffic').html(data.dataTraffic);
-                    
                     $('.dropHereSharingProfitTotal').html(data.totalSharingProfit);
                     $('.dropHereSharingProfit').empty();
                     $('.totalServiceFix').empty();
@@ -553,7 +558,4 @@
             });
         }
     </script>
-
-
-
 @endsection

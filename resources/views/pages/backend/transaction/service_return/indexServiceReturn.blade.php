@@ -1,5 +1,5 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__('Return Service'))
+@section('title', __('pages.title').__(' | Return Service'))
 @section('titleContent', __('Return Service'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
