@@ -8,7 +8,8 @@ $.ajaxSetup({
     },
 });
 
-// fungsi update status
+
+
 function searchData() {
     var dateS = $(".dtpickermnth").val();
     $(".dropHere").empty();
@@ -33,27 +34,27 @@ function searchData() {
 
                         $.each(value.main_detail, function (index1, value1) {
                             var jurnal = [];
-                            $.each(value1.jurnal, function (index2, value2) {
-                                jurnal[index2] =
-                                    '<table><tr><td style="padding-left:100px">' +
-                                    value2.code + 
-                                    '</td><td style="padding-left:100px">' +
-                                    value2.ref + 
-                                    '</td><td style="padding-left:100px">' +
-                                    value2.type + 
-                                    '</td><td style="padding-left:100px">' +
-                                    value2.total + 
-                                    '</td></tr></table>';
-                            });
+                            // $.each(value1.jurnal, function (index2, value2) {
+                            //     jurnal[index2] =
+                            //         '<table width="100%" style="height:0px"><tr><td style="width:100px;height: 0px !important">' +
+                            //         value2.code + 
+                            //         '</td><td style="height: 0px !important;text-align:left">' +
+                            //         value2.ref + 
+                            //         '</td><td style="height: 0px !important;text-align:left">' +
+                            //         value2.type + 
+                            //         '</td><td style="height: 0px !important;text-align:right">' +
+                            //         value2.total + 
+                            //         '</td></tr></table>';
+                            // });
                             mainDetail[index1] =
                                 '<tr><th><h5>' +
                                 value1.detail+'</h5>' + jurnal.join(' ')+
                                 '</th></tr>';
                         });
                         main[index] =
-                            '<tr><th style="background-color:antiquewhite;padding:0px;text-align:center"><b>' +
+                            '<tr><th style="background-color:antiquewhite;padding:0px;text-align:center"><h5><b>' +
                             value.main +
-                            '</b><br><br>' +
+                            '</b><h5>' +
                             mainDetail.join(' ') +
                             '</th></tr><br>';
                     });
