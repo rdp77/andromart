@@ -37,14 +37,6 @@
                                 <br>
                                 <div class="row">
                                     <table class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                {{-- <th>Kode</th> --}}
-                                                <th>Nama</th>
-                                                {{-- <th>Cabang</th> --}}
-                                                <th>Total</th>
-                                            </tr>
-                                        </thead>
                                         <tbody class="dropHere">
 
                                         </tbody>

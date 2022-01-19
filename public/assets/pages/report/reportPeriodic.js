@@ -26,22 +26,38 @@ function searchData() {
                     $(".dropHere").empty();
                     $(".dropMonth").empty();
                 } else {
-                        $(".dropMonth").html(data.date);
-                        $.each(data.result, function (index, value) {
-                        $(".dropHere").append(
-                            "<tr>" +
-                                "<td><b>" +
-                                value.nama +
-                                "</b>" +
-                                "</td>" +
-                                "<td style='text-align: right'><b>" +
-                                "Rp. " +
-                                parseInt(value.total).toLocaleString("en-US") +
-                                "</b>" +
-                                "</b></td>" +
-                            "</tr>"
-                        );
+                    $(".dropMonth").html(data.date);
+                    var main = [];
+                    $.each(data.result, function (index, value) {
+                        var mainDetail = [];
+
+                        $.each(value.main_detail, function (index1, value1) {
+                            var jurnal = [];
+                            $.each(value1.jurnal, function (index2, value2) {
+                                jurnal[index2] =
+                                    '<table><tr><td style="padding-left:100px">' +
+                                    value2.code + 
+                                    '</td><td style="padding-left:100px">' +
+                                    value2.ref + 
+                                    '</td><td style="padding-left:100px">' +
+                                    value2.type + 
+                                    '</td><td style="padding-left:100px">' +
+                                    value2.total + 
+                                    '</td></tr></table>';
+                            });
+                            mainDetail[index1] =
+                                '<tr><th><h5>' +
+                                value1.detail+'</h5>' + jurnal.join(' ')+
+                                '</th></tr>';
+                        });
+                        main[index] =
+                            '<tr><th style="background-color:antiquewhite;padding:0px;text-align:center"><b>' +
+                            value.main +
+                            '</b><br><br>' +
+                            mainDetail.join(' ') +
+                            '</th></tr><br>';
                     });
+                    $(".dropHere").append(main);
                 }
             }
         },
