@@ -27,5 +27,9 @@ class accountMainDetail extends Model
     {
         return $this->belongsTo('App\Models\AccountMain', 'main_id', 'id');
     }
+    public function accountData()
+    {
+        return $this->hasMany('App\Models\accountData', 'main_detail_id', 'id');
+    }
     
 }

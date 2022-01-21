@@ -140,8 +140,8 @@ class PaymentController extends Controller
                 Journal::create([
                     'id' => $idJournal,
                     'code' => $this->codeJournals('KK', $idJournal),
-                    'year' => date('Y'),
-                    'date' => date('Y-m-d'),
+                    'year' => date('Y',strtotime($date)),
+                    'date' => $date,
                     'type' => 'Biaya',
                     'total' => str_replace(",", '', $req->price),
                         'ref' => $req->code,
@@ -189,8 +189,8 @@ class PaymentController extends Controller
                 Journal::create([
                     'id' => $idJournalMasuk,
                     'code' => $this->codeJournals('DD', $idJournalMasuk),
-                    'year' => date('Y'),
-                    'date' => date('Y-m-d'),
+                    'year' => date('Y',strtotime($date)),
+                    'date' => $date,
                     'type' => 'Transfer Masuk',
                     'total' => str_replace(",", '', $req->price),
                     'ref' => $req->code,
@@ -238,8 +238,8 @@ class PaymentController extends Controller
                 Journal::create([
                     'id' => $idJournal,
                     'code' => $this->codeJournals('KK', $idJournal),
-                    'year' => date('Y'),
-                    'date' => date('Y-m-d'),
+                    'year' => date('Y',strtotime($date)),
+                    'date' => $date,
                     'type' => 'Biaya',
                     'total' => str_replace(",", '', $req->price),
                     'ref' => $req->code,

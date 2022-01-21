@@ -68,6 +68,7 @@
                                                                                 data-parent="#accordion2"
                                                                                 href="#{{ str_replace(' ', '', $data[$i]['main_detail'][$j]['detail']) }}">
                                                                                 {{ $data[$i]['main_detail'][$j]['detail'] }}
+                                                                                {{-- SaldoAkhirJurnalFix --}}
                                                                             </a>
                                                                         </div>
                                                                         <div id="{{ str_replace(' ', '', $data[$i]['main_detail'][$j]['detail']) }}"
@@ -131,8 +132,21 @@
                                                                                                                 </tr>
                                                                                                             </thead>
                                                                                                             <tbody>
+                                                                                                                <tr>
+                                                                                                                    <th style="height: 0px;border:1px solid black;text-align:right"
+                                                                                                                        colspan="5">
+                                                                                                                        Saldo
+                                                                                                                        Sebelumnya
+                                                                                                                    </th>
+                                                                                                                    <th
+                                                                                                                        style="height: 0px;border:1px solid black;text-align:right">
+                                                                                                                        Rp.
+
+                                                                                                                        {{ number_format($data[$i]['main_detail'][$j]['branch'][$k]['SaldoAkhirJurnalFix'], 0, '.', ',') }}
+                                                                                                                    </th>
+                                                                                                                </tr>
                                                                                                                 @php
-                                                                                                                    $totalSaldoBerjalan = 0;
+                                                                                                                    $totalSaldoBerjalan = $data[$i]['main_detail'][$j]['branch'][$k]['SaldoAkhirJurnalFix'];
                                                                                                                 @endphp
                                                                                                                 @if (isset($data[$i]['main_detail'][$j]['branch'][$k]['jurnal']))
                                                                                                                     @for ($l = 0; $l < count($data[$i]['main_detail'][$j]['branch'][$k]['jurnal']); $l++)

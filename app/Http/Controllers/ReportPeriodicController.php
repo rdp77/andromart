@@ -66,10 +66,10 @@ class ReportPeriodicController extends Controller
             ->where('date', '<=', date('Y-m-01', strtotime($dateParams)))
             ->get();
 
-        $account = accountMain::with('accountMainDetail')->get();
+        $account = accountMain::with('accountMainDetail','accountMainDetail.accountData')->get();
         $accountData = accountData::get();
         $branch = Branch::get();
-        // return $data;
+        // return $account;
         // return $accountData;
 
         // return $data;
@@ -78,16 +78,27 @@ class ReportPeriodicController extends Controller
         for ($i = 0; $i < count($account); $i++) {
             $data[$i]['main'] = $account[$i]->name;
             // array_push($data['main'],$account[$i]->name);
+
             for ($j = 0; $j < count($account[$i]->accountMainDetail); $j++) {
                 $data[$i]['main_detail'][$j]['detail'] = $account[$i]->accountMainDetail[$j]->name;
-                for ($k = 0; $k < count($jurnal); $k++) {
-                    for ($l = 0; $l < count($jurnal[$k]->JournalDetail); $l++) {
-                        if (($jurnal[$k]->JournalDetail[$l]->accountData->main_id ==  $account[$i]->id) && ($jurnal[$k]->JournalDetail[$l]->accountData->main_detail_id ==  $account[$i]->accountMainDetail[$j]->id)) {
-                            if (isset($jurnal[$k]->JournalDetail[$l]->accountData->code)) {
-                                for ($m = 0; $m < count($branch); $m++) {
-                                    $data[$i]['main_detail'][$j]['branch'][$m]['nama'] = $branch[$m]->name;
+
+                // mengecek jurnal sebelum bulan ini
+                for ($z=0; $z <count($account[$i]->accountMainDetail[$j]->accountData) ; $z++) { 
+                    $data[$i]['main_detail'][$j]['branch'][$z]['saldoAwal'] = $account[$i]->accountMainDetail[$j]->accountData[$z]->opening_balance;
+                }
+
+                for ($m = 0; $m < count($branch); $m++) {
+                    $data[$i]['main_detail'][$j]['branch'][$m]['nama'] = $branch[$m]->name;
+                    $data[$i]['main_detail'][$j]['branch'][$m]['SaldoAkhirJurnalFix'] = 0;
+
+                    // $data[$i]['main_detail'][$j]['branch'][$m]['balance'] = $account[$i]->accountMainDetail[$j]->accountData->main_detail_id;
+                    for ($k = 0; $k < count($jurnal); $k++) {
+                        for ($l = 0; $l < count($jurnal[$k]->JournalDetail); $l++) {
+                            if (($jurnal[$k]->JournalDetail[$l]->accountData->main_id ==  $account[$i]->id) && ($jurnal[$k]->JournalDetail[$l]->accountData->main_detail_id ==  $account[$i]->accountMainDetail[$j]->id)) {
+                                if (isset($jurnal[$k]->JournalDetail[$l]->accountData->code)) {
+
                                     if ($jurnal[$k]->JournalDetail[$l]->accountData->branch_id == $branch[$m]->id) {
-                                        $data[$i]['main_detail'][$j]['branch'][$m]['opening_balance'] = $jurnal[$k]->JournalDetail[$l]->accountData->opening_balance;
+                                        // $data[$i]['main_detail'][$j]['branch'][$m]['openingBalanceRaw'] = $jurnal[$k]->JournalDetail[$l]->accountData->opening_balance;
                                         $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['code'] = $jurnal[$k]->JournalDetail[$l]->accountData->code;
                                         $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['total']  = $jurnal[$k]->JournalDetail[$l]->total;
                                         $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['ref']  = $jurnal[$k]->ref;
@@ -106,23 +117,47 @@ class ReportPeriodicController extends Controller
                 }
                 for ($k = 0; $k < count($jurnalSebelumnya); $k++) {
                     for ($l = 0; $l < count($jurnalSebelumnya[$k]->JournalDetail); $l++) {
-                        if (($jurnalSebelumnya[$k]->JournalDetail[$l]->accountData->main_id ==  $account[$i]->id) && ($jurnalSebelumnya[$k]->JournalDetail[$l]->accountData->main_detail_id == $account[$i]->accountMainDetail[$j]->id)) {  
+                        // mengecek jurnal detail main id sama dengan id akun 
+                        if (($jurnalSebelumnya[$k]->JournalDetail[$l]->accountData->main_id ==  $account[$i]->id) && ($jurnalSebelumnya[$k]->JournalDetail[$l]->accountData->main_detail_id == $account[$i]->accountMainDetail[$j]->id)) {
+                            // isset mengecek apakah ada account id tsb
                             if (isset($jurnalSebelumnya[$k]->JournalDetail[$l]->accountData->code)) {
+                                // perulangan cabang
                                 for ($m = 0; $m < count($branch); $m++) {
-                                    $data[$i]['main_detail'][$j]['branch'][$m]['aa'] = [];
-                                    // $data[$i]['main_detail'][$j]['branch'][$m]['nama'] = $branch[$m]->name;
+                                    $data[$i]['main_detail'][$j]['branch'][$m]['nama'] = $branch[$m]->name;
+                                    // mengecek apakah cabang sama dengan perulangan cabang
                                     if ($jurnalSebelumnya[$k]->JournalDetail[$l]->accountData->branch_id == $branch[$m]->id) {
-                                        $data[$i]['main_detail'][$j]['branch'][$m]['aa'] = $jurnalSebelumnya[$k]->JournalDetail[$l]->accountData->opening_balance;
-                                        // $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['code'] = $jurnal[$k]->JournalDetail[$l]->accountData->code;
-                                        // $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['total']  = $jurnal[$k]->JournalDetail[$l]->total;
-                                        // $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['ref']  = $jurnal[$k]->ref;
-                                        // $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['debet_kredit']  = $jurnal[$k]->JournalDetail[$l]->debet_kredit;
-                                        // $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['date']  = date('d F Y', strtotime($jurnal[$k]->date));
-                                        // $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['acc_debet_kredit']  = $jurnal[$k]->JournalDetail[$l]->accountData->debet_kredit;
-                                        // $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['desc']  = $jurnal[$k]->JournalDetail[$l]->description;
+                                        $data[$i]['main_detail'][$j]['branch'][$m]['openingBalance'] = $jurnalSebelumnya[$k]->JournalDetail[$l]->accountData->opening_balance;
+                                        $data[$i]['main_detail'][$j]['branch'][$m]['saldoAkhirJurnalRaw'][$k]['total']  = $jurnalSebelumnya[$k]->JournalDetail[$l]->total;
+                                        $data[$i]['main_detail'][$j]['branch'][$m]['saldoAkhirJurnalRaw'][$k]['debet_kredit']  = $jurnalSebelumnya[$k]->JournalDetail[$l]->debet_kredit;
+                                        $data[$i]['main_detail'][$j]['branch'][$m]['saldoAkhirJurnalRaw'][$k]['acc_debet_kredit']  = $jurnalSebelumnya[$k]->JournalDetail[$l]->accountData->debet_kredit;
                                     }
-                                    if (isset($data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'])) {
-                                        // $data[$i]['main_detail'][$j]['branch'][$m]['jurnal'] = array_values($data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw']);
+                                    // mengecek apakah saldoAkhirJurnalRaw ada
+                                    if (isset($data[$i]['main_detail'][$j]['branch'][$m]['saldoAkhirJurnalRaw'])) {
+                                        // mengurutkan array menjadi dari 0 dst
+
+                                        $data[$i]['main_detail'][$j]['branch'][$m]['SaldoAkhirJurnalReindexArray'] = array_values($data[$i]['main_detail'][$j]['branch'][$m]['saldoAkhirJurnalRaw']);
+
+                                        // mendefinisikan jurnal DK
+                                        $data[$i]['main_detail'][$j]['branch'][$m]['SaldoAkhirJurnalDK'] = 0;
+
+                                        // melakukan perulangan pada reindex array untuk mendapatkan totalnya
+                                        for ($n = 0; $n < count($data[$i]['main_detail'][$j]['branch'][$m]['SaldoAkhirJurnalReindexArray']); $n++) {
+                                            // mengecek apakah dia DEBET / KREDIT
+                                            if ($data[$i]['main_detail'][$j]['branch'][$m]['SaldoAkhirJurnalReindexArray'][$n]['debet_kredit'] == 'D') {
+                                                $data[$i]['main_detail'][$j]['branch'][$m]['SaldoAkhirJurnalDK'] += $data[$i]['main_detail'][$j]['branch'][$m]['SaldoAkhirJurnalReindexArray'][$n]['total'];
+                                            } else {
+                                                // mengecek apakah dia KREDIT pada master, dan kredit pada jurnal , maka bernilai +
+                                                if ($data[$i]['main_detail'][$j]['branch'][$m]['SaldoAkhirJurnalReindexArray'][$n]['acc_debet_kredit'] == 'K') {
+                                                    $data[$i]['main_detail'][$j]['branch'][$m]['SaldoAkhirJurnalDK'] += $data[$i]['main_detail'][$j]['branch'][$m]['SaldoAkhirJurnalReindexArray'][$n]['total'];
+                                                } else {
+                                                    $data[$i]['main_detail'][$j]['branch'][$m]['SaldoAkhirJurnalDK'] -= $data[$i]['main_detail'][$j]['branch'][$m]['SaldoAkhirJurnalReindexArray'][$n]['total'];
+                                                }
+                                            }
+                                        }
+                                        // Menambah Saldo Akir Jurnal Opening Balance + Saldo Jurnal
+                                        $data[$i]['main_detail'][$j]['branch'][$m]['SaldoAkhirJurnalFix'] = $data[$i]['main_detail'][$j]['branch'][$m]['saldoAwal']  + $data[$i]['main_detail'][$j]['branch'][$m]['SaldoAkhirJurnalDK'];
+                                    }else{
+                                        $data[$i]['main_detail'][$j]['branch'][$m]['SaldoAkhirJurnalFix'] =  $data[$i]['main_detail'][$j]['branch'][$m]['saldoAwal'];
                                     }
                                 }
                             }
@@ -133,69 +168,5 @@ class ReportPeriodicController extends Controller
         }
         // return $data;
         return view('pages.backend.report.reportPeriodic', compact('data'));
-    }
-
-    public function searchReportPeriodic(Request $req)
-    {
-        // return $req->all();
-        $jurnal = Journal::with('JournalDetail', 'JournalDetail.AccountData')
-            ->where('date', '>=', date('Y-m-01', strtotime($req->dateS)))
-            ->where('date', '<=', date('Y-m-t', strtotime($req->dateS)))
-            ->get();
-
-        $account = accountMain::with('accountMainDetail')->get();
-        $accountData = accountData::get();
-        $branch = Branch::get();
-        // return $data;
-        // return $accountData;
-
-        // return $data;
-        $data = array();
-        // $data['main']['main_detail'][] = array();
-        for ($i = 0; $i < count($account); $i++) {
-            $data[$i]['main'] = $account[$i]->name;
-            // array_push($data['main'],$account[$i]->name);
-            for ($j = 0; $j < count($account[$i]->accountMainDetail); $j++) {
-                $data[$i]['main_detail'][$j]['detail'] = $account[$i]->accountMainDetail[$j]->name;
-                for ($k = 0; $k < count($jurnal); $k++) {
-                    for ($l = 0; $l < count($jurnal[$k]->JournalDetail); $l++) {
-                        if (($jurnal[$k]->JournalDetail[$l]->accountData->main_id ==  $account[$i]->id) && ($jurnal[$k]->JournalDetail[$l]->accountData->main_detail_id ==  $account[$i]->accountMainDetail[$j]->id)) {
-                            if (isset($jurnal[$k]->JournalDetail[$l]->accountData->code)) {
-                                for ($m = 0; $m < count($branch); $m++) {
-                                    if ($jurnal[$k]->JournalDetail[$l]->accountData->branch_id == $branch[$m]->id) {
-                                        $data[$i]['main_detail'][$j][$m]['JurnalRaw'][$k]['code'] = $jurnal[$k]->JournalDetail[$l]->accountData->code;
-                                        $data[$i]['main_detail'][$j][$m]['JurnalRaw'][$k]['total']  = $jurnal[$k]->JournalDetail[$l]->total;
-                                        $data[$i]['main_detail'][$j][$m]['JurnalRaw'][$k]['ref']  = $jurnal[$k]->ref;
-                                        $data[$i]['main_detail'][$j][$m]['JurnalRaw'][$k]['debet_kredit']  = $jurnal[$k]->JournalDetail[$l]->debet_kredit;
-                                        $data[$i]['main_detail'][$j][$m]['JurnalRaw'][$k]['type']  = $jurnal[$k]->JournalDetail[$l]->type;
-                                        $data[$i]['main_detail'][$j][$m]['JurnalRaw'][$k]['desc']  = $jurnal[$k]->JournalDetail[$l]->description;
-                                    }
-                                    if (isset($data[$i]['main_detail'][$j][$m]['JurnalRaw'])) {
-                                        $data[$i]['main_detail'][$j][$m]['jurnal'] = array_values($data[$i]['main_detail'][$j][$m]['JurnalRaw']);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        // return $data;
-        // return $data;
-
-        // return[$totalKasKecilJenggoloValD,$totalKasKecilJenggoloValK];
-        // return $totalKasKecilMukminFix;
-
-
-
-
-        if (count($data) == 0) {
-            $message = 'empty';
-        } else {
-            $message = 'exist';
-        }
-        return view('pages.backend.report.reportPeriodic', compact('data'));
-
-        // return Response::json(['status' => 'success', 'result' => $data, 'message' => $message, 'date' => $req->dateS]);
     }
 }

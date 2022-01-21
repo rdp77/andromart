@@ -23,7 +23,7 @@ Route::group(['prefix' => 'report'], function () {
 
         Route::post(
             'search-report-cash-balance',
-            [ReportCashBalanceController::class, 'searchReportIncomeSpending']
-        )->name('report-cash-balance.searchReportIncomeSpending');
+            [ReportCashBalanceController::class, 'searchReportCashBalance']
+        )->name('report-cash-balance.searchReportCashBalance');
     });
 });
