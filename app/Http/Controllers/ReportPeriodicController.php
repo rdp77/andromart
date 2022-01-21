@@ -52,14 +52,18 @@ class ReportPeriodicController extends Controller
     public function index(Request $req)
     {
         // return $req->dateS;
-        if($req->dateS == null){
+        if ($req->dateS == null) {
             $dateParams = date('F Y');
-        }else{
+        } else {
             $dateParams = $req->dateS;
         }
         $jurnal = Journal::with('JournalDetail', 'JournalDetail.AccountData')
             ->where('date', '>=', date('Y-m-01', strtotime($dateParams)))
             ->where('date', '<=', date('Y-m-t', strtotime($dateParams)))
+            ->get();
+
+        $jurnalSebelumnya = Journal::with('JournalDetail', 'JournalDetail.AccountData')
+            ->where('date', '<=', date('Y-m-01', strtotime($dateParams)))
             ->get();
 
         $account = accountMain::with('accountMainDetail')->get();
@@ -83,11 +87,13 @@ class ReportPeriodicController extends Controller
                                 for ($m = 0; $m < count($branch); $m++) {
                                     $data[$i]['main_detail'][$j]['branch'][$m]['nama'] = $branch[$m]->name;
                                     if ($jurnal[$k]->JournalDetail[$l]->accountData->branch_id == $branch[$m]->id) {
+                                        $data[$i]['main_detail'][$j]['branch'][$m]['opening_balance'] = $jurnal[$k]->JournalDetail[$l]->accountData->opening_balance;
                                         $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['code'] = $jurnal[$k]->JournalDetail[$l]->accountData->code;
                                         $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['total']  = $jurnal[$k]->JournalDetail[$l]->total;
                                         $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['ref']  = $jurnal[$k]->ref;
                                         $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['debet_kredit']  = $jurnal[$k]->JournalDetail[$l]->debet_kredit;
-                                        // $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['type']  = $jurnal[$k]->JournalDetail[$l]->accountData->type;
+                                        $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['date']  = date('d F Y', strtotime($jurnal[$k]->date));
+                                        $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['acc_debet_kredit']  = $jurnal[$k]->JournalDetail[$l]->accountData->debet_kredit;
                                         $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['desc']  = $jurnal[$k]->JournalDetail[$l]->description;
                                     }
                                     if (isset($data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'])) {
@@ -97,7 +103,31 @@ class ReportPeriodicController extends Controller
                             }
                         }
                     }
-                    
+                }
+                for ($k = 0; $k < count($jurnalSebelumnya); $k++) {
+                    for ($l = 0; $l < count($jurnalSebelumnya[$k]->JournalDetail); $l++) {
+                        if (($jurnalSebelumnya[$k]->JournalDetail[$l]->accountData->main_id ==  $account[$i]->id) && ($jurnalSebelumnya[$k]->JournalDetail[$l]->accountData->main_detail_id == $account[$i]->accountMainDetail[$j]->id)) {  
+                            if (isset($jurnalSebelumnya[$k]->JournalDetail[$l]->accountData->code)) {
+                                for ($m = 0; $m < count($branch); $m++) {
+                                    $data[$i]['main_detail'][$j]['branch'][$m]['aa'] = [];
+                                    // $data[$i]['main_detail'][$j]['branch'][$m]['nama'] = $branch[$m]->name;
+                                    if ($jurnalSebelumnya[$k]->JournalDetail[$l]->accountData->branch_id == $branch[$m]->id) {
+                                        $data[$i]['main_detail'][$j]['branch'][$m]['aa'] = $jurnalSebelumnya[$k]->JournalDetail[$l]->accountData->opening_balance;
+                                        // $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['code'] = $jurnal[$k]->JournalDetail[$l]->accountData->code;
+                                        // $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['total']  = $jurnal[$k]->JournalDetail[$l]->total;
+                                        // $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['ref']  = $jurnal[$k]->ref;
+                                        // $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['debet_kredit']  = $jurnal[$k]->JournalDetail[$l]->debet_kredit;
+                                        // $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['date']  = date('d F Y', strtotime($jurnal[$k]->date));
+                                        // $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['acc_debet_kredit']  = $jurnal[$k]->JournalDetail[$l]->accountData->debet_kredit;
+                                        // $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['desc']  = $jurnal[$k]->JournalDetail[$l]->description;
+                                    }
+                                    if (isset($data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'])) {
+                                        // $data[$i]['main_detail'][$j]['branch'][$m]['jurnal'] = array_values($data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw']);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -147,7 +177,6 @@ class ReportPeriodicController extends Controller
                             }
                         }
                     }
-                    
                 }
             }
         }

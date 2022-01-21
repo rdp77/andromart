@@ -60,6 +60,7 @@
                                                             @if (isset($data[$i]['main_detail']))
                                                                 @for ($j = 0; $j < count($data[$i]['main_detail']); $j++)
                                                                     <div class="accordion-group">
+                                                                        @if ($data[$i]['main_detail'][$j]['detail'] != 'Tranfer')
                                                                         <div class="accordion-heading"
                                                                             style="padding:10px;background-color:lightgoldenrodyellow;margin-bottom:10px">
                                                                             <a class="accordion-toggle"
@@ -100,18 +101,20 @@
                                                                                                                 <tr>
                                                                                                                     {{-- <td style="height: 0px;padding: 20px;">Kode</td> --}}
                                                                                                                     <th
+                                                                                                                         style="height: 0px;padding: 10px;border:1px solid black">
+                                                                                                                        Tanggal
+                                                                                                                    </th> 
+                                                                                                                    <th
                                                                                                                         style="height: 0px;padding: 10px;border:1px solid black">
                                                                                                                         Kode
                                                                                                                         Trans
                                                                                                                     </th>
+                                                                                                                    
                                                                                                                     <th
                                                                                                                         style="height: 0px;padding: 10px;border:1px solid black">
                                                                                                                         desc
                                                                                                                     </th>
-                                                                                                                    <th
-                                                                                                                        style="height: 0px;padding: 10px;border:1px solid black">
-                                                                                                                        DK
-                                                                                                                    </th>
+                                                                                                                    
                                                                                                                     <th
                                                                                                                         style="height: 0px;padding: 10px;border:1px solid black">
                                                                                                                         D
@@ -136,20 +139,24 @@
                                                                                                                         <tr>
                                                                                                                             <td
                                                                                                                                 style="height: 0px;padding-top: 5px;border:1px solid black">
+                                                                                                                                {{ $data[$i]['main_detail'][$j]['branch'][$k]['jurnal'][$l]['date'] }}
+                                                                                                                            </td>
+                                                                                                                            <td
+                                                                                                                                style="height: 0px;padding-top: 5px;border:1px solid black">
                                                                                                                                 {{ $data[$i]['main_detail'][$j]['branch'][$k]['jurnal'][$l]['ref'] }}
                                                                                                                             </td>
                                                                                                                             <td
                                                                                                                                 style="height: 0px;padding-top: 5px;border:1px solid black">
                                                                                                                                 {{ $data[$i]['main_detail'][$j]['branch'][$k]['jurnal'][$l]['desc'] }}
                                                                                                                             </td>
-                                                                                                                            <td
+                                                                                                                            {{-- <td
                                                                                                                                 style="height: 0px;padding-top: 5px;border:1px solid black">
                                                                                                                                 @if ($data[$i]['main_detail'][$j]['branch'][$k]['jurnal'][$l]['debet_kredit'] == 'D')
                                                                                                                                     DEBET
                                                                                                                                 @else
                                                                                                                                     KREDIT
                                                                                                                                 @endif
-                                                                                                                            </td>
+                                                                                                                            </td> --}}
                                                                                                                             <td
                                                                                                                                 style="height: 0px;padding-top: 5px;border:1px solid black;text-align:right">
                                                                                                                                 @if ($data[$i]['main_detail'][$j]['branch'][$k]['jurnal'][$l]['debet_kredit'] == 'D')
@@ -174,7 +181,12 @@
                                                                                                                                     if ($data[$i]['main_detail'][$j]['branch'][$k]['jurnal'][$l]['debet_kredit'] == 'D') {
                                                                                                                                         $totalSaldoBerjalan += $data[$i]['main_detail'][$j]['branch'][$k]['jurnal'][$l]['total'];
                                                                                                                                     } else {
-                                                                                                                                        $totalSaldoBerjalan -= $data[$i]['main_detail'][$j]['branch'][$k]['jurnal'][$l]['total'];
+                                                                                                                                        if (($data[$i]['main_detail'][$j]['branch'][$k]['jurnal'][$l]['debet_kredit'] == 'K') && ($data[$i]['main_detail'][$j]['branch'][$k]['jurnal'][$l]['acc_debet_kredit'] == 'K')) {
+                                                                                                                                            $totalSaldoBerjalan += $data[$i]['main_detail'][$j]['branch'][$k]['jurnal'][$l]['total'];
+                                                                                                                                        }else{
+                                                                                                                                            $totalSaldoBerjalan -= $data[$i]['main_detail'][$j]['branch'][$k]['jurnal'][$l]['total'];
+                                                                                                                                        }
+                                                                                                                                        
                                                                                                                                     }
                                                                                                                                     echo 'Rp. ' . number_format($totalSaldoBerjalan, 0, '.', ',');
                                                                                                                                 @endphp
@@ -204,6 +216,7 @@
                                                                                 @endfor
                                                                             @endif
                                                                         </div>
+                                                                        @endif
                                                                     </div>
 
                                                                 @endfor

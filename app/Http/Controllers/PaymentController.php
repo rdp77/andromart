@@ -144,7 +144,7 @@ class PaymentController extends Controller
                     'date' => date('Y-m-d'),
                     'type' => 'Biaya',
                     'total' => str_replace(",", '', $req->price),
-                    'ref' => $req->code,
+                        'ref' => $req->code,
                     'description' => $req->description,
                     'created_at' => date('Y-m-d h:i:s'),
                     // 'updated_at'=>date('Y-m-d h:i:s'),
