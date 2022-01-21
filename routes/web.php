@@ -89,6 +89,7 @@ require __DIR__ . '/report/reportPeriodicRoute.php';
 require __DIR__ . '/warehouse/stockRoute.php';
 require __DIR__ . '/warehouse/stockTransactionRoute.php';
 require __DIR__ . '/warehouse/stockMutationRoute.php';
+require __DIR__ . '/warehouse/stockOpnameRoute.php';
 
 // require __DIR__ . '/content/notes.php';
 require __DIR__ . '/content/contentsRoute.php';

@@ -132,8 +132,8 @@ class SubMenuSeeder extends Seeder
             [
                 'menu_id' => '4',
                 'name' => 'Laporan Periode Detail',
-                'url' => route('report-report-periodic.index'),
-                'hover' => '["' . route('report-report-periodic.index') . '"]'
+                'url' => route('report-periodic.index'),
+                'hover' => '["' . route('report-periodic.index') . '"]'
             ],
 
             // Master Data
@@ -272,8 +272,8 @@ class SubMenuSeeder extends Seeder
             [
                 'menu_id' => '6',
                 'name' => 'Stok Opname',
-                'url' => 'javascript:void(0)',
-                'hover' => null
+                'url' => route('stockOpname.index'),
+                'hover' => '["' . route('stockOpname.index') . '"]'
             ],
             [
                 'menu_id' => '6',

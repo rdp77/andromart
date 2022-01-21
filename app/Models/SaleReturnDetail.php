@@ -14,7 +14,6 @@ class SaleReturnDetail extends Model
 
     protected $fillable = [
         'sale_return_id',
-        'sale_detail_id',
         'item_id',
         'sales_id',
         'buyer_id',
@@ -22,10 +21,10 @@ class SaleReturnDetail extends Model
         'type',
         'description',
         'price',
-        'total_price',
-        'total_loss_store',
-        'total_loss_sales',
-        'total_loss_buyer',
+        'total',
+        'sharing_loss_store',
+        'sharing_loss_sales',
+        'sharing_loss_buyer',
         'created_at',
         'updated_at',
         'deleted_at',
