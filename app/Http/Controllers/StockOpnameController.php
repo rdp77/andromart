@@ -24,50 +24,17 @@ class StockOpnameController extends Controller
 
     public function index(Request $req)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(35,'view');
+        $checkRoles = $this->DashboardController->cekHakAkses(39,'view');
         if($checkRoles == 'akses ditolak'){
             return view('forbidden');
         }
 
-        if ($req->ajax()) {
-            $branchUser = Auth::user()->employee->branch_id;
-            $data = Stock::with('item', 'unit', 'branch')->where('branch_id', $branchUser)->where('id', '!=', 1)->get();
-            return Datatables::of($data)
-                ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-                    $actionBtn = '<div class="btn-group">';
-                    $actionBtn .= '<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                            data-toggle="dropdown">
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>';
-                    $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('stock.edit', $row->id) . '">Edit</a>';
-                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
-                    $actionBtn .= '</div></div>';
-                    return $actionBtn;
-                })
+        $branchUser = Auth::user()->employee->branch_id;
+        $item = Stock::with('item')->where('branch_id', $branchUser)->get();
+        $sumItem = count($item);
+        $sumActiva = Stock::with('item')->leftJoin('items', 'items.id', '=', 'stocks.item_id')->where('branch_id', $branchUser)->sum('buy');
 
-                ->addColumn('dataBuy', function ($row) {
-                    $htmlAdd =   '<tr>';
-                    $htmlAdd .=      '<td class="text-right">'.'Rp. '. number_format($row->item->buy, 0, ".", ",") .'</td>';
-                    $htmlAdd .=   '</tr>';
-
-                    return $htmlAdd;
-                })
-
-                ->addColumn('dataPrice', function ($row) {
-                    $price = $row->item->buy*$row->stock;
-                    $htmlAdd =   '<tr>';
-                    $htmlAdd .=      '<td class="text-right">'.'Rp. '. number_format($price, 0, ".", ",") .'</td>';
-                    $htmlAdd .=   '</tr>';
-
-                    return $htmlAdd;
-                })
-
-                ->rawColumns(['action','dataBuy', 'dataPrice'])
-                ->make(true);
-        }
-        return view('pages.backend.warehouse.stockOpname.indexStockOpname');
+        return view('pages.backend.warehouse.stockOpname.indexStockOpname', compact('item', 'sumItem', 'sumActiva'));
     }
 
     public function create()
