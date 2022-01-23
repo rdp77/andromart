@@ -312,7 +312,7 @@ function addItem() {
         }else{
             var stocks = $(this).data('stock');
         }
-        dataItems += '<option data-index="'+(index+1)+'"  data-price="'+$(this).data('price')+'" data-stock="'+stocks+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
+        dataItems += '<option data-index="'+(index+1)+'" data-hpp="'+$(this).data('hpp')+'"  data-price="'+$(this).data('price')+'" data-stock="'+stocks+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
     });
 
     $('.dropHereItem').append(
@@ -329,6 +329,7 @@ function addItem() {
             '</td>'+
             '<td>'+
                 '<input type="text" class="form-control cleaveNumeral priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
+                '<input type="hidden" class="form-control priceHpp priceHpp_'+(index+1)+'" name="priceHpp[]" value="0">'+
             '</td>'+
             '<td>'+
                 '<input type="text" class="form-control qtyDetail qtyDetail_'+(index+1)+'" name="qtyDetail[]" data-index="'+(index+1)+'" value="1" style="text-align: right">'+
@@ -338,6 +339,7 @@ function addItem() {
             '</td>'+
             '<td>'+
                 '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="0" style="text-align: right">'+
+                '<input readonly type="hidden" class="form-control totalPriceHpp totalPriceHpp_'+(index+1)+'" name="totalPriceHpp[]" value="0" style="text-align: right">'+
             '</td>'+
             '<td>'+
                 '<input type="text" class="form-control" name="descriptionDetail[]">'+
@@ -450,12 +452,15 @@ $(document.body).on("change",".itemsDetail",function(){
         $('.totalPriceDetail_' + index).val(0);
         $('.priceDetailLoss_'+index).val(0);
         $('.priceDetailSparePart_'+index).val(0);
+        $('.priceHpp'+index).val(0);
     }else{
         var typeDetail = $('.typeDetail_' + index).find(':selected').val();
         if (isNaN(parseInt($(this).find(':selected').data('price')))) {
             var itemPrice = 0;
+            var itemHpp = 0;
         } else {
             var itemPrice = $(this).find(':selected').data('price');
+            var itemHpp = $(this).find(':selected').data('hpp');
         }
         if (isNaN(parseInt($('.qtyDetail_' + index).val()))) {
             var itemQty = 0;
@@ -464,8 +469,12 @@ $(document.body).on("change",".itemsDetail",function(){
         }
         $('.priceDetail_' + index).val(parseInt(itemPrice).toLocaleString('en-US'));
         var totalItemPrice = itemPrice * itemQty;
+        
+        $('.priceHpp_' + index).val(parseInt(itemHpp).toLocaleString('en-US'));
+        var totalItemHpp = itemHpp * itemQty;
         $('.stock_' + index).val($(this).find(':selected').data('stock'));
         $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
+        $('.totalPriceHpp_'+index).val(totalItemHpp);
         if(typeDetail == 'SparePart'){
             $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
             $('.priceDetailLoss_'+index).val(0);
@@ -483,6 +492,11 @@ $(document.body).on("change",".itemsDetail",function(){
     }else{
         sumDiscontValue();
     }
+    var totalPriceHpp = 0;
+    $('.totalPriceHpp').each(function(){
+        totalPriceHpp += parseInt(this.value.replace(/,/g, ""))
+    });
+    $('#totalHppAtas').val(parseInt(totalPriceHpp).toLocaleString('en-US'));
 });
 
 // menghapus kolom
@@ -518,12 +532,15 @@ $(document.body).on("keyup",".qtyDetail",function(){
     var typeDetail = $('.typeDetail_'+index).find(':selected').val();
     if(isNaN(parseInt($('.priceDetail_'+index).val()))){
         var itemPrice =  0; }else{
-        var itemPrice = $('.priceDetail_'+index).val().replace(/,/g, ''),asANumber = +itemPrice;}
+        var itemPrice = $('.priceDetail_'+index).val().replace(/,/g, ''),asANumber = +itemPrice;
+        var itemHpp = $('.priceHpp_'+index).val().replace(/,/g, ''),asANumber = +itemHpp;}
     if(isNaN(parseInt(this.value))){
         var itemQty =  0; }else{
         var itemQty = this.value.replace(/,/g, ''),asANumber = +itemQty;}
     var totalItemPrice = itemPrice*itemQty;
+    var totalItemHpp = itemHpp*itemQty;
     $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
+    $('.totalPriceHpp_'+index).val(parseInt(totalItemHpp).toLocaleString('en-US'));
     if(typeDetail == 'SparePart'){
         $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailLoss_'+index).val(0);
@@ -540,6 +557,12 @@ $(document.body).on("keyup",".qtyDetail",function(){
     }else{
         sumDiscontValue();
     }
+
+    var totalPriceHpp = 0;
+    $('.totalPriceHpp').each(function(){
+        totalPriceHpp += parseInt(this.value.replace(/,/g, ""))
+    });
+    $('#totalHppAtas').val(parseInt(totalPriceHpp).toLocaleString('en-US'));
 });
 
 // merubah harga
@@ -570,6 +593,11 @@ $(document.body).on("keyup",".priceDetail",function(){
     }else{
         sumDiscontValue();
     }
+    var totalPriceHpp = 0;
+    $('.totalPriceHpp').each(function(){
+        totalPriceHpp += parseInt(this.value.replace(/,/g, ""))
+    });
+    $('#totalHppAtas').val(parseInt(totalPriceHpp).toLocaleString('en-US'));
 });
 
 // merubah harga jasa

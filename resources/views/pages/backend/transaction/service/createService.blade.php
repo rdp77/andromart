@@ -330,6 +330,11 @@
                         <input readonly id="totalLoss" onchange="sumTotal()" type="text" value="0"
                             class="form-control cleaveNumeral" name="totalLoss" style="text-align: right">
                     </div>
+                    <div class="form-group">
+                        <label for="totalPrice">{{ __('Total HPP') }}<code>*</code></label>
+                        <input id="totalHppAtas" type="text" readonly value="0" class="form-control cleaveNumeral"
+                            name="totalHppAtas" style="text-align: right">
+                    </div>
                     <div class="form-group" style="display: none">
                         <label for="totalDownPayment">{{ __('Down Payment (DP)') }}<code>*</code></label>
                         <input id="totalDownPayment" type="text" value="0" class="form-control cleaveNumeral"
@@ -367,6 +372,8 @@
                         <input id="totalPrice" type="text" value="0" class="form-control cleaveNumeral"
                             name="totalPrice" onchange="sumTotal()" style="text-align: right">
                     </div>
+
+                   
                 </div>
 
             </div>
@@ -698,6 +705,7 @@
             @foreach ($item as $el)
                 <input class="itemsData" type="hidden"
                 data-price="{{$el->sell}}"
+                data-hpp="{{$el->buy}}"
                 @foreach ($el->stock as $el1)
                     @if (Auth::user()->employee->branch_id == $el1->branch_id)
                         data-stock="{{$el1->stock}}"
@@ -738,6 +746,7 @@
                             <td>
                                 <input type="text" class="form-control priceServiceDetail cleaveNumeral"
                                     name="priceDetail[]" style="text-align: right" value="0">
+                                <input type="hidden" class="form-control priceHpp" name="priceHpp[]" value="0">
                             </td>
                             <td>
                                 <input readonly type="text" class="form-control" name="qtyDetail[]" value="1" style="text-align: right">
@@ -748,6 +757,7 @@
                             <td>
                                 <input readonly type="text" class="form-control totalPriceServiceDetail cleaveNumeral"
                                     name="totalPriceDetail[]" style="text-align: right" value="0">
+                                <input readonly type="hidden" class="form-control totalPriceHpp" name="totalPriceHpp[]" value="0" style="text-align: right">
                             </td>
                             <td>
                                 <input type="text" class="form-control" name="descriptionDetail[]">

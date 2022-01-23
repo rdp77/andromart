@@ -160,6 +160,9 @@
                         <label for="totalPrice">{{ __('Total Harga') }}<code>*</code></label>
                         <input readonly id="totalPrice" type="text" value="0" class="form-control cleaveNumeral"
                             name="totalPrice" onchange="sumTotal()" style="text-align: right">
+
+                            <input readonly id="totalHpp" type="hidden" value="0" class="form-control cleaveNumeral"
+                        name="totalHpp" style="text-align: right">
                     </div>
                     
                 </div>

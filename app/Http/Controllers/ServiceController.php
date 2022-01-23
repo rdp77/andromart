@@ -50,19 +50,19 @@ class ServiceController extends Controller
 
     public function index(Request $req)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
-        if($checkRoles == 'akses ditolak'){
+        $checkRoles = $this->DashboardController->cekHakAkses(1, 'view');
+        if ($checkRoles == 'akses ditolak') {
             return view('forbidden');
         }
         // return new User::akses();
 
 
         if ($req->ajax()) {
-            
+
             $data = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
-            ->orderBy('id', 'DESC')
-            // ->where('technician_id',Auth::user()->id)
-            ->get();
+                ->orderBy('id', 'DESC')
+                // ->where('technician_id',Auth::user()->id)
+                ->get();
 
             return Datatables::of($data)
                 ->addIndexColumn()
@@ -81,7 +81,7 @@ class ServiceController extends Controller
                     if ($row->payment_status == null) {
                         $actionBtn .= '<a class="dropdown-item" href="' . route('service.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
                         $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
-                    }else if($row->payment_status == 'DownPayment'){
+                    } else if ($row->payment_status == 'DownPayment') {
                         $actionBtn .= '<a class="dropdown-item" href="' . route('service.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
                     }
 
@@ -215,7 +215,7 @@ class ServiceController extends Controller
                         $workStatus = '<div class="badge badge-primary">Barang Diterima</div>';
                     } elseif ($row->work_status == 'Diambil') {
                         $workStatus = '<div class="badge badge-success">Sudah Diambil</div>';
-                    }elseif ($row->work_status == 'Return') {
+                    } elseif ($row->work_status == 'Return') {
                         $workStatus = '<div class="badge badge-success">Sudah Diambil</div>';
                     }
 
@@ -262,8 +262,8 @@ class ServiceController extends Controller
     }
     public function create()
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'create');
-        if($checkRoles == 'akses ditolak'){
+        $checkRoles = $this->DashboardController->cekHakAkses(1, 'create');
+        if ($checkRoles == 'akses ditolak') {
             return view('forbidden');
         }
         $code     = $this->code('SRV');
@@ -288,18 +288,18 @@ class ServiceController extends Controller
         try {
             // return $req->technicianId;
             $tech1 = Service::where('technician_id', $req->technicianId)
-            ->where('work_status', '!=', 'Selesai')
-            ->where('work_status', '!=', 'Cancel')
-            ->where('work_status', '!=', 'Return')
-            ->where('work_status', '!=', 'Diambil')
-            ->count();
+                ->where('work_status', '!=', 'Selesai')
+                ->where('work_status', '!=', 'Cancel')
+                ->where('work_status', '!=', 'Return')
+                ->where('work_status', '!=', 'Diambil')
+                ->count();
             // $tech1 = 10;
             $tech2 = Service::where('technician_replacement_id', $req->technicianId)
-            ->where('work_status', '!=', 'Selesai')
-            ->where('work_status', '!=', 'Cancel')
-            ->where('work_status', '!=', 'Return')
-            ->where('work_status', '!=', 'Diambil')
-            ->count();
+                ->where('work_status', '!=', 'Selesai')
+                ->where('work_status', '!=', 'Cancel')
+                ->where('work_status', '!=', 'Return')
+                ->where('work_status', '!=', 'Diambil')
+                ->count();
 
 
             $getEmployee =  Employee::where('user_id', Auth::user()->id)->first();
@@ -385,6 +385,7 @@ class ServiceController extends Controller
                 'discount_type' => $req->typeDiscount,
                 'discount_price' => str_replace(",", '', $req->totalDiscountValue),
                 'discount_percent' => str_replace(",", '', $req->totalDiscountPercent),
+                'total_hpp' => str_replace(",", '', $req->totalHppAtas),
                 'total_price' => str_replace(",", '', $req->totalPrice),
                 'work_status' => 'Manifest',
                 'equipment' => $req->equipment,
@@ -404,8 +405,10 @@ class ServiceController extends Controller
                     'service_id' => $id,
                     'item_id' => $req->itemsDetail[$i],
                     'price' => str_replace(",", '', $req->priceDetail[$i]),
+                    'hpp' => str_replace(",", '', $req->priceHpp[$i]),
                     'qty' => $req->qtyDetail[$i],
                     'total_price' => str_replace(",", '', $req->totalPriceDetail[$i]),
+                    'total_hpp' => str_replace(",", '', $req->totalPriceHpp[$i]),
                     'description' => str_replace(",", '', $req->descriptionDetail[$i]),
                     'type' => $req->typeDetail[$i],
                     'created_by' => Auth::user()->name,
@@ -631,8 +634,8 @@ class ServiceController extends Controller
 
     public function edit($id)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'edit');
-        if($checkRoles == 'akses ditolak'){
+        $checkRoles = $this->DashboardController->cekHakAkses(1, 'edit');
+        if ($checkRoles == 'akses ditolak') {
             return view('forbidden');
         }
         $service  = Service::with('ServiceDetail', 'serviceCondition', 'serviceEquipment')->find($id);
@@ -661,19 +664,19 @@ class ServiceController extends Controller
         DB::beginTransaction();
         try {
             $tech1 = Service::where('technician_id', $req->technicianId)
-            ->where('work_status', '!=', 'Selesai')
-            ->where('work_status', '!=', 'Cancel')
-            ->where('work_status', '!=', 'Return')
-            // ->where('work_status', '!=', 'Diambil')
-            ->where('work_status', '!=', 'Selesai')
-            ->count();
+                ->where('work_status', '!=', 'Selesai')
+                ->where('work_status', '!=', 'Cancel')
+                ->where('work_status', '!=', 'Return')
+                // ->where('work_status', '!=', 'Diambil')
+                ->where('work_status', '!=', 'Selesai')
+                ->count();
             $tech2 = Service::where('technician_replacement_id', $req->technicianId)
-            // ->where('work_status', '!=', 'Selesai')
-            ->where('work_status', '!=', 'Selesai')
-            ->where('work_status', '!=', 'Cancel')
-            ->where('work_status', '!=', 'Return')
-            ->where('work_status', '!=', 'Diambil')
-            ->count();
+                // ->where('work_status', '!=', 'Selesai')
+                ->where('work_status', '!=', 'Selesai')
+                ->where('work_status', '!=', 'Cancel')
+                ->where('work_status', '!=', 'Return')
+                ->where('work_status', '!=', 'Diambil')
+                ->count();
             $checkData = Service::where('id', $id)->first();
 
 
@@ -711,7 +714,7 @@ class ServiceController extends Controller
             }
             // return [$tech1
             // ,$tech2,$MaxHandle];
-            if($checkData->technician_id != $req->technicianId){
+            if ($checkData->technician_id != $req->technicianId) {
                 if (($tech1 + $tech2) >= $MaxHandle) {
                     return Response::json([
                         'status' => 'fail',
@@ -852,8 +855,10 @@ class ServiceController extends Controller
                         'service_id' => $id,
                         'item_id' => $req->itemsDetail[$i],
                         'price' => str_replace(",", '', $req->priceDetail[$i]),
+                        'hpp' => str_replace(",", '', $req->priceHpp[$i]),
                         'qty' => $req->qtyDetail[$i],
                         'total_price' => str_replace(",", '', $req->totalPriceDetail[$i]),
+                        'total_hpp' => str_replace(",", '', $req->totalPriceHpp[$i]),
                         'description' => str_replace(",", '', $req->descriptionDetail[$i]),
                         'type' => $req->typeDetail[$i],
                         'created_by' => Auth::user()->name,
@@ -948,6 +953,8 @@ class ServiceController extends Controller
                                         // 'service_id'=>$id,
                                         // 'item_id'=>$req->itemsDetailOld[$i],
                                         'price' => str_replace(",", '', $req->priceDetailOld[$i]),
+                                        'hpp' => str_replace(",", '', $req->priceDetailOld[$i]),
+                                        'total_hpp' => str_replace(",", '', $req->totalPriceHppOld[$i]),
                                         // 'qty'=>$req->qtyDetailOld[$i],
                                         'total_price' => str_replace(",", '', $req->totalPriceDetailOld[$i]),
                                         'description' => str_replace(",", '', $req->descriptionDetailOld[$i]),
@@ -1000,6 +1007,8 @@ class ServiceController extends Controller
                                         // 'item_id'=>$req->itemsDetailOld[$i],
                                         'price' => str_replace(",", '', $req->priceDetailOld[$i]),
                                         'qty' => $req->qtyDetailOld[$i],
+                                        'hpp' => str_replace(",", '', $req->priceDetailOld[$i]),
+                                        'total_hpp' => str_replace(",", '', $req->totalPriceHppOld[$i]),
                                         'total_price' => str_replace(",", '', $req->totalPriceDetailOld[$i]),
                                         'description' => str_replace(",", '', $req->descriptionDetailOld[$i]),
                                         'type' => $req->typeDetailOld[$i],
@@ -1058,6 +1067,8 @@ class ServiceController extends Controller
                                     'item_id' => $req->itemsDetailOld[$i],
                                     'price' => str_replace(",", '', $req->priceDetailOld[$i]),
                                     'qty' => $req->qtyDetailOld[$i],
+                                    'hpp' => str_replace(",", '', $req->priceDetailOld[$i]),
+                                    'total_hpp' => str_replace(",", '', $req->totalPriceHppOld[$i]),
                                     'total_price' => str_replace(",", '', $req->totalPriceDetailOld[$i]),
                                     'description' => str_replace(",", '', $req->descriptionDetailOld[$i]),
                                     'type' => $req->typeDetailOld[$i],
@@ -1261,9 +1272,9 @@ class ServiceController extends Controller
 
     public function destroy(Request $req, $id)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(1,'delete');
+        $checkRoles = $this->DashboardController->cekHakAkses(1, 'delete');
 
-        if($checkRoles == 'akses ditolak'){
+        if ($checkRoles == 'akses ditolak') {
             return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
         }
         // $this->DashboardController->createLog(
@@ -1347,12 +1358,12 @@ class ServiceController extends Controller
             $message = 'exist';
         }
 
-        return Response::json(['status' => 'success', 'result' => $data, 'message' => $message,'url'=>url('/')]);
+        return Response::json(['status' => 'success', 'result' => $data, 'message' => $message, 'url' => url('/')]);
     }
 
     public function serviceFormUpdateStatusSaveData(Request $req)
     {
-            // return $req->all();
+        // return $req->all();
         try {
             $checkData = Service::where('id', $req->serviceId)->first();
             $image = $req->image;
@@ -1360,8 +1371,8 @@ class ServiceController extends Controller
             $image = base64_decode($image);
             $index = ServiceStatusMutation::where('service_id', $req->serviceId)->count() + 1;
             if ($image != null) {
-                $fileSave = 'public/Service_Update_Status_'.$req->status.'_'.$index.'_' . $checkData->code . '.' . 'png';
-                $fileName = 'Service_Update_Status_'.$req->status.'_'.$index.'_' . $checkData->code . '.' . 'png';
+                $fileSave = 'public/Service_Update_Status_' . $req->status . '_' . $index . '_' . $checkData->code . '.' . 'png';
+                $fileName = 'Service_Update_Status_' . $req->status . '_' . $index . '_' . $checkData->code . '.' . 'png';
                 Storage::put($fileSave, $image);
             }
             // return 'asd';
@@ -1450,15 +1461,11 @@ class ServiceController extends Controller
     public function trafficCount()
     {
         DB::table('traffic')->insert([
-            'date'=>date('Y-m-d'),
-            'total'=>1,
-            'created_at'=>date('Y-m-d h:i:s'),
-            'updated_at'=>date('Y-m-d h:i:s'),
+            'date' => date('Y-m-d'),
+            'total' => 1,
+            'created_at' => date('Y-m-d h:i:s'),
+            'updated_at' => date('Y-m-d h:i:s'),
         ]);
         return Response::json(['status' => 'success', 'message' => 'Sukses Menyimpan Data']);
     }
-
-
-
 }
-

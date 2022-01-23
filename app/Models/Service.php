@@ -38,6 +38,7 @@ class Service extends Model
         'discount_type',
         'discount_price',
         'discount_percent',
+        'total_hpp',
         'total_price',
         'total_downpayment',
         'total_payment',
