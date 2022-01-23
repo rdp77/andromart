@@ -10,18 +10,19 @@ var table = $("#table").DataTable({
         [10, 25, 50, "Semua"],
     ],
     ajax: {
-        url: "/warehouse/stock/stock",
+        url: "/warehouse/stock-opname/stockOpname",
         type: "GET",
     },
     dom: '<"html5buttons">lBrtip',
     columns: [
         { data: "DT_RowIndex", searchable: false },
-        { data: "dataItem" },
-        { data: "item.condition" },
-        { data: "branch.name" },
-        { data: "dataQty" },
+        { data: "item.name" },
+        // { data: "item.condition" },
+        // { data: "branch.name" },
+        { data: "stock" },
         { data: "unit.code" },
-        { data: "description" },
+        { data: "dataBuy" },
+        { data: "dataPrice" },
     ],
     buttons: [
         {

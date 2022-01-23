@@ -1,32 +1,25 @@
 @extends('layouts.backend.default')
 @section('title', __('pages.title').__(' | Gudang'))
-@section('titleContent', __('Stok'))
+@section('titleContent', __('Stok Opname'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
-<div class="breadcrumb-item active">{{ __('Stok') }}</div>
+<div class="breadcrumb-item active">{{ __('Stok Opname') }}</div>
 @endsection
 
 @section('content')
 @include('pages.backend.components.filterSearch')
 @include('layouts.backend.components.notification')
 <div class="card">
-    <div class="card-header">
-        <a href="{{ route('stock.create')}}" class="btn btn-icon icon-left btn-primary">
-            <i class="far fa-edit"></i>{{ __('Tambah Stok') }}</a>
-    </div>
     <div class="card-body">
         <table class="table-striped table" id="table" width="100%">
             <thead>
                 <tr>
-                    <th class="text-center">
-                        {{ __('NO') }}
-                    </th>
-                    <th>{{ __('Barang') }}</th>
-                    <th>{{ __('Kondisi') }}</th>
-                    <th>{{ __('Cabang') }}</th>
-                    <th>{{ __('Qty') }}</th>
-                    <th>{{ __('Satuan') }}</th>
-                    <th>{{ __('Keterangan') }}</th>
+                    <th class="text-center">{{ __('NO') }}</th>
+                    <th class="text-center">{{ __('Barang') }}</th>
+                    <th class="text-center">{{ __('Stok') }}</th>
+                    <th class="text-center">{{ __('Satuan') }}</th>
+                    <th class="text-center">{{ __('Harga Beli') }}</th>
+                    <th class="text-center">{{ __('Saldo') }}</th>
                 </tr>
             </thead>
             <tbody>

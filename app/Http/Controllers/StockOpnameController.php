@@ -47,31 +47,24 @@ class StockOpnameController extends Controller
                     return $actionBtn;
                 })
 
-                ->addColumn('dataItem', function ($row) {
-                    $htmlAdd = '<table>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>'.$row->item->brand->category->code.'</td>';
-                    $htmlAdd .=      '<th>'.$row->item->name.'</th>';
+                ->addColumn('dataBuy', function ($row) {
+                    $htmlAdd =   '<tr>';
+                    $htmlAdd .=      '<td class="text-right">'.'Rp. '. number_format($row->item->buy, 0, ".", ",") .'</td>';
                     $htmlAdd .=   '</tr>';
-                    $htmlAdd .= '<table>';
 
                     return $htmlAdd;
                 })
-                ->addColumn('dataQty', function ($row) {
-                    $htmlAdd = '<table>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Stock</td>';
-                    $htmlAdd .=      '<th>'.$row->stock.'</th>';
+
+                ->addColumn('dataPrice', function ($row) {
+                    $price = $row->item->buy*$row->stock;
+                    $htmlAdd =   '<tr>';
+                    $htmlAdd .=      '<td class="text-right">'.'Rp. '. number_format($price, 0, ".", ",") .'</td>';
                     $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Min. Stock</td>';
-                    $htmlAdd .=      '<th>'.$row->min_stock.'</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .= '<table>';
 
                     return $htmlAdd;
                 })
-                ->rawColumns(['action', 'dataItem', 'dataQty'])
+
+                ->rawColumns(['action','dataBuy', 'dataPrice'])
                 ->make(true);
         }
         return view('pages.backend.warehouse.stockOpname.indexStockOpname');

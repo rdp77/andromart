@@ -8,8 +8,6 @@ $.ajaxSetup({
     },
 });
 
-
-
 function searchData() {
     var dateS = $(".dtpickermnth").val();
     $(".dropHere").empty();
@@ -37,13 +35,13 @@ function searchData() {
                             // $.each(value1.jurnal, function (index2, value2) {
                             //     jurnal[index2] =
                             //         '<table width="100%" style="height:0px"><tr><td style="width:100px;height: 0px !important">' +
-                            //         value2.code + 
+                            //         value2.code +
                             //         '</td><td style="height: 0px !important;text-align:left">' +
-                            //         value2.ref + 
+                            //         value2.ref +
                             //         '</td><td style="height: 0px !important;text-align:left">' +
-                            //         value2.type + 
+                            //         value2.type +
                             //         '</td><td style="height: 0px !important;text-align:right">' +
-                            //         value2.total + 
+                            //         value2.total +
                             //         '</td></tr></table>';
                             // });
                             mainDetail[index1] =
