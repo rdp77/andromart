@@ -49,6 +49,9 @@
                     <th class="text-center" width="25%">{{ __('Saldo') }}</th>
                 </tr>
             </thead>
+            @php
+                $sumTotal = 0;
+            @endphp
             @foreach($item as $key => $value)
             <tbody style="border: none !important">
                 <tr>
@@ -59,7 +62,7 @@
                     <td class="text-right">Rp. {{ number_format($value->item->buy, 0, ".", ",") }}</td>
                     <?php
                         $sumBuy = $value->stock*$value->item->buy;
-                        // $sumA = sum($sumBuy);
+                        $sumTotal += $value->stock*$value->item->buy;
                     ?>
                     <td class="text-right">Rp. {{ number_format($sumBuy, 0, ".", ",") }}</td>
                 </tr>
@@ -68,7 +71,7 @@
             <tfoot>
                 <tr style="color: #6777ef;">
                     <th colspan="3"><h5>Total Barang : {{ $sumItem }}</h5></th>
-                    <th colspan="3"><h5>Total Saldo : Rp. {{ number_format($sumActiva, 0, ".", ",") }}</h5></th>
+                    <th colspan="3"><h5>Total Saldo : Rp. {{ number_format($sumTotal, 0, ".", ",") }}</h5></th>
                 </tr>
             </tfoot>
         </table>
