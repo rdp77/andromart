@@ -103,7 +103,7 @@ class ReportCashBalanceController extends Controller
             $totalKasKecilJenggoloValK += $totalKasKecilJenggoloValuesK[$i];
         }
         $totalKasKecilJenggoloFix = $dataSaldoKas[1]['total'] + $totalKasKecilJenggoloValD - $totalKasKecilJenggoloValK;
-
+        // return [$dataSaldoKas[1]['total'],$totalKasKecilJenggoloValD];
         // return $totalKasKecilJenggoloFix;
         // CEK TOTAL KAS M KECIL D K
         $totalKasKecilMukminValuesD = array_values($totalKasKecilMukmin['D']);
