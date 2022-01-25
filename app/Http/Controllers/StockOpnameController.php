@@ -8,6 +8,7 @@ use App\Models\Item;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
@@ -30,9 +31,19 @@ class StockOpnameController extends Controller
         }
 
         $branchUser = Auth::user()->employee->branch_id;
-        $item = Stock::with('item')->where('branch_id', $branchUser)->get();
-        $sumItem = count($item);
-        $sumActiva = Stock::with('item')->leftJoin('items', 'items.id', '=', 'stocks.item_id')->where('branch_id', $branchUser)->sum('buy');
+        $item = Stock::with('item')
+        ->where('branch_id', $branchUser)
+        ->where('item_id', '!=', 1)
+        ->get();
+        $sumItem = Stock::with('item')->where('branch_id', $branchUser)->sum('stock');
+
+        $sumActiva = Stock::with('item')
+        ->leftJoin('items', 'items.id', '=', 'stocks.item_id')
+        ->where('branch_id', $branchUser)
+        ->select('stocks.stock as stock', 'items.buy as buy', 'items.id as itemq')
+        // ->get('itemq', 'stock', 'buy');
+        ->sum('buy');
+        // return $sumActiva;
 
         return view('pages.backend.warehouse.stockOpname.indexStockOpname', compact('item', 'sumItem', 'sumActiva'));
     }

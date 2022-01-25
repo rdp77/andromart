@@ -59,6 +59,7 @@
                     <td class="text-right">Rp. {{ number_format($value->item->buy, 0, ".", ",") }}</td>
                     <?php
                         $sumBuy = $value->stock*$value->item->buy;
+                        // $sumA = sum($sumBuy);
                     ?>
                     <td class="text-right">Rp. {{ number_format($sumBuy, 0, ".", ",") }}</td>
                 </tr>
