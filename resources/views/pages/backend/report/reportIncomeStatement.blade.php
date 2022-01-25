@@ -14,17 +14,18 @@
             display: none;
         }
 
-        table.table-bordered {
+        .table.table-bordered {
             border: 1px solid black !important;
             margin-top: 20px;
         }
+
         .table.table-bordered td {
             border: 1px solid #9a9a9a !important;
         }
-        table.table-bordered>thead>tr>th {
+
+        .table.table-bordered>thead>tr>th {
             border: 1px solid black !important;
         }
-        
 
     </style>
     <form class="form-data">
@@ -61,32 +62,173 @@
                                     <table class="table table-bordered table-md" style="color: black">
                                         <thead>
                                             <tr>
-                                                <th colspan="3">PENDAPATAN</th>
+                                                <th colspan="3" style="background-color: #ed3b9d;color:white">Pendapatan
+                                                </th>
                                             </tr>
                                             <tr>
-                                                <td >Pendapatan Kotor</td>
+                                                <td>Pendapatan Kotor</td>
                                                 <td></td>
-                                                <td style="text-align: right"><b>Rp. {{number_format($PendapatanKotor,0,'.',',')}}</b></td>
+                                                <td style="text-align: right"><b>Rp.
+                                                        {{ number_format($PendapatanKotor, 0, '.', ',') }}</b></td>
                                             </tr>
                                             <tr>
                                                 <td style="padding-left: 50px">Diskon</td>
-                                                <td style="text-align: right"><b>Rp. {{number_format($Diskon,0,'.',',')}}</b></td>
+                                                <td style="text-align: right"><b>Rp.
+                                                        {{ number_format($Diskon, 0, '.', ',') }}</b></td>
                                                 <td></td>
                                             <tr>
                                                 <td style="padding-left: 50px">Pendapatan Bersih</td>
-                                                <td style="text-align: right"><b>Rp. {{number_format($PendapatanBersih,0,'.',',')}}</b></td>
+                                                <td style="text-align: right"><b>Rp.
+                                                        {{ number_format($PendapatanBersih, 0, '.', ',') }}</b></td>
                                                 <td></td>
                                             <tr>
                                                 <td style="padding-left: 50px">HPP</td>
-                                                <td style="text-align: right"><b>Rp. {{number_format($HPP,0,'.',',')}}</b></td>
+                                                <td style="text-align: right"><b>Rp.
+                                                        {{ number_format($HPP, 0, '.', ',') }}</b>
+                                                </td>
                                                 <td></td>
                                             <tr>
-                                                <td >Laba Kotor</td>
+                                                <td>Laba Kotor</td>
                                                 <td></td>
-                                                <td style="text-align: right"><b>Rp. {{number_format($PendapatanBersih-$HPP,0,'.',',')}}</b></td>
+                                                <td style="text-align: right"><b>Rp.
+                                                        {{ number_format($PendapatanBersih - $HPP, 0, '.', ',') }}</b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="3" style="background-color: #ed3b9d;color:white">Beban Usaha
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="3" style="background-color: #ff6cbd;color:white">Beban
+                                                    Operasional</th>
+                                            </tr>
+                                            <tr>
+                                                <td>Sharing Profit</td>
+                                                <td></td>
+                                                <td style="text-align: right"><b>Rp.
+                                                        {{ number_format(0, 0, '.', ',') }}</b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="3" style="background-color: #ff6cbd;color:white">Beban
+                                                    Administrasi Umum</th>
+                                            </tr>
+                                            <tr>
+                                                <td>Gaji Karyawan</td>
+                                                <td style="text-align: right"><b>Rp.
+                                                    {{ number_format($gaji, 0, '.', ',') }}</b>
+                                                </td>
+                                                <td></td>
+
+                                            </tr>
+                                            <tr>
+                                                <td>Beban Umum Lain
+                                                    <table>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;">
+                                                                Listrik</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                ATK</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                Air (PDAM)</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                Meeting / Konsumsi</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                Internet</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                Qurban</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                Wisata</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                Sosial Internal</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                Iuran Bulanan</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                                <td style="text-align: right"><b>Rp.
+                                                        {{ number_format(0, 0, '.', ',') }}</b>
+                                                    <table style="width: 100%;text-align:left">
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;">
+                                                                Rp.
+                                                                    {{ number_format($listrik, 0, '.', ',') }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                Rp.
+                                                                {{ number_format($atk, 0, '.', ',') }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                Air (PDAM)</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                Meeting / Konsumsi</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                Internet</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                Qurban</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                Wisata</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                Sosial Internal</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                Iuran Bulanan</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                                <td></td>
+
                                             </tr>
                                         </thead>
                                     </table>
+
                                 </div>
                                 <br>
                                 <div>

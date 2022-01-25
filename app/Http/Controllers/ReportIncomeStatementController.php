@@ -77,6 +77,10 @@ class ReportIncomeStatementController extends Controller
         $Diskon = 0;
         $PendapatanBersih = 0;
         $HPP = 0;
+        $listrik = 0;
+        $gaji = 0;
+        $atk = 0;
+        $Air = 0;
         $data = [];
         for ($i = 0; $i < count($jurnal); $i++) {
             for ($j = 0; $j < count($jurnal[$i]->JournalDetail); $j++) {
@@ -90,12 +94,16 @@ class ReportIncomeStatementController extends Controller
                 if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id  == 7 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id  == 29) {
                     $HPP +=$jurnal[$i]->JournalDetail[$j]->total;
                 }
+                if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id  == 6 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id  == 10) {
+                    $listrik +=$jurnal[$i]->JournalDetail[$j]->total;
+                }
+                if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id  == 7 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id  == 15) {
+                    $gaji +=$jurnal[$i]->JournalDetail[$j]->total;
+                }
             }
         }
         $PendapatanKotor = $PendapatanBersih+$Diskon;
-        // return [$PendapatanKotor,$PendapatanBersih,$Diskon];
-        // return $data;
         $data = array();
-        return view('pages.backend.report.reportIncomeStatement', compact('data','PendapatanKotor','PendapatanBersih','Diskon','HPP'));
+        return view('pages.backend.report.reportIncomeStatement', compact('data','PendapatanKotor','PendapatanBersih','Diskon','HPP','listrik','atk','gaji'));
     }
 }
