@@ -83,22 +83,17 @@ class ReportPeriodicController extends Controller
                 $data[$i]['main_detail'][$j]['detail'] = $account[$i]->accountMainDetail[$j]->name;
 
                 // mengecek jurnal sebelum bulan ini
-                for ($z=0; $z <count($account[$i]->accountMainDetail[$j]->accountData) ; $z++) { 
-                    $data[$i]['main_detail'][$j]['branch'][$z]['saldoAwal'] = $account[$i]->accountMainDetail[$j]->accountData[$z]->opening_balance;
-                }
-
                 for ($m = 0; $m < count($branch); $m++) {
+                    $data[$i]['main_detail'][$j]['branch'][$m]['saldoAwal'] = 0;
                     $data[$i]['main_detail'][$j]['branch'][$m]['nama'] = $branch[$m]->name;
                     $data[$i]['main_detail'][$j]['branch'][$m]['SaldoAkhirJurnalFix'] = 0;
 
-                    // $data[$i]['main_detail'][$j]['branch'][$m]['balance'] = $account[$i]->accountMainDetail[$j]->accountData->main_detail_id;
                     for ($k = 0; $k < count($jurnal); $k++) {
                         for ($l = 0; $l < count($jurnal[$k]->JournalDetail); $l++) {
                             if (($jurnal[$k]->JournalDetail[$l]->accountData->main_id ==  $account[$i]->id) && ($jurnal[$k]->JournalDetail[$l]->accountData->main_detail_id ==  $account[$i]->accountMainDetail[$j]->id)) {
                                 if (isset($jurnal[$k]->JournalDetail[$l]->accountData->code)) {
 
                                     if ($jurnal[$k]->JournalDetail[$l]->accountData->branch_id == $branch[$m]->id) {
-                                        // $data[$i]['main_detail'][$j]['branch'][$m]['openingBalanceRaw'] = $jurnal[$k]->JournalDetail[$l]->accountData->opening_balance;
                                         $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['code'] = $jurnal[$k]->JournalDetail[$l]->accountData->code;
                                         $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['total']  = $jurnal[$k]->JournalDetail[$l]->total;
                                         $data[$i]['main_detail'][$j]['branch'][$m]['JurnalRaw'][$k]['ref']  = $jurnal[$k]->ref;
@@ -113,6 +108,11 @@ class ReportPeriodicController extends Controller
                                 }
                             }
                         }
+                    }
+                }
+                for ($z=0; $z <count($account[$i]->accountMainDetail[$j]->accountData) ; $z++) {
+                    if( $account[$i]->id == $account[$i]->accountMainDetail[$j]->accountData[$z]->main_detail_id){
+                        $data[$i]['main_detail'][$j]['branch'][$z]['saldoAwal'] = $account[$i]->accountMainDetail[$j]->accountData[$z]->opening_balance;
                     }
                 }
                 for ($k = 0; $k < count($jurnalSebelumnya); $k++) {

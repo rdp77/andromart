@@ -80,7 +80,22 @@ class ReportIncomeStatementController extends Controller
         $listrik = 0;
         $gaji = 0;
         $atk = 0;
-        $Air = 0;
+        $air = 0;
+        $sharingProfit = 0;
+        $sewaRuko = 0;
+        $hosting = 0;
+        $thr = 0;
+        $meeting = 0;
+        $internet = 0;
+        $biayaSosial = 0;
+        $meeting = 0;
+        $wisata = 0;
+        $qurban = 0;
+        $sosialInternal = 0;
+        $iuranBulanan = 0;
+        $bebanSewa = 0;
+        $operasional = 0;
+        
         $data = [];
         for ($i = 0; $i < count($jurnal); $i++) {
             for ($j = 0; $j < count($jurnal[$i]->JournalDetail); $j++) {
@@ -100,10 +115,61 @@ class ReportIncomeStatementController extends Controller
                 if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id  == 7 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id  == 15) {
                     $gaji +=$jurnal[$i]->JournalDetail[$j]->total;
                 }
+                if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id  == 6 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id  == 13) {
+                    $air +=$jurnal[$i]->JournalDetail[$j]->total;
+                }
+                if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id  == 7 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id  == 14) {
+                    $sharingProfit +=$jurnal[$i]->JournalDetail[$j]->total;
+                }
+                if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id  == 7 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id  == 16) {
+                    $sewaRuko +=$jurnal[$i]->JournalDetail[$j]->total;
+                }
+                if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id  == 7 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id  == 17) {
+                    $hosting +=$jurnal[$i]->JournalDetail[$j]->total;
+                }
+                if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id  == 7 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id  == 18) {
+                    $thr +=$jurnal[$i]->JournalDetail[$j]->total;
+                }
+                if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id  == 6 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id  == 19) {
+                    $meeting +=$jurnal[$i]->JournalDetail[$j]->total;
+                }
+                if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id  == 6 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id  == 20) {
+                    $internet +=$jurnal[$i]->JournalDetail[$j]->total;
+                }
+                if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id  == 6 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id  == 23) {
+                    $biayaSosial +=$jurnal[$i]->JournalDetail[$j]->total;
+                }
+                if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id  == 6 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id  == 24) {
+                    $wisata +=$jurnal[$i]->JournalDetail[$j]->total;
+                }
+                if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id  == 6 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id  == 25) {
+                    $qurban +=$jurnal[$i]->JournalDetail[$j]->total;
+                }
+                if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id  == 6 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id  == 26) {
+                    $atk +=$jurnal[$i]->JournalDetail[$j]->total;
+                }
+                if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id  == 6 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id  == 21) {
+                    $iuranBulanan +=$jurnal[$i]->JournalDetail[$j]->total;
+                }
+                if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id  == 6 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id  == 3) {
+                    $operasional +=$jurnal[$i]->JournalDetail[$j]->total;
+                }
+                
+                
             }
         }
         $PendapatanKotor = $PendapatanBersih+$Diskon;
         $data = array();
-        return view('pages.backend.report.reportIncomeStatement', compact('data','PendapatanKotor','PendapatanBersih','Diskon','HPP','listrik','atk','gaji'));
+        return view('pages.backend.report.reportIncomeStatement', compact('data','PendapatanKotor','PendapatanBersih','Diskon','HPP','listrik','atk','gaji','air',
+        'sharingProfit',
+        'sewaRuko',
+        'hosting',
+        'thr',
+        'meeting',
+        'internet',
+        'biayaSosial',
+        'wisata',
+        'qurban','iuranBulanan','bebanSewa','operasional'));
     }
+    
 }

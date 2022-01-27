@@ -29,6 +29,19 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="form-group col-6 col-md-6 col-lg-6">
+                            <label for="startDate">{{ __('Tipe') }}<code>*</code></label>
+                            <select class="form-control" name="tipe">
+                                <option value="">- select -</option>
+                                <option value="Pengeluaran">Pengeluaran</option>
+                                <option value="Pemasukan">Pemasukan</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-6 col-md-6 col-lg-6">
+                            {{-- <label for="endDate">{{ __('') }}<code>*</code></label> --}}
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="form-group col-12 col-md-12 col-lg-12">
                             <button class="btn btn-primary" type="button" onclick="checkData()"><i class="fas fa-eye"></i> Cari</button>
                         </div>

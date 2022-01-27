@@ -69,7 +69,7 @@ class ReportIncomeSpendingController extends Controller
             $message = 'exist';
         }
 
-        return Response::json(['status' => 'success','result'=>$data,'message'=>$message]);
+        return Response::json(['status' => 'success','result'=>$data,'message'=>$message,'tipe'=>$req->tipe]);
     }
 
     public function store(Request $req)

@@ -59,10 +59,10 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <table class="table table-bordered table-md" style="color: black">
+                                    <table class="table table-bordered table-sm" style="color: black">
                                         <thead>
                                             <tr>
-                                                <th colspan="3" style="background-color: #ed3b9d;color:white">Pendapatan
+                                                <th colspan="3" style="color:black">Pendapatan
                                                 </th>
                                             </tr>
                                             <tr>
@@ -88,38 +88,30 @@
                                                 </td>
                                                 <td></td>
                                             <tr>
-                                                <td>Laba Kotor</td>
-                                                <td></td>
-                                                <td style="text-align: right"><b>Rp.
+                                                <th colspan="1" style="background-color: #ffffdc;color:black">Laba Kotor
+                                                </th>
+                                                <td style="text-align: right;background-color: #ffffdc"></td>
+                                                <td style="text-align: right;background-color: #ffffdc;color:black"><b>Rp.
                                                         {{ number_format($PendapatanBersih - $HPP, 0, '.', ',') }}</b>
                                                 </td>
                                             </tr>
-                                            <tr>
-                                                <th colspan="3" style="background-color: #ed3b9d;color:white">Beban Usaha
+                                            @php
+                                                $labaBersih = $PendapatanBersih - $HPP;
+                                            @endphp
+                                            {{-- <tr>
+                                                <th colspan="3" style="color:black;text-align:center">Beban Usaha
                                                 </th>
-                                            </tr>
+                                            </tr> --}}
                                             <tr>
-                                                <th colspan="3" style="background-color: #ff6cbd;color:white">Beban
+                                                <th colspan="3" style="color:black">Beban
                                                     Operasional</th>
                                             </tr>
                                             <tr>
                                                 <td>Sharing Profit</td>
-                                                <td></td>
                                                 <td style="text-align: right"><b>Rp.
-                                                        {{ number_format(0, 0, '.', ',') }}</b>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th colspan="3" style="background-color: #ff6cbd;color:white">Beban
-                                                    Administrasi Umum</th>
-                                            </tr>
-                                            <tr>
-                                                <td>Gaji Karyawan</td>
-                                                <td style="text-align: right"><b>Rp.
-                                                    {{ number_format($gaji, 0, '.', ',') }}</b>
+                                                        {{ number_format($sharingProfit, 0, '.', ',') }}</b>
                                                 </td>
                                                 <td></td>
-
                                             </tr>
                                             <tr>
                                                 <td>Beban Umum Lain
@@ -127,8 +119,65 @@
                                                         <tr>
                                                             <td
                                                                 style="border:0px solid black !important;padding-left:40px;">
+                                                                Operasional</td>
+
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;">
                                                                 Listrik</td>
                                                         </tr>
+                                                    </table>
+                                                    Total Beban Umum Lain
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <b><br></b>
+                                                    
+                                                    <table style="width: 100%;text-align:left">
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;">
+                                                                Rp.
+                                                                {{ number_format($operasional, 0, '.', ',') }}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;">
+                                                                Rp.
+                                                                {{ number_format($listrik, 0, '.', ',') }}</td>
+
+                                                        </tr>
+                                                    </table>
+                                                    <b>Rp.
+                                                        {{ number_format($operasional + $listrik, 0, '.', ',') }}</b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="1" style="background-color: #ffffdc;color:black">Total Beban
+                                                    Operasional
+                                                </th>
+                                                <td style="text-align: right;background-color: #ffffdc;color:black"><b>Rp.
+                                                        {{ number_format($operasional + $listrik + $sharingProfit, 0, '.', ',') }}</b>
+                                                </td>
+                                                <td style="text-align: right;background-color: #ffffdc"></td>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="3" style="color:black">Beban
+                                                    Administrasi Umum</th>
+                                            </tr>
+
+                                            <tr>
+                                                <td>Gaji Karyawan</td>
+                                                <td style="text-align: right"><b>Rp.
+                                                        {{ number_format($gaji, 0, '.', ',') }}</b>
+                                                </td>
+                                                <td></td>
+
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <table>
+                                                        Beban Umum Lain
                                                         <tr>
                                                             <td
                                                                 style="border:0px solid black !important;padding-left:40px;padding-top:0px">
@@ -170,16 +219,12 @@
                                                                 Iuran Bulanan</td>
                                                         </tr>
                                                     </table>
+                                                    Total Beban Umum Lain
                                                 </td>
-                                                <td style="text-align: right"><b>Rp.
-                                                        {{ number_format(0, 0, '.', ',') }}</b>
+                                                <td style="text-align: right">
                                                     <table style="width: 100%;text-align:left">
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;">
-                                                                Rp.
-                                                                    {{ number_format($listrik, 0, '.', ',') }}</td>
-                                                        </tr>
+                                                        <b><br></b>
+
                                                         <tr>
                                                             <td
                                                                 style="border:0px solid black !important;padding-left:40px;padding-top:0px">
@@ -189,42 +234,101 @@
                                                         <tr>
                                                             <td
                                                                 style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Air (PDAM)</td>
+                                                                Rp.
+                                                                {{ number_format($air, 0, '.', ',') }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td
                                                                 style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Meeting / Konsumsi</td>
+                                                                Rp.
+                                                                {{ number_format($meeting, 0, '.', ',') }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td
                                                                 style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Internet</td>
+                                                                Rp.
+                                                                {{ number_format($internet, 0, '.', ',') }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td
                                                                 style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Qurban</td>
+                                                                Rp.
+                                                                {{ number_format($qurban, 0, '.', ',') }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td
                                                                 style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Wisata</td>
+                                                                Rp.
+                                                                {{ number_format($wisata, 0, '.', ',') }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td
                                                                 style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Sosial Internal</td>
+                                                                Rp.
+                                                                {{ number_format($biayaSosial, 0, '.', ',') }}</td>
                                                         </tr>
                                                         <tr>
                                                             <td
                                                                 style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Iuran Bulanan</td>
+                                                                Rp.
+                                                                {{ number_format($iuranBulanan, 0, '.', ',') }}</td>
                                                         </tr>
                                                     </table>
+                                                    <b>Rp.
+                                                        {{ number_format($atk + $air + $meeting + $internet + $qurban + $wisata + $biayaSosial + $iuranBulanan, 0, '.', ',') }}</b>
                                                 </td>
                                                 <td></td>
 
+                                            </tr>
+                                            <tr>
+                                                <td>Beban Sewa</td>
+                                                <td style="text-align: right"><b>Rp.
+                                                        {{ number_format($bebanSewa, 0, '.', ',') }}</b>
+                                                </td>
+                                                <td></td>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="1" style="background-color: #ffffdc;color:black">Total Beban
+                                                    Administrasi
+                                                </th>
+                                                <td style="text-align: right;background-color: #ffffdc;color:black"><b>Rp.
+                                                        {{                                                         number_format($atk + $air + $meeting + $internet + $qurban + $wisata + $biayaSosial + $iuranBulanan + +$gaji + $bebanSewa, 0, '.', ',') }}</b>
+                                                </td>
+                                                <td style="text-align: right;background-color: #ffffdc"></td>
+                                            </tr>
+                                            @php
+                                                $totalBebanUmumLain = $atk + $air + $meeting + $internet + $qurban + $wisata + $biayaSosial + $iuranBulanan;
+                                                $totalBebanOperasional = $operasional + $listrik + $sharingProfit;
+                                                $totalBebanUsaha = $totalBebanUmumLain + $gaji + $bebanSewa + $totalBebanOperasional;
+                                            @endphp
+                                            {{-- <tr>
+                                                <th colspan="1" style="background-color: #ffffdc;color:black">Total Beban
+                                                    Usaha
+                                                </th>
+                                                <td style="text-align: right;background-color: #ffffdc;color:black"><b>Rp.
+                                                        {{ number_format($totalBebanUmumLain + $gaji + $bebanSewa + $totalBebanOperasional, 0, '.', ',') }}</b>
+                                                </td>
+                                                <td style="text-align: right;background-color: #ffffdc"></td>
+                                            </tr> --}}
+
+                                            <tr>
+                                                <th colspan="2" style="background-color: yellow;color:black">Laba Bersih
+                                                    {{-- <br>
+                                                    <h1>{{ $labaBersih }}</h1>
+                                                    <br>
+                                                    <h1>{{ $totalBebanUmumLain }}</h1>
+                                                    <br>
+                                                    <h1>{{ $gaji }}</h1>
+                                                    <br>
+                                                    <h1>{{ $bebanSewa }}</h1>
+                                                    <br>
+                                                    <h1>{{ $totalBebanOperasional }}</h1>
+                                                    <br>
+                                                    <h1>{{ $totalBebanUmumLain + $gaji + $bebanSewa + $totalBebanOperasional }}</h1> --}}
+                                                </th>
+                                                <td style="text-align: right;background-color: yellow;color:black"><b>Rp.
+                                                        {{ number_format($labaBersih - $totalBebanUsaha, 0, '.', ',') }}</b>
+                                                </td>
                                             </tr>
                                         </thead>
                                     </table>
