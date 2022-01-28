@@ -21,7 +21,7 @@
                     <div class="row">
                         <div class="form-group col-6 col-md-6 col-lg-6">
                             <label for="startDate">{{ __('Tanggal Awal') }}<code>*</code></label>
-                            <input id="startDate" type="text" class="form-control datepicker" name="startDate">
+                            <input id="startDate" type="text" class="form-control datepicker"  name="startDate">
                         </div>
                         <div class="form-group col-6 col-md-6 col-lg-6">
                             <label for="endDate">{{ __('Tanggal Akhir') }}<code>*</code></label>
@@ -31,14 +31,20 @@
                     <div class="row">
                         <div class="form-group col-6 col-md-6 col-lg-6">
                             <label for="startDate">{{ __('Tipe') }}<code>*</code></label>
-                            <select class="form-control" name="tipe">
+                            <select class="form-control tipe" name="tipe">
                                 <option value="">- select -</option>
                                 <option value="Pengeluaran">Pengeluaran</option>
                                 <option value="Pemasukan">Pemasukan</option>
                             </select>
                         </div>
                         <div class="form-group col-6 col-md-6 col-lg-6">
-                            {{-- <label for="endDate">{{ __('') }}<code>*</code></label> --}}
+                            <label for="startDate">{{ __('cabang') }}<code>*</code></label>
+                            <select class="form-control cabang" name="cabang">
+                                <option value="">- select -</option>
+                                @foreach ($branch as $el)
+                                    <option value="{{$el->id}}">{{$el->name}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="row">

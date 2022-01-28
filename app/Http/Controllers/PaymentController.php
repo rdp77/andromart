@@ -142,9 +142,9 @@ class PaymentController extends Controller
                     'code' => $this->codeJournals('KK', $idJournal),
                     'year' => date('Y',strtotime($date)),
                     'date' => $date,
-                    'type' => 'Biaya',
+                    'type' => 'Transfer Keluar',
                     'total' => str_replace(",", '', $req->price),
-                        'ref' => $req->code,
+                    'ref' => $req->code,
                     'description' => $req->description,
                     'created_at' => date('Y-m-d h:i:s'),
                     // 'updated_at'=>date('Y-m-d h:i:s'),
@@ -221,10 +221,10 @@ class PaymentController extends Controller
 
 
                 for ($i = 0; $i < count($accountCode); $i++) {
-                    $idDetail = DB::table('journal_details')->max('id') + 1;
+                    $idDetailMasuk = DB::table('journal_details')->max('id') + 1;
                     JournalDetail::create([
-                        'id' => $idDetail,
-                        'journal_id' => $idJournal,
+                        'id' => $idDetailMasuk,
+                        'journal_id' => $idJournalMasuk,
                         'account_id' => $accountCode[$i],
                         'total' => $totalBayar[$i],
                         'description' => $description[$i],
@@ -341,9 +341,12 @@ class PaymentController extends Controller
             'Menghapus Data Pengeluaran'
         );
         $payment = Payment::find($id);
-        $checkJurnal = DB::table('journals')->where('ref', $payment->code)->first();
-        DB::table('journal_details')->where('journal_id', $checkJurnal->id)->delete();
-        DB::table('journals')->where('id', $checkJurnal->id)->delete();
+        $checkJurnal = DB::table('journals')->where('ref', $payment->code)->get();
+        for ($i=0; $i < count($checkJurnal); $i++) { 
+            DB::table('journal_details')->where('journal_id', $checkJurnal[$i]->id)->delete();
+            DB::table('journals')->where('id', $checkJurnal[$i]->id)->delete();
+        }
+
         DB::table('payments')->where('id', $id)->delete();
         return Response::json(['status' => 'success']);
     }

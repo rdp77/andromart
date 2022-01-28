@@ -13,6 +13,7 @@ use App\Models\SharingProfit;
 use App\Models\SharingProfitDetail;
 use App\Models\ServiceDetail;
 use App\Models\ServiceStatusMutation;
+use App\Models\Branch;
 use App\Models\Journal;
 use App\Models\JournalDetail;
 use Illuminate\Http\Request;
@@ -48,7 +49,8 @@ class ReportIncomeSpendingController extends Controller
     public function reportIncomeSpending(Request $req)
     {
         $data = Journal::with('JournalDetail')->get();
-        return view('pages.backend.finance.report.reportIncomeSpending',compact('data'));
+        $branch = Branch::get();
+        return view('pages.backend.finance.report.reportIncomeSpending',compact('data','branch'));
     }
     public function FunctionName(Type $var = null)
     {
@@ -60,7 +62,6 @@ class ReportIncomeSpendingController extends Controller
         $data = Journal::with('JournalDetail','JournalDetail.AccountData')
         ->where('date','>=',$this->DashboardController->changeMonthIdToEn($req->dateS))
         ->where('date','<=',$this->DashboardController->changeMonthIdToEn($req->dateE))
-        // ->whereBetween('date', [$this->DashboardController->changeMonthIdToEn($req->dateS), $this->DashboardController->changeMonthIdToEn($req->dateE)])
         ->get();
 
         if(count($data) == 0){
@@ -120,34 +121,7 @@ class ReportIncomeSpendingController extends Controller
         return view('pages.backend.transaction.service.printService', ['Service' => $Service,'member'=>$member]);
     }
 
-    // public function update($id, Request $req)
-    // {
-
-    //     Service::where('id', $id)
-    //         ->update([
-    //         'sales_id'   => $req->salesId,
-    //         'liquid_date'=> date('Y-m-d',strtotime($req->liquidDate)),
-    //         'total'      => str_replace(",", '',$req->total),
-    //         'updated_by' => Auth::user()->name,
-    //         'updated_at' => date('Y-m-d h:i:s'),
-    //     ]);
-
-    //     $Service = Service::find($id);
-    //     $this->DashboardController->createLog(
-    //         $req->header('user-agent'),
-    //         $req->ip(),
-    //         'Mengubah Service ' . Service::find($id)->name
-    //     );
-
-    //     $Service->save();
-
-    //     return Redirect::route('service.index')
-    //         ->with([
-    //             'status' => 'Berhasil merubah Dana Kredit',
-    //             'type' => 'success'
-    //         ]);
-    // }
-
+ 
     public function destroy(Request $req, $id)
     {
         $this->DashboardController->createLog(

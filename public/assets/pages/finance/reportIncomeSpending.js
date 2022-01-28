@@ -12,6 +12,8 @@ $.ajaxSetup({
 function checkData() {
     var dateS = $("#startDate").val();
     var dateE = $("#endDate").val();
+    var tipe = $(".tipe").val();
+    var cabang = $(".cabang").val();
     // $('.dropHereTotal').text(0);
     // $('.dropHereTotalVal').val(0);
     var jurnalDetailD = [];
@@ -23,7 +25,7 @@ function checkData() {
     $(".dropHere").empty();
     $.ajax({
         url: "/finance/report/search-report-income-spending",
-        data: { dateS: dateS, dateE: dateE },
+        data: { dateS: dateS, dateE: dateE, tipe: tipe , cabang: cabang},
         type: "POST",
         success: function (data) {
             if (data.status == "success") {
@@ -39,19 +41,24 @@ function checkData() {
                         }
 
                         $.each(value.journal_detail, function (index1, value1) {
-                            if (value.journal_detail[0].account_data.name.includes('Transfer / Setoran')) {
-                                jurnalDetailTransaksi[index] =
-                                "<b>" +
-                                value.journal_detail[2].account_data.code +
-                                "</b><br>" +
-                                value.journal_detail[2].account_data.name;
-                            }else{
+
+                            // if (value.journal_detail[1].account_data.name.includes('Transfer / Setoran')) {
+
+                            //     jurnalDetailTransaksi[index] =
+                            //     "<b>" +
+                            //     value.journal_detail[1].account_data.code +
+                            //     "</b><br>" +
+                            //     value.journal_detail[1].account_data.name;
+                            
+                            // }else{
+                            
                                 jurnalDetailTransaksi[index] =
                                 "<b>" +
                                 value.journal_detail[0].account_data.code +
                                 "</b><br>" +
                                 value.journal_detail[0].account_data.name;
-                            }
+                            
+                            // }
                             
 
                             if (value.code.includes("DD")) {
