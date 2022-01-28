@@ -725,7 +725,7 @@
             dd.getMinutes() +
             dd.getSeconds();
 
-        $("#xlsDownload").html("<a href=\"" + blobUrl + "\" download=\"Laporan Invoice\_" + ss + "\.xls\" id=\"xlsFile\">Downlaod</a>");
+        $("#xlsDownload").html("<a href=\"" + blobUrl + "\" download=\"Laporan Labar Rugi\_" + ss + "\.xls\" id=\"xlsFile\">Downlaod</a>");
         $("#xlsFile").get(0).click();
 
         function b64toBlob(b64Data, contentType, sliceSize) {
