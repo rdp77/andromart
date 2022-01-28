@@ -1,8 +1,10 @@
-<html><head>
+<html>
+
+<head>
     <title>Andromart | {{ $title }}</title>
     <link href="https://panel.jpmandiri.com/assets/vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
 
     {{-- <link href="https://panel.jpmandiri.com/assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet"> --}}
     <!-- datepicker -->
@@ -17,216 +19,258 @@
     <link href="https://panel.jpmandiri.com/assets/css/chosen/chosen.css" rel="stylesheet">
 
     <style>
-        .height{
-        background: white;
+        .height {
+            background: white;
             height: 100%;
         }
-        .pt-2{
+
+        .pt-2 {
             padding-top: 20px;
         }
-        .pl-2{
+
+        .pl-2 {
             padding-top: 20px;
         }
-        .pr-2{
+
+        .pr-2 {
             padding-right: 20px !important;
         }
-        .width-10{
+
+        .width-10 {
             width: 10%;
         }
-        .width-20{
+
+        .width-20 {
             width: 20%;
         }
-        .border-black{
-            border:1px solid #9999;
+
+        .border-black {
+            border: 1px solid #9999;
         }
-        .box-git{
+
+        .box-git {
             width: 100%;
             height: 133px;
         }
+
         .nopadding-right {
-         padding-right: 0 !important;
-         margin-right: 0 !important;
+            padding-right: 0 !important;
+            margin-right: 0 !important;
         }
 
         .nopadding-left {
-         padding-left: 0 !important;
-         margin-left: 0 !important;
+            padding-left: 0 !important;
+            margin-left: 0 !important;
         }
-        .mt-1{
-        margin-top: 10px !important;
+
+        .mt-1 {
+            margin-top: 10px !important;
         }
-        .mt-2{
-        margin-top: 20px !important;
+
+        .mt-2 {
+            margin-top: 20px !important;
         }
-        .mb-1{
-        margin-bottom: 10px !important;
+
+        .mb-1 {
+            margin-bottom: 10px !important;
         }
-        .mb-2{
-        margin-bottom: 20px !important;
+
+        .mb-2 {
+            margin-bottom: 20px !important;
         }
-        .mr-1{
-        margin-right: 10px !important;
+
+        .mr-1 {
+            margin-right: 10px !important;
         }
-        .mr-2{
-        margin-right: 20px !important;
+
+        .mr-2 {
+            margin-right: 20px !important;
         }
-        .ml-1{
-        margin-left: 10px !important;
+
+        .ml-1 {
+            margin-left: 10px !important;
         }
-        .ml-2{
-        margin-left: 20px !important;
+
+        .ml-2 {
+            margin-left: 20px !important;
         }
-        .grey{
-        color: grey;
+
+        .grey {
+            color: grey;
         }
-        .width-100{
-        width: 100%;
+
+        .width-100 {
+            width: 100%;
         }
-        .none{
-        text-decoration: none;
-        list-style-type: none;
+
+        .none {
+            text-decoration: none;
+            list-style-type: none;
         }
-        .d-inline-block{
-        display: inline-block;
-        vertical-align: middle;
+
+        .d-inline-block {
+            display: inline-block;
+            vertical-align: middle;
         }
-        .d-inline{
-        display: inline;
-        vertical-align: middle;
+
+        .d-inline {
+            display: inline;
+            vertical-align: middle;
         }
-        .d-inline li{
-        display: inline;
+
+        .d-inline li {
+            display: inline;
         }
-        .m-auto{
-        margin: auto;
+
+        .m-auto {
+            margin: auto;
         }
-        .nav-tabs li a{
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        text-align: center !important;
+
+        .nav-tabs li a {
+            padding-left: 0 !important;
+            padding-right: 0 !important;
+            text-align: center !important;
         }
-        .font-small{
-        font-size: 12px;
+
+        .font-small {
+            font-size: 12px;
         }
-        .middle{
-        height: 47px;
+
+        .middle {
+            height: 47px;
         }
-        .black{
-        color: black;
+
+        .black {
+            color: black;
         }
-        .head{
-        background: grey !important;
-        color:white;
-        width: 100%;
-        height: 100%;
-        vertical-align: middle;
+
+        .head {
+            background: grey !important;
+            color: white;
+            width: 100%;
+            height: 100%;
+            vertical-align: middle;
         }
-        .mt-5{
-        margin-top: 50px
+
+        .mt-5 {
+            margin-top: 50px
         }
-        .head_awal{
-        background-color: black !important;
-        color: white;`
+
+        .head_awal {
+            background-color: black !important;
+            color: white;
+            `
         }
-        .head_awal1{
-        background-color: black !important;
-        color: white;`
+
+        .head_awal1 {
+            background-color: black !important;
+            color: white;
+            `
         }
-        .head_awal2{
-        background-color: black !important;
-        color: white;`
+
+        .head_awal2 {
+            background-color: black !important;
+            color: white;
+            `
         }
-        .hide{
-        display: none;
+
+        .hide {
+            display: none;
         }
-        .disabled{
+
+        .disabled {
             pointer-events: none;
         }
 
-        .tree tr{
-            border :hidden;
+        .tree tr {
+            border: hidden;
         }
 
-        .tree_1 tr{
-            border :hidden;
+        .tree_1 tr {
+            border: hidden;
         }
 
-        hr{
+        hr {
             border-top: 1px solid black;
             margin-top: 2px;
             margin-bottom: 0px;
         }
 
-        .text-right{
+        .text-right {
             border: none;
         }
 
-        .text-right{
+        .text-right {
             border: none;
         }
 
-        .border-right-none{
+        .border-right-none {
             border-right: none !important;
         }
 
-        .border-none{
+        .border-none {
             border: none !important;
         }
-        .table-border td{
+
+        .table-border td {
             border: 1px solid black !important;
-            padding:1px;
+            padding: 1px;
         }
 
-        .table-margin{
+        .table-margin {
             margin-top: 70px;
             background: white;
             font-size: 10px;
             padding: 5px;
         }
 
-        .mb-3{
+        .mb-3 {
             margin-bottom: 10px;
         }
-        body{
+
+        body {
             font-family: Arial;
         }
-        @media  print
-        {
-            header, header *
-            {
+
+        @media print {
+
+            header,
+            header * {
                 display: none !important;
             }
 
-            .table thead tr td,.table tbody tr td{
+            .table thead tr td,
+            .table tbody tr td {
                 border-width: 1px !important;
                 border-style: solid !important;
                 border-color: black !important;
                 background-color: red;
-                -webkit-print-color-adjust:exact ;
+                -webkit-print-color-adjust: exact;
             }
-            body{
+
+            body {
                 background-color: white !important;
             }
 
-            #navigation{
+            #navigation {
                 display: none;
             }
 
-            #isi{
-                margin:0px 0px !important;
+            #isi {
+                margin: 0px 0px !important;
             }
 
-            .table-margin{
+            .table-margin {
                 margin-top: 0px;
             }
         }
 
-        .ttd{
+        .ttd {
             height: 70px;
             width: 20%;
         }
 
-        .dotted{
+        .dotted {
             border-bottom: 2px dotted gray;
             width: 100%;
             height: 1px;
@@ -235,50 +279,56 @@
             position: relative;
         }
 
-        .fa-scissors{
+        .fa-scissors {
             position: absolute;
             top: -10px;
             font-size: 20px;
             font-weight: 800
         }
 
-        #navigation ul{
+        #navigation ul {
             float: right;
             padding-right: 110px;
         }
 
-        #navigation ul li{
+        #navigation ul li {
             color: #fff;
             font-size: 15pt;
             list-style-type: none;
             display: inline-block;
             margin-left: 40px;
         }
-        body{
-                font-family: Arial, Helvetica, sans-serif;
-            }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
 
     </style>
     <style type="text/css" media="print">
-        #navigation{
+        #navigation {
             display: none;
         }
 
-        .table-data td.total{
-             background-color: #ccc !important;
-             -webkit-print-color-adjust: exact;
+        .table-data td.total {
+            background-color: #ccc !important;
+            -webkit-print-color-adjust: exact;
         }
 
-        .table-data td.not-same{
-             color: red !important;
-             -webkit-print-color-adjust: exact;
+        .table-data td.not-same {
+            color: red !important;
+            -webkit-print-color-adjust: exact;
         }
 
-        .page-break { display: block; page-break-before: always; }
+        .page-break {
+            display: block;
+            page-break-before: always;
+        }
 
     </style>
     <style type="text/css">
-        #overlay, #overlay-load, #overlay-jurnal {
+        #overlay,
+        #overlay-load,
+        #overlay-jurnal {
             position: fixed;
             width: 100%;
             height: 100%;
@@ -286,7 +336,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(0,0,0,0.6);
+            background-color: rgba(0, 0, 0, 0.6);
             z-index: 2500;
             display: none;
         }
@@ -298,6 +348,7 @@
             height: 64px;
             margin-top: 200px;
         }
+
         .lds-ring div {
             box-sizing: border-box;
             display: block;
@@ -310,46 +361,65 @@
             animation: lds-ring 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
             border-color: #cef transparent transparent transparent;
         }
+
         .lds-ring div:nth-child(1) {
             animation-delay: -0.45s;
         }
+
         .lds-ring div:nth-child(2) {
             animation-delay: -0.3s;
         }
+
         .lds-ring div:nth-child(3) {
             animation-delay: -0.15s;
         }
-        @keyframes  lds-ring {
+
+        @keyframes lds-ring {
             0% {
                 transform: rotate(0deg);
             }
+
             100% {
                 transform: rotate(360deg);
             }
         }
+
         .ui-datepicker-calendar {
             display: none;
         }
+
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css" integrity="sha256-FdatTf20PQr/rWg+cAKfl6j4/IY3oohFAJ7gVC3M34E=" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.css" integrity="sha256-zFnNbsU+u3l0K+MaY92RvJI6AdAVAxK3/QrBApHvlH8=" crossorigin="anonymous">
-<style shopback-extension-v5-6-5="" data-styled-version="4.2.0"></style></head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css"
+        integrity="sha256-FdatTf20PQr/rWg+cAKfl6j4/IY3oohFAJ7gVC3M34E=" crossorigin="anonymous">
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.css"
+        integrity="sha256-zFnNbsU+u3l0K+MaY92RvJI6AdAVAxK3/QrBApHvlH8=" crossorigin="anonymous">
+    <style shopback-extension-v5-6-5="" data-styled-version="4.2.0"></style>
+</head>
 
 <body style="background: rgb(85, 85, 85);" class="">
     <div id="overlay-jurnal" class="text-center">
-        <div class="lds-ring"><div></div><div></div><div></div><div></div></div> <br>
+        <div class="lds-ring">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div> <br>
         <span style="color: white;">
             Sedang Mengenerate Excel. Harap Tunggu..
         </span>
     </div>
-    <div class="col-md-12" id="navigation" style="background: rgba(0, 0, 0, 0.4); box-shadow: 0px 2px 5px #444; position: fixed; z-index: 2;">
+    <div class="col-md-12" id="navigation"
+        style="background: rgba(0, 0, 0, 0.4); box-shadow: 0px 2px 5px #444; position: fixed; z-index: 2;">
         <div class="row">
             <div class="col-md-7" style="background: none; padding: 15px 15px; color: #fff; padding-left: 120px;">
-                Andromart Cabang {{Auth::user()->employee->branch->name}}
+                Andromart Cabang {{ Auth::user()->employee->branch->name }}
             </div>
             <div class="col-md-5" style="background: none; padding: 10px 15px 5px 15px">
                 <ul>
-                    <li><i class="fa fa-file-excel" style="cursor: pointer;" id="btnExport" data-toggle="tooltip" data-placement="bottom" title="" onclick="excel()" data-original-title="Export Excel"></i></li>
+                    <li><i class="fa fa-file-excel" style="cursor: pointer;" id="btnExport" data-toggle="tooltip"
+                            data-placement="bottom" title="" onclick="excel()" data-original-title="Export Excel"></i>
+                    </li>
                     <li><i class="fa fa-print" style="cursor: pointer;" id="print" title="Print Laporan"></i></li>
                 </ul>
             </div>
@@ -365,12 +435,12 @@
             <tr>
                 <td style="font-weight: bold;color: #A9A9A9">Cabang</td>
                 <td> : &nbsp; </td>
-                <td> {{Auth::user()->employee->branch->name}} </td>
+                <td> {{ Auth::user()->employee->branch->name }} </td>
             </tr>
             <tr>
                 <td style="font-weight: bold;color: #A9A9A9">Dikeluarkan oleh</td>
                 <td> : &nbsp; </td>
-                <td> {{Auth::user()->employee->name}} </td>
+                <td> {{ Auth::user()->employee->name }} </td>
             </tr>
             <tr>
                 <td style="font-weight: bold;color: #A9A9A9">Dikeluarkan tanggal</td>
@@ -381,6 +451,80 @@
         <br>
         <hr>
         <br>
+        <table class="table table-bordered table-sm" style="color: black;border:1px solid black">
+            <thead>
+                <tr>
+                    @foreach ($array as $el)
+                        <th>{{ $el }}</th>
+                    @endforeach
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($data as $key => $value)
+            <tbody class="dropHere" style="border: none !important">
+                <tr role="row" class="odd">
+                    <td>{{ \Carbon\Carbon::parse($value->date)->locale('id')->isoFormat('LL') }}</td>
+                    <th>{{ $value->code }}</th>
+                    <td>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>
+                                        {{ $value->customer_name }}<br>
+                                        {{ $value->customer_phone }}<br>
+                                        {{ $value->customer_address }}
+                                    </th>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <b>{{ $value->Brand->name }} {{ $value->Type->name }}</b>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>No. IMEI : <b>{{ $value->no_imei }}</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>Pekerjaan : <b>{{ $value->work_status }}</b></td>
+                                </tr>
+                                <tr>
+                                    <td>Pembayaran : <b>{{ $value->payment_status }}</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                    {{-- <th>{{ $value->payment_status }}</th> --}}
+                    <th class="text-right">Rp. {{ number_format($value->total_price, 0, '.', ',') }}</th>
+                </tr>
+            </tbody>
+            @endforeach
+            <tfoot>
+                <tr style="color: #6777ef;">
+                    <th colspan="2">
+                        <h5>Jumlah Transaksi : {{ $tr }}</h5>
+                    </th>
+                    <th colspan="2">
+                        <h5>Pendapatan Kotor : Rp. {{ number_format($sumKotor, 0, '.', ',') }}</h5>
+                    </th>
+                    <th colspan="2">
+                        <h5>Pendapatan Bersih : Rp. {{ number_format($sumBersih, 0, '.', ',') }}</h5>
+                    </th>
+                </tr>
+            </tfoot>
+            </tbody>
+        </table>    
+
 
     </div>
     <div id="xlsDownload" style="display: none"></div>
@@ -397,7 +541,8 @@
                 dd.getMinutes() +
                 dd.getSeconds();
 
-            $("#xlsDownload").html("<a href=\"" + blobUrl + "\" download=\"Laporan Transaksi\_" + ss + "\.xls\" id=\"xlsFile\">Downlaod</a>");
+            $("#xlsDownload").html("<a href=\"" + blobUrl + "\" download=\"Laporan Transaksi\_" + ss +
+                "\.xls\" id=\"xlsFile\">Downlaod</a>");
             $("#xlsFile").get(0).click();
 
             function b64toBlob(b64Data, contentType, sliceSize) {
@@ -427,9 +572,11 @@
 
             }
         }
+
         function cetak(params) {
             window.print();
         }
     </script>
 </body>
+
 </html>

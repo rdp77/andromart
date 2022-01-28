@@ -48,6 +48,14 @@ Route::group(['prefix' => 'report'], function () {
             'print-report-service-periode',
             [ReportServiceController::class, 'printPeriode']
         )->name('print-report-service.periode');
+
+
+
+
+        Route::get(
+            'print-report-all',
+            [ReportServiceController::class, 'printReport']
+        )->name('print-report-all.printReport');
     });
 
 });

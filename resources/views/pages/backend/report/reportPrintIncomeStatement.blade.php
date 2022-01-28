@@ -329,18 +329,6 @@
             display: none;
         }
 
-        .table.table-bordered {
-            border: 1px solid black !important;
-            margin-top: 20px;
-        }
-
-        .table.table-bordered td {
-            border: 1px solid #9a9a9a !important;
-        }
-
-        .table.table-bordered>thead>tr>th {
-            border: 1px solid black !important;
-        }
     </style>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.12/css/select2.min.css" integrity="sha256-FdatTf20PQr/rWg+cAKfl6j4/IY3oohFAJ7gVC3M34E=" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2-bootstrap-theme/0.1.0-beta.10/select2-bootstrap.css" integrity="sha256-zFnNbsU+u3l0K+MaY92RvJI6AdAVAxK3/QrBApHvlH8=" crossorigin="anonymous">
