@@ -11,7 +11,7 @@
     <div class="card">
         <div class="row">
             <div class="col-md-12">
-                <form method="POST" action="{{ route('payment.store') }}">
+                <form method="POST" class="form-data">
                     @csrf
                     <div class="card-header">
                         <h4>Form Data</h4>
@@ -24,7 +24,7 @@
                             </div>
                             <div class="form-group col-md-6 col-lg-6">
                                 <label for="date">{{ __('Tanggal') }}<code>*</code></label>
-                                <input id="date" type="text" class="form-control datepicker" readonly="" name="date">
+                                <input id="date" type="text" data-name="Tanggal Harus Di isi" class="form-control datepicker validation" readonly="" name="date">
                             </div>
                         </div>
                         <div class="row">
@@ -33,7 +33,7 @@
                                     <label for="branch_id"
                                         class="control-label">{{ __('Cabang') }}<code>*</code></label>
                                 </div>
-                                <select onchange="branchChange()" class="select2 branch @error('branch_id') is-invalid @enderror" name="branch_id" required>
+                                <select onchange="branchChange()" data-name="Cabang Harus Di isi" class="select2 validation branch @error('branch_id') is-invalid @enderror" name="branch_id" required>
                                     <option value="">- Select -</option>
                                     @foreach ($branch as $branch)
                                     <option value="{{$branch->id}}">{{$branch->code}} - {{$branch->name}}</option>
@@ -50,7 +50,7 @@
                                     <label for="type_id"
                                         class="control-label">{{ __('Type') }}<code>*</code></label>
                                 </div>
-                                <select class="select2 type_id" onchange="typeChange()" name="type_id" required>
+                                <select class="select2 validation type_id" data-name="Tipe Harus Di isi" onchange="typeChange()" name="type_id" required>
                                     <option value="">- Select -</option>
                                     <option value="Transfer">Transfer</option>
                                     <option value="Pengeluaran">Pengeluaran</option>
@@ -61,7 +61,7 @@
                                     <label for="cash_id"
                                         class="control-label">{{ __('Kass') }}<code>*</code></label>
                                 </div>
-                                <select class="select2" name="cash_id" required>
+                                <select class="select2 validation" data-name="Kas Harus Di isi" name="cash_id" required>
                                     <option value="">- Select -</option>
                                     @foreach ($cash as $el)
                                         @if ($el->main_id == 1)
@@ -83,7 +83,7 @@
                                     <label for="cost_id"
                                         class="control-label">{{ __('Jenis Biaya') }}<code>*</code></label>
                                 </div>
-                                <select class="select2 cost @error('cost_id') is-invalid @enderror"  name="cost_id" required>
+                                <select class="select2 validation cost @error('cost_id') is-invalid @enderror" data-name="Jenis Biasa Harus Di isi" name="cost_id" required>
                                     <option value="">- Select -</option>
                                 </select>
                                 @error('cost_id')
@@ -99,7 +99,7 @@
                                     <label for="cash_tranfer_id"
                                         class="control-label">{{ __('Transfer Ke') }}<code>*</code></label>
                                 </div>
-                                <select class="select2" name="cash_tranfer_id">
+                                <select class="select2 validation" data-name="Transfer Harus Di isi" name="cash_tranfer_id">
                                     <option value="">- Select -</option>
                                     @foreach ($cash_transfer as $el)
                                         @if ($el->main_id == 1)
@@ -119,7 +119,7 @@
                                         Rp.
                                         </div>
                                     </div>
-                                    <input id="rupiah" type="text" class="form-control cleaveNumeral @error('price') is-invalid @enderror"
+                                    <input id="rupiah" type="text" data-name="Jumlah Pembayaran Harus Di isi" class="validation form-control cleaveNumeral @error('price') is-invalid @enderror"
                                         name="price" value="{{ old('price') }}" required style="text-align: right">
                                     @error('price')
                                     <div class="invalid-feedback">
@@ -130,13 +130,13 @@
                             </div>
                             <div class="form-group col-md-7 col-xs-12">
                                 <label for="description">{{ __('Keterangan') }}</label>
-                                <input id="description" type="text" class="form-control" name="description">
+                                <input id="description" type="text" data-name="Keterangan Harus Di isi" class="form-control validation" name="description">
                             </div>
                         </div>
                     </div>
                     <div class="card-footer text-right">
                         <a class="btn btn-outline" href="javascript:window.history.go(-1);">{{ __('Kembali') }}</a>
-                        <button class="btn btn-primary mr-1" type="submit">{{ __('Tambah Data Transaksi') }}</button>
+                        <button class="btn btn-primary mr-1" onclick="save()" type="button">{{ __('Tambah Data Transaksi') }}</button>
                     </div>
                 </form>
             </div>

@@ -38,15 +38,15 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="form-group col-sm-11  mb-1 mr-10">
+                                    <div class="form-group col-sm-10  mb-1 mr-10">
                                         <label for="inputPassword2" class="sr-only">Bulan</label>
                                         <input type="text" class="form-control dtpickermnth" value="{{ date('F Y') }}"
                                             name="dtpickermnth" id="dtpickermnth" />
                                     </div>
                                     <button class="btn btn-primary tombol" onclick="searchData()" type="button"
                                         style="margin-bottom: 6px"><i class="fas fa-search"></i> Cari</button>
-                                    {{-- <button class="btn btn-primary tombol ml-2" onclick="expandAll()" type="button" --}}
-                                    {{-- style="margin-bottom: 6px"><i class="fas fa-list"></i> Expand</button> --}}
+                                    <button class="btn btn-primary tombol ml-2" onclick="cetakData()" type="button"
+                                    style="margin-bottom: 6px"><i class="fas fa-print"></i> Cetak</button>
                                     {{-- <button class="btn btn-primary tombol ml-2" onclick="closeAll()" type="button" --}}
                                     {{-- style="margin-bottom: 6px"><i class="fas fa-angle-double-up"></i> Perkecil</button> --}}
                                 </div>
@@ -365,6 +365,11 @@
             var dateS = $(".dtpickermnth").val();
             window.location.href = '{{ route('report-income-statement.index') }}?&dateS=' + $(".dtpickermnth").val();
         }
+        function cetakData() {
+            var dateS = $(".dtpickermnth").val();
+            window.location.href = '{{ route('report-income-statement.printReportIncomeStatement') }}?&dateS=' + $(".dtpickermnth").val();
+        }
+        
 
         function expandAll(params) {
             // $('#accordion .panel-collapse').collapse('toggle');

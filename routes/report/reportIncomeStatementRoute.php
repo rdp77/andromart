@@ -25,5 +25,9 @@ Route::group(['prefix' => 'report'], function () {
             'search-report-income-statement',
             [ReportIncomeStatementController::class, 'searchReportIncomeStatement']
         )->name('report-income-statement.searchReportIncomeStatement');
+        Route::get(
+            'print-report-income-statement',
+            [ReportIncomeStatementController::class, 'printReportIncomeStatement']
+        )->name('report-income-statement.printReportIncomeStatement');
     });
 });
