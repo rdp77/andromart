@@ -14,6 +14,7 @@ class accountMainDetail extends Seeder
      */
     public function run()
     {
+        DB::table('account_main_detail')->truncate();
         DB::table('account_main_detail')->insert([
             [
                 'id' => '1',
@@ -231,7 +232,38 @@ class accountMainDetail extends Seeder
                 'created_at' => date("Y-m-d h:i:s"),
                 'updated_at' => date("Y-m-d h:i:s"),
             ],
-
+            [
+                'id' => '28',
+                'main_id' => '7',
+                'name' => 'Transfer',
+                'code' => '06',
+                'created_at' => date("Y-m-d h:i:s"),
+                'updated_at' => date("Y-m-d h:i:s"),
+            ],
+            [
+                'id' => '29',
+                'main_id' => '7',
+                'name' => 'Biaya HPP',
+                'code' => '07',
+                'created_at' => date("Y-m-d h:i:s"),
+                'updated_at' => date("Y-m-d h:i:s"),
+            ],
+            [
+                'id' => '30',
+                'main_id' => '8',
+                'name' => 'Diskon Penjualan',
+                'code' => '01',
+                'created_at' => date("Y-m-d h:i:s"),
+                'updated_at' => date("Y-m-d h:i:s"),
+            ],
+            [
+                'id' => '31',
+                'main_id' => '8',
+                'name' => 'Diskon Service',
+                'code' => '02',
+                'created_at' => date("Y-m-d h:i:s"),
+                'updated_at' => date("Y-m-d h:i:s"),
+            ],
         ]);
     }
 }

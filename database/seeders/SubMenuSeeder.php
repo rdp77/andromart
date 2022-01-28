@@ -120,8 +120,8 @@ class SubMenuSeeder extends Seeder
             [
                 'menu_id' => '4',
                 'name' => 'Laporan Laba Rugi',
-                'url' => 'javascript:void(0)',
-                'hover' => null
+                'url' => route('report-income-statement.index'),
+                'hover' => '["' . route('report-income-statement.index') . '"]'
             ],
             [
                 'menu_id' => '4',

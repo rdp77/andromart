@@ -14,6 +14,7 @@ class accountMain extends Seeder
      */
     public function run()
     {
+        DB::table('account_main')->truncate();
         DB::table('account_main')->insert([
             [
                 'id' => '1',
@@ -61,6 +62,13 @@ class accountMain extends Seeder
                 'id' => '7',
                 'name' => 'Beban',
                 'code' => '50',
+                'created_at' => date("Y-m-d h:i:s"),
+                'updated_at' => date("Y-m-d h:i:s"),
+            ],
+            [
+                'id' => '8',
+                'name' => 'Diskon',
+                'code' => '42',
                 'created_at' => date("Y-m-d h:i:s"),
                 'updated_at' => date("Y-m-d h:i:s"),
             ],
