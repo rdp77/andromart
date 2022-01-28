@@ -70,15 +70,11 @@ class AccountDataController extends Controller
     {
         DB::beginTransaction();
         try {
-
             $AccountMainDetail = AccountMainDetail::where('id', $req->account_detail_id)->first();
             $AccountMain       = AccountMain::where('id', $AccountMainDetail->main_id)->first();
             $Branch            = Branch::where('id', $req->branch_id)->first();
             $Area              = Area::where('id', $Branch->area_id)->first();
-
             $code = $AccountMain->code . $AccountMainDetail->code . $Area->code . $Branch->code;
-
-
             $checkCode = AccountData::where('code', $code)->get();
 
             if(count($checkCode) != 0){
@@ -105,7 +101,7 @@ class AccountDataController extends Controller
             $this->DashboardController->createLog(
                 $req->header('user-agent'),
                 $req->ip(),
-                'Membuat master area baru'
+                'Membuat master account data baru'
             );
 
             DB::commit();
@@ -117,7 +113,6 @@ class AccountDataController extends Controller
         } catch (\Throwable $th) {
             DB::rollback();
             return $th;
-            //throw $th;
         }
     }
 
@@ -133,44 +128,90 @@ class AccountDataController extends Controller
             return view('forbidden');
         }
 
-        $branch = Area::find($id);
-        return view('pages.backend.master.accountData.updateAccountData', ['branch' => $branch]);
+        $accountData = AccountData::find($id);
+        $accountMain = AccountMain::get();
+        $accountMainDetail = AccountMainDetail::get();
+        $area = Area::get();
+        $branch = Branch::get();
+
+        return view('pages.backend.master.accountData.updateAccountData', compact('accountData', 'accountMain', 'accountMainDetail', 'area', 'branch'));
     }
 
     public function update(Request $req, $id)
     {
-        if ($req->code == Area::find($id)->code) {
-            Validator::make($req->all(), [
-                'name' => ['required', 'string', 'max:255'],
-            ])->validate();
+        $AccountData       = AccountData::where('id', $id)->first();
+        $AccountMainDetail = AccountMainDetail::where('id', $req->account_detail_id)->first();
+        $AccountMain       = AccountMain::where('id', $AccountMainDetail->main_id)->first();
+        $Branch            = Branch::where('id', $req->branch_id)->first();
+        $Area              = Area::where('id', $Branch->area_id)->first();
+        $code = $AccountMain->code . $AccountMainDetail->code . $Area->code . $Branch->code;
+        $checkCode = AccountData::where('code', $code)->get();
+        // return $code;
+        if (count($checkCode) != 0) {
+            if($AccountData->code == $code){
+                AccountData::where('id', $id)
+                ->update([
+                    'code' => $code,
+                    'name' => $req->name,
+                    'area_id' => $Branch->area_id,
+                    'branch_id' => $req->branch_id,
+                    'debet_kredit' => $req->debet_kredit,
+                    'active' => $req->active,
+                    'account_type' => '-',
+                    'main_id' => $AccountMainDetail->main_id,
+                    'main_detail_id' => $req->account_detail_id,
+                    'opening_balance' => $req->opening_balance,
+                    // 'opening_date' => date('Y-m-d'),
+                    'updated_by' => Auth::user()->name,
+                ]);
+
+                $accountData = AccountData::find($id);
+                $this->DashboardController->createLog(
+                $req->header('user-agent'),
+                $req->ip(),
+                'Mengubah master akun data ' . AccountData::find($id)->name
+            );
+            $accountData->save();
+
+            return Redirect::route('account-data.index')
+                ->with([
+                    'status' => 'Berhasil merubah master akun data ',
+                    'type' => 'success'
+                ]);
+            } else {
+                return Response::json(['status' => 'error','message'=>'Data Sudah Ada','result'=>$checkCode]);
+            }
         } else {
-            Validator::make($req->all(), [
-                'code' => ['required', 'string', 'max:255', 'unique:areas'],
-                'name' => ['required', 'string', 'max:255'],
-            ])->validate();
+            AccountData::where('id', $id)
+                ->update([
+                    'code' => $code,
+                    'name' => $req->name,
+                    'area_id' => $Branch->area_id,
+                    'branch_id' => $req->branch_id,
+                    'debet_kredit' => $req->debet_kredit,
+                    'active' => $req->active,
+                    'account_type' => '-',
+                    'main_id' => $AccountMainDetail->main_id,
+                    'main_detail_id' => $req->account_detail_id,
+                    'opening_balance' => $req->opening_balance,
+                    // 'opening_date' => date('Y-m-d'),
+                    'updated_by' => Auth::user()->name,
+                ]);
+
+            $accountData = AccountData::find($id);
+            $this->DashboardController->createLog(
+                $req->header('user-agent'),
+                $req->ip(),
+                'Mengubah master akun data ' . AccountData::find($id)->name
+            );
+            $accountData->save();
+
+            return Redirect::route('account-data.index')
+                ->with([
+                    'status' => 'Berhasil merubah master akun data ',
+                    'type' => 'success'
+                ]);
         }
-
-        Area::where('id', $id)
-            ->update([
-                'code' => $req->code,
-                'name' => $req->name,
-                'updated_by' => Auth::user()->name,
-            ]);
-
-        $area = Area::find($id);
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Mengubah masrter area ' . Area::find($id)->name
-        );
-
-        $area->save();
-
-        return Redirect::route('area.index')
-            ->with([
-                'status' => 'Berhasil merubah master area ',
-                'type' => 'success'
-            ]);
     }
 
     public function destroy(Request $req, $id)

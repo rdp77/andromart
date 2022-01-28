@@ -43,10 +43,20 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-12 col-md-12 col-lg-12">
+                                <div class="form-group col-6 col-md-3">
                                     <button class="btn btn-primary" type="button"
                                         onclick="changes('{{ csrf_token() }}', '{{ route('report-service.dataLoad') }}', '#data-load')">
                                         <i class="fas fa-eye"></i> Cari
+                                    </button>
+                                </div>
+                                <div class="form-group col-6 col-md-4">
+                                    {{-- <a href="{{ route('print-report-service.periode') }}"
+                                        target="_blank" class="btn btn-primary" type="button">
+                                        <i class="fas fa-print"></i> Cetak Laporan
+                                    </a> --}}
+                                    <button class="btn btn-primary" type="button"
+                                        onclick="changes('{{ csrf_token() }}', '{{ route('print-report-service.periode') }}')">
+                                        <i class="fas fa-print"></i> Cetak Laporan
                                     </button>
                                 </div>
                             </div>
@@ -165,12 +175,8 @@
                     </tr>
                 </tfoot>
             </table>
-
         </div>
       </div>
-      <div class="col-12" id="data-employee-load">
-      </div>
-
   </section>
 </form>
 @endsection

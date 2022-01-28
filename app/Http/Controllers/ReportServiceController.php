@@ -10,6 +10,7 @@ use App\Models\Service;
 use App\Models\Type;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Redirect;
 
 class ReportServiceController extends Controller
 {
@@ -28,9 +29,16 @@ class ReportServiceController extends Controller
     {
         $branchUser = Auth::user()->employee->branch_id;
         $type = Type::get();
+
+        if (Auth::user()->role_id == 1) {
+            $branch = Branch::get();
+        } elseif (Auth::user()->role_id == 2) {
+            $branch = Branch::where('area_id', Auth::user()->employee->branch->area_id)->get();
+        } else {
+            $branch = Branch::where('id', Auth::user()->employee->branch_id)->get();
+        }
         $technician = Employee::where('branch_id', $branchUser)->get();
         // $as = User::where('role_id', '5');
-        $branch = Branch::get();
 
         return view('pages.backend.report.reportService',compact('type', 'technician', 'branch'));
     }
@@ -133,6 +141,34 @@ class ReportServiceController extends Controller
         }
         return $data;
         return view('pages.backend.report.reportEmployeeServiceLoad', compact('data'));
+    }
+
+    public function printPeriode(Request $req)
+    {
+        $array = [
+            'Tanggal',
+            'Faktur',
+            'Customer',
+            'Barang',
+            'Status',
+            'Jumlah'
+        ];
+        // return $array;
+        // $th = ['Tanggal', 'Faktur', 'Customer', 'Barang', 'Status', 'Jumlah'];
+        $branchUser = Auth::user()->employee->branch_id;
+        $startDate = $req->startDate1;
+        $endDate = $req->endDate1;
+        $data = Service::with(['Type', 'Brand'])
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('branch_id', $branchUser)
+        ->orderBy('id', 'desc')->get();
+
+        $sumKotor = $data->sum('total_price');
+        $sumBersih = $data->sum('sharing_profit_store');
+        $tr = count($data);
+
+        return view('pages.backend.report.printReport', compact('data', 'tr', 'sumKotor', 'sumBersih', 'array'));
     }
 
 }

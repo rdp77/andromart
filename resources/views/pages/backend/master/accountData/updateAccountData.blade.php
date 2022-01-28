@@ -8,123 +8,60 @@
 @endsection
 
 @section('content')
+@include('layouts.backend.components.notification')
 <div class="card">
-    <form method="POST" action="{{ route('account-data.update',$branch->id) }}">
+    <form method="POST" action="{{ route('account-data.update',$accountData->id) }}">
         @csrf
         @method('PUT')
         <div class="card-body">
             <div class="row">
                 <div class="form-group col-md-6 col-xs-12">
-                    <div class="d-block">
-                        <label for="name" class="control-label">{{ __('Nama') }}<code>*</code></label>
-                    </div>
-                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name"
-                        value="{{ $branch->name }}" required autofocus>
-                    @error('name')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                    @enderror
-                </div>
-                <div class="form-group col-md-6 col-xs-12">
-                    <label for="title">{{ __('Nama Lain') }}</label>
-                    <input id="title" type="text" class="form-control @error('title') is-invalid @enderror"
-                        name="title" value="{{ $branch->title }}">
-                    @error('title')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                    @enderror
-                </div>
-            </div>
-            <div class="row">
-                <div class="form-group col-md-6 col-xs-12">
-                    <label for="area_id">{{ __('Kode Area') }}<code>*</code></label>
-                    <select name="area_id" id="area_id" class="form-control select2" required>
-                        <option value="{{ $branch->area->id }}"> {{ $branch->area->code }} - {{ $branch->area->name }} </option>
-                        @foreach ($area as $area)
-                        <option value="{{ $area->id }}"> {{ $area->code }} - {{ $area->name }} </option>
+                    <label for="branch_id">{{ __('Cabang') }}<code>*</code></label>
+                    <select name="branch_id" id="branch_id" class="form-control select2" required>
+                        @foreach ($branch as $branch)
+                        <option value="{{ $branch->id }}" @if ($branch->id == $accountData->branch_id) selected @endif>
+                            {{ $branch->code }} - {{ $branch->name }}
+                        </option>
                         @endforeach
                     </select>
                 </div>
                 <div class="form-group col-md-6 col-xs-12">
-                    <label for="code">{{ __('Kode Cabang') }}<code>*</code></label>
-                    <input id="code" type="text" class="form-control @error('code') is-invalid @enderror"
-                        name="code" value="{{ $branch->code }}" required>
-                    @error('code')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                    @enderror
+                    <label for="account_detail_id">{{ __('Detail Akun') }}<code>*</code></label>
+                    <select name="account_detail_id" id="account_detail_id" class="form-control select2" required>
+                        @foreach ($accountMainDetail as $accountMainDetail)
+                        <option value="{{ $accountMainDetail->id }}" @if($accountMainDetail->id == $accountData->main_detail_id) selected @endif>
+                            {{ $accountMainDetail->code }} - {{ $accountMainDetail->name }}
+                        </option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6 col-xs-12">
-                    <div class="d-block">
-                        <label for="phone" class="control-label">{{ __('Kontak') }}<code>*</code></label>
-                    </div>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                          <div class="input-group-text">
-                            <i class="fas fa-phone"></i>
-                          </div>
-                        </div>
-                        <input id="phone" type="text" class="form-control phone-number @error('phone') is-invalid @enderror" name="phone"
-                            value="{{ $branch->phone }}" required>
-                        @error('phone')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                        @enderror
-                    </div>
+                    <label for="name" class="control-label">{{ __('Nama') }}</label><code>*</code>
+                    <input id="name" type="text" class="form-control" name="name" value="{{ $accountData->name }}" required>
                 </div>
                 <div class="form-group col-md-6 col-xs-12">
-                    <div class="d-block">
-                        <label for="email" class="control-label">{{ __('Email') }}</label>
-                    </div>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                          <div class="input-group-text">
-                            <i class="fas fa-at"></i>
-                          </div>
-                        </div>
-                        <input id="email" type="email" class="form-control email @error('email') is-invalid @enderror" name="email"
-                            value="{{ $branch->email }}">
-                        @error('email')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                        @enderror
-                    </div>
+                    <label for="email" class="control-label">{{ __('Opening Balance') }}</label><code>*</code>
+                    <input id="opening_balance" type="number" class="form-control opening_balance" name="opening_balance" min="0" value="{{ $accountData->opening_balance }}" required>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <div class="d-block">
-                        <label for="address" class="control-label">{{ __('Alamat Cabang') }}<code>*</code></label>
-                    </div>
-                    <input id="address" type="text" class="form-control @error('address') is-invalid @enderror" name="address"
-                        value="{{ $branch->address }}" required>
-                    @error('address')
-                    <div class="invalid-feedback">
-                        {{ $message }}
-                    </div>
-                    @enderror
+                    <label for="address" class="control-label">{{ __('Debet Kredit') }}<code>*</code></label>
+                    <select name="debet_kredit" class="select2" required>
+                        <option value="">- Select -</option>
+                        <option value="D" @if ($accountData->debet_kredit == 'D') selected @endif>Debet</option>
+                        <option value="K" @if ($accountData->debet_kredit == 'K') selected @endif>Kredit</option>
+                    </select>
                 </div>
                 <div class="form-group col-md-6">
-                    <div class="d-block">
-                        <label for="latitude" class="control-label">{{ __('Koordinat') }}</label>
-                    </div>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="input-lat" name="latitude" value="{{ $branch->latitude }}"
-                        @if ($branch->latitude == null)
-                            placeholder ="Latitude"
-                        @endif >
-                        <input type="text" class="form-control" id="input-lng" name="longitude" value="{{ $branch->longitude }}"
-                        @if ($branch->longitude == null)
-                            placeholder ="Longitude"
-                        @endif >
-                    </div>
+                    <label for="address" class="control-label">{{ __('Status') }}<code>*</code></label>
+                    <select name="active" class="select2" required>
+                        <option value="">- Select -</option>
+                        <option value="Y" @if ($accountData->active == 'Y') selected @endif>Aktif</option>
+                        <option value="N" @if ($accountData->active == 'N') selected @endif>Non Aktif</option>
+                    </select>
                 </div>
             </div>
         </div>

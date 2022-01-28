@@ -8,11 +8,6 @@ use Illuminate\Support\Facades\DB;
 
 class RolesDetailSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
     public function run()
     {
         DB::table('roles_detail')->truncate();
@@ -30,7 +25,16 @@ class RolesDetailSeeder extends Seeder
                     'created_at' => date("Y-m-d h:i:s"),
                     'updated_at' => date("Y-m-d h:i:s"),
                 ],
-
+                [
+                    'roles_id' => 2,
+                    'menu' => $id,
+                    'view' => 'on',
+                    'create' => 'on',
+                    'edit' => 'on',
+                    'delete' => 'on',
+                    'created_at' => date("Y-m-d h:i:s"),
+                    'updated_at' => date("Y-m-d h:i:s"),
+                ],
             ]);
         }
     }

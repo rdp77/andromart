@@ -120,8 +120,8 @@ class SubMenuSeeder extends Seeder
             [
                 'menu_id' => '4',
                 'name' => 'Laporan Laba Rugi',
-                'url' => 'javascript:void(0)',
-                'hover' => null
+                'url' => route('report-income-statement.index'),
+                'hover' => '["' . route('report-income-statement.index') . '"]'
             ],
             [
                 'menu_id' => '4',
@@ -215,18 +215,6 @@ class SubMenuSeeder extends Seeder
                 'url' => route('category.index'),
                 'hover' => '["' . route('category.create') . '","' . route('category.index') . '"]'
             ],
-            // [
-            //     'menu_id' => '5',
-            //     'name' => 'Biaya',
-            //     'url' => route('cost.index'),
-            //     'hover' => '["' . route('cost.create') . '","' . route('cost.index') . '"]'
-            // ],
-            // [
-            //     'menu_id' => '5',
-            //     'name' => 'Kas',
-            //     'url' => route('cash.index'),
-            //     'hover' => '["' . route('cash.create') . '","' . route('cash.index') . '"]'
-            // ],
             [
                 'menu_id' => '5',
                 'name' => 'Hak Akses',
@@ -251,12 +239,6 @@ class SubMenuSeeder extends Seeder
                 'url' => route('icon.index'),
                 'hover' => '["' . route('icon.create') . '","' . route('icon.index') . '"]'
             ],
-            // [
-            //     'menu_id' => '5',
-            //     'name' => 'Menu',
-            //     'url' => route('menu.index'),
-            //     'hover' => '["' . route('menu.create') . '","' . route('menu.index') . '"]'
-            // ],
             [
                 'menu_id' => '6',
                 'name' => 'Stok',

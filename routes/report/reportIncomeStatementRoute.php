@@ -19,7 +19,7 @@ Route::group(['prefix' => 'report'], function () {
         Route::resource('report-income-statement', ReportIncomeStatementController::class)
             ->except([
                 'show',
-            ]); 
+            ]);
 
         Route::post(
             'search-report-income-statement',

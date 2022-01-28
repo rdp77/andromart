@@ -33,53 +33,30 @@
                 </div>
             </div>
             <div class="row">
-
                 <div class="form-group col-md-6 col-xs-12">
-                    <div class="d-block">
-                        <label for="email" class="control-label">{{ __('Nama') }}</label>
-                    </div>
-                    <div>
-                        <input id="name" type="text" class="form-control opening_balance @error('email') is-invalid @enderror" name="name">
-                        @error('email')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                        @enderror
-                    </div>
+                    <label for="email" class="control-label">{{ __('Nama') }}</label><code>*</code>
+                    <input id="name" type="text" class="form-control" name="name" required>
                 </div>
                 <div class="form-group col-md-6 col-xs-12">
-                    <div class="d-block">
-                        <label for="email" class="control-label">{{ __('Opening Balance') }}</label>
-                    </div>
-                    <div>
-                        <input id="opening_balance" type="text" class="form-control opening_balance @error('email') is-invalid @enderror" name="opening_balance">
-                        @error('email')
-                        <div class="invalid-feedback">
-                            {{ $message }}
-                        </div>
-                        @enderror
-                    </div>
+                    <label for="email" class="control-label">{{ __('Opening Balance') }}</label><code>*</code>
+                    <input id="opening_balance" type="number" class="form-control opening_balance" name="opening_balance" min="0" required>
                 </div>
             </div>
             <div class="row">
                 <div class="form-group col-md-6">
-                    <div class="d-block">
-                        <label for="address" class="control-label">{{ __('Debet Kredit') }}<code>*</code></label>
-                    </div>
-                    <select name="debet_kredit" class="select2">
+                    <label for="address" class="control-label">{{ __('Debet Kredit') }}<code>*</code></label>
+                    <select name="debet_kredit" class="select2" required>
                         <option value="">- Select -</option>
                         <option value="D">Debet</option>
                         <option value="K">Kredit</option>
                     </select>
                 </div>
                 <div class="form-group col-md-6">
-                    <div class="d-block">
-                        <label for="address" class="control-label">{{ __('Aktif ?') }}<code>*</code></label>
-                    </div>
-                    <select name="active" class="select2">
+                    <label for="address" class="control-label">{{ __('Status') }}<code>*</code></label>
+                    <select name="active" class="select2" required>
                         <option value="">- Select -</option>
-                        <option value="Y">Ya</option>
-                        <option value="N">Tidak</option>
+                        <option value="Y">Aktif</option>
+                        <option value="N">Non Aktif</option>
                     </select>
                 </div>
             </div>
