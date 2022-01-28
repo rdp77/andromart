@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
-use App\Models\Stock;
+use App\Models\Brand;
+use App\Models\Category;
 use App\Models\Item;
+use App\Models\Stock;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,26 +33,37 @@ class StockOpnameController extends Controller
         }
 
         $branchUser = Auth::user()->employee->branch_id;
-        $item = Stock::with('item')
+        $category = Category::with('brand', 'brand.item', 'brand.item.stocks')->get();
+
+        $item = Stock::with('item', 'item.brand', 'item.brand.category')
+        ->leftJoin('units', 'units.id', 'stocks.unit_id')
+        ->leftJoin('items', 'items.id', 'stocks.item_id')
+        ->leftJoin('brands', 'brands.id', 'items.brand_id')
+        ->leftJoin('categories', 'categories.id', 'brands.category_id')
         ->where('branch_id', $branchUser)
         ->where('item_id', '!=', 1)
+        ->select('brands.name as merk', 'items.name as itemName', 'categories.code as category', 'units.code as satuan', 'items.buy as hargabeli', 'stocks.stock as stock')
         ->get();
-        $sumItem = Stock::with('item')->where('branch_id', $branchUser)->sum('stock');
 
-        $sumActiva = Stock::with('item')
-        ->leftJoin('items', 'items.id', '=', 'stocks.item_id')
-        ->where('branch_id', $branchUser)
-        ->select('stocks.stock as stock', 'items.buy as buy', 'items.id as itemq')
-        // ->get('itemq', 'stock', 'buy');
-        ->sum('buy');
-        // return $sumActiva;
-
-        return view('pages.backend.warehouse.stockOpname.indexStockOpname', compact('item', 'sumItem', 'sumActiva'));
+        return view('pages.backend.warehouse.stockOpname.indexStockOpname', compact('category','item'));
     }
 
-    public function create()
+    public function printStockOpname()
     {
-        //
+        $branchUser = Auth::user()->employee->branch_id;
+        $category = Category::with('brand', 'brand.item', 'brand.item.stocks')->get();
+
+        $item = Stock::with('item', 'item.brand', 'item.brand.category')
+        ->leftJoin('units', 'units.id', 'stocks.unit_id')
+        ->leftJoin('items', 'items.id', 'stocks.item_id')
+        ->leftJoin('brands', 'brands.id', 'items.brand_id')
+        ->leftJoin('categories', 'categories.id', 'brands.category_id')
+        ->where('branch_id', $branchUser)
+        ->where('item_id', '!=', 1)
+        ->select('brands.name as merk', 'items.name as itemName', 'categories.code as category', 'units.code as satuan', 'items.buy as hargabeli', 'stocks.stock as stock')
+        ->get();
+        $itung = count($item);
+        return view('pages.backend.warehouse.stockOpname.printStockOpname', compact('item', 'category', 'itung'));
     }
 
     public function store(Request $request)

@@ -30,7 +30,13 @@ class ReportSaleController extends Controller
         $sales = Employee::where('branch_id', $branchUser)->where('id', '!=', 1)->get();
         $kas = AccountData::where('branch_id', $branchUser)->where('active', 'Y')->where('name', 'LIKE', '%'.'Kas'.'%')->get();
         $customer = Customer::where('branch_id', $branchUser)->get();
-        $branch = Branch::get();
+        if (Auth::user()->role_id == 1) {
+            $branch = Branch::get();
+        } elseif (Auth::user()->role_id == 2) {
+            $branch = Branch::where('area_id', Auth::user()->employee->branch->area_id)->get();
+        } else {
+            $branch = Branch::where('id', Auth::user()->employee->branch_id)->get();
+        }
 
         return view('pages.backend.report.reportSale', compact(['stock', 'sales', 'kas', 'customer', 'branch']));
     }

@@ -7,13 +7,11 @@
 @endsection
 
 @section('content')
-    {{-- @include('pages.backend.components.filterSearch') --}}
     @include('layouts.backend.components.notification')
     <style>
         .ui-datepicker-calendar {
             display: none;
         }
-
     </style>
     <form class="form-data">
         @csrf
@@ -23,8 +21,6 @@
                     <div class="col-12">
                         <h2 class="section-title">Periode Bulan <b class="dropMonth">{{ date('F Y') }}</b> </h2>
                         <div class="card">
-
-
                             <div class="card-body">
                                 <div class="row">
                                     <div class="form-group col-sm-9  mb-1 mr-10">
@@ -104,18 +100,18 @@
                                                                                                                     <th
                                                                                                                          style="height: 0px;padding: 10px;border:1px solid black">
                                                                                                                         Tanggal
-                                                                                                                    </th> 
+                                                                                                                    </th>
                                                                                                                     <th
                                                                                                                         style="height: 0px;padding: 10px;border:1px solid black">
                                                                                                                         Kode
                                                                                                                         Trans
                                                                                                                     </th>
-                                                                                                                    
+
                                                                                                                     <th
                                                                                                                         style="height: 0px;padding: 10px;border:1px solid black">
                                                                                                                         desc
                                                                                                                     </th>
-                                                                                                                    
+
                                                                                                                     <th
                                                                                                                         style="height: 0px;padding: 10px;border:1px solid black">
                                                                                                                         D
@@ -200,7 +196,7 @@
                                                                                                                                         }else{
                                                                                                                                             $totalSaldoBerjalan -= $data[$i]['main_detail'][$j]['branch'][$k]['jurnal'][$l]['total'];
                                                                                                                                         }
-                                                                                                                                        
+
                                                                                                                                     }
                                                                                                                                     echo 'Rp. ' . number_format($totalSaldoBerjalan, 0, '.', ',');
                                                                                                                                 @endphp

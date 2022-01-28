@@ -37,7 +37,13 @@ class ReportPurchaseController extends Controller
     {
         $stock = Stock::where('branch_id', Auth::user()->employee->branch_id)->where('id', '!=', 1)->get();
         $supplier = Supplier::get();
-        $branch = Branch::get();
+        if (Auth::user()->role_id == 1) {
+            $branch = Branch::get();
+        } elseif (Auth::user()->role_id == 2) {
+            $branch = Branch::where('area_id', Auth::user()->employee->branch->area_id)->get();
+        } else {
+            $branch = Branch::where('id', Auth::user()->employee->branch_id)->get();
+        }
 
         return view('pages.backend.report.reportPurchase', compact('stock', 'supplier', 'branch'));
     }

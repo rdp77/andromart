@@ -17,7 +17,7 @@
     <link href="https://panel.jpmandiri.com/assets/css/chosen/chosen.css" rel="stylesheet">
 
     <style>
-        
+
         .height{
         background: white;
             height: 100%;
@@ -192,7 +192,7 @@
             font-family: Arial, Helvetica, sans-serif;
         }
         @media  print
-        {    
+        {
             header, header *
             {
                 display: none !important;
@@ -234,7 +234,7 @@
             margin-bottom: 5px;
             margin-top: 10px;
             position: relative;
-        }   
+        }
 
         .fa-scissors{
             position: absolute;
@@ -447,7 +447,7 @@
                     </td>
                     <td style="text-align: right">
                         <b><br></b>
-                        
+
                         <table style="width: 100%;text-align:left">
                             <tr>
                                 <td
@@ -684,7 +684,7 @@
 
     <script type="text/javascript" src="https://panel.jpmandiri.com/assets/vendors/bootstrap/js/bootstrap.min.js"></script>
 
-    <!-- datepicker  --> 
+    <!-- datepicker  -->
     <script src="https://panel.jpmandiri.com/assets/vendors/daterangepicker/moment.min.js"></script>
     <script src="https://panel.jpmandiri.com/assets/vendors/datapicker/bootstrap-datepicker.js"></script>
     <script src="https://panel.jpmandiri.com/assets/vendors/daterangepicker/daterangepicker.js"></script>
@@ -705,14 +705,9 @@
         baseUrl = 'https://panel.jpmandiri.com';
 
         // script for buku besar
-       
+
             // export excel---------------------------------------------------
     });
-
-
-
-
-   
     function excel(argument) {
         var blob = b64toBlob(btoa($('div[id=isi]').html()), "application/vnd.ms-excel");
         var blobUrl = URL.createObjectURL(blob);

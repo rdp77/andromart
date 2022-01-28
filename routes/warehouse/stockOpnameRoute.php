@@ -16,9 +16,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'warehouse'], function () {
     Route::group(['prefix' => 'stock-opname'], function () {
-        Route::resource('stockOpname', StockOpnameController::class)
-            ->except([
-                'show',
-            ]);
+        Route::resource('stockOpname', StockOpnameController::class);
+        Route::get(
+            'printStockOpname',
+            [StockOpnameController::class, 'printStockOpname']
+        )->name('stockOpname.print');
     });
 });

@@ -11,33 +11,13 @@
 @include('layouts.backend.components.notification')
 <div class="card">
     <div class="card-header">
-        <a href="#" class="btn btn-large btn-primary">
+        <a href="{{ route('stockOpname.print') }}" class="btn btn-large btn-primary" target="_blank">
             <i class="fas fa-print"></i> Print Data
         </a>
     </div>
     <div class="card-body">
-        {{-- <table class="table-striped table" id="table" width="100%">
-            <thead>
-                <tr>
-                    <th class="text-center">{{ __('NO') }}</th>
-                    <th class="text-center">{{ __('Barang') }}</th>
-                    <th class="text-center">{{ __('Stok') }}</th>
-                    <th class="text-center">{{ __('Satuan') }}</th>
-                    <th class="text-center">{{ __('Harga Beli') }}</th>
-                    <th class="text-center">{{ __('Saldo') }}</th>
-                </tr>
-            </thead>
-            <tbody>
-
-            </tbody>
-            <tfoot>
-                <tr style="color: #6777ef;">
-                    <th colspan="2"><h5>Total Barang : {{ $sumItem }}</h5></th>
-                    <th colspan="2"><h5>Total Saldo : Rp. {{ number_format($sumActiva, 0, ".", ",") }}</h5></th>
-                </tr>
-            </tfoot>
-        </table> --}}
-
+        @foreach($category as $key => $el)
+        <h5>Kategori : {{$el->name}}</h5>
         <table class="table table-striped table-bordered" width="100%">
             <thead>
                 <tr>
@@ -50,34 +30,38 @@
                 </tr>
             </thead>
             @php
-                $sumTotal = 0;
+                $no=1;
+                $sumActiva = 0;
+                $sumItem = 0;
             @endphp
-            @foreach($item as $key => $value)
+            @foreach ($item as $key1 => $el1)
+            @if ($el1->category == $el->code)
+            @php
+                $sumBuy = $el1->stock*$el1->hargabeli;
+                $sumActiva += $el1->stock*$el1->hargabeli;
+                $sumItem += $el1->stock;
+            @endphp
             <tbody style="border: none !important">
                 <tr>
-                    <th scope="row" class="text-right">{{ $loop->iteration }}</th>
-                    <td>{{$value->item->brand->name}} {{$value->item->name}}</td>
-                    <td class="text-center">{{$value->stock}}</td>
-                    <td class="text-center">{{$value->unit->code}}</td>
-                    <td class="text-right">Rp. {{ number_format($value->item->buy, 0, ".", ",") }}</td>
-                    <?php
-                        $sumBuy = $value->stock*$value->item->buy;
-                        $sumTotal += $value->stock*$value->item->buy;
-                    ?>
+                    <th scope="row" class="text-right">{{ $no++ }}</th>
+                    <td>{{ $el1->merk }} {{ $el1->itemName }}</td>
+                    <td>{{ $el1->stock }}</td>
+                    <td>{{ $el1->satuan }}</td>
+                    <td class="text-right">Rp. {{ number_format($el1->hargabeli, 0, ".", ",") }}</td>
                     <td class="text-right">Rp. {{ number_format($sumBuy, 0, ".", ",") }}</td>
                 </tr>
             </tbody>
+            @endif
             @endforeach
             <tfoot>
                 <tr style="color: #6777ef;">
-                    <th colspan="3"><h5>Total Barang : {{ $sumItem }}</h5></th>
-                    <th colspan="3"><h5>Total Saldo : Rp. {{ number_format($sumTotal, 0, ".", ",") }}</h5></th>
+                    <th colspan="3" class="text-right"><h4>Total Barang : {{ $sumItem }} </h4></th>
+                    <th colspan="3" class="text-right"><h4>Total Saldo : Rp. {{ number_format($sumActiva, 0, ".", ",") }}</h4></th>
                 </tr>
             </tfoot>
         </table>
+        <br>
+        @endforeach
     </div>
 </div>
-@endsection
-@section('script')
-{{-- <script src="{{ asset('assets/pages/warehouse/stockOpnameScript.js') }}"></script> --}}
 @endsection
