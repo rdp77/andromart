@@ -87,7 +87,7 @@ function checkData() {
                         } else {
                             var jurnalDetailKReal = jurnalDetailK[index];
                         }
-
+                        
                         $(".dropHere").append(
                             "<tr>" +
                                 "<td><b>" +

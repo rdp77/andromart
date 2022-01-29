@@ -122,20 +122,20 @@ function save(params) {
                 ) {
                     validation++;
                     // alert($(this).data('name'));
-                    if ($('.type_id').val() == 'Pengeluaran') {
-                        if ($(this).data("name") != 'Transfer Harus Di isi') {
+                    if ($(".type_id").val() == "Pengeluaran") {
+                        if ($(this).data("name") != "Transfer Harus Di isi") {
                             iziToast.warning({
                                 type: "warning",
                                 title: $(this).data("name"),
                             });
                         }
-                    }else{
+                    } else {
                         iziToast.warning({
                             type: "warning",
                             title: $(this).data("name"),
                         });
                     }
-            } else {
+                } else {
                     validation - 1;
                 }
             });
@@ -151,35 +151,79 @@ function save(params) {
                         swal(data.message, {
                             icon: "success",
                         });
-                        swal({
-                            title: "Apakah Anda Ingin Mengupdate Service Ini?",
-                            text: "Aksi ini membuat anda akan berpindah halaman.",
-                            icon: "warning",
-                            buttons: true,
-                            dangerMode: true,
-                        }).then((red) => {
-                            if (red) {
-                                // window.open(
-                                //     window.location.origin +
-                                //         "/transaction/service/print-service-payment/" +
-                                //         data.id
-                                // );
-                                // window.location.href =
-                                //     window.location.origin +
-                                //     "/transaction/service/service-form-update-status";
-                            } else {
-                                // window.open(
-                                    // window.location.origin +
-                                        // "/transaction/service/print-service-payment/" +
-                                        // data.id
-                                // );
-                                // location.reload;
-                            }
-                        });
+                        location.reload();
                     } else {
                         swal(data.message, {
                             icon: "warning",
                         });
+                        
+                    }
+                },
+                error: function (data) {
+                    // edit(id);
+                },
+            });
+        } else {
+            swal("diCancel!");
+        }
+    });
+}
+
+function updateData(params) {
+    swal({
+        title: "Apakah Anda Yakin?",
+        text: "Aksi ini tidak dapat dikembalikan, dan akan menyimpan data Anda.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willSave) => {
+        if (willSave) {
+            var validation = 0;
+            console.log(validation);
+            $(".validation").each(function () {
+                if (
+                    $(this).val() == "" ||
+                    $(this).val() == null ||
+                    $(this).val() == 0
+                ) {
+                    validation++;
+                    // alert($(this).data('name'));
+                    if ($(".type_id").val() == "Pengeluaran") {
+                        if ($(this).data("name") != "Transfer Harus Di isi") {
+                            iziToast.warning({
+                                type: "warning",
+                                title: $(this).data("name"),
+                            });
+                        }
+                    } else {
+                        iziToast.warning({
+                            type: "warning",
+                            title: $(this).data("name"),
+                        });
+                    }
+                } else {
+                    validation - 1;
+                }
+            });
+            if (validation != 0) {
+                return false;
+            }
+            $.ajax({
+                url: "/transaction/payment/payment/" + id,
+                data: $(".form-data").serialize(),
+                type: "PUT",
+                success: function (data) {
+                    if (data.status == "success") {
+                        swal(data.message, {
+                            icon: "success",
+                        });
+                        // location.reload();
+                        // window.location.href = transaction/payment/payment
+                    } else {
+                        swal(data.message, {
+                            icon: "warning",
+                        });
+                        
                     }
                 },
                 error: function (data) {
@@ -205,8 +249,13 @@ function branchChange() {
     var params = $(".branch").find(":selected").val();
     $.each($(".accountData"), function () {
         if (params == $(this).data("branch")) {
+            var selected = '';
+            if($(this).data("selected") == 'selected'){
+               var selected = 'selected'; 
+            }
+
             dataItems +=
-                '<option value="' +
+                '<option '+selected+' value="' +
                 this.value +
                 '">' +
                 $(this).data("name") +
@@ -235,30 +284,89 @@ function jurnal(params) {
         type: "POST",
         success: function (data) {
             if (data.status == "success") {
-                $.each(data.jurnal.journal_detail, function (index, value) {
-                    if (value.debet_kredit == "K") {
-                        var dk =
-                            "<td>0</td><td>" +
-                            parseInt(value.total).toLocaleString("en-US") +
-                            "</td>";
-                    } else {
-                        var dk =
-                            "<td>" +
-                            parseInt(value.total).toLocaleString("en-US") +
-                            "</td><td>0</td>";
-                    }
-                    $(".dropHereJournals").append(
-                        "<tr>" +
-                            "<td>" +
-                            value.account_data.code +
-                            "</td>" +
-                            "<td>" +
-                            value.account_data.name +
-                            "</td>" +
-                            dk +
-                            "</tr>"
+                if (data.jurnal[0].type.includes("Transfer")) {
+                    $.each(data.jurnal[0].journal_detail, function (index, value) {
+                        if (value.debet_kredit == "K") {
+                            var dk =
+                                "<td>0</td><td>" +
+                                parseInt(value.total).toLocaleString("en-US") +
+                                "</td>";
+                        } else {
+                            var dk =
+                                "<td>" +
+                                parseInt(value.total).toLocaleString("en-US") +
+                                "</td><td>0</td>";
+                        }
+                        $(".dropHereJournals").append(
+                            "<tr>" +
+                                "<td>" +
+                                value.account_data.code +
+                                "</td>" +
+                                "<td>" +
+                                value.account_data.name +
+                                "</td>" +
+                                dk +
+                                "</tr>"
+                        );
+                    });
+
+                    $.each(data.jurnal[1].journal_detail, function (index, value) {
+                        if (value.debet_kredit == "K") {
+                            var dk =
+                                "<td>0</td><td>" +
+                                parseInt(value.total).toLocaleString("en-US") +
+                                "</td>";
+                        } else {
+                            var dk =
+                                "<td>" +
+                                parseInt(value.total).toLocaleString("en-US") +
+                                "</td><td>0</td>";
+                        }
+                        $(".dropHereJournals").append(
+                            "<tr>" +
+                                "<td>" +
+                                value.account_data.code +
+                                "</td>" +
+                                "<td>" +
+                                value.account_data.name +
+                                "</td>" +
+                                dk +
+                                "</tr>"
+                        );
+                    });
+                } else {
+                    $.each(
+                        data.jurnal[0].journal_detail,
+                        function (index, value) {
+                            if (value.debet_kredit == "K") {
+                                var dk =
+                                    "<td>0</td><td>" +
+                                    parseInt(value.total).toLocaleString(
+                                        "en-US"
+                                    ) +
+                                    "</td>";
+                            } else {
+                                var dk =
+                                    "<td>" +
+                                    parseInt(value.total).toLocaleString(
+                                        "en-US"
+                                    ) +
+                                    "</td><td>0</td>";
+                            }
+                            $(".dropHereJournals").append(
+                                "<tr>" +
+                                    "<td>" +
+                                    value.account_data.code +
+                                    "</td>" +
+                                    "<td>" +
+                                    value.account_data.name +
+                                    "</td>" +
+                                    dk +
+                                    "</tr>"
+                            );
+                        }
                     );
-                });
+                }
             }
             $("#exampleModal").modal("show");
         },
