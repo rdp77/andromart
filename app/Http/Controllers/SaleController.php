@@ -146,7 +146,9 @@ class SaleController extends Controller
         $getEmployee =  Employee::with('branch')->where('user_id', Auth::user()->id)->first();
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
-        $index = DB::table('sales')->max('id') + 1;
+        // $index = DB::table('sales')->max('id') + 1;
+        $co = Sale::where('branch_id', Auth::user()->employee->branch_id)->whereMonth('date', now())->get();
+        $index = count($co) + 1;
 
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
         return $code = $type . $getEmployee->Branch->code . $year . $month . $index;
@@ -172,6 +174,7 @@ class SaleController extends Controller
         }
 
         $code = $this->code('PJT');
+        // return $code;
         $account  = AccountData::with('AccountMain', 'AccountMainDetail', 'Branch')->get();
         $userBranch = Auth::user()->employee->branch_id;
         $sales = Employee::where('id', '!=', '1')->where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
@@ -186,11 +189,12 @@ class SaleController extends Controller
     public function store(Request $req)
     {
         // return [$req->profitSharingBuyer,$req->profitSharingSales,$req->totalPriceDetail];
-        DB::beginTransaction();
-        try {
+        // DB::beginTransaction();
+        // try {
             $id = DB::table('sales')->max('id') + 1;
             $getEmployee =  Employee::where('user_id', Auth::user()->id)->first();
             $code = $this->code('PJT');
+            $dateConvert = $this->DashboardController->changeMonthIdToEn($req->date);
             // return($req);
             if ($req->customer_name != null) {
                 $customerName = $req->customer_name;
@@ -209,6 +213,7 @@ class SaleController extends Controller
                 $total_profit_store = collect($sharing_profit_store)->sum();
                 $total_profit_sales = collect($sharing_profit_sales)->sum();
                 $total_profit_buyer = collect($sharing_profit_buyer)->sum();
+                $total_hpp = collect($req->profitDetail[$i])->sum();
             }
 
             Sale::create([
@@ -229,6 +234,7 @@ class SaleController extends Controller
                 'discount_percent' => str_replace(",", '', $req->totalDiscountPercent),
                 'item_price' => str_replace(",", '', $req->totalSparePart),
                 'total_price' => str_replace(",", '', $req->totalPrice),
+                'total_hpp' => str_replace(",", '', $total_hpp),
                 'total_profit_store' => $total_profit_store,
                 'total_profit_sales' => $total_profit_sales,
                 'total_profit_buyer' => $total_profit_buyer,
@@ -242,6 +248,8 @@ class SaleController extends Controller
                 $sharing_profit_store[$i] = (100 - ($req->profitSharingBuyer[$i] + $req->profitSharingSales[$i])) * ((str_replace(",", '', $req->totalPriceDetail[$i])) - ($req->qtyDetail[$i] * (str_replace(",", '', $req->profitDetail[$i])))) / 100;
                 $sharing_profit_sales[$i] = $req->profitSharingSales[$i] * ((str_replace(",", '', $req->totalPriceDetail[$i])) - ($req->qtyDetail[$i] * (str_replace(",", '', $req->profitDetail[$i])))) / 100;
                 $sharing_profit_buyer[$i] = $req->profitSharingBuyer[$i] * ((str_replace(",", '', $req->totalPriceDetail[$i])) - ($req->qtyDetail[$i] * (str_replace(",", '', $req->profitDetail[$i])))) / 100;
+                // $hpp[$i] = $req->profitDetail[$i];
+                $tot_hpp[$i] = (str_replace(",", '', $req->profitDetail[$i])) * $req->qtyDetail[$i];
 
                 SaleDetail::create([
                     'sale_id' => $id,
@@ -254,6 +262,8 @@ class SaleController extends Controller
                     'price' => str_replace(",", '', $req->priceDetail[$i]),
                     'qty' => $req->qtyDetail[$i],
                     'total' => str_replace(",", '', $req->totalPriceDetail[$i]),
+                    'hpp' => str_replace(",", '', $req->profitDetail[$i]),
+                    'total_hpp' => str_replace(",", '', $tot_hpp[$i]),
                     'description' => $req->descriptionDetail[$i],
                     'type' => $req->typeDetail[$i],
                     'created_by' => Auth::user()->name,
@@ -308,7 +318,7 @@ class SaleController extends Controller
                 'id' => $idJournal,
                 'code' => $this->code('DD'),
                 'year' => date('Y'),
-                'date' => date('Y-m-d'),
+                'date' => $dateConvert,
                 'type' => 'Penjualan',
                 'total' => str_replace(",", '', $req->totalPrice),
                 'ref' => $code,
@@ -323,17 +333,27 @@ class SaleController extends Controller
                     ->where('main_id', 5)
                     ->where('main_detail_id', 27)
                     ->first();
+
+                $accountDiskon  = AccountData::where('branch_id', $getEmployee->branch_id)
+                    ->where('active', 'Y')
+                    ->where('main_id', 8)
+                    ->where('main_detail_id', 31)
+                    ->first();
+
                 $accountPembayaran  = AccountData::where('id', $req->account)
                     ->first();
+
                 $accountCode = [
                     $accountPembayaran->id,
                     $accountData->id,
                 ];
                 $description = [
-                    'Transaksi Penjualan' .$code,
-                    'Transaksi Penjualan' .$code,
+                    'Kas Pendapatan Penjualan' .$code,
+                    'Diskon Penjualan' .$code,
+                    'Pendapatan Penjualan' .$code,
                 ];
                 $DK = [
+                    'D',
                     'D',
                     'K',
                 ];
@@ -351,16 +371,74 @@ class SaleController extends Controller
                         'updated_at' => date('Y-m-d h:i:s'),
                     ]);
                 }
+
+                //Jurnal HPP
+                $idJournalHpp = DB::table('journals')->max('id') + 1;
+                Journal::create([
+                    'id' => $idJournalHpp,
+                    'code' => $this->code('KK', $idJournalHpp),
+                    'year' => date('Y'),
+                    'date' => $dateConvert,
+                    'type' => 'Biaya',
+                    'total' => str_replace(",", '', $req->totalHpp),
+                    'ref' => $code,
+                    'description' => 'HPP ' . $code,
+                    'created_at' => date('Y-m-d h:i:s'),
+                ]);
+
+                $accountPersediaan  = AccountData::where('branch_id', $getEmployee->branch_id)
+                    ->where('active', 'Y')
+                    ->where('main_id', 3)
+                    ->where('main_detail_id', 11)
+                    ->first();
+
+                $accountBiayaHpp  = AccountData::where('branch_id', $getEmployee->branch_id)
+                    ->where('active', 'Y')
+                    ->where('main_id', 7)
+                    ->where('main_detail_id', 29)
+                    ->first();
+                // JURNAL HPP
+                $accountCodeHpp = [
+                    $accountBiayaHpp->id,
+                    $accountPersediaan->id,
+                ];
+                // return $accountCodeHpp;
+                $totalHpp = [
+                    str_replace(",", '', $req->totalHpp),
+                    str_replace(",", '', $req->totalHpp),
+                ];
+                $descriptionHpp = [
+                    'Pengeluaran Harga Pokok Penjualan ' . $code,
+                    'Biaya Harga Pokok Penjualan' . $code,
+                ];
+                $DKHpp = [
+                    'D',
+                    'K',
+                ];
+                for ($i = 0; $i < count($accountCodeHpp); $i++) {
+                    if ($totalHpp[$i] != 0) {
+                        $idDetailhpp = DB::table('journal_details')->max('id') + 1;
+                        JournalDetail::create([
+                            'id' => $idDetailhpp,
+                            'journal_id' => $idJournalHpp,
+                            'account_id' => $accountCodeHpp[$i],
+                            'total' => $totalHpp[$i],
+                            'description' => $descriptionHpp[$i],
+                            'debet_kredit' => $DKHpp[$i],
+                            'created_at' => date('Y-m-d h:i:s'),
+                            'updated_at' => date('Y-m-d h:i:s'),
+                        ]);
+                    }
+                }
             }
 
             DB::commit();
             return Response::json(['status' => 'success', 'message' => 'Data Tersimpan', 'id' => $id] );
-        } catch (\Throwable $th) {
-            DB::rollback();
-            return $th;
-            return Response::json(['status' => 'error', 'message' => $th ]);
-        }
-        // return Response::json(['status' => 'success','message'=>'Data Tersimpan']);
+        // } catch (\Throwable $th) {
+        //     DB::rollback();
+        //     return $th;
+            // return Response::json(['status' => 'error', 'message' => $th ]);
+        // }
     }
 
     public function show($id)
@@ -394,11 +472,8 @@ class SaleController extends Controller
 
     public function update(Request $req, $id)
     {
-        // return $req->all();
-        // return $req->itemsDetail;
         // DB::beginTransaction();
         // try{
-        // $checkData = Sale::where('id',$id)->first();
         // $date = $this->DashboardController->changeMonthIdToEn($req->date);
         $getEmployee =  Employee::where('user_id', Auth::user()->id)->first();
 
@@ -423,20 +498,22 @@ class SaleController extends Controller
                 $sharing_profit_store[$i] = (100 - ($req->profitSharingBuyer[$i] + $req->profitSharingSales[$i])) * ((str_replace(",", '', $req->totalPriceDetail[$i])) - ($req->qtyDetail[$i] * (str_replace(",", '', $req->profitDetail[$i])))) / 100;
                 $sharing_profit_sales[$i] = $req->profitSharingSales[$i] * ((str_replace(",", '', $req->totalPriceDetail[$i])) - ($req->qtyDetail[$i] * (str_replace(",", '', $req->profitDetail[$i])))) / 100;
                 $sharing_profit_buyer[$i] = $req->profitSharingBuyer[$i] * ((str_replace(",", '', $req->totalPriceDetail[$i])) - ($req->qtyDetail[$i] * (str_replace(",", '', $req->profitDetail[$i])))) / 100;
+                $hpp[$i] = collect((str_replace(",", '', $req->profitDetail[$i])))->sum();
             }
         }
         if ($req->itemsDetailOld != null) {
             for ($i = 0; $i < count($req->itemsDetailOld); $i++) {
                 $sharing_profit_storeOld[$i] = (100 - ($req->profitSharingBuyerOld[$i] + $req->profitSharingSalesOld[$i])) * ((str_replace(",", '', $req->totalPriceDetailOld[$i])) - ($req->qtyDetailOld[$i] * (str_replace(",", '', $req->profitDetailOld[$i])))) / 100;
-
                 $sharing_profit_salesOld[$i] = $req->profitSharingSalesOld[$i] * ((str_replace(",", '', $req->totalPriceDetailOld[$i])) - ($req->qtyDetailOld[$i] * (str_replace(",", '', $req->profitDetailOld[$i])))) / 100;
                 $sharing_profit_buyerOld[$i] = $req->profitSharingBuyerOld[$i] * ((str_replace(",", '', $req->totalPriceDetailOld[$i])) - ($req->qtyDetailOld[$i] * (str_replace(",", '', $req->profitDetailOld[$i])))) / 100;
+                $hppOld[$i] = collect((str_replace(",", '', $req->profitDetailOld[$i])))->sum();
             }
         }
 
         $total_profit_store = collect($sharing_profit_store)->sum() + collect($sharing_profit_storeOld)->sum();
         $total_profit_sales = collect($sharing_profit_sales)->sum() + collect($sharing_profit_salesOld)->sum();
         $total_profit_buyer = collect($sharing_profit_buyer)->sum() + collect($sharing_profit_buyerOld)->sum();
+        $total_hpp = $hpp[$i] + $hppOld[$i];
         // return [$total_profit_store,collect($sharing_profit_store)->sum(),collect($sharing_profit_storeOld)->sum()];
         Sale::where('id', $id)->update([
             'user_id' => Auth::user()->id,
@@ -448,12 +525,12 @@ class SaleController extends Controller
             'customer_address' => $customerAddress,
             'customer_phone' => $customerPhone,
             'payment_method' => $req->PaymentMethod,
-            // 'date' => $date,
             'discount_type' => $req->typeDiscount,
             'discount_price' => str_replace(",", '', $req->totalDiscountValue),
             'discount_percent' => str_replace(",", '', $req->totalDiscountPercent),
             'item_price' => str_replace(",", '', $req->totalSparePart),
             'total_price' => str_replace(",", '', $req->totalPrice),
+            'total_hpp' => $total_hpp,
             'total_profit_store' => $total_profit_store,
             'total_profit_sales' => $total_profit_sales,
             'total_profit_buyer' => $total_profit_buyer,
@@ -508,6 +585,7 @@ class SaleController extends Controller
                 $sharing_profit_store[$i] = (100 - ($req->profitSharingBuyer[$i] + $req->profitSharingSales[$i])) * ((str_replace(",", '', $req->totalPriceDetail[$i])) - ($req->qtyDetail[$i] * $req->profitDetail[$i])) / 100;
                 $sharing_profit_sales[$i] = $req->profitSharingSales[$i] * ((str_replace(",", '', $req->totalPriceDetail[$i])) - ($req->qtyDetail[$i] * $req->profitDetail[$i])) / 100;
                 $sharing_profit_buyer[$i] = $req->profitSharingBuyer[$i] * ((str_replace(",", '', $req->totalPriceDetail[$i])) - ($req->qtyDetail[$i] * $req->profitDetail[$i])) / 100;
+                $tot_hpp[$i] = (str_replace(",", '', $req->profitDetail[$i])) * $req->qtyDetail[$i];
 
                 SaleDetail::create([
                     'sale_id' => $id,
@@ -520,8 +598,9 @@ class SaleController extends Controller
                     'price' => str_replace(",", '', $req->priceDetail[$i]),
                     'qty' => $req->qtyDetail[$i],
                     'total' => str_replace(",", '', $req->totalPriceDetail[$i]),
+                    'hpp' => str_replace(",", '', $req->profitDetail[$i]),
+                    'total_hpp' => str_replace(",", '', $tot_hpp[$i]),
                     'description' => $req->descriptionDetail[$i],
-                    // 'type' =>$req->typeDetail[$i],
                     'created_by' => Auth::user()->name,
                     'created_at' => date('Y-m-d h:i:s'),
                     'updated_by' => Auth::user()->name,
@@ -625,9 +704,10 @@ class SaleController extends Controller
                                     'sharing_profit_store' => $sharing_profit_storeOld[$i],
                                     'sharing_profit_sales' => $sharing_profit_salesOld[$i],
                                     'sharing_profit_buyer' => $sharing_profit_buyerOld[$i],
-
                                     // 'qty'=>$req->qtyDetailOld[$i],
                                     'total' => str_replace(",", '', $req->totalPriceDetailOld[$i]),
+                                    'hpp' => str_replace(",", '', $req->profitDetailOld[$i]),
+                                    'total_hpp' => str_replace(",", '', $hppOld[$i]),
                                     'description' => $req->descriptionDetailOld[$i],
                                     // 'type' =>$req->typeDetailOld[$i],
                                     'updated_by' => Auth::user()->name,
@@ -692,6 +772,8 @@ class SaleController extends Controller
                                     'price' => str_replace(",", '', $req->priceDetailOld[$i]),
                                     'qty' => $req->qtyDetailOld[$i],
                                     'total' => str_replace(",", '', $req->totalPriceDetailOld[$i]),
+                                    'hpp' => str_replace(",", '', $req->profitDetailOld[$i]),
+                                    'total_hpp' => str_replace(",", '', $hppOld[$i]),
                                     'description' => str_replace(",", '', $req->descriptionDetailOld[$i]),
                                     // 'type' =>$req->typeDetailOld[$i],
                                     'updated_by' => Auth::user()->name,
@@ -762,8 +844,9 @@ class SaleController extends Controller
                                 'price' => str_replace(",", '', $req->priceDetailOld[$i]),
                                 'qty' => $req->qtyDetailOld[$i],
                                 'total' => str_replace(",", '', $req->totalPriceDetailOld[$i]),
+                                'hpp' => str_replace(",", '', $req->profitDetailOld[$i]),
+                                'total_hpp' => str_replace(",", '', $hppOld[$i]),
                                 'description' => str_replace(",", '', $req->descriptionDetailOld[$i]),
-                                // 'type' =>$req->typeDetailOld[$i],
                                 'updated_by' => Auth::user()->name,
                                 'updated_at' => date('Y-m-d h:i:s'),
                             ]);
@@ -791,24 +874,34 @@ class SaleController extends Controller
         if ($req->type == 'DownPayment') {
         } else {
             $accountData  = AccountData::where('branch_id', $getEmployee->branch_id)
-                ->where('active', 'Y')
-                ->where('main_id', 5)
-                ->where('main_detail_id', 27)
-                ->first();
-            $accountPembayaran  = AccountData::where('id', $req->account)
-                ->first();
-            $accountCode = [
-                $accountPembayaran->id,
-                $accountData->id,
-            ];
-            $description = [
-               'Transaksi Penjualan' .$req->code,
-               'Transaksi Penjualan' .$req->code,
-            ];
-            $DK = [
-                'D',
-                'K',
-            ];
+                    ->where('active', 'Y')
+                    ->where('main_id', 5)
+                    ->where('main_detail_id', 27)
+                    ->first();
+
+                $accountDiskon  = AccountData::where('branch_id', $getEmployee->branch_id)
+                    ->where('active', 'Y')
+                    ->where('main_id', 8)
+                    ->where('main_detail_id', 31)
+                    ->first();
+
+                $accountPembayaran  = AccountData::where('id', $req->account)
+                    ->first();
+
+                $accountCode = [
+                    $accountPembayaran->id,
+                    $accountData->id,
+                ];
+                $description = [
+                    'Kas Pendapatan Penjualan' .$req->code,
+                    'Diskon Penjualan' .$req->code,
+                    'Pendapatan Penjualan' .$req->code,
+                ];
+                $DK = [
+                    'D',
+                    'D',
+                    'K',
+                ];
 
             for ($i = 0; $i < count($accountCode); $i++) {
                 $idDetail = DB::table('journal_details')->max('id') + 1;

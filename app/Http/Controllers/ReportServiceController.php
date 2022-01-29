@@ -145,16 +145,7 @@ class ReportServiceController extends Controller
 
     public function printPeriode(Request $req)
     {
-        $array = [
-            'Tanggal',
-            'Faktur',
-            'Customer',
-            'Barang',
-            'Status',
-            'Jumlah'
-        ];
-        // return $array;
-        // $th = ['Tanggal', 'Faktur', 'Customer', 'Barang', 'Status', 'Jumlah'];
+        $title = 'Laporan Service per Periode';
         $branchUser = Auth::user()->employee->branch_id;
         $startDate = $req->startDate1;
         $endDate = $req->endDate1;
@@ -167,12 +158,11 @@ class ReportServiceController extends Controller
         $sumKotor = $data->sum('total_price');
         $sumBersih = $data->sum('sharing_profit_store');
         $tr = count($data);
-        $title = 'kya';
-        $title = 'kya';
 
-        return view('pages.backend.report.printReport', compact('data', 'tr', 'sumKotor', 'sumBersih', 'array','title'));
+        return view('pages.backend.report.printReportService', compact('data', 'tr', 'sumKotor', 'sumBersih','title'));
     }
-    public function printReport (Request $req)
+
+    public function printSeries (Request $req)
     {
         $array = [
             'Tanggal',
@@ -182,8 +172,6 @@ class ReportServiceController extends Controller
             'Status',
             'Jumlah'
         ];
-        // return $array;
-        // $th = ['Tanggal', 'Faktur', 'Customer', 'Barang', 'Status', 'Jumlah'];
         $branchUser = Auth::user()->employee->branch_id;
         $startDate = $req->startDate1;
         $endDate = $req->endDate1;

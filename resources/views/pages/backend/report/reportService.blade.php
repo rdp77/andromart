@@ -50,12 +50,7 @@
                                     </button>
                                 </div>
                                 <div class="form-group col-6 col-md-4">
-                                    {{-- <a href="{{ route('print-report-service.periode') }}"
-                                        target="_blank" class="btn btn-primary" type="button">
-                                        <i class="fas fa-print"></i> Cetak Laporan
-                                    </a> --}}
-                                    <button class="btn btn-primary" type="button"
-                                        onclick="cetak()">
+                                    <button class="btn btn-primary" type="button" onclick="printPeriode()">
                                         <i class="fas fa-print"></i> Cetak Laporan
                                     </button>
                                 </div>
@@ -217,19 +212,19 @@
       });
   }
 
-  function cetak() {
+  function printPeriode() {
     var startDate1 = document.getElementById("startDate1").value;
-      var startDate2 = document.getElementById("startDate2").value;
-      var startDate3 = document.getElementById("startDate3").value;
-      var startDate4 = document.getElementById("startDate4").value;
-      var endDate1 = document.getElementById("endDate1").value;
-      var endDate2 = document.getElementById("endDate2").value;
-      var endDate3 = document.getElementById("endDate3").value;
-      var endDate4 = document.getElementById("endDate4").value;
-      var type_id = document.getElementById("type_id").value;
-      var technician_id = document.getElementById("technician_id").value;
-      var branch_id = document.getElementById("branch_id").value;
-    window.location.href = '{{ route('print-report-all.printReport') }}?&startDate1=' + startDate1+'&startDate2=' + startDate2+'&startDate3=' + startDate3+'&startDate4=' + startDate4+'&endDate1=' + endDate1+'&endDate2=' + endDate2+'&endDate3=' + endDate3+'&endDate4=' + endDate4+'&type_id=' + type_id+'&technician_id=' + technician_id+'&branch_id=' + branch_id
+    // var startDate2 = document.getElementById("startDate2").value;
+    // var startDate3 = document.getElementById("startDate3").value;
+    // var startDate4 = document.getElementById("startDate4").value;
+    var endDate1 = document.getElementById("endDate1").value;
+    // var endDate2 = document.getElementById("endDate2").value;
+    // var endDate3 = document.getElementById("endDate3").value;
+    // var endDate4 = document.getElementById("endDate4").value;
+    // var type_id = document.getElementById("type_id").value;
+    // var technician_id = document.getElementById("technician_id").value;
+    var branch_id = document.getElementById("branch_id").value;
+    window.location.href = '{{ route('print-report-service.periode') }}?&startDate1=' + startDate1+'&endDate1=' + endDate1+'&branch_id=' + branch_id
   }
 </script>
 @endsection

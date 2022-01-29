@@ -177,7 +177,7 @@ class ServicePaymentController extends Controller
         // return Service::with('ServiceDetail')->where('id',$req->serviceId)->get();
         // return $req->all();
         // return [str_replace(",", '', $req->totalPayment),str_replace(",", '', $req->totalDiscountValue)];
-        
+
         DB::beginTransaction();
         try {
 
@@ -286,7 +286,7 @@ class ServicePaymentController extends Controller
 
                 if ($accountDimuka == null) {
                     DB::rollback();
-                    return Response::json(['status' => 'error', 'message' => 'Akun Pembayran Dimuka Kosong']);
+                    return Response::json(['status' => 'error', 'message' => 'Akun Pembayaran Dimuka Kosong']);
                 }
 
 
@@ -359,7 +359,6 @@ class ServicePaymentController extends Controller
                     ];
                 }
 
-
                 if ($checkService != null) {
                     array_unshift($accountCode, $accountDimuka->id);
                     array_unshift($totalBayar, str_replace(",", '', $checkService->total));
@@ -384,7 +383,7 @@ class ServicePaymentController extends Controller
                 }
 
 
-
+                //Jurnal HPP
                 $idJournalHpp = DB::table('journals')->max('id') + 1;
                 Journal::create([
                     'id' => $idJournalHpp,
@@ -396,7 +395,6 @@ class ServicePaymentController extends Controller
                     'ref' => $kode,
                     'description' => 'HPP ' . $kode,
                     'created_at' => date('Y-m-d h:i:s'),
-                    // 'updated_at'=>date('Y-m-d h:i:s'),
                 ]);
 
                 $accountPersediaan  = AccountData::where('branch_id', $getEmployee->branch_id)
@@ -571,7 +569,7 @@ class ServicePaymentController extends Controller
                     DB::table('journals')->where('id', $checkJournals[0]->id)->delete();
                     DB::table('journal_details')->where('journal_id', $checkJournals[0]->id)->delete();
                 }
-                
+
             }
 
 
