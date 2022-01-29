@@ -1,22 +1,17 @@
 <html>
-
 <head>
     <title>Andromart | {{ $title }}</title>
     <link href="https://panel.jpmandiri.com/assets/vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-
-    {{-- <link href="https://panel.jpmandiri.com/assets/vendors/font-awesome/css/font-awesome.min.css" rel="stylesheet"> --}}
     <!-- datepicker -->
     <link href="https://panel.jpmandiri.com/assets/vendors/datapicker/datepicker3.css" rel="stylesheet">
     <link href="https://panel.jpmandiri.com/assets/vendors/daterangepicker/daterangepicker.css" rel="stylesheet">
-
     <!-- Toastr style -->
     <link href="https://panel.jpmandiri.com/assets/vendors/toastr/toastr.min.css" rel="stylesheet">
-
+    <link href="https://panel.jpmandiri.com/assets/css/chosen/chosen.css" rel="stylesheet">
     <script type="text/javascript" src="https://panel.jpmandiri.com/assets/plugins/jquery-1.12.3.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js"></script>
-    <link href="https://panel.jpmandiri.com/assets/css/chosen/chosen.css" rel="stylesheet">
 
     <style>
         .height {
@@ -420,7 +415,7 @@
                     <li><i class="fa fa-file-excel" style="cursor: pointer;" id="btnExport" data-toggle="tooltip"
                             data-placement="bottom" title="" onclick="excel()" data-original-title="Export Excel"></i>
                     </li>
-                    <li><i class="fa fa-print" style="cursor: pointer;" id="print" title="Print Laporan"></i></li>
+                    <li><i class="fa fa-print" style="cursor: pointer;" id="print" title="Print Laporan" onclick="cetak()"></i></li>
                 </ul>
             </div>
         </div>
@@ -443,7 +438,7 @@
                 <td> {{ Auth::user()->employee->name }} </td>
             </tr>
             <tr>
-                <td style="font-weight: bold;color: #A9A9A9">Dikeluarkan tanggal</td>
+                <td style="font-weight: bold;color: #A9A9A9">Dikeluarkan pada tanggal</td>
                 <td> : &nbsp; </td>
                 <td> {{ date('D, d M Y') }} </td>
             </tr>
@@ -459,8 +454,7 @@
                     @endforeach
                 </tr>
             </thead>
-            <tbody>
-                @foreach ($data as $key => $value)
+            @foreach($data as $key => $value)
             <tbody class="dropHere" style="border: none !important">
                 <tr role="row" class="odd">
                     <td>{{ \Carbon\Carbon::parse($value->date)->locale('id')->isoFormat('LL') }}</td>
@@ -468,13 +462,12 @@
                     <td>
                         <table>
                             <tbody>
+                                @foreach ($value->SaleDetail as $as => $sd)
                                 <tr>
-                                    <th>
-                                        {{ $value->customer_name }}<br>
-                                        {{ $value->customer_phone }}<br>
-                                        {{ $value->customer_address }}
-                                    </th>
+                                    <td>x{{ $sd->qty }}</td>
+                                    <th>{{ $sd->item->brand->name }} <br> {{ $sd->item->name }}</th>
                                 </tr>
+                                @endforeach
                             </tbody>
                         </table>
                     </td>
@@ -483,49 +476,26 @@
                             <tbody>
                                 <tr>
                                     <td>
-                                        <b>{{ $value->Brand->name }} {{ $value->Type->name }}</b>
+                                        <b>{{ $value->accountData->code }}</b>
+                                        <br>{{ $value->accountData->name }}
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>No. IMEI : <b>{{ $value->no_imei }}</b></td>
-                                </tr>
                             </tbody>
                         </table>
                     </td>
-                    <td>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td>Pekerjaan : <b>{{ $value->work_status }}</b></td>
-                                </tr>
-                                <tr>
-                                    <td>Pembayaran : <b>{{ $value->payment_status }}</b></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </td>
-                    {{-- <th>{{ $value->payment_status }}</th> --}}
-                    <th class="text-right">Rp. {{ number_format($value->total_price, 0, '.', ',') }}</th>
+                    <th class="text-right">Rp. {{ number_format($value->total_price, 0, ".", ",") }}</th>
+                    <th class="text-right">Rp. {{ number_format($value->total_profit_store, 0, ".", ",") }}</th>
                 </tr>
             </tbody>
             @endforeach
             <tfoot>
                 <tr style="color: #6777ef;">
-                    <th colspan="2">
-                        <h5>Jumlah Transaksi : {{ $tr }}</h5>
-                    </th>
-                    <th colspan="2">
-                        <h5>Pendapatan Kotor : Rp. {{ number_format($sumKotor, 0, '.', ',') }}</h5>
-                    </th>
-                    <th colspan="2">
-                        <h5>Pendapatan Bersih : Rp. {{ number_format($sumBersih, 0, '.', ',') }}</h5>
-                    </th>
+                    <th colspan="2"><h5>Jumlah Transaksi : {{ $tr }}</h5></th>
+                    <th colspan="2"><h5>Pendapatan Kotor : Rp. {{ number_format($sumKotor, 0, ".", ",") }}</h5></th>
+                    <th colspan="2"><h5>Pendapatan Bersih : Rp. {{ number_format($sumBersih, 0, ".", ",") }}</h5></th>
                 </tr>
             </tfoot>
-            </tbody>
-        </table>    
-
-
+        </table>
     </div>
     <div id="xlsDownload" style="display: none"></div>
     <script type="text/javascript">
@@ -569,7 +539,6 @@
                     type: contentType
                 });
                 return blob;
-
             }
         }
 
@@ -578,5 +547,4 @@
         }
     </script>
 </body>
-
 </html>

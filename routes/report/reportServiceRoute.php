@@ -44,13 +44,10 @@ Route::group(['prefix' => 'report'], function () {
             'refresh-employee-report-service',
             [ReportServiceController::class, 'dataEmployeeLoad']
         )->name('report-employee-service.dataLoad');
-        Route::post(
+        Route::get(
             'print-report-service-periode',
             [ReportServiceController::class, 'printPeriode']
         )->name('print-report-service.periode');
-
-
-
 
         Route::get(
             'print-report-all',

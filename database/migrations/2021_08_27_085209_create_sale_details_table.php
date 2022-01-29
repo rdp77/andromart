@@ -20,6 +20,8 @@ class CreateSaleDetailsTable extends Migration
             $table->double('price');
             $table->double('qty');
             $table->double('total');
+            $table->double('hpp');
+            $table->double('total_hpp');
             $table->integer('sales_id');
             $table->integer('buyer_id')->nullable();
             $table->double('sharing_profit_store');

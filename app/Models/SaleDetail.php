@@ -20,6 +20,8 @@ class SaleDetail extends Model
         'price',
         'qty',
         'total',
+        'hpp',
+        'total_hpp',
         'sales_id',
         'buyer_id',
         'sharing_profit_store',

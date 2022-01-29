@@ -37,7 +37,7 @@ class SubMenuSeeder extends Seeder
             ],
             [
                 'menu_id' => '2',
-                'name' => 'Service Pembyaran',
+                'name' => 'Service Pembayaran',
                 'url' => route('service-payment.index'),
                 'hover' => '["' . route('service-payment.create') . '","' . route('service-payment.index') . '"]'
             ],
