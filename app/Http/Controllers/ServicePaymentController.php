@@ -347,7 +347,7 @@ class ServicePaymentController extends Controller
                     ];
                     $description = [
                         'Kas Pelunasan Service '.$req->totalPayment. ' '. $kode,
-                        'Dikson Pelunasan Service ' . $kode,
+                        'Diskon Pelunasan Service ' . $kode,
                         'Pendapatan SparePart Pelunasan Service ' . $kode,
                         'Pendapatan Jasa Service Pelunasan Service ' . $kode,
                     ];
