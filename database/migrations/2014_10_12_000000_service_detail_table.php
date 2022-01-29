@@ -20,10 +20,12 @@ class ServiceDetailTable extends Migration
             $table->integer('service_id');
             $table->integer('item_id');
             $table->double('price');
+            $table->double('hpp');
             $table->double('qty');
             // $table->double('loss');
             // $table->double('sparepart');
             $table->double('total_price');
+            $table->double('total_hpp');
             $table->String('description');
             $table->String('type');
             $table->string('created_by')->nullable();   

@@ -39,6 +39,7 @@ class ServiceTable extends Migration
             $table->double('discount_price');
             $table->double('discount_percent');
             $table->double('total_price');
+            $table->double('total_hpp');
 
             $table->double('total_payment')->nullable();
             $table->double('total_downpayment')->nullable();
