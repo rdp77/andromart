@@ -232,6 +232,7 @@ class SaleController extends Controller
                 'discount_type' => $req->typeDiscount,
                 'discount_price' => str_replace(",", '', $req->totalDiscountValue),
                 'discount_percent' => str_replace(",", '', $req->totalDiscountPercent),
+                'discount_sale' => str_replace(",", '', $req->totalSparePart),-str_replace(",", '', $req->totalDiscountValue),
                 'item_price' => str_replace(",", '', $req->totalSparePart),
                 'total_price' => str_replace(",", '', $req->totalPrice),
                 'total_hpp' => str_replace(",", '', $total_hpp),
@@ -343,7 +344,7 @@ class SaleController extends Controller
                 $accountPembayaran  = AccountData::where('id', $req->account)
                     ->first();
 
-                
+
 
                 if (str_replace(",", '', $req->totalDiscountValue) == 0) {
                     $accountCode = [
@@ -461,9 +462,7 @@ class SaleController extends Controller
 
             DB::rollback();
             // return $req->all();
-            return [$accountCode
-,$totalBayar
-,$description];
+            return [$accountCode,$totalBayar,$description];
             // return [$descriptionHpp,$total_hpp,$DKHpp];
             DB::commit();
             // return Response::json(['status' => 'success', 'message' => 'Data Tersimpan', 'id' => $id] );
@@ -561,6 +560,7 @@ class SaleController extends Controller
             'discount_type' => $req->typeDiscount,
             'discount_price' => str_replace(",", '', $req->totalDiscountValue),
             'discount_percent' => str_replace(",", '', $req->totalDiscountPercent),
+            'discount_sale' => str_replace(",", '', $req->totalSparePart),-str_replace(",", '', $req->totalDiscountValue),
             'item_price' => str_replace(",", '', $req->totalSparePart),
             'total_price' => str_replace(",", '', $req->totalPrice),
             'total_hpp' => $total_hpp,

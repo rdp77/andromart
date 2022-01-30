@@ -29,6 +29,7 @@ class CreateSalesTable extends Migration
             $table->string('discount_type')->nullable();
             $table->double('discount_price')->nullable();
             $table->double('discount_percent')->nullable();
+            $table->double('discount_sale')->nullable();
             $table->double('item_price');
             $table->double('total_price');
             $table->double('total_hpp');

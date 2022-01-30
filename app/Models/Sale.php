@@ -28,6 +28,7 @@ class Sale extends Model
         'discount_type',
         'discount_price',
         'discount_percent',
+        'discount_sale',
         'payment_method',
         'item_price',
         'total_price',

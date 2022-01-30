@@ -255,7 +255,9 @@ class ServiceController extends Controller
         $getEmployee =  Employee::with('branch')->where('user_id', Auth::user()->id)->first();
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
-        $index = DB::table('service')->max('id') + 1;
+        $co = Service::where('branch_id', Auth::user()->employee->branch_id)->whereMonth('date', now())->get();
+        $index = count($co) + 1;
+        // $index = DB::table('service')->max('id') + 1;
 
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
         return $code = $type . $getEmployee->Branch->code . $year . $month . $index;
