@@ -456,56 +456,51 @@
         <br>
         <hr>
         <br>
-        <table class="table table-bordered table-sm" style="color: black;border:1px solid black">
+        <table class="table table-striped table-bordered">
             <thead>
                 <tr>
-                    <th class="text-center" width="15%">Tanggal</th>
-                    <th class="text-center">Faktur</th>
-                    <th class="text-center">Customer</th>
+                    <th class="text-center" width="">Tanggal</th>
+                    <th class="text-center" width="">Faktur</th>
                     <th class="text-center" width="25%">Barang</th>
-                    <th class="text-center" width="13%">Status</th>
+                    <th class="text-center" width="">Supplier</th>
+                    <th class="text-center" width="">Pembayaran</th>
+                    {{-- <th class="text-center" width="">Operator</th> --}}
                     <th class="text-center" width="15%">Jumlah</th>
                 </tr>
             </thead>
-            @foreach ($data as $key => $value)
+            @foreach($data as $key => $value)
             <tbody class="dropHere" style="border: none !important">
-                <tr role="row" class="odd">
-                    <td class="text-center">{{ \Carbon\Carbon::parse($value->date)->locale('id')->isoFormat('LL') }}</td>
-                    <th>{{ $value->code }}</th>
+                <tr>
+                    <td>{{ $value->date }}</td>
+                    <td>{{ $value->code }}</td>
                     <td>
-                        {{ $value->customer_name }}<br>
-                        {{ $value->customer_phone }}
+                        @foreach ($value->purchasingDetail as $as => $pd)
+                            {{ $pd->qty }}x {{ $pd->item->name }} <br>
+                        @endforeach
                     </td>
                     <td>
-                        <b>{{ $value->Brand->name }} {{ $value->Type->name }}</b><br>
-                        IMEI : <b>{{ $value->no_imei }}</b>
+                        @foreach ($value->purchasingDetail as $qw => $pds)
+                            {{ $pds->item->supplier->name }}
+                        @endforeach
                     </td>
                     <td>
-                        {{ $value->work_status }}<br>
-                        @if ($value->payment_status == null)
-                        Belum Bayar
+                        @if ($value->status = 'paid')
+                            LUNAS
                         @else
-                        {{ $value->payment_status }}
+                            HUTANG
                         @endif
-
                     </td>
-                    <td class="text-right">Rp. {{ number_format($value->total_price, 0, '.', ',') }}</td>
+                    {{-- <td>{{ $value->employee->name }}</td> --}}
+                    <td class="text-right">Rp. {{ number_format($value->price, 0, '.', ',') }}</td>
                 </tr>
             </tbody>
             @endforeach
         </table>
         <table class="table table-bordered table-sm" style="color: black;border:1px solid black">
             <thead>
-                <tr style="color: #6777ef;">
-                    <th>
-                        <h4>Jumlah Transaksi : {{ $tr }}</h4>
-                    </th>
-                    <th>
-                        <h4>Pendapatan Kotor : Rp. {{ number_format($sumKotor, 0, '.', ',') }}</h4>
-                    </th>
-                    <th>
-                        <h4>Pendapatan Bersih : Rp. {{ number_format($sumBersih, 0, '.', ',') }}</h4>
-                    </th>
+                <tr style="color: #6777ef">
+                    <th><h4>Jumlah Transaksi : {{ $tr }}</h4></th>
+                    <th><h4>Total Pengeluaran : Rp. {{ number_format($sumBayar, 0, '.', ',') }}</h4></th>
                 </tr>
             </thead>
         </table>

@@ -408,7 +408,7 @@
         style="background: rgba(0, 0, 0, 0.4); box-shadow: 0px 2px 5px #444; position: fixed; z-index: 2;">
         <div class="row">
             <div class="col-md-7" style="background: none; padding: 15px 15px; color: #fff; padding-left: 120px;">
-                Andromart Cabang {{ Auth::user()->employee->branch->name }}
+                Andromart
             </div>
             <div class="col-md-5" style="background: none; padding: 10px 15px 5px 15px">
                 <ul>
@@ -426,7 +426,7 @@
                 <h3><b>Andromart | {{ $title }}</b></h3>
             </caption>
         </table>
-        <table style="width: 40%">
+        <table style="width: 60%">
             <tr>
                 <td style="font-weight: bold;color: #A9A9A9">Cabang</td>
                 <td> : &nbsp; </td>
@@ -442,6 +442,16 @@
                 <td> : &nbsp; </td>
                 <td> {{ date('D, d M Y') }} </td>
             </tr>
+            <tr>
+                <td style="font-weight: bold;color: #A9A9A9">Periode</td>
+                <td> : &nbsp; </td>
+                <td> {{ $periode }} </td>
+            </tr>
+            <tr>
+                <td style="font-weight: bold;color: #A9A9A9">Filter {{ $subtitle }}</td>
+                <td> : &nbsp; </td>
+                <td> {{ $val }} </td>
+            </tr>
         </table>
         <br>
         <hr>
@@ -449,52 +459,43 @@
         <table class="table table-bordered table-sm" style="color: black;border:1px solid black">
             <thead>
                 <tr>
-                    @foreach ($array as $el)
-                        <th>{{ $el }}</th>
-                    @endforeach
+                    <th class="text-center" width="15%">Tanggal</th>
+                    <th class="text-center" width="12%">Faktur</th>
+                    <th class="text-center" width="25%">Barang</th>
+                    <th class="text-center" width="18%">Akun Kas</th>
+                    <th class="text-center" width="15%">Laba Kotor</th>
+                    <th class="text-center" width="15%">Laba Bersih</th>
                 </tr>
             </thead>
             @foreach($data as $key => $value)
             <tbody class="dropHere" style="border: none !important">
                 <tr role="row" class="odd">
                     <td>{{ \Carbon\Carbon::parse($value->date)->locale('id')->isoFormat('LL') }}</td>
-                    <th>{{ $value->code }}</th>
+                    <td>{{ $value->code }}</td>
                     <td>
-                        <table>
-                            <tbody>
-                                @foreach ($value->SaleDetail as $as => $sd)
-                                <tr>
-                                    <td>x{{ $sd->qty }}</td>
-                                    <th>{{ $sd->item->brand->name }} <br> {{ $sd->item->name }}</th>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+                        @foreach ($value->SaleDetail as $as => $sd)
+                            {{ $sd->qty }}x
+                            {{ $sd->item->brand->name }} {{ $sd->item->name }} <br>
+                        @endforeach
                     </td>
                     <td>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <td>
-                                        <b>{{ $value->accountData->code }}</b>
-                                        <br>{{ $value->accountData->name }}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        {{-- <b>{{ $value->accountData->code }}</b><br> --}}
+                        {{ $value->accountData->name }}
                     </td>
-                    <th class="text-right">Rp. {{ number_format($value->total_price, 0, ".", ",") }}</th>
-                    <th class="text-right">Rp. {{ number_format($value->total_profit_store, 0, ".", ",") }}</th>
+                    <td class="text-right">Rp. {{ number_format($value->total_price, 0, ".", ",") }}</td>
+                    <td class="text-right">Rp. {{ number_format($value->total_profit_store, 0, ".", ",") }}</td>
                 </tr>
             </tbody>
             @endforeach
-            <tfoot>
+        </table>
+        <table class="table table-bordered table-sm" style="color: black;border:1px solid black">
+            <thead>
                 <tr style="color: #6777ef;">
-                    <th colspan="2"><h5>Jumlah Transaksi : {{ $tr }}</h5></th>
-                    <th colspan="2"><h5>Pendapatan Kotor : Rp. {{ number_format($sumKotor, 0, ".", ",") }}</h5></th>
-                    <th colspan="2"><h5>Pendapatan Bersih : Rp. {{ number_format($sumBersih, 0, ".", ",") }}</h5></th>
+                    <th colspan="2"><h4>Jumlah Transaksi : {{ $tr }}</h4></th>
+                    <th colspan="2"><h4>Pendapatan Kotor : Rp. {{ number_format($sumKotor, 0, ".", ",") }}</h4></th>
+                    <th colspan="2"><h4>Pendapatan Bersih : Rp. {{ number_format($sumBersih, 0, ".", ",") }}</h4></th>
                 </tr>
-            </tfoot>
+            </thead>
         </table>
     </div>
     <div id="xlsDownload" style="display: none"></div>

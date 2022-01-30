@@ -44,15 +44,24 @@ Route::group(['prefix' => 'report'], function () {
             'refresh-employee-report-service',
             [ReportServiceController::class, 'dataEmployeeLoad']
         )->name('report-employee-service.dataLoad');
+
+        //print report
         Route::get(
             'print-report-service-periode',
             [ReportServiceController::class, 'printPeriode']
         )->name('print-report-service.periode');
-
         Route::get(
-            'print-report-all',
-            [ReportServiceController::class, 'printReport']
-        )->name('print-report-all.printReport');
+            'print-report-service-series',
+            [ReportServiceController::class, 'printSeries']
+        )->name('print-report-service.series');
+        Route::get(
+            'print-report-service-technician',
+            [ReportServiceController::class, 'printTechnician']
+        )->name('print-report-service.technician');
+        Route::get(
+            'print-report-service-branch',
+            [ReportServiceController::class, 'printBranch']
+        )->name('print-report-service.branch');
     });
 
 });

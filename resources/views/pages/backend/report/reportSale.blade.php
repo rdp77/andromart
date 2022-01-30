@@ -49,9 +49,14 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-12 col-md-12 col-lg-12">
+                                <div class="form-group col-6 col-md-3">
                                     <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('report-sale.dataLoad') }}', '#data-load')">
                                         <i class="fas fa-eye"></i> Cari</button>
+                                </div>
+                                <div class="form-group col-6 col-md-4">
+                                    <button class="btn btn-primary" type="button" onclick="printPeriode()">
+                                        <i class="fas fa-print"></i> Cetak Laporan
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -76,9 +81,14 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-12 col-md-12 col-lg-12">
+                                <div class="form-group col-6 col-md-3">
                                     <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('report-sale.itemLoad') }}', '#data-load')">
                                         <i class="fas fa-eye"></i> Cari</button>
+                                </div>
+                                <div class="form-group col-6 col-md-4">
+                                    <button class="btn btn-primary" type="button" onclick="printItem()">
+                                        <i class="fas fa-print"></i> Cetak Laporan
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -103,9 +113,14 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-12 col-md-12 col-lg-12">
+                                <div class="form-group col-6 col-md-3">
                                     <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('report-sale.salesLoad') }}', '#data-load')">
                                         <i class="fas fa-eye"></i> Cari</button>
+                                </div>
+                                <div class="form-group col-6 col-md-4">
+                                    <button class="btn btn-primary" type="button" onclick="printSales()">
+                                        <i class="fas fa-print"></i> Cetak Laporan
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -130,9 +145,14 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-12 col-md-12 col-lg-12">
+                                <div class="form-group col-6 col-md-3">
                                     <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('report-sale.kasLoad') }}', '#data-load')">
                                         <i class="fas fa-eye"></i> Cari</button>
+                                </div>
+                                <div class="form-group col-6 col-md-4">
+                                    <button class="btn btn-primary" type="button" onclick="printKas()">
+                                        <i class="fas fa-print"></i> Cetak Laporan
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -157,9 +177,14 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-12 col-md-12 col-lg-12">
+                                <div class="form-group col-6 col-md-3">
                                     <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('report-sale.customerLoad') }}', '#data-load')">
                                         <i class="fas fa-eye"></i> Cari</button>
+                                </div>
+                                <div class="form-group col-6 col-md-4">
+                                    <button class="btn btn-primary" type="button" onclick="printCustomer()">
+                                        <i class="fas fa-print"></i> Cetak Laporan
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -184,9 +209,14 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-12 col-md-12 col-lg-12">
+                                <div class="form-group col-6 col-md-3">
                                     <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('report-sale.branchLoad') }}', '#data-load')">
                                         <i class="fas fa-eye"></i> Cari</button>
+                                </div>
+                                <div class="form-group col-6 col-md-4">
+                                    <button class="btn btn-primary" type="button" onclick="printBranch()">
+                                        <i class="fas fa-print"></i> Cetak Laporan
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -201,12 +231,12 @@
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
-                        <th width="15%">Tanggal</th>
-                        <th width="12%">Faktur</th>
-                        <th width="25%">Barang</th>
-                        <th width="18%">Akun Kas</th>
-                        <th width="15%">Laba Kotor</th>
-                        <th width="15%">Laba Bersih</th>
+                        <th class="text-center" width="15%">Tanggal</th>
+                        <th class="text-center" width="12%">Faktur</th>
+                        <th class="text-center" width="25%">Barang</th>
+                        <th class="text-center" width="18%">Akun Kas</th>
+                        <th class="text-center" width="15%">Laba Kotor</th>
+                        <th class="text-center" width="15%">Laba Bersih</th>
                     </tr>
                 </thead>
                 <tbody class="dropHere" style="border: none !important">
@@ -271,6 +301,47 @@
           console.log(data);
           $(target).html(data);
       });
+  }
+
+  function printPeriode() {
+    var startDate1 = document.getElementById("startDate1").value;
+    var endDate1 = document.getElementById("endDate1").value;
+    window.location.href = '{{ route('print-report-sale.periode') }}?&startDate1=' + startDate1+'&endDate1=' + endDate1
+  }
+
+  function printItem() {
+    var startDate2 = document.getElementById("startDate2").value;
+    var endDate2 = document.getElementById("endDate2").value;
+    var item = document.getElementById("item").value;
+    window.location.href = '{{ route('print-report-sale.item') }}?&startDate2=' + startDate2+'&endDate2=' + endDate2+'&item=' + item
+  }
+
+  function printSales() {
+    var startDate3 = document.getElementById("startDate3").value;
+    var endDate3 = document.getElementById("endDate3").value;
+    var sales = document.getElementById("sales").value;
+    window.location.href = '{{ route('print-report-sale.sales') }}?&startDate3=' + startDate3+'&endDate3=' + endDate3+'&sales=' + sales
+  }
+
+  function printKas() {
+    var startDate4 = document.getElementById("startDate4").value;
+    var endDate4 = document.getElementById("endDate4").value;
+    var kas = document.getElementById("kas").value;
+    window.location.href = '{{ route('print-report-sale.kas') }}?&startDate4=' + startDate4+'&endDate4=' + endDate4+'&kas=' + kas
+  }
+
+  function printCustomer() {
+    var startDate5 = document.getElementById("startDate5").value;
+    var endDate5 = document.getElementById("endDate5").value;
+    var customer = document.getElementById("customer").value;
+    window.location.href = '{{ route('print-report-sale.customer') }}?&startDate5=' + startDate5+'&endDate5=' + endDate5+'&customer=' + customer
+  }
+
+  function printBranch() {
+    var startDate6 = document.getElementById("startDate6").value;
+    var endDate6 = document.getElementById("endDate6").value;
+    var branch = document.getElementById("branch").value;
+    window.location.href = '{{ route('print-report-sale.branch') }}?&startDate6=' + startDate6+'&endDate6=' + endDate6+'&branch=' + branch
   }
 </script>
 @endsection
