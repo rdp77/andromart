@@ -384,6 +384,7 @@ class ServiceController extends Controller
                 'image' => $fileName,
                 'discount_type' => $req->typeDiscount,
                 'discount_price' => str_replace(",", '', $req->totalDiscountValue),
+                'discount_service' => str_replace(",", '', $req->totalService)-str_replace(",", '',$req->totalDiscountValue),
                 'discount_percent' => str_replace(",", '', $req->totalDiscountPercent),
                 'total_hpp' => str_replace(",", '', $req->totalHppAtas),
                 'total_price' => str_replace(",", '', $req->totalPrice),

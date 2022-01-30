@@ -163,6 +163,8 @@
 
                             <input readonly id="totalHpp" type="hidden" value="0" class="form-control cleaveNumeral"
                         name="totalHpp" style="text-align: right">
+                            <input readonly id="totalDiskonService" type="hidden" value="0" class="form-control cleaveNumeral"
+                        name="totalDiskonService" style="text-align: right">
                     </div>
                     
                 </div>

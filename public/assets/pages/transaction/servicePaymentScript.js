@@ -301,6 +301,7 @@ function choseService() {
                 if (data.message == "empty") {
                     $(".DownPaymentHidden").css("display", "none");
                     $("#totalHpp").val(0);
+                    $("#totalDiskonService").val(0);
                     $("#totalService").val(0);
                     $("#totalSparePart").val(0);
                     $("#totalPriceHidden").val(0);
@@ -310,6 +311,7 @@ function choseService() {
                     $(".dropHereItem").empty();
                 } else {
                     $("#totalHpp").val(data.result.total_hpp);
+                    $("#totalDiskonService").val(data.result.discount_service);
 
                     $("#totalService").val(
                         parseInt(data.result.total_service).toLocaleString(

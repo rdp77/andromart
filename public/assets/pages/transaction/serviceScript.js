@@ -484,7 +484,11 @@ $(document.body).on("change",".itemsDetail",function(){
         }
     }
     var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
-
+    var totalPriceHpp = 0;
+    $('.totalPriceHpp').each(function(){
+        totalPriceHpp += parseInt(this.value.replace(/,/g, ""))
+    });
+    $('#totalHppAtas').val(parseInt(totalPriceHpp).toLocaleString('en-US'));
     sum();
     sumTotal();
     if (checkVerificationDiscount == 'percent') {
@@ -492,11 +496,7 @@ $(document.body).on("change",".itemsDetail",function(){
     }else{
         sumDiscontValue();
     }
-    var totalPriceHpp = 0;
-    $('.totalPriceHpp').each(function(){
-        totalPriceHpp += parseInt(this.value.replace(/,/g, ""))
-    });
-    $('#totalHppAtas').val(parseInt(totalPriceHpp).toLocaleString('en-US'));
+
 });
 
 // menghapus kolom
@@ -531,7 +531,7 @@ $(document.body).on("keyup",".qtyDetail",function(){
     var index = $(this).data('index');
     var typeDetail = $('.typeDetail_'+index).find(':selected').val();
     if(isNaN(parseInt($('.priceDetail_'+index).val()))){
-        var itemPrice =  0; }else{
+        var itemPrice =  0;var itemHpp =0; }else{
         var itemPrice = $('.priceDetail_'+index).val().replace(/,/g, ''),asANumber = +itemPrice;
         var itemHpp = $('.priceHpp_'+index).val().replace(/,/g, ''),asANumber = +itemHpp;}
     if(isNaN(parseInt(this.value))){
@@ -549,7 +549,11 @@ $(document.body).on("keyup",".qtyDetail",function(){
         $('.priceDetailSparePart_'+index).val(0);
     }
     var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
-
+    var totalPriceHpp = 0;
+    $('.totalPriceHpp').each(function(){
+        totalPriceHpp += parseInt(this.value.replace(/,/g, ""))
+    });
+    $('#totalHppAtas').val(parseInt(totalPriceHpp).toLocaleString('en-US'));
     sum();
     sumTotal();
     if (checkVerificationDiscount == 'percent') {
@@ -558,11 +562,7 @@ $(document.body).on("keyup",".qtyDetail",function(){
         sumDiscontValue();
     }
 
-    var totalPriceHpp = 0;
-    $('.totalPriceHpp').each(function(){
-        totalPriceHpp += parseInt(this.value.replace(/,/g, ""))
-    });
-    $('#totalHppAtas').val(parseInt(totalPriceHpp).toLocaleString('en-US'));
+
 });
 
 // merubah harga
@@ -593,11 +593,7 @@ $(document.body).on("keyup",".priceDetail",function(){
     }else{
         sumDiscontValue();
     }
-    var totalPriceHpp = 0;
-    $('.totalPriceHpp').each(function(){
-        totalPriceHpp += parseInt(this.value.replace(/,/g, ""))
-    });
-    $('#totalHppAtas').val(parseInt(totalPriceHpp).toLocaleString('en-US'));
+
 });
 
 // merubah harga jasa
@@ -627,6 +623,11 @@ function sum() {
         priceDetailLoss += parseInt(this.value.replace(/,/g, ""))
     });
     $('#totalLoss').val(parseInt(priceDetailLoss).toLocaleString('en-US'));
+    var totalPriceHpp = 0;
+    $('.totalPriceHpp').each(function(){
+        totalPriceHpp += parseInt(this.value.replace(/,/g, ""))
+    });
+    $('#totalHppAtas').val(parseInt(totalPriceHpp).toLocaleString('en-US'));
 }
 
 // fungsi rubah tipe
@@ -676,13 +677,13 @@ function sumDiscont() {
         var totalDiscountPercent = $('#totalDiscountPercent').val().replace(/,/g, ''),asANumber = +totalDiscountPercent;}
 
     if(totalDiscountPercent <= 100){
-        var sumTotalPrice = (parseInt(totalDiscountPercent)/100)*(parseInt(totalService)+parseInt(totalSparePart));
+        var sumTotalPrice = (parseInt(totalDiscountPercent)/100)*(parseInt(totalService));
         $('#totalDiscountValue').val(parseInt(sumTotalPrice).toLocaleString('en-US'));
         $('#totalDiscountPercent').val(totalDiscountPercent);
     }else{
         $('#totalDiscountPercent').val(0);
         $('#totalDiscountValue').val(0);
-        var sumTotalPrice = (100/100)*(parseInt(totalService)+parseInt(totalSparePart));}
+        var sumTotalPrice = (100/100)*(parseInt(totalService));}
     sumTotal();
 }
 
@@ -700,7 +701,7 @@ function sumDiscontValue() {
         var totalDiscountValue =  0;
     }else{
         var totalDiscountValue = $('#totalDiscountValue').val().replace(/,/g, ''),asANumber = +totalDiscountValue;}
-        var totalValue = parseInt(totalService)+parseInt(totalSparePart);
+        var totalValue = parseInt(totalService);
 
         if(totalDiscountValue <= totalValue){
             console.log(totalDiscountValue);

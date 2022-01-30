@@ -189,8 +189,8 @@ class SaleController extends Controller
     public function store(Request $req)
     {
         // return $req->all();
-        // DB::beginTransaction();
-        // try {
+        DB::beginTransaction();
+        try {
             $id = DB::table('sales')->max('id') + 1;
             $getEmployee =  Employee::where('user_id', Auth::user()->id)->first();
             $code = $this->code('PJT');
@@ -343,20 +343,47 @@ class SaleController extends Controller
                 $accountPembayaran  = AccountData::where('id', $req->account)
                     ->first();
 
-                $accountCode = [
-                    $accountPembayaran->id,
-                    $accountData->id,
-                ];
-                $description = [
-                    'Kas Pendapatan Penjualan' .$code,
-                    'Diskon Penjualan' .$code,
-                    'Pendapatan Penjualan' .$code,
-                ];
-                $DK = [
-                    'K',
-                    'D',
-                    'D',
-                ];
+                
+
+                if (str_replace(",", '', $req->totalDiscountValue) == 0) {
+                    $accountCode = [
+                        $accountPembayaran->id,
+                        $accountData->id,
+                    ];
+                    $description = [
+                        'Kas Pendapatan Penjualan' .$code,
+                        'Pendapatan Penjualan' .$code,
+                    ];
+                    $totalBayar = [
+                        str_replace(",", '', $req->totalPrice),
+                        str_replace(",", '', $req->totalPrice),
+                    ];
+                    $DK = [
+                        'D',
+                        'K',
+                    ];
+                } else {
+                    $accountCode = [
+                        $accountPembayaran->id,
+                        $accountDiskon->id,
+                        $accountData->id,
+                    ];
+                    $totalBayar = [
+                        str_replace(",", '', $req->totalPrice),
+                        str_replace(",", '', $req->totalDiscountValue),
+                        str_replace(",", '', $req->totalPrice),
+                    ];
+                    $description = [
+                        'Kas Pendapatan Penjualan' .$code,
+                        'Diskon Penjualan' .$code,
+                        'Pendapatan Penjualan' .$code,
+                    ];
+                    $DK = [
+                        'D',
+                        'D',
+                        'K',
+                    ];
+                }
 
                 for ($i = 0; $i < count($accountCode); $i++) {
                     $idDetail = DB::table('journal_details')->max('id') + 1;
@@ -364,7 +391,7 @@ class SaleController extends Controller
                         'id' => $idDetail,
                         'journal_id' => $idJournal,
                         'account_id' => $accountCode[$i],
-                        'total' => str_replace(",", '', $req->totalPrice),
+                        'total' => $totalBayar[$i],
                         'description' => $description[$i],
                         'debet_kredit' => $DK[$i],
                         'created_at' => date('Y-m-d h:i:s'),
@@ -432,13 +459,19 @@ class SaleController extends Controller
                 }
             }
 
+            DB::rollback();
+            // return $req->all();
+            return [$accountCode
+,$totalBayar
+,$description];
+            // return [$descriptionHpp,$total_hpp,$DKHpp];
             DB::commit();
-            return Response::json(['status' => 'success', 'message' => 'Data Tersimpan', 'id' => $id] );
-        // } catch (\Throwable $th) {
-        //     DB::rollback();
-        //     return $th;
-            // return Response::json(['status' => 'error', 'message' => $th ]);
-        // }
+            // return Response::json(['status' => 'success', 'message' => 'Data Tersimpan', 'id' => $id] );
+        } catch (\Throwable $th) {
+            DB::rollback();
+            // return $th;
+            return Response::json(['status' => 'error', 'message' => $th ]);
+        }
     }
 
     public function show($id)
