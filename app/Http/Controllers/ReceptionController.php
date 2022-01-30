@@ -111,10 +111,16 @@ class ReceptionController extends Controller
         $model = Purchasing::where('purchasings.id', $id)
         ->leftjoin('employees', 'purchasings.employee_id', 'employees.id')
         ->first();
+
         $models = Purchasing::where('purchasings.id', $id)
         ->join('purchasing_details', 'purchasings.id', 'purchasing_details.purchasing_id')
         ->join('items', 'purchasing_details.item_id', 'items.id')
-        ->join('stocks', 'items.id', 'stocks.item_id')
+        // ->join('stocks', 'items.id', 'stocks.item_id')
+        ->leftJoin('stocks', function($join)
+             {
+                 $join->on('items.id', 'stocks.item_id');
+                 $join->on('purchasing_details.branch_id', 'stocks.branch_id');
+             })
         ->join('units', 'stocks.unit_id', 'units.id')
         ->join('branches', 'stocks.branch_id', 'branches.id')
         ->where('purchasing_details.qty', '>', 0)
