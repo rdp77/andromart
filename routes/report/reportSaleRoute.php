@@ -48,6 +48,33 @@ Route::group(['prefix' => 'report'], function () {
             'refresh-report-sale-branch',
             [ReportSaleController::class, 'branchLoad']
         )->name('report-sale.branchLoad');
+
+        //print report
+        Route::get(
+            'print-report-sale-periode',
+            [ReportSaleController::class, 'printPeriode']
+        )->name('print-report-sale.periode');
+        Route::get(
+            'print-report-sale-item',
+            [ReportSaleController::class, 'printItem']
+        )->name('print-report-sale.item');
+        Route::get(
+            'print-report-sale-sales',
+            [ReportSaleController::class, 'printSales']
+        )->name('print-report-sale.sales');
+        Route::get(
+            'print-report-sale-kas',
+            [ReportSaleController::class, 'printKas']
+        )->name('print-report-sale.kas');
+        Route::get(
+            'print-report-sale-customer',
+            [ReportSaleController::class, 'printCustomer']
+        )->name('print-report-sale.customer');
+        Route::get(
+            'print-report-sale-branch',
+            [ReportSaleController::class, 'printBranch']
+        )->name('print-report-sale.branch');
+
     });
 
 });

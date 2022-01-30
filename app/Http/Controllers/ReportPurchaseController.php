@@ -65,6 +65,7 @@ class ReportPurchaseController extends Controller
         ->where('branch_id', $branchUser)
         ->whereBetween('date', [$startDate, $endDate])
         ->orderBy('id', 'desc')->get();
+
         $tr = count($data);
         $sumBayar = $data->sum('price');
 
@@ -99,6 +100,7 @@ class ReportPurchaseController extends Controller
         ->join('purchasing_details', 'purchasing_details.purchasing_id', '=', 'purchasings.id')
         ->join('items', 'items.id', '=', 'purchasing_details.item_id')
         ->select('items.supplier_id','purchasings.id', 'purchasings.date', 'purchasings.code', 'purchasings.price', 'purchasings.status', 'purchasings.employee_id')
+        ->whereBetween('date', [$startDate, $endDate])
         ->where('items.supplier_id', '=', $supplier)
         ->orderBy('id', 'desc')->get();
 
@@ -116,29 +118,98 @@ class ReportPurchaseController extends Controller
         ->whereBetween('date', [$startDate, $endDate])
         ->where('branch_id', $req->branch_id)
         ->orderBy('id', 'desc')->get();
+
         $tr = count($data);
         $sumBayar = $data->sum('price');
 
         return view('pages.backend.report.reportPurchaseLoad', compact('data', 'tr', 'sumBayar'));
     }
 
-    public function show($id)
+    public function printPeriode(Request $req)
     {
-        //
+        $title = 'Laporan Pembelian per Periode';
+        $subtitle = ' ';
+        $val = ' ';
+        $periode = $req->startDate1. ' - ' .$req->endDate1;
+        $branchUser = Auth::user()->employee->branch_id;
+        $startDate = $this->changeDate($req->startDate1)." 00:00:00";
+        $endDate = $this->changeDate($req->endDate1)." 23:59:59";
+        $data = Purchasing::with('purchasingDetail')
+        ->where('branch_id', $branchUser)
+        ->whereBetween('date', [$startDate, $endDate])
+        ->orderBy('id', 'desc')->get();
+
+        $tr = count($data);
+        $sumBayar = $data->sum('price');
+
+        return view('pages.backend.report.printReportPurchase', compact('data', 'tr', 'sumBayar', 'title', 'subtitle', 'val', 'periode'));
     }
 
-    public function edit($id)
+    public function printItem(Request $req)
     {
-        //
+        $item = Item::where('id', $req->item)->first();
+        $brand = Brand::where('id', $item->brand_id)->first();
+        $title = 'Laporan Pembelian per Item';
+        $subtitle = 'Item';
+        $periode = $req->startDate2. ' - ' .$req->endDate2;
+        $val = $brand->name. ' ' .$item->name;
+        $branchUser = Auth::user()->employee->branch_id;
+        $startDate = $this->changeDate($req->startDate2)." 00:00:00";
+        $endDate = $this->changeDate($req->endDate2)." 23:59:59";
+        $data = Purchasing::with('purchasingDetail')
+        ->leftJoin('purchasing_details', 'purchasing_details.purchasing_id', '=', 'purchasings.id')
+        ->select('purchasings.id', 'purchasings.date', 'purchasings.code', 'purchasings.price', 'purchasings.status', 'purchasings.employee_id')
+        ->whereBetween('date', [$startDate, $endDate])
+        ->where('purchasing_details.item_id', '=', $req->item)
+        ->orderBy('id', 'desc')->get();
+
+        $tr = count($data);
+        $sumBayar = $data->sum('price');
+
+        return view('pages.backend.report.printReportPurchase', compact('data', 'tr', 'sumBayar', 'title', 'subtitle', 'val', 'periode'));
     }
 
-    public function update(Request $request, $id)
+    public function printSupplier(Request $req)
     {
-        //
+        $supplier = Supplier::where('id', $req->supplier)->first();
+        $title = 'Laporan Pembelian per Supplier';
+        $subtitle = 'Supplier';
+        $periode = $req->startDate3. ' - ' .$req->endDate3;
+        $val = $supplier->name;
+        $branchUser = Auth::user()->employee->branch_id;
+        $startDate = $this->changeDate($req->startDate3)." 00:00:00";
+        $endDate = $this->changeDate($req->endDate3)." 23:59:59";
+        $data = Purchasing::with(['purchasingDetail', 'purchasingDetail.item', 'purchasingDetail.item.supplier'])
+        ->join('purchasing_details', 'purchasing_details.purchasing_id', '=', 'purchasings.id')
+        ->join('items', 'items.id', '=', 'purchasing_details.item_id')
+        ->select('items.supplier_id','purchasings.id', 'purchasings.date', 'purchasings.code', 'purchasings.price', 'purchasings.status', 'purchasings.employee_id')
+        ->whereBetween('date', [$startDate, $endDate])
+        ->where('items.supplier_id', '=', $req->supplier)
+        ->orderBy('id', 'desc')->get();
+
+        $tr = count($data);
+        $sumBayar = $data->sum('price');
+
+        return view('pages.backend.report.printReportPurchase', compact('data', 'tr', 'sumBayar', 'title', 'subtitle', 'val', 'periode'));
     }
 
-    public function destroy($id)
+    public function printBranch(Request $req)
     {
-        //
+        $branch = Branch::where('id', $req->branch_id)->first();
+        $title = 'Laporan Pembelian per Cabang';
+        $subtitle = 'Cabang';
+        $periode = $req->startDate4. ' - ' .$req->endDate4;
+        $val = $branch->name;
+        $startDate = $this->changeDate($req->startDate4)." 00:00:00";
+        $endDate = $this->changeDate($req->endDate4)." 23:59:59";
+        $data = Purchasing::with('purchasingDetail')
+        ->whereBetween('date', [$startDate, $endDate])
+        ->where('branch_id', $req->branch_id)
+        ->orderBy('id', 'desc')->get();
+
+        $tr = count($data);
+        $sumBayar = $data->sum('price');
+
+        return view('pages.backend.report.printReportPurchase', compact('data', 'tr', 'sumBayar', 'title', 'subtitle', 'val', 'periode'));
     }
 }

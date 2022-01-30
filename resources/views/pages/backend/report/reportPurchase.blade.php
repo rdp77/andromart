@@ -44,9 +44,14 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-12 col-md-12 col-lg-12">
+                                <div class="form-group col-6 col-md-3">
                                     <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('report-purchase.dataLoad') }}', '#data-load')">
                                         <i class="fas fa-eye"></i> Cari
+                                    </button>
+                                </div>
+                                <div class="form-group col-6 col-md-4">
+                                    <button class="btn btn-primary" type="button" onclick="printPeriode()">
+                                        <i class="fas fa-print"></i> Cetak Laporan
                                     </button>
                                 </div>
                             </div>
@@ -72,9 +77,14 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-12 col-md-12 col-lg-12">
+                                <div class="form-group col-6 col-md-3">
                                     <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('report-purchase.itemLoad') }}', '#data-load')">
                                         <i class="fas fa-eye"></i> Cari
+                                    </button>
+                                </div>
+                                <div class="form-group col-6 col-md-4">
+                                    <button class="btn btn-primary" type="button" onclick="printItem()">
+                                        <i class="fas fa-print"></i> Cetak Laporan
                                     </button>
                                 </div>
                             </div>
@@ -100,9 +110,14 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-12 col-md-12 col-lg-12">
+                                <div class="form-group col-6 col-md-3">
                                     <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('report-purchase.supplierLoad') }}', '#data-load')">
                                         <i class="fas fa-eye"></i> Cari
+                                    </button>
+                                </div>
+                                <div class="form-group col-6 col-md-4">
+                                    <button class="btn btn-primary" type="button" onclick="printSupplier()">
+                                        <i class="fas fa-print"></i> Cetak Laporan
                                     </button>
                                 </div>
                             </div>
@@ -128,9 +143,14 @@
                                 </div>
                             </div>
                             <div class="row">
-                                <div class="form-group col-12 col-md-12 col-lg-12">
+                                <div class="form-group col-6 col-md-3">
                                     <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('report-purchase.branchLoad') }}', '#data-load')">
                                         <i class="fas fa-eye"></i> Cari
+                                    </button>
+                                </div>
+                                <div class="form-group col-6 col-md-4">
+                                    <button class="btn btn-primary" type="button" onclick="printBranch()">
+                                        <i class="fas fa-print"></i> Cetak Laporan
                                     </button>
                                 </div>
                             </div>
@@ -206,6 +226,33 @@
           console.log(data);
           $(target).html(data);
       });
+  }
+
+  function printPeriode() {
+    var startDate1 = document.getElementById("startDate1").value;
+    var endDate1 = document.getElementById("endDate1").value;
+    window.location.href = '{{ route('print-report-purchase.periode') }}?&startDate1=' + startDate1+'&endDate1=' + endDate1
+  }
+
+  function printItem() {
+    var startDate2 = document.getElementById("startDate2").value;
+    var endDate2 = document.getElementById("endDate2").value;
+    var item = document.getElementById("item").value;
+    window.location.href = '{{ route('print-report-purchase.item') }}?&startDate2=' + startDate2+'&endDate2=' + endDate2+'&item=' + item
+  }
+
+  function printSupplier() {
+    var startDate3 = document.getElementById("startDate3").value;
+    var endDate3 = document.getElementById("endDate3").value;
+    var supplier = document.getElementById("supplier").value;
+    window.location.href = '{{ route('print-report-purchase.supplier') }}?&startDate3=' + startDate3+'&endDate3=' + endDate3+'&supplier=' + supplier
+  }
+
+  function printBranch() {
+    var startDate4 = document.getElementById("startDate4").value;
+    var endDate4 = document.getElementById("endDate4").value;
+    var branch_id = document.getElementById("branch_id").value;
+    window.location.href = '{{ route('print-report-purchase.branch') }}?&startDate4=' + startDate4+'&endDate4=' + endDate4+'&branch_id=' + branch_id
   }
 </script>
 @endsection

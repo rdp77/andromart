@@ -54,7 +54,6 @@
         <tr style="color: #6777ef">
             <th colspan="4"><h5>Jumlah Transaksi : {{ $tr }}</h5></th>
             <th colspan="3"><h5>Total Pengeluaran : Rp.{{ number_format($sumBayar, 0, '.', ',') }}</h5></th>
-            {{-- <th colspan="2"><h5>Pendapatan Bersih : <b class="dropPendapatan">Rp. 0</b></h5></th> --}}
         </tr>
     </tfoot>
 </table>

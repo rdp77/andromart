@@ -44,5 +44,23 @@ Route::group(['prefix' => 'report'], function () {
             'refresh-report-Purchase-branch',
             [ReportPurchaseController::class, 'branchLoad']
         )->name('report-purchase.branchLoad');
+
+        //print report
+        Route::get(
+            'print-report-purchase-periode',
+            [ReportPurchaseController::class, 'printPeriode']
+        )->name('print-report-purchase.periode');
+        Route::get(
+            'print-report-purchase-item',
+            [ReportPurchaseController::class, 'printItem']
+        )->name('print-report-purchase.item');
+        Route::get(
+            'print-report-purchase-supplier',
+            [ReportPurchaseController::class, 'printSupplier']
+        )->name('print-report-purchase.supplier');
+        Route::get(
+            'print-report-purchase-branch',
+            [ReportPurchaseController::class, 'printBranch']
+        )->name('print-report-purchase.branch');
     });
 });
