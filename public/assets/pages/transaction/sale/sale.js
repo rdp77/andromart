@@ -733,7 +733,7 @@ function jurnal(params) {
     $(".dropHereJournals").empty();
     // $('.dropHereJournals').
     $.ajax({
-        url: "/transaction/service/check-journals",
+        url: "/transaction/sale/check-journals",
         data: { id: params },
         type: "POST",
         success: function (data) {

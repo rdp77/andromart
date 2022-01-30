@@ -42,6 +42,7 @@
             </div>
             <div class="modal-body">
                 {{-- <div class="dropHereJournals"> --}}
+                    <h6>Jurnal Pendapatan</h6>
                     <table class="table table-stripped table-bordered">
                         <tr>
                             <th>Kode</th>
@@ -50,6 +51,19 @@
                             <th>K</th>
                         </tr>
                         <tbody class="dropHereJournals">
+
+                        </tbody>
+                    </table>
+
+                    <h6>Jurnal HPP</h6>
+                    <table class="table table-stripped table-bordered">
+                        <tr>
+                            <th>Kode</th>
+                            <th>Nama</th>
+                            <th>D</th>
+                            <th>K</th>
+                        </tr>
+                        <tbody class="dropHereJournalsHpp">
 
                         </tbody>
                     </table>

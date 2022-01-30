@@ -409,7 +409,7 @@ class SaleController extends Controller
                 ];
                 $descriptionHpp = [
                     'Pengeluaran Harga Pokok Penjualan ' . $code,
-                    'Biaya Harga Pokok Penjualan' . $code,
+                    'Biaya Harga Pokok Penjualan ' . $code,
                 ];
                 $DKHpp = [
                     'D',
@@ -865,7 +865,7 @@ class SaleController extends Controller
             'type' => 'Penjualan',
             'total' => str_replace(",", '', $req->totalPrice),
             'ref' => $req->code,
-            'description' => 'Transaksi Penjualan' .$req->code,
+            'description' => 'Transaksi Penjualan ' .$req->code,
             'updated_at' => date('Y-m-d h:i:s'),
         ]);
 
@@ -893,9 +893,9 @@ class SaleController extends Controller
                     $accountData->id,
                 ];
                 $description = [
-                    'Kas Pendapatan Penjualan' .$req->code,
-                    'Diskon Penjualan' .$req->code,
-                    'Pendapatan Penjualan' .$req->code,
+                    'Kas Pendapatan Penjualan ' .$req->code,
+                    'Diskon Penjualan ' .$req->code,
+                    'Pendapatan Penjualan ' .$req->code,
                 ];
                 $DK = [
                     'D',
