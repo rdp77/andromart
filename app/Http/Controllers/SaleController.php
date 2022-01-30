@@ -63,7 +63,7 @@ class SaleController extends Controller
                     $actionBtn .= '<a class="dropdown-item" href="' . route('sale.show', $row->id) . '" ><i class="fas fa-list-alt"></i> Detail</a>';
                     $actionBtn .= '<a class="dropdown-item" href="' . route('sale.printSale', $row->id) . '" target="output"><i class="fas fa-print"></i> Nota Besar</a>';
                     $actionBtn .= '<a class="dropdown-item" href="' . route('sale.printSmallSale', $row->id) . '" target="output"><i class="fas fa-print"></i> Nota Kecil</a>';
-                    $actionBtn .= '<a onclick="jurnal(' ."'". $row->code ."'". ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
+                    $actionBtn .= '<a onclick="jurnal(' . "'" . $row->code . "'" . ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
                     // $actionBtn .= '<a onclick="" class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
                     // $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
@@ -188,13 +188,13 @@ class SaleController extends Controller
 
     public function store(Request $req)
     {
-        // return [$req->profitSharingBuyer,$req->profitSharingSales,$req->totalPriceDetail];
+        // return $req->all();
         // DB::beginTransaction();
         // try {
             $id = DB::table('sales')->max('id') + 1;
             $getEmployee =  Employee::where('user_id', Auth::user()->id)->first();
             $code = $this->code('PJT');
-            $dateConvert = $this->DashboardController->changeMonthIdToEn($req->date);
+            // $dateConvert = $this->DashboardController->changeMonthIdToEn($req->date);
             // return($req);
             if ($req->customer_name != null) {
                 $customerName = $req->customer_name;
@@ -318,7 +318,7 @@ class SaleController extends Controller
                 'id' => $idJournal,
                 'code' => $this->code('DD'),
                 'year' => date('Y'),
-                'date' => $dateConvert,
+                'date' => date('Y-m-d'),
                 'type' => 'Penjualan',
                 'total' => str_replace(",", '', $req->totalPrice),
                 'ref' => $code,
@@ -378,9 +378,9 @@ class SaleController extends Controller
                     'id' => $idJournalHpp,
                     'code' => $this->code('KK', $idJournalHpp),
                     'year' => date('Y'),
-                    'date' => $dateConvert,
+                    'date' => date('Y-m-d'),
                     'type' => 'Biaya',
-                    'total' => str_replace(",", '', $req->totalHpp),
+                    'total' => str_replace(",", '', $total_hpp),
                     'ref' => $code,
                     'description' => 'HPP ' . $code,
                     'created_at' => date('Y-m-d h:i:s'),
@@ -403,9 +403,9 @@ class SaleController extends Controller
                     $accountPersediaan->id,
                 ];
                 // return $accountCodeHpp;
-                $totalHpp = [
-                    str_replace(",", '', $req->totalHpp),
-                    str_replace(",", '', $req->totalHpp),
+                $total_hpp = [
+                    str_replace(",", '', $total_hpp),
+                    str_replace(",", '', $total_hpp),
                 ];
                 $descriptionHpp = [
                     'Pengeluaran Harga Pokok Penjualan ' . $code,
@@ -416,13 +416,13 @@ class SaleController extends Controller
                     'K',
                 ];
                 for ($i = 0; $i < count($accountCodeHpp); $i++) {
-                    if ($totalHpp[$i] != 0) {
+                    if ($total_hpp[$i] != 0) {
                         $idDetailhpp = DB::table('journal_details')->max('id') + 1;
                         JournalDetail::create([
                             'id' => $idDetailhpp,
                             'journal_id' => $idJournalHpp,
                             'account_id' => $accountCodeHpp[$i],
-                            'total' => $totalHpp[$i],
+                            'total' => $total_hpp[$i],
                             'description' => $descriptionHpp[$i],
                             'debet_kredit' => $DKHpp[$i],
                             'created_at' => date('Y-m-d h:i:s'),
@@ -950,7 +950,9 @@ class SaleController extends Controller
 
     public function checkjournals(Request $req)
     {
-        $data = Journal::with('JournalDetail.AccountData')->where('ref',$req->id)->first();
+        $data = Journal::with('JournalDetail.AccountData')
+            ->where('ref',$req->id)
+            ->get();
 
         return Response::json(['status' => 'success', 'jurnal'=>$data]);
     }

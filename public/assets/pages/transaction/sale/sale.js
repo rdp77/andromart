@@ -738,54 +738,130 @@ function jurnal(params) {
         type: "POST",
         success: function (data) {
             if (data.status == "success") {
-                $.each(data.jurnal.journal_detail, function (index, value) {
-                    if (value.debet_kredit == "K") {
-                        var dk =
-                            "<td>0</td><td>" +
-                            parseInt(value.total).toLocaleString("en-US") +
-                            "</td>";
-                    } else {
-                        var dk =
-                            "<td>" +
-                            parseInt(value.total).toLocaleString("en-US") +
-                            "</td><td>0</td>";
-                    }
-                    $(".dropHereJournals").append(
-                        "<tr>" +
-                            "<td>" +
-                            value.account_data.code +
-                            "</td>" +
-                            "<td>" +
-                            value.account_data.name +
-                            "</td>" +
-                            dk +
-                            "</tr>"
+                if (data.jurnal[0].type.includes("Transfer")) {
+                    $.each(data.jurnal[0].journal_detail, function (index, value) {
+                        if (value.debet_kredit == "K") {
+                            var dk =
+                                "<td>0</td><td>" +
+                                parseInt(value.total).toLocaleString("en-US") +
+                                "</td>";
+                        } else {
+                            var dk =
+                                "<td>" +
+                                parseInt(value.total).toLocaleString("en-US") +
+                                "</td><td>0</td>";
+                        }
+                        $(".dropHereJournals").append(
+                            "<tr>" +
+                                "<td>" +
+                                value.account_data.code +
+                                "</td>" +
+                                "<td>" +
+                                value.account_data.name +
+                                "</td>" +
+                                dk +
+                                "</tr>"
+                        );
+                    });
+
+                    $.each(data.jurnal[1].journal_detail, function (index, value) {
+                        if (value.debet_kredit == "K") {
+                            var dk =
+                                "<td>0</td><td>" +
+                                parseInt(value.total).toLocaleString("en-US") +
+                                "</td>";
+                        } else {
+                            var dk =
+                                "<td>" +
+                                parseInt(value.total).toLocaleString("en-US") +
+                                "</td><td>0</td>";
+                        }
+                        $(".dropHereJournals").append(
+                            "<tr>" +
+                                "<td>" +
+                                value.account_data.code +
+                                "</td>" +
+                                "<td>" +
+                                value.account_data.name +
+                                "</td>" +
+                                dk +
+                                "</tr>"
+                        );
+                    });
+                } else {
+                    $.each(
+                        data.jurnal[0].journal_detail,
+                        function (index, value) {
+                            if (value.debet_kredit == "K") {
+                                var dk =
+                                    "<td>0</td><td>" +
+                                    parseInt(value.total).toLocaleString(
+                                        "en-US"
+                                    ) +
+                                    "</td>";
+                            } else {
+                                var dk =
+                                    "<td>" +
+                                    parseInt(value.total).toLocaleString(
+                                        "en-US"
+                                    ) +
+                                    "</td><td>0</td>";
+                            }
+                            $(".dropHereJournals").append(
+                                "<tr>" +
+                                    "<td>" +
+                                    value.account_data.code +
+                                    "</td>" +
+                                    "<td>" +
+                                    value.account_data.name +
+                                    "</td>" +
+                                    dk +
+                                    "</tr>"
+                            );
+                        }
                     );
-                });
+                }
             }
             $("#exampleModal").modal("show");
         },
     });
 }
 
-// $("#paymentMethod").on("change", function () {
-//     $("#account").empty();
-//     var payment = this.value;
+// function jurnal(params) {
+//     $(".dropHereJournals").empty();
+//     // $('.dropHereJournals').
 //     $.ajax({
-//         url: getPayment,
-//         type: "GET",
-//         data: {
-//             payment: payment,
-//         },
-//         dataType: "json",
+//         url: "/transaction/sale/check-journals",
+//         data: { id: params },
+//         type: "POST",
 //         success: function (data) {
-//             $("#saleDate").text(data.result.date);
-//             $("#qty").val(data.result.qty);
-//             $("#price").val(data.result.price);
-//             $("#total").val(data.result.total);
-//             $("#operator").val(data.result.operator);
-//             $("#sale_id").val(data.result.sale);
-//             $("#item_id_create").val(data.result.item);
+//             if (data.status == "success") {
+//                 $.each(data.jurnal.journal_detail, function (index, value) {
+//                     if (value.debet_kredit == "K") {
+//                         var dk =
+//                             "<td>0</td><td>" +
+//                             parseInt(value.total).toLocaleString("en-US") +
+//                             "</td>";
+//                     } else {
+//                         var dk =
+//                             "<td>" +
+//                             parseInt(value.total).toLocaleString("en-US") +
+//                             "</td><td>0</td>";
+//                     }
+//                     $(".dropHereJournals").append(
+//                         "<tr>" +
+//                             "<td>" +
+//                             value.account_data.code +
+//                             "</td>" +
+//                             "<td>" +
+//                             value.account_data.name +
+//                             "</td>" +
+//                             dk +
+//                             "</tr>"
+//                     );
+//                 });
+//             }
+//             $("#exampleModal").modal("show");
 //         },
 //     });
-// });
+// }
