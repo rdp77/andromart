@@ -898,9 +898,9 @@ class SaleController extends Controller
                     'Pendapatan Penjualan ' .$req->code,
                 ];
                 $DK = [
-                    'D',
-                    'D',
                     'K',
+                    'D',
+                    'D',
                 ];
 
             for ($i = 0; $i < count($accountCode); $i++) {
