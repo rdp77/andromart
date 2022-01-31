@@ -209,7 +209,7 @@ function updateData(params) {
                         swal(data.message, {
                             icon: "success",
                         });
-                        // location.reload();
+                        location.reload();
                     }else{
                         swal(data.message, {
                             icon: "warning",
@@ -452,7 +452,7 @@ $(document.body).on("change",".itemsDetail",function(){
         $('.totalPriceDetail_' + index).val(0);
         $('.priceDetailLoss_'+index).val(0);
         $('.priceDetailSparePart_'+index).val(0);
-        $('.priceHpp'+index).val(0);
+        $('.priceHpp_'+index).val(0);
     }else{
         var typeDetail = $('.typeDetail_' + index).find(':selected').val();
         if (isNaN(parseInt($(this).find(':selected').data('price')))) {

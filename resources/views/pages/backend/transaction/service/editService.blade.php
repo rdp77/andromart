@@ -373,6 +373,11 @@
                         <input readonly id="totalLoss" onchange="sumTotal()" type="text" value="{{$service->total_loss}}"
                             class="form-control cleaveNumeral" name="totalLoss" style="text-align: right">
                     </div>
+                    <div class="form-group">
+                        <label for="totalPrice">{{ __('Total HPP') }}<code>*</code></label>
+                        <input id="totalHppAtas" type="text" readonly value="{{$service->total_hpp}}" class="form-control cleaveNumeral"
+                            name="totalHppAtas" style="text-align: right">
+                    </div>
                     <div class="form-group" style="display: none">
                         <label for="totalDownPayment">{{ __('Down Payment (DP)') }}<code>*</code></label>
                         <input id="totalDownPayment" type="text" value="0" class="form-control cleaveNumeral"
@@ -753,6 +758,7 @@
             @foreach ($item as $el)
                 <input class="itemsData" type="hidden"
                 data-price="{{$el->sell}}"
+                data-hpp="{{$el->buy}}"
                 @foreach ($el->stock as $el1)
                     @if (Auth::user()->employee->branch_id == $el1->branch_id)
                         data-stock="{{$el1->stock}}"
@@ -839,7 +845,9 @@
                                     <select class="select2 itemsDetail" name="itemsDetailOld[]">
                                         <option value="-" data-index="">- Select -</option>
                                         @foreach ($item as $el0)
-                                            <option data-index="{{$i}}"  data-price="{{$el0->sell}}" 
+                                            <option data-index="{{$i}}" 
+                                            data-hpp="{{$el0->buy}}"
+                                            data-price="{{$el0->sell}}" 
                                             @foreach ($el0->stock as $el1)
                                                 @if ((Auth::user()->employee->branch_id == $el1->branch_id))
                                                     data-stock="{{$el1->stock}}"
@@ -854,9 +862,11 @@
                                 </td>
                                 <td>
                                     <input type="text" class="form-control cleaveNumeral  priceDetail priceDetail_{{$i}}" name="priceDetailOld[]" data-index="{{$i}}" style="text-align: right" value="{{$el->price}}">
+                                    <input type="hidden" class="form-control priceHpp priceHpp_{{$i}}" name="priceHppOld[]" value="{{$el->hpp}}">
                                 </td>
                                 <td>
                                     <input type="text" class="form-control qtyDetail qtyDetail_{{$i}}" name="qtyDetailOld[]" value="{{$el->qty}}" data-index="{{$i}}" style="text-align: right">
+                                    
                                 </td>
                                 <td>
                                     <input readonly type="text" class="form-control stockDetail stock_{{$i}}" name="stockDetailOld[]" 
@@ -871,6 +881,7 @@
                                 </td>
                                 <td>
                                     <input readonly type="text" class="form-control totalPriceDetail cleaveNumeral totalPriceDetail_{{$i}}" name="totalPriceDetailOld[]" style="text-align: right" value="{{$el->total_price}}">
+                                    <input readonly type="hidden" class="form-control totalPriceHpp totalPriceHpp_{{$i}}" name="totalPriceHppOld[]" value="{{$el->total_hpp}}" style="text-align: right">
                                 </td>
                                 <td>
                                     <input type="text" class="form-control" name="descriptionDetailOld[]" value="{{$el->description}}">

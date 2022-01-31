@@ -372,7 +372,7 @@ class SaleController extends Controller
                     $totalBayar = [
                         str_replace(",", '', $req->totalPrice),
                         str_replace(",", '', $req->totalDiscountValue),
-                        str_replace(",", '', $req->totalPrice),
+                        str_replace(",", '', $req->totalSparePart),
                     ];
                     $description = [
                         'Kas Pendapatan Penjualan' .$code,

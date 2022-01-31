@@ -793,6 +793,10 @@ class ServiceController extends Controller
                 'clock' => date('h:i'),
                 'total_service' => str_replace(",", '', $req->totalService),
                 'total_part' => str_replace(",", '', $req->totalSparePart),
+
+                'discount_service' => str_replace(",", '', $req->totalService)-str_replace(",", '',$req->totalDiscountValue),
+                'total_hpp' => str_replace(",", '', $req->totalHppAtas),
+                
                 // 'total_payment'=>0,
                 // 'total_downpayment'=>0,
                 'total_loss' => str_replace(",", '', $req->totalLoss),

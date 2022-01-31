@@ -343,7 +343,7 @@ class ServicePaymentController extends Controller
                         str_replace(",", '', $req->totalPayment),
                         str_replace(",", '', $req->totalDiscountValue),
                         str_replace(",", '', $req->totalSparePart),
-                        str_replace(",", '', $req->totalDiskonService),
+                        str_replace(",", '', $req->totalService),
                     ];
                     $description = [
                         'Kas Pelunasan Service '.$req->totalPayment. ' '. $kode,
