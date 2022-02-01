@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\accountMain;
 use App\Models\User;
+use App\Models\AccountMain;
 use App\Models\Item;
 use App\Models\Type;
 use App\Models\Brand;
