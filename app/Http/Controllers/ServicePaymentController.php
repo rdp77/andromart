@@ -59,8 +59,11 @@ class ServicePaymentController extends Controller
                             data-toggle="dropdown">
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>';
-                    $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('service-payment.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
+                    $actionBtn .=
+                        '<div class="dropdown-menu">
+                            <a class="dropdown-item" href="' .
+                        route('service-payment.edit', $row->id) .
+                        '"><i class="far fa-edit"></i> Edit</a>';
                     $actionBtn .= '<a class="dropdown-item" href="' . route('service.printServicePayment', $row->id) . '"><i class="fas fa-print"></i> Print</a>';
                     // $actionBtn .= '<a class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
                     $actionBtn .= '<a onclick="jurnal(' . "'" . $row->code . "'" . ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
@@ -70,10 +73,12 @@ class ServicePaymentController extends Controller
                     return $actionBtn;
                 })
                 ->addColumn('dateData', function ($row) {
-                    return Carbon::parse($row->date)->locale('id')->isoFormat('LL');
+                    return Carbon::parse($row->date)
+                        ->locale('id')
+                        ->isoFormat('LL');
                 })
                 ->addColumn('totalValue', function ($row) {
-                    return number_format($row->total, 0, ".", ",");
+                    return number_format($row->total, 0, '.', ',');
                 })
                 ->addColumn('currentStatus', function ($row) {
                     if ($row->type == 'Lunas') {
@@ -111,22 +116,27 @@ class ServicePaymentController extends Controller
                     }
 
                     $htmlAdd = '<table>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Kode Service</td>';
-                    $htmlAdd .=      '<th>' . $row->Service->code . '</th>';
-                    $htmlAdd .=      '<td>Tgl Service</td>';
-                    $htmlAdd .=      '<th>' . Carbon::parse($row->Service->date)->locale('id')->isoFormat('LL') . '</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>status bayar</td>';
-                    $htmlAdd .=      '<th>' . $paymentStatus . '</th>';
-                    $htmlAdd .=      '<td>status kerja</td>';
-                    $htmlAdd .=      '<th>' . $work_status . '</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Total</td>';
-                    $htmlAdd .=      '<th>' . number_format($row->Service->total_price, 0, ".", ",") . '</th>';
-                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<td>Kode Service</td>';
+                    $htmlAdd .= '<th>' . $row->Service->code . '</th>';
+                    $htmlAdd .= '<td>Tgl Service</td>';
+                    $htmlAdd .=
+                        '<th>' .
+                        Carbon::parse($row->Service->date)
+                            ->locale('id')
+                            ->isoFormat('LL') .
+                        '</th>';
+                    $htmlAdd .= '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<td>status bayar</td>';
+                    $htmlAdd .= '<th>' . $paymentStatus . '</th>';
+                    $htmlAdd .= '<td>status kerja</td>';
+                    $htmlAdd .= '<th>' . $work_status . '</th>';
+                    $htmlAdd .= '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<td>Total</td>';
+                    $htmlAdd .= '<th>' . number_format($row->Service->total_price, 0, '.', ',') . '</th>';
+                    $htmlAdd .= '</tr>';
                     $htmlAdd .= '<table>';
 
                     return $htmlAdd;
@@ -140,7 +150,9 @@ class ServicePaymentController extends Controller
 
     public function code($type, $id)
     {
-        $getEmployee =  Employee::with('branch')->where('user_id', Auth::user()->id)->first();
+        $getEmployee = Employee::with('branch')
+            ->where('user_id', Auth::user()->id)
+            ->first();
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
         $index = str_pad($id, 3, '0', STR_PAD_LEFT);
@@ -148,7 +160,9 @@ class ServicePaymentController extends Controller
     }
     public function codeJournals($type, $id)
     {
-        $getEmployee =  Employee::with('branch')->where('user_id', Auth::user()->id)->first();
+        $getEmployee = Employee::with('branch')
+            ->where('user_id', Auth::user()->id)
+            ->first();
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
         $index = str_pad($id, 3, '0', STR_PAD_LEFT);
@@ -161,14 +175,16 @@ class ServicePaymentController extends Controller
             return view('forbidden');
         }
         $id = DB::table('service_payment')->max('id') + 1;
-        $code   = $this->code('BYR', $id);
+        $code = $this->code('BYR', $id);
         $employee = Employee::where('user_id', Auth::user()->id)->first();
-        $items  = Item::where('name', '!=', 'Jasa Service')->get();
-        $account  = AccountData::with('AccountMain', 'AccountMainDetail', 'Branch')->get();
+        $items = Item::where('name', '!=', 'Jasa Service')->get();
+        $account = AccountData::with('AccountMain', 'AccountMainDetail', 'Branch')->get();
         $data = Service::where(function ($query) {
             $query->where('payment_status', 'DownPayment');
             $query->orWhere('payment_status', null);
-        })->with('Brand', 'Type', 'ServiceDetail')->get();
+        })
+            ->with('Brand', 'Type', 'ServiceDetail')
+            ->get();
         return view('pages.backend.transaction.servicePayment.createServicePayment', compact('employee', 'code', 'items', 'data', 'account'));
     }
 
@@ -180,11 +196,10 @@ class ServicePaymentController extends Controller
 
         DB::beginTransaction();
         try {
-
             // return $req->all();
             $dateConvert = $this->DashboardController->changeMonthIdToEn($req->date);
             $id = DB::table('service_payment')->max('id') + 1;
-            $getEmployee =  Employee::where('user_id', Auth::user()->id)->first();
+            $getEmployee = Employee::where('user_id', Auth::user()->id)->first();
             $kode = $this->code('BYR', $id);
             ServicePayment::create([
                 'id' => $id,
@@ -192,7 +207,7 @@ class ServicePaymentController extends Controller
                 'user_id' => Auth::user()->id,
                 'service_id' => $req->serviceId,
                 'date' => $dateConvert,
-                'total' => str_replace(",", '', $req->totalPayment),
+                'total' => str_replace(',', '', $req->totalPayment),
                 'type' => $req->type,
                 'payment_method' => $req->paymentMethod,
                 'account' => $req->account,
@@ -204,13 +219,13 @@ class ServicePaymentController extends Controller
                 Service::where('id', $req->serviceId)->update([
                     'payment_status' => $req->type,
                     'downpayment_date' => $dateConvert,
-                    'total_downpayment' => str_replace(",", '', $req->totalPayment),
+                    'total_downpayment' => str_replace(',', '', $req->totalPayment),
                 ]);
             } else {
                 Service::where('id', $req->serviceId)->update([
                     'payment_status' => $req->type,
                     'payment_date' => $dateConvert,
-                    'total_payment' => str_replace(",", '', $req->totalPayment),
+                    'total_payment' => str_replace(',', '', $req->totalPayment),
                 ]);
             }
             // penjurnalan
@@ -221,14 +236,14 @@ class ServicePaymentController extends Controller
                 'year' => date('Y'),
                 'date' => $dateConvert,
                 'type' => 'Pembayaran Service',
-                'total' => str_replace(",", '', $req->totalPayment),
+                'total' => str_replace(',', '', $req->totalPayment),
                 'ref' => $kode,
                 'description' => 'Pembayaran Service ' . $kode,
                 'created_at' => date('Y-m-d h:i:s'),
                 // 'updated_at'=>date('Y-m-d h:i:s'),
             ]);
             if ($req->type == 'DownPayment') {
-                $accountData  = AccountData::where('branch_id', $getEmployee->branch_id)
+                $accountData = AccountData::where('branch_id', $getEmployee->branch_id)
                     ->where('active', 'Y')
                     ->where('main_id', 4)
                     ->where('main_detail_id', 4)
@@ -238,25 +253,11 @@ class ServicePaymentController extends Controller
                     return Response::json(['status' => 'error', 'message' => 'Akun Pembayaran Dimuka Kosong']);
                 }
 
-                $accountPembayaran  = AccountData::where('id', $req->account)
-                    ->first();
-                $accountCode = [
-                    $accountPembayaran->id,
-                    $accountData->id,
-                ];
-                $totalBayar = [
-                    str_replace(",", '', $req->totalPayment),
-                    str_replace(",", '', $req->totalPayment),
-                ];
-                $description = [
-                    'Down Payment Service ' . $kode,
-                    'Down Payment Service ' . $kode,
-                ];
-                $DK = [
-                    'D',
-                    'K',
-                ];
-
+                $accountPembayaran = AccountData::where('id', $req->account)->first();
+                $accountCode = [$accountPembayaran->id, $accountData->id];
+                $totalBayar = [str_replace(',', '', $req->totalPayment), str_replace(',', '', $req->totalPayment)];
+                $description = ['Down Payment Service ' . $kode, 'Down Payment Service ' . $kode];
+                $DK = ['D', 'K'];
 
                 for ($i = 0; $i < count($accountCode); $i++) {
                     $idDetail = DB::table('journal_details')->max('id') + 1;
@@ -278,7 +279,7 @@ class ServicePaymentController extends Controller
                     ->where('type', 'DownPayment')
                     ->first();
 
-                $accountDimuka  = AccountData::where('branch_id', $getEmployee->branch_id)
+                $accountDimuka = AccountData::where('branch_id', $getEmployee->branch_id)
                     ->where('active', 'Y')
                     ->where('main_id', 4)
                     ->where('main_detail_id', 4)
@@ -289,81 +290,43 @@ class ServicePaymentController extends Controller
                     return Response::json(['status' => 'error', 'message' => 'Akun Pembayaran Dimuka Kosong']);
                 }
 
-
-                $accountService  = AccountData::where('branch_id', $getEmployee->branch_id)
+                $accountService = AccountData::where('branch_id', $getEmployee->branch_id)
                     ->where('active', 'Y')
                     ->where('main_id', 5)
                     ->where('main_detail_id', 6)
                     ->first();
 
-                $accountJasa  = AccountData::where('branch_id', $getEmployee->branch_id)
+                $accountJasa = AccountData::where('branch_id', $getEmployee->branch_id)
                     ->where('active', 'Y')
                     ->where('main_id', 5)
                     ->where('main_detail_id', 5)
                     ->first();
 
-                $accountDiskon  = AccountData::where('branch_id', $getEmployee->branch_id)
+                $accountDiskon = AccountData::where('branch_id', $getEmployee->branch_id)
                     ->where('active', 'Y')
                     ->where('main_id', 8)
                     ->where('main_detail_id', 31)
                     ->first();
 
-                $accountPembayaran  = AccountData::where('id', $req->account)
-                    ->first();
+                $accountPembayaran = AccountData::where('id', $req->account)->first();
 
-                if (str_replace(",", '', $req->totalDiscountValue) == 0) {
-                    $accountCode = [
-                        $accountPembayaran->id,
-                        $accountService->id,
-                        $accountJasa->id,
-                    ];
-                    $totalBayar = [
-                        str_replace(",", '', $req->totalPayment),
-                        str_replace(",", '', $req->totalSparePart),
-                        str_replace(",", '', $req->totalService),
-                    ];
-                    $description = [
-                        'Kas Pelunasan Service ' . $kode,
-                        'Pendapatan SparePart Pelunasan Service ' . $kode,
-                        'Pendapatan Jasa Service Pelunasan Service ' . $kode,
-                    ];
-                    $DK = [
-                        'D',
-                        'K',
-                        'K',
-                    ];
+                if (str_replace(',', '', $req->totalDiscountValue) == 0) {
+                    $accountCode = [$accountPembayaran->id, $accountService->id, $accountJasa->id];
+                    $totalBayar = [str_replace(',', '', $req->totalPayment), str_replace(',', '', $req->totalSparePart), str_replace(',', '', $req->totalService)];
+                    $description = ['Kas Pelunasan Service ' . $kode, 'Pendapatan SparePart Pelunasan Service ' . $kode, 'Pendapatan Jasa Service Pelunasan Service ' . $kode];
+                    $DK = ['D', 'K', 'K'];
                 } else {
-                    $accountCode = [
-                        $accountPembayaran->id,
-                        $accountDiskon->id,
-                        $accountService->id,
-                        $accountJasa->id,
-                    ];
-                    $totalBayar = [
-                        str_replace(",", '', $req->totalPayment),
-                        str_replace(",", '', $req->totalDiscountValue),
-                        str_replace(",", '', $req->totalSparePart),
-                        str_replace(",", '', $req->totalService),
-                    ];
-                    $description = [
-                        'Kas Pelunasan Service '.$req->totalPayment. ' '. $kode,
-                        'Diskon Pelunasan Service ' . $kode,
-                        'Pendapatan SparePart Pelunasan Service ' . $kode,
-                        'Pendapatan Jasa Service Pelunasan Service ' . $kode,
-                    ];
-                    $DK = [
-                        'D',
-                        'D',
-                        'K',
-                        'K',
-                    ];
+                    $accountCode = [$accountPembayaran->id, $accountDiskon->id, $accountService->id, $accountJasa->id];
+                    $totalBayar = [str_replace(',', '', $req->totalPayment), str_replace(',', '', $req->totalDiscountValue), str_replace(',', '', $req->totalSparePart), str_replace(',', '', $req->totalService)];
+                    $description = ['Kas Pelunasan Service ' . $req->totalPayment . ' ' . $kode, 'Diskon Pelunasan Service ' . $kode, 'Pendapatan SparePart Pelunasan Service ' . $kode, 'Pendapatan Jasa Service Pelunasan Service ' . $kode];
+                    $DK = ['D', 'D', 'K', 'K'];
                 }
 
                 if ($checkService != null) {
                     array_unshift($accountCode, $accountDimuka->id);
-                    array_unshift($totalBayar, str_replace(",", '', $checkService->total));
+                    array_unshift($totalBayar, str_replace(',', '', $checkService->total));
                     array_unshift($description, $req->description);
-                    array_unshift($DK, "D");
+                    array_unshift($DK, 'D');
                 }
 
                 for ($i = 0; $i < count($accountCode); $i++) {
@@ -382,63 +345,54 @@ class ServicePaymentController extends Controller
                     }
                 }
 
+                // return [$dateConvert];
 
                 //Jurnal HPP
-                $idJournalHpp = DB::table('journals')->max('id') + 1;
-                Journal::create([
-                    'id' => $idJournalHpp,
-                    'code' => $this->code('KK', $idJournalHpp),
-                    'year' => date('Y'),
-                    'date' => $dateConvert,
-                    'type' => 'Biaya',
-                    'total' => str_replace(",", '', $req->totalHpp),
-                    'ref' => $kode,
-                    'description' => 'HPP ' . $kode,
-                    'created_at' => date('Y-m-d h:i:s'),
-                ]);
+                if (isset($req->totalHpp)) {
+                    $idJournalHpp = DB::table('journals')->max('id') + 1;
+                    Journal::create([
+                        'id' => $idJournalHpp,
+                        'code' => $this->code('KK', $idJournalHpp),
+                        'year' => date('Y'),
+                        'date' => $dateConvert,
+                        'type' => 'Biaya',
+                        'total' => str_replace(',', '', $req->totalHpp),
+                        'ref' => $kode,
+                        'description' => 'HPP ' . $kode,
+                        'created_at' => date('Y-m-d h:i:s'),
+                    ]);
 
-                $accountPersediaan  = AccountData::where('branch_id', $getEmployee->branch_id)
-                    ->where('active', 'Y')
-                    ->where('main_id', 3)
-                    ->where('main_detail_id', 11)
-                    ->first();
+                    $accountPersediaan = AccountData::where('branch_id', $getEmployee->branch_id)
+                        ->where('active', 'Y')
+                        ->where('main_id', 3)
+                        ->where('main_detail_id', 11)
+                        ->first();
 
-                $accountBiayaHpp  = AccountData::where('branch_id', $getEmployee->branch_id)
-                    ->where('active', 'Y')
-                    ->where('main_id', 7)
-                    ->where('main_detail_id', 29)
-                    ->first();
-                // JURNAL HPP
-                $accountCodeHpp = [
-                    $accountBiayaHpp->id,
-                    $accountPersediaan->id,
-                ];
-                // return $accountCodeHpp;
-                $totalHpp = [
-                    str_replace(",", '', $req->totalHpp),
-                    str_replace(",", '', $req->totalHpp),
-                ];
-                $descriptionHpp = [
-                    'Pengeluaran Harga Pokok Penjualan ' . $kode,
-                    'Biaya Harga Pokok Penjualan' . $kode,
-                ];
-                $DKHpp = [
-                    'D',
-                    'K',
-                ];
-                for ($i = 0; $i < count($accountCodeHpp); $i++) {
-                    if ($totalHpp[$i] != 0) {
-                        $idDetailhpp = DB::table('journal_details')->max('id') + 1;
-                        JournalDetail::create([
-                            'id' => $idDetailhpp,
-                            'journal_id' => $idJournalHpp,
-                            'account_id' => $accountCodeHpp[$i],
-                            'total' => $totalHpp[$i],
-                            'description' => $descriptionHpp[$i],
-                            'debet_kredit' => $DKHpp[$i],
-                            'created_at' => date('Y-m-d h:i:s'),
-                            'updated_at' => date('Y-m-d h:i:s'),
-                        ]);
+                    $accountBiayaHpp = AccountData::where('branch_id', $getEmployee->branch_id)
+                        ->where('active', 'Y')
+                        ->where('main_id', 7)
+                        ->where('main_detail_id', 29)
+                        ->first();
+                    // JURNAL HPP
+                    $accountCodeHpp = [$accountBiayaHpp->id, $accountPersediaan->id];
+                    // return $accountCodeHpp;
+                    $totalHpp = [str_replace(',', '', $req->totalHpp), str_replace(',', '', $req->totalHpp)];
+                    $descriptionHpp = ['Pengeluaran Harga Pokok Penjualan ' . $kode, 'Biaya Harga Pokok Penjualan' . $kode];
+                    $DKHpp = ['D', 'K'];
+                    for ($i = 0; $i < count($accountCodeHpp); $i++) {
+                        if ($totalHpp[$i] != 0) {
+                            $idDetailhpp = DB::table('journal_details')->max('id') + 1;
+                            JournalDetail::create([
+                                'id' => $idDetailhpp,
+                                'journal_id' => $idJournalHpp,
+                                'account_id' => $accountCodeHpp[$i],
+                                'total' => $totalHpp[$i],
+                                'description' => $descriptionHpp[$i],
+                                'debet_kredit' => $DKHpp[$i],
+                                'created_at' => date('Y-m-d h:i:s'),
+                                'updated_at' => date('Y-m-d h:i:s'),
+                            ]);
+                        }
                     }
                 }
             }
@@ -451,9 +405,6 @@ class ServicePaymentController extends Controller
             return Response::json(['status' => 'error', 'message' => 'Error Hubungi Mas Rizal Taufiq']);
         }
 
-
-
-
         // if($req->verificationPrice == 'N'){
         // echo 'menjurnal';
 
@@ -463,7 +414,6 @@ class ServicePaymentController extends Controller
         //     $req->ip(),
         //     'Membuat Dana Kredit Pagu per PDL'
         // );
-
     }
 
     public function edit($id)
@@ -513,14 +463,14 @@ class ServicePaymentController extends Controller
         }
         DB::beginTransaction();
         try {
-            $this->DashboardController->createLog(
-                $req->header('user-agent'),
-                $req->ip(),
-                'Menghapus Data Kredit'
-            );
-            $checkServicePayment = DB::table('service_payment')->where('id', $id)->first();
+            $this->DashboardController->createLog($req->header('user-agent'), $req->ip(), 'Menghapus Data Kredit');
+            $checkServicePayment = DB::table('service_payment')
+                ->where('id', $id)
+                ->first();
             $checkService = Service::where('id', $checkServicePayment->service_id)->first();
-            $checkJournals = DB::table('journals')->where('ref', $checkServicePayment->code)->get();
+            $checkJournals = DB::table('journals')
+                ->where('ref', $checkServicePayment->code)
+                ->get();
             if ($checkServicePayment->type == 'Lunas') {
                 $checkServicePaymentDP = DB::table('service_payment')
                     ->where('service_id', $checkService->id)
@@ -540,7 +490,6 @@ class ServicePaymentController extends Controller
                     ]);
                 }
             } else {
-
                 $checkServicePaymentLunas = DB::table('service_payment')
                     ->where('service_id', $checkService->id)
                     ->where('type', 'Lunas')
@@ -556,22 +505,32 @@ class ServicePaymentController extends Controller
                 ]);
             }
 
-
-
-            DB::table('service_payment')->where('id', $id)->delete();
-            if(isset($checkJournals)){
-                if($checkServicePayment->type == 'Lunas'){
-                    DB::table('journals')->where('id', $checkJournals[0]->id)->delete();
-                    DB::table('journals')->where('id', $checkJournals[1]->id)->delete();
-                    DB::table('journal_details')->where('journal_id', $checkJournals[0]->id)->delete();
-                    DB::table('journal_details')->where('journal_id', $checkJournals[1]->id)->delete();
-                }else{
-                    DB::table('journals')->where('id', $checkJournals[0]->id)->delete();
-                    DB::table('journal_details')->where('journal_id', $checkJournals[0]->id)->delete();
+            DB::table('service_payment')
+                ->where('id', $id)
+                ->delete();
+            if (isset($checkJournals)) {
+                if ($checkServicePayment->type == 'Lunas') {
+                    DB::table('journals')
+                        ->where('id', $checkJournals[0]->id)
+                        ->delete();
+                    DB::table('journals')
+                        ->where('id', $checkJournals[1]->id)
+                        ->delete();
+                    DB::table('journal_details')
+                        ->where('journal_id', $checkJournals[0]->id)
+                        ->delete();
+                    DB::table('journal_details')
+                        ->where('journal_id', $checkJournals[1]->id)
+                        ->delete();
+                } else {
+                    DB::table('journals')
+                        ->where('id', $checkJournals[0]->id)
+                        ->delete();
+                    DB::table('journal_details')
+                        ->where('journal_id', $checkJournals[0]->id)
+                        ->delete();
                 }
-
             }
-
 
             DB::commit();
             return Response::json(['status' => 'success', 'message' => 'Data Terhapus']);
@@ -584,7 +543,9 @@ class ServicePaymentController extends Controller
 
     public function serviceCheckJournals(Request $req)
     {
-        $data = Journal::with('JournalDetail.AccountData')->where('ref', $req->id)->get();
+        $data = Journal::with('JournalDetail.AccountData')
+            ->where('ref', $req->id)
+            ->get();
         return Response::json(['status' => 'success', 'jurnal' => $data]);
     }
     public function printServicePayment($id)
