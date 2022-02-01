@@ -69,7 +69,6 @@ class ReportIncomeStatementController extends Controller
         $jurnalSebelumnya = Journal::with('JournalDetail', 'JournalDetail.AccountData')
             ->get();
 
-        $account = accountMain::with('accountMainDetail', 'accountMainDetail.accountData')->get();
         $accountData = accountData::get();
         $branch = Branch::get();
         // return $account;
@@ -190,7 +189,6 @@ class ReportIncomeStatementController extends Controller
         $jurnalSebelumnya = Journal::with('JournalDetail', 'JournalDetail.AccountData')
             ->get();
 
-        $account = accountMain::with('accountMainDetail', 'accountMainDetail.accountData')->get();
         $accountData = accountData::get();
         $branch = Branch::get();
         // return $account;
