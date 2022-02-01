@@ -513,15 +513,19 @@ class ServicePaymentController extends Controller
                     DB::table('journals')
                         ->where('id', $checkJournals[0]->id)
                         ->delete();
-                    DB::table('journals')
-                        ->where('id', $checkJournals[1]->id)
-                        ->delete();
+                    
+                    
                     DB::table('journal_details')
                         ->where('journal_id', $checkJournals[0]->id)
                         ->delete();
-                    DB::table('journal_details')
+                        if (isset($checkJournals[1])) {
+                        DB::table('journals')
+                        ->where('id', $checkJournals[1]->id)
+                        ->delete();
+                        DB::table('journal_details')
                         ->where('journal_id', $checkJournals[1]->id)
                         ->delete();
+                    }
                 } else {
                     DB::table('journals')
                         ->where('id', $checkJournals[0]->id)
