@@ -29,7 +29,7 @@ class accountMainDetail extends Model
     }
     public function accountData()
     {
-        return $this->hasMany('App\Models\accountData', 'main_detail_id', 'id');
+        return $this->hasMany('App\Models\AccountData', 'main_detail_id', 'id');
     }
     
 }
