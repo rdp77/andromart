@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\accountMain;
+use App\Models\AccountMain;
 use App\Models\User;
 use App\Models\Item;
 use App\Models\Type;
@@ -25,7 +25,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 use Carbon\carbon;
-use App\Models\accountData;
+use App\Models\AccountData;
 use App\Models\Branch;
 
 // use DB;
@@ -66,8 +66,8 @@ class ReportPeriodicController extends Controller
             ->where('date', '<=', date('Y-m-01', strtotime($dateParams)))
             ->get();
 
-        $account = accountMain::with('accountMainDetail','accountMainDetail.accountData')->get();
-        $accountData = accountData::get();
+        $account = AccountMain::with('accountMainDetail','accountMainDetail.accountData')->get();
+        $accountData = AccountData::get();
         $branch = Branch::get();
         // return $account;
         // return $accountData;
