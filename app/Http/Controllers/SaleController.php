@@ -465,7 +465,7 @@ class SaleController extends Controller
             // return [$accountCode,$totalBayar,$description];
             // return [$descriptionHpp,$total_hpp,$DKHpp];
             DB::commit();
-            // return Response::json(['status' => 'success', 'message' => 'Data Tersimpan', 'id' => $id] );
+            return Response::json(['status' => 'success', 'message' => 'Data Tersimpan', 'id' => $id] );
         } catch (\Throwable $th) {
             DB::rollback();
             // return $th;
