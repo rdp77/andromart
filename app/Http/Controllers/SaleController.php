@@ -460,7 +460,7 @@ class SaleController extends Controller
                 }
             }
 
-            DB::rollback();
+            // DB::rollback();
             // return $req->all();
             // return [$accountCode,$totalBayar,$description];
             // return [$descriptionHpp,$total_hpp,$DKHpp];
