@@ -462,7 +462,7 @@ class SaleController extends Controller
 
             DB::rollback();
             // return $req->all();
-            return [$accountCode,$totalBayar,$description];
+            // return [$accountCode,$totalBayar,$description];
             // return [$descriptionHpp,$total_hpp,$DKHpp];
             DB::commit();
             // return Response::json(['status' => 'success', 'message' => 'Data Tersimpan', 'id' => $id] );
