@@ -20,12 +20,11 @@ function checkData() {
     var jurnalDetailK = [];
     var jurnalDetailTransaksi = [];
 
-    var totalPengeluaran = 0;
-    var totalPendapatan = 0;
+
     $(".dropHere").empty();
     $.ajax({
         url: "/finance/report/search-report-income-spending",
-        data: { dateS: dateS, dateE: dateE, tipe: tipe , cabang: cabang},
+        data: { dateS: dateS, dateE: dateE, tipe: tipe, cabang: cabang },
         type: "POST",
         success: function (data) {
             if (data.status == "success") {
@@ -33,90 +32,212 @@ function checkData() {
                 if (data.message == "empty") {
                     $(".dropHere").empty();
                 } else {
+                    var totalPengeluaran = 0;
+                    var totalPendapatan = 0;
                     $.each(data.result, function (index, value) {
-                        if (value.code.includes("KK")) {
-                            totalPengeluaran += value.total;
-                        } else {
-                            totalPendapatan += value.total;
-                        }
-
-                        $.each(value.journal_detail, function (index1, value1) {
-
-                            // if (value.journal_detail[1].account_data.name.includes('Transfer / Setoran')) {
-
-                            //     jurnalDetailTransaksi[index] =
-                            //     "<b>" +
-                            //     value.journal_detail[1].account_data.code +
-                            //     "</b><br>" +
-                            //     value.journal_detail[1].account_data.name;
-                            
-                            // }else{
-                            
-                                jurnalDetailTransaksi[index] =
-                                "<b>" +
-                                value.journal_detail[0].account_data.code +
-                                "</b><br>" +
-                                value.journal_detail[0].account_data.name;
-                            
-                            // }
-                            
-
-                            if (value.code.includes("DD")) {
-                                jurnalDetailD[index] =
-                                    " Rp. " +
-                                    parseInt(
-                                        value.journal_detail[0].total
-                                    ).toLocaleString("en-US");
+                        if (data.tipe == "Pengeluaran") {
+                            $.each(
+                                value.journal_detail,
+                                function (index1, value1) {
+                                    jurnalDetailTransaksi[index] =
+                                        "<b>" +
+                                        value.journal_detail[0].account_data
+                                            .code +
+                                        "</b><br>" +
+                                        value.journal_detail[0].account_data
+                                            .name;
+                                    if (value.code.includes("DD")) {
+                                        jurnalDetailD[index] = " Rp. 0";
+                                    } else {
+                                        jurnalDetailK[index] =
+                                            " Rp. " +
+                                            parseInt(
+                                                value.journal_detail[0].total
+                                            ).toLocaleString("en-US");
+                                    }
+                                }
+                            );
+                            if (jurnalDetailK[index] == undefined) {
+                                var jurnalDetailKReal = "";
                             } else {
-                                jurnalDetailK[index] =
-                                    " Rp. " +
-                                    parseInt(
-                                        value.journal_detail[0].total
-                                    ).toLocaleString("en-US");
+                                var jurnalDetailKReal = jurnalDetailK[index];
                             }
-                        });
+                            if (jurnalDetailD[index] == undefined) {
+                                var jurnalDetailDReal = "";
+                            } else {
+                                var jurnalDetailDReal = "";
+                            }
+                            if (value.code.includes("KK")) {
+                                totalPengeluaran += value.total;
 
-                        if (jurnalDetailD[index] == undefined) {
-                            var jurnalDetailDReal = "";
+                                $(".dropHere").append(
+                                    "<tr>" +
+                                        "<td><b>" +
+                                        value.code +
+                                        "</b><br>" +
+                                        value.type +
+                                        "</td>" +
+                                        "<td><b>" +
+                                        moment(value.date).format(
+                                            "DD MMMM YYYY"
+                                        ) +
+                                        "</b></td>" +
+                                        "<td><b>" +
+                                        value.ref +
+                                        "</b><br>" +
+                                        value.description +
+                                        "</td>" +
+                                        "<td>" +
+                                        jurnalDetailTransaksi[index] +
+                                        "</td>" +
+                                        "<td><b>" +
+                                        jurnalDetailDReal +
+                                        "</b></td>" +
+                                        "<td><b>" +
+                                        jurnalDetailKReal +
+                                        "</b></td>" +
+                                        "</tr>"
+                                );
+                            } else {
+                                totalPendapatan += 0;
+                            }
+                        } else if (data.tipe == "Pemasukan") {
+                            $.each(
+                                value.journal_detail,
+                                function (index1, value1) {
+                                    jurnalDetailTransaksi[index] =
+                                        "<b>" +
+                                        value.journal_detail[0].account_data
+                                            .code +
+                                        "</b><br>" +
+                                        value.journal_detail[0].account_data
+                                            .name;
+                                    if (value.code.includes("DD")) {
+                                        jurnalDetailD[index] =
+                                            " Rp. " +
+                                            parseInt(
+                                                value.journal_detail[0].total
+                                            ).toLocaleString("en-US");
+                                    } else {
+                                        jurnalDetailK[index] = " Rp. 0";
+                                    }
+                                }
+                            );
+                            if (jurnalDetailD[index] == undefined) {
+                                var jurnalDetailDReal = "";
+                            } else {
+                                var jurnalDetailDReal = jurnalDetailD[index];
+                            }
+                            if (jurnalDetailK[index] == undefined) {
+                                var jurnalDetailKReal = "";
+                            } else {
+                                var jurnalDetailKReal = "";
+                            }
+                            if (value.code.includes("KK")) {
+                                totalPengeluaran += 0;
+                            } else {
+                                totalPendapatan += value.total;
+                                $(".dropHere").append(
+                                    "<tr>" +
+                                        "<td><b>" +
+                                        value.code +
+                                        "</b><br>" +
+                                        value.type +
+                                        "</td>" +
+                                        "<td><b>" +
+                                        moment(value.date).format(
+                                            "DD MMMM YYYY"
+                                        ) +
+                                        "</b></td>" +
+                                        "<td><b>" +
+                                        value.ref +
+                                        "</b><br>" +
+                                        value.description +
+                                        "</td>" +
+                                        "<td>" +
+                                        jurnalDetailTransaksi[index] +
+                                        "</td>" +
+                                        "<td><b>" +
+                                        jurnalDetailDReal +
+                                        "</b></td>" +
+                                        "<td><b>" +
+                                        jurnalDetailKReal +
+                                        "</b></td>" +
+                                        "</tr>"
+                                );
+                            }
                         } else {
-                            var jurnalDetailDReal = jurnalDetailD[index];
-                        }
+                            $.each(
+                                value.journal_detail,
+                                function (index1, value1) {
+                                    jurnalDetailTransaksi[index] =
+                                        "<b>" +
+                                        value.journal_detail[0].account_data
+                                            .code +
+                                        "</b><br>" +
+                                        value.journal_detail[0].account_data
+                                            .name;
 
-                        if (jurnalDetailK[index] == undefined) {
-                            var jurnalDetailKReal = "";
-                        } else {
-                            var jurnalDetailKReal = jurnalDetailK[index];
+                                            
+                                    if (value.code.includes("DD")) {
+                                        jurnalDetailD[index] =
+                                            " Rp. " +
+                                            parseInt(
+                                                value.journal_detail[0].total
+                                            ).toLocaleString("en-US");
+                                    } else {
+                                        jurnalDetailK[index] =
+                                            " Rp. " +
+                                            parseInt(
+                                                value.journal_detail[0].total
+                                            ).toLocaleString("en-US");
+                                    }
+                                }
+                            );
+                            if (jurnalDetailD[index] == undefined) {
+                                var jurnalDetailDReal = "";
+                            } else {
+                                var jurnalDetailDReal = jurnalDetailD[index];
+                            }
+
+                            if (jurnalDetailK[index] == undefined) {
+                                var jurnalDetailKReal = "";
+                            } else {
+                                var jurnalDetailKReal = jurnalDetailK[index];
+                            }
+                            if (value.code.includes("KK")) {
+                                totalPengeluaran += value.total;
+                            } else {
+                                totalPendapatan += value.total;
+                            }
+                            
+                            $(".dropHere").append(
+                                "<tr>" +
+                                    "<td><b>" +
+                                    value.code +
+                                    "</b><br>" +
+                                    value.type +
+                                    "</td>" +
+                                    "<td><b>" +
+                                    moment(value.date).format("DD MMMM YYYY") +
+                                    "</b></td>" +
+                                    "<td><b>" +
+                                    value.ref +
+                                    "</b><br>" +
+                                    value.description +
+                                    "</td>" +
+                                    "<td>" +
+                                    jurnalDetailTransaksi[index] +
+                                    "</td>" +
+                                    "<td><b>" +
+                                    jurnalDetailDReal +
+                                    "</b></td>" +
+                                    "<td><b>" +
+                                    jurnalDetailKReal +
+                                    "</b></td>" +
+                                    "</tr>"
+                            );
                         }
-                        
-                        $(".dropHere").append(
-                            "<tr>" +
-                                "<td><b>" +
-                                value.code +
-                                "</b><br>" +
-                                value.type +
-                                "</td>" +
-                                "<td><b>" +
-                                moment(value.date).format("DD MMMM YYYY") +
-                                "</b></td>" +
-                                "<td><b>" +
-                                value.ref +
-                                "</b><br>" +
-                                value.description +
-                                "</td>" +
-                                "<td>" +
-                                jurnalDetailTransaksi[index] +
-                                "</td>" +
-                                "<td><b>" +
-                                jurnalDetailDReal +
-                                "</b></td>" +
-                                "<td><b>" +
-                                jurnalDetailKReal +
-                                "</b></td>" +
-                                // '<td style="vertical-align: top;"><b> Rp. '+
-                                //     parseInt(value.total).toLocaleString('en-US')+
-                                // '</b></td>'+
-                                "</tr>"
-                        );
                     });
 
                     $(".dropPengeluaran").text(
