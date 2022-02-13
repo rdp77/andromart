@@ -171,7 +171,7 @@ function save() {
 }
 
 function print(params) {
-    window.open(params+'/transaction/service/service/'+idSaved);   
+    window.open(params+'/transaction/service/service/'+idSaved);
 }
 
 function updateData(params) {
@@ -246,7 +246,7 @@ function changeDiscount(params) {
 function category() {
     var dataItems = [];
     $('.brand').empty();
-    
+
     var params = $('.type').find(':selected').val();
     $.each($('.brandData'), function(){
         if (params == $(this).data('category')) {
@@ -297,7 +297,7 @@ $(document.body).on("change",".brand",function(){
             },
         },
     });
-    
+
 });
 
 
@@ -469,7 +469,7 @@ $(document.body).on("change",".itemsDetail",function(){
         }
         $('.priceDetail_' + index).val(parseInt(itemPrice).toLocaleString('en-US'));
         var totalItemPrice = itemPrice * itemQty;
-        
+
         $('.priceHpp_' + index).val(parseInt(itemHpp).toLocaleString('en-US'));
         var totalItemHpp = itemHpp * itemQty;
         $('.stock_' + index).val($(this).find(':selected').data('stock'));
