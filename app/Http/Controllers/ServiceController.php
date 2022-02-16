@@ -250,6 +250,39 @@ class ServiceController extends Controller
         return view('pages.backend.transaction.service.indexService');
     }
 
+    public function onProgress()
+    {
+        $branchUser = Auth::user()->employee->branch_id;
+        $technician = Employee::where('branch_id', $branchUser)->get();
+        $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
+        ->whereIn('work_status', ['Proses', 'Manifest'])
+        ->orderBy('id', 'desc')->get();
+
+        return view('pages.backend.transaction.service.onProgressService', compact('technician', 'service'));
+    }
+
+    public function onProgressLoad(Request $req)
+    {
+        if ($req->technician_id == 'x') {
+            $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
+            ->whereIn('work_status', ['Proses', 'Manifest'])
+            ->orderBy('id', 'desc')->get();
+            $progress = Service::where('work_status', 'Proses')->get();
+            $manifest = Service::where('work_status', 'Manifest')->get();
+        } else {
+            $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
+            ->whereIn('work_status', ['Proses', 'Manifest'])
+            ->where('technician_id', $req->technician_id)
+            ->orderBy('id', 'desc')->get();
+            $progress = Service::where('work_status', 'Proses')->where('technician_id', $req->technician_id)->get();
+            $manifest = Service::where('work_status', 'Manifest')->where('technician_id', $req->technician_id)->get();
+        }
+        $tr = count($service);
+        $tprogress = count($progress);
+        $tmanifest = count($manifest);
+        return view('pages.backend.transaction.service.onProgressLoad', compact('service', 'tr', 'tprogress', 'tmanifest'));
+    }
+
     public function code($type)
     {
         $getEmployee =  Employee::with('branch')->where('user_id', Auth::user()->id)->first();
@@ -796,7 +829,7 @@ class ServiceController extends Controller
 
                 'discount_service' => str_replace(",", '', $req->totalService)-str_replace(",", '',$req->totalDiscountValue),
                 'total_hpp' => str_replace(",", '', $req->totalHppAtas),
-                
+
                 // 'total_payment'=>0,
                 // 'total_downpayment'=>0,
                 'total_loss' => str_replace(",", '', $req->totalLoss),

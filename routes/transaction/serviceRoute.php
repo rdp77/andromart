@@ -27,11 +27,19 @@ Route::group(['prefix' => 'transaction'], function () {
             [ServiceController::class, 'serviceFormUpdateStatus']
         )->name('service.serviceFormUpdateStatus');
 
-
         Route::get(
             'traffic-count',
             [ServiceController::class, 'trafficCount']
         )->name('service.trafficCount');
+
+        Route::get(
+            'service-onProgress',
+            [ServiceController::class, 'onProgress']
+        )->name('service.onProgress');
+        Route::post(
+            'service-onProgressLoad',
+            [ServiceController::class, 'onProgressLoad']
+        )->name('service.onProgressLoad');
 
         Route::post(
             'service-form-update-status-load-data',
@@ -52,8 +60,6 @@ Route::group(['prefix' => 'transaction'], function () {
             'service/{id}',
             [ServiceController::class, 'printService']
         )->name('service.printService');
-
-        
 
         Route::resource('service-payment', ServicePaymentController::class);
 
