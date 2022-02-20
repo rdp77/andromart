@@ -110,6 +110,10 @@ class Service extends Model
     {
         return $this->belongsTo('App\Models\Employee', 'technician_id', 'id');
     }
+    public function Warrantys()
+    {
+        return $this->belongsTo('App\Models\Warranty', 'warranty_id', 'id');
+    }
     public function Employee2()
     {
         return $this->belongsTo('App\Models\Employee', 'technician_replacement_id', 'id');
