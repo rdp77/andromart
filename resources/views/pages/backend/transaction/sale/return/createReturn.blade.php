@@ -36,7 +36,7 @@
                             <label class="control-label">
                                 {{ __('Faktur Penjualan')}}<code>*</code>
                             </label>
-                            <select class="select2" name="saleId" id="saleId" onchange="itemId('{{ csrf_token() }}','{{ route('sale.return.loadDataItem') }}', '#itemOldDiv')">
+                            <select class="select2" name="saleId" id="saleId" onchange="itemId('{{ csrf_token() }}','{{ route('sale.return.loadDataItem') }}', '#itemOld')">
                                 <option value="">{{ __('- Select -') }}</option>
                                 @foreach ($sale as $i)
                                 <option value="{{ $i->id }}">
@@ -49,11 +49,11 @@
                     <div class="row">
                         <div class="form-group col-md-8 col-xs-12" id="itemOldDiv">
                             <label for="itemOld">{{ __('Barang') }}</label><code>*</code>
-                            <select class="select2" name="itemOld" id="itemOld">
+                            <select class="select2" name="itemOld" id="itemOld" onchange="itemAll('{{ csrf_token() }}','{{ route('sale.return.loadDataItemAll') }}', '#qtyForm')">
                                 <option value="">{{ __('- Select -') }}</option>
                             </select>
                         </div>
-                        <div class="form-group col-md-4 col-xs-12">
+                        <div class="form-group col-md-4 col-xs-12" id="qtyForm">
                             <label for="">{{ __('Qty') }}</label><code>*</code>
                             <input class="form-control" type="text" value="1" readonly="">
                         </div>
@@ -70,14 +70,14 @@
                             {{-- <textarea data-name="Deskripsi" name="description" class="form-control" id="description"
                                 style="height: 50px"></textarea> --}}
                         </div>
-                        <div class="form-group col-md-4 col-xs-12">
+                        <div class="form-group col-md-4 col-xs-12" id="tindakanSelect">
                             <label for="type">{{ __('Tindakan') }}</label><code>*</code>
-                            <select name="type" id="type" class="select2">
+                            <select name="type" id="type" class="select2" onchange="tindakan()">
                                 <option value="">{{ __('- Select -') }}</option>
-                                <option value="">{{ __('Ganti uang') }}</option>
-                                <option value="">{{ __('Ganti barang serupa') }}</option>
-                                <option value="">{{ __('Tukar tambah') }}</option>
-                                <option value="">{{ __('Servis') }}</option>
+                                <option value="1">{{ __('Ganti uang') }}</option>
+                                <option value="2">{{ __('Ganti barang serupa') }}</option>
+                                <option value="3">{{ __('Tukar tambah') }}</option>
+                                <option value="4">{{ __('Servis') }}</option>
                             </select>
                         </div>
                     </div>
@@ -147,7 +147,8 @@
             </div>
         </div>
     </div>
-    <div class="card card-primary">
+    {{ $actionDetail }}
+    <div class="card card-primary" id="dataDetailStyle">
         <div class="card-header">
             <h4>{{ __('Data Detail') }}</h4>
             <div class="card-header-action">
@@ -240,6 +241,7 @@
 @include('pages.backend.transaction.sale.return.components.successModalReturn')
 @endsection
 @section('script')
+<script src="{{ asset('assets/pages/transaction/sale/return/saleReturn.js') }}"></script>
 <script type="text/javascript">
     var loading = `-- sedang memuat data --`;
     var getdata = '{{ route('sale.return.data') }}';
@@ -263,6 +265,24 @@
           $(target).html(data);
       });
     }
+    function itemAll(token, url, target) {
+      // var saleId = document.getElementById("saleId").value;
+      $(target).html(loading);
+      $.post(url, {
+          _token: token,
+      },
+      function (data) {
+          console.log(data);
+          $(target).html(data);
+      });
+    }
+    // function tindakan() {
+    //     var selected = document.getElementById("type").selectedIndex;
+    //     if(selected == 1){
+    //         document.getElementById("dataDetailStyle").style.visibility = "hidden";
+    //     } else {
+    //         document.getElementById("dataDetailStyle").style.visibility = "visible";
+    //     }
+    // }
 </script>
-<script src="{{ asset('assets/pages/transaction/sale/return/saleReturn.js') }}"></script>
 @endsection

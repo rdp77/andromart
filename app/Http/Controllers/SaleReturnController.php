@@ -123,6 +123,7 @@ class SaleReturnController extends Controller
         // $cash = Cash::get();
         // $customer = Customer::where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
         $stock = Stock::where('branch_id', '=', $userBranch)->where('item_id', '!=', 1)->get();
+        $actionDetail = null;
 
         return view('pages.backend.transaction.sale.return.createReturn', [
             'code' => $code,
@@ -130,6 +131,7 @@ class SaleReturnController extends Controller
             'sale' => $sale,
             'account' => $account,
             'stock' => $stock,
+            'actionDetail' => $actionDetail,
         ]);
     }
 
@@ -137,10 +139,21 @@ class SaleReturnController extends Controller
     {
         $id = $req->saleId;
         $query = Sale::where('id', $id)->with('SaleDetail')->first();
-        return view('pages.backend.transaction.sale.return.loadItemReturn', compact('query'));
+        echo '<option value="">- Select -</option>';
+        foreach ($query->saleDetail as $key => $value) {
+            echo '<option value="'.$value->item_id.'">' . $value->item->brand->name .' '. $value->item->name . '</option>';
+        }
+    }
+    public function loadDataItemAll(Request $req)
+    {
+        dd("masuk");
     }
 
     public function loadDataQty()
+    {
+
+    }
+    public function loadAction()
     {
 
     }
