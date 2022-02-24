@@ -20,11 +20,6 @@ class ReportServiceController extends Controller
         $this->DashboardController = $dashboardController;
     }
 
-    public function index()
-    {
-        //
-    }
-
     public function reportService()
     {
         $branchUser = Auth::user()->employee->branch_id;
@@ -38,7 +33,6 @@ class ReportServiceController extends Controller
             $branch = Branch::where('id', Auth::user()->employee->branch_id)->get();
         }
         $technician = Employee::where('branch_id', $branchUser)->get();
-        // $as = User::where('role_id', '5');
 
         return view('pages.backend.report.reportService',compact('type', 'technician', 'branch'));
     }
@@ -54,8 +48,14 @@ class ReportServiceController extends Controller
         ->where('branch_id', $branchUser)
         ->orderBy('id', 'desc')->get();
 
-        $sumKotor = $data->sum('total_price');
-        $sumBersih = $data->sum('sharing_profit_store');
+        $bayar = Service::with(['Type', 'Brand'])
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('branch_id', $branchUser)
+        ->where('payment_status', 'Lunas')->get();
+
+        $sumKotor = $bayar->sum('total_price');
+        $sumBersih = $bayar->sum('sharing_profit_store');
         $tr = count($data);
 
         return view('pages.backend.report.reportServiceLoad', compact('data', 'tr', 'sumKotor', 'sumBersih'));
@@ -73,8 +73,15 @@ class ReportServiceController extends Controller
         ->where('series', $req->type_id)
         ->orderBy('id', 'desc')->get();
 
-        $sumKotor = $data->sum('total_price');
-        $sumBersih = $data->sum('sharing_profit_store');
+        $bayar = Service::with(['Type', 'Brand'])
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('branch_id', $branchUser)
+        ->where('series', $req->type_id)
+        ->where('payment_status', 'Lunas')->get();
+
+        $sumKotor = $bayar->sum('total_price');
+        $sumBersih = $bayar->sum('sharing_profit_store');
         $tr = count($data);
 
         return view('pages.backend.report.reportServiceLoad', compact('data', 'tr', 'sumKotor', 'sumBersih'));
@@ -90,8 +97,14 @@ class ReportServiceController extends Controller
         ->where('technician_id', $req->technician_id)
         ->orderBy('id', 'desc')->get();
 
-        $sumKotor = $data->sum('total_price');
-        $sumBersih = $data->sum('sharing_profit_store');
+        $bayar = Service::with(['Type', 'Brand'])
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('technician_id', $req->technician_id)
+        ->where('payment_status', 'Lunas')->get();
+
+        $sumKotor = $bayar->sum('total_price');
+        $sumBersih = $bayar->sum('sharing_profit_store');
         $tr = count($data);
 
         return view('pages.backend.report.reportServiceLoad', compact('data', 'tr', 'sumKotor', 'sumBersih'));
@@ -107,11 +120,137 @@ class ReportServiceController extends Controller
         ->where('branch_id', $req->branch_id)
         ->orderBy('id', 'desc')->get();
 
-        $sumKotor = $data->sum('total_price');
-        $sumBersih = $data->sum('sharing_profit_store');
+        $bayar = Service::with(['Type', 'Brand'])
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('branch_id', $req->branch_id)
+        ->where('payment_status', 'Lunas')->get();
+
+        $sumKotor = $bayar->sum('total_price');
+        $sumBersih = $bayar->sum('sharing_profit_store');
         $tr = count($data);
 
         return view('pages.backend.report.reportServiceLoad', compact('data', 'tr', 'sumKotor', 'sumBersih'));
+    }
+
+    public function printPeriode(Request $req)
+    {
+        $title = 'Laporan Service per Periode';
+        $subtitle = ' ';
+        $periode = $req->startDate1. ' - ' .$req->endDate1;
+        $val = ' ';
+        $branchUser = Auth::user()->employee->branch_id;
+        $startDate = $req->startDate1;
+        $endDate = $req->endDate1;
+        $data = Service::with(['Type', 'Brand'])
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('branch_id', $branchUser)
+        ->orderBy('id', 'desc')->get();
+
+        $bayar = Service::with(['Type', 'Brand'])
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('branch_id', $branchUser)
+        ->where('payment_status', 'Lunas')->get();
+
+        $sumKotor = $bayar->sum('total_price');
+        $sumBersih = $bayar->sum('sharing_profit_store');
+        $tr = count($data);
+
+        return view('pages.backend.report.printReportService', compact('data', 'tr', 'sumKotor', 'sumBersih','title', 'subtitle', 'val', 'periode'));
+    }
+
+    public function printSeries (Request $req)
+    {
+        $type = Type::where('id', $req->type_id)->first();
+        $brand = Brand::where('id', $type->brand_id)->first();
+        $title = 'Laporan Service per Series';
+        $subtitle = 'Series';
+        $periode = $req->startDate2. ' - ' .$req->endDate2;
+        $val = $brand->name .' '. $type->name;
+        $branchUser = Auth::user()->employee->branch_id;
+        $startDate = $req->startDate2;
+        $endDate = $req->endDate2;
+        $data = Service::with(['Type', 'Brand'])
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('branch_id', $branchUser)
+        ->where('series', $req->type_id)
+        ->orderBy('id', 'desc')->get();
+
+        $bayar = Service::with(['Type', 'Brand'])
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('branch_id', $branchUser)
+        ->where('series', $req->type_id)
+        ->where('payment_status', 'Lunas')->get();
+
+        $sumKotor = $bayar->sum('total_price');
+        $sumBersih = $bayar->sum('sharing_profit_store');
+        $tr = count($data);
+
+        return view('pages.backend.report.printReportService', compact('data', 'tr', 'sumKotor', 'sumBersih', 'title', 'subtitle', 'val', 'periode'));
+    }
+
+    public function printTechnician (Request $req)
+    {
+        $teknisi = Employee::where('id', $req->technician_id)->first();
+        $title = 'Laporan Service per Teknisi';
+        $subtitle = 'Teknisi';
+        $periode = $req->startDate3. ' - ' .$req->endDate3;
+        $val = $teknisi->name;
+        $branchUser = Auth::user()->employee->branch_id;
+        $startDate = $req->startDate3;
+        $endDate = $req->endDate3;
+        $data = Service::with(['Type', 'Brand'])
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('branch_id', $branchUser)
+        ->where('technician_id', $req->technician_id)
+        ->orderBy('id', 'desc')->get();
+
+        $bayar = Service::with(['Type', 'Brand'])
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('branch_id', $branchUser)
+        ->where('technician_id', $req->technician_id)
+        ->where('payment_status', 'Lunas')->get();
+
+        $sumKotor = $bayar->sum('total_price');
+        $sumBersih = $bayar->sum('sharing_profit_store');
+        $tr = count($data);
+
+        return view('pages.backend.report.printReportService', compact('data', 'tr', 'sumKotor', 'sumBersih', 'title', 'subtitle', 'val', 'periode'));
+    }
+
+    public function printBranch (Request $req)
+    {
+        $branch = Branch::where('id', $req->branch_id)->first();
+        $title = 'Laporan Service per Cabang';
+        $subtitle = 'Cabang';
+        $periode = $req->startDate4. ' - ' .$req->endDate4;
+        $val = $branch->name;
+        $branchUser = Auth::user()->employee->branch_id;
+        $startDate = $req->startDate4;
+        $endDate = $req->endDate4;
+        $data = Service::with(['Type', 'Brand'])
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('branch_id', $req->branch_id)
+        ->orderBy('id', 'desc')->get();
+
+        $bayar = Service::with(['Type', 'Brand'])
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('branch_id', $req->branch_id)
+        ->where('payment_status', 'Lunas')->get();
+
+        $sumKotor = $bayar->sum('total_price');
+        $sumBersih = $bayar->sum('sharing_profit_store');
+        $tr = count($data);
+
+        return view('pages.backend.report.printReportService', compact('data', 'tr', 'sumKotor', 'sumBersih', 'title', 'subtitle', 'val', 'periode'));
     }
 
     public function dataEmployeeLoad(Request $req)
@@ -141,99 +280,5 @@ class ReportServiceController extends Controller
         }
         return $data;
         return view('pages.backend.report.reportEmployeeServiceLoad', compact('data'));
-    }
-
-    public function printPeriode(Request $req)
-    {
-        $title = 'Laporan Service per Periode';
-        $subtitle = ' ';
-        $periode = $req->startDate1. ' - ' .$req->endDate1;
-        $val = ' ';
-        $branchUser = Auth::user()->employee->branch_id;
-        $startDate = $req->startDate1;
-        $endDate = $req->endDate1;
-        $data = Service::with(['Type', 'Brand'])
-        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
-        ->where('branch_id', $branchUser)
-        ->orderBy('id', 'desc')->get();
-
-        $sumKotor = $data->sum('total_price');
-        $sumBersih = $data->sum('sharing_profit_store');
-        $tr = count($data);
-
-        return view('pages.backend.report.printReportService', compact('data', 'tr', 'sumKotor', 'sumBersih','title', 'subtitle', 'val', 'periode'));
-    }
-
-    public function printSeries (Request $req)
-    {
-        $type = Type::where('id', $req->type_id)->first();
-        $brand = Brand::where('id', $type->brand_id)->first();
-        $title = 'Laporan Service per Series';
-        $subtitle = 'Series';
-        $periode = $req->startDate2. ' - ' .$req->endDate2;
-        $val = $brand->name .' '. $type->name;
-        $branchUser = Auth::user()->employee->branch_id;
-        $startDate = $req->startDate2;
-        $endDate = $req->endDate2;
-        $data = Service::with(['Type', 'Brand'])
-        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
-        ->where('branch_id', $branchUser)
-        ->where('series', $req->type_id)
-        ->orderBy('id', 'desc')->get();
-
-        $sumKotor = $data->sum('total_price');
-        $sumBersih = $data->sum('sharing_profit_store');
-        $tr = count($data);
-
-        return view('pages.backend.report.printReportService', compact('data', 'tr', 'sumKotor', 'sumBersih', 'title', 'subtitle', 'val', 'periode'));
-    }
-
-    public function printTechnician (Request $req)
-    {
-        $teknisi = Employee::where('id', $req->technician_id)->first();
-        $title = 'Laporan Service per Teknisi';
-        $subtitle = 'Teknisi';
-        $periode = $req->startDate3. ' - ' .$req->endDate3;
-        $val = $teknisi->name;
-        $branchUser = Auth::user()->employee->branch_id;
-        $startDate = $req->startDate3;
-        $endDate = $req->endDate3;
-        $data = Service::with(['Type', 'Brand'])
-        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
-        ->where('branch_id', $branchUser)
-        ->where('technician_id', $req->technician_id)
-        ->orderBy('id', 'desc')->get();
-
-        $sumKotor = $data->sum('total_price');
-        $sumBersih = $data->sum('sharing_profit_store');
-        $tr = count($data);
-
-        return view('pages.backend.report.printReportService', compact('data', 'tr', 'sumKotor', 'sumBersih', 'title', 'subtitle', 'val', 'periode'));
-    }
-
-    public function printBranch (Request $req)
-    {
-        $branch = Branch::where('id', $req->branch_id)->first();
-        $title = 'Laporan Service per Cabang';
-        $subtitle = 'Cabang';
-        $periode = $req->startDate4. ' - ' .$req->endDate4;
-        $val = $branch->name;
-        $branchUser = Auth::user()->employee->branch_id;
-        $startDate = $req->startDate4;
-        $endDate = $req->endDate4;
-        $data = Service::with(['Type', 'Brand'])
-        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
-        ->where('branch_id', $req->branch_id)
-        ->orderBy('id', 'desc')->get();
-
-        $sumKotor = $data->sum('total_price');
-        $sumBersih = $data->sum('sharing_profit_store');
-        $tr = count($data);
-
-        return view('pages.backend.report.printReportService', compact('data', 'tr', 'sumKotor', 'sumBersih', 'title', 'subtitle', 'val', 'periode'));
     }
 }

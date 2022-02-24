@@ -1,12 +1,12 @@
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <th width="15%">Tanggal</th>
-            <th width="12%">Faktur</th>
-            <th width="25%">Barang</th>
-            <th width="18%">Akun Kas</th>
-            <th width="15%">Laba Kotor</th>
-            <th width="15%">Laba Bersih</th>
+            <th class="text-center" width="15%">Tanggal</th>
+            <th class="text-center" width="12%">Faktur</th>
+            <th class="text-center" width="25%">Barang</th>
+            <th class="text-center" width="18%">Akun Kas</th>
+            <th class="text-center" width="15%">Laba Kotor</th>
+            <th class="text-center" width="15%">Laba Bersih</th>
         </tr>
     </thead>
     @foreach($data as $key => $value)
