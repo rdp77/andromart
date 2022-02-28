@@ -9,6 +9,13 @@
 @section('content')
 {{-- @include('pages.backend.components.filterSearch') --}}
 @include('layouts.backend.components.notification')
+
+{{-- <style>
+    .areaToPrint{
+        font-size: 10px;
+    }
+</style> --}}
+
 <form class="form-data">
     @csrf
     <section class="section">
@@ -49,7 +56,8 @@
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-12 col-lg-12">
-                            <button class="btn btn-primary" type="button" onclick="checkData()"><i class="fas fa-eye"></i> Cari</button>
+                            <button class="btn btn-primary" style="margin-right: 20px" type="button" onclick="checkData()"><i class="fas fa-eye"></i> Cari</button>
+                            <button class="btn btn-warning" type="button" onclick="printDiv()"><i class="fas fa-print"></i> Cetak</button>
                         </div>
                     </div>
                 </div>
@@ -59,7 +67,7 @@
       <div class="col-12">
         <h2 class="section-title">Total Pendapatan & Pengeluaran</h2>
         <div class="table-responsive">
-          <table class="table table-striped">
+          <table class="table table-striped " id="areaToPrint">
               <thead>
                   <tr>
                       <th>Nama</th>
@@ -88,5 +96,7 @@
 </form>
 @endsection
 @section('script')
+
 <script src="{{ asset('assets/pages/finance/reportIncomeSpending.js') }}"></script>
+
 @endsection
