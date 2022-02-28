@@ -73,8 +73,18 @@ Route::group(['prefix' => 'transaction'], function () {
         )->name('sale.return.loadDataItem');
 
         Route::post(
+            'sale-return-load-data-item-all-id',
+            [SaleReturnController::class, 'loadDataItemAll']
+        )->name('sale.return.loadDataItemAll');
+
+        Route::post(
             'sale-return-load-data-qty',
             [SaleReturnController::class, 'loadDataQty']
         )->name('sale.return.loadDataQty');
+
+        // Route::post(
+        //     'sale-return-load-action',
+        //     [SaleReturnController::class, 'loadAction']
+        // )->name('sale.return.loadDataQty');
     });
 });

@@ -244,6 +244,7 @@ function addItem() {
     //     dataBranches += '<option data-code="'+$(this).data('code')+'" value="'+this.value+'">'+$(this).data('name')+'</option>';
     // });
     var dataDet = dataDetail+1;
+    // console.log('coba ' + dataItems);
     // console.log(dataDet);
     $('.dropHereItem').append(
         '<tr class="dataDetail dataDetail_'+(dataDet)+'">'+
@@ -411,13 +412,13 @@ $(document.body).on("change",".itemsDetail",function(){
         $('.totalPriceDetail_' + index).val(0);
     }else{
         var typeDetail = $('.typeDetail_' + index).find(':selected').val();
-        console.log(typeDetail);
+        // console.log(typeDetail);
         if (isNaN(parseInt($(this).find(':selected').data('price')))) {
             var itemPrice = 0;
         } else {
             var itemPrice = $(this).find(':selected').data('price');
         }
-        console.log(itemPrice);
+        // console.log(itemPrice);
         if (isNaN(parseInt($('.qtyDetail_' + index).val()))) {
             var itemQty = 0;
         } else {
@@ -478,7 +479,7 @@ $(document.body).on("keyup",".priceDetail",function(){
 });
 function sumDiscount() {
     var totalDiscountPercent = $('#totalDiscountPercent').val().replace(/,/g, ''),asANumber = +totalDiscountPercent;
-    console.log(totalDiscountPercent);
+    // console.log(totalDiscountPercent);
     if(totalDiscountPercent > 100){
         document.getElementById("totalDiscountPercent").value = 0;
         alert('Diskon melebihi angka 100%');
