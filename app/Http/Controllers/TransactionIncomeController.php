@@ -31,7 +31,7 @@ class TransactionIncomeController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Income::with('income','branch', 'cash')->get();
+            $data = Income::with('income','branch', 'cash')->orderBy('id','DESC')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('date', function ($row) {

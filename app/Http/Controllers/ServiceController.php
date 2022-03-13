@@ -100,6 +100,10 @@ class ServiceController extends Controller
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Tgl Dibuat</td>';
+                    $htmlAdd .=      '<th>' . Carbon::parse($row->created_at)->locale('id')->isoFormat('LL') . '</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<td>Tgl </td>';
                     $htmlAdd .=      '<th>' . Carbon::parse($row->date)->locale('id')->isoFormat('LL') . '</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';

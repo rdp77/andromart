@@ -209,6 +209,7 @@
                         <div class="section-title" style="font-size: 20px">
                             Pembayaran <b>{{ $service->payment_method }}</b>
                             <br>
+                            {{-- {{$service->Service}} --}}
                             @isset($service->Service->Warrantys)
                                 Garansi <b>{{ $service->Service->Warrantys->periode }}
                                     {{ $service->Service->Warrantys->name }}</b>
