@@ -250,8 +250,8 @@ function addItem() {
             '<input type="text" class="form-control" name="salesDetail[]" value="Penjual" readonly>' +
             "</td>" +
             "<td>" +
-            '<input type="number" class="form-control" name="profitSharingBuyer[]" value="0">' +
-            '<input type="number" class="form-control" name="profitSharingSales[]" value="0">' +
+            '<input type="number" class="form-control" name="profitSharingBuyer[]" max="50" value="0">' +
+            '<input type="number" class="form-control" name="profitSharingSales[]" max="50" value="0">' +
             "</td>" +
             "<td>" +
             '<input type="text" class="form-control cleaveNumeral profitDetail profitDetail_' +

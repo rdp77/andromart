@@ -255,10 +255,16 @@ class ServiceController extends Controller
         $branchUser = Auth::user()->employee->branch_id;
         $technician = Employee::where('branch_id', $branchUser)->get();
         $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
+        ->where('branch_id', $branchUser)
         ->whereIn('work_status', ['Proses', 'Manifest'])
         ->orderBy('id', 'desc')->get();
+        $progress = Service::where('work_status', 'Proses')->where('branch_id', $branchUser)->get();
+        $manifest = Service::where('work_status', 'Manifest')->where('branch_id', $branchUser)->get();
+        $tr = count($service);
+        $tprogress = count($progress);
+        $tmanifest = count($manifest);
 
-        return view('pages.backend.transaction.service.onProgressService', compact('technician', 'service'));
+        return view('pages.backend.transaction.service.onProgressService', compact('technician', 'service', 'tr', 'tprogress', 'tmanifest'));
     }
 
     public function onProgressLoad(Request $req)
@@ -280,6 +286,7 @@ class ServiceController extends Controller
         $tr = count($service);
         $tprogress = count($progress);
         $tmanifest = count($manifest);
+
         return view('pages.backend.transaction.service.onProgressLoad', compact('service', 'tr', 'tprogress', 'tmanifest'));
     }
 
@@ -311,6 +318,7 @@ class ServiceController extends Controller
         $category = Category::orderBy('name', 'ASC')->get();
         $warranty = Warranty::orderBy('name', 'ASC')->get();
         $customer = Customer::orderBy('name', 'ASC')->get();
+
         return view('pages.backend.transaction.service.createService', compact('employee', 'code', 'item', 'brand', 'type', 'warranty', 'category', 'customer'));
     }
 

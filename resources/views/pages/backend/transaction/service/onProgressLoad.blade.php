@@ -1,16 +1,17 @@
-    <table class="table table-striped table-bordered">
+    <table class="table table-striped">
         <thead>
             <tr>
                 <th colspan="2"><h5 style="color: #6777ef;">Menunggu Servis : {{ $tmanifest }}</h5></th>
-                <th colspan="1"><h5 style="color: #6777ef;">Proses Servis : {{ $tprogress }}</h5></th>
+                <th colspan="2"><h5 style="color: #6777ef;">Proses Servis : {{ $tprogress }}</h5></th>
                 <th colspan="2"><h5 style="color: #6777ef;">Total Transaksi : {{ $tr }}</h5></th>
             </tr>
         </thead>
         <thead>
             <tr>
                 <th class="text-center">{{ __('Faktur') }}</th>
+                <th class="text-center">{{ __('Operator') }}</th>
                 <th class="text-center">{{ __('Pelanggan') }}</th>
-                <th class="text-center">{{ __('Barang') }}</th>
+                <th class="text-center" width="20%">{{ __('Barang') }}</th>
                 <th class="text-center" width="25%">{{ __('Keluhan') }}</th>
                 <th class="text-center">{{ __('Status') }}</th>
             </tr>
@@ -28,9 +29,11 @@
                         <th>{{ \Carbon\Carbon::parse($service->date)->locale('id')->isoFormat('LL') }}</th>
                     </tr>
                 </table>
+            </td>
+            <td>
                 <table>
                     <tr>
-                        <td>Operator</td>
+                        <td>Penerima</td>
                         <th>{{ $service->created_by }}</th>
                     </tr>
                     <tr>
@@ -58,16 +61,10 @@
             <td>
                 <table>
                     <tr>
-                        <td>Kategori</td>
-                        <th>{{ $service->Brand->Category->name }}</th>
-                        <td>Merk</td>
-                        <th>{{ $service->Brand->name }}</th>
+                        <th>{{ $service->Brand->Category->code }} {{ $service->Brand->name }} <br>{{ $service->Type->name }}</th>
                     </tr>
                     <tr>
-                        <td>Seri</td>
-                        <th>{{ $service->Type->name }}</th>
-                        <td>IMEI</td>
-                        <th>{{ $service->no_imei }}</th>
+                        <td>IMEI : <b>{{ $service->no_imei }}</b></td>
                     </tr>
                 </table>
             </td>

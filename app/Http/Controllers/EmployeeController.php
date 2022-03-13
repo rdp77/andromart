@@ -33,7 +33,10 @@ class EmployeeController extends Controller
         }
 
         // $employee = Employee::where('id', '!=', '1')->where('status', 'aktif')->get();
-        $employee = Employee::where('id', '!=', '1')->orderBy('status', 'asc')->get();
+        $employee = Employee::where('id', '!=', '1')
+        ->orderBy('status', 'asc')
+        ->orderBy('branch_id', 'asc')
+        ->get();
 
         $totalSharingProfit = 0;
         $totalSharingProfitSplit = [];
@@ -41,13 +44,13 @@ class EmployeeController extends Controller
         $totalServiceDone = [];
         $totalServiceCancel = [];
 
-        for ($i=0; $i <count($employee) ; $i++) { 
+        for ($i=0; $i <count($employee) ; $i++) {
             $checkServiceStatus[$i] = Service::
             where('technician_id', $employee[$i]->id)
             ->get();
         }
         // return $checkServiceStatus;
-        
+
 
         for ($i = 0; $i < count($employee); $i++) {
 
@@ -59,7 +62,7 @@ class EmployeeController extends Controller
             $totalServiceFix[$i]['cancel'] = 0;
             $totalServiceFix[$i]['nama'] = $employee[$i]->name;
 
-            
+
 
             for ($j = 0; $j < count($checkServiceStatus[$i]); $j++) {
                 if ($checkServiceStatus[$i][$j]->work_status == 'Proses' || $checkServiceStatus[$i][$j]->work_status == 'Mutasi' || $checkServiceStatus[$i][$j]->work_status == 'Manifest') {

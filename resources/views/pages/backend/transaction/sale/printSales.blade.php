@@ -1,4 +1,5 @@
 @include('layouts.components.header')
+@section('title', __('Nota Besar'))
 <style>
   @media print {
     body{

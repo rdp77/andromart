@@ -23,7 +23,8 @@
                     <div class="profile-widget-item">
                       {{-- <div class="profile-widget-item-label">Posts</div>
                       <div class="profile-widget-item-value">187</div> --}}
-                      <div class="profile-widget-item-value">
+                      <div class="profile-widget-item-value text-left">
+                        &emsp;{{ $employee->user->role->name }} {{ $employee->level }} - {{ $employee->branch->name }} &nbsp;
                         @if ($employee->status == 'aktif')
                         <div class="badge badge-success">
                             Aktif
@@ -39,12 +40,12 @@
                 </div>
 
                 <div class="profile-widget-description">
-                    <div class="profile-widget-name">
+                    {{-- <div class="profile-widget-name">
                         <i class="fa fa-user-astronaut"></i> &nbsp;&nbsp;
                         <div class="text-muted d-inline font-weight-normal">
                             {{ $employee->user->role->name }} {{ $employee->level }} - {{ $employee->branch->name }}
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="profile-widget-name">
                         <i class="fa fa-user"></i> &nbsp;
                         <div class="text-muted d-inline font-weight-normal">
@@ -102,32 +103,7 @@
                         </a>
                     </div> --}}
                 </div>
-
-                <div class="card-footer">
-                    <div class="profile-widget-name">
-                        <i class="fa fa-times"></i> &nbsp;
-                        <div class="text-muted d-inline font-weight-normal">
-                            {{$totalServiceCancel[$index]}}
-                        </div>
-                    </div>
-                    <div class="profile-widget-name">
-                        <i class="fa fa-check"></i> &nbsp;
-                        <div class="text-muted d-inline font-weight-normal">
-                            {{$totalServiceDone[$index]}}
-
-                        </div>
-                    </div>
-                    <div class="profile-widget-name">
-                        <i class="fa fa-list"></i> &nbsp;
-                        <div class="text-muted d-inline font-weight-normal">
-                            {{$totalServiceProgress[$index]}}
-
-                        </div>
-                    </div>
-                </div>
-
             </div>
-
         </div>
         @endforeach
     </div>
