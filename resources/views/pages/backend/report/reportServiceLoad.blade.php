@@ -12,7 +12,7 @@
     @foreach($data as $key => $value)
     <tbody class="dropHere" style="border: none !important">
         <tr role="row" class="odd">
-            <td>{{ \Carbon\Carbon::parse($value->date)->locale('id')->isoFormat('LL') }}</td>
+            <td>{{ \Carbon\Carbon::parse($value->created_at)->locale('id')->isoFormat('LL') }}</td>
             <th>{{ $value->code }}</th>
             <td>
                 <table>
