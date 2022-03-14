@@ -50,7 +50,7 @@ class PurchaseController extends Controller
         }
 
         if ($req->ajax()) {
-            $data = Purchasing::with('employee')->get();
+            $data = Purchasing::with('employee')->orderBy('id','DESC')->get();
             foreach($data as $row) {
                 $tanggal = date("d F Y", strtotime($row->date));
                 $row->date = $tanggal;

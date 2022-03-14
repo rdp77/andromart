@@ -40,7 +40,7 @@ class ReceptionController extends Controller
         }
         if ($req->ajax()) {
             // ORDER BY FIND_IN_SET(column, 'Yellow,Blue,Red')
-            $data = Purchasing::with('employee')->whereIn("done", [1,3,0,2])->get();
+            $data = Purchasing::with('employee')->whereIn("done", [1,3,0,2])->orderBy('id','DESC')->get();
             foreach($data as $row) {
                 $tanggal = date("d F Y", strtotime($row->date));
                 $row->date = $tanggal;
