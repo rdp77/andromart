@@ -25,7 +25,7 @@
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="date">{{ __('Tanggal') }}<code>*</code></label>
                             <input id="date" type="text" class="form-control datepicker" readonly="" 
-                            value="{{$service->date}}" name="date">
+                            value="{{ date('d-F-Y', strtotime($service->date)) }}" name="date">
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="warranty">{{ __('Garansi') }}<code>*</code></label>
@@ -52,7 +52,7 @@
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="estimateDate">{{ __('Estimasi') }}<code>*</code></label>
-                            <input id="estimateDate" type="text" value="{{$service->estimate_date}}" class="form-control datepicker" name="estimateDate">
+                            <input id="estimateDate" type="text" value="{{ date('d-F-Y', strtotime($service->estimate_date)) }}" class="form-control datepicker" name="estimateDate">
                         </div>
                     </div>
                     <div class="row">
