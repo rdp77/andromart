@@ -206,7 +206,7 @@ class TransactionIncomeController extends Controller
         $branch = Branch::where('id', '!=', Income::find($id)->branch_id)->get();
         $cost = Cost::where('id', '!=', Income::find($id)->income_id)->get();
         $cash = Cash::where('id', '!=', Income::find($id)->cash_id)->get();
-        $income = Income::find($id);
+        $income = Income::find($id)->with('cash')->first();
 
         return view(
             'pages.backend.transaction.income.updateIncome',
