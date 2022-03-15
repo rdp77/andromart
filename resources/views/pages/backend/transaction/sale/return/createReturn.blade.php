@@ -73,7 +73,7 @@
                         <div class="form-group col-md-4 col-xs-12" id="tindakanSelect">
                             <label for="type">{{ __('Tindakan') }}</label><code>*</code>
                             <select name="type" id="type" class="select2" onchange="tindakan()">
-                                <option value="">{{ __('- Select -') }}</option>
+                                <option value="" selected>{{ __('- Select -') }}</option>
                                 <option value="1">{{ __('Ganti uang') }}</option>
                                 <option value="2">{{ __('Ganti barang serupa') }}</option>
                                 <option value="3">{{ __('Tukar tambah') }}</option>
@@ -94,13 +94,13 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label>{{ __('Harga Barang Lama') }}</label>
-                        <div class="input-group">
+                        <div class="input-group" id="hargaBarangLamaId">
                             <div class="input-group-prepend">
                                 <div class="input-group-text">
                                     {{ __('Rp.') }}
                                 </div>
                             </div>
-                            <input id="item_price_old" type="text" value="0" class="form-control" style="text-align: right" readonly>
+                            <input id="item_price_old" type="text" value="" class="form-control" style="text-align: right" readonly>
                         </div>
                         {{-- <div class="input-group d-none" id="dv">
                             <div class="input-group-prepend">
@@ -148,8 +148,12 @@
         </div>
     </div>
     {{ $actionDetail }}
+    <button class="btn btn-primary mr-1 tombolSave" type="button" onclick="save()" id="buttonSubmit" style="float: left; display: none;">
+        <i class="far fa-save"></i>
+        {{ __('Simpan Data') }}
+    </button>
     <div class="card card-primary" id="dataDetailStyle">
-        <div class="card-header">
+        <div class="card-header" id="card-header-id">
             <h4>{{ __('Data Detail') }}</h4>
             <div class="card-header-action">
                 <button onclick="addItem()" type="button" class="btn btn-icon icon-left btn-warning">
@@ -157,7 +161,7 @@
                 </button>
             </div>
         </div>
-        <div class="card-body">
+        <div class="card-body" id="card-body-id">
             {{-- @foreach ($buyer as $buyer)
             <input class="buyerData" type="hidden" data-name="{{$buyer->name}}" value="{{$buyer->id}}">
             @endforeach --}}
@@ -266,23 +270,34 @@
       });
     }
     function itemAll(token, url, target) {
-      // var saleId = document.getElementById("saleId").value;
+      var itemOld = document.getElementById("itemOld").value;
       $(target).html(loading);
       $.post(url, {
           _token: token,
+          item: itemOld,
       },
       function (data) {
           console.log(data);
           $(target).html(data);
       });
     }
-    // function tindakan() {
-    //     var selected = document.getElementById("type").selectedIndex;
-    //     if(selected == 1){
-    //         document.getElementById("dataDetailStyle").style.visibility = "hidden";
-    //     } else {
-    //         document.getElementById("dataDetailStyle").style.visibility = "visible";
-    //     }
-    // }
+    function tindakan() {
+        var selected = document.getElementById("type").selectedIndex;
+        var itemOld = document.getElementById("itemOld").value;
+        // alert(selected);
+        if(selected == 1) {
+            // document.getElementById("dataDetailStyle").style.visibility = "hidden";
+            // document.getElementById("buttonSubmit").style.visibility = "visible";
+            document.getElementById("dataDetailStyle").style.display = "none";
+            document.getElementById("buttonSubmit").style.display = "block";
+            alert(itemOld);
+        } else {
+            document.getElementById("dataDetailStyle").style.display = "block";
+            document.getElementById("buttonSubmit").style.display = "none";
+        }
+        // else {
+        //     document.getElementById("dataDetailStyle").style.visibility = "visible";
+        // }
+    }
 </script>
 @endsection
