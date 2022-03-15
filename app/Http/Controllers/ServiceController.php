@@ -56,9 +56,7 @@ class ServiceController extends Controller
         }
         // return new User::akses();
 
-
         if ($req->ajax()) {
-
             $data = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
                 ->orderBy('id', 'DESC')
                 // ->where('technician_id',Auth::user()->id)
@@ -81,7 +79,7 @@ class ServiceController extends Controller
                     if ($row->payment_status == null) {
                         $actionBtn .= '<a class="dropdown-item" href="' . route('service.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
                         $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
-                    } else if ($row->payment_status == 'DownPayment') {
+                    } elseif ($row->payment_status == 'DownPayment') {
                         $actionBtn .= '<a class="dropdown-item" href="' . route('service.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
                     }
 
@@ -94,31 +92,41 @@ class ServiceController extends Controller
                 })
                 ->addColumn('Informasi', function ($row) {
                     $htmlAdd = '<table>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Kode</td>';
-                    $htmlAdd .=      '<th>' . $row->code . '</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Tgl Dibuat</td>';
-                    $htmlAdd .=      '<th>' . Carbon::parse($row->created_at)->locale('id')->isoFormat('LL') . '</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Tgl </td>';
-                    $htmlAdd .=      '<th>' . Carbon::parse($row->date)->locale('id')->isoFormat('LL') . '</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Di Input </td>';
-                    $htmlAdd .=      '<th>' . $row->created_by . '</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Teknisi 1</td>';
-                    $htmlAdd .=      '<th>' . $row->Employee1->name . '</th>';
-                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<td>Kode</td>';
+                    $htmlAdd .= '<th>' . $row->code . '</th>';
+                    $htmlAdd .= '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<td>Tgl Dibuat</td>';
+                    $htmlAdd .=
+                        '<th>' .
+                        Carbon::parse($row->created_at)
+                            ->locale('id')
+                            ->isoFormat('LL') .
+                        '</th>';
+                    $htmlAdd .= '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<td>Tgl </td>';
+                    $htmlAdd .=
+                        '<th>' .
+                        Carbon::parse($row->date)
+                            ->locale('id')
+                            ->isoFormat('LL') .
+                        '</th>';
+                    $htmlAdd .= '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<td>Di Input </td>';
+                    $htmlAdd .= '<th>' . $row->created_by . '</th>';
+                    $htmlAdd .= '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<td>Teknisi 1</td>';
+                    $htmlAdd .= '<th>' . $row->Employee1->name . '</th>';
+                    $htmlAdd .= '</tr>';
                     if ($row->technician_replacement_id != null) {
-                        $htmlAdd .=   '<tr>';
-                        $htmlAdd .=      '<td>Teknisi 2</td>';
-                        $htmlAdd .=      '<th>' . $row->Employee2->name . '</th>';
-                        $htmlAdd .=   '</tr>';
+                        $htmlAdd .= '<tr>';
+                        $htmlAdd .= '<td>Teknisi 2</td>';
+                        $htmlAdd .= '<th>' . $row->Employee2->name . '</th>';
+                        $htmlAdd .= '</tr>';
                     }
                     $htmlAdd .= '<table>';
 
@@ -126,82 +134,82 @@ class ServiceController extends Controller
                 })
                 ->addColumn('dataCustomer', function ($row) {
                     $htmlAdd = '<table>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<th>' . $row->customer_name . '</th>';
-                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<th>' . $row->customer_name . '</th>';
+                    $htmlAdd .= '</tr>';
                     // $htmlAdd .=   '<tr>';
                     // $htmlAdd .=      '<th>'.$row->customer_address.'</th>';
                     // $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<th>' . $row->customer_phone . '</th>';
-                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<th>' . $row->customer_phone . '</th>';
+                    $htmlAdd .= '</tr>';
                     $htmlAdd .= '<table>';
 
                     return $htmlAdd;
                 })
                 ->addColumn('dataItem', function ($row) {
                     $htmlAdd = '<table>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Merk</td>';
-                    $htmlAdd .=      '<th>' . $row->Brand->name . '</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Seri</td>';
-                    $htmlAdd .=      '<th>' . $row->Type->name . '</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Kategori</td>';
-                    $htmlAdd .=      '<th>' . $row->Brand->Category->name . '</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>IMEI</td>';
-                    $htmlAdd .=      '<th>' . $row->no_imei . '</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Keluhan</td>';
-                    $htmlAdd .=      '<th>' . $row->complaint . '</th>';
-                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<td>Merk</td>';
+                    $htmlAdd .= '<th>' . $row->Brand->name . '</th>';
+                    $htmlAdd .= '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<td>Seri</td>';
+                    $htmlAdd .= '<th>' . $row->Type->name . '</th>';
+                    $htmlAdd .= '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<td>Kategori</td>';
+                    $htmlAdd .= '<th>' . $row->Brand->Category->name . '</th>';
+                    $htmlAdd .= '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<td>IMEI</td>';
+                    $htmlAdd .= '<th>' . $row->no_imei . '</th>';
+                    $htmlAdd .= '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<td>Keluhan</td>';
+                    $htmlAdd .= '<th>' . $row->complaint . '</th>';
+                    $htmlAdd .= '</tr>';
                     $htmlAdd .= '<table>';
 
                     return $htmlAdd;
                 })
                 ->addColumn('finance', function ($row) {
                     $htmlAdd = '<table>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Service</td>';
-                    $htmlAdd .=      '<th>' . number_format($row->total_service, 0, ".", ",") . '</th>';
-                    $htmlAdd .=      '<td>S.P Toko</td>';
-                    $htmlAdd .=      '<th>' . number_format($row->sharing_profit_store, 0, ".", ",") . '</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Part</td>';
-                    $htmlAdd .=      '<th>' . number_format($row->total_part, 0, ".", ",") . '</th>';
-                    $htmlAdd .=      '<td>S.P Teknisi</td>';
-                    $htmlAdd .=      '<th>' . number_format($row->sharing_profit_technician_1, 0, ".", ",") . '</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Lalai</td>';
-                    $htmlAdd .=      '<th>' . number_format($row->total_loss, 0, ".", ",") . '</th>';
-                    $htmlAdd .=      '<td>S.P Teknisi 2</td>';
-                    $htmlAdd .=      '<th>' . number_format($row->sharing_profit_technician_2, 0, ".", ",") . '</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Diskon</td>';
-                    $htmlAdd .=      '<th>' . number_format($row->discount_price, 0, ".", ",") . '</th>';
-                    $htmlAdd .=      '<td>Loss Store</td>';
-                    $htmlAdd .=      '<th>' . number_format($row->total_loss_store, 0, ".", ",") . '</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Total</td>';
-                    $htmlAdd .=      '<th>' . number_format($row->total_price, 0, ".", ",") . '</th>';
-                    $htmlAdd .=      '<td>Loss Teknisi</td>';
-                    $htmlAdd .=      '<th>' . number_format($row->total_loss_technician_1, 0, ".", ",") . '</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=      '<td></td>';
-                    $htmlAdd .=      '<th></th>';
-                    $htmlAdd .=      '<td>Loss Teknisi 2</td>';
-                    $htmlAdd .=      '<th>' . number_format($row->total_loss_technician_2, 0, ".", ",") . '</th>';
-                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<td>Service</td>';
+                    $htmlAdd .= '<th>' . number_format($row->total_service, 0, '.', ',') . '</th>';
+                    $htmlAdd .= '<td>S.P Toko</td>';
+                    $htmlAdd .= '<th>' . number_format($row->sharing_profit_store, 0, '.', ',') . '</th>';
+                    $htmlAdd .= '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<td>Part</td>';
+                    $htmlAdd .= '<th>' . number_format($row->total_part, 0, '.', ',') . '</th>';
+                    $htmlAdd .= '<td>S.P Teknisi</td>';
+                    $htmlAdd .= '<th>' . number_format($row->sharing_profit_technician_1, 0, '.', ',') . '</th>';
+                    $htmlAdd .= '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<td>Lalai</td>';
+                    $htmlAdd .= '<th>' . number_format($row->total_loss, 0, '.', ',') . '</th>';
+                    $htmlAdd .= '<td>S.P Teknisi 2</td>';
+                    $htmlAdd .= '<th>' . number_format($row->sharing_profit_technician_2, 0, '.', ',') . '</th>';
+                    $htmlAdd .= '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<td>Diskon</td>';
+                    $htmlAdd .= '<th>' . number_format($row->discount_price, 0, '.', ',') . '</th>';
+                    $htmlAdd .= '<td>Loss Store</td>';
+                    $htmlAdd .= '<th>' . number_format($row->total_loss_store, 0, '.', ',') . '</th>';
+                    $htmlAdd .= '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<td>Total</td>';
+                    $htmlAdd .= '<th>' . number_format($row->total_price, 0, '.', ',') . '</th>';
+                    $htmlAdd .= '<td>Loss Teknisi</td>';
+                    $htmlAdd .= '<th>' . number_format($row->total_loss_technician_1, 0, '.', ',') . '</th>';
+                    $htmlAdd .= '</tr>';
+                    $htmlAdd .= '<td></td>';
+                    $htmlAdd .= '<th></th>';
+                    $htmlAdd .= '<td>Loss Teknisi 2</td>';
+                    $htmlAdd .= '<th>' . number_format($row->total_loss_technician_2, 0, '.', ',') . '</th>';
+                    $htmlAdd .= '</tr>';
                     $htmlAdd .= '<table>';
 
                     return $htmlAdd;
@@ -231,18 +239,18 @@ class ServiceController extends Controller
                         $paymentStatus = '<div class="badge badge-danger">Belum Bayar</div>';
                     }
                     $htmlAdd = '<table>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Status Pekerjaan</td>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<th>' . $workStatus . '</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Status Pembayaran</td>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<th>' . $paymentStatus . '</th>';
-                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<td>Status Pekerjaan</td>';
+                    $htmlAdd .= '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<th>' . $workStatus . '</th>';
+                    $htmlAdd .= '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<td>Status Pembayaran</td>';
+                    $htmlAdd .= '</tr>';
+                    $htmlAdd .= '<tr>';
+                    $htmlAdd .= '<th>' . $paymentStatus . '</th>';
+                    $htmlAdd .= '</tr>';
                     $htmlAdd .= '<table>';
 
                     return $htmlAdd;
@@ -259,11 +267,16 @@ class ServiceController extends Controller
         $branchUser = Auth::user()->employee->branch_id;
         $technician = Employee::where('branch_id', $branchUser)->get();
         $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
-        ->where('branch_id', $branchUser)
-        ->whereIn('work_status', ['Proses', 'Manifest'])
-        ->orderBy('id', 'desc')->get();
-        $progress = Service::where('work_status', 'Proses')->where('branch_id', $branchUser)->get();
-        $manifest = Service::where('work_status', 'Manifest')->where('branch_id', $branchUser)->get();
+            ->where('branch_id', $branchUser)
+            ->whereIn('work_status', ['Proses', 'Manifest'])
+            ->orderBy('id', 'desc')
+            ->get();
+        $progress = Service::where('work_status', 'Proses')
+            ->where('branch_id', $branchUser)
+            ->get();
+        $manifest = Service::where('work_status', 'Manifest')
+            ->where('branch_id', $branchUser)
+            ->get();
         $tr = count($service);
         $tprogress = count($progress);
         $tmanifest = count($manifest);
@@ -275,17 +288,23 @@ class ServiceController extends Controller
     {
         if ($req->technician_id == 'x') {
             $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
-            ->whereIn('work_status', ['Proses', 'Manifest'])
-            ->orderBy('id', 'desc')->get();
+                ->whereIn('work_status', ['Proses', 'Manifest'])
+                ->orderBy('id', 'desc')
+                ->get();
             $progress = Service::where('work_status', 'Proses')->get();
             $manifest = Service::where('work_status', 'Manifest')->get();
         } else {
             $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
-            ->whereIn('work_status', ['Proses', 'Manifest'])
-            ->where('technician_id', $req->technician_id)
-            ->orderBy('id', 'desc')->get();
-            $progress = Service::where('work_status', 'Proses')->where('technician_id', $req->technician_id)->get();
-            $manifest = Service::where('work_status', 'Manifest')->where('technician_id', $req->technician_id)->get();
+                ->whereIn('work_status', ['Proses', 'Manifest'])
+                ->where('technician_id', $req->technician_id)
+                ->orderBy('id', 'desc')
+                ->get();
+            $progress = Service::where('work_status', 'Proses')
+                ->where('technician_id', $req->technician_id)
+                ->get();
+            $manifest = Service::where('work_status', 'Manifest')
+                ->where('technician_id', $req->technician_id)
+                ->get();
         }
         $tr = count($service);
         $tprogress = count($progress);
@@ -296,10 +315,14 @@ class ServiceController extends Controller
 
     public function code($type)
     {
-        $getEmployee =  Employee::with('branch')->where('user_id', Auth::user()->id)->first();
+        $getEmployee = Employee::with('branch')
+            ->where('user_id', Auth::user()->id)
+            ->first();
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
-        $co = Service::where('branch_id', Auth::user()->employee->branch_id)->whereMonth('date', now())->get();
+        $co = Service::where('branch_id', Auth::user()->employee->branch_id)
+            ->whereMonth('date', now())
+            ->get();
         $index = count($co) + 1;
         // $index = DB::table('service')->max('id') + 1;
 
@@ -312,13 +335,16 @@ class ServiceController extends Controller
         if ($checkRoles == 'akses ditolak') {
             return view('forbidden');
         }
-        $code     = $this->code('SRV');
+        $code = $this->code('SRV');
         $employee = Employee::orderBy('name', 'ASC')->get();
         // $items    = Item::where('name','!=','Jasa Service')->get();
-        $item     = Item::with('stock', 'supplier')->where('name', '!=', 'Jasa Service')->orderBy('name', 'ASC')->get();
+        $item = Item::with('stock', 'supplier')
+            ->where('name', '!=', 'Jasa Service')
+            ->orderBy('name', 'ASC')
+            ->get();
         // return $item;
-        $brand    = Brand::orderBy('name', 'ASC')->get();
-        $type     = Type::orderBy('name', 'ASC')->get();
+        $brand = Brand::orderBy('name', 'ASC')->get();
+        $type = Type::orderBy('name', 'ASC')->get();
         $category = Category::orderBy('name', 'ASC')->get();
         $warranty = Warranty::orderBy('name', 'ASC')->get();
         $customer = Customer::orderBy('name', 'ASC')->get();
@@ -348,9 +374,8 @@ class ServiceController extends Controller
                 ->where('work_status', '!=', 'Diambil')
                 ->count();
 
-
-            $getEmployee =  Employee::where('user_id', Auth::user()->id)->first();
-            $settingPresentase =  SettingPresentase::get();
+            $getEmployee = Employee::where('user_id', Auth::user()->id)->first();
+            $settingPresentase = SettingPresentase::get();
 
             for ($i = 0; $i < count($settingPresentase); $i++) {
                 if ($settingPresentase[$i]->name == 'Presentase Sharing Profit Toko') {
@@ -370,10 +395,10 @@ class ServiceController extends Controller
                 }
             }
             if ($req->technicianId != 1) {
-                if (($tech1 + $tech2) >= $MaxHandle) {
+                if ($tech1 + $tech2 >= $MaxHandle) {
                     return Response::json([
                         'status' => 'fail',
-                        'message' => 'Teknisi Memiliki ' . $MaxHandle . ' Pekerjaan Belum Selesai'
+                        'message' => 'Teknisi Memiliki ' . $MaxHandle . ' Pekerjaan Belum Selesai',
                     ]);
                 }
             }
@@ -383,11 +408,11 @@ class ServiceController extends Controller
             // $lossStore,$lossTechnician];
             // return [$req->totalService,$req->totalSparePart];
             $id = DB::table('service')->max('id') + 1;
-            $sharing_profit_store =  (((str_replace(",", '', $req->totalService) - str_replace(",", '', $req->totalDiscountValue)) / 100) * $sharingProfitStore) + str_replace(",", '', $req->totalSparePart);
-            $sharing_profit_technician_1 = ((str_replace(",", '', $req->totalService) - str_replace(",", '', $req->totalDiscountValue)) / 100) * $sharingProfitTechnician;
+            $sharing_profit_store = ((str_replace(',', '', $req->totalService) - str_replace(',', '', $req->totalDiscountValue)) / 100) * $sharingProfitStore + str_replace(',', '', $req->totalSparePart);
+            $sharing_profit_technician_1 = ((str_replace(',', '', $req->totalService) - str_replace(',', '', $req->totalDiscountValue)) / 100) * $sharingProfitTechnician;
 
-            $total_loss_technician_1 = (str_replace(",", '', $req->totalLoss) / 100) * $lossTechnician;
-            $total_loss_store = (str_replace(",", '', $req->totalLoss) / 100) * $lossStore;
+            $total_loss_technician_1 = (str_replace(',', '', $req->totalLoss) / 100) * $lossTechnician;
+            $total_loss_store = (str_replace(',', '', $req->totalLoss) / 100) * $lossStore;
 
             $estimateDate = $this->DashboardController->changeMonthIdToEn($req->estimateDate);
 
@@ -420,30 +445,30 @@ class ServiceController extends Controller
                 'no_imei' => $req->noImei,
                 'complaint' => $req->complaint,
                 'clock' => date('h:i'),
-                'total_service' => str_replace(",", '', $req->totalService),
-                'total_part' => str_replace(",", '', $req->totalSparePart),
+                'total_service' => str_replace(',', '', $req->totalService),
+                'total_part' => str_replace(',', '', $req->totalSparePart),
                 'total_payment' => 0,
                 'total_downpayment' => 0,
-                'total_loss' => str_replace(",", '', $req->totalLoss),
+                'total_loss' => str_replace(',', '', $req->totalLoss),
                 'total_loss_technician_1' => $total_loss_technician_1,
                 'total_loss_technician_2' => 0,
                 'total_loss_store' => $total_loss_store,
                 'image' => $fileName,
                 'discount_type' => $req->typeDiscount,
-                'discount_price' => str_replace(",", '', $req->totalDiscountValue),
-                'discount_service' => str_replace(",", '', $req->totalService)-str_replace(",", '',$req->totalDiscountValue),
-                'discount_percent' => str_replace(",", '', $req->totalDiscountPercent),
-                'total_hpp' => str_replace(",", '', $req->totalHppAtas),
-                'total_price' => str_replace(",", '', $req->totalPrice),
+                'discount_price' => str_replace(',', '', $req->totalDiscountValue),
+                'discount_service' => str_replace(',', '', $req->totalService) - str_replace(',', '', $req->totalDiscountValue),
+                'discount_percent' => str_replace(',', '', $req->totalDiscountPercent),
+                'total_hpp' => str_replace(',', '', $req->totalHppAtas),
+                'total_price' => str_replace(',', '', $req->totalPrice),
                 'work_status' => 'Manifest',
                 'equipment' => $req->equipment,
                 'description' => $req->description,
                 'warranty_id' => $req->warranty,
                 'verification_price' => $req->verificationPrice,
                 'technician_id' => $req->technicianId,
-                'sharing_profit_store' => str_replace(",", '', $sharing_profit_store),
-                'sharing_profit_technician_1' => str_replace(",", '', $sharing_profit_technician_1),
-                'sharing_profit_technician_2' => str_replace(",", '', 0),
+                'sharing_profit_store' => str_replace(',', '', $sharing_profit_store),
+                'sharing_profit_technician_1' => str_replace(',', '', $sharing_profit_technician_1),
+                'sharing_profit_technician_2' => str_replace(',', '', 0),
                 'created_at' => date('Y-m-d h:i:s'),
                 'created_by' => Auth::user()->name,
             ]);
@@ -452,12 +477,12 @@ class ServiceController extends Controller
                 ServiceDetail::create([
                     'service_id' => $id,
                     'item_id' => $req->itemsDetail[$i],
-                    'price' => str_replace(",", '', $req->priceDetail[$i]),
-                    'hpp' => str_replace(",", '', $req->priceHpp[$i]),
+                    'price' => str_replace(',', '', $req->priceDetail[$i]),
+                    'hpp' => str_replace(',', '', $req->priceHpp[$i]),
                     'qty' => $req->qtyDetail[$i],
-                    'total_price' => str_replace(",", '', $req->totalPriceDetail[$i]),
-                    'total_hpp' => str_replace(",", '', $req->totalPriceHpp[$i]),
-                    'description' => str_replace(",", '', $req->descriptionDetail[$i]),
+                    'total_price' => str_replace(',', '', $req->totalPriceDetail[$i]),
+                    'total_hpp' => str_replace(',', '', $req->totalPriceHpp[$i]),
+                    'description' => str_replace(',', '', $req->descriptionDetail[$i]),
                     'type' => $req->typeDetail[$i],
                     'created_by' => Auth::user()->name,
                     'created_at' => date('Y-m-d h:i:s'),
@@ -470,7 +495,7 @@ class ServiceController extends Controller
                     if ($checkStock[$i][0]->stock < $req->qtyDetail[$i]) {
                         return Response::json([
                             'status' => 'fail',
-                            'message' => 'Stock Item Ada yang 0. Harap Cek Kembali'
+                            'message' => 'Stock Item Ada yang 0. Harap Cek Kembali',
                         ]);
                     }
                     if ($req->typeDetail[$i] == 'SparePart') {
@@ -479,16 +504,17 @@ class ServiceController extends Controller
                         $desc[$i] = 'Pengeluaran Barang Loss Pada Service ' . $codeNota;
                     }
                     Stock::where('item_id', $req->itemsDetail[$i])
-                        ->where('branch_id', $getEmployee->branch_id)->update([
-                            'stock'      => $checkStock[$i][0]->stock - $req->qtyDetail[$i],
+                        ->where('branch_id', $getEmployee->branch_id)
+                        ->update([
+                            'stock' => $checkStock[$i][0]->stock - $req->qtyDetail[$i],
                         ]);
                     StockMutation::create([
-                        'item_id'    => $req->itemsDetail[$i],
-                        'unit_id'    => $checkStock[$i][0]->unit_id,
-                        'branch_id'  => $checkStock[$i][0]->branch_id,
-                        'qty'        => $req->qtyDetail[$i],
-                        'code'       => $codeNota,
-                        'type'       => 'Out',
+                        'item_id' => $req->itemsDetail[$i],
+                        'unit_id' => $checkStock[$i][0]->unit_id,
+                        'branch_id' => $checkStock[$i][0]->branch_id,
+                        'qty' => $req->qtyDetail[$i],
+                        'code' => $codeNota,
+                        'type' => 'Out',
                         'description' => $desc[$i],
                     ]);
                 }
@@ -588,7 +614,6 @@ class ServiceController extends Controller
             ]);
             $dataEquipment = [];
 
-
             if ($req->chargerEquipment == 'on') {
                 $dataEquipment[0] = 'Y';
                 $dataEquipmentName[0] = 'Charger';
@@ -686,15 +711,18 @@ class ServiceController extends Controller
         if ($checkRoles == 'akses ditolak') {
             return view('forbidden');
         }
-        $service  = Service::with('ServiceDetail', 'serviceCondition', 'serviceEquipment')->find($id);
+        $service = Service::with('ServiceDetail', 'serviceCondition', 'serviceEquipment')->find($id);
         // return $service;
-        $member   = User::orderBy('name', 'ASC')->get();
+        $member = User::orderBy('name', 'ASC')->get();
         $employee = Employee::orderBy('name', 'ASC')->get();
         $category = Category::orderBy('name', 'ASC')->get();
-        $brand    = Brand::orderBy('name', 'ASC')->get();
-        $type     = Type::orderBy('name', 'ASC')->get();
+        $brand = Brand::orderBy('name', 'ASC')->get();
+        $type = Type::orderBy('name', 'ASC')->get();
         $warranty = Warranty::orderBy('name', 'ASC')->get();
-        $item     = Item::with('stock')->where('name', '!=', 'Jasa Service')->orderBy('name', 'ASC')->get();
+        $item = Item::with('stock')
+            ->where('name', '!=', 'Jasa Service')
+            ->orderBy('name', 'ASC')
+            ->get();
         $customer = Customer::orderBy('name', 'ASC')->get();
         return view('pages.backend.transaction.service.editService', compact('employee', 'item', 'brand', 'type', 'warranty', 'service', 'category', 'customer'));
     }
@@ -727,10 +755,8 @@ class ServiceController extends Controller
                 ->count();
             $checkData = Service::where('id', $id)->first();
 
-
-
-            $getEmployee =  Employee::where('user_id', Auth::user()->id)->first();
-            $settingPresentase =  SettingPresentase::get();
+            $getEmployee = Employee::where('user_id', Auth::user()->id)->first();
+            $settingPresentase = SettingPresentase::get();
             for ($i = 0; $i < count($settingPresentase); $i++) {
                 if ($settingPresentase[$i]->name == 'Presentase Sharing Profit Toko') {
                     $sharingProfitStore = $settingPresentase[$i]->total;
@@ -762,13 +788,15 @@ class ServiceController extends Controller
             }
             // return [$tech1
             // ,$tech2,$MaxHandle];
-            if ($checkData->technician_id != $req->technicianId) {
-                $totalHandledNow = $tech1 + $tech2;
-                if ($totalHandledNow >= $MaxHandle) {
-                    return Response::json([
-                        'status' => 'fail',
-                        'message' => 'Teknisi Memiliki ' . $MaxHandle . ' Pekerjaan Belum Selesai'
-                    ]);
+            if ($req->technicianId != 1) {
+                if ($checkData->technician_id != $req->technicianId) {
+                    $totalHandledNow = $tech1 + $tech2;
+                    if ($totalHandledNow >= $MaxHandle) {
+                        return Response::json([
+                            'status' => 'fail',
+                            'message' => 'Teknisi Memiliki ' . $MaxHandle . ' Pekerjaan Belum Selesai',
+                        ]);
+                    }
                 }
             }
 
@@ -782,28 +810,28 @@ class ServiceController extends Controller
             // $sharing_profit_store =  ((str_replace(",", '',$req->totalService)/100)*$sharingProfitStore)+str_replace(",", '',$req->totalSparePart);
             // $sharing_profit_technician_1 = (str_replace(",", '',$req->totalService)/100)*$sharingProfitTechnician;
 
-            if (str_replace(",", '', $req->totalLoss) == 0) {
+            if (str_replace(',', '', $req->totalLoss) == 0) {
                 $total_loss_store = 0;
                 $total_loss_technician_1 = 0;
                 $total_loss_technician_2 = 0;
             } else {
-                $total_loss_store = (str_replace(",", '', $req->totalLoss) / 100) * $lossStore;
+                $total_loss_store = (str_replace(',', '', $req->totalLoss) / 100) * $lossStore;
                 if ($checkData->technician_replacement_id != null) {
-                    $total_loss_technician_1 = $lossTechnician1 / 100 * (str_replace(",", '', $req->totalLoss));
-                    $total_loss_technician_2 = $lossTechnician2 / 100 * (str_replace(",", '', $req->totalLoss));
+                    $total_loss_technician_1 = ($lossTechnician1 / 100) * str_replace(',', '', $req->totalLoss);
+                    $total_loss_technician_2 = ($lossTechnician2 / 100) * str_replace(',', '', $req->totalLoss);
                 } else {
-                    $total_loss_technician_1 = $lossTechnician / 100 * (str_replace(",", '', $req->totalLoss));
+                    $total_loss_technician_1 = ($lossTechnician / 100) * str_replace(',', '', $req->totalLoss);
                     $total_loss_technician_2 = 0;
                 }
             }
 
-            $sharing_profit_store =  (((str_replace(",", '', $req->totalService) - str_replace(",", '', $req->totalDiscountValue)) / 100) * $sharingProfitStore) + str_replace(",", '', $req->totalSparePart);
+            $sharing_profit_store = ((str_replace(',', '', $req->totalService) - str_replace(',', '', $req->totalDiscountValue)) / 100) * $sharingProfitStore + str_replace(',', '', $req->totalSparePart);
 
             if ($checkData->technician_replacement_id != null) {
-                $sharing_profit_technician_1 = $sharingProfitTechnician1 / 100 * (str_replace(",", '', $req->totalService) - str_replace(",", '', $req->totalDiscountValue));
-                $sharing_profit_technician_2 = $sharingProfitTechnician2 / 100 * (str_replace(",", '', $req->totalService) - str_replace(",", '', $req->totalDiscountValue));
+                $sharing_profit_technician_1 = ($sharingProfitTechnician1 / 100) * (str_replace(',', '', $req->totalService) - str_replace(',', '', $req->totalDiscountValue));
+                $sharing_profit_technician_2 = ($sharingProfitTechnician2 / 100) * (str_replace(',', '', $req->totalService) - str_replace(',', '', $req->totalDiscountValue));
             } else {
-                $sharing_profit_technician_1 = $sharingProfitTechnician / 100 * (str_replace(",", '', $req->totalService) - str_replace(",", '', $req->totalDiscountValue));
+                $sharing_profit_technician_1 = ($sharingProfitTechnician / 100) * (str_replace(',', '', $req->totalService) - str_replace(',', '', $req->totalDiscountValue));
                 $sharing_profit_technician_2 = 0;
             }
 
@@ -837,30 +865,30 @@ class ServiceController extends Controller
                 'no_imei' => $req->noImei,
                 'complaint' => $req->complaint,
                 'clock' => date('h:i'),
-                'total_service' => str_replace(",", '', $req->totalService),
-                'total_part' => str_replace(",", '', $req->totalSparePart),
+                'total_service' => str_replace(',', '', $req->totalService),
+                'total_part' => str_replace(',', '', $req->totalSparePart),
 
-                'discount_service' => str_replace(",", '', $req->totalService)-str_replace(",", '',$req->totalDiscountValue),
-                'total_hpp' => str_replace(",", '', $req->totalHppAtas),
+                'discount_service' => str_replace(',', '', $req->totalService) - str_replace(',', '', $req->totalDiscountValue),
+                'total_hpp' => str_replace(',', '', $req->totalHppAtas),
 
                 // 'total_payment'=>0,
                 // 'total_downpayment'=>0,
-                'total_loss' => str_replace(",", '', $req->totalLoss),
+                'total_loss' => str_replace(',', '', $req->totalLoss),
                 'total_loss_technician_1' => $total_loss_technician_1,
                 'total_loss_technician_2' => $total_loss_technician_2,
                 'total_loss_store' => $total_loss_store,
                 'image' => $fileName,
                 'discount_type' => $req->typeDiscount,
-                'discount_price' => str_replace(",", '', $req->totalDiscountValue),
-                'discount_percent' => str_replace(",", '', $req->totalDiscountPercent),
-                'total_price' => str_replace(",", '', $req->totalPrice),
+                'discount_price' => str_replace(',', '', $req->totalDiscountValue),
+                'discount_percent' => str_replace(',', '', $req->totalDiscountPercent),
+                'total_price' => str_replace(',', '', $req->totalPrice),
                 // 'work_status'=>'Manifest',
                 'equipment' => $req->equipment,
                 'description' => $req->description,
                 'warranty_id' => $req->warranty,
                 'verification_price' => $req->verificationPrice,
                 'technician_id' => $req->technicianId,
-                'sharing_profit_store' => str_replace(",", '', $sharing_profit_store),
+                'sharing_profit_store' => str_replace(',', '', $sharing_profit_store),
                 'sharing_profit_technician_1' => $sharing_profit_technician_1,
                 'sharing_profit_technician_2' => $sharing_profit_technician_2,
                 'updated_at' => date('Y-m-d h:i:s'),
@@ -884,20 +912,23 @@ class ServiceController extends Controller
                     }
                     // return $desc;
                     Stock::where('item_id', $checkDataDeleted[$i]->item_id)
-                        ->where('branch_id', $getEmployee->branch_id)->update([
-                            'stock'      => $checkStockDeleted[$i][0]->stock + $checkDataDeleted[$i]->qty,
+                        ->where('branch_id', $getEmployee->branch_id)
+                        ->update([
+                            'stock' => $checkStockDeleted[$i][0]->stock + $checkDataDeleted[$i]->qty,
                         ]);
                     StockMutation::create([
-                        'item_id'    => $checkDataDeleted[$i]->item_id,
-                        'unit_id'    => $checkStockDeleted[$i][0]->unit_id,
-                        'branch_id'  => $checkStockDeleted[$i][0]->branch_id,
-                        'qty'        => $checkDataDeleted[$i]->qty,
-                        'code'       => $req->code,
-                        'type'       => 'In',
+                        'item_id' => $checkDataDeleted[$i]->item_id,
+                        'unit_id' => $checkStockDeleted[$i][0]->unit_id,
+                        'branch_id' => $checkStockDeleted[$i][0]->branch_id,
+                        'qty' => $checkDataDeleted[$i]->qty,
+                        'code' => $req->code,
+                        'type' => 'In',
                         'description' => $desc[$i],
                     ]);
                 }
-                $destroyExistingData = DB::table('service_detail')->whereIn('id', $req->deletedExistingData)->delete();
+                $destroyExistingData = DB::table('service_detail')
+                    ->whereIn('id', $req->deletedExistingData)
+                    ->delete();
             }
 
             // menyimpan data baru dan memperbaru stock
@@ -907,12 +938,12 @@ class ServiceController extends Controller
                     ServiceDetail::create([
                         'service_id' => $id,
                         'item_id' => $req->itemsDetail[$i],
-                        'price' => str_replace(",", '', $req->priceDetail[$i]),
-                        'hpp' => str_replace(",", '', $req->priceHpp[$i]),
+                        'price' => str_replace(',', '', $req->priceDetail[$i]),
+                        'hpp' => str_replace(',', '', $req->priceHpp[$i]),
                         'qty' => $req->qtyDetail[$i],
-                        'total_price' => str_replace(",", '', $req->totalPriceDetail[$i]),
-                        'total_hpp' => str_replace(",", '', $req->totalPriceHpp[$i]),
-                        'description' => str_replace(",", '', $req->descriptionDetail[$i]),
+                        'total_price' => str_replace(',', '', $req->totalPriceDetail[$i]),
+                        'total_hpp' => str_replace(',', '', $req->totalPriceHpp[$i]),
+                        'description' => str_replace(',', '', $req->descriptionDetail[$i]),
                         'type' => $req->typeDetail[$i],
                         'created_by' => Auth::user()->name,
                         'created_at' => date('Y-m-d h:i:s'),
@@ -925,7 +956,7 @@ class ServiceController extends Controller
                         if ($checkStock[$i][0]->stock < $req->qtyDetail[$i]) {
                             return Response::json([
                                 'status' => 'fail',
-                                'message' => 'Stock Item Ada yang 0. Harap Cek Kembali'
+                                'message' => 'Stock Item Ada yang 0. Harap Cek Kembali',
                             ]);
                         }
                         if ($req->typeDetail[$i] == 'SparePart') {
@@ -934,16 +965,17 @@ class ServiceController extends Controller
                             $desc[$i] = '(Update Service) Pengeluaran Barang Loss Pada Service ' . $req->code;
                         }
                         Stock::where('item_id', $req->itemsDetail[$i])
-                            ->where('branch_id', $getEmployee->branch_id)->update([
-                                'stock'      => $checkStock[$i][0]->stock - $req->qtyDetail[$i],
+                            ->where('branch_id', $getEmployee->branch_id)
+                            ->update([
+                                'stock' => $checkStock[$i][0]->stock - $req->qtyDetail[$i],
                             ]);
                         StockMutation::create([
-                            'item_id'    => $req->itemsDetail[$i],
-                            'unit_id'    => $checkStock[$i][0]->unit_id,
-                            'branch_id'  => $checkStock[$i][0]->branch_id,
-                            'qty'        => $req->qtyDetail[$i],
-                            'code'       => $req->code,
-                            'type'       => 'Out',
+                            'item_id' => $req->itemsDetail[$i],
+                            'unit_id' => $checkStock[$i][0]->unit_id,
+                            'branch_id' => $checkStock[$i][0]->branch_id,
+                            'qty' => $req->qtyDetail[$i],
+                            'code' => $req->code,
+                            'type' => 'Out',
                             'description' => $desc[$i],
                         ]);
                     }
@@ -992,12 +1024,12 @@ class ServiceController extends Controller
                                         $desc[$i] = '(Update Service) Perubahan Barang dari ' . $checkDataOld[$i]->type . ' Menjadi ' . $req->typeDetailOld[$i] . ' Pada Service ' . $req->code;
 
                                         StockMutation::create([
-                                            'item_id'    => $req->itemsDetailOld[$i],
-                                            'unit_id'    => $checkStockExisting[$i][0]->unit_id,
-                                            'branch_id'  => $checkStockExisting[$i][0]->branch_id,
-                                            'qty'        => $req->qtyDetailOld[$i],
-                                            'code'       => $req->code,
-                                            'type'       => 'Mutation',
+                                            'item_id' => $req->itemsDetailOld[$i],
+                                            'unit_id' => $checkStockExisting[$i][0]->unit_id,
+                                            'branch_id' => $checkStockExisting[$i][0]->branch_id,
+                                            'qty' => $req->qtyDetailOld[$i],
+                                            'code' => $req->code,
+                                            'type' => 'Mutation',
                                             'description' => $desc[$i],
                                         ]);
                                     }
@@ -1005,12 +1037,12 @@ class ServiceController extends Controller
                                     ServiceDetail::where('id', $req->idDetailOld[$i])->update([
                                         // 'service_id'=>$id,
                                         // 'item_id'=>$req->itemsDetailOld[$i],
-                                        'price' => str_replace(",", '', $req->priceDetailOld[$i]),
-                                        'hpp' => str_replace(",", '', $req->priceDetailOld[$i]),
-                                        'total_hpp' => str_replace(",", '', $req->totalPriceHppOld[$i]),
+                                        'price' => str_replace(',', '', $req->priceDetailOld[$i]),
+                                        'hpp' => str_replace(',', '', $req->priceDetailOld[$i]),
+                                        'total_hpp' => str_replace(',', '', $req->totalPriceHppOld[$i]),
                                         // 'qty'=>$req->qtyDetailOld[$i],
-                                        'total_price' => str_replace(",", '', $req->totalPriceDetailOld[$i]),
-                                        'description' => str_replace(",", '', $req->descriptionDetailOld[$i]),
+                                        'total_price' => str_replace(',', '', $req->totalPriceDetailOld[$i]),
+                                        'description' => str_replace(',', '', $req->descriptionDetailOld[$i]),
                                         'type' => $req->typeDetailOld[$i],
                                         'updated_by' => Auth::user()->name,
                                         'updated_at' => date('Y-m-d h:i:s'),
@@ -1025,12 +1057,12 @@ class ServiceController extends Controller
                                         $descPengembalian[$i] = '(Update Service) Pengembalian Barang Loss Pada Service ' . $req->code;
                                     }
                                     StockMutation::create([
-                                        'item_id'    => $req->itemsDetailOld[$i],
-                                        'unit_id'    => $checkStockExisting[$i][0]->unit_id,
-                                        'branch_id'  => $checkStockExisting[$i][0]->branch_id,
-                                        'qty'        => $checkDataOld[$i]->qty,
-                                        'code'       => $req->code,
-                                        'type'       => 'In',
+                                        'item_id' => $req->itemsDetailOld[$i],
+                                        'unit_id' => $checkStockExisting[$i][0]->unit_id,
+                                        'branch_id' => $checkStockExisting[$i][0]->branch_id,
+                                        'qty' => $checkDataOld[$i]->qty,
+                                        'code' => $req->code,
+                                        'type' => 'In',
                                         'description' => $descPengembalian[$i],
                                     ]);
 
@@ -1041,29 +1073,30 @@ class ServiceController extends Controller
                                         $descPengeluaran[$i] = '(Update Service) Pengeluaran Barang Loss Pada Service ' . $req->code;
                                     }
                                     StockMutation::create([
-                                        'item_id'    => $req->itemsDetailOld[$i],
-                                        'unit_id'    => $checkStockExisting[$i][0]->unit_id,
-                                        'branch_id'  => $checkStockExisting[$i][0]->branch_id,
-                                        'qty'        => $req->qtyDetailOld[$i],
-                                        'code'       => $req->code,
-                                        'type'       => 'Out',
+                                        'item_id' => $req->itemsDetailOld[$i],
+                                        'unit_id' => $checkStockExisting[$i][0]->unit_id,
+                                        'branch_id' => $checkStockExisting[$i][0]->branch_id,
+                                        'qty' => $req->qtyDetailOld[$i],
+                                        'code' => $req->code,
+                                        'type' => 'Out',
                                         'description' => $descPengeluaran[$i],
                                     ]);
 
                                     Stock::where('item_id', $checkDataOld[$i]->item_id)
-                                        ->where('branch_id', $getEmployee->branch_id)->update([
-                                            'stock'      => $checkStockExisting[$i][0]->stock + $checkDataOld[$i]->qty - $req->qtyDetailOld[$i],
+                                        ->where('branch_id', $getEmployee->branch_id)
+                                        ->update([
+                                            'stock' => $checkStockExisting[$i][0]->stock + $checkDataOld[$i]->qty - $req->qtyDetailOld[$i],
                                         ]);
 
                                     ServiceDetail::where('id', $req->idDetailOld[$i])->update([
                                         // 'service_id'=>$id,
                                         // 'item_id'=>$req->itemsDetailOld[$i],
-                                        'price' => str_replace(",", '', $req->priceDetailOld[$i]),
+                                        'price' => str_replace(',', '', $req->priceDetailOld[$i]),
                                         'qty' => $req->qtyDetailOld[$i],
-                                        'hpp' => str_replace(",", '', $req->priceDetailOld[$i]),
-                                        'total_hpp' => str_replace(",", '', $req->totalPriceHppOld[$i]),
-                                        'total_price' => str_replace(",", '', $req->totalPriceDetailOld[$i]),
-                                        'description' => str_replace(",", '', $req->descriptionDetailOld[$i]),
+                                        'hpp' => str_replace(',', '', $req->priceDetailOld[$i]),
+                                        'total_hpp' => str_replace(',', '', $req->totalPriceHppOld[$i]),
+                                        'total_price' => str_replace(',', '', $req->totalPriceDetailOld[$i]),
+                                        'description' => str_replace(',', '', $req->descriptionDetailOld[$i]),
                                         'type' => $req->typeDetailOld[$i],
                                         'updated_by' => Auth::user()->name,
                                         'updated_at' => date('Y-m-d h:i:s'),
@@ -1075,8 +1108,9 @@ class ServiceController extends Controller
 
                                 if ($checkStockExistingOlder[$i][0]->item_id == $checkDataOld[$i]->item_id) {
                                     Stock::where('item_id', $checkDataOld[$i]->item_id)
-                                        ->where('branch_id', $getEmployee->branch_id)->update([
-                                            'stock'      => $checkStockExistingOlder[$i][0]->stock + $checkDataOld[$i]->qty,
+                                        ->where('branch_id', $getEmployee->branch_id)
+                                        ->update([
+                                            'stock' => $checkStockExistingOlder[$i][0]->stock + $checkDataOld[$i]->qty,
                                         ]);
                                 }
 
@@ -1086,12 +1120,12 @@ class ServiceController extends Controller
                                     $descPengembalian[$i] = '(Update Service) Pengembalian Barang Loss Pada Service ' . $req->code;
                                 }
                                 StockMutation::create([
-                                    'item_id'    => $checkDataOld[$i]->item_id,
-                                    'unit_id'    => $checkStockExisting[$i][0]->unit_id,
-                                    'branch_id'  => $checkStockExisting[$i][0]->branch_id,
-                                    'qty'        => $checkDataOld[$i]->qty,
-                                    'code'       => $req->code,
-                                    'type'       => 'In',
+                                    'item_id' => $checkDataOld[$i]->item_id,
+                                    'unit_id' => $checkStockExisting[$i][0]->unit_id,
+                                    'branch_id' => $checkStockExisting[$i][0]->branch_id,
+                                    'qty' => $checkDataOld[$i]->qty,
+                                    'code' => $req->code,
+                                    'type' => 'In',
                                     'description' => $descPengembalian[$i],
                                 ]);
 
@@ -1102,28 +1136,29 @@ class ServiceController extends Controller
                                     $descPengeluaran[$i] = '(Update Service) Pengeluaran Barang Loss Pada Service ' . $req->code;
                                 }
                                 Stock::where('item_id', $req->itemsDetailOld[$i])
-                                    ->where('branch_id', $getEmployee->branch_id)->update([
-                                        'stock'      => $checkStockExisting[$i][0]->stock - $req->qtyDetailOld[$i],
+                                    ->where('branch_id', $getEmployee->branch_id)
+                                    ->update([
+                                        'stock' => $checkStockExisting[$i][0]->stock - $req->qtyDetailOld[$i],
                                     ]);
                                 StockMutation::create([
-                                    'item_id'    => $req->itemsDetailOld[$i],
-                                    'unit_id'    => $checkStockExisting[$i][0]->unit_id,
-                                    'branch_id'  => $checkStockExisting[$i][0]->branch_id,
-                                    'qty'        => $req->qtyDetailOld[$i],
-                                    'code'       => $req->code,
-                                    'type'       => 'Out',
+                                    'item_id' => $req->itemsDetailOld[$i],
+                                    'unit_id' => $checkStockExisting[$i][0]->unit_id,
+                                    'branch_id' => $checkStockExisting[$i][0]->branch_id,
+                                    'qty' => $req->qtyDetailOld[$i],
+                                    'code' => $req->code,
+                                    'type' => 'Out',
                                     'description' => $descPengeluaran[$i],
                                 ]);
 
                                 ServiceDetail::where('id', $req->idDetailOld[$i])->update([
                                     // 'service_id'=>$id,
                                     'item_id' => $req->itemsDetailOld[$i],
-                                    'price' => str_replace(",", '', $req->priceDetailOld[$i]),
+                                    'price' => str_replace(',', '', $req->priceDetailOld[$i]),
                                     'qty' => $req->qtyDetailOld[$i],
-                                    'hpp' => str_replace(",", '', $req->priceDetailOld[$i]),
-                                    'total_hpp' => str_replace(",", '', $req->totalPriceHppOld[$i]),
-                                    'total_price' => str_replace(",", '', $req->totalPriceDetailOld[$i]),
-                                    'description' => str_replace(",", '', $req->descriptionDetailOld[$i]),
+                                    'hpp' => str_replace(',', '', $req->priceDetailOld[$i]),
+                                    'total_hpp' => str_replace(',', '', $req->totalPriceHppOld[$i]),
+                                    'total_price' => str_replace(',', '', $req->totalPriceDetailOld[$i]),
+                                    'description' => str_replace(',', '', $req->descriptionDetailOld[$i]),
                                     'type' => $req->typeDetailOld[$i],
                                     'updated_by' => Auth::user()->name,
                                     'updated_at' => date('Y-m-d h:i:s'),
@@ -1135,18 +1170,22 @@ class ServiceController extends Controller
                 ServiceDetail::where('id', $req->idDetailOld[0])->update([
                     // 'service_id'=>$id,
                     'item_id' => $req->itemsDetailOld[0],
-                    'price' => str_replace(",", '', $req->priceDetailOld[0]),
+                    'price' => str_replace(',', '', $req->priceDetailOld[0]),
                     'qty' => $req->qtyDetailOld[0],
-                    'total_price' => str_replace(",", '', $req->totalPriceDetailOld[0]),
-                    'description' => str_replace(",", '', $req->descriptionDetailOld[0]),
+                    'total_price' => str_replace(',', '', $req->totalPriceDetailOld[0]),
+                    'description' => str_replace(',', '', $req->descriptionDetailOld[0]),
                     'type' => $req->typeDetailOld[0],
                     'updated_by' => Auth::user()->name,
                     'updated_at' => date('Y-m-d h:i:s'),
                 ]);
             }
 
-            DB::table('service_condition')->where('service_id', $id)->delete();
-            DB::table('service_equipment')->where('service_id', $id)->delete();
+            DB::table('service_condition')
+                ->where('service_id', $id)
+                ->delete();
+            DB::table('service_equipment')
+                ->where('service_id', $id)
+                ->delete();
 
             ServiceCondition::create([
                 'service_id' => $id,
@@ -1229,7 +1268,6 @@ class ServiceController extends Controller
                 'status' => $req->touchpadCondition,
             ]);
             $dataEquipment = [];
-
 
             if ($req->chargerEquipment == 'on') {
                 $dataEquipment[0] = 'Y';
@@ -1337,9 +1375,7 @@ class ServiceController extends Controller
         // );
         DB::beginTransaction();
         try {
-
-
-            $getEmployee =  Employee::where('user_id', Auth::user()->id)->first();
+            $getEmployee = Employee::where('user_id', Auth::user()->id)->first();
             $checkDataDeleted = ServiceDetail::where('service_id', $id)->get();
             $checkStockDeleted = [];
             for ($i = 0; $i < count($checkDataDeleted); $i++) {
@@ -1356,27 +1392,40 @@ class ServiceController extends Controller
                     }
                     // return $desc;
                     Stock::where('item_id', $checkDataDeleted[$i]->item_id)
-                        ->where('branch_id', $getEmployee->branch_id)->update([
-                            'stock'      => $checkStockDeleted[$i][0]->stock + $checkDataDeleted[$i]->qty,
+                        ->where('branch_id', $getEmployee->branch_id)
+                        ->update([
+                            'stock' => $checkStockDeleted[$i][0]->stock + $checkDataDeleted[$i]->qty,
                         ]);
                     StockMutation::create([
-                        'item_id'    => $checkDataDeleted[$i]->item_id,
-                        'unit_id'    => $checkStockDeleted[$i][0]->unit_id,
-                        'branch_id'  => $checkStockDeleted[$i][0]->branch_id,
-                        'qty'        => $checkDataDeleted[$i]->qty,
-                        'code'       => $req->code,
-                        'type'       => 'In',
+                        'item_id' => $checkDataDeleted[$i]->item_id,
+                        'unit_id' => $checkStockDeleted[$i][0]->unit_id,
+                        'branch_id' => $checkStockDeleted[$i][0]->branch_id,
+                        'qty' => $checkDataDeleted[$i]->qty,
+                        'code' => $req->code,
+                        'type' => 'In',
                         'description' => $desc[$i],
                     ]);
                 }
             }
 
-            DB::table('service')->where('id', $id)->delete();
-            DB::table('service_detail')->where('service_id', $id)->delete();
-            DB::table('service_payment')->where('service_id', $id)->delete();
-            DB::table('service_status_mutation')->where('service_id', $id)->delete();
-            DB::table('service_condition')->where('service_id', $id)->delete();
-            DB::table('service_equipment')->where('service_id', $id)->delete();
+            DB::table('service')
+                ->where('id', $id)
+                ->delete();
+            DB::table('service_detail')
+                ->where('service_id', $id)
+                ->delete();
+            DB::table('service_payment')
+                ->where('service_id', $id)
+                ->delete();
+            DB::table('service_status_mutation')
+                ->where('service_id', $id)
+                ->delete();
+            DB::table('service_condition')
+                ->where('service_id', $id)
+                ->delete();
+            DB::table('service_equipment')
+                ->where('service_id', $id)
+                ->delete();
             // Stock::where('item_id',$checkDataOld[$i]->item_id)
             //                                     ->where('branch_id',$getEmployee->branch_id)->update([
             //                                         'stock'      =>$checkStockExistingOlder[$i][0]->stock+$checkDataOld[$i]->qty,
@@ -1403,7 +1452,9 @@ class ServiceController extends Controller
     }
     public function serviceFormUpdateStatusLoadData(Request $req)
     {
-        $data = Service::with(['ServiceDetail', 'ServiceDetail.Items', 'ServiceStatusMutation', 'ServiceStatusMutation.Technician'])->where('id', $req->id)->first();
+        $data = Service::with(['ServiceDetail', 'ServiceDetail.Items', 'ServiceStatusMutation', 'ServiceStatusMutation.Technician'])
+            ->where('id', $req->id)
+            ->first();
 
         if ($data == null) {
             $message = 'empty';
@@ -1430,7 +1481,7 @@ class ServiceController extends Controller
             }
             // return 'asd';
             // return $checkData;
-            $settingPresentase =  SettingPresentase::get();
+            $settingPresentase = SettingPresentase::get();
 
             // return $req->all();
             for ($i = 0; $i < count($settingPresentase); $i++) {
@@ -1465,23 +1516,23 @@ class ServiceController extends Controller
                     $total_loss_technician_1 = 0;
                     $total_loss_technician_2 = 0;
                 } else {
-                    $total_loss_technician_1 = $lossTechnician1 / 100 * $checkData->total_loss;
-                    $total_loss_technician_2 = $lossTechnician2 / 100 * $checkData->total_loss;
+                    $total_loss_technician_1 = ($lossTechnician1 / 100) * $checkData->total_loss;
+                    $total_loss_technician_2 = ($lossTechnician2 / 100) * $checkData->total_loss;
                 }
-                $sharing_profit_technician_1 = $sharingProfitTechnician1 / 100 * $checkData->total_price;
-                $sharing_profit_technician_2 = $sharingProfitTechnician2 / 100 * $checkData->total_price;
+                $sharing_profit_technician_1 = ($sharingProfitTechnician1 / 100) * $checkData->total_price;
+                $sharing_profit_technician_2 = ($sharingProfitTechnician2 / 100) * $checkData->total_price;
             } else {
                 if ($checkData->technician_replacement_id != null) {
                     $technician_replacement_id = $checkData->technician_replacement_id;
                     $total_loss_technician_1 = $checkData->total_loss_technician_1;
                     $total_loss_technician_2 = $checkData->total_loss_technician_2;
-                    $sharing_profit_technician_1 =  $checkData->sharing_profit_technician_1;
+                    $sharing_profit_technician_1 = $checkData->sharing_profit_technician_1;
                     $sharing_profit_technician_2 = $checkData->sharing_profit_technician_2;
                 } else {
                     $technician_replacement_id = null;
                     $total_loss_technician_1 = $checkData->total_loss_technician_1;
                     $total_loss_technician_2 = 0;
-                    $sharing_profit_technician_1 =  $checkData->sharing_profit_technician_1;
+                    $sharing_profit_technician_1 = $checkData->sharing_profit_technician_1;
                     $sharing_profit_technician_2 = 0;
                 }
             }
@@ -1509,7 +1560,6 @@ class ServiceController extends Controller
             return Response::json(['status' => 'error', 'message' => $th]);
         }
     }
-
 
     public function trafficCount()
     {
