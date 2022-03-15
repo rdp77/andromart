@@ -139,14 +139,20 @@ class SaleReturnController extends Controller
     {
         $id = $req->saleId;
         $query = Sale::where('id', $id)->with('SaleDetail')->first();
+        // echo '<option value="'.$value->item_id.'">' . $value->item->brand->name .' '. $value->item->name . '</option>';
         echo '<option value="">- Select -</option>';
         foreach ($query->saleDetail as $key => $value) {
-            echo '<option value="'.$value->item_id.'">' . $value->item->brand->name .' '. $value->item->name . '</option>';
+            echo '<option value="'.$value->id.'">' . $value->item->brand->name .' '. $value->item->name . '</option>';
         }
     }
     public function loadDataItemAll(Request $req)
     {
-        dd("masuk");
+        $output = SaleDetail::find($req->item);
+        echo '<label for="">Qty</label><code>*</code><input class="form-control" type="text" value="'.$output->qty.'">';
+        // echo '<div class="form-group col-md-4 col-xs-12" id="qtyForm"><label for="">Qty</label><code>*</code><input class="form-control" type="text" value="'.$output->qty.'"></div>';
+        // $output = Sale::where('code', 'PJT0112112002')->first();
+        // $item = Item::find($req->item);
+        // dd("masuk");
     }
 
     public function loadDataQty()

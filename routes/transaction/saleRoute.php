@@ -82,6 +82,11 @@ Route::group(['prefix' => 'transaction'], function () {
             [SaleReturnController::class, 'loadDataQty']
         )->name('sale.return.loadDataQty');
 
+        Route::post(
+            'sale-return-tindakan',
+            [SaleReturnController::class, 'loadTindakan']
+        )->name('sale.return.tindakan');
+
         // Route::post(
         //     'sale-return-load-action',
         //     [SaleReturnController::class, 'loadAction']
