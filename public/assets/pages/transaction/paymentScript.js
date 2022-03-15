@@ -5,6 +5,7 @@ var table = $("#table").DataTable({
     processing: true,
     serverSide: true,
     responsive: true,
+    order:[],
     lengthMenu: [
         [10, 25, 50, -1],
         [10, 25, 50, "Semua"],
@@ -113,7 +114,6 @@ function save(params) {
     }).then((willSave) => {
         if (willSave) {
             var validation = 0;
-            console.log(validation);
             $(".validation").each(function () {
                 if (
                     $(this).val() == "" ||
@@ -121,27 +121,38 @@ function save(params) {
                     $(this).val() == 0
                 ) {
                     validation++;
-                    // alert($(this).data('name'));
+                    // alert($(this).data("name"));
+                    // alert($(".type_id").val());
                     if ($(".type_id").val() == "Pengeluaran") {
+                        validation--;
+                        // alert('pengeluaran');
                         if ($(this).data("name") != "Transfer Harus Di isi") {
-                            iziToast.warning({
+                        validation++;
+                        iziToast.warning({
                                 type: "warning",
                                 title: $(this).data("name"),
                             });
                         }
+                        // alert('cek data...');
                     } else {
+                        // alert($(this).data("name"));
+                        // alert('transfer');
                         iziToast.warning({
                             type: "warning",
                             title: $(this).data("name"),
                         });
                     }
+                    // alert('lewatttt..');
                 } else {
                     validation - 1;
                 }
             });
+            console.log('cek total validasi '+validation);
+
             if (validation != 0) {
                 return false;
             }
+            console.log('melewati');
             $.ajax({
                 url: "/transaction/payment/payment",
                 data: $(".form-data").serialize(),
@@ -156,7 +167,6 @@ function save(params) {
                         swal(data.message, {
                             icon: "warning",
                         });
-                        
                     }
                 },
                 error: function (data) {
@@ -179,7 +189,6 @@ function updateData(params) {
     }).then((willSave) => {
         if (willSave) {
             var validation = 0;
-            console.log(validation);
             $(".validation").each(function () {
                 if (
                     $(this).val() == "" ||
@@ -208,6 +217,7 @@ function updateData(params) {
             if (validation != 0) {
                 return false;
             }
+            console.log(validation);
             $.ajax({
                 url: "/transaction/payment/payment/" + id,
                 data: $(".form-data").serialize(),
@@ -223,7 +233,6 @@ function updateData(params) {
                         swal(data.message, {
                             icon: "warning",
                         });
-                        
                     }
                 },
                 error: function (data) {
@@ -249,13 +258,15 @@ function branchChange() {
     var params = $(".branch").find(":selected").val();
     $.each($(".accountData"), function () {
         if (params == $(this).data("branch")) {
-            var selected = '';
-            if($(this).data("selected") == 'selected'){
-               var selected = 'selected'; 
+            var selected = "";
+            if ($(this).data("selected") == "selected") {
+                var selected = "selected";
             }
 
             dataItems +=
-                '<option '+selected+' value="' +
+                "<option " +
+                selected +
+                ' value="' +
                 this.value +
                 '">' +
                 $(this).data("name") +
@@ -285,55 +296,69 @@ function jurnal(params) {
         success: function (data) {
             if (data.status == "success") {
                 if (data.jurnal[0].type.includes("Transfer")) {
-                    $.each(data.jurnal[0].journal_detail, function (index, value) {
-                        if (value.debet_kredit == "K") {
-                            var dk =
-                                "<td>0</td><td>" +
-                                parseInt(value.total).toLocaleString("en-US") +
-                                "</td>";
-                        } else {
-                            var dk =
-                                "<td>" +
-                                parseInt(value.total).toLocaleString("en-US") +
-                                "</td><td>0</td>";
+                    $.each(
+                        data.jurnal[0].journal_detail,
+                        function (index, value) {
+                            if (value.debet_kredit == "K") {
+                                var dk =
+                                    "<td>0</td><td>" +
+                                    parseInt(value.total).toLocaleString(
+                                        "en-US"
+                                    ) +
+                                    "</td>";
+                            } else {
+                                var dk =
+                                    "<td>" +
+                                    parseInt(value.total).toLocaleString(
+                                        "en-US"
+                                    ) +
+                                    "</td><td>0</td>";
+                            }
+                            $(".dropHereJournals").append(
+                                "<tr>" +
+                                    "<td>" +
+                                    value.account_data.code +
+                                    "</td>" +
+                                    "<td>" +
+                                    value.account_data.name +
+                                    "</td>" +
+                                    dk +
+                                    "</tr>"
+                            );
                         }
-                        $(".dropHereJournals").append(
-                            "<tr>" +
-                                "<td>" +
-                                value.account_data.code +
-                                "</td>" +
-                                "<td>" +
-                                value.account_data.name +
-                                "</td>" +
-                                dk +
-                                "</tr>"
-                        );
-                    });
+                    );
 
-                    $.each(data.jurnal[1].journal_detail, function (index, value) {
-                        if (value.debet_kredit == "K") {
-                            var dk =
-                                "<td>0</td><td>" +
-                                parseInt(value.total).toLocaleString("en-US") +
-                                "</td>";
-                        } else {
-                            var dk =
-                                "<td>" +
-                                parseInt(value.total).toLocaleString("en-US") +
-                                "</td><td>0</td>";
+                    $.each(
+                        data.jurnal[1].journal_detail,
+                        function (index, value) {
+                            if (value.debet_kredit == "K") {
+                                var dk =
+                                    "<td>0</td><td>" +
+                                    parseInt(value.total).toLocaleString(
+                                        "en-US"
+                                    ) +
+                                    "</td>";
+                            } else {
+                                var dk =
+                                    "<td>" +
+                                    parseInt(value.total).toLocaleString(
+                                        "en-US"
+                                    ) +
+                                    "</td><td>0</td>";
+                            }
+                            $(".dropHereJournals").append(
+                                "<tr>" +
+                                    "<td>" +
+                                    value.account_data.code +
+                                    "</td>" +
+                                    "<td>" +
+                                    value.account_data.name +
+                                    "</td>" +
+                                    dk +
+                                    "</tr>"
+                            );
                         }
-                        $(".dropHereJournals").append(
-                            "<tr>" +
-                                "<td>" +
-                                value.account_data.code +
-                                "</td>" +
-                                "<td>" +
-                                value.account_data.name +
-                                "</td>" +
-                                dk +
-                                "</tr>"
-                        );
-                    });
+                    );
                 } else {
                     $.each(
                         data.jurnal[0].journal_detail,

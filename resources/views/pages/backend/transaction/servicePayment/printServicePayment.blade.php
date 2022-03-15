@@ -207,8 +207,9 @@
                 <div class="row mt-4">
                     <div class="col-lg-8 col-md-8 col-sm-8">
                         <div class="section-title" style="font-size: 20px">
-                            Pembayaran <b>{{ $service->payment_method }}</b>
+                            Pembayaran <b>{{ $service->payment_method }} [ {{ $service->code }} ] </b>
                             <br>
+                            {{-- {{$service->Service}} --}}
                             @isset($service->Service->Warrantys)
                                 Garansi <b>{{ $service->Service->Warrantys->periode }}
                                     {{ $service->Service->Warrantys->name }}</b>

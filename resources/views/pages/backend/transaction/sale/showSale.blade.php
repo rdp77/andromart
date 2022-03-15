@@ -160,12 +160,13 @@
                 <table class="table table-striped">
                     <thead>
                         <tr>
-                            <th style="width: 25%">{{ __('Barang') }}</th>
-                            <th style="width: 13%">{{ __('Qty * Harga') }}</th>
-                            <th style="width: 11%">{{ __('Jumlah') }}</th>
-                            <th style="width: 20%">{{ __('P.S Pengambil') }}</th>
-                            <th style="width: 20%">{{ __('P.S Penjual') }}</th>
-                            <th>{{ __('Deskripsi') }}</th>
+                            <th class="text-center" style="width: 25%">{{ __('Barang') }}</th>
+                            <th class="text-center" style="width: 13%">{{ __('Qty * Harga') }}</th>
+                            <th class="text-center" style="width: 11%">{{ __('Jumlah') }}</th>
+                            <th class="text-center" style="width: 18%">{{ __('Pengambil') }}</th>
+                            <th class="text-center" style="width: 11%">{{ __('P.S Pengambil') }}</th>
+                            <th class="text-center" style="width: 11%">{{ __('P.S Penjual') }}</th>
+                            <th class="text-center">{{ __('Deskripsi') }}</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -181,15 +182,21 @@
                                 <input type="text" class="form-control text-right" value="{{ number_format($sd->total,0,".",",") }}" readonly>
                             </td>
                             <td>
-                                <input type="text" class="form-control" @if ($sd->buyer_id != null && $sd->sharing_profit_buyer > 0)
-                                    value="{{$sd->buyer->name}} : {{ number_format($sd->sharing_profit_buyer,0,".",",") }}"
-                                    @else value=" - "
+                                <input type="text" @if ($sd->buyer_id != null && $sd->sharing_profit_buyer > 0)
+                                    class="form-control"  value="{{ $sd->buyer->name }}"
+                                    @else class="form-control text-center"  value=" - "
                                 @endif readonly>
                             </td>
                             <td>
-                                <input type="text" class="form-control" @if ($sd->sharing_profit_sales > 0)
-                                value="{{$sale->sales->name}} : {{ number_format($sd->sharing_profit_sales,0,".",",") }}"
-                                @else value=" - "
+                                <input type="text" class="form-control text-right" @if ($sd->buyer_id != null && $sd->sharing_profit_buyer > 0)
+                                    value="{{ number_format($sd->sharing_profit_buyer,0,".",",") }}"
+                                    @else value=" 0 "
+                                @endif readonly>
+                            </td>
+                            <td>
+                                <input type="text" class="form-control text-right" @if ($sd->sharing_profit_sales > 0)
+                                value="{{ number_format($sd->sharing_profit_sales,0,".",",") }}"
+                                @else value=" 0 "
                             @endif readonly>
                             </td>
                             <td>

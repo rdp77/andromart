@@ -1,44 +1,44 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__(' | Edit Transaksi Pengeluaran'))
-@section('titleContent', __('Edit Transaksi Pengeluaran'))
+@section('title', __('pages.title').__(' | Tambah Pendapatan'))
+@section('titleContent', __('Tambah Pendapatan'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
-<div class="breadcrumb-item active">{{ __('Transaksi Pengeluaran') }}</div>
-<div class="breadcrumb-item active">{{ __('Edit Transaksi Pengeluaran') }}</div>
+<div class="breadcrumb-item active">{{ __('Pendapatan') }}</div>
+<div class="breadcrumb-item active">{{ __('EDit Pendapatan') }}</div>
 @endsection
 
 @section('content')
     <div class="card">
         <div class="row">
             <div class="col-md-12">
-                <form method="POST" action="{{ route('payment.update',$payment->id) }}">
+                <form method="POST" action="{{ route('income.update') }}">
                     @csrf
-                    @method('PUT')
                     <div class="card-header">
                         <h4>Form Data</h4>
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="form-group col-md-3">
+                            <div class="form-group col-md-6">
                                 <label for="code">{{ __('Kode Faktur') }}<code>*</code></label>
-                                <input id="code" type="text" class="form-control" readonly="" value="{{ $payment->code }}" name="code">
+                                <input id="code" type="text" class="form-control" readonly="" value="{{$income->code}}" name="code">
                             </div>
-                            <div class="form-group col-md-3 col-lg-3">
+                            <div class="form-group col-md-6 col-lg-6">
                                 <label for="date">{{ __('Tanggal') }}<code>*</code></label>
-                                <input id="date" type="text" class="form-control" readonly="" value="{{ date('d-F-Y', strtotime($payment->date))}}"
-                                    name="date">
+                                <input id="date" type="text" class="form-control datepicker" value="{{ date('d-F-Y', strtotime($income->date)) }}" readonly="" name="date">
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-3 col-xs-12">
+                            <div class="form-group col-md-4 col-xs-12">
                                 <div class="d-block">
                                     <label for="branch_id"
                                         class="control-label">{{ __('Cabang') }}<code>*</code></label>
                                 </div>
-                                <select class="select2 @error('branch_id') is-invalid @enderror" name="branch_id" required>
-                                    <option value="{{ $payment->branch->id }}">{{ $payment->branch->code }} - {{ $payment->branch->name }}</option>
+                                <select onchange="branchChange()" class="select2 branch @error('branch_id') is-invalid @enderror" name="branch_id" required>
+                                    <option value="">- Select -</option>
                                     @foreach ($branch as $branch)
-                                    <option value="{{$branch->id}}">{{$branch->code}} - {{$branch->name}}</option>
+                                    <option @if ($branch->id == $income->branch_id)
+                                        selected=""
+                                    @endif value="{{$branch->id}}">{{$branch->code}} - {{$branch->name}}</option>
                                     @endforeach
                                 </select>
                                 @error('branch_id')
@@ -47,64 +47,60 @@
                                 </div>
                                 @enderror
                             </div>
-                            <div class="form-group col-md-3 col-xs-12">
+                            <div class="form-group col-md-4 col-xs-12">
                                 <div class="d-block">
                                     <label for="cash_id"
                                         class="control-label">{{ __('Kass') }}<code>*</code></label>
                                 </div>
-                                <select class="select2 @error('cash_id') is-invalid @enderror" name="cash_id" disabled>
-                                    <option value="{{ $payment->cash->id }}">{{ $payment->cash->code }} - {{ $payment->cash->name }}</option>
-                                    {{-- @foreach ($cash as $cash)
-                                    <option value="{{$cash->id}}">{{$cash->code}} - {{$cash->name}}</option>
-                                    @endforeach --}}
+                                <select class="select2" name="cash_id" required>
+                                    <option value="">- Select -</option>
+                                    @foreach ($cash as $el)
+                                        @if ($el->main_id == 1)
+                                            <option value="{{$el->id}}">{{$el->code}} - {{$el->name}}</option>
+                                        @endif
+                                    @endforeach 
                                 </select>
-                                @error('cash_id')
-                                <div class="invalid-feedback">
-                                    {{ $message }}
-                                </div>
-                                @enderror
                             </div>
-                            {{-- <div class="form-group col-md-3 col-xs-12">
-                                <label for="balance">{{ __('Saldo Kas') }}<code>*</code></label>
-                                <div class="input-group">
-                                    <div class="input-group-prepend">
-                                        <div class="input-group-text">
-                                        Rp.
-                                        </div>
-                                    </div>
-                                    <input id="rupiah" type="text" class="form-control currency"
-                                        name="balance" value="" readonly autocomplete="balance">
-                                </div>
-                            </div> --}}
-                        </div>
-                        <div class="row">
-                            <div class="form-group col-md-3 col-xs-12">
+                            @foreach ($cash as $el)
+                                @if ($el->debet_kredit == 'D')
+                                    <input class="accountData" type="hidden"
+                                    data-branch="{{$el->branch_id}}"
+                                    data-name="{{$el->code}} - {{$el->name}}"
+                                    value="{{$el->id}}">
+                                @endif
+                            @endforeach
+                            <div class="form-group col-md-4 col-xs-12">
                                 <div class="d-block">
-                                    <label for="cost_id"
-                                        class="control-label">{{ __('Jenis Biaya') }}<code>*</code></label>
+                                    <label for="income_id"
+                                        class="control-label">{{ __('Jenis Pendapatan') }}<code>*</code></label>
                                 </div>
-                                <select class="select2 @error('cost_id') is-invalid @enderror" name="cost_id" required>
-                                    <option value="{{ $payment->cost->id }}">{{ $payment->cost->code }} - {{ $payment->cost->name }}</option>
+                                <select class="select2 cost @error('income_id') is-invalid @enderror"  name="income_id" required>
+                                    <option value="">- Select -</option>
                                     @foreach ($cost as $cost)
-                                    <option value="{{$cost->id}}">{{$cost->code}} - {{$cost->name}}</option>
+                                    <option @if ($cost->id == $income->cash_id)
+                                        selected=""
+                                    @endif value="{{$cost->id}}">{{$cost->code}} - {{$cost->name}}</option>
                                     @endforeach
                                 </select>
-                                @error('cost_id')
+                                @error('income_id')
                                 <div class="invalid-feedback">
                                     {{ $message }}
                                 </div>
                                 @enderror
                             </div>
-                            <div class="form-group col-md-3 col-xs-12">
-                                <label for="price">{{ __('Jumlah Pembayaran') }}<code>*</code></label>
+                        </div>
+                        <div class="row">
+                            
+                            <div class="form-group col-md-6 col-xs-12">
+                                <label for="price">{{ __('Jumlah Pendapatan') }}<code>*</code></label>
                                 <div class="input-group">
                                     <div class="input-group-prepend">
                                         <div class="input-group-text">
                                         Rp.
                                         </div>
                                     </div>
-                                    <input id="rupiah" type="text" class="form-control currency @error('price') is-invalid @enderror"
-                                        name="price" value="{{ $payment->price }}" readonly autocomplete="price">
+                                    <input id="rupiah" type="text" value="{{$income->price}}"  class="form-control cleaveNumeral @error('price') is-invalid @enderror"
+                                        name="price" value="{{ old('price') }}" required style="text-align: right">
                                     @error('price')
                                     <div class="invalid-feedback">
                                         {{ $message }}
@@ -112,20 +108,24 @@
                                     @enderror
                                 </div>
                             </div>
+                            <div class="form-group col-md-6">
+                                <label for="description">{{ __('Keterangan') }}</label>
+                                <input id="description" type="text" class="form-control" name="description">
+                            </div>
                         </div>
                         <div class="row">
-                            <div class="form-group col-md-4">
-                                <label for="description">{{ __('Keterangan') }}</label>
-                                <input id="description" type="text" class="form-control" name="description" value="{{ $payment->description }}">
-                            </div>
+                            
                         </div>
                     </div>
                     <div class="card-footer text-right">
                         <a class="btn btn-outline" href="javascript:window.history.go(-1);">{{ __('Kembali') }}</a>
-                        <button class="btn btn-primary mr-1" type="submit">{{ __('pages.edit') }}</button>
+                        <button class="btn btn-primary mr-1" type="submit">{{ __('Tambah Data Transaksi') }}</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+@endsection
+@section('script')
+<script src="{{ asset('assets/pages/transaction/incomeScript.js') }}"></script>
 @endsection

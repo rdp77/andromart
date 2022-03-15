@@ -4,11 +4,14 @@ var table = $("#table").DataTable({
     pageLength: 10,
     processing: true,
     serverSide: true,
+    order: [],
     responsive: true,
+    // order:[[ 3, "desc" ]],
     lengthMenu: [
         [10, 25, 50, -1],
         [10, 25, 50, "Semua"],
     ],
+    
     ajax: {
         url: "/transaction/service/service-payment",
         type: "GET",
@@ -24,6 +27,7 @@ var table = $("#table").DataTable({
         { data: "totalValue" },
         { data: "action", orderable: false, searchable: true },
     ],
+    
     buttons: [
         {
             extend: "print",

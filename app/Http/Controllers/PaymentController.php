@@ -31,7 +31,7 @@ class PaymentController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Payment::with('cost', 'branch', 'cash')->get();
+            $data = Payment::with('cost', 'branch', 'cash')->orderBy('id','DESC')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('date', function ($row) {

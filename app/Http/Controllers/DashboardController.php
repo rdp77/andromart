@@ -56,9 +56,9 @@ class DashboardController extends Controller
         // return $topSales;
 
         $dataTrafficToday = DB::table('traffic')->where('date', date('Y-m-d'))->count();
-        $dataServiceTotal = Service::where('date', date('Y-m-d'))->count();
-        $dataServiceHandphone = Service::where('type', '2')->where('date', date('Y-m-d'))->count();
-        $dataServiceLaptop = Service::where('type', '3')->where('date', date('Y-m-d'))->count();
+        $dataServiceTotal = Service::where('created_at','like','%'.  date('Y-m-d').'%')->count();
+        $dataServiceHandphone = Service::where('type', '2')->where('created_at','like','%'. date('Y-m-d').'%')->count();
+        $dataServiceLaptop = Service::where('type', '3')->where('created_at','like','%'. date('Y-m-d').'%')->count();
         $checkDataSharingProfit =  $this->checkSharingProfit();
         $sharingProfit1Service = $checkDataSharingProfit[0];
         $sharingProfit2Service = $checkDataSharingProfit[1];

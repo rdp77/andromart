@@ -213,7 +213,9 @@ class SaleController extends Controller
                 $total_profit_store = collect($sharing_profit_store)->sum();
                 $total_profit_sales = collect($sharing_profit_sales)->sum();
                 $total_profit_buyer = collect($sharing_profit_buyer)->sum();
-                $total_hpp = collect($req->profitDetail[$i])->sum();
+                $hpp = str_replace(",", '', $req->profitDetail);
+                $total_hpp = collect($hpp)->sum();
+                // return $tot;
             }
 
             Sale::create([
@@ -464,11 +466,12 @@ class SaleController extends Controller
             // return $req->all();
             // return [$accountCode,$totalBayar,$description];
             // return [$descriptionHpp,$total_hpp,$DKHpp];
+
             DB::commit();
             return Response::json(['status' => 'success', 'message' => 'Data Tersimpan', 'id' => $id] );
         } catch (\Throwable $th) {
             DB::rollback();
-            // return $th;
+                                // return $th;
             return Response::json(['status' => 'error', 'message' => $th ]);
         }
     }

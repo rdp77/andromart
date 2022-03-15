@@ -31,7 +31,7 @@ class TransactionIncomeController extends Controller
     public function index(Request $req)
     {
         if ($req->ajax()) {
-            $data = Income::with('income','branch', 'cash')->get();
+            $data = Income::with('income','branch', 'cash')->orderBy('id','DESC')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('date', function ($row) {
@@ -206,7 +206,7 @@ class TransactionIncomeController extends Controller
         $branch = Branch::where('id', '!=', Income::find($id)->branch_id)->get();
         $cost = Cost::where('id', '!=', Income::find($id)->income_id)->get();
         $cash = Cash::where('id', '!=', Income::find($id)->cash_id)->get();
-        $income = Income::find($id);
+        $income = Income::find($id)->with('cash')->first();
 
         return view(
             'pages.backend.transaction.income.updateIncome',

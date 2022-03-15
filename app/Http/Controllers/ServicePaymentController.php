@@ -48,7 +48,7 @@ class ServicePaymentController extends Controller
             return view('forbidden');
         }
         if ($req->ajax()) {
-            $data = ServicePayment::with(['Service', 'ServiceDetail', 'user'])->get();
+            $data = ServicePayment::with(['Service', 'ServiceDetail', 'user'])->orderBy('id', 'DESC')->get();
 
             return Datatables::of($data)
                 ->addIndexColumn()
@@ -136,6 +136,8 @@ class ServicePaymentController extends Controller
                     $htmlAdd .= '<tr>';
                     $htmlAdd .= '<td>Total</td>';
                     $htmlAdd .= '<th>' . number_format($row->Service->total_price, 0, '.', ',') . '</th>';
+                    $htmlAdd .= '<td>Customer</td>';
+                    $htmlAdd .= '<th>' . $row->Service->customer_name . '</th>';
                     $htmlAdd .= '</tr>';
                     $htmlAdd .= '<table>';
 

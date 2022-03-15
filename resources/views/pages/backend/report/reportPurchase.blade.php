@@ -166,13 +166,13 @@
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
-                        <th>Tanggal</th>
-                        <th>Faktur</th>
-                        <th>Barang</th>
-                        <th>Supplier</th>
-                        <th>Pembayaran</th>
-                        <th>Operator</th>
-                        <th>Jumlah</th>
+                        <th class="text-center">Tanggal</th>
+                        <th class="text-center">Faktur</th>
+                        <th class="text-center">Barang</th>
+                        <th class="text-center">Supplier</th>
+                        <th class="text-center">Pembayaran</th>
+                        <th class="text-center">Operator</th>
+                        <th class="text-center">Jumlah</th>
                     </tr>
                 </thead>
                 <tbody class="dropHere" style="border: none !important">

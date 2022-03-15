@@ -37,7 +37,7 @@ function checkData() {
                         if (data.tipe == "Pengeluaran") {
                             // $.each(
                             //     value.journal_detail,
-                            //     function (index1, value1) {
+                            //     function (index1, value1) { 
                             //         jurnalDetailTransaksi[index] =
                             //             "<b>" +
                             //             value.journal_detail[0].account_data
@@ -370,4 +370,15 @@ function checkData() {
         },
         error: function (data) {},
     });
+}
+
+
+function printDiv() {
+    var outputString = '<style type="text/css">#areaToPrint {font-size:5px;font-family: Arial, Helvetica, sans-serif;border-collapse: collapse;width: 100%;}#areaToPrint td, #areaToPrint th {border: 1px solid #ddd;padding: 8px;}#areaToPrint tr:nth-child(even){background-color: #f2f2f2;}#areaToPrint tr:hover {background-color: #ddd;}#areaToPrint th {padding-top: 12px;padding-bottom: 12px;text-align: left;background-color: #04AA6D;color: white;}</style>'
+    var divToPrint = document.getElementById('areaToPrint');
+    newWin = window.open("");
+    newWin.document.write(divToPrint.outerHTML);
+    newWin.document.write(outputString);
+    newWin.print();
+    newWin.close();
 }

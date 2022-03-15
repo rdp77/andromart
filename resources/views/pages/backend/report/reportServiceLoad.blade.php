@@ -1,18 +1,18 @@
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <th width="13%">Tanggal</th>
-            <th width="12%">Faktur</th>
-            <th width="25%">Customer</th>
-            <th width="20%">Barang</th>
-            <th width="18%">Status</th>
-            <th width="12%">Jumlah</th>
+            <th class="text-center" width="13%">Tanggal</th>
+            <th class="text-center" width="12%">Faktur</th>
+            <th class="text-center" width="25%">Customer</th>
+            <th class="text-center" width="20%">Barang</th>
+            <th class="text-center" width="18%">Status</th>
+            <th class="text-center" width="12%">Jumlah</th>
         </tr>
     </thead>
     @foreach($data as $key => $value)
     <tbody class="dropHere" style="border: none !important">
         <tr role="row" class="odd">
-            <td>{{ \Carbon\Carbon::parse($value->date)->locale('id')->isoFormat('LL') }}</td>
+            <td>{{ \Carbon\Carbon::parse($value->created_at)->locale('id')->isoFormat('LL') }}</td>
             <th>{{ $value->code }}</th>
             <td>
                 <table>
@@ -48,7 +48,13 @@
                             <td>Pekerjaan : <b>{{ $value->work_status }}</b></td>
                         </tr>
                         <tr>
-                            <td>Pembayaran : <b>{{ $value->payment_status}}</b></td>
+                            <td>Pembayaran :
+                                @if ($value->payment_status == null)
+                                <b>Belum Bayar</b>
+                                @else
+                                <b>{{ $value->payment_status}}</b>
+                                @endif
+                            </td>
                         </tr>
                     </tbody>
                 </table>
