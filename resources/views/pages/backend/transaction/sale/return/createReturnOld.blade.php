@@ -36,8 +36,7 @@
                             <label class="control-label">
                                 {{ __('Faktur Penjualan')}}<code>*</code>
                             </label>
-                             <!-- onchange="itemId('{{ csrf_token() }}','{{ route('sale.return.loadDataItem') }}', '#itemOld')" -->
-                            <select class="select2 saleId" name="saleId" id="saleId" onchange="itemIdChange()">
+                            <select class="select2" name="saleId" id="saleId" onchange="itemId('{{ csrf_token() }}','{{ route('sale.return.loadDataItem') }}', '#itemOld')">
                                 <option value="">{{ __('- Select -') }}</option>
                                 @foreach ($sale as $i)
                                 <option value="{{ $i->id }}">
@@ -47,27 +46,16 @@
                             </select>
                         </div>
                     </div>
-                    @foreach ($barang as $el)
-                    <input class="barangDataHidden" type="hidden" data-id="{{$el->sale_id}}"
-                        data-value="{{$el->id}}" data-brand="{{$el->brand_name}}" data-old="{{$el->price}}" data-qty="{{$el->qty}}"
-                        data-item="{{$el->item_name}}" value="{{$el->id}}">
-                    @endforeach
                     <div class="row">
                         <div class="form-group col-md-8 col-xs-12" id="itemOldDiv">
-                            <label for="account">{{ __('Barangs') }}<code>*</code></label>
-                            <select class="select2 barang validation" name="barang" onchange="barangChange()" required>
-                                <option value="">- Select -</option>
-                            </select>
-                        </div>
-                        <!-- <div class="form-group col-md-8 col-xs-12" id="itemOldDiv">
                             <label for="itemOld">{{ __('Barang') }}</label><code>*</code>
                             <select class="select2" name="itemOld" id="itemOld" onchange="itemAll('{{ csrf_token() }}','{{ route('sale.return.loadDataItemAll') }}', '#qtyForm')">
                                 <option value="">{{ __('- Select -') }}</option>
                             </select>
-                        </div> -->
+                        </div>
                         <div class="form-group col-md-4 col-xs-12" id="qtyForm">
                             <label for="">{{ __('Qty') }}</label><code>*</code>
-                            <input class="form-control qty" id="qty" type="text" value="1" readonly="">
+                            <input class="form-control" type="text" value="1" readonly="">
                         </div>
                     </div>
 
@@ -112,8 +100,7 @@
                                     {{ __('Rp.') }}
                                 </div>
                             </div>
-                            <input id="item_price_old" type="text" value="" class="form-control" style="text-align: right" readonly onchange="sumTotal()" name="item_price_old">
-                             <!-- readonly id="priceTotal" onchange="sumTotal()" -->
+                            <input id="item_price_old" type="text" value="" class="form-control" style="text-align: right" readonly>
                         </div>
                         {{-- <div class="input-group d-none" id="dv">
                             <div class="input-group-prepend">
@@ -169,8 +156,8 @@
         <div class="card-header" id="card-header-id">
             <h4>{{ __('Data Detail') }}</h4>
             <div class="card-header-action">
-                <button onclick="addItem()" type="button" class="btn btn-icon icon-left btn-warning">
-                    <i class="fas fa-plus"></i>{{ __(' Tambah Data') }}
+                <button onclick="addItemReturnSale()" type="button" class="btn btn-icon icon-left btn-warning">
+                    <i class="fas fa-plus"></i>{{ __(' Tambah Datas') }}
                 </button>
             </div>
         </div>
@@ -310,6 +297,57 @@
         // else {
         //     document.getElementById("dataDetailStyle").style.visibility = "visible";
         // }
+    }
+    function addItemReturnSale() {
+        var index = $('.priceDetail').length;
+        var dataDetail = $('.dataDetail').length;
+        $('.dropHereItem').append(
+            '<tr class="dataDetail dataDetail_'+(dataDetail+1)+'">'+
+                '<td style="display:none">'+
+                    '<input type="text" class="form-control priceDetailSparePart priceDetailSparePart_'+(index+1)+'" name="priceDetailSparePart[]" value="0">'+
+                    '<input type="text" class="form-control priceDetailLoss priceDetailLoss_'+(index+1)+'" name="priceDetailLoss[]" value="0">'+
+                '</td>'+
+                '<td>'+
+                    '<select class="select2 itemsDetail" name="itemsDetail[]">'+
+                        '<option value="-" data-index="'+(index+1)+'">- Select -</option>'+
+                        dataItems+
+                    '</select>' +
+                    '<input type="text" class="form-control supplier supplier_'+(index+1)+'" name="supplierDetail[]" data-index="'+(index+1)+'" readonly>'+
+                '</td>'+
+                '<td>' +
+                    '<input type="text" class="form-control qtyDetail qtyDetail_' + (index + 1) + '" name="qtyDetail[]" data-index="' + (index + 1) + '" value="1" style="text-align: right">' +
+                    '<input type="text" class="form-control stock stock_'+(index+1)+'" readonly name="stockDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
+                '</td>'+
+                '<td>' +
+                    '<input type="text" class="form-control cleaveNumeral priceDetail priceDetail_'+(index+1)+'" name="priceDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right">'+
+                    '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="0" style="text-align: right">'+
+                '</td>'+
+                // '<td>'+
+                //     '<select class="select2 buyerDetail" name="buyerDetail[]">'+
+                //         '<option value="" data-index="'+(index+1)+'">- Select Buyer -</option>'+
+                //         dataBuyer+
+                //     '</select>' +
+                //     '<input type="text" class="form-control" name="salesDetail[]" value="Sales" readonly>'+
+                // '</td>'+
+                // '<td>'+
+                //     '<input type="number" class="form-control" name="profitSharingBuyer[]" value="0">'+
+                //     '<input type="number" class="form-control" name="profitSharingSales[]" value="0">'+
+                // '</td>'+
+                '<td>'+
+                    // '<input type="text" class="form-control cleaveNumeral profitDetail profitDetail_'+(index+1)+'" name="profitDetail[]" data-index="'+(index+1)+'" value="0" style="text-align: right" hidden>'+
+                    '<input type="text" class="form-control" name="descriptionDetail[]">' +
+                '</td>'+
+                '<td>'+
+                    '<select class="select2 typeDetail typeDetail_'+(index+1)+'" name="typeDetail[]">'+
+                        '<option selected data-index="'+(index+1)+'" value="SparePart">Ganti Barang</option>'+
+                        '<option data-index="'+(index+1)+'" value="Loss">Barang Loss</option>'+
+                    '</select>'+
+                '</td>'+
+                '<td>'+
+                    '<button type="button" class="btn btn-danger removeDataDetail" value="'+(index+1)+'" >X</button>'+
+                '</td>'+
+            '</tr>'
+        );
     }
 </script>
 @endsection
