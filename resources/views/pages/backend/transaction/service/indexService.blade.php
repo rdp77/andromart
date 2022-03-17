@@ -1,7 +1,7 @@
 @extends('layouts.backend.default')
 @section('title', __('pages.title').__(' | Transaksi Service'))
 @section('titleContent', __('Service'))
-@section('breadcrumb', __('Data'))
+@section('breadcrumb', __('Transaksi'))
 @section('morebreadcrumb')
 <div class="breadcrumb-item active">{{ __('Service') }}</div>
 @endsection

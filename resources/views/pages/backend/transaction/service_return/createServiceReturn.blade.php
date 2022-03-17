@@ -1,9 +1,9 @@
 @extends('layouts.backend.default')
 @section('title', __('pages.title').__('Tambah Service Return '))
 @section('titleContent', __('Tambah Service Return '))
-@section('breadcrumb', __('Data'))
+@section('breadcrumb', __('Transaksi'))
 @section('morebreadcrumb')
-<div class="breadcrumb-item active">{{ __('Service') }}</div>
+<div class="breadcrumb-item active">{{ __('Return Service') }}</div>
 <div class="breadcrumb-item active">{{ __('Tambah Service Return ') }}</div>
 @endsection
 
@@ -38,13 +38,13 @@
                                     data-brand="{{$element->Brand->name}}"
                                     data-type="{{$element->Type->name}}"
                                     >
-                                    
+
                                     [{{$element->code}}] {{$element->customer_name}} - {{$element->Brand->name}} {{$element->Type->name}} <span><strong>( {{$element->work_status}} )
                                     </span></strong></option>
                                 @endforeach
                             </select>
                         </div>
-                        
+
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
@@ -61,7 +61,7 @@
                         </div>
                     </div>
                     <div class="row">
-                        
+
                         <div class="form-group col-12 col-md-12 col-lg-12">
                             <label for="type">{{ __('Keterangan') }}<code>*</code></label>
                             <textarea name="description" class="form-control validation" data-name="Deskripsi Harus Di isi"  id="description"></textarea>
@@ -83,7 +83,7 @@
                     <br>
                     <div class="dropHereDataService">
                     </div>
-                    
+
                 </div>
             </div>
         </div>
@@ -137,7 +137,7 @@
                         <input readonly id="totalPayment" type="text" value="0" class="form-control cleaveNumeral"
                             name="totalPayment" style="text-align: right" onkeyup="sumTotal()">
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="totalPrice">{{ __('Total Harga') }}<code>*</code></label>
                         <input readonly id="totalPrice" type="text" value="0" class="form-control cleaveNumeral"

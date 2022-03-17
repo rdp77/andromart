@@ -1,7 +1,7 @@
 @extends('layouts.backend.default')
 @section('title', __('pages.title').__(' | Tambah Service'))
 @section('titleContent', __('Tambah Service'))
-@section('breadcrumb', __('Data'))
+@section('breadcrumb', __('Transaksi'))
 @section('morebreadcrumb')
 <div class="breadcrumb-item active">{{ __('Service') }}</div>
 <div class="breadcrumb-item active">{{ __('Tambah Service') }}</div>
@@ -373,7 +373,7 @@
                             name="totalPrice" onchange="sumTotal()" style="text-align: right">
                     </div>
 
-                   
+
                 </div>
 
             </div>

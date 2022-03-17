@@ -286,13 +286,17 @@ class ServiceController extends Controller
 
     public function onProgressLoad(Request $req)
     {
+        $branchUser = Auth::user()->employee->branch_id;
         if ($req->technician_id == 'x') {
             $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
+                ->where('branch_id', $branchUser)
                 ->whereIn('work_status', ['Proses', 'Manifest'])
                 ->orderBy('id', 'desc')
                 ->get();
-            $progress = Service::where('work_status', 'Proses')->get();
-            $manifest = Service::where('work_status', 'Manifest')->get();
+            $progress = Service::where('branch_id', $branchUser)
+                ->where('work_status', 'Proses')->get();
+            $manifest = Service::where('branch_id', $branchUser)
+                ->where('work_status', 'Manifest')->get();
         } else {
             $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
                 ->whereIn('work_status', ['Proses', 'Manifest'])
@@ -311,6 +315,57 @@ class ServiceController extends Controller
         $tmanifest = count($manifest);
 
         return view('pages.backend.transaction.service.onProgressLoad', compact('service', 'tr', 'tprogress', 'tmanifest'));
+    }
+
+    public function onProgressPrint(Request $req)
+    {
+        $title = 'Service onProgress';
+        $branchUser = Auth::user()->employee->branch_id;
+
+        // $technician = 'Semua';
+        // $sub = ' ';
+        // $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
+        //     ->where('branch_id', $branchUser)
+        //     ->whereIn('work_status', ['Proses', 'Manifest'])
+        //     ->orderBy('id', 'desc')
+        //     ->get();
+        // $progress = Service::where('work_status', 'Proses')->where('branch_id', $branchUser)->get();
+        // $manifest = Service::where('work_status', 'Manifest')->where('branch_id', $branchUser)->get();
+
+        if ($req->technician_id == 'x') {
+            $technician = 'Semua';
+            $sub = ' ';
+            $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
+                ->where('branch_id', $branchUser)
+                ->whereIn('work_status', ['Proses', 'Manifest'])
+                ->orderBy('id', 'desc')
+                ->get();
+            $progress = Service::where('branch_id', $branchUser)->where('work_status', 'Proses')->get();
+            $manifest = Service::where('branch_id', $branchUser)->where('work_status', 'Manifest')->get();
+        } else {
+            $technic = Employee::where('id', $req->technician_id)->first();
+            $technician = $technic->name;
+            $sub = 'Teknisi';
+            $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
+                ->whereIn('work_status', ['Proses', 'Manifest'])
+                ->where('technician_id', $req->technician_id)
+                ->orderBy('id', 'desc')
+                ->get();
+            $progress = Service::where('work_status', 'Proses')
+                ->where('technician_id', $req->technician_id)
+                ->get();
+            $manifest = Service::where('work_status', 'Manifest')
+                ->where('technician_id', $req->technician_id)
+                ->get();
+        }
+        $tr = count($service);
+        $tprogress = count($progress);
+        $tmanifest = count($manifest);
+
+        $subtitle = $sub;
+        $val = $technician;
+        // return $req->all();
+        return view('pages.backend.transaction.service.onProgressPrint', compact('service', 'tr', 'tprogress', 'tmanifest','title', 'subtitle', 'val'));
     }
 
     public function code($type)
