@@ -376,12 +376,23 @@ function checkData() {
 function printDiv() {
     var outputString = 
     '<style type="text/css">'+
-    '#areaToPrint {font-size:5px;font-family: Arial, Helvetica, sans-serif;border-collapse: collapse;width: 100%;}'+
-    '#areaToPrint td, #areaToPrint th {border: 1px solid #ddd;padding: 8px;}'+
-    '#areaToPrint tr:nth-child(even){background-color: #f2f2f2;}'+
-    '#areaToPrint tr:hover {background-color: #ddd;}'+
-    '#areaToPrint th {padding-top: 12px;padding-bottom: 12px;text-align: left;background-color: #04AA6D;color: red;}'+
+        '#areaToPrint {'+
+            'font-size:5px;font-family: Arial, Helvetica, sans-serif;border-collapse: collapse;width: 100%;'+
+        '}'+
+        '#areaToPrint td, #areaToPrint th {'+
+            'border: 1px solid black;padding: 8px;'+
+        '}'+
+        '#areaToPrint tr:nth-child(even){'+
+            'background-color: #f2f2f2;'+
+        '}'+
+        '#areaToPrint tr:hover {'+
+            'background-color: #ddd;'+
+        '}'+
+        '#areaToPrint th {'+
+            'padding-top: 12px;padding-bottom: 12px;text-align: left;background-color: #04AA6D;color: red;'+
+        '}'+
     '</style>';
+
     var divToPrint = document.getElementById('areaToPrint');
     newWin = window.open("");
     newWin.document.write(divToPrint.outerHTML);
