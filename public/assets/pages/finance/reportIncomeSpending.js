@@ -377,7 +377,7 @@ function printDiv() {
     var outputString = 
     '<style type="text/css">'+
         '#areaToPrint {'+
-            'font-size:5px;font-family: Arial, Helvetica, sans-serif;border-collapse: collapse;width: 100%;'+
+            'font-size:5px;font-family: Arial, Helvetica, sans-serif;border-collapse: collapse;width: 100%;color: black;'+
         '}'+
         '#areaToPrint td, #areaToPrint th {'+
             'border: 1px solid black;padding: 8px;'+
@@ -389,7 +389,7 @@ function printDiv() {
             'background-color: #ddd;'+
         '}'+
         '#areaToPrint th {'+
-            'padding-top: 12px;padding-bottom: 12px;text-align: left;background-color: #04AA6D;color: red;'+
+            'padding-top: 12px;padding-bottom: 12px;text-align: left;background-color: #04AA6D;'+
         '}'+
     '</style>';
 
