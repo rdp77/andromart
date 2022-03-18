@@ -1,8 +1,9 @@
 @extends('layouts.backend.default')
 @section('title', __('pages.title').__(' | Service On Progress'))
 @section('titleContent', __('Service On Progress'))
-@section('breadcrumb', __('Data'))
+@section('breadcrumb', __('Transaksi'))
 @section('morebreadcrumb')
+<div class="breadcrumb-item">{{ __('Service') }}</div>
 <div class="breadcrumb-item active">{{ __('Service On Progress') }}</div>
 @endsection
 
@@ -25,7 +26,13 @@
                 <div class="form-group col-6 col-md-3">
                     <br><button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}', '{{ route('service.onProgressLoad') }}', '#data-load')">
                         <i class="fas fa-eye"></i> Cari
+                    </button>&emsp;
+                    <button class="btn btn-primary" type="button" onclick="printTechnician()">
+                        <i class="fas fa-print"></i> Cetak Laporan
                     </button>
+                    {{-- <a href="{{ route('service.onProgressPrint') }}" target="__blank" class="btn btn-primary">
+                        <i class="fas fa-print"></i> Print
+                    </a> --}}
                 </div>
             </div>
             <div class="card-body">
@@ -140,6 +147,10 @@
           console.log(data);
           $(target).html(data);
       });
+  }
+  function printTechnician() {
+    var technician_id = document.getElementById("technician_id").value;
+    window.location.href = '{{ route('service.onProgressPrint') }}?&technician_id=' + technician_id
   }
 </script>
 @endsection

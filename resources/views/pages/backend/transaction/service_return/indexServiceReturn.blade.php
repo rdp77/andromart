@@ -1,7 +1,7 @@
 @extends('layouts.backend.default')
 @section('title', __('pages.title').__(' | Return Service'))
 @section('titleContent', __('Return Service'))
-@section('breadcrumb', __('Data'))
+@section('breadcrumb', __('Transaksi'))
 @section('morebreadcrumb')
 <div class="breadcrumb-item active">{{ __('Return Service') }}</div>
 @endsection

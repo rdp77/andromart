@@ -40,6 +40,10 @@ Route::group(['prefix' => 'transaction'], function () {
             'service-onProgressLoad',
             [ServiceController::class, 'onProgressLoad']
         )->name('service.onProgressLoad');
+        Route::get(
+            'service-onProgressPrint',
+            [ServiceController::class, 'onProgressPrint']
+        )->name('service.onProgressPrint');
 
         Route::post(
             'service-form-update-status-load-data',

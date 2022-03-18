@@ -19,6 +19,7 @@ use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
+
 class SaleReturnController extends Controller
 {
     public function __construct(DashboardController $DashboardController)
@@ -124,6 +125,12 @@ class SaleReturnController extends Controller
         // $customer = Customer::where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
         $stock = Stock::where('branch_id', '=', $userBranch)->where('item_id', '!=', 1)->get();
         $actionDetail = null;
+        // $barang = Sale::where('id', 1)->with('SaleDetail')->get();
+        $barang = Sale::rightJoin('sale_details', 'sales.id', 'sale_details.sale_id')
+        ->join('items', 'sale_details.item_id', 'items.id')
+        ->join('brands', 'items.brand_id', 'brands.id')
+        ->select('*', 'brands.name as brand_name', 'items.name as item_name')
+        ->get();
 
         return view('pages.backend.transaction.sale.return.createReturn', [
             'code' => $code,
@@ -132,6 +139,7 @@ class SaleReturnController extends Controller
             'account' => $account,
             'stock' => $stock,
             'actionDetail' => $actionDetail,
+            'barang' => $barang,
         ]);
     }
 
