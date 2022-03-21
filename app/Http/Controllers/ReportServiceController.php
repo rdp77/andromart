@@ -43,14 +43,14 @@ class ReportServiceController extends Controller
         $startDate = $req->startDate1;
         $endDate = $req->endDate1;
         $data = Service::with(['Type', 'Brand'])
-        ->where('created_at','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('created_at','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('branch_id', $branchUser)
         ->orderBy('id', 'desc')->get();
 
         $bayar = Service::with(['Type', 'Brand'])
-        ->where('created_at','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('created_at','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('branch_id', $branchUser)
         ->where('payment_status', 'Lunas')->get();
 
@@ -67,15 +67,15 @@ class ReportServiceController extends Controller
         $startDate = $req->startDate2;
         $endDate = $req->endDate2;
         $data = Service::with(['Type', 'Brand'])
-        ->where('created_at','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('created_at','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('branch_id', $branchUser)
         ->where('series', $req->type_id)
         ->orderBy('id', 'desc')->get();
 
         $bayar = Service::with(['Type', 'Brand'])
-        ->where('created_at','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('created_at','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('branch_id', $branchUser)
         ->where('series', $req->type_id)
         ->where('payment_status', 'Lunas')->get();
@@ -92,14 +92,14 @@ class ReportServiceController extends Controller
         $startDate = $req->startDate3;
         $endDate = $req->endDate3;
         $data = Service::with(['Type', 'Brand'])
-        ->where('created_at','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('created_at','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('technician_id', $req->technician_id)
         ->orderBy('id', 'desc')->get();
 
         $bayar = Service::with(['Type', 'Brand'])
-        ->where('created_at','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('created_at','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('technician_id', $req->technician_id)
         ->where('payment_status', 'Lunas')->get();
 
@@ -115,14 +115,14 @@ class ReportServiceController extends Controller
         $startDate = $req->startDate4;
         $endDate = $req->endDate4;
         $data = Service::with(['Type', 'Brand'])
-        ->where('created_at','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('created_at','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('branch_id', $req->branch_id)
         ->orderBy('id', 'desc')->get();
 
         $bayar = Service::with(['Type', 'Brand'])
-        ->where('created_at','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('created_at','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('branch_id', $req->branch_id)
         ->where('payment_status', 'Lunas')->get();
 
@@ -143,14 +143,14 @@ class ReportServiceController extends Controller
         $startDate = $req->startDate1;
         $endDate = $req->endDate1;
         $data = Service::with(['Type', 'Brand'])
-        ->where('created_at','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('created_at','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('branch_id', $branchUser)
         ->orderBy('id', 'desc')->get();
 
         $bayar = Service::with(['Type', 'Brand'])
-        ->where('created_at','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('created_at','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('branch_id', $branchUser)
         ->where('payment_status', 'Lunas')->get();
 
@@ -173,15 +173,15 @@ class ReportServiceController extends Controller
         $startDate = $req->startDate2;
         $endDate = $req->endDate2;
         $data = Service::with(['Type', 'Brand'])
-        ->where('created_at','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('created_at','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('branch_id', $branchUser)
         ->where('series', $req->type_id)
         ->orderBy('id', 'desc')->get();
 
         $bayar = Service::with(['Type', 'Brand'])
-        ->where('created_at','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('created_at','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('branch_id', $branchUser)
         ->where('series', $req->type_id)
         ->where('payment_status', 'Lunas')->get();
@@ -204,15 +204,15 @@ class ReportServiceController extends Controller
         $startDate = $req->startDate3;
         $endDate = $req->endDate3;
         $data = Service::with(['Type', 'Brand'])
-        ->where('created_at','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('created_at','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('branch_id', $branchUser)
         ->where('technician_id', $req->technician_id)
         ->orderBy('id', 'desc')->get();
 
         $bayar = Service::with(['Type', 'Brand'])
-        ->where('created_at','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('created_at','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('branch_id', $branchUser)
         ->where('technician_id', $req->technician_id)
         ->where('payment_status', 'Lunas')->get();
@@ -235,14 +235,14 @@ class ReportServiceController extends Controller
         $startDate = $req->startDate4;
         $endDate = $req->endDate4;
         $data = Service::with(['Type', 'Brand'])
-        ->where('created_at','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('created_at','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('branch_id', $req->branch_id)
         ->orderBy('id', 'desc')->get();
 
         $bayar = Service::with(['Type', 'Brand'])
-        ->where('created_at','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('created_at','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('branch_id', $req->branch_id)
         ->where('payment_status', 'Lunas')->get();
 

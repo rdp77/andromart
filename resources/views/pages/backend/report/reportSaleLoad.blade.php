@@ -1,12 +1,13 @@
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <th class="text-center" width="15%">Tanggal</th>
+            <th class="text-center" width="13%">Tanggal</th>
             <th class="text-center" width="12%">Faktur</th>
             <th class="text-center" width="25%">Barang</th>
             <th class="text-center" width="18%">Akun Kas</th>
-            <th class="text-center" width="15%">Laba Kotor</th>
-            <th class="text-center" width="15%">Laba Bersih</th>
+            <th class="text-center" width="12%">Laba Kotor</th>
+            <th class="text-center" width="10%">HPP</th>
+            <th class="text-center" width="10%">Laba Bersih</th>
         </tr>
     </thead>
     @foreach($data as $key => $value)
@@ -39,6 +40,7 @@
                 </table>
             </td>
             <th class="text-right">Rp. {{ number_format($value->total_price, 0, ".", ",") }}</th>
+            <th class="text-right">Rp. {{ number_format($value->total_hpp, 0, ".", ",") }}</th>
             <th class="text-right">Rp. {{ number_format($value->total_profit_store, 0, ".", ",") }}</th>
         </tr>
     </tbody>
@@ -47,7 +49,7 @@
         <tr style="color: #6777ef;">
             <th colspan="2"><h5>Jumlah Transaksi : {{ $tr }}</h5></th>
             <th colspan="2"><h5>Pendapatan Kotor : Rp. {{ number_format($sumKotor, 0, ".", ",") }}</h5></th>
-            <th colspan="2"><h5>Pendapatan Bersih : Rp. {{ number_format($sumBersih, 0, ".", ",") }}</h5></th>
+            <th colspan="3"><h5>Pendapatan Bersih : Rp. {{ number_format($sumBersih, 0, ".", ",") }}</h5></th>
         </tr>
     </tfoot>
 </table>
