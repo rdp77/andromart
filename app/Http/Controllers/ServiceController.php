@@ -310,7 +310,6 @@ class ServiceController extends Controller
                 ->get();
             $manifest = Service::where('work_status', 'Manifest')
                 ->where('technician_id', $req->technician_id)
-                ->orWhere('technician_replacement_id', $req->technician_id)
                 ->get();
         }
         $tr = count($service);
