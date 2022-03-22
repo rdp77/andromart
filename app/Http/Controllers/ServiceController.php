@@ -301,13 +301,16 @@ class ServiceController extends Controller
             $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
                 ->whereIn('work_status', ['Proses', 'Manifest','Mutasi'])
                 ->where('technician_id', $req->technician_id)
+                ->orWhere('technician_replacement_id', $req->technician_id)
                 ->orderBy('id', 'desc')
                 ->get();
             $progress = Service::where('work_status', ['Proses','Mutasi'])
                 ->where('technician_id', $req->technician_id)
+                ->orWhere('technician_replacement_id', $req->technician_id)
                 ->get();
             $manifest = Service::where('work_status', 'Manifest')
                 ->where('technician_id', $req->technician_id)
+                ->orWhere('technician_replacement_id', $req->technician_id)
                 ->get();
         }
         $tr = count($service);
