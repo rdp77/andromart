@@ -268,7 +268,7 @@ class ServiceController extends Controller
         $technician = Employee::where('branch_id', $branchUser)->get();
         $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
             ->where('branch_id', $branchUser)
-            ->whereIn('work_status', ['Proses', 'Manifest'])
+            ->whereIn('work_status', ['Proses', 'Manifest','Mutasi'])
             ->orderBy('id', 'desc')
             ->get();
         $progress = Service::where('work_status', 'Proses')
@@ -294,16 +294,16 @@ class ServiceController extends Controller
                 ->orderBy('id', 'desc')
                 ->get();
             $progress = Service::where('branch_id', $branchUser)
-                ->where('work_status', 'Proses')->get();
+                ->where('work_status',['Proses','Mutasi'])->get();
             $manifest = Service::where('branch_id', $branchUser)
                 ->where('work_status', 'Manifest')->get();
         } else {
             $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
-                ->whereIn('work_status', ['Proses', 'Manifest'])
+                ->whereIn('work_status', ['Proses', 'Manifest','Mutasi'])
                 ->where('technician_id', $req->technician_id)
                 ->orderBy('id', 'desc')
                 ->get();
-            $progress = Service::where('work_status', 'Proses')
+            $progress = Service::where('work_status', ['Proses','Mutasi'])
                 ->where('technician_id', $req->technician_id)
                 ->get();
             $manifest = Service::where('work_status', 'Manifest')
