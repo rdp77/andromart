@@ -459,12 +459,13 @@
         <table class="table table-bordered table-sm" style="color: black;border:1px solid black">
             <thead>
                 <tr>
-                    <th class="text-center" width="15%">Tanggal</th>
+                    <th class="text-center" width="13%">Tanggal</th>
                     <th class="text-center" width="12%">Faktur</th>
                     <th class="text-center" width="25%">Barang</th>
                     <th class="text-center" width="18%">Akun Kas</th>
-                    <th class="text-center" width="15%">Laba Kotor</th>
-                    <th class="text-center" width="15%">Laba Bersih</th>
+                    <th class="text-center" width="12%">Laba Kotor</th>
+                    <th class="text-center" width="10%">HPP</th>
+                    <th class="text-center" width="10%">Laba Bersih</th>
                 </tr>
             </thead>
             @foreach($data as $key => $value)
@@ -483,6 +484,7 @@
                         {{ $value->accountData->name }}
                     </td>
                     <td class="text-right">Rp. {{ number_format($value->total_price, 0, ".", ",") }}</td>
+                    <td class="text-right">Rp. {{ number_format($value->total_hpp, 0, ".", ",") }}</td>
                     <td class="text-right">Rp. {{ number_format($value->total_profit_store, 0, ".", ",") }}</td>
                 </tr>
             </tbody>
