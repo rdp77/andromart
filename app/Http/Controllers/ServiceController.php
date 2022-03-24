@@ -422,6 +422,7 @@ class ServiceController extends Controller
                 ->where('work_status', '!=', 'Cancel')
                 ->where('work_status', '!=', 'Return')
                 ->where('work_status', '!=', 'Diambil')
+                ->where('work_status', '!=', 'Mutasi')
                 ->count();
             // $tech1 = 10;
             $tech2 = Service::where('technician_replacement_id', $req->technicianId)
@@ -802,6 +803,7 @@ class ServiceController extends Controller
                 ->where('work_status', '!=', 'Return')
                 ->where('work_status', '!=', 'Diambil')
                 ->where('work_status', '!=', 'Selesai')
+                ->where('work_status', '!=', 'Mutasi')
                 ->count();
             $tech2 = Service::where('technician_replacement_id', $req->technicianId)
                 // ->where('work_status', '!=', 'Selesai')
