@@ -113,7 +113,7 @@
                             <br>
                             <strong>
                                 <p style="font-size: 30px">Tanggal :
-                                    {{ date('d F Y', strtotime($service->Service->date)) }}</p>
+                                    {{ date('d F Y', strtotime($service->date)) }}</p>
                             </strong>
                         </address>
                     </div>
