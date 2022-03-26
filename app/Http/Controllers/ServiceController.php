@@ -290,10 +290,11 @@ class ServiceController extends Controller
         if ($req->technician_id == 'x') {
             $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
                 ->where('branch_id', $branchUser)
-                ->whereIn('work_status', ['Proses', 'Manifest'])
+                ->whereIn('work_status', ['Proses', 'Manifest','Mutasi'])
                 ->orderBy('id', 'desc')
                 ->get();
                 $service2 =[];
+                $progress2 =[];
             $progress = Service::where('branch_id', $branchUser)
                 ->where('work_status',['Proses','Mutasi'])->get();
             $manifest = Service::where('branch_id', $branchUser)
@@ -307,7 +308,7 @@ class ServiceController extends Controller
                 ->get();
             
             $service2 = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
-                ->whereIn('work_status', ['Proses', 'Manifest'])
+                ->whereIn('work_status', ['Mutasi'])
                 // ->where('technician_id', $req->technician_id)
                 ->where('technician_replacement_id', $req->technician_id)
                 ->orderBy('id', 'desc')
@@ -315,7 +316,11 @@ class ServiceController extends Controller
 
             $progress = Service::where('work_status', ['Proses'])
                 ->where('technician_id', $req->technician_id)
-                ->orWhere('technician_replacement_id', $req->technician_id)
+                // ->orWhere('technician_replacement_id', $req->technician_id)
+                ->get();
+            $progress2 = Service::where('work_status', ['Mutasi'])
+                // ->where('technician_id', $req->technician_id)
+                ->where('technician_replacement_id', $req->technician_id)
                 ->get();
             $manifest = Service::where('work_status', 'Manifest')
                 ->where('technician_id', $req->technician_id)
@@ -324,9 +329,10 @@ class ServiceController extends Controller
         $tr = count($service);
         $tr2 = count($service2);
         $tprogress = count($progress);
+        $tprogress2 = count($progress2);
         $tmanifest = count($manifest);
 
-        return view('pages.backend.transaction.service.onProgressLoad', compact('service', 'tr','service2','tr2', 'tprogress', 'tmanifest'));
+        return view('pages.backend.transaction.service.onProgressLoad', compact('service', 'tr','service2','tr2','tprogress2', 'tprogress', 'tmanifest'));
     }
 
     public function onProgressPrint(Request $req)
