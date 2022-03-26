@@ -326,7 +326,7 @@ class ServiceController extends Controller
         $tprogress = count($progress);
         $tmanifest = count($manifest);
 
-        return view('pages.backend.transaction.service.onProgressLoad', compact('service', 'tr', 'tprogress', 'tmanifest'));
+        return view('pages.backend.transaction.service.onProgressLoad', compact('service', 'tr','service2','tr2', 'tprogress', 'tmanifest'));
     }
 
     public function onProgressPrint(Request $req)

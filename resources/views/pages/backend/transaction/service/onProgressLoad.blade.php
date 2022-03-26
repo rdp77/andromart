@@ -3,7 +3,7 @@
             <tr>
                 <th colspan="2"><h5 style="color: #6777ef;">Menunggu Servis : {{ $tmanifest }}</h5></th>
                 <th colspan="2"><h5 style="color: #6777ef;">Proses Servis : {{ $tprogress }}</h5></th>
-                <th colspan="2"><h5 style="color: #6777ef;">Total Transaksi : {{ $tr }}</h5></th>
+                <th colspan="2"><h5 style="color: #6777ef;">Total Transaksi : {{ $tr+$tr2 }}</h5></th>
             </tr>
         </thead>
         <thead>
