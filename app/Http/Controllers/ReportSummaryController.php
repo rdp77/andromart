@@ -51,12 +51,12 @@ class ReportSummaryController extends Controller
         $data = Journal::with('JournalDetail')->get();
         $branch = Branch::get();
         if ($req->startDate == null || $req->startDate == '') {
-            $startDate = date('Y-03-07');
+            $startDate = date('Y-m-d');
         } else {
             $startDate = $this->DashboardController->changeMonthIdToEn($req->startDate);
         }
         if ($req->endDate == null || $req->endDate == '') {
-            $endDate = date('Y-03-07');
+            $endDate = date('Y-m-d');
         } else {
             $endDate = $this->DashboardController->changeMonthIdToEn($req->endDate);
         }
