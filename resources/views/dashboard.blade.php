@@ -107,9 +107,10 @@
                         Rp. {{ $totalSharingProfit }}
                     </div>
                     <div class="card-footer">
-                        <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar" style="position: relative;
-                                                    height: 200px;
-                                                    overflow: auto;display: block;">
+                        <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar"
+                            style="position: relative;
+                                                                                                                                height: 200px;
+                                                                                                                                overflow: auto;display: block;">
                             <table class="table table-bordered table-striped mb-0">
                                 <thead>
                                     <tr>
@@ -124,7 +125,8 @@
                                         <tr>
                                             <th scope="row">{{ $i + 1 }}</th>
                                             <th>{{ $el->name }}</th>
-                                            <th class="text-right">Rp. {{ number_format($sharingProfit1Service[$i] + $sharingProfit2Service[$i] + $sharingProfitSaleSales[$i] + $sharingProfitSaleBuyer[$i], 0, ',', '.') }}
+                                            <th class="text-right">Rp.
+                                                {{ number_format($sharingProfit1Service[$i] + $sharingProfit2Service[$i] + $sharingProfitSaleSales[$i] + $sharingProfitSaleBuyer[$i],0,',','.') }}
                                             </th>
                                         </tr>
                                     @endforeach
@@ -136,7 +138,7 @@
             </div>
         </div>
 
-        <div class="col-lg-4 col-md-4 col-sm-12">
+        <div class="col-lg-8 col-md-8 col-sm-12">
             <div class="card card-statistic-2">
                 <div class="card-icon shadow-primary bg-primary">
                     <i class="fas fa-dollar-sign"></i>
@@ -146,6 +148,12 @@
                         <h4>Pendapatan Kotor</h4>
                     </div>
                     <div class="card-body dropPendapatanKotor">
+                        <figure class="highcharts-figure">
+                            <div id="containerPendapatanKotor" style="width:600px"></div>
+                            <p class="highcharts-description">
+
+                            </p>
+                        </figure>
                         @php
                             $totalKeseluruhanPendapatan = 0;
                             $totalCash = 0;
@@ -185,24 +193,28 @@
                                     @endphp
                                 @endif
                             @endif
-
                         @endforeach
+                        <h style="font-size: 15px">Total Keseluruhan Pendapatan Kas.</h>
+                        <br>
                         Rp. {{ number_format($totalKeseluruhanPendapatan, 0, ',', '.') }}
                     </div>
                     <div class="card-footer">
                         <table class="table">
-                            <tr>
+                            {{-- <tr>
                                 <th>Cash</th>
-                                <th class="text-right"><b class="dropPendapatanCash">Rp. {{ number_format($totalCash, 0, ',', '.') }}</b></th>
+                                <th class="text-right"><b class="dropPendapatanCash">Rp.
+                                        {{ number_format($totalCash, 0, ',', '.') }}</b></th>
                             </tr>
                             <tr>
                                 <th>Debet</th>
-                                <th class="text-right"><b class="dropPendapatanDebit">Rp. {{ number_format($totalDebit, 0, ',', '.') }}</b></th>
+                                <th class="text-right"><b class="dropPendapatanDebit">Rp.
+                                        {{ number_format($totalDebit, 0, ',', '.') }}</b></th>
                             </tr>
                             <tr>
                                 <th>Transfer</th>
-                                <th class="text-right"><b class="dropPendapatanTransfer">Rp. {{ number_format($totalTransfer, 0, ',', '.') }}</b></th>
-                            </tr>
+                                <th class="text-right"><b class="dropPendapatanTransfer">Rp.
+                                        {{ number_format($totalTransfer, 0, ',', '.') }}</b></th>
+                            </tr> --}}
                         </table>
                     </div>
                 </div>
@@ -336,92 +348,20 @@
                     </div>
                 </div>
             </div>
+
+
         </div>
     </div>
-    {{-- <div class="col-lg-12 col-md-12 col-sm-12">
-        <div class="card card-statistic-2">
-            <div class="card-icon shadow-primary bg-primary">
-                <i class="fas fa-dollar-sign"></i>
-            </div>
-            <div class="card-wrap">
-                <div class="card-header">
-                    <h4>Data Service</h4>
-                </div>
-                <div class="card-body">
-                    <h4>KPI Karyawan</h4>
-                </div>
-                <div class="card-footer">
-                    <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar" style="position: relative;
-                        height: 300px;
-                        overflow: auto;display: block;">
-                        <table class="table table-bordered table-striped mb-0" style="text-align: center;">
-                            <thead>
-                                <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Nama</th>
-                                    <th scope="col" >Progress</th>
-                                    <th scope="col" >Selesai / Diterima</th>
-                                    <th scope="col" >Cancel / Return</th>
-                                </tr>
-                            </thead>
-                            <tbody>
 
-                                @foreach ($karyawan as $i => $el)
-                                    <tr>
-                                        <th scope="row">{{ $i + 1 }}</th>
-                                        <td>{{ $el->name }}</td>
-                                        <td style="font-size: 17px;font-weight:bold" >
-                                            {{$totalServiceProgress[$i]}}
-                                        </td>
-                                        <td style="font-size: 17px;font-weight:bold" >
-                                            {{$totalServiceDone[$i]}}
-                                        </td>
-                                        <td style="font-size: 17px;font-weight:bold" >
-                                            {{$totalServiceCancel[$i]}}
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> --}}
-    {{-- <div class="card card-hero">
-        <div class="card-header">
-            <div class="card-icon">
-                <i class="fas fa-history"></i>
-            </div>
-            <h4>{{ __('pages.history') }}</h4>
-            <div class="card-description">
-                {{ __('pages.historyDesc') }}
-            </div>
-        </div>
-        <div class="card-body p-0">
-            <div class="tickets-list">
-                @foreach ($log as $l)
-                    <a href="javascript:void(0)" class="ticket-item">
-                        <div class="ticket-title">
-                            <h4>{{ $l->info }}</h4>
-                        </div>
-                        <div class="ticket-info">
-                            <div>{{ $l->ip }}</div>
-                            <div class="bullet"></div>
-                            <div class="text-primary">
-                                {{ __('Tercatat pada tanggal ') . date('d-M-Y', strtotime($l->added_at)) . __(' Jam ') . date('H:m', strtotime($l->added_at)) }}
-                            </div>
-                        </div>
-                    </a>
-                @endforeach
-                <a href="{{ route('dashboard.log') }}" class="ticket-item ticket-more">
-                    {{ __('Lihat Semua ') }} <i class="fas fa-chevron-right"></i>
-                </a>
-            </div>
-        </div>
-    </div> --}}
 @endsection
 @section('script')
+    <script src="https://code.highcharts.com/highcharts.js"></script>
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    <script src="https://code.highcharts.com/modules/variable-pie.js"></script>
+    <script src="https://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script>
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    {{-- <script src="https://code.highcharts.com/highcharts.js"></script> --}}
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js"></script>
     <script language="JavaScript">
@@ -439,14 +379,12 @@
         }
         $(".dtpickermnth").datepicker({
             format: "MM yyyy",
-            // locale:'id',
             autoclose: true,
             startView: "months",
             minViewMode: "months"
         });
         $(".dtpickeryr").datepicker({
             format: "yyyy",
-            // locale:'id',
             autoclose: true,
             startView: "years",
             minViewMode: "years"
@@ -469,6 +407,40 @@
             }
         }
 
+        var cashPendapatanKotor = <?php echo $totalCash; ?>;
+        var debetPendapatanKotor = <?php echo $totalDebit; ?>;
+        var transferPendapatanKotor = <?php echo $totalTransfer; ?>;
+
+        var chartPendapatanKotor = Highcharts.chart('containerPendapatanKotor', {
+            chart: {
+                type: 'variablepie'
+            },
+            title: {
+                text: ''
+            },
+            tooltip: {
+                headerFormat: '',
+                pointFormat: '<span style="color:{point.color}">\u25CF</span> <b> {point.name}</b><br/>' +
+                    'Total: <b>{point.y}</b><br/>'
+            },
+            series: [{
+                minPointSize: 100,
+                innerSize: '30%',
+                zMin: 0,
+                name: 'Total Pendapatan Kotor',
+                data: [{
+                    name: 'Cash',
+                    y: cashPendapatanKotor,
+                }, {
+                    name: 'Debet',
+                    y: debetPendapatanKotor,
+                }, {
+                    name: 'Transfer',
+                    y: transferPendapatanKotor,
+                }]
+            }]
+        });
+
         function searchData(params) {
             var startDate = $('.startDate').val();
             var endDate = $('.endDate').val();
@@ -486,10 +458,15 @@
                     'endDate': endDate
                 },
                 success: function(data) {
+                    var cashPendapatanKotor = data.totalCash;
+                    var debetPendapatanKotor = data.totalDebit;
+                    var transferPendapatanKotor = data.totalTransfer;
+
+
                     $('.dropPendapatanKotor').html(data.totalKeseluruhanPendapatan);
-                    $('.dropPendapatanCash').html(data.totalCash);
-                    $('.dropPendapatanDebit').html(data.totalDebit);
-                    $('.dropPendapatanTransfer').html(data.totalTransfer);
+                    $('.dropPendapatanCash').html(cashPendapatanKotor);
+                    $('.dropPendapatanDebit').html(debetPendapatanKotor);
+                    $('.dropPendapatanTransfer').html(transferPendapatanKotor);
                     $('.dataServiceHandphone').html(data.dataServiceHandphone);
                     $('.dataServiceLaptop').html(data.dataServiceLaptop);
                     $('.dataServiceTotal').html(data.dataServiceTotal);
@@ -524,7 +501,7 @@
                             value.name +
                             "</b>" +
                             "</td>" +
-                            "<td><b>"+
+                            "<td><b>" +
                             value.total +
                             "</b>" +
                             "</b></td>" +
@@ -542,18 +519,19 @@
                             value.nama +
                             "</b>" +
                             "</td>" +
-                            "<td style='text-align: right'><b>"+
+                            "<td style='text-align: right'><b>" +
                             value.progress +
                             "</b></td>" +
-                            "<td style='text-align: right'><b>"+
+                            "<td style='text-align: right'><b>" +
                             value.done +
                             "</b></td>" +
-                            "<td style='text-align: right'><b>"+
+                            "<td style='text-align: right'><b>" +
                             value.cancel +
                             "</b></td>" +
                             "</tr>"
                         );
                     });
+                    
                 }
             });
         }
