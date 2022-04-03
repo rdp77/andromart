@@ -133,13 +133,17 @@
     </style>
     <script language="JavaScript">
         $(document).ready(function() {
-            // var constraints = {
-                // video: true,
-                // facingMode: "environment"
-            // };
+            var constraints = {
+                video: true,
+                facingMode: "environment"
+            };
             Webcam.set({
+                constraints,
                 width: 700,
                 height: 550,
+                facingMode: "environment",
+                // dest_width:1000,
+                // dest_height:1000,
                 image_format: 'jpeg',
                 jpeg_quality: 500
             });
