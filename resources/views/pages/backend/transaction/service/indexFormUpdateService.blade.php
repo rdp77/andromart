@@ -82,7 +82,7 @@
                     <div class="col-lg-7 col-md-12 col-sm-12">
                         <h2 class="section-title">Ambil Foto</h2>
                         <div class="form-group col-12 col-md-12 col-lg-12">
-                            <div id="my_camera" style="width: 100%;height:650px"></div>
+                            <div id="my_camera" style="width: 100%;height:100vh"></div>
                             <br />
                             <div class="row">
                                 <div class="form-group col-md-3">
