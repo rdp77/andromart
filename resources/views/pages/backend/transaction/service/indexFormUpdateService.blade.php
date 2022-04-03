@@ -82,7 +82,7 @@
                     <div class="col-lg-7 col-md-12 col-sm-12">
                         <h2 class="section-title">Ambil Foto</h2>
                         <div class="form-group col-12 col-md-12 col-lg-12">
-                            <div id="my_camera"></div>
+                            <div id="my_camera" style="width: 500px;height:500px"></div>
                             <br />
                             <div class="row">
                                 <div class="form-group col-md-3">
@@ -132,20 +132,23 @@
 
     </style>
     <script language="JavaScript">
+        // suppose we require a full HD video
+    
         $(document).ready(function() {
+
             var constraints = {
                 video: true,
                 facingMode: "environment"
             };
             Webcam.set({
                 constraints,
-                width: 700,
-                height: 700,
-                facingMode: "environment",
-                dest_width:1000,
-                dest_height:1000,
+                // width: 500,
+                // height: 500,
+                // facingMode: "environment",
+                // dest_width:100,
+                // dest_height:100,
                 image_format: 'jpeg',
-                jpeg_quality: 500
+                jpeg_quality: 90
             });
 
             Webcam.attach('#my_camera');
@@ -159,7 +162,7 @@
                 $(".image-tag").val(data_uri);
 
                 document.getElementById('results').innerHTML =
-                    '<img name="image" id="sortpicture" class="image"  style="width: 100 % !important;height: auto!important;min - width: 100 px; min - height: 100 px;" src="' + data_uri + '"/>';
+                    '<img name="image" id="sortpicture" class="image" src="' + data_uri + '"/>';
             });
 
         }
