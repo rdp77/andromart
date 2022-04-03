@@ -137,12 +137,12 @@
             Webcam.set({
                 constraints,
                 width: 700,
-                height: 380,
+                height: 550,
                 facingMode: "environment",
                 // dest_width:1000,
                 // dest_height:1000,
                 image_format: 'jpeg',
-                jpeg_quality: 100
+                jpeg_quality: 500
             });
 
             Webcam.attach('#my_camera');
