@@ -156,7 +156,7 @@
                 $(".image-tag").val(data_uri);
 
                 document.getElementById('results').innerHTML =
-                    '<img name="image" id="sortpicture" class="image" width="100%" height="100%" src="' + data_uri + '"/>';
+                    '<img name="image" id="sortpicture" class="image" width="550px" height="700px" src="' + data_uri + '"/>';
             });
 
         }
