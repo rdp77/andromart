@@ -153,15 +153,15 @@
             };
             Webcam.set({
                 constraints,
-                // width: 500,
-                // height: 500,
+                width: 500,
+                height: 500,
                 // facingMode: "environment",
                 // dest_width:100,
                 // dest_height:100,
-                width: 320,
-                height: 240,
-                crop_width: 240,
-                crop_height: 240,
+                // width: 320,
+                // height: 240,
+                crop_width: 600,
+                crop_height: 600,
                 image_format: 'jpeg',
                 jpeg_quality: 90
             });
