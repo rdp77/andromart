@@ -405,27 +405,48 @@ class DashboardController extends Controller
                 }
             }
         }
-        return Response::json([
-            'status' => 'success',
-            'totalKeseluruhanPendapatan' => 'Rp. '.number_format($totalKeseluruhanPendapatan, 0, ',', '.'),
-            'totalCash' =>  'Rp. '.number_format($totalCash, 0, ',', '.'),
-            'totalDebit' => 'Rp. '.number_format($totalDebit, 0, ',', '.'),
-            'totalTransfer' => 'Rp. '.number_format($totalTransfer, 0, ',', '.'),
-            'topSales' => $topSales,
+        // return Response::json([
+        //     'status' => 'success',
+        //     'totalKeseluruhanPendapatan' => 'Rp. '.number_format($totalKeseluruhanPendapatan, 0, ',', '.'),
+        //     'totalCash' =>  'Rp. '.number_format($totalCash, 0, ',', '.'),
+        //     'totalDebit' => 'Rp. '.number_format($totalDebit, 0, ',', '.'),
+        //     'totalTransfer' => 'Rp. '.number_format($totalTransfer, 0, ',', '.'),
+        //     'topSales' => $topSales,
+        //     'sharingProfit1Service' => $sharingProfit1Service,
+        //     'sharingProfit2Service' => $sharingProfit2Service,
+        //     'sharingProfitSaleSales' => $sharingProfitSaleSales,
+        //     'sharingProfitSaleBuyer' => $sharingProfitSaleBuyer,
+        //     'dataTraffic' => $dataTrafficToday,
+        //     'dataServiceTotal' => $dataServiceTotal,
+        //     'dataServiceHandphone' => $dataServiceHandphone,
+        //     'dataServiceLaptop' => $dataServiceLaptop,
+        //     'totalServiceProgress' => $totalServiceProgress,
+        //     'totalServiceDone' => $totalServiceDone,
+        //     'totalServiceCancel' => $totalServiceCancel,
+        //     'totalServiceFix' => $totalServiceFix,
+        //     'totalSharingProfitSplit' => $totalSharingProfitSplit,
+        //     'totalSharingProfit' => 'Rp. '.number_format($totalSharingProfit, 0, ',', '.'),
+        // ]);
+        return view('load-dashboard', [
+            // 'log' => $log,
+            // 'users' => $users,
+            // 'logCount' => $logCount,
+            'dataPendapatan' => $dataPendapatan,
+            'dataServiceTotal' => $dataServiceTotal,
+            'dataServiceHandphone' => $dataServiceHandphone,
+            'dataServiceLaptop' => $dataServiceLaptop,
+            'dataTrafficToday' => $dataTrafficToday,
+            'karyawan' => $karyawan,
             'sharingProfit1Service' => $sharingProfit1Service,
             'sharingProfit2Service' => $sharingProfit2Service,
             'sharingProfitSaleSales' => $sharingProfitSaleSales,
             'sharingProfitSaleBuyer' => $sharingProfitSaleBuyer,
-            'dataTraffic' => $dataTrafficToday,
-            'dataServiceTotal' => $dataServiceTotal,
-            'dataServiceHandphone' => $dataServiceHandphone,
-            'dataServiceLaptop' => $dataServiceLaptop,
+            'totalSharingProfit' => number_format($totalSharingProfit, 0, ',', '.'),
+            // 'checkServiceStatus' => $checkServiceStatus
             'totalServiceProgress' => $totalServiceProgress,
             'totalServiceDone' => $totalServiceDone,
             'totalServiceCancel' => $totalServiceCancel,
-            'totalServiceFix' => $totalServiceFix,
-            'totalSharingProfitSplit' => $totalSharingProfitSplit,
-            'totalSharingProfit' => 'Rp. '.number_format($totalSharingProfit, 0, ',', '.'),
+            'topSales' => $topSales,
         ]);
     }
 
