@@ -82,7 +82,7 @@
                     <div class="col-lg-7 col-md-12 col-sm-12">
                         <h2 class="section-title">Ambil Foto</h2>
                         <div class="form-group col-12 col-md-12 col-lg-12">
-                            <div id="my_camera" style="width: 100%;height:100vh"></div>
+                            <div id="my_camera" style="width: 100%;height:500px"></div>
                             <br />
                             <div class="row">
                                 <div class="form-group col-md-3">
@@ -133,7 +133,18 @@
     </style>
     <script language="JavaScript">
         // suppose we require a full HD video
-    
+        var v = document.getElementById("my_camera");
+        v.addEventListener("loadedmetadata", function(e) {
+            var width = this.videoWidth,
+                height = this.videoHeight;
+        }, false);
+        var vid = document.getElementById("my_camera");
+        vid.videoHeight; // returns the intrinsic height of the video
+        vid.videoWidth;
+        console.log(v);
+        console.log(vid);
+        console.log(vid.videoHeight);
+        console.log(vid.videoWidth);
         $(document).ready(function() {
 
             var constraints = {
@@ -147,6 +158,10 @@
                 // facingMode: "environment",
                 // dest_width:100,
                 // dest_height:100,
+                width: 320,
+                height: 240,
+                crop_width: 240,
+                crop_height: 240,
                 image_format: 'jpeg',
                 jpeg_quality: 90
             });
