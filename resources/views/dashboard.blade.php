@@ -219,7 +219,7 @@
 
         </div>
         <div class="row">
-            <div class="col-lg-8 col-md-8 col-sm-12">
+            <div class="col-lg-12 col-md-12 col-sm-12">
                 <div class="card card-statistic-2">
                     <div class="card-icon shadow-primary bg-primary">
                         <i class="fas fa-dollar-sign"></i>
@@ -238,34 +238,14 @@
 
                                 </p>
                             </figure>
-                            <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar"
-                                style="position: relative;height: 200px;overflow: auto;display: block;">
-                                <table class="table table-bordered table-striped mb-0">
-                                    <thead>
-                                        <tr>
-                                            <th class="text-center" scope="col" width="10%">#</th>
-                                            <th class="text-center" scope="col" width="55%">Nama</th>
-                                            <th class="text-center" scope="col" width="35%">Profit</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="dropHereSharingProfit">
 
-                                        @foreach ($karyawan as $i => $el)
-                                            <tr>
-                                                <th scope="row">{{ $i + 1 }}</th>
-                                                <th>{{ $el->name }}</th>
-                                                <th class="text-right">Rp.
-                                                    {{ number_format($sharingProfit1Service[$i] + $sharingProfit2Service[$i] + $sharingProfitSaleSales[$i] + $sharingProfitSaleBuyer[$i],0,',','.') }}
-                                                </th>
-                                            </tr>
-                                        @endforeach
-                                    </tbody>
-                                </table>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+        <div class="row">
+
             <div class="col-lg-4 col-md-4 col-sm-12">
                 <div class="card card-statistic-2">
                     <div class="card-icon shadow-primary bg-primary">
@@ -288,7 +268,6 @@
                     </div>
                 </div>
             </div>
-
             <div class="col-lg-6 col-md-6 col-sm-12">
                 <div class="card card-statistic-2">
                     <div class="card-icon shadow-primary bg-primary">
@@ -358,6 +337,8 @@
         </div>
     </div>
 
+    </div>
+
 @endsection
 @section('script')
     <script src="https://code.highcharts.com/highcharts.js"></script>
@@ -370,11 +351,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js"></script>
     <script language="JavaScript">
-        var cures = <?php echo json_encode($karyawan); ?>;
-        for (var key in cures) {
-            var cure = cures[key];
-        }
-
         function countTrafic() {
             $.ajax({
                 url: "/transaction/service/traffic-count",
@@ -490,8 +466,8 @@
             },
             xAxis: {
                 categories: [
-                    'Handphone',
-                    'Laptop'
+
+                    'Service Masuk'
                 ],
                 crosshair: true
             },
@@ -526,13 +502,9 @@
             }]
         });
 
-        // var dataServiceHandphone = <?php echo $dataServiceHandphone; ?>;
-        // var dataServiceLaptop = <?php echo $dataServiceLaptop; ?>;
-
-
         Highcharts.chart('containerSharingProfit', {
             chart: {
-                type: 'column'
+                type: 'bar'
             },
             title: {
                 text: ''
@@ -540,49 +512,56 @@
             subtitle: {
                 text: ''
             },
-            xAxis: {
-                categories: [
-                    'Handphone',
-                    'Laptop'
-                ],
-                crosshair: true
-            },
+
             yAxis: {
                 min: 0,
                 title: {
-                    text: 'Total (Unit)'
+                    text: '',
+                    align: 'low'
+                },
+                labels: {
+                    overflow: 'justify'
                 }
             },
             tooltip: {
-                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                    '<td style="padding:0"><b>{point.y:.0f} Unit</b></td></tr>',
-                footerFormat: '</table>',
-                shared: true,
-                useHTML: true
+                valueSuffix: ' Rupiah'
             },
             plotOptions: {
-                column: {
-                    pointPadding: 0.2,
-                    borderWidth: 0
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
                 }
             },
-            series: [{
-                name: 'Handphone',
-                data: [
-                @foreach ($karyawan as $el)
-                    
+            xAxis: {
+                categories: [''],
+                layout: 'vertical',
+                title: {
+                    text: null
+                }
+            },
+            legend: {
+                layout: 'vertical',
+                align: 'right',
+                verticalAlign: 'top',
+                x: -40,
+                y: 80,
+                floating: false,
+                borderWidth: 1,
+                backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+                shadow: true
+            },
+            credits: {
+                enabled: false
+            },
+            series: [
+                @foreach ($karyawan as $i => $el)
+                    {
+                    name:"{{ $el->name }}",
+                    data:[{{ $sharingProfit1Service[$i] +$sharingProfit2Service[$i] +$sharingProfitSaleSales[$i] +$sharingProfitSaleBuyer[$i] }}]
+                    },
                 @endforeach
-                ]
-            }, {
-                name: 'Laptop',
-                data: [dataServiceLaptop]
-
-            }]
+            ]
         });
-
-
-
-        
     </script>
 @endsection

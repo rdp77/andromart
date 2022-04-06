@@ -19,24 +19,24 @@
                         </p>
                     </figure>
                     {{-- <table class="table">
-                            <tr>
-                                <th>Handphone</th>
-                                <th><b
-                                        class="dataServiceHandphone">{{ number_format($dataServiceHandphone, 0, ',', '.') }}</b>
-                                </th>
-                            </tr>
-                            <tr>
-                                <th>Laptop</th>
-                                <th><b
-                                        class="dataServiceLaptop">{{ number_format($dataServiceLaptop, 0, ',', '.') }}</b>
-                                </th>
-                            </tr>
-                        </table> --}}
+                        <tr>
+                            <th>Handphone</th>
+                            <th><b
+                                    class="dataServiceHandphone">{{ number_format($dataServiceHandphone, 0, ',', '.') }}</b>
+                            </th>
+                        </tr>
+                        <tr>
+                            <th>Laptop</th>
+                            <th><b
+                                    class="dataServiceLaptop">{{ number_format($dataServiceLaptop, 0, ',', '.') }}</b>
+                            </th>
+                        </tr>
+                    </table> --}}
                 </div>
             </div>
         </div>
     </div>
- 
+
 
     <div class="col-lg-8 col-md-8 col-sm-12">
         <div class="card card-statistic-2">
@@ -101,28 +101,55 @@
                 <div class="card-footer">
                     <table class="table">
                         {{-- <tr>
-                                <th>Cash</th>
-                                <th class="text-right"><b class="dropPendapatanCash">Rp.
-                                        {{ number_format($totalCash, 0, ',', '.') }}</b></th>
-                            </tr>
-                            <tr>
-                                <th>Debet</th>
-                                <th class="text-right"><b class="dropPendapatanDebit">Rp.
-                                        {{ number_format($totalDebit, 0, ',', '.') }}</b></th>
-                            </tr>
-                            <tr>
-                                <th>Transfer</th>
-                                <th class="text-right"><b class="dropPendapatanTransfer">Rp.
-                                        {{ number_format($totalTransfer, 0, ',', '.') }}</b></th>
-                            </tr> --}}
+                        <th>Cash</th>
+                        <th class="text-right"><b class="dropPendapatanCash">Rp.
+                                {{ number_format($totalCash, 0, ',', '.') }}</b></th>
+                    </tr>
+                    <tr>
+                        <th>Debet</th>
+                        <th class="text-right"><b class="dropPendapatanDebit">Rp.
+                                {{ number_format($totalDebit, 0, ',', '.') }}</b></th>
+                    </tr>
+                    <tr>
+                        <th>Transfer</th>
+                        <th class="text-right"><b class="dropPendapatanTransfer">Rp.
+                                {{ number_format($totalTransfer, 0, ',', '.') }}</b></th>
+                    </tr> --}}
                     </table>
                 </div>
             </div>
         </div>
     </div>
-    
+
 </div>
 <div class="row">
+    <div class="col-lg-12 col-md-12 col-sm-12">
+        <div class="card card-statistic-2">
+            <div class="card-icon shadow-primary bg-primary">
+                <i class="fas fa-dollar-sign"></i>
+            </div>
+            <div class="card-wrap">
+                <div class="card-header">
+                    <h4>Sharing Profit</h4>
+                </div>
+                <div class="card-body dropHereSharingProfitTotal">
+                    Rp. {{ $totalSharingProfit }}
+                </div>
+                <div class="card-footer">
+                    <figure class="highcharts-figure">
+                        <div id="containerSharingProfit" style="width:100%"></div>
+                        <p class="highcharts-description">
+
+                        </p>
+                    </figure>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+
     <div class="col-lg-4 col-md-4 col-sm-12">
         <div class="card card-statistic-2">
             <div class="card-icon shadow-primary bg-primary">
@@ -145,7 +172,6 @@
             </div>
         </div>
     </div>
-
     <div class="col-lg-6 col-md-6 col-sm-12">
         <div class="card card-statistic-2">
             <div class="card-icon shadow-primary bg-primary">
@@ -195,47 +221,6 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-4 col-md-4 col-sm-12">
-        <div class="card card-statistic-2">
-            <div class="card-icon shadow-primary bg-primary">
-                <i class="fas fa-dollar-sign"></i>
-            </div>
-            <div class="card-wrap">
-                <div class="card-header">
-                    <h4>Sharing Profit</h4>
-                </div>
-                <div class="card-body dropHereSharingProfitTotal">
-                    Rp. {{ $totalSharingProfit }}
-                </div>
-                <div class="card-footer">
-                    <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar"
-                        style="position: relative;height: 200px;overflow: auto;display: block;">
-                        <table class="table table-bordered table-striped mb-0">
-                            <thead>
-                                <tr>
-                                    <th class="text-center" scope="col" width="10%">#</th>
-                                    <th class="text-center" scope="col" width="55%">Nama</th>
-                                    <th class="text-center" scope="col" width="35%">Profit</th>
-                                </tr>
-                            </thead>
-                            <tbody class="dropHereSharingProfit">
-
-                                @foreach ($karyawan as $i => $el)
-                                    <tr>
-                                        <th scope="row">{{ $i + 1 }}</th>
-                                        <th>{{ $el->name }}</th>
-                                        <th class="text-right">Rp.
-                                            {{ number_format($sharingProfit1Service[$i] + $sharingProfit2Service[$i] + $sharingProfitSaleSales[$i] + $sharingProfitSaleBuyer[$i],0,',','.') }}
-                                        </th>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="col-lg-2 col-md-2 col-sm-2 col-12">
         <div class="card card-statistic-2">
             <div onclick="countTrafic()" class="card-icon shadow-primary bg-primary">
@@ -255,9 +240,6 @@
     </div>
 </div>
 
-
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js"></script>
 <script language="JavaScript">
     var cashPendapatanKotor = <?php echo $totalCash; ?>;
     var debetPendapatanKotor = <?php echo $totalDebit; ?>;
@@ -343,5 +325,66 @@
             data: [dataServiceLaptop]
 
         }]
+    });
+    Highcharts.chart('containerSharingProfit', {
+        chart: {
+            type: 'bar'
+        },
+        title: {
+            text: ''
+        },
+        subtitle: {
+            text: ''
+        },
+
+        yAxis: {
+            min: 0,
+            title: {
+                text: '',
+                align: 'low'
+            },
+            labels: {
+                overflow: 'justify'
+            }
+        },
+        tooltip: {
+            valueSuffix: ' Rupiah'
+        },
+        plotOptions: {
+            bar: {
+                dataLabels: {
+                    enabled: true
+                }
+            }
+        },
+        xAxis: {
+            categories: [''],
+            layout: 'vertical',
+            title: {
+                text: null
+            }
+        },
+        legend: {
+            layout: 'vertical',
+            align: 'right',
+            verticalAlign: 'top',
+            x: -40,
+            y: 80,
+            floating: false,
+            borderWidth: 1,
+            backgroundColor: Highcharts.defaultOptions.legend.backgroundColor || '#FFFFFF',
+            shadow: true
+        },
+        credits: {
+            enabled: false
+        },
+        series: [
+            @foreach ($karyawan as $i => $el)
+                {
+                name:"{{ $el->name }}",
+                data:[{{ $sharingProfit1Service[$i] +$sharingProfit2Service[$i] +$sharingProfitSaleSales[$i] +$sharingProfitSaleBuyer[$i] }}]
+                },
+            @endforeach
+        ]
     });
 </script>
