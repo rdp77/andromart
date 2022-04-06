@@ -132,7 +132,7 @@
                     </div>
                 </div>
             </div>
-           
+
 
             <div class="col-lg-8 col-md-8 col-sm-12">
                 <div class="card card-statistic-2">
@@ -216,10 +216,10 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
         <div class="row">
-            <div class="col-lg-4 col-md-4 col-sm-12">
+            <div class="col-lg-8 col-md-8 col-sm-12">
                 <div class="card card-statistic-2">
                     <div class="card-icon shadow-primary bg-primary">
                         <i class="fas fa-dollar-sign"></i>
@@ -232,6 +232,12 @@
                             Rp. {{ $totalSharingProfit }}
                         </div>
                         <div class="card-footer">
+                            <figure class="highcharts-figure">
+                                <div id="containerSharingProfit" style="width:100%"></div>
+                                <p class="highcharts-description">
+
+                                </p>
+                            </figure>
                             <div class="table-responsive table-wrapper-scroll-y my-custom-scrollbar"
                                 style="position: relative;height: 200px;overflow: auto;display: block;">
                                 <table class="table table-bordered table-striped mb-0">
@@ -364,6 +370,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js"></script>
     <script language="JavaScript">
+        var cures = <?php echo json_encode($karyawan); ?>;
+        for (var key in cures) {
+            var cure = cures[key];
+        }
+
         function countTrafic() {
             $.ajax({
                 url: "/transaction/service/traffic-count",
@@ -514,5 +525,64 @@
 
             }]
         });
+
+        // var dataServiceHandphone = <?php echo $dataServiceHandphone; ?>;
+        // var dataServiceLaptop = <?php echo $dataServiceLaptop; ?>;
+
+
+        Highcharts.chart('containerSharingProfit', {
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: ''
+            },
+            subtitle: {
+                text: ''
+            },
+            xAxis: {
+                categories: [
+                    'Handphone',
+                    'Laptop'
+                ],
+                crosshair: true
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: 'Total (Unit)'
+                }
+            },
+            tooltip: {
+                headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                    '<td style="padding:0"><b>{point.y:.0f} Unit</b></td></tr>',
+                footerFormat: '</table>',
+                shared: true,
+                useHTML: true
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0
+                }
+            },
+            series: [{
+                name: 'Handphone',
+                data: [
+                @foreach ($karyawan as $el)
+                    
+                @endforeach
+                ]
+            }, {
+                name: 'Laptop',
+                data: [dataServiceLaptop]
+
+            }]
+        });
+
+
+
+        
     </script>
 @endsection
