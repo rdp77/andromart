@@ -305,6 +305,26 @@ class SubMenuSeeder extends Seeder
                 'url' => route('regulationAll'),
                 'hover' => '["' . route('regulationAll') . '"]'
             ],
+
+            // Tambahan Laporan
+            [
+                'menu_id' => '4',
+                'name' => 'Laporan Summary',
+                'url' => route('report-summary.reportSummary'),
+                'hover' => '["' . route('report-summary.reportSummary') . '"]'
+            ],
+            [
+                'menu_id' => '4',
+                'name' => 'Laporan Pembayaran Service',
+                'url' => route('report-service-payment.reportServicePayment'),
+                'hover' => '["' . route('report-service-payment.reportServicePayment') . '"]'
+            ],
+            [
+                'menu_id' => '4',
+                'name' => 'Laporan Pengeluaran',
+                'url' => route('report-spending.reportSpending'),
+                'hover' => '["' . route('report-spending.reportSpending') . '"]'
+            ],
         ]);
     }
 }

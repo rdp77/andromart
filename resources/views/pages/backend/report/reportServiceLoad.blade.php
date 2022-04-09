@@ -1,4 +1,4 @@
-<table class="table table-striped table-bordered">
+<table class="table table-striped">
     <thead>
         <tr>
             <th class="text-center" width="13%">Tanggal</th>
@@ -15,49 +15,22 @@
             <td>{{ \Carbon\Carbon::parse($value->created_at)->locale('id')->isoFormat('LL') }}</td>
             <th>{{ $value->code }}</th>
             <td>
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>
-                                {{ $value->customer_name}}<br>
-                                {{ $value->customer_phone}}<br>
-                                {{ $value->customer_address}}
-                            </th>
-                        </tr>
-                    </tbody>
-                </table>
+                <strong>{{ $value->customer_name}}</strong> &nbsp; ||  
+                {{ $value->customer_phone}}<br>
+                {{ $value->customer_address}}
             </td>
             <td>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <b>{{ $value->Brand->name }} {{ $value->Type->name }}</b>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>No. IMEI : <b>{{ $value->no_imei}}</b></td>
-                        </tr>
-                    </tbody>
-                </table>
+                <b>{{ $value->Brand->name }} {{ $value->Type->name }}</b><br>
+                    IMEI : <b>{{ $value->no_imei}}</b>
             </td>
             <td>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>Pekerjaan : <b>{{ $value->work_status }}</b></td>
-                        </tr>
-                        <tr>
-                            <td>Pembayaran :
-                                @if ($value->payment_status == null)
-                                <b>Belum Bayar</b>
-                                @else
-                                <b>{{ $value->payment_status}}</b>
-                                @endif
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                Pekerjaan : <b>{{ $value->work_status }}</b><br>
+                Pembayaran :
+                    @if ($value->payment_status == null)
+                        <b>Belum Bayar</b>
+                    @else
+                        <b>{{ $value->payment_status}}</b>
+                    @endif
             </td>
             {{-- <th>{{ $value->payment_status }}</th> --}}
             <th class="text-right">Rp. {{ number_format($value->total_price, 0, ".", ",") }}</th>

@@ -228,7 +228,7 @@
       <div class="col-12">
         {{-- <h2 class="section-title">Total Pendapatan</h2> --}}
           <div class="table-responsive" id="data-load">
-            <table class="table table-striped table-bordered">
+            <table class="table table-striped">
                 <thead>
                     <tr>
                         <th class="text-center" width="13%">Tanggal</th>
