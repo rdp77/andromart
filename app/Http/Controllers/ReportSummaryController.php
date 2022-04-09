@@ -137,7 +137,7 @@ class ReportSummaryController extends Controller
                 // }S
             }
         }
-        return $tempPembelian;
+        // return $tempPembelian;
         // return [$totalPenjualan,$totalPembelian];
         return view('pages.backend.report.reportSummary', compact('branch', 'totalPenjualan', 'totalPembelian', 'totalPengeluaran', 'totalDiskonPenjualan', 'totalService', 'totalDiskonService'));
     }
