@@ -1,4 +1,4 @@
-<table class="table table-striped table-bordered">
+<table class="table table-striped">
     <thead>
         <tr>
             <th class="text-center" width="13%">Tanggal</th>
@@ -21,23 +21,15 @@
                         @foreach ($value->SaleDetail as $as => $sd)
                         <tr>
                             <td>x{{ $sd->qty }}</td>
-                            <th>{{ $sd->item->brand->name }} <br> {{ $sd->item->name }}</th>
+                            <td>{{ $sd->item->brand->name }} <br> {{ $sd->item->name }}</td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
             </td>
             <td>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td>
-                                <b>{{ $value->accountData->code }}</b>
-                                <br>{{ $value->accountData->name }}
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                <b>{{ $value->accountData->code }}</b>
+                <br>{{ $value->accountData->name }}
             </td>
             <th class="text-right">Rp. {{ number_format($value->total_price, 0, ".", ",") }}</th>
             <th class="text-right">Rp. {{ number_format($value->total_hpp, 0, ".", ",") }}</th>

@@ -84,11 +84,11 @@ require __DIR__ . '/report/reportServiceRoute.php';
 require __DIR__ . '/report/reportSaleRoute.php';
 require __DIR__ . '/report/reportSpendingRoute.php';
 require __DIR__ . '/report/reportSummaryRoute.php';
+require __DIR__ . '/report/reportServicePaymentRoute.php';
 require __DIR__ . '/report/reportPurchaseRoute.php';
 require __DIR__ . '/report/reportCashBalanceRoute.php';
 require __DIR__ . '/report/reportPeriodicRoute.php';
 require __DIR__ . '/report/reportIncomeStatementRoute.php';
-
 
 require __DIR__ . '/warehouse/stockRoute.php';
 require __DIR__ . '/warehouse/stockTransactionRoute.php';
