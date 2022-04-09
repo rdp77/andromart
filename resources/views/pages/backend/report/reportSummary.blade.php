@@ -20,7 +20,7 @@
         @csrf
         <section class="section">
             <div class="section-body">
-                 <div class="row">
+                <div class="row">
                     <div class="col-12">
                         <h2 class="section-title">Search Data </h2>
                         <div class="card">
@@ -39,7 +39,7 @@
                                         <select class="form-control cabang" name="cabang">
                                             <option value="">- select -</option>
                                             @foreach ($branch as $el)
-                                                <option value="{{$el->id}}">{{$el->name}}</option>
+                                                <option value="{{ $el->id }}">{{ $el->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -55,11 +55,11 @@
                             </div>
                         </div>
                     </div>
-                </div> 
-                <div class="col-12">
+                </div>
+                <div class="col-12" id="areaToPrint">
                     <h2 class="section-title">Total Summary</h2>
                     <div>
-                        <div class="row">
+                        <div class="row" id="areaToStyle">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                                 <div class="card card-statistic-1">
                                     <div class="card-icon bg-warning">
@@ -70,7 +70,7 @@
                                             <h4>Pembelian </h4>
                                         </div>
                                         <div class="card-body">
-                                            {{number_format($totalPembelian, 0, '.', ',') }}
+                                            {{ number_format($totalPembelian, 0, '.', ',') }}
                                         </div>
                                     </div>
                                 </div>
@@ -85,7 +85,7 @@
                                             <h4>Pengeluaran</h4>
                                         </div>
                                         <div class="card-body">
-                                            {{number_format($totalPengeluaran, 0, '.', ',') }}
+                                            {{ number_format($totalPengeluaran, 0, '.', ',') }}
                                         </div>
                                     </div>
                                 </div>
@@ -100,7 +100,7 @@
                                             <h4>Penjualan</h4>
                                         </div>
                                         <div class="card-body">
-                                            {{number_format($totalPenjualan-$totalDiskonPenjualan, 0, '.', ',') }}
+                                            {{ number_format($totalPenjualan - $totalDiskonPenjualan, 0, '.', ',') }}
                                         </div>
                                     </div>
                                 </div>
@@ -115,7 +115,7 @@
                                             <h4>Pembayaran Service</h4>
                                         </div>
                                         <div class="card-body">
-                                            {{number_format($totalService-$totalDiskonService, 0, '.', ',') }}
+                                            {{ number_format($totalService - $totalDiskonService, 0, '.', ',') }}
                                         </div>
                                     </div>
                                 </div>
@@ -135,11 +135,28 @@
             var startDate = $("#startDate").val();
             var endDate = $("#endDate").val();
             var cabang = $(".cabang").val();
-            
 
-            window.location.href = '{{ route('report-summary.reportSummary') }}?&startDate=' + startDate+'&endDate='+endDate+'&cabang='+cabang;
+
+            window.location.href = '{{ route('report-summary.reportSummary') }}?&startDate=' + startDate + '&endDate=' +
+                endDate + '&cabang=' + cabang;
         }
 
+        function printDiv() {
+            var outputString =
+                '<style type="text/css">' +
+                "#areaToStyle {" +
+                "font-size:5px;font-family: Arial, Helvetica, sans-serif;border-collapse: collapse;width: 100%;color: black;display: flex;justify-content: space-evenly;" +
+                
+                "}" +
+                "</style>";
+
+            var divToPrint = document.getElementById("areaToPrint");
+            newWin = window.open("");
+            newWin.document.write(divToPrint.outerHTML);
+            newWin.document.write(outputString);
+            newWin.print();
+            newWin.close();
+        }
     </script>
     {{-- <script src="{{ asset('assets/pages/finance/reportIncomeSpending.js') }}"></script> --}}
 
