@@ -126,6 +126,7 @@ class ReportSummaryController extends Controller
                         }
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '11') {
                             $totalPembelian += $data[$i]->JournalDetail[$j]->total;
+                            $tempPembelian = $data[$i]->JournalDetail[$j];
                         }
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_id == '6' || $data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '14' || $data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '15' || $data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '16' || $data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '17' || $data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '18') {
                             $totalPengeluaran += $data[$i]->JournalDetail[$j]->total;
