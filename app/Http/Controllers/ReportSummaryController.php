@@ -72,6 +72,7 @@ class ReportSummaryController extends Controller
         $totalService = 0;
         $totalDiskonService = 0;
         $totalPembelian = 0;
+        $tempPembelian = [];
         $totalPengeluaran = 0;
         if ($req->cabang == null || $req->cabang == '') {
             // return 'aas';
@@ -102,8 +103,9 @@ class ReportSummaryController extends Controller
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '30') {
                             $totalDiskonPenjualan += $data[$i]->JournalDetail[$j]->total;
                         }
-                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '11') {
+                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '11' && $data[$i]->JournalDetail[$j]->debet_kredit == 'D') {
                             $totalPembelian += $data[$i]->JournalDetail[$j]->total;
+                            array_push( $tempPembelian,$data[$i]->JournalDetail[$j]);
                         }
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_id == '6' || $data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '14' || $data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '15' || $data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '16' || $data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '17' || $data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '18') {
                             $totalPengeluaran += $data[$i]->JournalDetail[$j]->total;
@@ -122,8 +124,10 @@ class ReportSummaryController extends Controller
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '30') {
                             $totalDiskonPenjualan += $data[$i]->JournalDetail[$j]->total;
                         }
-                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '11') {
+                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '11' && $data[$i]->JournalDetail[$j]->debet_kredit == 'D') {
                             $totalPembelian += $data[$i]->JournalDetail[$j]->total;
+                            array_push( $tempPembelian,$data[$i]->JournalDetail[$j]);
+                           
                         }
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_id == '6' || $data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '14' || $data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '15' || $data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '16' || $data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '17' || $data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '18') {
                             $totalPengeluaran += $data[$i]->JournalDetail[$j]->total;
@@ -133,7 +137,7 @@ class ReportSummaryController extends Controller
                 // }S
             }
         }
-        // return $data;
+        // return $tempPembelian;
         // return [$totalPenjualan,$totalPembelian];
         return view('pages.backend.report.reportSummary', compact('branch', 'totalPenjualan', 'totalPembelian', 'totalPengeluaran', 'totalDiskonPenjualan', 'totalService', 'totalDiskonService'));
     }

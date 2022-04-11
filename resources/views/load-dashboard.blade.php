@@ -291,8 +291,7 @@
         },
         xAxis: {
             categories: [
-                'Handphone',
-                'Laptop'
+                'Service Masuk',
             ],
             crosshair: true
         },
