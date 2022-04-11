@@ -50,9 +50,15 @@ class ReportServicePaymentController extends Controller
         $startDate = $req->startDate1;
         $endDate = $req->endDate1;
         $data = ServicePayment::with('Service')
-        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
-        ->orderBy('id', 'DESC')->get();
+        ->Join('service', 'service.id', '=', 'service_payment.service_id')
+        ->select(
+            'service_payment.description as description', 'service_payment.date',
+            'service_payment.code as paymentCode', 'service.code as serviceCode', 'service_payment.date as paymentDate',
+            'service.date as serviceDate', 'service.customer_name', 'service.customer_phone', 'service.customer_address',
+            'service.work_status', 'service_payment.total', 'service_payment.type')
+        ->where('service_payment.date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('service_payment.date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->orderBy('service_payment.id', 'DESC')->get();
 
         $sumKotor = $data->sum('total');
         $tr = count($data);
@@ -66,8 +72,13 @@ class ReportServicePaymentController extends Controller
         $startDate = $req->startDate2;
         $endDate = $req->endDate2;
         $branch = $req->branch_id;
-        $data = ServicePayment::join('service', 'service.id', '=', 'service_payment.service_id')
-        // ->select('service_payment.description as description')
+        $data = ServicePayment::with('Service')
+        ->Join('service', 'service.id', '=', 'service_payment.service_id')
+        ->select(
+            'service_payment.description as description', 'service_payment.date',
+            'service_payment.code as paymentCode', 'service.code as serviceCode', 'service_payment.date as paymentDate',
+            'service.date as serviceDate', 'service.customer_name', 'service.customer_phone', 'service.customer_address',
+            'service.work_status', 'service_payment.total', 'service_payment.type')
         ->where('service_payment.date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
         ->where('service_payment.date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('service.branch_id', $branch)
@@ -89,9 +100,43 @@ class ReportServicePaymentController extends Controller
         $startDate = $req->startDate1;
         $endDate = $req->endDate1;
         $data = ServicePayment::with('Service')
-        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
-        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
-        ->orderBy('id', 'DESC')->get();
+        ->Join('service', 'service.id', '=', 'service_payment.service_id')
+        ->select(
+            'service_payment.description as description', 'service_payment.date',
+            'service_payment.code as paymentCode', 'service.code as serviceCode', 'service_payment.date as paymentDate',
+            'service.date as serviceDate', 'service.customer_name', 'service.customer_phone', 'service.customer_address',
+            'service.work_status', 'service_payment.total', 'service_payment.type')
+        ->where('service_payment.date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('service_payment.date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->orderBy('service_payment.id', 'DESC')->get();
+
+        $sumKotor = $data->sum('total');
+        $tr = count($data);
+
+        return view('pages.backend.report.printReportServicePayment', compact('data', 'tr', 'sumKotor', 'title', 'subtitle', 'val', 'periode'));
+    }
+
+    public function printBranch(Request $req)
+    {
+        $title = 'Laporan Pemabayaran Service per Cabang';
+        $subtitle = ' ';
+        $periode = $req->startDate2. ' - ' .$req->endDate2;
+        $val = ' ';
+        $branchUser = Auth::user()->employee->branch_id;
+        $startDate = $req->startDate2;
+        $endDate = $req->endDate2;
+        $branch = $req->branch_id;
+        $data = ServicePayment::with('Service')
+        ->Join('service', 'service.id', '=', 'service_payment.service_id')
+        ->select(
+            'service_payment.description as description', 'service_payment.date',
+            'service_payment.code as paymentCode', 'service.code as serviceCode', 'service_payment.date as paymentDate',
+            'service.date as serviceDate', 'service.customer_name', 'service.customer_phone', 'service.customer_address',
+            'service.work_status', 'service_payment.total', 'service_payment.type')
+        ->where('service_payment.date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('service_payment.date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('service.branch_id', $branch)
+        ->orderBy('service_payment.id', 'DESC')->get();
 
         $sumKotor = $data->sum('total');
         $tr = count($data);

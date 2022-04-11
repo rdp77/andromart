@@ -7,7 +7,6 @@
 @endsection
 
 @section('content')
-@include('pages.backend.components.filterSearch')
 @include('layouts.backend.components.notification')
 <div class="card">
     <div class="card-header">
@@ -18,7 +17,7 @@
     <div class="card-body">
         @foreach($category as $key => $el)
         <h5>Kategori : {{$el->name}}</h5>
-        <table class="table table-striped table-bordered" width="100%">
+        <table class="table table-striped" width="100%">
             <thead>
                 <tr>
                     <th class="text-center" width="6%" >{{ __('NO') }}</th>

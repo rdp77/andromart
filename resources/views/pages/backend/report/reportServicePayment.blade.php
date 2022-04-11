@@ -20,7 +20,7 @@
                         <li class="nav-item">
                           <a class="nav-link active" id="periode-tab3" data-toggle="tab" href="#periode3" role="tab" aria-controls="periode" aria-selected="true">Periode</a>
                         </li>
-                        <li class="nav-item" hidden>
+                        <li class="nav-item">
                             <a class="nav-link" id="branch-tab3" data-toggle="tab" href="#branch3" role="tab" aria-controls="branch" aria-selected="false">Cabang</a>
                         </li>
                     </ul>
