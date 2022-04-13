@@ -496,11 +496,11 @@
             </tbody>
             @endforeach
         </table>
-        <table class="table table-bordered table-sm" style="color: black;border:1px solid black">
+        <table class="table table-bordered" style="color: black;border:1px solid black">
             <thead>
                 <tr style="color: #6777ef">
-                    <th><h4>Jumlah Transaksi : {{ $tr }}</h4></th>
-                    <th><h4>Total Pengeluaran : Rp. {{ number_format($sumBayar, 0, '.', ',') }}</h4></th>
+                    <th class="text-left" width="50%"><h4>Jumlah Transaksi : {{ $tr }}</h4></th>
+                    <th class="text-right" width="50%"><h4>Total Pengeluaran : Rp. {{ number_format($sumBayar, 0, '.', ',') }}</h4></th>
                 </tr>
             </thead>
         </table>
@@ -526,11 +526,8 @@
             function b64toBlob(b64Data, contentType, sliceSize) {
                 contentType = contentType || '';
                 sliceSize = sliceSize || 512;
-
                 var byteCharacters = atob(b64Data);
                 var byteArrays = [];
-
-
                 for (var offset = 0; offset < byteCharacters.length; offset += sliceSize) {
                     var slice = byteCharacters.slice(offset, offset + sliceSize);
 
@@ -539,10 +536,8 @@
                         byteNumbers[i] = slice.charCodeAt(i);
                     }
                     var byteArray = new Uint8Array(byteNumbers);
-
                     byteArrays.push(byteArray);
                 }
-
                 var blob = new Blob(byteArrays, {
                     type: contentType
                 });

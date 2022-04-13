@@ -39,9 +39,9 @@
     @endforeach
     <tfoot>
         <tr style="color: #6777ef;">
-            <th colspan="2"><h5>Jumlah Transaksi : {{ $tr }}</h5></th>
-            <th colspan="2"><h5>Pendapatan Kotor : Rp. {{ number_format($sumKotor, 0, ".", ",") }}</h5></th>
-            <th colspan="2"><h5>Pendapatan Bersih : Rp. {{ number_format($sumBersih, 0, ".", ",") }}</h5></th>
+            <th colspan="2" class="text-left"><h5>Jumlah Transaksi : {{ $tr }}</h5></th>
+            <th colspan="2" class="text-center"><h5>Pendapatan Kotor : Rp. {{ number_format($sumKotor, 0, ".", ",") }}</h5></th>
+            <th colspan="2" class="text-right"><h5>Pendapatan Bersih : Rp. {{ number_format($sumBersih, 0, ".", ",") }}</h5></th>
         </tr>
     </tfoot>
 </table>

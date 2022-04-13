@@ -497,13 +497,13 @@
         <table class="table table-bordered table-sm" style="color: black;border:1px solid black">
             <thead>
                 <tr style="color: #6777ef;">
-                    <th>
+                    <th class="text-left" width="33%">
                         <h4>Jumlah Transaksi : {{ $tr }}</h4>
                     </th>
-                    <th>
+                    <th class="text-center" width="33%">
                         <h4>Pendapatan Kotor : Rp. {{ number_format($sumKotor, 0, '.', ',') }}</h4>
                     </th>
-                    <th>
+                    <th class="text-right" width="33%">
                         <h4>Pendapatan Bersih : Rp. {{ number_format($sumBersih, 0, '.', ',') }}</h4>
                     </th>
                 </tr>

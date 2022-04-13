@@ -7,7 +7,6 @@
 @endsection
 
 @section('content')
-{{-- @include('pages.backend.components.filterSearch') --}}
 @include('layouts.backend.components.notification')
 <form class="form-data">
     @csrf
@@ -161,7 +160,6 @@
         </div>
       </div>
       <div class="col-12">
-        {{-- <h2 class="section-title">Total Pendapatan & Pengeluaran</h2> --}}
           <div class="table-responsive" id="data-load">
             <table class="table table-striped table-bordered">
                 <thead>
@@ -179,14 +177,11 @@
                 </tbody>
                 <tfoot>
                     <tr style="color: #6777ef">
-                        <th colspan="4"><h5>Jumlah Transaksi : 0</h5></th>
-                        <th colspan="3"><h5>Total Pengeluaran : Rp. 0</h5></th>
-                        {{-- <th colspan="2"><h5>Pendapatan Bersih : <b class="dropPendapatan">Rp. 0</b></h5></th> --}}
+                        <th colspan="4" class="text-left"><h5>Jumlah Transaksi : 0</h5></th>
+                        <th colspan="3" class="text-right"><h5>Total Pengeluaran : Rp. 0</h5></th>
                     </tr>
                 </tfoot>
             </table>
-            {{-- <div class="dropHereTotalVal"></div> --}}
-
         </div>
       </div>
   </section>

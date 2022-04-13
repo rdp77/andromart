@@ -60,10 +60,20 @@ class ReportServicePaymentController extends Controller
         ->where('service_payment.date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->orderBy('service_payment.id', 'DESC')->get();
 
-        $sumKotor = $data->sum('total');
+        $bayar = ServicePayment::with('Service')
+        ->Join('service', 'service.id', '=', 'service_payment.service_id')
+        ->select(
+            'service_payment.date', 'service_payment.date as paymentDate',
+            'service.payment_status', 'service_payment.total', 'service.sharing_profit_store')
+        ->where('service_payment.date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('service_payment.date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('service.payment_status', 'Lunas')->get();
+
+        $sumKotor = $bayar->sum('total');
+        $sumBersih = $bayar->sum('sharing_profit_store');
         $tr = count($data);
 
-        return view('pages.backend.report.reportServicePaymentLoad', compact('data', 'sumKotor', 'tr'));
+        return view('pages.backend.report.reportServicePaymentLoad', compact('data', 'sumKotor', 'sumBersih', 'tr'));
     }
 
     public function branchLoad(Request $req)
@@ -84,10 +94,20 @@ class ReportServicePaymentController extends Controller
         ->where('service.branch_id', $branch)
         ->orderBy('service_payment.id', 'DESC')->get();
 
-        $sumKotor = $data->sum('total');
+        $bayar = ServicePayment::with('Service')
+        ->Join('service', 'service.id', '=', 'service_payment.service_id')
+        ->select(
+            'service_payment.date', 'service_payment.date as paymentDate',
+            'service.payment_status', 'service_payment.total', 'service.sharing_profit_store')
+        ->where('service_payment.date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('service_payment.date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('service.payment_status', 'Lunas')->get();
+
+        $sumKotor = $bayar->sum('total');
+        $sumBersih = $bayar->sum('sharing_profit_store');
         $tr = count($data);
 
-        return view('pages.backend.report.reportServicePaymentLoad', compact('data', 'sumKotor', 'tr'));
+        return view('pages.backend.report.reportServicePaymentLoad', compact('data', 'sumKotor', 'sumBersih', 'tr'));
     }
 
     public function printPeriode(Request $req)
@@ -110,10 +130,20 @@ class ReportServicePaymentController extends Controller
         ->where('service_payment.date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->orderBy('service_payment.id', 'DESC')->get();
 
-        $sumKotor = $data->sum('total');
+        $bayar = ServicePayment::with('Service')
+        ->Join('service', 'service.id', '=', 'service_payment.service_id')
+        ->select(
+            'service_payment.date', 'service_payment.date as paymentDate',
+            'service.payment_status', 'service_payment.total', 'service.sharing_profit_store')
+        ->where('service_payment.date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('service_payment.date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('service.payment_status', 'Lunas')->get();
+
+        $sumKotor = $bayar->sum('total');
+        $sumBersih = $bayar->sum('sharing_profit_store');
         $tr = count($data);
 
-        return view('pages.backend.report.printReportServicePayment', compact('data', 'tr', 'sumKotor', 'title', 'subtitle', 'val', 'periode'));
+        return view('pages.backend.report.printReportServicePayment', compact('data', 'tr', 'sumKotor', 'sumBersih', 'title', 'subtitle', 'val', 'periode'));
     }
 
     public function printBranch(Request $req)
@@ -138,9 +168,19 @@ class ReportServicePaymentController extends Controller
         ->where('service.branch_id', $branch)
         ->orderBy('service_payment.id', 'DESC')->get();
 
-        $sumKotor = $data->sum('total');
+        $bayar = ServicePayment::with('Service')
+        ->Join('service', 'service.id', '=', 'service_payment.service_id')
+        ->select(
+            'service_payment.date', 'service_payment.date as paymentDate',
+            'service.payment_status', 'service_payment.total', 'service.sharing_profit_store')
+        ->where('service_payment.date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('service_payment.date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('service.payment_status', 'Lunas')->get();
+
+        $sumKotor = $bayar->sum('total');
+        $sumBersih = $bayar->sum('sharing_profit_store');
         $tr = count($data);
 
-        return view('pages.backend.report.printReportServicePayment', compact('data', 'tr', 'sumKotor', 'title', 'subtitle', 'val', 'periode'));
+        return view('pages.backend.report.printReportServicePayment', compact('data', 'tr', 'sumKotor', 'sumBersih', 'title', 'subtitle', 'val', 'periode'));
     }
 }
