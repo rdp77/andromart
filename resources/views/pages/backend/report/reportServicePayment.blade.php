@@ -106,8 +106,8 @@
                 <tfoot>
                     <tr style="color: #6777ef;">
                         <th colspan="2" class="text-left"><h5>Jumlah Transaksi : 0</h5></th>
-                        <th colspan="2" class="text-center"><h5>Pendapatan Kotor : Rp. 0</h5></th>
-                        <th colspan="3" class="text-right"><h5>Pendapatan Bersih : Rp. 0</h5></th>
+                        <th colspan="3" class="text-center"><h5>Pendapatan Kotor : Rp. 0</h5></th>
+                        <th colspan="2" class="text-right"><h5>Pendapatan Bersih : Rp. 0</h5></th>
                     </tr>
                 </tfoot>
             </table>
