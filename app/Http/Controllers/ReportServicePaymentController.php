@@ -101,6 +101,7 @@ class ReportServicePaymentController extends Controller
             'service.payment_status', 'service_payment.total', 'service.sharing_profit_store')
         ->where('service_payment.date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
         ->where('service_payment.date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('service.branch_id', $branch)
         ->where('service.payment_status', 'Lunas')->get();
 
         $sumKotor = $bayar->sum('total');
@@ -175,6 +176,7 @@ class ReportServicePaymentController extends Controller
             'service.payment_status', 'service_payment.total', 'service.sharing_profit_store')
         ->where('service_payment.date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
         ->where('service_payment.date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('service.branch_id', $branch)
         ->where('service.payment_status', 'Lunas')->get();
 
         $sumKotor = $bayar->sum('total');
