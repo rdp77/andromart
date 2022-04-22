@@ -70,7 +70,7 @@ class ReportServicePaymentController extends Controller
         ->where('service.payment_status', 'Lunas')->get();
 
         $sumKotor = $bayar->sum('total');
-        $sumBersih = $bayar->sum('sharing_profit_store');
+        $sumBersih = $bayar->sum('total_service');
         $tr = count($data);
 
         return view('pages.backend.report.reportServicePaymentLoad', compact('data', 'sumKotor', 'sumBersih', 'tr'));
@@ -105,7 +105,7 @@ class ReportServicePaymentController extends Controller
         ->where('service.payment_status', 'Lunas')->get();
 
         $sumKotor = $bayar->sum('total');
-        $sumBersih = $bayar->sum('sharing_profit_store');
+        $sumBersih = $bayar->sum('total_service');
         $tr = count($data);
 
         return view('pages.backend.report.reportServicePaymentLoad', compact('data', 'sumKotor', 'sumBersih', 'tr'));
@@ -141,7 +141,7 @@ class ReportServicePaymentController extends Controller
         ->where('service.payment_status', 'Lunas')->get();
 
         $sumKotor = $bayar->sum('total');
-        $sumBersih = $bayar->sum('sharing_profit_store');
+        $sumBersih = $bayar->sum('total_service');
         $tr = count($data);
 
         return view('pages.backend.report.printReportServicePayment', compact('data', 'tr', 'sumKotor', 'sumBersih', 'title', 'subtitle', 'val', 'periode'));
@@ -180,7 +180,7 @@ class ReportServicePaymentController extends Controller
         ->where('service.payment_status', 'Lunas')->get();
 
         $sumKotor = $bayar->sum('total');
-        $sumBersih = $bayar->sum('sharing_profit_store');
+        $sumBersih = $bayar->sum('total_service');
         $tr = count($data);
 
         return view('pages.backend.report.printReportServicePayment', compact('data', 'tr', 'sumKotor', 'sumBersih', 'title', 'subtitle', 'val', 'periode'));
