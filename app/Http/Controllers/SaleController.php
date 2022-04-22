@@ -340,7 +340,7 @@ class SaleController extends Controller
                 $accountDiskon  = AccountData::where('branch_id', $getEmployee->branch_id)
                     ->where('active', 'Y')
                     ->where('main_id', 8)
-                    ->where('main_detail_id', 31)
+                    ->where('main_detail_id', 30)
                     ->first();
 
                 $accountPembayaran  = AccountData::where('id', $req->account)
@@ -918,7 +918,7 @@ class SaleController extends Controller
                 $accountDiskon  = AccountData::where('branch_id', $getEmployee->branch_id)
                     ->where('active', 'Y')
                     ->where('main_id', 8)
-                    ->where('main_detail_id', 31)
+                    ->where('main_detail_id', 30)
                     ->first();
 
                 $accountPembayaran  = AccountData::where('id', $req->account)

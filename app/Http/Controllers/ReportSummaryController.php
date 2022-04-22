@@ -73,6 +73,7 @@ class ReportSummaryController extends Controller
         $totalDiskonService = 0;
         $totalPembelian = 0;
         $tempPembelian = [];
+        $tempDiskon = [];
         $totalPengeluaran = 0;
         if ($req->cabang == null || $req->cabang == '') {
             // return 'aas';
@@ -96,6 +97,8 @@ class ReportSummaryController extends Controller
                         }
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '31') {
                             $totalDiskonService += $data[$i]->JournalDetail[$j]->total;
+                            // array_push( $tempDiskon,$data[$i]->JournalDetail[$j]->total);
+
                         }
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '27') {
                             $totalPenjualan += $data[$i]->JournalDetail[$j]->total;
@@ -117,6 +120,7 @@ class ReportSummaryController extends Controller
                         }
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '31') {
                             $totalDiskonService += $data[$i]->JournalDetail[$j]->total;
+                            // array_push( $tempDiskon,$data[$i]->JournalDetail[$j]->total);
                         }
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '27') {
                             $totalPenjualan += $data[$i]->JournalDetail[$j]->total;
@@ -137,8 +141,8 @@ class ReportSummaryController extends Controller
                 // }S
             }
         }
-        // return $tempPembelian;
-        // return [$totalPenjualan,$totalPembelian];
+        // return $tempDiskon;
+        // return [$totalService,$totalDiskonService];
         return view('pages.backend.report.reportSummary', compact('branch', 'totalPenjualan', 'totalPembelian', 'totalPengeluaran', 'totalDiskonPenjualan', 'totalService', 'totalDiskonService'));
     }
     public function searchReportSummary(Request $req)
