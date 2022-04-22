@@ -103,7 +103,7 @@ class ReportSummaryController extends Controller
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '30') {
                             $totalDiskonPenjualan += $data[$i]->JournalDetail[$j]->total;
                         }
-                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '11' && $data[$i]->JournalDetail[$j]->debet_kredit == 'D') {
+                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '12' && $data[$i]->JournalDetail[$j]->debet_kredit == 'D') {
                             $totalPembelian += $data[$i]->JournalDetail[$j]->total;
                             array_push( $tempPembelian,$data[$i]->JournalDetail[$j]);
                         }
@@ -124,7 +124,7 @@ class ReportSummaryController extends Controller
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '30') {
                             $totalDiskonPenjualan += $data[$i]->JournalDetail[$j]->total;
                         }
-                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '11' && $data[$i]->JournalDetail[$j]->debet_kredit == 'D') {
+                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '12' && $data[$i]->JournalDetail[$j]->debet_kredit == 'D') {
                             $totalPembelian += $data[$i]->JournalDetail[$j]->total;
                             array_push( $tempPembelian,$data[$i]->JournalDetail[$j]);
                            
