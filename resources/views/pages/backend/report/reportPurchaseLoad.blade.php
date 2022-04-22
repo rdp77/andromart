@@ -52,8 +52,8 @@
     @endforeach
     <tfoot>
         <tr style="color: #6777ef">
-            <th colspan="4"><h5>Jumlah Transaksi : {{ $tr }}</h5></th>
-            <th colspan="3"><h5>Total Pengeluaran : Rp.{{ number_format($sumBayar, 0, '.', ',') }}</h5></th>
+            <th colspan="4" class="text-left"><h5>Jumlah Transaksi : {{ $tr }}</h5></th>
+            <th colspan="3" class="text-right"><h5>Total Pengeluaran : Rp.{{ number_format($sumBayar, 0, '.', ',') }}</h5></th>
         </tr>
     </tfoot>
 </table>

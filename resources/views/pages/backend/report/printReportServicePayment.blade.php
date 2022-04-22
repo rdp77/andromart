@@ -472,21 +472,21 @@
                 <tr role="row" class="odd">
                     <td class="text-center">{{ \Carbon\Carbon::parse($value->date)->locale('id')->isoFormat('LL') }}</td>
                     <td> 
-                        <b>{{ $value->code }}</b><br>
+                        <b>{{ $value->paymentCode }}</b><br>
                         Kode Pembayaran
                     </td>
                     <td> 
-                        <b>{{ $value->service->code }}</b><br>
+                        <b>{{ $value->serviceCode }}</b><br>
                         Kode Service
                     </td>
                     <td>
-                        <b>{{ $value->service->customer_name }}</b><br>
-                        {{ $value->service->customer_phone }}
+                        <b>{{ $value->customer_name }}</b><br>
+                        {{ $value->customer_phone }}
                     </td>
                     <td>Pembayaran &nbsp; :
                         <strong>
                             @if ($value->type == null)
-                            <b>Belum Bayar
+                                Belum Bayar
                             @elseif($value->type == "DownPayment")
                                 Bayar DP
                             @elseif ($value->type == "Lunas")
@@ -495,19 +495,19 @@
                         </strong><br>
                         Pekerjaan &emsp; &nbsp; :
                         <strong>
-                            @if ($value->service->work_status == "Proses")
+                            @if ($value->work_status == "Proses")
                                 Proses Pengerjaan
-                            @elseif($value->service->work_status == "Mutasi")
+                            @elseif($value->work_status == "Mutasi")
                                 Perpindahan Teknisi
-                            @elseif ($value->service->work_status == "Selesai")
+                            @elseif ($value->work_status == "Selesai")
                                 Selesai
-                            @elseif($value->service->work_status == "Cancel")
+                            @elseif($value->work_status == "Cancel")
                                 Service Batal
-                            @elseif ($value->service->work_status == "Manifest")
+                            @elseif ($value->work_status == "Manifest")
                                 Barang Diterima
-                            @elseif ($value->service->work_status == "Diambil")
+                            @elseif ($value->work_status == "Diambil")
                                 Sudah Diambil
-                            @elseif ($value->service->work_status == "Return")
+                            @elseif ($value->work_status == "Return")
                                 Sudah Diambil
                             @endif
                         </strong>
@@ -520,14 +520,17 @@
             </tbody>
             @endforeach
         </table>
-        <table class="table table-bordered table-sm" style="color: black;border:1px solid black">
+        <table class="table table-bordered" style="color: black;border:1px solid black">
             <thead>
                 <tr style="color: #6777ef;">
-                    <th>
+                    <th class="text-left" width="33%">
                         <h4>Jumlah Transaksi : {{ $tr }}</h4>
                     </th>
-                    <th>
-                        <h4>Total : Rp. {{ number_format($sumKotor, 0, '.', ',') }}</h4>
+                    <th class="text-center" width="33%">
+                        <h4>Pendapatan Kotor : Rp. {{ number_format($sumKotor, 0, '.', ',') }}</h4>
+                    </th>
+                    <th class="text-right" width="33%">
+                        <h4>Pendapatan Bersih : Rp. {{ number_format($sumBersih, 0, '.', ',') }}</h4>
                     </th>
                 </tr>
             </thead>

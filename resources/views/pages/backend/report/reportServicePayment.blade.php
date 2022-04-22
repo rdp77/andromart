@@ -7,7 +7,6 @@
 @endsection
 
 @section('content')
-{{-- @include('pages.backend.components.filterSearch') --}}
 @include('layouts.backend.components.notification')
 <form class="form-data">
     @csrf
@@ -20,7 +19,7 @@
                         <li class="nav-item">
                           <a class="nav-link active" id="periode-tab3" data-toggle="tab" href="#periode3" role="tab" aria-controls="periode" aria-selected="true">Periode</a>
                         </li>
-                        <li class="nav-item" hidden>
+                        <li class="nav-item">
                             <a class="nav-link" id="branch-tab3" data-toggle="tab" href="#branch3" role="tab" aria-controls="branch" aria-selected="false">Cabang</a>
                         </li>
                     </ul>
@@ -90,7 +89,6 @@
         </div>
       </div>
       <div class="col-12">
-        {{-- <h2 class="section-title">Total Pendapatan</h2> --}}
           <div class="table-responsive" id="data-load">
             <table class="table table-striped">
                 <thead>
@@ -98,18 +96,18 @@
                         <th class="text-center" width="12%">Tanggal</th>
                         <th class="text-center" width="25%" colspan="2">Faktur</th>
                         <th class="text-center" width="13%">Customer</th>
-                        <th class="text-center" width="20%">Status</th>
-                        <th class="text-center" width="12%">Keterangan</th>
-                        <th class="text-center" width="13%">Jumlah</th>
+                        <th class="text-center" width="18%">Status</th>
+                        <th class="text-center" width="13%">Keterangan</th>
+                        <th class="text-center" width="14%">Jumlah</th>
                     </tr>
                 </thead>
                 <tbody class="dropHere" style="border: none !important">
                 </tbody>
                 <tfoot>
                     <tr style="color: #6777ef;">
-                        <th colspan="3"><h5>Jumlah Transaksi : 0</h5></th>
-                        <th colspan="3"><h5>Total : Rp. 0</h5></th>
-                        {{-- <th colspan="2"><h5>Pendapatan Bersih : Rp. 0</h5></th> --}}
+                        <th colspan="2" class="text-left"><h5>Jumlah Transaksi : 0</h5></th>
+                        <th colspan="3" class="text-center"><h5>Pendapatan Kotor : Rp. 0</h5></th>
+                        <th colspan="2" class="text-right"><h5>Pendapatan Bersih : Rp. 0</h5></th>
                     </tr>
                 </tfoot>
             </table>
