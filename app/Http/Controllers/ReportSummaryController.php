@@ -69,7 +69,10 @@ class ReportSummaryController extends Controller
         // return $dateStart;
         $totalPenjualan = 0;
         $totalDiskonPenjualan = 0;
+        $totalBersihPenjualan = 0;
+        $totalHPPPenjualan = 0;
         $totalService = 0;
+        $totalSparepartService = 0;
         $totalDiskonService = 0;
         $totalPembelian = 0;
         $tempPembelian = [];
@@ -97,14 +100,21 @@ class ReportSummaryController extends Controller
                         }
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '31') {
                             $totalDiskonService += $data[$i]->JournalDetail[$j]->total;
-                            // array_push( $tempDiskon,$data[$i]->JournalDetail[$j]->total);
-
+                        }
+                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '6') {
+                            $totalSparepartService += $data[$i]->JournalDetail[$j]->total;
                         }
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '27') {
                             $totalPenjualan += $data[$i]->JournalDetail[$j]->total;
                         }
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '30') {
                             $totalDiskonPenjualan += $data[$i]->JournalDetail[$j]->total;
+                        }
+                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '27') {
+                            $totalBersihPenjualan += $data[$i]->JournalDetail[$j]->total;
+                        }
+                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '29') {
+                            $totalHPPPenjualan += $data[$i]->JournalDetail[$j]->total;
                         }
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '12' && $data[$i]->JournalDetail[$j]->debet_kredit == 'D') {
                             $totalPembelian += $data[$i]->JournalDetail[$j]->total;
@@ -122,11 +132,20 @@ class ReportSummaryController extends Controller
                             $totalDiskonService += $data[$i]->JournalDetail[$j]->total;
                             // array_push( $tempDiskon,$data[$i]->JournalDetail[$j]->total);
                         }
+                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '6') {
+                            $totalSparepartService += $data[$i]->JournalDetail[$j]->total;
+                        }
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '27') {
                             $totalPenjualan += $data[$i]->JournalDetail[$j]->total;
                         }
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '30') {
                             $totalDiskonPenjualan += $data[$i]->JournalDetail[$j]->total;
+                        }
+                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '27') {
+                            $totalBersihPenjualan += $data[$i]->JournalDetail[$j]->total;
+                        }
+                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '29') {
+                            $totalHPPPenjualan += $data[$i]->JournalDetail[$j]->total;
                         }
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '12' && $data[$i]->JournalDetail[$j]->debet_kredit == 'D') {
                             $totalPembelian += $data[$i]->JournalDetail[$j]->total;
@@ -141,9 +160,9 @@ class ReportSummaryController extends Controller
                 // }S
             }
         }
-        // return $tempDiskon;
-        // return [$totalService,$totalDiskonService];
-        return view('pages.backend.report.reportSummary', compact('branch', 'totalPenjualan', 'totalPembelian', 'totalPengeluaran', 'totalDiskonPenjualan', 'totalService', 'totalDiskonService'));
+        // return $totalSparepartService;
+        // return [$totalBersihPenjualan,$totalHPPPenjualan];
+        return view('pages.backend.report.reportSummary', compact('branch', 'totalPenjualan', 'totalPembelian', 'totalPengeluaran', 'totalDiskonPenjualan', 'totalService', 'totalDiskonService','totalSparepartService','totalBersihPenjualan','totalHPPPenjualan'));
     }
     public function searchReportSummary(Request $req)
     {
