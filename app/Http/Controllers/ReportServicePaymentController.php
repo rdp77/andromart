@@ -64,7 +64,7 @@ class ReportServicePaymentController extends Controller
         ->Join('service', 'service.id', '=', 'service_payment.service_id')
         ->select(
             'service_payment.date', 'service_payment.date as paymentDate',
-            'service.payment_status', 'service_payment.total', 'service.sharing_profit_store')
+            'service.payment_status', 'service_payment.total', 'service.total_service')
         ->where('service_payment.date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
         ->where('service_payment.date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('service.payment_status', 'Lunas')->get();
@@ -98,7 +98,7 @@ class ReportServicePaymentController extends Controller
         ->Join('service', 'service.id', '=', 'service_payment.service_id')
         ->select(
             'service_payment.date', 'service_payment.date as paymentDate',
-            'service.payment_status', 'service_payment.total', 'service.sharing_profit_store')
+            'service.payment_status', 'service_payment.total', 'service.total_service')
         ->where('service_payment.date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
         ->where('service_payment.date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('service.branch_id', $branch)
@@ -135,7 +135,7 @@ class ReportServicePaymentController extends Controller
         ->Join('service', 'service.id', '=', 'service_payment.service_id')
         ->select(
             'service_payment.date', 'service_payment.date as paymentDate',
-            'service.payment_status', 'service_payment.total', 'service.sharing_profit_store')
+            'service.payment_status', 'service_payment.total', 'service.total_service')
         ->where('service_payment.date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
         ->where('service_payment.date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('service.payment_status', 'Lunas')->get();
@@ -173,7 +173,7 @@ class ReportServicePaymentController extends Controller
         ->Join('service', 'service.id', '=', 'service_payment.service_id')
         ->select(
             'service_payment.date', 'service_payment.date as paymentDate',
-            'service.payment_status', 'service_payment.total', 'service.sharing_profit_store')
+            'service.payment_status', 'service_payment.total', 'service.total_service')
         ->where('service_payment.date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
         ->where('service_payment.date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('service.branch_id', $branch)
