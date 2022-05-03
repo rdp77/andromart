@@ -1,10 +1,10 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__('Tambah Service'))
-@section('titleContent', __('Tambah Service'))
+@section('title', __('pages.title').__(' | Edit Service'))
+@section('titleContent', __('Edit Service'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
 <div class="breadcrumb-item active">{{ __('Service') }}</div>
-<div class="breadcrumb-item active">{{ __('Tambah Service') }}</div>
+<div class="breadcrumb-item active">{{ __('Edit Service') }}</div>
 @endsection
 
 @section('content')
@@ -20,12 +20,12 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="code">{{ __('Kode Faktur') }}<code>*</code></label>
-                            <input id="code" type="text" class="form-control" readonly="" value="{{$service->code}}" name="code">
+                            <input id="code" type="text" class="form-control" readonly="" value="{{ $service->code }}" name="code">
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="date">{{ __('Tanggal') }}<code>*</code></label>
-                            <input id="date" type="text" class="form-control datepicker" readonly="" 
-                            value="{{ date('d-F-Y', strtotime($service->date)) }}" name="date">
+                            <input id="date" type="text" class="form-control datepicker" readonly=""
+                            value="{{ $service->date }}" name="date">
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="warranty">{{ __('Garansi') }}<code>*</code></label>
@@ -52,7 +52,7 @@
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="estimateDate">{{ __('Estimasi') }}<code>*</code></label>
-                            <input id="estimateDate" type="text" value="{{ date('d-F-Y', strtotime($service->estimate_date)) }}" class="form-control datepicker" name="estimateDate">
+                            <input id="estimateDate" type="text" value="{{ $service->estimate_date }}" class="form-control datepicker" name="estimateDate">
                         </div>
                     </div>
                     <div class="row">
@@ -129,13 +129,13 @@
                         </div>
                     </div>
                     <div class="row">
-                        
+
                         <div class="form-group col-12 col-md-12 col-lg-12">
                             <label for="description">{{ __('Kesepakatan Bersama') }}<code>*</code></label>
                             <input id="description" value="{{$service->description}}" type="text" class="form-control validation" data-name="Deskripsi" name="description">
                         </div>
                     </div>
-                    
+
                     <h6 style="color: #6777ef">Data Customer</h6>
                     <br>
                     <div class="row">
@@ -148,12 +148,12 @@
                             <select class="select2 customerId" name="customerId" onchange="customerChange()">
                                 <option value="">- Select -</option>
                                 @foreach ($customer as $element)
-                                <option @if ($service->customer_id == $element->id) selected @endif value="{{$element->id}}" 
-                                    data-name="{{$element->name}}" 
+                                <option @if ($service->customer_id == $element->id) selected @endif value="{{$element->id}}"
+                                    data-name="{{$element->name}}"
                                     data-address="{{$element->address}}"
                                     data-phone="{{$element->contact}}"
                                     >{{$element->name}}</option>
-                                @endforeach 
+                                @endforeach
                                 {{-- <option value="Deny">Deny</option>
                                 <option value="Rizal">Rizal</option>
                                 <option value="Alfian">Alfian</option> --}}
@@ -207,14 +207,14 @@
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Charger</span>
                             </label>
-                            <div class="chargerEquipmentDescUsed" 
-                                @if ($service->ServiceEquipment[0]->status == 'Y') 
+                            <div class="chargerEquipmentDescUsed"
+                                @if ($service->ServiceEquipment[0]->status == 'Y')
                                     style="display: block"
-                                @else 
+                                @else
                                     style="display: none"
                                 @endif ><hr>
                                 <input id="chargerEquipmentDesc" value="{{$service->ServiceEquipment[0]->description}}" type="text" class="form-control" name="chargerEquipmentDesc">
-                            </div>  
+                            </div>
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
@@ -222,15 +222,15 @@
                                 <span class="custom-switch-indicator"></span>
                                 <span class="custom-switch-description">Baterai</span>
                             </label>
-                            <div class="bateraiEquipmentDescUsed" 
-                                @if ($service->ServiceEquipment[1]->status == 'Y') 
+                            <div class="bateraiEquipmentDescUsed"
+                                @if ($service->ServiceEquipment[1]->status == 'Y')
                                     style="display: block"
-                                @else 
+                                @else
                                     style="display: none"
                                 @endif
                                 ><hr>
                                 <input id="bateraiEquipmentDesc" type="text" value="{{$service->ServiceEquipment[1]->description}}" class="form-control" name="bateraiEquipmentDesc">
-                            </div> 
+                            </div>
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
@@ -239,14 +239,14 @@
                                 <span class="custom-switch-description">Hardisk / SSD</span>
                             </label>
                             <div class="hardiskSsdEquipmentDescUsed"
-                                @if ($service->ServiceEquipment[2]->status == 'Y') 
+                                @if ($service->ServiceEquipment[2]->status == 'Y')
                                     style="display: block"
-                                @else 
+                                @else
                                     style="display: none"
                                 @endif
                                 ><hr>
                                 <input id="hardiskSsdEquipmentDesc" type="text" value="{{$service->ServiceEquipment[2]->description}}" class="form-control" name="hardiskSsdEquipmentDesc">
-                            </div> 
+                            </div>
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
@@ -255,18 +255,18 @@
                                 <span class="custom-switch-description">RAM</span>
                             </label>
                             <div class="RamEquipmentDescUsed"
-                            @if ($service->ServiceEquipment[3]->status == 'Y') 
+                            @if ($service->ServiceEquipment[3]->status == 'Y')
                                     style="display: block"
-                                @else 
+                                @else
                                     style="display: none"
                                 @endif
                             ><hr>
                                 <input id="RamEquipmentDesc" value="{{$service->ServiceEquipment[3]->description}}" type="text" class="form-control" name="RamEquipmentDesc">
                             </div>
                         </div>
-                        
-                        
-                        
+
+
+
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-3 col-lg-3">
@@ -276,14 +276,14 @@
                                 <span class="custom-switch-description">Kabel</span>
                             </label>
                             <div class="kabelEquipmentDescUsed"
-                            @if ($service->ServiceEquipment[4]->status == 'Y') 
+                            @if ($service->ServiceEquipment[4]->status == 'Y')
                                     style="display: block"
-                                @else 
+                                @else
                                     style="display: none"
                                 @endif
                             ><hr>
                                 <input id="kabelEquipmentDesc" value="{{$service->ServiceEquipment[4]->description}}" type="text" class="form-control" name="kabelEquipmentDesc">
-                            </div>    
+                            </div>
                         </div>
                         <div class="form-group col-12 col-md-3 col-lg-3">
                             <label class="custom-switch mt-2" style="margin-left: -30px !important">
@@ -292,9 +292,9 @@
                                 <span class="custom-switch-description">Tas Laptop</span>
                             </label>
                             <div class="tasLaptopEquipmentDescUsed"
-                            @if ($service->ServiceEquipment[5]->status == 'Y') 
+                            @if ($service->ServiceEquipment[5]->status == 'Y')
                                     style="display: block"
-                                @else 
+                                @else
                                     style="display: none"
                                 @endif
                             ><hr>
@@ -308,9 +308,9 @@
                                 <span class="custom-switch-description">Aksesoris</span>
                             </label>
                             <div class="aksesorisEquipmentDescUsed"
-                            @if ($service->ServiceEquipment[6]->status == 'Y') 
+                            @if ($service->ServiceEquipment[6]->status == 'Y')
                                     style="display: block"
-                                @else 
+                                @else
                                     style="display: none"
                                 @endif
                             ><hr>
@@ -324,16 +324,16 @@
                                 <span class="custom-switch-description">Lainnya</span>
                             </label>
                             <div class="lainnyaEquipmentDescUsed"
-                            @if ($service->ServiceEquipment[7]->status == 'Y') 
+                            @if ($service->ServiceEquipment[7]->status == 'Y')
                                     style="display: block"
-                                @else 
+                                @else
                                     style="display: none"
                                 @endif
                             ><hr>
                                 <input id="lainnyaEquipmentDesc" value="{{$service->ServiceEquipment[7]->description}}" type="text" class="form-control" name="lainnyaEquipmentDesc">
                             </div>
                         </div>
-                        
+
                     </div>
                 </div>
             </div>
@@ -354,7 +354,7 @@
                                 <span class="selectgroup-button">Ya</span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="verificationPrice" value="N" @if ($service->verification_price == 'N') checked @endif onchange="sumTotal()" 
+                                <input type="radio" name="verificationPrice" value="N" @if ($service->verification_price == 'N') checked @endif onchange="sumTotal()"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button">Tidak</span>
                             </label>
@@ -392,7 +392,7 @@
                                 <span class="selectgroup-button">Persentase (%)</span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="typeDiscount" value="value" @if ($service->discount_type == 'value') checked @endif onchange="changeDiscount('value'),sumTotal()" 
+                                <input type="radio" name="typeDiscount" value="value" @if ($service->discount_type == 'value') checked @endif onchange="changeDiscount('value'),sumTotal()"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button">Harga (RP)</span>
                             </label>
@@ -401,22 +401,22 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="totalDiscountPercent">{{ __('Diskon %') }}<code>*</code></label>
-                            <input id="totalDiscountPercent" 
-                            @if ($service->discount_type == 'value') 
+                            <input id="totalDiscountPercent"
+                            @if ($service->discount_type == 'value')
                                 style="pointer-events:none"
                                 style="background-color:#e9ecef"
-                            @endif 
+                            @endif
                             style="text-align: right"
                             type="text" value="{{$service->discount_percent}}" class="form-control cleaveNumeral"
                             name="totalDiscountPercent" onkeyup="sumTotal(),sumDiscont()">
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="totalDiscountValue">{{ __('Diskon') }}<code>*</code></label>
-                            <input id="totalDiscountValue" 
+                            <input id="totalDiscountValue"
                             @if ($service->discount_type == 'percent')
                                 style="pointer-events:none"
                                 style="background-color:#e9ecef"
-                            @endif 
+                            @endif
                             style="text-align: right"
                             type="text" value="{{$service->discount_price}}" class="form-control cleaveNumeral"
                             name="totalDiscountValue" onkeyup="sumTotal(),sumDiscontValue()">
@@ -450,7 +450,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="LcdCondition" value="?" @if ($service->ServiceCondition[0]->status == '?') checked @endif 
+                                <input type="radio" name="LcdCondition" value="?" @if ($service->ServiceCondition[0]->status == '?') checked @endif
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -490,7 +490,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input @if ($service->ServiceCondition[1]->status == '?') checked @endif type="radio" name="wifiCondition" value="?" 
+                                <input @if ($service->ServiceCondition[1]->status == '?') checked @endif type="radio" name="wifiCondition" value="?"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -530,7 +530,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input @if ($service->ServiceCondition[2]->status == '?') checked @endif type="radio" name="cameraDepanCondition" value="?" 
+                                <input @if ($service->ServiceCondition[2]->status == '?') checked @endif type="radio" name="cameraDepanCondition" value="?"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -550,7 +550,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input @if ($service->ServiceCondition[3]->status == '?') checked @endif type="radio" name="cameraBelakangCondition" value="?" 
+                                <input @if ($service->ServiceCondition[3]->status == '?') checked @endif type="radio" name="cameraBelakangCondition" value="?"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -570,7 +570,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input  @if ($service->ServiceCondition[9]->status == '?') checked @endif type="radio" name="vibratorCondition" value="?" 
+                                <input  @if ($service->ServiceCondition[9]->status == '?') checked @endif type="radio" name="vibratorCondition" value="?"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -590,7 +590,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input  @if ($service->ServiceCondition[7]->status == '?') checked @endif type="radio" name="speakerCondition" value="?" 
+                                <input  @if ($service->ServiceCondition[7]->status == '?') checked @endif type="radio" name="speakerCondition" value="?"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -610,7 +610,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input  @if ($service->ServiceCondition[6]->status == '?') checked @endif type="radio" name="micCondition" value="?" 
+                                <input  @if ($service->ServiceCondition[6]->status == '?') checked @endif type="radio" name="micCondition" value="?"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -630,7 +630,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input  @if ($service->ServiceCondition[15]->status == '?') checked @endif type="radio" name="touchpadCondition" value="?" 
+                                <input  @if ($service->ServiceCondition[15]->status == '?') checked @endif type="radio" name="touchpadCondition" value="?"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -650,7 +650,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input  @if ($service->ServiceCondition[14]->status == '?') checked @endif type="radio" name="keyboardCondition" value="?" 
+                                <input  @if ($service->ServiceCondition[14]->status == '?') checked @endif type="radio" name="keyboardCondition" value="?"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -670,7 +670,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input  @if ($service->ServiceCondition[13]->status == '?') checked @endif type="radio" name="tombolCondition" value="?" 
+                                <input  @if ($service->ServiceCondition[13]->status == '?') checked @endif type="radio" name="tombolCondition" value="?"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -690,7 +690,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input  @if ($service->ServiceCondition[12]->status == '?') checked @endif type="radio" name="sinyalCondition" value="?" 
+                                <input  @if ($service->ServiceCondition[12]->status == '?') checked @endif type="radio" name="sinyalCondition" value="?"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -710,7 +710,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input  @if ($service->ServiceCondition[11]->status == '?') checked @endif type="radio" name="usbCondition" value="?" 
+                                <input  @if ($service->ServiceCondition[11]->status == '?') checked @endif type="radio" name="usbCondition" value="?"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -730,7 +730,7 @@
                                 <span class="selectgroup-button"><i class="fas fa-times"></i></span>
                             </label>
                             <label class="selectgroup-item">
-                                <input  @if ($service->ServiceCondition[10]->status == '?') checked @endif type="radio" name="soketAudioCondition" value="?" 
+                                <input  @if ($service->ServiceCondition[10]->status == '?') checked @endif type="radio" name="soketAudioCondition" value="?"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button"><i class="fas fa-question"></i></span>
                             </label>
@@ -825,7 +825,7 @@
                                 <td style="display:none" >
                                     <input type="hidden" name="idDetailOld[]" value="{{$el->id}}">
                                     <input type="text" class="form-control priceDetailSparePart priceDetailSparePart_{{$i}} cleaveNumeral"
-                                        name="priceDetailSparePartOld[]" 
+                                        name="priceDetailSparePartOld[]"
                                         @if ($el->type == 'SparePart')
                                             value="{{$el->total_price}}"
                                         @else
@@ -833,7 +833,7 @@
                                         @endif
                                     >
                                     <input type="text" class="form-control priceDetailLoss priceDetailLoss_{{$i}} cleaveNumeral"
-                                        name="priceDetailLossOld[]" 
+                                        name="priceDetailLossOld[]"
                                         @if ($el->type == 'Loss')
                                             value="{{$el->total_price}}"
                                         @else
@@ -845,14 +845,14 @@
                                     <select class="select2 itemsDetail" name="itemsDetailOld[]">
                                         <option value="-" data-index="">- Select -</option>
                                         @foreach ($item as $el0)
-                                            <option data-index="{{$i}}" 
+                                            <option data-index="{{$i}}"
                                             data-hpp="{{$el0->buy}}"
-                                            data-price="{{$el0->sell}}" 
+                                            data-price="{{$el0->sell}}"
                                             @foreach ($el0->stock as $el1)
                                                 @if ((Auth::user()->employee->branch_id == $el1->branch_id))
                                                     data-stock="{{$el1->stock}}"
                                                 @endif
-                                            @endforeach 
+                                            @endforeach
                                             @if ($el0->id == $el->item_id)
                                                 selected
                                             @endif
@@ -866,16 +866,16 @@
                                 </td>
                                 <td>
                                     <input type="text" class="form-control qtyDetail qtyDetail_{{$i}}" name="qtyDetailOld[]" value="{{$el->qty}}" data-index="{{$i}}" style="text-align: right">
-                                    
+
                                 </td>
                                 <td>
-                                    <input readonly type="text" class="form-control stockDetail stock_{{$i}}" name="stockDetailOld[]" 
+                                    <input readonly type="text" class="form-control stockDetail stock_{{$i}}" name="stockDetailOld[]"
                                     @foreach ($item as $el0)
                                         @foreach ($el0->stock as $el1)
                                             @if ((Auth::user()->employee->branch_id == $el1->branch_id))
-                                                value="{{$el1->stock}}" 
+                                                value="{{$el1->stock}}"
                                             @endif
-                                        @endforeach 
+                                        @endforeach
                                     @endforeach
                                     style="text-align: right">
                                 </td>

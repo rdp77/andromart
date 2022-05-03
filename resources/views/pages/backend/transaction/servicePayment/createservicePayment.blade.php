@@ -1,5 +1,5 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__('Tambah Pembayaran Service'))
+@section('title', __('pages.title').__(' | Tambah Pembayaran Service'))
 @section('titleContent', __('Tambah Pembayaran Service'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
@@ -38,13 +38,13 @@
                                     data-brand="{{$element->Brand->name}}"
                                     data-type="{{$element->Type->name}}"
                                     >
-                                    
+
                                     [{{$element->code}}] {{$element->customer_name}} - {{$element->Brand->name}} {{$element->Type->name}} <span><strong>( {{$element->work_status}} )
                                     </span></strong></option>
                                 @endforeach
                             </select>
                         </div>
-                        
+
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
@@ -99,7 +99,7 @@
                     <br>
                     <div class="row">
                         <div class="form-group col-12 col-md-12 col-lg-12">
-                          
+
                         </div>
 
                     </div> --}}
@@ -166,7 +166,7 @@
                             <input readonly id="totalDiskonService" type="hidden" value="0" class="form-control cleaveNumeral"
                         name="totalDiskonService" style="text-align: right">
                     </div>
-                    
+
                 </div>
             </div>
         </div>

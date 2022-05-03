@@ -1,9 +1,9 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__(' | Pemasukan'))
-@section('titleContent', __('Pemasukan'))
+@section('title', __('pages.title').__(' | Pendapatan'))
+@section('titleContent', __('Pendapatan'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
-<div class="breadcrumb-item active">{{ __('Pemasukan') }}</div>
+<div class="breadcrumb-item active">{{ __('Pendapatan') }}</div>
 @endsection
 
 @section('content')
@@ -12,7 +12,7 @@
 <div class="card">
     <div class="card-header">
         <a href="{{ route('income.create') }}" class="btn btn-icon icon-left btn-primary">
-            <i class="far fa-edit"></i>{{ __(' Tambah Pemasukan') }}</a>
+            <i class="far fa-edit"></i>{{ __(' Tambah Pendapatan') }}</a>
     </div>
     <div class="card-body">
         <table class="table-striped table" id="table" width="100%">
