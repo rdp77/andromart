@@ -927,7 +927,7 @@ class ServiceController extends Controller
                 // 'id' =>$id,
                 // 'code' =>$this->code('SRV-'),
                 'user_id' => Auth::user()->id,
-                'branch_id' => $getEmployee->branch_id,
+                // 'branch_id' => $req->branch_id,
                 'customer_id' => $req->customerId,
                 'customer_name' => $req->customerName,
                 'customer_address' => $req->customerAdress,
