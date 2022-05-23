@@ -63,9 +63,9 @@
 												<a class="nav-link" href="{{ route('frontendAbout') }}">About</a>
 											@endif
 										</li>
-										<li>
+										{{-- <li>
 											<a class="nav-link" href="/login">Login</a>
-										</li>
+										</li> --}}
 									</ul>
 								</nav>
 							</div>
