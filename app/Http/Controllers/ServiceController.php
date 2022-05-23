@@ -71,7 +71,6 @@ class ServiceController extends Controller
                 })
                 ->addColumn('action', function ($row) {
                     $actionBtn = '<div class="btn-group">';
-                    // $actionBtn .= '<a onclick="reset(' . $row->id . ')" class="btn btn-primary text-white" style="cursor:pointer;">Reset Password</a>';
                     $actionBtn .= '<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
                             data-toggle="dropdown">
                             <span class="sr-only">Toggle Dropdown</span>
@@ -82,11 +81,7 @@ class ServiceController extends Controller
                     } elseif ($row->payment_status == 'DownPayment') {
                         $actionBtn .= '<a class="dropdown-item" href="' . route('service.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
                     }
-
                     $actionBtn .= '<a class="dropdown-item" href="' . route('service.printService', $row->id) . '"><i class="fas fa-print"></i> Cetak</a>';
-
-                    // $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
-
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
@@ -306,7 +301,7 @@ class ServiceController extends Controller
                 // ->orWhere('technician_replacement_id', $req->technician_id)
                 ->orderBy('id', 'desc')
                 ->get();
-            
+
             $service2 = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
                 ->whereIn('work_status', ['Mutasi'])
                 // ->where('technician_id', $req->technician_id)
@@ -798,6 +793,8 @@ class ServiceController extends Controller
             ->orderBy('name', 'ASC')
             ->get();
         $customer = Customer::orderBy('name', 'ASC')->get();
+
+        // return $service;
         return view('pages.backend.transaction.service.editService', compact('employee', 'item', 'brand', 'type', 'warranty', 'service', 'category', 'customer'));
     }
     public function printService($id)

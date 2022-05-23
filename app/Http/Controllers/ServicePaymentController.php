@@ -54,22 +54,17 @@ class ServicePaymentController extends Controller
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
                     $actionBtn = '<div class="btn-group">';
-                    // $actionBtn .= '<a onclick="reset(' . $row->id . ')" class="btn btn-primary text-white" style="cursor:pointer;">Reset Password</a>';
                     $actionBtn .= '<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
                             data-toggle="dropdown">
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>';
-                    $actionBtn .=
-                        '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' .
-                        route('service-payment.edit', $row->id) .
-                        '"><i class="far fa-edit"></i> Edit</a>';
+                    $actionBtn .= '<div class="dropdown-menu">';
+                    // $actionBtn .= '<a class="dropdown-item" href="' . route('service-payment.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
                     $actionBtn .= '<a class="dropdown-item" href="' . route('service.printServicePayment', $row->id) . '"><i class="fas fa-print"></i> Print</a>';
-                    // $actionBtn .= '<a class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
                     $actionBtn .= '<a onclick="jurnal(' . "'" . $row->code . "'" . ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
-
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
                     $actionBtn .= '</div></div>';
+
                     return $actionBtn;
                 })
                 ->addColumn('dateData', function ($row) {
@@ -103,8 +98,8 @@ class ServicePaymentController extends Controller
                         $work_status = '<div class="badge badge-primary">Barang Diterima</div>';
                     } elseif ($row->Service->work_status == 'Diambil') {
                         $work_status = '<div class="badge badge-success">Sudah Diambil</div>';
-                    } elseif ($row->work_status == 'Return') {
-                        $work_status = '<div class="badge badge-success">Sudah Diambil</div>';
+                    } elseif ($row->Service->work_status == 'Return') {
+                        $work_status = '<div class="badge badge-warning">Barang Direturn</div>';
                     }
 
                     if ($row->Service->payment_status == 'Lunas') {
@@ -147,6 +142,7 @@ class ServicePaymentController extends Controller
                 ->rawColumns(['action', 'informationService', 'currentStatus'])
                 ->make(true);
         }
+
         return view('pages.backend.transaction.servicePayment.indexServicePayment');
     }
 
@@ -515,8 +511,8 @@ class ServicePaymentController extends Controller
                     DB::table('journals')
                         ->where('id', $checkJournals[0]->id)
                         ->delete();
-                    
-                    
+
+
                     DB::table('journal_details')
                         ->where('journal_id', $checkJournals[0]->id)
                         ->delete();

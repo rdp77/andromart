@@ -39,7 +39,6 @@ class ReceptionController extends Controller
             return view('forbidden');
         }
         if ($req->ajax()) {
-            // ORDER BY FIND_IN_SET(column, 'Yellow,Blue,Red')
             $data = Purchasing::with('employee')->whereIn("done", [1,3,0,2])->orderBy('id','DESC')->get();
             foreach($data as $row) {
                 $tanggal = date("d F Y", strtotime($row->date));
@@ -66,7 +65,7 @@ class ReceptionController extends Controller
                         $actionBtn .= '<div class="dropdown-menu">';
                     } else {
                         $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('reception.edit', Crypt::encryptString($row->id)) . '">Ubah</a>';
+                            <a class="dropdown-item" href="' . route('reception.edit', Crypt::encryptString($row->id)) . '"><i class="far fa-edit"></i> Edit</a>';
                         $actionBtn .= '<a onclick="jurnal(' ."'". $row->code ."'". ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
                     }
                     // $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
@@ -88,18 +87,18 @@ class ReceptionController extends Controller
     {
     }
 
-    public function show(Notes $notes, $id)
-    {
-        $id = Crypt::decryptString($id);
-        $models = Notes::where('id', $id)->first();
-        // $models = Notes::where('notes.id', $id)
-        // ->join('users', 'notes.users_id', '=', 'users.id')
-        // ->select('notes.id as notes_id', 'notes.date as date', 'users.name as name', 'users.id as users_id', 'notes.title as title', 'notes.description as description')
-        // ->first();
-        $modelsFile = NotesPhoto::where('notes_id', $id)->get();
-        // dd($modelsFile);
-        return view('pages.backend.office.notes.showNotes', compact('models', 'modelsFile'));
-    }
+    // public function show(Notes $notes, $id)
+    // {
+    //     // $id = Crypt::decryptString($id);
+    //     // $models = Notes::where('id', $id)->first();
+    //     // // $models = Notes::where('notes.id', $id)
+    //     // // ->join('users', 'notes.users_id', '=', 'users.id')
+    //     // // ->select('notes.id as notes_id', 'notes.date as date', 'users.name as name', 'users.id as users_id', 'notes.title as title', 'notes.description as description')
+    //     // // ->first();
+    //     // $modelsFile = NotesPhoto::where('notes_id', $id)->get();
+    //     // // dd($modelsFile);
+    //     // return view('pages.backend.office.notes.showNotes', compact('models', 'modelsFile'));
+    // }
 
     public function edit($id)
     {
@@ -135,14 +134,13 @@ class ReceptionController extends Controller
             ->get();
             $row->history_detail = $historyDetail;
         }
-        // $historyDetail = HistoryDetailPurchase::where('')
 
         return view('pages.backend.transaction.reception.editReception', compact('model', 'models', 'id', 'history'));
     }
 
     function base64_to_jpeg($base64_string, $output_file) {
         // open the output file for writing
-        $ifp = fopen( $output_file, 'wb' ); 
+        $ifp = fopen( $output_file, 'wb' );
 
         // split the string on commas
         // $data[ 0 ] == "data:image/png;base64"
@@ -153,9 +151,9 @@ class ReceptionController extends Controller
         fwrite( $ifp, base64_decode( $data[1] ) );
 
         // clean up the file resource
-        fclose( $ifp ); 
+        fclose( $ifp );
 
-        return $output_file; 
+        return $output_file;
     }
     public function update(Request $req, $id)
     {
@@ -219,7 +217,7 @@ class ReceptionController extends Controller
             $historyDetailPurchase->qty = $qtyNew;
             $historyDetailPurchase->save();
             $output[] = array($qtyNew);
-            
+
             $purchasing->qty -= $qtyNew;
             $purchasing->edit = 1;
             $purchasing->save();
@@ -241,7 +239,7 @@ class ReceptionController extends Controller
 
         $journal = new Journal;
         $journal->code = "DD13010101".$branch_id;
-        $journal->year = $years; 
+        $journal->year = $years;
         $journal->date = $dates;
         $journal->total = str_replace(",", '',$finalTotal);
         $journal->type = "Persediaan Barang Dagang";

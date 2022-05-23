@@ -1,10 +1,10 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title') . __(' | Tambah Pengeluaran'))
-@section('titleContent', __('Tambah Pengeluaran'))
+@section('title', __('pages.title') . __(' | Edit Pengeluaran'))
+@section('titleContent', __('Edit Pengeluaran'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
     <div class="breadcrumb-item active">{{ __('Pengeluaran') }}</div>
-    <div class="breadcrumb-item active">{{ __('Tambah Pengeluaran') }}</div>
+    <div class="breadcrumb-item active">{{ __('Edit Pengeluaran') }}</div>
 @endsection
 
 @section('content')
@@ -29,7 +29,7 @@
                                 <label for="date">{{ __('Tanggal') }}<code>*</code></label>
                                 <input id="date" type="text" data-name="Tanggal Harus Di isi"
                                     class="form-control datepicker validation" readonly=""
-                                    value="{{ date('d-F-Y', strtotime($payment->date)) }}" name="date">
+                                    value="{{ $payment->date }}" name="date">
                             </div>
                         </div>
                         <div class="row">

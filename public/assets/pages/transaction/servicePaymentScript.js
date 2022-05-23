@@ -11,7 +11,7 @@ var table = $("#table").DataTable({
         [10, 25, 50, -1],
         [10, 25, 50, "Semua"],
     ],
-    
+
     ajax: {
         url: "/transaction/service/service-payment",
         type: "GET",
@@ -27,7 +27,7 @@ var table = $("#table").DataTable({
         { data: "totalValue" },
         { data: "action", orderable: false, searchable: true },
     ],
-    
+
     buttons: [
         {
             extend: "print",
@@ -499,7 +499,7 @@ function jurnal(params) {
                         );
                     });
                 }
-                
+
             }
             $("#exampleModal").modal("show");
         },

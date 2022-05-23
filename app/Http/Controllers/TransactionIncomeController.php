@@ -55,9 +55,9 @@ class TransactionIncomeController extends Controller
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>';
                     $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('income.edit', $row->id) . '">Edit</a>';
-                    $actionBtn .= '<a onclick="jurnal(' ."'". $row->code ."'". ')" class="dropdown-item" style="cursor:pointer;">Jurnal</a>';
-                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
+                            <a class="dropdown-item" href="' . route('income.edit', $row->id) . '"><i class="fas fa-pencil-alt"></i> Edit</a>';
+                    $actionBtn .= '<a onclick="jurnal(' ."'". $row->code ."'". ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
+                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
@@ -67,15 +67,6 @@ class TransactionIncomeController extends Controller
         return view('pages.backend.transaction.income.indexIncome');
     }
 
-    // public function code($type)
-    // {
-    //     $month = Carbon::now()->format('m');
-    //     $year = Carbon::now()->format('y');
-    //     $index = DB::table('transaction_income')->max('id')+1;
-
-    //     $index = str_pad($index, 3, '0', STR_PAD_LEFT);
-    //     return $code = $type.$year . $month . $index;
-    // }
     public function code($type)
     {
         $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
@@ -108,11 +99,8 @@ class TransactionIncomeController extends Controller
 
     public function store(Request $req)
     {
-        // return $req->all();
         DB::beginTransaction();
         try {
-            //code...
-        
         $date = $this->DashboardController->changeMonthIdToEn($req->date);
 
         Income::create([
@@ -125,7 +113,7 @@ class TransactionIncomeController extends Controller
             'description' => $req->description,
             'created_by' => Auth::user()->name,
         ]);
-        
+
 
         $idJournal = DB::table('journals')->max('id')+1;
         Journal::create([
@@ -138,15 +126,13 @@ class TransactionIncomeController extends Controller
             'ref'=>$req->code,
             'description'=>$req->description,
             'created_at'=>date('Y-m-d h:i:s'),
-            // 'updated_at'=>date('Y-m-d h:i:s'),
         ]);
 
-        $accountPembayaran  = AccountData::where('id',$req->account)
-                            ->first();
+        $accountPembayaran  = AccountData::where('id',$req->account)->first();
         $accountCode = [
             $req->income_id,
             $req->cash_id,
-        ];  
+        ];
         $totalBayar = [
             str_replace(",", '',$req->price),
             str_replace(",", '',$req->price),
@@ -159,9 +145,8 @@ class TransactionIncomeController extends Controller
             'D',
             'K',
         ];
-    
 
-        for ($i=0; $i <count($accountCode) ; $i++) { 
+        for ($i=0; $i <count($accountCode) ; $i++) {
             $idDetail = DB::table('journal_details')->max('id')+1;
             JournalDetail::create([
                 'id'=>$idDetail,
@@ -187,14 +172,12 @@ class TransactionIncomeController extends Controller
             'status' => 'Berhasil membuat transaksi pembayaran baru',
             'type' => 'success'
         ]);
-       
-
         } catch (\Throwable $th) {
             DB::rollback();
             return$th;
             //throw $th;
         }
-        
+
     }
 
     public function show($id)
@@ -208,10 +191,7 @@ class TransactionIncomeController extends Controller
         $cash = Cash::where('id', '!=', Income::find($id)->cash_id)->get();
         $income = Income::find($id)->with('cash')->first();
 
-        return view(
-            'pages.backend.transaction.income.updateIncome',
-            ['income' => $income, 'branch' => $branch, 'cash' => $cash, 'cost' => $cost]
-        );
+        return view('pages.backend.transaction.income.updateIncome', compact('income', 'branch', 'cash', 'cost'));
     }
 
     public function update(Request $req, $id)
@@ -239,7 +219,7 @@ class TransactionIncomeController extends Controller
         DB::table('transaction_income')->where('id',$id)->delete();
         return Response::json(['status' => 'success']);
     }
-    
+
     function incomeCheckJournals(Request $req)
     {
         $data = Journal::with('JournalDetail.AccountData')->where('ref',$req->id)->first();

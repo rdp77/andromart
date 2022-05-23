@@ -59,13 +59,10 @@ class PaymentController extends Controller
                             data-toggle="dropdown">
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>';
-                    $actionBtn .=
-                        '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' .
-                        route('payment.edit', $row->id) .
-                        '">Edit</a>';
-                    $actionBtn .= '<a onclick="jurnal(' . "'" . $row->code . "'" . ')" class="dropdown-item" style="cursor:pointer;">Jurnal</a>';
-                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
+                    $actionBtn .= '<div class="dropdown-menu">';
+                    $actionBtn .= '<a class="dropdown-item" href="' . route('payment.edit', $row->id) . '"><i class="fas fa-pencil-alt"></i> Edit</a>';
+                    $actionBtn .= '<a onclick="jurnal(' . "'" . $row->code . "'" . ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
+                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })

@@ -10,7 +10,7 @@
 @section('content')
 @include('layouts.backend.components.notification')
 <div class="card">
-    <form method="POST" action="{{ route('account-data.update',$accountData->id) }}">
+    <form method="POST" action="{{ route('account-data.update', $accountData->id) }}">
         @csrf
         @method('PUT')
         <div class="card-body">

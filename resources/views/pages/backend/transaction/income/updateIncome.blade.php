@@ -1,17 +1,17 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__(' | Tambah Pendapatan'))
-@section('titleContent', __('Tambah Pendapatan'))
+@section('title', __('pages.title').__(' | Edit Pendapatan'))
+@section('titleContent', __('Edit Pendapatan'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
 <div class="breadcrumb-item active">{{ __('Pendapatan') }}</div>
-<div class="breadcrumb-item active">{{ __('EDit Pendapatan') }}</div>
+<div class="breadcrumb-item active">{{ __('Edit Pendapatan') }}</div>
 @endsection
 
 @section('content')
     <div class="card">
         <div class="row">
             <div class="col-md-12">
-                <form method="POST" action="{{ route('income.update') }}">
+                <form method="POST" action="{{ route('income.update', $income->id) }}">
                     @csrf
                     <div class="card-header">
                         <h4>Form Data</h4>
@@ -58,7 +58,7 @@
                                         @if ($el->main_id == 1)
                                             <option value="{{$el->id}}">{{$el->code}} - {{$el->name}}</option>
                                         @endif
-                                    @endforeach 
+                                    @endforeach
                                 </select>
                             </div>
                             @foreach ($cash as $el)
@@ -90,7 +90,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            
+
                             <div class="form-group col-md-6 col-xs-12">
                                 <label for="price">{{ __('Jumlah Pendapatan') }}<code>*</code></label>
                                 <div class="input-group">
@@ -114,7 +114,7 @@
                             </div>
                         </div>
                         <div class="row">
-                            
+
                         </div>
                     </div>
                     <div class="card-footer text-right">

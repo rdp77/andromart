@@ -67,7 +67,7 @@ class SubMenuSeeder extends Seeder
             ],
             [
                 'menu_id' => '2',
-                'name' => 'Pemasukan',
+                'name' => 'Pendapatan',
                 'url' => route('income.index'),
                 'hover' => '["' . route('income.create') . '","' . route('income.index') . '"]'
             ],
