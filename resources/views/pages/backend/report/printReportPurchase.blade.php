@@ -475,7 +475,7 @@
                     <td>{{ $value->code }}</td>
                     <td>
                         @foreach ($value->purchasingDetail as $as => $pd)
-                            {{ $pd->qty }}x {{ $pd->item->name }} <br>
+                            {{ $pd->qty_start }}x {{ $pd->item->name }} <br>
                         @endforeach
                     </td>
                     <td>

@@ -1,7 +1,7 @@
 <table class="table table-striped table-bordered">
     <thead>
         <tr>
-            <th class="text-center">Tanggal</th>
+            <th class="text-center" width="13%">Tanggal</th>
             <th class="text-center">Faktur</th>
             <th class="text-center">Barang</th>
             <th class="text-center">Supplier</th>
@@ -13,30 +13,18 @@
     @foreach($data as $key => $value)
     <tbody class="dropHere" style="border: none !important">
         <tr>
-            <td>{{ $value->date }}</td>
+            <td>{{ date('d F Y', strtotime($value->date)) }}</td>
             <th>{{ $value->code }}</th>
             <td>
-                <table>
-                    <tbody>
-                        @foreach ($value->purchasingDetail as $as => $pd)
-                        <tr>
-                            <td>x{{ $pd->qty}}</td>
-                            <th>{{ $pd->item->name }}</th>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                @foreach ($value->purchasingDetail as $as => $pd)
+                <b>x{{ $pd->qty_start}}</b> &nbsp;
+                {{ $pd->item->brand->name }} {{ $pd->item->name }} <br>
+                @endforeach
             </td>
             <td>
-                <table>
-                    <tbody>
-                        @foreach ($value->purchasingDetail as $qw => $pds)
-                            <tr>
-                                <td>{{ $pds->item->supplier->name }}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                @foreach ($value->purchasingDetail as $qw => $pds)
+                {{ $pds->item->supplier->name }} <br>
+                @endforeach
             </td>
             <th>
                 @if ($value->status = 'paid')

@@ -21,5 +21,9 @@ Route::group(['prefix' => 'warehouse'], function () {
             'printStockOpname',
             [StockOpnameController::class, 'printStockOpname']
         )->name('stockOpname.print');
+        Route::post(
+            'loadStockOpname',
+            [StockOpnameController::class, 'dataLoad']
+        )->name('stockOpname.dataLoad');
     });
 });

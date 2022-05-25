@@ -98,23 +98,12 @@ class PurchaseController extends Controller
 
     public function code($type)
     {
-        // $date = date('Y-m-d');
-        // $month = Carbon::now()->format('m');
-        // $year = Carbon::now()->format('y');
-
-        // $getEmployee =  Employee::with('branch')->where('user_id',Auth::user()->id)->first();
-        // $now = Purchasing::whereBetween("created_at", [$date.' 00:00:00', $date.' 23:59:59'])->count();
-        // $index = $now + 1;
-        // $index = str_pad($index, 3, '0', STR_PAD_LEFT);
-        // return $code = $type.$getEmployee->Branch->code.$year . $month . $index;
-
-
         $getEmployee =  Employee::with('branch')->where('user_id', Auth::user()->id)->first();
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
         $index = DB::table('purchasings')->max('id') + 1;
-
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
+
         return $code = $type . $getEmployee->Branch->code . $year . $month . $index;
     }
     public function codeJournals($type)
@@ -124,8 +113,8 @@ class PurchaseController extends Controller
         $year = Carbon::now()->format('y');
         // DB::table('service')->max('id')+1;
         $index = DB::table('journals')->max('id') + 1;
-
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
+
         return $code = $type . $getEmployee->Branch->code . $year . $month . $index;
     }
     public function create()
@@ -136,8 +125,6 @@ class PurchaseController extends Controller
         }
         $code     = $this->code('PCS');
         $employee = Employee::get();
-        // $items    = Item::where('name','!=','Jasa Service')->get();
-
         $branch_id = Auth::user()->employee->branch_id;
         $item     = Item::with('stock')->where('items.name','!=','Jasa Service')
         ->join('stocks', 'items.id', 'stocks.item_id')
@@ -149,8 +136,8 @@ class PurchaseController extends Controller
         $branch   = Branch::get();
         $account  = AccountData::with('AccountMain', 'AccountMainDetail', 'Branch')->get();
         $cash     = Cash::get();
+
         return view('pages.backend.transaction.purchase.createPurchase',compact('employee','code','item', 'unit', 'branch', 'account', 'cash'));
-        // return view('pages.backend.transaction.purchase.createPurchase');
     }
 
     public function edit($id)
@@ -177,8 +164,8 @@ class PurchaseController extends Controller
         $jumlah = PurchasingDetail::where('purchasing_id', $id)->count();
         $account  = AccountData::with('AccountMain', 'AccountMainDetail', 'Branch')->get();
         $cash     = Cash::get();
+
         return view('pages.backend.transaction.purchase.editPurchase',compact('employee','item', 'unit', 'branch', 'account', 'cash', 'model', 'models', 'jumlah'));
-        // return view('pages.backend.transaction.purchase.editPurchase',compact('employee','item', 'unit', 'branch', 'model', 'models', 'jumlah'));
     }
     function base64_to_jpeg($base64_string, $output_file) {
         // open the output file for writing
@@ -233,15 +220,11 @@ class PurchaseController extends Controller
         $purchasing->date = $date;
         $purchasing->employee_id = $req->buyer;
         $purchasing->branch_id = $branch_id;
-        // $purchasing->status = $req->pay;
-
         $purchasing->discountType = $discountType;
         $purchasing->discountValue = str_replace(",", '',$discountValue);
-        
         $purchasing->discount = str_replace(",", '',$req->discountTotal);
         $purchasing->price = str_replace(",", '',$req->grandTotal);
         $purchasing->created_by = Auth::user()->name;
-
         $purchasing->image = $fileName;
         $purchasing->description = $descriptionPurchase;
         $savePurchasing = $purchasing->save();
@@ -250,7 +233,6 @@ class PurchaseController extends Controller
             $debetKredit = array("K", "D");
             $accountId = array([$account->main_id, $account->main_detail_id], [4, 12]);
             $descriptionJournal = array("Pembelian Kredit", "Pembelian Debit");
-
             $journal = new Journal;
             $journal->code = "KK".$account->code;
             $journal->year = $years; 
@@ -259,7 +241,6 @@ class PurchaseController extends Controller
             $journal->type = $account->name;
             $journal->ref = $req->code;
             $journal->description = $descriptionPurchase;
-            // $journal->description = $descriptionJournal[$key];
             $saveJournal = $journal->save();
 
             if ($saveJournal) {
@@ -277,12 +258,9 @@ class PurchaseController extends Controller
         }
 
         foreach($req->idDetail as $row) {
-            // dd($req->qtyDetail);
             $purchasingDetail = new PurchasingDetail;
             $purchasingDetail->purchasing_id = $purchasing->id;
             $purchasingDetail->item_id = $req->itemsDetail[$row];
-            // $purchasingDetail->unit_id = $req->unitsDetail[$row];
-            // $purchasingDetail->branch_id = $req->branchesDetail[$row];
             $purchasingDetail->branch_id = $branch_id;
             $purchasingDetail->price = str_replace(",", '',$req->priceDetail[$row]);
             $purchasingDetail->qty_start = str_replace(",", '',$req->qtyDetail[$row]);
@@ -291,7 +269,6 @@ class PurchaseController extends Controller
             $purchasingDetail->description = $req->desDetail[$row];
             $purchasingDetail->created_by = Auth::user()->name;
             $purchasingDetail->save();
-            // journal_details (journal_id, account_id, total, description, debet_kredit)
         }
         return Redirect::route('purchase.index')
             ->with([
@@ -332,7 +309,6 @@ class PurchaseController extends Controller
         $date = date('Y-m-d H:i:s');
         $purchasing = Purchasing::where('id', $id)->first();
         $purchasing->code = $req->code;
-        // $purchasing->date = $date;
         $purchasing->employee_id = $req->buyer;
         $purchasing->status = $req->pay;
         
@@ -358,7 +334,6 @@ class PurchaseController extends Controller
                 $journal->type = $account->name;
                 $journal->ref = $req->code;
                 $journal->description = $descriptionPurchase;
-                // $journal->description = $descriptionJournal[$key];
                 $journal->save();
                 $journalId[] = $journal->id;
             }
@@ -367,17 +342,13 @@ class PurchaseController extends Controller
         $deletes = purchasingDetail::where('purchasing_id', $id)->get();
         foreach($deletes as $row) {
             $history = HistoryDetailPurchase::where('purchasing_detail_id', $row->id)->truncate();
-            // $delPurchasingDetail = PurchasingDetail::where('purchasing_id', $id)->get();
             $delPurchasingDetail = PurchasingDetail::where('id', $row->id)->delete();
         }
 
         foreach($req->idDetail as $row => $value) {
-            // dd($req->qtyDetail);
-            // $row = $rows - 1;
             $purchasingDetail = new PurchasingDetail;
             $purchasingDetail->purchasing_id = $purchasing->id;
             $purchasingDetail->item_id = $req->itemsDetail[$row];
-            // $purchasingDetail->unit_id = $req->unitsDetail[$row];
             $purchasingDetail->branch_id = $req->branchesDetail[$row];
             $purchasingDetail->price = str_replace(",", '',$req->priceDetail[$row]);
             $purchasingDetail->qty_start = str_replace(",", '',$req->qtyDetail[$row]);
@@ -412,7 +383,6 @@ class PurchaseController extends Controller
         }
         $id = Crypt::decryptString($id);
         $employee = Employee::get();
-        // $items    = Item::where('name','!=','Jasa Service')->get();
         $item     = Item::with('stock')->where('items.name','!=','Jasa Service')
         ->join('suppliers', 'items.supplier_id', 'suppliers.id')
         ->select('items.id as id', 'items.name as name', 'buy', 'suppliers.name as supplier')
@@ -426,7 +396,7 @@ class PurchaseController extends Controller
         ->select('purchasing_details.id as id', 'qty', 'price', 'items.id as item_id', 'items.name as item_name', 'branches.id as branch_id', 'branches.name as branch_name', 'purchasing_details.description as description')
         ->get();
         $jumlah = PurchasingDetail::where('purchasing_id', $id)->count();
-        // dd($model);
+
         return view('pages.backend.transaction.purchase.showPurchase',compact('employee','item', 'unit', 'branch', 'model', 'models', 'jumlah'));
     }
 
@@ -454,82 +424,6 @@ class PurchaseController extends Controller
         return Response::json(['status' => 'success']);
     }
 
-    // /**
-    //  * Display a listing of the resource.
-    //  *
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function index()
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Show the form for creating a new resource.
-    //  *
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function create()
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Store a newly created resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function store(Request $request)
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Display the specified resource.
-    //  *
-    //  * @param  \App\Models\Purchasing  $purchasing
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function show(Purchasing $purchasing)
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Show the form for editing the specified resource.
-    //  *
-    //  * @param  \App\Models\Purchasing  $purchasing
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function edit(Purchasing $purchasing)
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Update the specified resource in storage.
-    //  *
-    //  * @param  \Illuminate\Http\Request  $request
-    //  * @param  \App\Models\Purchasing  $purchasing
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function update(Request $request, Purchasing $purchasing)
-    // {
-    //     //
-    // }
-
-    // /**
-    //  * Remove the specified resource from storage.
-    //  *
-    //  * @param  \App\Models\Purchasing  $purchasing
-    //  * @return \Illuminate\Http\Response
-    //  */
-    // public function destroy(Purchasing $purchasing)
-    // {
-    //     //
-    // }
-
     public function approve($id)
     {
         $checkRoles = $this->DashboardController->cekHakAkses(1,'view');
@@ -539,23 +433,20 @@ class PurchaseController extends Controller
         $purchase = Purchasing::where('id', $id)->first();
         $purchaseDetail = PurchasingDetail::where('purchasing_id', $purchase->id)->get();
         foreach ($purchaseDetail as $key => $value) {
-            // $code = 
             $account = AccountData::where('code', )->where('active', 'Y')->first();
-
         }
-        // dd($purchaseDetail);
         $purchase = Purchasing::where('id', $id)->first();
         $purchase->status = 'paid';
         $purchase->done = 3;
         $purchase->updated_by = Auth::user()->name;
         $purchase->save();
+
         return Redirect::route('purchase.index')
             ->with([
                 'status' => 'Berhasil disetujui',
                 'type' => 'success'
             ]);
     }
-
 
     public function itemCreate()
     {

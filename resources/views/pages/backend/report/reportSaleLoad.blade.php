@@ -16,16 +16,10 @@
             <td>{{ \Carbon\Carbon::parse($value->date)->locale('id')->isoFormat('LL') }}</td>
             <th>{{ $value->code }}</th>
             <td>
-                <table>
-                    <tbody>
-                        @foreach ($value->SaleDetail as $as => $sd)
-                        <tr>
-                            <td>x{{ $sd->qty }}</td>
-                            <td>{{ $sd->item->brand->name }} <br> {{ $sd->item->name }}</td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                @foreach ($value->SaleDetail as $as => $sd)
+                <b>x{{ $sd->qty }}</b> &nbsp;
+                {{ $sd->item->brand->name }} <br> {{ $sd->item->name }} <br>
+                @endforeach
             </td>
             <td>
                 <b>{{ $value->accountData->code }}</b>

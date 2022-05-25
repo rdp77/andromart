@@ -164,7 +164,7 @@
             <table class="table table-striped table-bordered">
                 <thead>
                     <tr>
-                        <th class="text-center">Tanggal</th>
+                        <th class="text-center" width="13%">Tanggal</th>
                         <th class="text-center">Faktur</th>
                         <th class="text-center">Barang</th>
                         <th class="text-center">Supplier</th>
