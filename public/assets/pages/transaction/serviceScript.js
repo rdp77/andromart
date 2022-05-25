@@ -850,6 +850,19 @@ function updateStatusService() {
                                 '</div>'+
                             '</div>'
                         );
+                        if (status == 'Selesai') {
+                            swal({
+                                title: "Apakah Anda Ingin Mengkonfirmasi WA Customer ?",
+                                text: "Aksi ini membuat anda akan berpindah halaman.",
+                                icon: "warning",
+                                buttons: true,
+                                dangerMode: true,
+                            }).then((red) => {
+                                if (red) {
+                                    window.open("https://www.w3schools.com");
+                                }
+                            });
+                        }
                         if (status == 'Diambil') {
                             // location.reload();
                             swal({
