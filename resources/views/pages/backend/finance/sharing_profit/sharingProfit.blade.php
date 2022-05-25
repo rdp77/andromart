@@ -49,6 +49,7 @@
             <table class="table table-striped">
                 <thead>
                     <tr>
+                        <th>Kode</th>
                         <th>Tanggal</th>
                         <th>Customer</th>
                         <th>total</th>

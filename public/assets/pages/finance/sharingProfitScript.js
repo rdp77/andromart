@@ -184,6 +184,9 @@ function checkEmploye() {
                                     '<input type="text" class="form-control" name="payDetail[]" value="'+payDetail+'">'+
                                 '</td>'+
                                 '<td>'+
+                                    value.code+
+                                '</td>'+
+                                '<td>'+
                                     moment(value.date).format('DD MMMM YYYY')+
                                 '</td>'+
                                 '<td>'+
@@ -217,6 +220,9 @@ function checkEmploye() {
                                     '<input type="text" class="form-control" name="totalDetail[]" value="'+value.sharing_profit_sales+'">'+
                                     '<input type="text" class="form-control" name="payDetail[]" value="'+payDetail+'">'+
                                     '</td>'+
+                                    '<td>'+
+                                    value.code+
+                                '</td>'+
                                 '<td>'+
                                     moment(value.sale.date).format('DD MMMM YYYY')+
                                 '</td>'+
@@ -250,6 +256,9 @@ function checkEmploye() {
                                     '<input type="text" class="form-control" name="totalDetail[]" value="'+value.sharing_profit_buyer+'">'+
                                     '<input type="text" class="form-control" name="payDetail[]" value="'+payDetail+'">'+
                                     '</td>'+
+                                    '<td>'+
+                                    value.code+
+                                '</td>'+
                                 '<td>'+
                                     moment(value.sale.date).format('DD MMMM YYYY')+
                                 '</td>'+
