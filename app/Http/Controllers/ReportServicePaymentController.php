@@ -113,7 +113,7 @@ class ReportServicePaymentController extends Controller
 
     public function printPeriode(Request $req)
     {
-        $title = 'Laporan Pemabayaran Service per Periode';
+        $title = 'Laporan Pembayaran Service per Periode';
         $subtitle = ' ';
         $periode = $req->startDate1. ' - ' .$req->endDate1;
         $val = ' ';
