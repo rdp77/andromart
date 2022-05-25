@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\PurchasingController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\ReceptionController;
 use App\Http\Controllers\PurchasingDetailController;
@@ -19,7 +18,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'transaction'], function () {
     Route::group(['prefix' => 'purchasing'], function () {
-        Route::resource('purchasing', PurchasingController::class);
         Route::resource('purchase', PurchaseController::class);
         Route::resource('reception', ReceptionController::class);
         Route::post('/history-purchasing', [ReceptionController::class, 'history'])->name('receptionHistory');

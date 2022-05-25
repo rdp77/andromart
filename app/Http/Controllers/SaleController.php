@@ -535,6 +535,8 @@ class SaleController extends Controller
                 $sharing_profit_buyer[$i] = $req->profitSharingBuyer[$i] * ((str_replace(",", '', $req->totalPriceDetail[$i])) - ($req->qtyDetail[$i] * (str_replace(",", '', $req->profitDetail[$i])))) / 100;
                 $hpp[$i] = collect((str_replace(",", '', $req->profitDetail[$i])))->sum();
             }
+        } else {
+            $hpp = '0';
         }
         if ($req->itemsDetailOld != null) {
             for ($i = 0; $i < count($req->itemsDetailOld); $i++) {
@@ -548,32 +550,33 @@ class SaleController extends Controller
         $total_profit_store = collect($sharing_profit_store)->sum() + collect($sharing_profit_storeOld)->sum();
         $total_profit_sales = collect($sharing_profit_sales)->sum() + collect($sharing_profit_salesOld)->sum();
         $total_profit_buyer = collect($sharing_profit_buyer)->sum() + collect($sharing_profit_buyerOld)->sum();
-        $total_hpp = $hpp[$i] + $hppOld[$i];
-        // return [$total_profit_store,collect($sharing_profit_store)->sum(),collect($sharing_profit_storeOld)->sum()];
-        Sale::where('id', $id)->update([
-            'user_id' => Auth::user()->id,
-            'sales_id' => $req->sales_id,
-            'account' => $req->account,
-            'branch_id' => $getEmployee->branch_id,
-            'customer_id' => $req->customer_id,
-            'customer_name' => $customerName,
-            'customer_address' => $customerAddress,
-            'customer_phone' => $customerPhone,
-            'payment_method' => $req->PaymentMethod,
-            'discount_type' => $req->typeDiscount,
-            'discount_price' => str_replace(",", '', $req->totalDiscountValue),
-            'discount_percent' => str_replace(",", '', $req->totalDiscountPercent),
-            'discount_sale' => str_replace(",", '', $req->totalSparePart),-str_replace(",", '', $req->totalDiscountValue),
-            'item_price' => str_replace(",", '', $req->totalSparePart),
-            'total_price' => str_replace(",", '', $req->totalPrice),
-            'total_hpp' => $total_hpp,
-            'total_profit_store' => $total_profit_store,
-            'total_profit_sales' => $total_profit_sales,
-            'total_profit_buyer' => $total_profit_buyer,
-            'description' => $req->description,
-            'updated_at' => date('Y-m-d h:i:s'),
-            'updated_by' => Auth::user()->name,
-        ]);
+        $total_hpp = collect($hpp)->sum() + collect($hppOld)->sum();
+        // return [$total_profit_store,collect($sharing_profit_store)->sum(),collect($sharing_profit_storeOld)->sum(), $req->all(), $total_hpp];
+        // return [$req->all(), $id];
+        Sale::where('id', $id)
+            ->update([
+                'user_id' => Auth::user()->id,
+                'sales_id' => $req->sales_id,
+                'account' => $req->account,
+                'customer_id' => $req->customer_id,
+                'customer_name' => $customerName,
+                'customer_address' => $customerAddress,
+                'customer_phone' => $customerPhone,
+                'payment_method' => $req->PaymentMethod,
+                'discount_type' => $req->typeDiscount,
+                'discount_price' => str_replace(",", '', $req->totalDiscountValue),
+                'discount_percent' => str_replace(",", '', $req->totalDiscountPercent),
+                'discount_sale' => str_replace(",", '', $req->totalSparePart),-str_replace(",", '', $req->totalDiscountValue),
+                'item_price' => str_replace(",", '', $req->totalSparePart),
+                'total_price' => str_replace(",", '', $req->totalPrice),
+                'total_hpp' => $total_hpp,
+                'total_profit_store' => $total_profit_store,
+                'total_profit_sales' => $total_profit_sales,
+                'total_profit_buyer' => $total_profit_buyer,
+                'description' => $req->description,
+                'updated_at' => date('Y-m-d h:i:s'),
+                'updated_by' => Auth::user()->name,
+            ]);
 
         // check data yang dihapus dan mengembalikan stock terlebih dahulu
         if ($req->deletedExistingData != null) {

@@ -9,13 +9,38 @@
 @section('content')
 @include('layouts.backend.components.notification')
 <div class="card">
-    <div class="card-header">
-        <a href="{{ route('stockOpname.print') }}" class="btn btn-large btn-primary" target="_blank">
-            <i class="fas fa-print"></i> Print Data
-        </a>
-    </div>
     <div class="card-body">
-        @foreach($category as $key => $el)
+        <div class="tab-content" id="myTabContent2">
+            <div class="tab-pane fade show active" id="category3" role="tabpanel" aria-labelledby="category-tab3">
+                <div class="row">
+                    <div class="form-group col-3 col-md-3 col-lg-3">
+                        <label>{{ __('Kategori') }}<code>*</code></label>
+                        <select name="category" id="category" class="select2 form-control">
+                            <option value="0">Semua</option>
+                            @foreach ($category as $category)
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-6 col-md-3">
+                        <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('stockOpname.dataLoad') }}', '#data-load')">
+                            <i class="fas fa-eye"></i> Cari</button>
+                    </div>
+                    <div class="form-group col-6 col-md-4">
+                        <button class="btn btn-primary" type="button" onclick="printStockOpname()">
+                            <i class="fas fa-print"></i> Cetak Laporan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card">
+    <div class="card-body" id="data-load">
+        @foreach($stockCategory as $key => $el)
         <h5>Kategori : {{$el->name}}</h5>
         <table class="table table-striped" width="100%">
             <thead>
@@ -64,3 +89,22 @@
     </div>
 </div>
 @endsection
+<script type="text/javascript">
+    var loading = `-- Sedang Memuat Data --`;
+    function changes(token, url, target) {
+      var category = document.getElementById("category").value;
+      $(target).html(loading);
+      $.post(url, {
+          _token: token,
+          category,
+      },
+      function (data) {
+          console.log(data);
+          $(target).html(data);
+      });
+    }
+    function printStockOpname() {
+        var category = document.getElementById("category").value;
+        window.location.href = '{{ route('stockOpname.print') }}?&category=' + category
+    }
+</script>

@@ -335,16 +335,6 @@ class ServiceController extends Controller
         $title = 'Service onProgress';
         $branchUser = Auth::user()->employee->branch_id;
 
-        // $technician = 'Semua';
-        // $sub = ' ';
-        // $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
-        //     ->where('branch_id', $branchUser)
-        //     ->whereIn('work_status', ['Proses', 'Manifest'])
-        //     ->orderBy('id', 'desc')
-        //     ->get();
-        // $progress = Service::where('work_status', 'Proses')->where('branch_id', $branchUser)->get();
-        // $manifest = Service::where('work_status', 'Manifest')->where('branch_id', $branchUser)->get();
-
         if ($req->technician_id == 'x') {
             $technician = 'Semua';
             $sub = ' ';
@@ -377,7 +367,7 @@ class ServiceController extends Controller
 
         $subtitle = $sub;
         $val = $technician;
-        // return $req->all();
+
         return view('pages.backend.transaction.service.onProgressPrint', compact('service', 'tr', 'tprogress', 'tmanifest','title', 'subtitle', 'val'));
     }
 
@@ -393,8 +383,8 @@ class ServiceController extends Controller
             ->get();
         $index = count($co) + 1;
         // $index = DB::table('service')->max('id') + 1;
-
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
+
         return $code = $type . $getEmployee->Branch->code . $year . $month . $index;
     }
     public function create()
@@ -405,12 +395,10 @@ class ServiceController extends Controller
         }
         $code = $this->code('SRV');
         $employee = Employee::orderBy('name', 'ASC')->get();
-        // $items    = Item::where('name','!=','Jasa Service')->get();
         $item = Item::with('stock', 'supplier')
             ->where('name', '!=', 'Jasa Service')
             ->orderBy('name', 'ASC')
             ->get();
-        // return $item;
         $brand = Brand::orderBy('name', 'ASC')->get();
         $type = Type::orderBy('name', 'ASC')->get();
         $category = Category::orderBy('name', 'ASC')->get();
@@ -422,12 +410,8 @@ class ServiceController extends Controller
 
     public function store(Request $req)
     {
-        // return
-        // return [$req->bateraiEquipment,$req->ramEquipment];
-        // return $req->all();
         DB::beginTransaction();
         try {
-            // return $req->technicianId;
             $tech1 = Service::where('technician_id', $req->technicianId)
                 ->where('work_status', '!=', 'Selesai')
                 ->where('work_status', '!=', 'Cancel')
@@ -435,7 +419,6 @@ class ServiceController extends Controller
                 ->where('work_status', '!=', 'Diambil')
                 ->where('work_status', '!=', 'Mutasi')
                 ->count();
-            // $tech1 = 10;
             $tech2 = Service::where('technician_replacement_id', $req->technicianId)
                 ->where('work_status', '!=', 'Selesai')
                 ->where('work_status', '!=', 'Cancel')
@@ -472,10 +455,6 @@ class ServiceController extends Controller
                 }
             }
             $codeNota = $this->code('SRV');
-            // return [$sharingProfitStore,
-            // $sharingProfitTechnician,
-            // $lossStore,$lossTechnician];
-            // return [$req->totalService,$req->totalSparePart];
             $id = DB::table('service')->max('id') + 1;
             $sharing_profit_store = ((str_replace(',', '', $req->totalService) - str_replace(',', '', $req->totalDiscountValue)) / 100) * $sharingProfitStore + str_replace(',', '', $req->totalSparePart);
             $sharing_profit_technician_1 = ((str_replace(',', '', $req->totalService) - str_replace(',', '', $req->totalDiscountValue)) / 100) * $sharingProfitTechnician;
@@ -588,7 +567,6 @@ class ServiceController extends Controller
                     ]);
                 }
             }
-            // return $checkStock;
 
             ServiceStatusMutation::create([
                 'service_id' => $id,
@@ -756,7 +734,6 @@ class ServiceController extends Controller
                 $dataEquipmentName[7] = 'Lainnya';
                 $dataEquipmentDesc[7] = $req->lainnyaEquipmentDesc;
             }
-            // return [$dataEquipment,$dataEquipmentName];
             for ($i = 0; $i < count($dataEquipment); $i++) {
                 ServiceEquipment::create([
                     'service_id' => $id,
@@ -781,7 +758,6 @@ class ServiceController extends Controller
             return view('forbidden');
         }
         $service = Service::with('ServiceDetail', 'serviceCondition', 'serviceEquipment')->find($id);
-        // return $service;
         $member = User::orderBy('name', 'ASC')->get();
         $employee = Employee::orderBy('name', 'ASC')->get();
         $category = Category::orderBy('name', 'ASC')->get();
@@ -794,24 +770,21 @@ class ServiceController extends Controller
             ->get();
         $customer = Customer::orderBy('name', 'ASC')->get();
 
-        // return $service;
         return view('pages.backend.transaction.service.editService', compact('employee', 'item', 'brand', 'type', 'warranty', 'service', 'category', 'customer'));
     }
     public function printService($id)
     {
         $Service = Service::with('ServiceDetail', 'ServiceDetail.Items', 'Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand', 'Brand.Category', 'ServiceEquipment', 'ServiceCondition')->find($id);
-        // return $Service;
         $member = User::get();
+
         return view('pages.backend.transaction.service.printService', ['service' => $Service, 'member' => $member]);
     }
 
     public function update($id, Request $req)
     {
-        // return $req->all();
         DB::beginTransaction();
         try {
             $tech1 = Service::where('technician_id', $req->technicianId)
-                // ->where('work_status', '!=', 'Selesai')
                 ->where('work_status', '!=', 'Cancel')
                 ->where('work_status', '!=', 'Return')
                 ->where('work_status', '!=', 'Diambil')
@@ -819,7 +792,6 @@ class ServiceController extends Controller
                 ->where('work_status', '!=', 'Mutasi')
                 ->count();
             $tech2 = Service::where('technician_replacement_id', $req->technicianId)
-                // ->where('work_status', '!=', 'Selesai')
                 ->where('work_status', '!=', 'Selesai')
                 ->where('work_status', '!=', 'Cancel')
                 ->where('work_status', '!=', 'Return')
@@ -858,8 +830,7 @@ class ServiceController extends Controller
                     $MaxHandle = $settingPresentase[$i]->total;
                 }
             }
-            // return [$tech1
-            // ,$tech2,$MaxHandle];
+
             if ($req->technicianId != 1) {
                 if ($checkData->technician_id != $req->technicianId) {
                     $totalHandledNow = $tech1 + $tech2;
@@ -871,16 +842,6 @@ class ServiceController extends Controller
                     }
                 }
             }
-
-            // return [$sharingProfitStore,
-            // $sharingProfitTechnician,
-            // $lossStore,$lossTechnician];
-            // return [$req->totalService,$req->totalSparePart];
-            // return $req->all();
-
-            // $id = DB::table('service')->max('id')+1;
-            // $sharing_profit_store =  ((str_replace(",", '',$req->totalService)/100)*$sharingProfitStore)+str_replace(",", '',$req->totalSparePart);
-            // $sharing_profit_technician_1 = (str_replace(",", '',$req->totalService)/100)*$sharingProfitTechnician;
 
             if (str_replace(',', '', $req->totalLoss) == 0) {
                 $total_loss_store = 0;
@@ -919,12 +880,9 @@ class ServiceController extends Controller
             } else {
                 $fileName = $checkData->image;
             }
-            // return 'asd';
+
             Service::where('id', $id)->update([
-                // 'id' =>$id,
-                // 'code' =>$this->code('SRV-'),
                 'user_id' => Auth::user()->id,
-                // 'branch_id' => $req->branch_id,
                 'customer_id' => $req->customerId,
                 'customer_name' => $req->customerName,
                 'customer_address' => $req->customerAdress,
@@ -939,12 +897,8 @@ class ServiceController extends Controller
                 'clock' => date('h:i'),
                 'total_service' => str_replace(',', '', $req->totalService),
                 'total_part' => str_replace(',', '', $req->totalSparePart),
-
                 'discount_service' => str_replace(',', '', $req->totalService) - str_replace(',', '', $req->totalDiscountValue),
                 'total_hpp' => str_replace(',', '', $req->totalHppAtas),
-
-                // 'total_payment'=>0,
-                // 'total_downpayment'=>0,
                 'total_loss' => str_replace(',', '', $req->totalLoss),
                 'total_loss_technician_1' => $total_loss_technician_1,
                 'total_loss_technician_2' => $total_loss_technician_2,
@@ -954,7 +908,6 @@ class ServiceController extends Controller
                 'discount_price' => str_replace(',', '', $req->totalDiscountValue),
                 'discount_percent' => str_replace(',', '', $req->totalDiscountPercent),
                 'total_price' => str_replace(',', '', $req->totalPrice),
-                // 'work_status'=>'Manifest',
                 'equipment' => $req->equipment,
                 'description' => $req->description,
                 'warranty_id' => $req->warranty,
