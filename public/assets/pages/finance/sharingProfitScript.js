@@ -184,10 +184,10 @@ function checkEmploye() {
                                     '<input type="text" class="form-control" name="payDetail[]" value="'+payDetail+'">'+
                                 '</td>'+
                                 '<td>'+
-                                    value.code+
+                                '<a href="https://andromartindonesia.com/transaction/service/service/'+value.id+'/show">'+value.code+'</a>'+
                                 '</td>'+
                                 '<td>'+
-                                    moment(value.date).format('DD MMMM YYYY')+
+                                    moment(value.payment_date).format('DD MMMM YYYY')+
                                 '</td>'+
                                 '<td>'+
                                     value.customer_name+
@@ -257,7 +257,7 @@ function checkEmploye() {
                                     '<input type="text" class="form-control" name="payDetail[]" value="'+payDetail+'">'+
                                     '</td>'+
                                     '<td>'+
-                                    value.code+
+                                    '<a href="https://andromartindonesia.com/transaction/service/service/"'+value.id+'"/show">'+value.code+'</a>'+
                                 '</td>'+
                                 '<td>'+
                                     moment(value.sale.date).format('DD MMMM YYYY')+

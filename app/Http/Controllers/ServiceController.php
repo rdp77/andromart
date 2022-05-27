@@ -772,6 +772,27 @@ class ServiceController extends Controller
 
         return view('pages.backend.transaction.service.editService', compact('employee', 'item', 'brand', 'type', 'warranty', 'service', 'category', 'customer'));
     }
+    public function show($id)
+    {
+        $checkRoles = $this->DashboardController->cekHakAkses(1, 'edit');
+        if ($checkRoles == 'akses ditolak') {
+            return view('forbidden');
+        }
+        $service = Service::with('ServiceDetail', 'serviceCondition', 'serviceEquipment')->find($id);
+        $member = User::orderBy('name', 'ASC')->get();
+        $employee = Employee::orderBy('name', 'ASC')->get();
+        $category = Category::orderBy('name', 'ASC')->get();
+        $brand = Brand::orderBy('name', 'ASC')->get();
+        $type = Type::orderBy('name', 'ASC')->get();
+        $warranty = Warranty::orderBy('name', 'ASC')->get();
+        $item = Item::with('stock')
+            ->where('name', '!=', 'Jasa Service')
+            ->orderBy('name', 'ASC')
+            ->get();
+        $customer = Customer::orderBy('name', 'ASC')->get();
+
+        return view('pages.backend.transaction.service.showService', compact('employee', 'item', 'brand', 'type', 'warranty', 'service', 'category', 'customer'));
+    }
     public function printService($id)
     {
         $Service = Service::with('ServiceDetail', 'ServiceDetail.Items', 'Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand', 'Brand.Category', 'ServiceEquipment', 'ServiceCondition')->find($id);
