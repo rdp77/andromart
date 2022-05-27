@@ -52,14 +52,20 @@ class SharingProfitController extends Controller
         $date1 = $this->DashboardController->changeMonthIdToEn($req->dateS);
         $date2 = $this->DashboardController->changeMonthIdToEn($req->dateE);
         $data = Service::with(['ServiceDetail', 'ServiceDetail.Items', 'ServiceStatusMutation', 'ServiceStatusMutation.Technician', 'SharingProfitDetail', 'SharingProfitDetail.SharingProfit'])
-            ->where('date', '>=', $this->DashboardController->changeMonthIdToEn($req->dateS))
-            ->where('date', '<=', $this->DashboardController->changeMonthIdToEn($req->dateE))
+            // ->whereHas('ServicePayment', function ($query) use ($date1,$date2) {
+            //     // return $query->where('IDUser', '=', 1);
+            //     return $query->where('date', '>=',$date1)
+            //                  ->where('date', '<=',$date2);
+            // })
+            ->where('payment_date', '>=', $this->DashboardController->changeMonthIdToEn($req->dateS))
+            ->where('payment_date', '<=', $this->DashboardController->changeMonthIdToEn($req->dateE))
             ->where('work_status', 'Diambil')
             ->where('payment_status', 'Lunas')
             ->where(function ($query) use ($req) {
                 $query->where('technician_id', $req->id)
                     ->orWhere('technician_replacement_id', $req->id);
             })
+            ->orderBy('payment_date','ASC')
             ->get();
 
         $sharingProfitSaleSales = SaleDetail::with(['sale'])
