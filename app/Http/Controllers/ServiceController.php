@@ -1579,7 +1579,7 @@ class ServiceController extends Controller
                 'created_by' => Auth::user()->name,
                 'created_at' => date('Y-m-d h:i:s'),
             ]);
-            return Response::json(['status' => 'success', 'message' => 'Sukses Menyimpan Data']);
+            return Response::json(['status' => 'success', 'message' => 'Sukses Menyimpan Data','data'=>$checkData]);
         } catch (\Throwable $th) {
             return $th;
             return Response::json(['status' => 'error', 'message' => $th]);

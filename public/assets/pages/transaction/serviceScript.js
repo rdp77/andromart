@@ -859,10 +859,16 @@ function updateStatusService() {
                                 dangerMode: true,
                             }).then((red) => {
                                 if (red) {
-                                    window.open("https://www.w3schools.com");
+                                    let str = data.data.customer_phone;
+ 
+                                    str = str.substr(1);
+                                    // console.log(str);
+
+                                    window.open("https://wa.me/62"+str+"?text=Barang%20yang%20anda%20service%20telah%20SELESAI%0A");
                                 }
                             });
                         }
+                        
                         if (status == 'Diambil') {
                             // location.reload();
                             swal({
