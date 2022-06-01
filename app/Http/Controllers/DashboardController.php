@@ -57,8 +57,8 @@ class DashboardController extends Controller
 
         $dataTrafficToday = DB::table('traffic')->where('date', date('Y-m-d'))->count();
         $dataServiceTotal = Service::where('created_at','like','%'.  date('Y-m-d').'%')->count();
-        $dataServiceHandphone = Service::where('type', '2')->where('created_at','like','%'. date('Y-m-d').'%')->count();
-        $dataServiceLaptop = Service::where('type', '3')->where('created_at','like','%'. date('Y-m-d').'%')->count();
+        $dataServiceHandphone = Service::where('type', '11')->where('created_at','like','%'. date('Y-m-d').'%')->count();
+        $dataServiceLaptop = Service::where('type', '10')->where('created_at','like','%'. date('Y-m-d').'%')->count();
         $checkDataSharingProfit =  $this->checkSharingProfit();
         $sharingProfit1Service = $checkDataSharingProfit[0];
         $sharingProfit2Service = $checkDataSharingProfit[1];
@@ -190,7 +190,7 @@ class DashboardController extends Controller
                     ->where('date', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
             }
         })->count();
-        $dataServiceHandphone = Service::where('type', '2')->where(function ($query) use ($req) {
+        $dataServiceHandphone = Service::where('type', '11')->where(function ($query) use ($req) {
             if ($req->type == 'Tanggal') {
                 $query
                     ->where('date', '>=', $this->changeMonthIdToEn($req->startDate))
@@ -205,7 +205,7 @@ class DashboardController extends Controller
                     ->where('date', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
             }
         })->count();
-        $dataServiceLaptop = Service::where('type', '3')->where(function ($query) use ($req) {
+        $dataServiceLaptop = Service::where('type', '10')->where(function ($query) use ($req) {
             if ($req->type == 'Tanggal') {
                 $query
                     ->where('date', '>=', $this->changeMonthIdToEn($req->startDate))
