@@ -8,6 +8,17 @@
 @endsection
 
 @section('content')
+@if (count($errors) > 0)
+<div class="alert alert-danger alert-has-icon">
+    <div class="alert-icon"><i class="far fa-lightbulb"></i></div>
+    <div class="alert-body">
+        <div class="alert-title">{{ __('Error') }}</div>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </div>
+</div>
+@endif
 <div class="card">
     <form method="POST" action="{{ route('type.store') }}">
         @csrf
