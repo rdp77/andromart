@@ -23,8 +23,8 @@ class TypeController extends Controller
 
     public function index(Request $req)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(28,'view');
-        if($checkRoles == 'akses ditolak'){
+        $checkRoles = $this->DashboardController->cekHakAkses(28, 'view');
+        if ($checkRoles == 'akses ditolak') {
             return view('forbidden');
         }
 
@@ -52,8 +52,8 @@ class TypeController extends Controller
 
     public function create()
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(28,'create');
-        if($checkRoles == 'akses ditolak'){
+        $checkRoles = $this->DashboardController->cekHakAkses(28, 'create');
+        if ($checkRoles == 'akses ditolak') {
             return view('forbidden');
         }
 
@@ -64,7 +64,7 @@ class TypeController extends Controller
     public function store(Request $req)
     {
         Validator::make($req->all(), [
-            'brand_id' => ['required', 'integer', 'max:255'],
+            'brand_id' => 'required',
             'name' => ['required', 'string', 'max:255'],
         ])->validate();
 
@@ -94,8 +94,8 @@ class TypeController extends Controller
 
     public function edit($id)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(28,'edit');
-        if($checkRoles == 'akses ditolak'){
+        $checkRoles = $this->DashboardController->cekHakAkses(28, 'edit');
+        if ($checkRoles == 'akses ditolak') {
             return view('forbidden');
         }
 
@@ -136,11 +136,11 @@ class TypeController extends Controller
 
     public function destroy(Request $req, $id)
     {
-        $checkRoles = $this->DashboardController->cekHakAkses(28,'delete');
+        $checkRoles = $this->DashboardController->cekHakAkses(28, 'delete');
         $service = Service::where('series', $id)->get();
         $checkService = count($service);
 
-        if($checkRoles == 'akses ditolak'){
+        if ($checkRoles == 'akses ditolak') {
             return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
         }
 
@@ -156,7 +156,5 @@ class TypeController extends Controller
             Type::destroy($id);
             return Response::json(['status' => 'success', 'message' => 'Data master berhasil dihapus !']);
         }
-
-
     }
 }
