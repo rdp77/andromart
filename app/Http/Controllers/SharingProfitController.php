@@ -189,7 +189,7 @@ class SharingProfitController extends Controller
                 'Pengeluaran Untuk Sharing Profit',
             ];
             $DK = [
-                'D',
+                'K',
             ];
 
             for ($i = 0; $i < count($req->codeDetail); $i++) {
@@ -206,7 +206,7 @@ class SharingProfitController extends Controller
                     array_push($accountCode, $accountSharingProfit->id);
                     array_push($totalBayar, $req->totalDetail[$i]);
                     array_push($description, 'Pembagian Sharing Profit Detail');
-                    array_push($DK, 'K');
+                    array_push($DK, 'D');
                 }
             }
             // return [$DK, $description,$totalBayar,$accountCode];
