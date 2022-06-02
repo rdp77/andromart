@@ -130,7 +130,7 @@ class ReportCashBalanceController extends Controller
         for ($i = 0; $i < count($totalKasBankJenggoloValuesK); $i++) {
             $totalKasBankJenggoloValK += $totalKasBankJenggoloValuesK[$i];
         }
-        $totalKasBankJenggoloFix =  $dataSaldoKas[3]['total'] + $totalKasBankJenggoloValD - $totalKasBankJenggoloValK;
+        $totalKasBankJenggoloFix =  $dataSaldoKas[3]['total'2 + $totalKasBankJenggoloValD - $totalKasBankJenggoloValK;
 
         // return $totalKasBankJenggoloFix;
         // CEK TOTAL KAS M KECIL D K
@@ -167,7 +167,7 @@ class ReportCashBalanceController extends Controller
         //     if ($accountOpening[2]->opening_date < date('Y-m-d')) {
         //         $totalKBCM =  $accountOpening[2]->opening_balance;
         //     }
-        // } else if ($accountOpening[3]->name == 'Kas Bank JAGO Cabang Mukmin') {
+        // } else if ($accountOpening[3]->name == 'Kas Bank Cabang Pusat') {
         //     if ($accountOpening[3]->opening_date < date('Y-m-d')) {
         //         $totalKBCJ =  $accountOpening[3]->opening_balance;
         //     }
@@ -188,7 +188,7 @@ class ReportCashBalanceController extends Controller
                 $totalKBCM =  $accountOpening[2]->opening_balance;
             }
         } 
-         if ($accountOpening[3]->name == 'Kas Bank JAGO Cabang Mukmin') {
+         if ($accountOpening[3]->name == 'Kas Bank Cabang Pusat') {
             if ($accountOpening[3]->opening_date >= date('Y-m-01') && $accountOpening[3]->opening_date <= date('Y-m-d')) {
                 $totalKBCJ =  $accountOpening[3]->opening_balance;
             }
@@ -290,7 +290,7 @@ class ReportCashBalanceController extends Controller
         for ($i = 0; $i < count($totalKasBankJenggoloValuesK); $i++) {
             $totalKasBankJenggoloValK += $totalKasBankJenggoloValuesK[$i];
         }
-        $totalKasBankJenggoloFix = $dataSaldoKas[3]['total'] + $totalKasBankJenggoloValD - $totalKasBankJenggoloValK;
+        $totalKasBankJenggoloFix = $dataSaldoKas[2]['total'] + $totalKasBankJenggoloValD - $totalKasBankJenggoloValK;
 
         // return $totalKasBankJenggoloFix;
         // CEK TOTAL KAS M KECIL D K
@@ -304,7 +304,7 @@ class ReportCashBalanceController extends Controller
         for ($i = 0; $i < count($totalKasBankMukminValuesK); $i++) {
             $totalKasBankMukminValK += $totalKasBankMukminValuesK[$i];
         }
-        $totalKasBankMukminFix = $dataSaldoKas[2]['total'] + $totalKasBankMukminValD - $totalKasBankMukminValK;
+        $totalKasBankMukminFix = $dataSaldoKas[3]['total'] + $totalKasBankMukminValD - $totalKasBankMukminValK;
         // return $totalKasKecilMukminFix;
 
         $accountOpening = AccountData::with('accountMainDetail')->where('main_id', '1')->get();
@@ -328,7 +328,7 @@ class ReportCashBalanceController extends Controller
                 $totalKBCM =  $accountOpening[2]->opening_balance;
             }
         } 
-         if ($accountOpening[3]->name == 'Kas Bank JAGO Cabang Mukmin') {
+         if ($accountOpening[3]->name == 'Kas Bank Cabang Pusat') {
             if ($accountOpening[3]->opening_date >= date('Y-m-01', strtotime($req->dateS)) && $accountOpening[3]->opening_date <= date('Y-m-t', strtotime($req->dateS))) {
                 $totalKBCJ =  $accountOpening[3]->opening_balance;
             }
@@ -473,7 +473,7 @@ class ReportCashBalanceController extends Controller
                 $totalKBCM =  $accountOpening[2]->opening_balance;
             }
         }
-        if ($accountOpening[3]->name == 'Kas Bank JAGO Cabang Mukmin') {
+        if ($accountOpening[3]->name == 'Kas Bank Cabang Pusat') {
             if ($accountOpening[3]->opening_date <= date('Y-m-01', strtotime($date))) {
                 $totalKBCJ =  $accountOpening[3]->opening_balance;
             }
