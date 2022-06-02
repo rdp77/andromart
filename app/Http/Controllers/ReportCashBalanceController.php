@@ -163,11 +163,11 @@ class ReportCashBalanceController extends Controller
         //     if ($accountOpening[1]->opening_date < date('Y-m-d')) {
         //         $totalKCCM =  $accountOpening[1]->opening_balance;
         //     }
-        // } else if ($accountOpening[2]->name == 'Kas Bank JAGO Cabang Mukmin') {
+        // } else if ($accountOpening[2]->name == 'Kas Bank Cabang Pusat') {
         //     if ($accountOpening[2]->opening_date < date('Y-m-d')) {
         //         $totalKBCM =  $accountOpening[2]->opening_balance;
         //     }
-        // } else if ($accountOpening[3]->name == 'Kas Bank Cabang Mukmin') {
+        // } else if ($accountOpening[3]->name == 'Kas Bank JAGO Cabang Mukmin') {
         //     if ($accountOpening[3]->opening_date < date('Y-m-d')) {
         //         $totalKBCJ =  $accountOpening[3]->opening_balance;
         //     }
@@ -183,12 +183,12 @@ class ReportCashBalanceController extends Controller
                 $totalKCCM =  $accountOpening[1]->opening_balance;
             }
         } 
-         if ($accountOpening[2]->name == 'Kas Bank JAGO Cabang Mukmin') {
+         if ($accountOpening[2]->name == 'Kas Bank Cabang Pusat') {
             if ($accountOpening[2]->opening_date >= date('Y-m-01') && $accountOpening[2]->opening_date <= date('Y-m-d')) {
                 $totalKBCM =  $accountOpening[2]->opening_balance;
             }
         } 
-         if ($accountOpening[3]->name == 'Kas Bank Cabang Mukmin') {
+         if ($accountOpening[3]->name == 'Kas Bank JAGO Cabang Mukmin') {
             if ($accountOpening[3]->opening_date >= date('Y-m-01') && $accountOpening[3]->opening_date <= date('Y-m-d')) {
                 $totalKBCJ =  $accountOpening[3]->opening_balance;
             }
@@ -323,12 +323,12 @@ class ReportCashBalanceController extends Controller
                 $totalKCCM =  $accountOpening[1]->opening_balance;
             }
         } 
-         if ($accountOpening[2]->name == 'Kas Bank JAGO Cabang Mukmin') {
+         if ($accountOpening[2]->name == 'Kas Bank Cabang Pusat') {
             if ($accountOpening[2]->opening_date >= date('Y-m-01', strtotime($req->dateS)) && $accountOpening[2]->opening_date <= date('Y-m-t', strtotime($req->dateS))) {
                 $totalKBCM =  $accountOpening[2]->opening_balance;
             }
         } 
-         if ($accountOpening[3]->name == 'Kas Bank Cabang Mukmin') {
+         if ($accountOpening[3]->name == 'Kas Bank JAGO Cabang Mukmin') {
             if ($accountOpening[3]->opening_date >= date('Y-m-01', strtotime($req->dateS)) && $accountOpening[3]->opening_date <= date('Y-m-t', strtotime($req->dateS))) {
                 $totalKBCJ =  $accountOpening[3]->opening_balance;
             }
@@ -468,12 +468,12 @@ class ReportCashBalanceController extends Controller
                 $totalKCCM =  $accountOpening[1]->opening_balance;
             }
         }
-        if ($accountOpening[2]->name == 'Kas Bank JAGO Cabang Mukmin') {
+        if ($accountOpening[2]->name == 'Kas Bank Cabang Pusat') {
             if ($accountOpening[2]->opening_date <= date('Y-m-01', strtotime($date))) {
                 $totalKBCM =  $accountOpening[2]->opening_balance;
             }
         }
-        if ($accountOpening[3]->name == 'Kas Bank Cabang Mukmin') {
+        if ($accountOpening[3]->name == 'Kas Bank JAGO Cabang Mukmin') {
             if ($accountOpening[3]->opening_date <= date('Y-m-01', strtotime($date))) {
                 $totalKBCJ =  $accountOpening[3]->opening_balance;
             }
