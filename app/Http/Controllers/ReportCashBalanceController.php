@@ -130,7 +130,7 @@ class ReportCashBalanceController extends Controller
         for ($i = 0; $i < count($totalKasBankJenggoloValuesK); $i++) {
             $totalKasBankJenggoloValK += $totalKasBankJenggoloValuesK[$i];
         }
-        $totalKasBankJenggoloFix =  $dataSaldoKas[3]['total'2 + $totalKasBankJenggoloValD - $totalKasBankJenggoloValK;
+        $totalKasBankJenggoloFix =  $dataSaldoKas[3]['total'] + $totalKasBankJenggoloValD - $totalKasBankJenggoloValK;
 
         // return $totalKasBankJenggoloFix;
         // CEK TOTAL KAS M KECIL D K
