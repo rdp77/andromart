@@ -198,7 +198,7 @@ class ReportCashBalanceController extends Controller
         $dtFix = [
             ['total' => $totalKasKecilMukminFix + $totalKCCM, 'nama' => 'Kas Kecil Cabang Mukmin'],
             ['total' => $totalKasKecilJenggoloFix + $totalKCCJ, 'nama' => 'Kas Kecil Cabang Jenggolo'],
-            ['total' => $totalKasBankMukminFix + $totalKBCM, 'nama' => 'Kas Bank Cabang Mukmin'],
+            ['total' => $totalKasBankMukminFix + $totalKBCM, 'nama' => 'Kas Bank JAGO Cabang Mukmin'],
             ['total' => $totalKasBankJenggoloFix + $totalKBCJ, 'nama' => 'Kas Bank Cabang Jenggolo']
         ];
         return view('pages.backend.report.reportCashBalance', compact('dtFix'));
@@ -342,7 +342,7 @@ class ReportCashBalanceController extends Controller
         $dtFix = [
             ['total' =>  $totalKasKecilMukminFix + $totalKCCM, 'nama' => 'Kas Kecil Cabang Mukmin'],
             ['total' =>  $totalKasKecilJenggoloFix + $totalKCCJ, 'nama' => 'Kas Kecil Cabang Jenggolo'],
-            ['total' =>  $totalKasBankMukminFix + $totalKBCM, 'nama' => 'Kas Bank Cabang Mukmin'],
+            ['total' =>  $totalKasBankMukminFix + $totalKBCM, 'nama' => 'Kas Bank JAGO Cabang Mukmin'],
             ['total' =>  $totalKasBankJenggoloFix + $totalKBCJ, 'nama' => 'Kas Bank Cabang Jenggolo']
         ];
 
@@ -482,7 +482,7 @@ class ReportCashBalanceController extends Controller
         $dtFix = [
             ['total' => $totalKasKecilMukminFix + $totalKCCM, 'nama' => 'Kas Kecil Cabang Mukmin'],
             ['total' => $totalKasKecilJenggoloFix + $totalKCCJ, 'nama' => 'Kas Kecil Cabang Jenggolo'],
-            ['total' => $totalKasBankMukminFix + $totalKBCM, 'nama' => 'Kas Bank Cabang Mukmin'],
+            ['total' => $totalKasBankMukminFix + $totalKBCM, 'nama' => 'Kas Bank JAGO Cabang Mukmin'],
             ['total' => $totalKasBankJenggoloFix + $totalKBCJ, 'nama' => 'Kas Bank Cabang Jenggolo']
         ];
 

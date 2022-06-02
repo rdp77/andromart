@@ -346,7 +346,7 @@ class ServicePaymentController extends Controller
                 // return [$dateConvert];
 
                 //Jurnal HPP
-                if (isset($req->totalHpp)) {
+                // if (isset($req->totalHpp)) {
                     $idJournalHpp = DB::table('journals')->max('id') + 1;
                     Journal::create([
                         'id' => $idJournalHpp,
@@ -392,7 +392,7 @@ class ServicePaymentController extends Controller
                             ]);
                         }
                     }
-                }
+                // }
             }
 
             DB::commit();
