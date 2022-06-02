@@ -63,7 +63,7 @@ class ReportPeriodicController extends Controller
             ->get();
 
         $jurnalSebelumnya = Journal::with('JournalDetail', 'JournalDetail.AccountData')
-            ->where('date', '<=', date('Y-m-01', strtotime($dateParams)))
+            ->where('date', '<', date('Y-m-01', strtotime($dateParams)))
             ->get();
 
         $account = AccountMain::with('accountMainDetail','accountMainDetail.accountData')->get();
@@ -115,7 +115,14 @@ class ReportPeriodicController extends Controller
                         $data[$i]['main_detail'][$j]['branch'][$z]['saldoAwal'] = $account[$i]->accountMainDetail[$j]->accountData[$z]->opening_balance;
                     }
                 }
-                for ($k = 0; $k < count($jurnalSebelumnya); $k++) {
+                if (count($jurnalSebelumnya) == 0) {
+                    for ($z=0; $z <count($account[$i]->accountMainDetail[$j]->accountData) ; $z++) {
+                    if( $account[$i]->id == $account[$i]->accountMainDetail[$j]->accountData[$z]->main_detail_id){
+                        $data[$i]['main_detail'][$j]['branch'][$z]['SaldoAkhirJurnalFix'] = $account[$i]->accountMainDetail[$j]->accountData[$z]->opening_balance;
+                    }
+                }
+                }else{
+                    for ($k = 0; $k < count($jurnalSebelumnya); $k++) {
                     for ($l = 0; $l < count($jurnalSebelumnya[$k]->JournalDetail); $l++) {
                         // mengecek jurnal detail main id sama dengan id akun 
                         if (($jurnalSebelumnya[$k]->JournalDetail[$l]->accountData->main_id ==  $account[$i]->id) && ($jurnalSebelumnya[$k]->JournalDetail[$l]->accountData->main_detail_id == $account[$i]->accountMainDetail[$j]->id)) {
@@ -164,6 +171,8 @@ class ReportPeriodicController extends Controller
                         }
                     }
                 }
+                }
+                
             }
         }
         // return $data;
