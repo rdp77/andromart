@@ -92,6 +92,8 @@ class ReportIncomeStatementController extends Controller
         $operasional = 0;
         $totalService = 0;
         $totalPenjualan = 0;
+        $DiskonPenjualan = 0;
+        $DiskonService = 0;
 
         $data = [];
         for ($i = 0; $i < count($jurnal); $i++) {
@@ -110,6 +112,12 @@ class ReportIncomeStatementController extends Controller
                 }
                 if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 8) {
                     $Diskon += $jurnal[$i]->JournalDetail[$j]->total;
+                }
+                if ($jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id == 30) {
+                    $DiskonPenjualan += $jurnal[$i]->JournalDetail[$j]->total;
+                }
+                if ($jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id == 31) {
+                    $DiskonService += $jurnal[$i]->JournalDetail[$j]->total;
                 }
                 if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 7 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id == 29) {
                     $HPP += $jurnal[$i]->JournalDetail[$j]->total;
@@ -163,7 +171,7 @@ class ReportIncomeStatementController extends Controller
         }
         $PendapatanKotor = $PendapatanBersih + $Diskon;
         $data = [];
-        return view('pages.backend.report.reportIncomeStatement', compact('data', 'PendapatanKotor', 'PendapatanBersih', 'Diskon', 'HPP', 'listrik', 'atk', 'gaji', 'air', 'sharingProfit', 'sewaRuko', 'hosting', 'thr', 'meeting', 'internet', 'biayaSosial', 'wisata', 'qurban', 'iuranBulanan', 'bebanSewa', 'operasional','totalService','totalPenjualan'));
+        return view('pages.backend.report.reportIncomeStatement', compact('data', 'PendapatanKotor', 'PendapatanBersih', 'Diskon', 'HPP', 'listrik', 'atk', 'gaji', 'air', 'sharingProfit', 'sewaRuko', 'hosting', 'thr', 'meeting', 'internet', 'biayaSosial', 'wisata', 'qurban', 'iuranBulanan', 'bebanSewa', 'operasional','totalService','totalPenjualan','DiskonPenjualan','DiskonService'));
     }
     public function printReportIncomeStatement(Request $req)
     {

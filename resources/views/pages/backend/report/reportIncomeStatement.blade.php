@@ -65,52 +65,49 @@
                                                 <th colspan="3" style="color:black">Pendapatan
                                                 </th>
                                             </tr>
-                                            {{-- <tr>
+                                            
+                                            <tr>
+                                                <td>Service
+                                                    <table>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;">
+                                                                Diskon Service</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                                <td style="text-align: right"><br> <b>Rp.
+                                                    {{ number_format($DiskonService, 0, '.', ',') }}</b>
+                                                <td style="text-align: right">
+                                                    <b>Rp.
+                                                        {{ number_format($totalService, 0, '.', ',') }}</b>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Penjualan
+                                                    <table>
+                                                        <tr>
+                                                            <td
+                                                                style="border:0px solid black !important;padding-left:40px;">
+                                                                Diskon Penjualan</td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                                <td style="text-align: right"><br> <b>Rp.
+                                                    {{ number_format($DiskonPenjualan, 0, '.', ',') }}</b>
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <b>Rp.
+                                                        {{ number_format($totalPenjualan, 0, '.', ',') }}</b>
+                                                </td>
+                                            </tr>
+                                            <tr>
                                                 <td>Pendapatan Kotor</td>
                                                 <td></td>
                                                 <td style="text-align: right"><b>Rp.
                                                     
 
                                                         {{ number_format($totalPenjualan+$totalService, 0, '.', ',') }}</b></td>
-                                            </tr> --}}
-                                            <tr>
-                                                <td>Pendapatan Kotor
-                                                    <table>
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;">
-                                                                Service</td>
-
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;">
-                                                                Penjualan</td>
-                                                        </tr>
-                                                    </table>
-                                                    
-                                                </td>
-                                                <td></td>
-                                                <td style="text-align: right">
-                                                    <b>Rp.
-                                                        {{ number_format($totalService + $totalPenjualan, 0, '.', ',') }}</b>
-                                                    <table style="width: 100%;text-align:left">
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;">
-                                                                Rp.
-                                                                {{ number_format($totalService, 0, '.', ',') }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;">
-                                                                Rp.
-                                                                {{ number_format($totalPenjualan, 0, '.', ',') }}</td>
-
-                                                        </tr>
-                                                    </table>
-                                                    
-                                                </td>
                                             </tr>
                                             {{-- <tr>
                                                 <td style="padding-left: 50px">Total Service</td>
@@ -123,10 +120,10 @@
                                                 <td style="text-align: right"><b>Rp.
                                                     {{ number_format($totalPenjualan, 0, '.', ',') }}</b></td>
                                             <tr> --}}
-                                                <td style="padding-left: 50px">Diskon</td>
+                                                {{-- <td style="padding-left: 50px">Diskon</td>
                                                 <td style="text-align: right"><b>Rp.
                                                         {{ number_format($Diskon, 0, '.', ',') }}</b></td>
-                                                <td></td>
+                                                <td></td> --}}
                                             <tr>
                                                 <td style="padding-left: 50px">HPP</td>
                                                 <td style="text-align: right"><b>Rp.
