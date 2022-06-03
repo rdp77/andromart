@@ -161,10 +161,10 @@
                         <input readonly id="totalPrice" type="text" value="0" class="form-control cleaveNumeral totalPrice"
                             name="totalPrice" onchange="sumTotal()" style="text-align: right">
 
-                        <input id="totalHpp" type="text" class="totalHpp form-control"
+                        <input id="totalHpp" type="text" style="display: none" class="totalHpp form-control"
                         name="totalHpp" style="text-align: right">
 
-                        <input id="totalDiskonService" type="text" value="0" class="totalDiskonService form-control"
+                        <input id="totalDiskonService" type="text" style="display: none" value="0" class="totalDiskonService form-control"
                         name="totalDiskonService" style="text-align: right">
                     </div>
 
