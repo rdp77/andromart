@@ -20,7 +20,7 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="code">{{ __('Kode Faktur') }}<code>*</code></label>
-                            <input id="code" type="text" class="form-control" readonly="" value="{{$code}}" name="code">
+                            <input id="code" type="text" class="form-control code" readonly="" value="{{$code}}" name="code">
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <div class="d-block">
@@ -49,7 +49,7 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="date">{{ __('Tanggal') }}<code>*</code></label>
-                            <input id="date" type="text" class="form-control datepicker validation" data-name="Tanggal Harus Di isi" name="date">
+                            <input id="date" type="text" class="form-control datepicker validation date" data-name="Tanggal Harus Di isi" name="date">
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="type">{{ __('Tipe') }}<code>*</code></label>
