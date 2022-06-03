@@ -27,11 +27,11 @@ function searchData() {
                     $(".dropMonth").empty();
                 } else {
                         $(".dropMonth").html(data.date);
-                        $.each(data.result, function (index, value) {
+                        $.each(data.data, function (index, value) {
                         $(".dropHere").append(
                             "<tr>" +
                                 "<td><b>" +
-                                value.nama +
+                                value.namaAkun +
                                 "</b>" +
                                 "</td>" +
                                 "<td style='text-align: right'><b>" +
@@ -39,7 +39,7 @@ function searchData() {
                                 parseInt(value.total).toLocaleString("en-US") +
                                 "</b>" +
                                 "</b></td>" +
-                                "</tr>"
+                            "</tr>"
                         );
                     });
                 }

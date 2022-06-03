@@ -89,14 +89,20 @@ class ReportCashBalanceController extends Controller
     }
     public function searchReportCashBalance(Request $req)
     {
+        
         $accountData = AccountData::where('main_id',1)->get();
         $jurnal = Journal::with('JournalDetail', 'JournalDetail.AccountData')
-            ->where('date', '<=', date('Y-m-d'))
+            ->where('date', '<=', date('Y-m-t', strtotime($req->dateS)))
+            // ->where('date', '>=', date('Y-m-01', strtotime($req->dateS)))
             ->get();
 
         $data = [];
         for ($i=0; $i <count($accountData) ; $i++) { 
-            if (  $accountData[$i]->opening_date <= date('Y-m-d')) {
+            if (
+                
+                $accountData[$i]->opening_date <= date('Y-m-t', strtotime($req->dateS)) 
+                // && $accountData[$i]->opening_date >= date('Y-m-01', strtotime($req->dateS))
+            ) {
                 $data[$i]['total'] = $accountData[$i]->opening_balance;
             }else{
                 $data[$i]['total'] = 0;
@@ -122,7 +128,7 @@ class ReportCashBalanceController extends Controller
             }
         }
 
-        return Response::json(['status' => 'success', 'date' => $req->dateS]);
+        return Response::json(['status' => 'success', 'date' => $req->dateS,'data'=>$data]);
     }
     public function checkSaldoKas($date)
     {
