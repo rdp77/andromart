@@ -206,5 +206,8 @@
 @endsection
 
 @section('script')
+<script>
+    var token = "{{ csrf_token() }}";
+</script>
 <script src="{{ asset('assets/pages/transaction/servicePaymentScript.js') }}"></script>
 @endsection

@@ -298,7 +298,7 @@ function choseService() {
     $(".dropHereItem").empty();
     $.ajax({
         url: "/transaction/service/service-form-update-status-load-data",
-        data: { id: serviceId },
+        data: { id: serviceId , "_token": token,},
         type: "POST",
         success: function (data) {
             if (data.status == "success") {

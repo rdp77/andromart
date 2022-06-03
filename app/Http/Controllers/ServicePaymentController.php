@@ -379,7 +379,7 @@ class ServicePaymentController extends Controller
                     $descriptionHpp = ['Pengeluaran Harga Pokok Penjualan ' . $kode, 'Biaya Harga Pokok Penjualan' . $kode];
                     $DKHpp = ['D', 'K'];
                     for ($i = 0; $i < count($totalHpp); $i++) {
-                        if ($totalHpp[$i] != '') {
+                        if ($totalHpp[$i] != '0') {
                             $idDetailhpp = DB::table('journal_details')->max('id') + 1;
                             JournalDetail::create([
                                 'id' => $idDetailhpp,
