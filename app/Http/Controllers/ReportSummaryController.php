@@ -71,6 +71,7 @@ class ReportSummaryController extends Controller
         $totalDiskonPenjualan = 0;
         $totalBersihPenjualan = 0;
         $totalHPPPenjualan = 0;
+        $totalHPPService = 0;
         $totalService = 0;
         $totalSparepartService = 0;
         $totalDiskonService = 0;
@@ -110,12 +111,19 @@ class ReportSummaryController extends Controller
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '30') {
                             $totalDiskonPenjualan += $data[$i]->JournalDetail[$j]->total;
                         }
-                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '27') {
-                            $totalBersihPenjualan += $data[$i]->JournalDetail[$j]->total;
+                        
+                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '29' 
+                        && 
+                        str_contains($data[$i]->ref, 'BYR') && str_contains($data[$i]->description, 'HPP')) {
+                            $totalHPPService += $data[$i]->JournalDetail[$j]->total;
                         }
-                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '29') {
+
+                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '29' 
+                        && 
+                        str_contains($data[$i]->ref, 'PJT') && str_contains($data[$i]->description, 'HPP')) {
                             $totalHPPPenjualan += $data[$i]->JournalDetail[$j]->total;
                         }
+
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '12' && $data[$i]->JournalDetail[$j]->debet_kredit == 'D') {
                             $totalPembelian += $data[$i]->JournalDetail[$j]->total;
                             // array_push( $tempPembelian,$data[$i]->JournalDetail[$j]);
@@ -125,7 +133,7 @@ class ReportSummaryController extends Controller
                         }
                     }
                 }else{
-                    if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '6' || $data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '5') {
+                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '6' || $data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '5') {
                             $totalService += $data[$i]->JournalDetail[$j]->total;
                         }
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '31') {
@@ -135,16 +143,21 @@ class ReportSummaryController extends Controller
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '6') {
                             $totalSparepartService += $data[$i]->JournalDetail[$j]->total;
                         }
+                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '29' 
+                        && 
+                        str_contains($data[$i]->ref, 'BYR') && str_contains($data[$i]->description, 'HPP')) {
+                            $totalHPPService += $data[$i]->JournalDetail[$j]->total;
+                        }
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '27') {
                             $totalPenjualan += $data[$i]->JournalDetail[$j]->total;
                         }
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '30') {
                             $totalDiskonPenjualan += $data[$i]->JournalDetail[$j]->total;
                         }
-                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '27') {
-                            $totalBersihPenjualan += $data[$i]->JournalDetail[$j]->total;
-                        }
-                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '29') {
+                        
+                        if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '29' 
+                        && 
+                        str_contains($data[$i]->ref, 'PJT') && str_contains($data[$i]->description, 'HPP')) {
                             $totalHPPPenjualan += $data[$i]->JournalDetail[$j]->total;
                         }
                         if ($data[$i]->JournalDetail[$j]->AccountData->main_detail_id == '12' && $data[$i]->JournalDetail[$j]->debet_kredit == 'D') {
@@ -160,9 +173,9 @@ class ReportSummaryController extends Controller
                 // }S
             }
         }
-        // return $totalSparepartService;
+        // return [$totalHPPService,$totalService,$totalDiskonService];
         // return [$totalBersihPenjualan,$totalHPPPenjualan];
-        return view('pages.backend.report.reportSummary', compact('branch', 'totalPenjualan', 'totalPembelian', 'totalPengeluaran', 'totalDiskonPenjualan', 'totalService', 'totalDiskonService','totalSparepartService','totalBersihPenjualan','totalHPPPenjualan'));
+        return view('pages.backend.report.reportSummary', compact('branch', 'totalPenjualan', 'totalPembelian', 'totalPengeluaran', 'totalDiskonPenjualan', 'totalService', 'totalDiskonService','totalSparepartService','totalHPPPenjualan','totalHPPService'));
     }
     public function searchReportSummary(Request $req)
     {

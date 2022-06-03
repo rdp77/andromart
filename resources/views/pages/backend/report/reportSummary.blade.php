@@ -131,7 +131,7 @@
                                             <h4>Pendapatan Bersih Penjualan</h4>
                                         </div>
                                         <div class="card-body">
-                                            {{ number_format($totalBersihPenjualan - $totalHPPPenjualan, 0, '.', ',') }}
+                                            {{ number_format($totalPenjualan - $totalDiskonPenjualan - $totalHPPPenjualan, 0, '.', ',') }}
                                         </div>
                                     </div>
                                 </div>
@@ -146,7 +146,7 @@
                                             <h4>Pendapatan Bersih Service</h4>
                                         </div>
                                         <div class="card-body">
-                                            {{ number_format($totalService - $totalDiskonService - $totalSparepartService, 0, '.', ',') }}
+                                            {{ number_format($totalService - $totalDiskonService - $totalHPPService, 0, '.', ',') }}
                                         </div>
                                     </div>
                                 </div>
