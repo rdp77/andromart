@@ -8,8 +8,8 @@
 @endsection
 
 @section('content')
-<form method="POST" class="form-data">
-    @csrf
+@csrf
+<form class="form-data">
     <div class="row">
         <div class="col-lg-8">
             <div class="card">
