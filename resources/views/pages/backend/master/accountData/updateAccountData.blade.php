@@ -41,9 +41,13 @@
                     <label for="name" class="control-label">{{ __('Nama') }}</label><code>*</code>
                     <input id="name" type="text" class="form-control" name="name" value="{{ $accountData->name }}" required>
                 </div>
-                <div class="form-group col-md-6 col-xs-12">
+                <div class="form-group col-md-3 col-xs-12">
                     <label for="email" class="control-label">{{ __('Opening Balance') }}</label><code>*</code>
                     <input id="opening_balance" type="number" class="form-control opening_balance" name="opening_balance" min="0" value="{{ $accountData->opening_balance }}" required>
+                </div>
+                <div class="form-group col-md-3 col-xs-12">
+                    <label for="email" class="control-label">{{ __('Opening Date') }}</label><code>*</code>
+                    <input id="opening_date" type="text" class="form-control opening_date datepicker" name="opening_date" value="{{\Carbon\Carbon::parse($accountData->opening_date)->locale('id')->isoFormat('D MMM OY')}}" required>
                 </div>
             </div>
             <div class="row">

@@ -29,8 +29,7 @@
                                 <div class="row">
                                     <div class="form-group col-sm-11  mb-1">
                                         <label for="inputPassword2" class="sr-only">Bulan</label>
-                                        <input type="text" class="form-control dtpickermnth" value="{{ date('F Y') }}"
-                                            name="dtpickermnth" id="dtpickermnth" />
+                                        <input type="text" class="form-control dtpickermnth" value="{{ date('F Y') }}"name="dtpickermnth" id="dtpickermnth"/>
                                     </div>
                                     <button class="btn btn-primary tombol" onclick="searchData()" type="button"
                                         style="margin-bottom: 6px"><i class="fas fa-search"></i> Cari</button>
@@ -62,8 +61,10 @@
             <div class="section-body">
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="section-title">Laporan Kas Saat ini <b>{{ date('d F Y') }}</b> </h2>
+                        <h2 class="section-title">Laporan Kas Saat ini <b >{{ date('d F Y') }}</b> </h2>
                         <div class="card">
+
+
                             <div class="card-body">
                                 <br>
                                 <div class="row">
@@ -75,22 +76,12 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @for ($i = 0; $i < count($data); $i++)
+                                            @foreach ($dtFix as $el)
                                                 <tr>
-                                                    <th>
-                                                        @php
-                                                            // var_dump($data[$i]);
-                                                            echo $data[$i]['namaAkun'];
-                                                            // var_dump($data[$i]['akun']);
-                                                        @endphp
-                                                    </th>
-                                                    {{-- @for ($j = 0; $j < count($data[$i]['jurnal']); $j++) --}}
-                                                    <th style="text-align: right">Rp.
-                                                        {{ number_format($data[$i]['total'], 0, ',', ',') }}
-                                                        {{-- @endfor --}}
-                                                    </th>
+                                                    <th >{{$el['nama']}}</th>
+                                                    <th style="text-align: right">Rp. {{number_format($el['total'],0,',',',')}}</th>
                                                 </tr>
-                                            @endfor
+                                            @endforeach
 
                                         </tbody>
                                     </table>

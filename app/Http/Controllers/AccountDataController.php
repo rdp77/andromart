@@ -147,6 +147,8 @@ class AccountDataController extends Controller
         $code = $AccountMain->code . $AccountMainDetail->code . $Area->code . $Branch->code;
         $checkCode = AccountData::where('code', $code)->get();
         // return $code;
+        $date = $this->DashboardController->changeMonthIdToEn($req->opening_date);
+
         if (count($checkCode) != 0) {
             if($AccountData->code == $code){
                 AccountData::where('id', $id)
@@ -161,7 +163,7 @@ class AccountDataController extends Controller
                     'main_id' => $AccountMainDetail->main_id,
                     'main_detail_id' => $req->account_detail_id,
                     'opening_balance' => $req->opening_balance,
-                    // 'opening_date' => date('Y-m-d'),
+                    'opening_date' => $date,
                     'updated_by' => Auth::user()->name,
                 ]);
 
