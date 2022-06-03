@@ -448,7 +448,7 @@ function jurnal(params) {
             if (data.status == "success") {
                 $(".dropHereJournals").empty();
                 $(".dropHereJournalsHpp").empty();
-
+                // alert('sd');
                 $.each(data.jurnal[0].journal_detail, function (index, value) {
                     if (value.debet_kredit == "K") {
                         var dk =

@@ -35,7 +35,7 @@
         </table>
     </div>
 </div>
-<div class="modal  fade" tabindex="-1" role="dialog" id="exampleModal" data-backdrop="false">
+<div class="modal  fade exampleModal" tabindex="-1" role="dialog" id="exampleModal" data-backdrop="false">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
