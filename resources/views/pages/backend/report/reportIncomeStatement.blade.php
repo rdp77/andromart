@@ -107,7 +107,7 @@
                                                 <td style="text-align: right"><b>Rp.
                                                     
 
-                                                        {{ number_format($totalPenjualan+$totalService, 0, '.', ',') }}</b></td>
+                                                        {{ number_format($totalPenjualan+$totalService-$DiskonPenjualan-$DiskonService, 0, '.', ',') }}</b></td>
                                             </tr>
                                             {{-- <tr>
                                                 <td style="padding-left: 50px">Total Service</td>
