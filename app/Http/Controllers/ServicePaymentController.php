@@ -194,7 +194,7 @@ class ServicePaymentController extends Controller
 
         DB::beginTransaction();
         try {
-            // return $req->all();
+            return $req->all();
             $dateConvert = $this->DashboardController->changeMonthIdToEn($req->date);
             $id = DB::table('service_payment')->max('id') + 1;
             $getEmployee = Employee::where('user_id', Auth::user()->id)->first();
@@ -375,11 +375,11 @@ class ServicePaymentController extends Controller
                     $accountCodeHpp = [$accountBiayaHpp->id, $accountPersediaan->id];
                     // return $accountCodeHpp;
                     $totalHpp = [str_replace(',', '', $req->totalHpp), str_replace(',', '', $req->totalHpp)];
-                    return $totalHpp;
+                    // return $totalHpp;
                     $descriptionHpp = ['Pengeluaran Harga Pokok Penjualan ' . $kode, 'Biaya Harga Pokok Penjualan' . $kode];
                     $DKHpp = ['D', 'K'];
                     for ($i = 0; $i < count($totalHpp); $i++) {
-                        if ($totalHpp[$i] != '0') {
+                        if ($totalHpp[$i] != '') {
                             $idDetailhpp = DB::table('journal_details')->max('id') + 1;
                             JournalDetail::create([
                                 'id' => $idDetailhpp,
