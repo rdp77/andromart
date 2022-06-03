@@ -69,17 +69,24 @@
                                                 <td>Pendapatan Kotor</td>
                                                 <td></td>
                                                 <td style="text-align: right"><b>Rp.
-                                                        {{ number_format($PendapatanKotor, 0, '.', ',') }}</b></td>
+                                                    
+
+                                                        {{ number_format($totalPenjualan+$totalService, 0, '.', ',') }}</b></td>
                                             </tr>
+                                            <tr>
+                                                <td style="padding-left: 50px">Total Service</td>
+                                                <td></td> 
+                                                <td style="text-align: right"><b>Rp.
+                                                    {{ number_format($totalService, 0, '.', ',') }}</b></td>
+                                            <tr>
+                                                <td style="padding-left: 50px">Total Penjualan</td>
+                                                <td></td> 
+                                                <td style="text-align: right"><b>Rp.
+                                                    {{ number_format($totalPenjualan, 0, '.', ',') }}</b></td>
                                             <tr>
                                                 <td style="padding-left: 50px">Diskon</td>
                                                 <td style="text-align: right"><b>Rp.
                                                         {{ number_format($Diskon, 0, '.', ',') }}</b></td>
-                                                <td></td>
-                                            <tr>
-                                                <td style="padding-left: 50px">Pendapatan Bersih</td>
-                                                <td style="text-align: right"><b>Rp.
-                                                        {{ number_format($PendapatanBersih, 0, '.', ',') }}</b></td>
                                                 <td></td>
                                             <tr>
                                                 <td style="padding-left: 50px">HPP</td>
@@ -92,7 +99,7 @@
                                                 </th>
                                                 <td style="text-align: right;background-color: #ffffdc"></td>
                                                 <td style="text-align: right;background-color: #ffffdc;color:black"><b>Rp.
-                                                        {{ number_format($PendapatanBersih - $HPP, 0, '.', ',') }}</b>
+                                                        {{ number_format($totalPenjualan+$totalService-$Diskon-$HPP, 0, '.', ',') }}</b>
                                                 </td>
                                             </tr>
                                             @php
