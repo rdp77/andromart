@@ -1,6 +1,6 @@
 "use strict";
 
-var table = $(".table").DataTable({
+var table = $("#table").DataTable({
     pageLength: 10,
     processing: true,
     serverSide: true,
@@ -131,7 +131,7 @@ function save() {
         asANumber = +totalPayment;
     var totalPriceHidden = $(".totalPriceHidden").val();
     var type = $(".type").val();
-    var checkDp = $("#checkDpData").val();
+    var checkDp = $(".checkDpData").val();
 
     if (parseInt(totalPayment) > parseInt(totalPriceHidden)) {
         return alertNotification("Pembayaran Lebih Dari Sisa Pembayaran");
@@ -298,7 +298,7 @@ function choseService() {
     $(".dropHereItem").empty();
     $.ajax({
         url: "/transaction/service/service-form-update-status-load-data",
-        data: { id: serviceId , "_token": token,},
+        data: { id: serviceId},
         type: "POST",
         success: function (data) {
             if (data.status == "success") {
@@ -501,7 +501,7 @@ function jurnal(params) {
                 }
 
             }
-            $("#exampleModal").modal("show");
+            $(".exampleModal").modal("show");
         },
     });
 }
