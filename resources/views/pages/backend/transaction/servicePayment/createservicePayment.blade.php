@@ -112,37 +112,37 @@
                     <h4>Harga</h4>
 
                 </div>
-                <input id="totalPriceHidden" type="hidden" value="0" class="form-control cleaveNumeral"
+                <input id="totalPriceHidden" type="hidden" value="0" class="form-control cleaveNumeral totalPriceHidden"
                 name="totalPriceHidden" style="text-align: right">
 
-                <input id="checkDpData" type="hidden" class="form-control"
+                <input id="checkDpData" type="hidden" class="form-control checkDpData"
                 name="checkDpData" style="text-align: right">
 
                 <div class="card-body">
                     <div class="form-group">
                         <label for="totalService">{{ __('Jasa') }}<code>*</code></label>
                         <input readonly id="totalService" onchange="sumTotal()" type="text" value="0"
-                            class="form-control cleaveNumeral" name="totalService" style="text-align: right">
+                            class="form-control cleaveNumeral totalService" name="totalService" style="text-align: right">
                     </div>
                     <div class="form-group">
                         <label for="totalSparePart">{{ __('Spare Part') }}<code>*</code></label>
                         <input readonly id="totalSparePart" onchange="sumTotal()" type="text" value="0"
-                            class="form-control cleaveNumeral" name="totalSparePart" style="text-align: right">
+                            class="form-control cleaveNumeral totalSparePart" name="totalSparePart" style="text-align: right">
                     </div>
                     <div class="form-group" style="display: none">
                         <label for="totalLoss" >{{ __('Total Loss') }}<code>*</code></label>
                         <input readonly id="totalLoss" onchange="sumTotal()" type="text" value="0"
-                            class="form-control cleaveNumeral" name="totalLoss" style="text-align: right">
+                            class="form-control cleaveNumeral totalLoss" name="totalLoss" style="text-align: right">
                     </div>
                     <div class="form-group DownPaymentHidden"  style="display: none">
                         <label for="totalDownPayment">{{ __('Down Payment') }}<code>*</code></label>
                         <input readonly id="totalDownPayment" onchange="sumTotal()" type="text" value="0"
-                            class="form-control cleaveNumeral" name="totalDownPayment" style="text-align: right">
+                            class="form-control cleaveNumeral totalDownPayment" name="totalDownPayment" style="text-align: right">
                     </div>
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="totalDiscountPercent">{{ __('Diskon %') }}<code>*</code></label>
-                            <input readonly id="totalDiscountPercent" type="text" value="0" class="form-control cleaveNumeral"
+                            <input readonly id="totalDiscountPercent" type="text" value="0" class="form-control totalDiscountPercent cleaveNumeral"
                                 name="totalDiscountPercent" onkeyup="sumTotal()" style="text-align: right">
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
@@ -153,17 +153,18 @@
                     </div>
                     <div class="form-group">
                         <label for="totalPayment">{{ __('Total Bayar') }}<code>*</code></label>
-                        <input id="totalPayment" type="text" value="0" class="form-control cleaveNumeral"
+                        <input id="totalPayment" type="text" value="0" class="form-control cleaveNumeral totalPayment"
                             name="totalPayment" style="text-align: right" onkeyup="sumTotal()">
                     </div>
                     <div class="form-group">
                         <label for="totalPrice">{{ __('Total Harga') }}<code>*</code></label>
-                        <input readonly id="totalPrice" type="text" value="0" class="form-control cleaveNumeral"
+                        <input readonly id="totalPrice" type="text" value="0" class="form-control cleaveNumeral totalPrice"
                             name="totalPrice" onchange="sumTotal()" style="text-align: right">
 
-                            <input readonly id="totalHpp" type="hidden" class="form-control cleaveNumeral"
+                        <input id="totalHpp" type="text" class="totalHpp form-control"
                         name="totalHpp" style="text-align: right">
-                            <input readonly id="totalDiskonService" type="hidden" value="0" class="form-control cleaveNumeral"
+
+                        <input id="totalDiskonService" type="text" value="0" class="totalDiskonService form-control"
                         name="totalDiskonService" style="text-align: right">
                     </div>
 

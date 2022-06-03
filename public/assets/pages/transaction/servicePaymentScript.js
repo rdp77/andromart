@@ -304,44 +304,44 @@ function choseService() {
             if (data.status == "success") {
                 if (data.message == "empty") {
                     $(".DownPaymentHidden").css("display", "none");
-                    $("#totalHpp").val(0);
-                    $("#totalDiskonService").val(0);
-                    $("#totalService").val(0);
-                    $("#totalSparePart").val(0);
-                    $("#totalPriceHidden").val(0);
-                    $("#totalDiscountPercent").val(0);
-                    $("#totalDiscountValue").val(0);
-                    $("#checkDpData").val("");
+                    $(".totalHpp").val(0);
+                    $(".totalDiskonService").val(0);
+                    $(".totalService").val(0);
+                    $(".totalSparePart").val(0);
+                    $(".totalPriceHidden").val(0);
+                    $(".totalDiscountPercent").val(0);
+                    $(".totalDiscountValue").val(0);
+                    $(".checkDpData").val("");
                     $(".dropHereItem").empty();
                 } else {
-                    $("#totalHpp").val(data.result.total_hpp);
-                    $("#totalDiskonService").val(data.result.discount_service);
+                    $(".totalHpp").val(data.result.total_hpp);
+                    $(".totalDiskonService").val(data.result.discount_service);
 
-                    $("#totalService").val(
+                    $(".totalService").val(
                         parseInt(data.result.total_service).toLocaleString(
                             "en-US"
                         )
                     );
-                    $("#totalSparePart").val(
+                    $(".totalSparePart").val(
                         parseInt(data.result.total_part).toLocaleString("en-US")
                     );
-                    $("#totalDownPayment").val(
+                    $(".totalDownPayment").val(
                         parseInt(data.result.total_downpayment).toLocaleString(
                             "en-US"
                         )
                     );
-                    $("#totalDiscountPercent").val(
+                    $(".totalDiscountPercent").val(
                         parseFloat(data.result.discount_percent).toLocaleString(
                             "en-US"
                         )
                     );
-                    $("#totalDiscountValue").val(
+                    $(".totalDiscountValue").val(
                         parseInt(data.result.discount_price).toLocaleString(
                             "en-US"
                         )
                     );
-                    $("#totalPriceHidden").val(data.result.total_price);
-                    $("#checkDpData").val(data.result.total_downpayment);
+                    $(".totalPriceHidden").val(data.result.total_price);
+                    $(".checkDpData").val(data.result.total_downpayment);
                     if (data.result.downpayment_date != null) {
                         $(".DownPaymentHidden").css("display", "block");
                     } else {
