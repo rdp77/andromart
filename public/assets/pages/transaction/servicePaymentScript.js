@@ -1,6 +1,6 @@
 "use strict";
 
-var table = $("#table").DataTable({
+var table = $(".table").DataTable({
     pageLength: 10,
     processing: true,
     serverSide: true,
@@ -125,11 +125,11 @@ function alertNotification(params) {
 }
 function save() {
     // alert('asd');
-    var totalPrice = $("#totalPrice").val().replace(/,/g, ""),
+    var totalPrice = $(".totalPrice").val().replace(/,/g, ""),
         asANumber = +totalPrice;
-    var totalPayment = $("#totalPayment").val().replace(/,/g, ""),
+    var totalPayment = $(".totalPayment").val().replace(/,/g, ""),
         asANumber = +totalPayment;
-    var totalPriceHidden = $("#totalPriceHidden").val();
+    var totalPriceHidden = $(".totalPriceHidden").val();
     var type = $(".type").val();
     var checkDp = $("#checkDpData").val();
 
@@ -240,40 +240,40 @@ function save() {
 }
 
 function sumTotal() {
-    if (isNaN(parseInt($("#totalSparePart").val()))) {
+    if (isNaN(parseInt($(".totalSparePart").val()))) {
         var totalSparePart = 0;
     } else {
-        var totalSparePart = $("#totalSparePart").val().replace(/,/g, ""),
+        var totalSparePart = $(".totalSparePart").val().replace(/,/g, ""),
             asANumber = +totalSparePart;
     }
 
-    if (isNaN(parseInt($("#totalService").val()))) {
+    if (isNaN(parseInt($(".totalService").val()))) {
         var totalService = 0;
     } else {
-        var totalService = $("#totalService").val().replace(/,/g, ""),
+        var totalService = $(".totalService").val().replace(/,/g, ""),
             asANumber = +totalService;
     }
 
-    if (isNaN(parseInt($("#totalPayment").val()))) {
+    if (isNaN(parseInt($(".totalPayment").val()))) {
         var totalPayment = 0;
     } else {
-        var totalPayment = $("#totalPayment").val().replace(/,/g, ""),
+        var totalPayment = $(".totalPayment").val().replace(/,/g, ""),
             asANumber = +totalPayment;
     }
 
-    if (isNaN(parseInt($("#totalDiscountValue").val()))) {
+    if (isNaN(parseInt($(".totalDiscountValue").val()))) {
         var totalDiscountValue = 0;
     } else {
-        var totalDiscountValue = $("#totalDiscountValue")
+        var totalDiscountValue = $(".totalDiscountValue")
                 .val()
                 .replace(/,/g, ""),
             asANumber = +totalDiscountValue;
     }
 
-    if (isNaN(parseInt($("#totalDownPayment").val()))) {
+    if (isNaN(parseInt($(".totalDownPayment").val()))) {
         var totalDownPayment = 0;
     } else {
-        var totalDownPayment = $("#totalDownPayment").val().replace(/,/g, ""),
+        var totalDownPayment = $(".totalDownPayment").val().replace(/,/g, ""),
             asANumber = +totalDownPayment;
     }
 
@@ -286,9 +286,9 @@ function sumTotal() {
     // changeTypePay();
 
     if (sumTotal < 0) {
-        $("#totalPrice").val(parseInt(0).toLocaleString("en-US"));
+        $(".totalPrice").val(parseInt(0).toLocaleString("en-US"));
     } else {
-        $("#totalPrice").val(parseInt(sumTotal).toLocaleString("en-US"));
+        $(".totalPrice").val(parseInt(sumTotal).toLocaleString("en-US"));
     }
 }
 
@@ -509,19 +509,19 @@ function jurnal(params) {
 function changeTypePay() {
     var type = $(".type").find(":selected").val();
     if (type == "Lunas") {
-        $("#totalPayment").val(
-            parseInt($("#totalPriceHidden").val()).toLocaleString("en-US")
+        $(".totalPayment").val(
+            parseInt($(".totalPriceHidden").val()).toLocaleString("en-US")
         );
-        $("#totalPrice").val(0);
+        $(".totalPrice").val(0);
     } else if (type == "DownPayment") {
-        $("#totalPayment").val(0);
-        $("#totalPrice").val(
-            parseInt($("#totalPriceHidden").val()).toLocaleString("en-US")
+        $(".totalPayment").val(0);
+        $(".totalPrice").val(
+            parseInt($(".totalPriceHidden").val()).toLocaleString("en-US")
         );
     } else {
-        $("#totalPayment").val(0);
-        $("#totalPrice").val(
-            parseInt($("#totalPriceHidden").val()).toLocaleString("en-US")
+        $(".totalPayment").val(0);
+        $(".totalPrice").val(
+            parseInt($(".totalPriceHidden").val()).toLocaleString("en-US")
         );
     }
 }
