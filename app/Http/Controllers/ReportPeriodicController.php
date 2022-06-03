@@ -111,16 +111,16 @@ class ReportPeriodicController extends Controller
                     }
                 }
                 for ($z=0; $z <count($account[$i]->accountMainDetail[$j]->accountData) ; $z++) {
-                    if( $account[$i]->id == $account[$i]->accountMainDetail[$j]->accountData[$z]->main_detail_id){
+                    if( $account[$i]->id == $account[$i]->accountMainDetail[$j]->   accountData[$z]->main_detail_id){
                         $data[$i]['main_detail'][$j]['branch'][$z]['saldoAwal'] = $account[$i]->accountMainDetail[$j]->accountData[$z]->opening_balance;
                     }
                 }
                 if (count($jurnalSebelumnya) == 0) {
                     for ($z=0; $z <count($account[$i]->accountMainDetail[$j]->accountData) ; $z++) {
-                    if( $account[$i]->id == $account[$i]->accountMainDetail[$j]->accountData[$z]->main_detail_id){
-                        $data[$i]['main_detail'][$j]['branch'][$z]['SaldoAkhirJurnalFix'] = $account[$i]->accountMainDetail[$j]->accountData[$z]->opening_balance;
+                        if( $account[$i]->id == $account[$i]->accountMainDetail[$j]->accountData[$z]->main_detail_id){
+                            $data[$i]['main_detail'][$j]['branch'][$z]['SaldoAkhirJurnalFix'] = $account[$i]->accountMainDetail[$j]->accountData[$z]->opening_balance;
+                        }
                     }
-                }
                 }else{
                     for ($k = 0; $k < count($jurnalSebelumnya); $k++) {
                     for ($l = 0; $l < count($jurnalSebelumnya[$k]->JournalDetail); $l++) {

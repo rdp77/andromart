@@ -375,10 +375,11 @@ class ServicePaymentController extends Controller
                     $accountCodeHpp = [$accountBiayaHpp->id, $accountPersediaan->id];
                     // return $accountCodeHpp;
                     $totalHpp = [str_replace(',', '', $req->totalHpp), str_replace(',', '', $req->totalHpp)];
+                    return $totalHpp;
                     $descriptionHpp = ['Pengeluaran Harga Pokok Penjualan ' . $kode, 'Biaya Harga Pokok Penjualan' . $kode];
                     $DKHpp = ['D', 'K'];
-                    for ($i = 0; $i < count($accountCodeHpp); $i++) {
-                        if ($totalHpp[$i] != 0) {
+                    for ($i = 0; $i < count($totalHpp); $i++) {
+                        if ($totalHpp[$i] != '0') {
                             $idDetailhpp = DB::table('journal_details')->max('id') + 1;
                             JournalDetail::create([
                                 'id' => $idDetailhpp,
