@@ -34,6 +34,10 @@ class StockOpnameController extends Controller
         $category = Category::get();
         $branchUser = Auth::user()->employee->branch_id;
         $stockCategory = Category::with('brand', 'brand.item', 'brand.item.stocks')->get();
+        $activa = Stock::with('item')
+        ->leftJoin('items', 'items.id', 'stocks.item_id')
+        ->select('items.buy as hargabeli', 'stocks.stock as stock')
+        ->get();
 
         $item = Stock::with('item', 'item.brand', 'item.brand.category')
         ->leftJoin('units', 'units.id', 'stocks.unit_id')
@@ -45,7 +49,7 @@ class StockOpnameController extends Controller
         ->select('brands.name as merk', 'items.name as itemName', 'categories.code as category', 'units.code as satuan', 'items.buy as hargabeli', 'stocks.stock as stock')
         ->get();
 
-        return view('pages.backend.warehouse.stockOpname.indexStockOpname', compact('stockCategory', 'category','item'));
+        return view('pages.backend.warehouse.stockOpname.indexStockOpname', compact('activa', 'stockCategory', 'category','item'));
     }
 
     public function dataLoad(Request $req)
@@ -72,8 +76,16 @@ class StockOpnameController extends Controller
     public function printStockOpname(Request $req)
     {
         if ($req->category < '1') {
+            $activa = Stock::with('item')
+            ->leftJoin('items', 'items.id', 'stocks.item_id')
+            ->select('items.buy as hargabeli', 'stocks.stock as stock')
+            ->get();
             $category = Category::with('brand', 'brand.item', 'brand.item.stocks')->get();
         } else {
+            $activa = Stock::with('item')
+            ->leftJoin('items', 'items.id', 'stocks.item_id')
+            ->select('items.buy as hargabeli', 'stocks.stock as stock')
+            ->get();
             $category = Category::with('brand', 'brand.item', 'brand.item.stocks')->where('id', $req->category)->get();            
         }
         $branchUser = Auth::user()->employee->branch_id;
@@ -84,11 +96,12 @@ class StockOpnameController extends Controller
         ->leftJoin('categories', 'categories.id', 'brands.category_id')
         ->where('branch_id', $branchUser)
         ->where('item_id', '!=', 1)
+        ->where('stock', '>', 0)
         ->select('brands.name as merk', 'items.name as itemName', 'categories.code as category', 'units.code as satuan', 'items.buy as hargabeli', 'stocks.stock as stock')
         ->get();
         $itung = count($item);
         
-        return view('pages.backend.warehouse.stockOpname.printStockOpname', compact('item', 'category', 'itung'));
+        return view('pages.backend.warehouse.stockOpname.printStockOpname', compact('activa', 'item', 'category', 'itung'));
     }
 
     public function printDataLoad(Request $req)

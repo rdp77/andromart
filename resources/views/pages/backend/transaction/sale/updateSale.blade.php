@@ -300,9 +300,17 @@
                             </td>
                             <td>
                                 <input type="number" class="form-control" name="profitSharingBuyerOld[]"
+                                @if ($el->sharing_profit_buyer > 0)
                                     value="{{($el->sharing_profit_buyer/($el->sharing_profit_store+$el->sharing_profit_sales+$el->sharing_profit_buyer)*100)}}">
+                                @else
+                                    value="0">
+                                @endif
                                 <input type="number" class="form-control" name="profitSharingSalesOld[]"
-                                    value="{{($el->sharing_profit_sales/($el->sharing_profit_store+$el->sharing_profit_sales+$el->sharing_profit_buyer)*100)}}">
+                                @if ($el->sharing_profit_sales > 0)
+                                value="{{($el->sharing_profit_sales/($el->sharing_profit_store+$el->sharing_profit_sales+$el->sharing_profit_buyer)*100)}}">
+                                @else
+                                    value="0">
+                                @endif
                             </td>
                             <td>
                                 <input hidden type="text"

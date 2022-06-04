@@ -1410,15 +1410,9 @@ class ServiceController extends Controller
     public function destroy(Request $req, $id)
     {
         $checkRoles = $this->DashboardController->cekHakAkses(1, 'delete');
-
         if ($checkRoles == 'akses ditolak') {
             return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
         }
-        // $this->DashboardController->createLog(
-        //     $req->header('user-agent'),
-        //     $req->ip(),
-        //     'Menghapus Data Kredit'
-        // );
         DB::beginTransaction();
         try {
             $getEmployee = Employee::where('user_id', Auth::user()->id)->first();
@@ -1432,9 +1426,9 @@ class ServiceController extends Controller
                         ->get();
 
                     if ($checkDataDeleted[$i]->type == 'SparePart') {
-                        $desc[$i] = '(Update Service) Pengembalian Barang Pada Service ' . $req->code;
+                        $desc[$i] = '(Delete Service) Pengembalian Barang Pada Service ' . $req->code;
                     } else {
-                        $desc[$i] = '(Update Service) Pengembalian Barang Loss Pada Service ' . $req->code;
+                        $desc[$i] = '(Delete Service) Pengembalian Barang Loss Pada Service ' . $req->code;
                     }
                     // return $desc;
                     Stock::where('item_id', $checkDataDeleted[$i]->item_id)
@@ -1472,15 +1466,6 @@ class ServiceController extends Controller
             DB::table('service_equipment')
                 ->where('service_id', $id)
                 ->delete();
-            // Stock::where('item_id',$checkDataOld[$i]->item_id)
-            //                                     ->where('branch_id',$getEmployee->branch_id)->update([
-            //                                         'stock'      =>$checkStockExistingOlder[$i][0]->stock+$checkDataOld[$i]->qty,
-            //                                     ]);
-
-            // Service::where('id',$id)->destroy($id);
-            // ServiceDetail::where('service_id',$id)->destroy($id);
-            // ServicePayment::where('service_id',$id)->destroy($id);
-            // ServiceMutation::where('service_id',$id)->destroy($id);
             DB::commit();
             return Response::json(['status' => 'success', 'message' => 'Data Tersimpan']);
         } catch (\Throwable $th) {
