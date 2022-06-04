@@ -680,7 +680,7 @@ function paymentMethodChange() {
     $(".account").empty();
     $.each($(".accountDataHidden"), function () {
         testStr = $(this).data("maindetailname");
-        console.log(testStr);
+        // console.log(testStr);
     
             if (value == "Cash") {
                 if (
