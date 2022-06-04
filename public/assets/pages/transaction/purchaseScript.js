@@ -567,30 +567,62 @@ function save() {
 }
 
 function paymentMethodChange() {
-    var branch = $('.branchId').val();
-    var value = $('.PaymentMethod').val();
+    var branch = $(".branchId").val();
+    var value = $(".PaymentMethod").val();
     var dataItems = [];
-    $('.account').empty();
-    $.each($('.accountDataHidden'), function(){
-        if (value == 'Cash') {
-            if ($(this).data('maindetailname') == 'Kas Kecil' && branch == $(this).data('branch')) {
-                dataItems += '<option value="'+this.value+'">'+$(this).data('code') +' - '+ $(this).data('name')+'</option>';
-            }else if($(this).data('maindetailname') == 'Kas Besar' && branch == $(this).data('branch')){
-                dataItems += '<option value="'+this.value+'">'+$(this).data('code') +' - '+ $(this).data('name')+'</option>';
-
-            }
-        }else if(value == 'Debit' || value == 'Transfer'){
-            if ($(this).data('maindetailname') == 'Kas Bank' && branch == $(this).data('branch')) {
-                dataItems += '<option value="'+this.value+'">'+$(this).data('code') +' - '+ $(this).data('name')+'</option>';
-            }
-        }else{
-
-        }
-    });
+    var testStr;
+    $(".account").empty();
+    $.each($(".accountDataHidden"), function () {
+        testStr = $(this).data("maindetailname");
+        // console.log(testStr);
     
-    $('.account').append('<option value="">- Select -</option>');
+            if (value == "Cash") {
+                if (
+                    $(this).data("maindetailname") == "Kas Kecil" &&
+                    branch == $(this).data("branch")
+                ) {
+                    dataItems +=
+                        '<option value="' +
+                        this.value +
+                        '">' +
+                        $(this).data("code") +
+                        " - " +
+                        $(this).data("name") +
+                        "</option>";
+                } else if (
+                    $(this).data("maindetailname") == "Kas Besar" &&
+                    branch == $(this).data("branch")
+                ) {
+                    dataItems +=
+                        '<option value="' +
+                        this.value +
+                        '">' +
+                        $(this).data("code") +
+                        " - " +
+                        $(this).data("name") +
+                        "</option>";
+                }
+            } else if (value == "Debit" || value == "Transfer") {
+                if (
+                    testStr.includes('Kas Bank') &&
+                    branch == $(this).data("branch")
+                ) {
+                    dataItems +=
+                        '<option value="' +
+                        this.value +
+                        '">' +
+                        $(this).data("code") +
+                        " - " +
+                        $(this).data("name") +
+                        "</option>";
+                }
+            } else {
+            }
+    });
+
+    $(".account").append('<option value="">- Select -</option>');
     // if (value == 'Cash') {
-    $('.account').append(dataItems);
+    $(".account").append(dataItems);
     // }
     // alert($('.PaymentMethod').val());
 }
