@@ -387,7 +387,11 @@ function paymentMethodChange() {
     var value = $(".PaymentMethod").val();
     var dataItems = [];
     $(".account").empty();
+    var testStr;
     $.each($(".accountDataHidden"), function () {
+        testStr = $(this).data("maindetailname");
+    // console.log(testStr);
+
         if (value == "Cash") {
             if (
                 $(this).data("maindetailname") == "Kas Kecil" &&
@@ -416,7 +420,7 @@ function paymentMethodChange() {
             }
         } else if (value == "Debit" || value == "Transfer") {
             if (
-                contains($(this).data("maindetailname"), "Kas Bank") &&
+                testStr.includes('Kas Bank') &&
                 branch == $(this).data("branch")
             ) {
                 dataItems +=
