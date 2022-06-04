@@ -58,16 +58,20 @@ class SaleController extends Controller
                             data-toggle="dropdown">
                             <span class="sr-only">Toggle Dropdown</span>
                         </button>';
-                    $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('sale.edit', $row->id) . '" ><i class="fas fa-pencil-alt"></i> Edit</a>';
-                    $actionBtn .= '<a class="dropdown-item" href="' . route('sale.show', $row->id) . '" ><i class="fas fa-list-alt"></i> Detail</a>';
+                    $actionBtn .= '<div class="dropdown-menu">';
                     $actionBtn .= '<a class="dropdown-item" href="' . route('sale.printSale', $row->id) . '" target="output"><i class="fas fa-print"></i> Nota Besar</a>';
                     $actionBtn .= '<a class="dropdown-item" href="' . route('sale.printSmallSale', $row->id) . '" target="output"><i class="fas fa-print"></i> Nota Kecil</a>';
                     $actionBtn .= '<a onclick="jurnal(' . "'" . $row->code . "'" . ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
+                    $actionBtn .= '<a class="dropdown-item" href="' . route('sale.edit', $row->id) . '" ><i class="fas fa-pencil-alt"></i> Edit</a>';
+                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-trash"></i> Hapus</a>';
                     // $actionBtn .= '<a onclick="" class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
-                    // $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
+                })
+                ->addColumn('dataCode', function($row) {
+                    $htmlAdd = '<td><a href="' . route('sale.show', $row->id) . '">' . $row->code . '</a></td>';
+
+                    return $htmlAdd;
                 })
                 ->addColumn('dataDateOperator', function ($row) {
                     $htmlAdd = '<table>';
@@ -135,7 +139,7 @@ class SaleController extends Controller
                     return $htmlAdd;
                 })
 
-                ->rawColumns(['action', 'dataItem', 'dataCustomer', 'finance', 'dataDateOperator'])
+                ->rawColumns(['action', 'dataCode', 'dataItem', 'dataCustomer', 'finance', 'dataDateOperator'])
                 ->make(true);
         }
         return view('pages.backend.transaction.sale.indexSale');
@@ -309,13 +313,13 @@ class SaleController extends Controller
                     } else {
                         return Response::json([
                             'status' => 'fail',
-                            'message' => 'Item Tidak Ditemukan Di STOCK dengan cabang .....'
+                            'message' => 'Item Tidak Ditemukan Di STOCK '
                         ]);
                     }
                 }
             }
 
-            // penjurnalan
+            // Jurnal
             $idJournal = DB::table('journals')->max('id') + 1;
             Journal::create([
                 'id' => $idJournal,
@@ -346,16 +350,14 @@ class SaleController extends Controller
                 $accountPembayaran  = AccountData::where('id', $req->account)
                     ->first();
 
-
-
                 if (str_replace(",", '', $req->totalDiscountValue) == 0) {
                     $accountCode = [
                         $accountPembayaran->id,
                         $accountData->id,
                     ];
                     $description = [
-                        'Kas Pendapatan Penjualan' .$code,
-                        'Pendapatan Penjualan' .$code,
+                        'Kas Pendapatan Penjualan ' .$code,
+                        'Pendapatan Penjualan ' .$code,
                     ];
                     $totalBayar = [
                         str_replace(",", '', $req->totalPrice),
@@ -377,9 +379,9 @@ class SaleController extends Controller
                         str_replace(",", '', $req->totalSparePart),
                     ];
                     $description = [
-                        'Kas Pendapatan Penjualan' .$code,
-                        'Diskon Penjualan' .$code,
-                        'Pendapatan Penjualan' .$code,
+                        'Kas Pendapatan Penjualan ' .$code,
+                        'Diskon Penjualan ' .$code,
+                        'Pendapatan Penjualan ' .$code,
                     ];
                     $DK = [
                         'D',
@@ -432,7 +434,6 @@ class SaleController extends Controller
                     $accountBiayaHpp->id,
                     $accountPersediaan->id,
                 ];
-                // return $accountCodeHpp;
                 $total_hpp = [
                     str_replace(",", '', $total_hpp),
                     str_replace(",", '', $total_hpp),
@@ -462,16 +463,11 @@ class SaleController extends Controller
                 }
             }
 
-            // DB::rollback();
-            // return $req->all();
-            // return [$accountCode,$totalBayar,$description];
-            // return [$descriptionHpp,$total_hpp,$DKHpp];
-
             DB::commit();
             return Response::json(['status' => 'success', 'message' => 'Data Tersimpan', 'id' => $id] );
         } catch (\Throwable $th) {
             DB::rollback();
-                                // return $th;
+
             return Response::json(['status' => 'error', 'message' => $th ]);
         }
     }
@@ -507,10 +503,9 @@ class SaleController extends Controller
 
     public function update(Request $req, $id)
     {
-        // DB::beginTransaction();
-        // try{
-        // $date = $this->DashboardController->changeMonthIdToEn($req->date);
-        $getEmployee =  Employee::where('user_id', Auth::user()->id)->first();
+        DB::beginTransaction();
+        try{
+            $getEmployee =  Employee::where('user_id', Auth::user()->id)->first();
 
         if ($req->customer_name != null) {
             $customerName = $req->customer_name;
@@ -551,8 +546,7 @@ class SaleController extends Controller
         $total_profit_sales = collect($sharing_profit_sales)->sum() + collect($sharing_profit_salesOld)->sum();
         $total_profit_buyer = collect($sharing_profit_buyer)->sum() + collect($sharing_profit_buyerOld)->sum();
         $total_hpp = collect($hpp)->sum() + collect($hppOld)->sum();
-        // return [$total_profit_store,collect($sharing_profit_store)->sum(),collect($sharing_profit_storeOld)->sum(), $req->all(), $total_hpp];
-        // return [$req->all(), $id];
+
         Sale::where('id', $id)
             ->update([
                 'user_id' => Auth::user()->id,
@@ -566,7 +560,7 @@ class SaleController extends Controller
                 'discount_type' => $req->typeDiscount,
                 'discount_price' => str_replace(",", '', $req->totalDiscountValue),
                 'discount_percent' => str_replace(",", '', $req->totalDiscountPercent),
-                'discount_sale' => str_replace(",", '', $req->totalSparePart),-str_replace(",", '', $req->totalDiscountValue),
+                'discount_sale' => str_replace(",", '', $req->totalSparePart)-str_replace(",", '', $req->totalDiscountValue),
                 'item_price' => str_replace(",", '', $req->totalSparePart),
                 'total_price' => str_replace(",", '', $req->totalPrice),
                 'total_hpp' => $total_hpp,
@@ -587,14 +581,12 @@ class SaleController extends Controller
                     ->where('branch_id', $getEmployee->branch_id)
                     ->where('id', '!=', 1)
                     ->get();
-
                 if ($checkDataDeleted[$i]->type == 'SparePart') {
                     $desc[$i] = '(Update Penjualan) Pengembalian Barang Pada Penjualan ' . $req->code;
                 } else {
                     $desc[$i] = '(Update Penjualan) Pengembalian Barang Pada Penjualan ' . $req->code;
-                    // $desc[$i] = '(Update Penjualan) Pengembalian Barang Loss Pada Penjualan '.$req->code;
                 }
-                // return $desc;
+
                 Stock::where('item_id', $checkDataDeleted[$i]->item_id)
                     ->where('branch_id', $getEmployee->branch_id)->update([
                         'stock'      => $checkStockDeleted[$i][0]->stock + $checkDataDeleted[$i]->qty,
@@ -613,7 +605,6 @@ class SaleController extends Controller
                     'updated_at' => date('Y-m-d h:i:s'),
                 ]);
             }
-            // return $req->deletedExistingData;
             $destroyExistingData = DB::table('sale_details')->whereIn('id', $req->deletedExistingData)->delete();
         }
 
@@ -700,18 +691,14 @@ class SaleController extends Controller
                             ->where('branch_id', $getEmployee->branch_id)
                             ->where('id', '!=', 1)
                             ->get();
-                        // if($checkStockExisting[$i][0]->stock < ($req->qtyDetailOld[$i])){
-                        //     return Response::json(['status' => 'fail',
-                        //                     'message'=>'Stock Item Ada yang 0. Harap Cek Kembali']);
-                        // }
-                        // return 'masuk 1';
-                        // mengecek kembali jika data item sama dengan data yang ada di service_detail
+
+                            // mengecek kembali jika data item sama dengan data yang ada di sale_detail
                         if ($checkDataOld[$i]->item_id == $req->itemsDetailOld[$i]) {
                             // return 'masuk 2.1';
-                            // mengecek kembali jika data QTY sama dengan data yang ada di service_detail
+                            // mengecek kembali jika data QTY sama dengan data yang ada di sale_detail
                             if ($checkDataOld[$i]->qty == $req->qtyDetailOld[$i]) {
                                 // return 'masuk 3.1';
-                                // jika qty di service_detail sama dengan QTY yang akan di update
+                                // jika qty di sale_detail sama dengan QTY yang akan di update
                                 if ($checkDataOld[$i]->type == $req->typeDetailOld[$i]) {
                                     // return 'masuk 4.1';
                                     // Jika Type sama maka tidak perlu melakukan update stock mutasi
@@ -801,7 +788,6 @@ class SaleController extends Controller
                                     ]);
 
                                 SaleDetail::where('id', $req->idDetailOld[$i])->update([
-                                    // 'service_id'=>$id,
                                     // 'item_id'=>$req->itemsDetailOld[$i],
                                     'sales_id' => $req->sales_id,
                                     'buyer_id' => $req->buyerDetailOld[$i],
@@ -814,14 +800,13 @@ class SaleController extends Controller
                                     'hpp' => str_replace(",", '', $req->profitDetailOld[$i]),
                                     'total_hpp' => str_replace(",", '', $hppOld[$i]),
                                     'description' => str_replace(",", '', $req->descriptionDetailOld[$i]),
-                                    // 'type' =>$req->typeDetailOld[$i],
                                     'updated_by' => Auth::user()->name,
                                     'updated_at' => date('Y-m-d h:i:s'),
                                 ]);
                             }
                         } else {
                             // return 'masuk 2.2';
-                            // pengembalian stock atas item service_detail yang dirubah
+                            // pengembalian stock atas item sale_detail yang dirubah
 
                             if ($checkStockExistingOlder[$i][0]->item_id == $checkDataOld[$i]->item_id) {
                                 Stock::where('item_id', $checkDataOld[$i]->item_id)
@@ -895,9 +880,15 @@ class SaleController extends Controller
             }
         }
 
-        //Jurnal
-        $idJ = Journal::where('ref', $req->code)->get('id');
-        Journal::where('ref', $req->code)->update([
+        // Jurnal
+        $idJ = Journal::where('ref', $req->code)->first('id');
+        $idJournal = DB::table('journals')->max('id') + 1;
+        // Delete Jurnal
+        Journal::where('ref', $req->code)->delete();
+        JournalDetail::where('journal_id', $idJ)->delete();
+
+        Journal::create([
+            'id' => $idJournal,
             'code' => $this->code('DD'),
             'year' => date('Y'),
             'date' => date('Y-m-d'),
@@ -905,31 +896,53 @@ class SaleController extends Controller
             'total' => str_replace(",", '', $req->totalPrice),
             'ref' => $req->code,
             'description' => 'Transaksi Penjualan ' .$req->code,
-            'updated_at' => date('Y-m-d h:i:s'),
+            'created_at' => date('Y-m-d h:i:s'),
         ]);
-
-        $destroyJournalDetail = DB::table('journal_details')->whereIn('journal_id', $idJ)->delete();
 
         if ($req->type == 'DownPayment') {
         } else {
             $accountData  = AccountData::where('branch_id', $getEmployee->branch_id)
-                    ->where('active', 'Y')
-                    ->where('main_id', 5)
-                    ->where('main_detail_id', 27)
-                    ->first();
+                ->where('active', 'Y')
+                ->where('main_id', 5)
+                ->where('main_detail_id', 27)
+                ->first();
 
-                $accountDiskon  = AccountData::where('branch_id', $getEmployee->branch_id)
-                    ->where('active', 'Y')
-                    ->where('main_id', 8)
-                    ->where('main_detail_id', 30)
-                    ->first();
+            $accountDiskon  = AccountData::where('branch_id', $getEmployee->branch_id)
+                ->where('active', 'Y')
+                ->where('main_id', 8)
+                ->where('main_detail_id', 30)
+                ->first();
 
-                $accountPembayaran  = AccountData::where('id', $req->account)
-                    ->first();
+            $accountPembayaran  = AccountData::where('id', $req->account)
+                ->first();
 
+            if (str_replace(",", '', $req->totalDiscountValue) == 0) {
                 $accountCode = [
                     $accountPembayaran->id,
                     $accountData->id,
+                ];
+                $description = [
+                    'Kas Pendapatan Penjualan ' .$req->code,
+                    'Pendapatan Penjualan ' .$req->code,
+                ];
+                $totalBayar = [
+                    str_replace(",", '', $req->totalPrice),
+                    str_replace(",", '', $req->totalPrice),
+                ];
+                $DK = [
+                    'D',
+                    'K',
+                ];
+            } else {
+                $accountCode = [
+                    $accountPembayaran->id,
+                    $accountDiskon->id,
+                    $accountData->id,
+                ];
+                $totalBayar = [
+                    str_replace(",", '', $req->totalPrice),
+                    str_replace(",", '', $req->totalDiscountValue),
+                    str_replace(",", '', $req->totalSparePart),
                 ];
                 $description = [
                     'Kas Pendapatan Penjualan ' .$req->code,
@@ -937,38 +950,157 @@ class SaleController extends Controller
                     'Pendapatan Penjualan ' .$req->code,
                 ];
                 $DK = [
+                    'D',
+                    'D',
                     'K',
-                    'D',
-                    'D',
                 ];
+            }
 
             for ($i = 0; $i < count($accountCode); $i++) {
                 $idDetail = DB::table('journal_details')->max('id') + 1;
                 JournalDetail::create([
                     'id' => $idDetail,
-                    'journal_id' => $req->idJurnal,
+                    'journal_id' => $idJournal,
                     'account_id' => $accountCode[$i],
-                    'total' => str_replace(",", '', $req->totalPrice),
+                    'total' => $totalBayar[$i],
                     'description' => $description[$i],
                     'debet_kredit' => $DK[$i],
                     'created_at' => date('Y-m-d h:i:s'),
                     'updated_at' => date('Y-m-d h:i:s'),
                 ]);
             }
+
+            //Jurnal HPP
+            $idJournalHpp = DB::table('journals')->max('id') + 1;
+            Journal::create([
+                'id' => $idJournalHpp,
+                'code' => $this->code('KK', $idJournalHpp),
+                'year' => date('Y'),
+                'date' => date('Y-m-d'),
+                'type' => 'Biaya',
+                'total' => str_replace(",", '', $total_hpp),
+                'ref' => $req->code,
+                'description' => 'HPP ' . $req->code,
+                'created_at' => date('Y-m-d h:i:s'),
+            ]);
+
+            $accountPersediaan  = AccountData::where('branch_id', $getEmployee->branch_id)
+                ->where('active', 'Y')
+                ->where('main_id', 3)
+                ->where('main_detail_id', 11)
+                ->first();
+
+            $accountBiayaHpp  = AccountData::where('branch_id', $getEmployee->branch_id)
+                ->where('active', 'Y')
+                ->where('main_id', 7)
+                ->where('main_detail_id', 29)
+                ->first();
+
+            // JURNAL HPP
+            $accountCodeHpp = [
+                $accountBiayaHpp->id,
+                $accountPersediaan->id,
+            ];
+            // return $accountCodeHpp;
+            $total_hpp = [
+                str_replace(",", '', $total_hpp),
+                str_replace(",", '', $total_hpp),
+            ];
+            $descriptionHpp = [
+                'Pengeluaran Harga Pokok Penjualan ' . $req->code,
+                'Biaya Harga Pokok Penjualan ' . $req->code,
+            ];
+            $DKHpp = [
+                'D',
+                'K',
+            ];
+            for ($i = 0; $i < count($accountCodeHpp); $i++) {
+                if ($total_hpp[$i] != 0) {
+                    $idDetailhpp = DB::table('journal_details')->max('id') + 1;
+                    JournalDetail::create([
+                        'id' => $idDetailhpp,
+                        'journal_id' => $idJournalHpp,
+                        'account_id' => $accountCodeHpp[$i],
+                        'total' => $total_hpp[$i],
+                        'description' => $descriptionHpp[$i],
+                        'debet_kredit' => $DKHpp[$i],
+                        'created_at' => date('Y-m-d h:i:s'),
+                        'updated_at' => date('Y-m-d h:i:s'),
+                    ]);
+                }
+            }
         }
-        // DB::commit();
+
+        DB::commit();
         return Response::json(['status' => 'success', 'message' => 'Data Tersimpan']);
-        // } catch (\Throwable $th) {
-        //throw $th;
-        // DB::rollback();
-        // return $th;
-        // return Response::json(['status' => 'error','message'=> 'keliru']);
-        // }
+        } catch (\Throwable $th) {
+            throw $th;
+            DB::rollback();
+            return Response::json(['status' => 'error','message'=> $th->getMessage()]);
+        }
     }
 
     public function destroy(Request $req, $id)
     {
+        // stok, sale detail, jurnal, jurnal detail, sale.
+        $checkRoles = $this->DashboardController->cekHakAkses(5,'delete');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
+        DB::beginTransaction();
+        try {
+            $getEmployee = Employee::where('user_id', Auth::user()->id)->first();
+            $sale = Sale::where('id', $id)->first();
+            $branch = Sale::where('id', $id)->first('branch_id');
+            $checkDataDeleted = SaleDetail::where('sale_id', $id)->get();
+            $idJournal = Journal::where('ref', $sale->code)->first('id');
+            $journalDetail = JournalDetail::where('journal_id', $idJournal->id)->get();
+            $checkStockDeleted = [];
+            for ($i = 0; $i < count($checkDataDeleted); $i++) {
+                if ($checkDataDeleted[$i]->item_id != 1) {
+                    $checkStockDeleted[$i] = Stock::where('item_id', $checkDataDeleted[$i]->item_id)
+                        ->where('branch_id', $branch->branch_id)
+                        ->where('id', '!=', 1)
+                        ->get();
 
+                    if ($checkDataDeleted[$i]->type == 'SparePart') {
+                        $desc[$i] = '(Delete Penjualan) Pengembalian Barang Pada Penjualan ' . $req->code;
+                    } else {
+                        $desc[$i] = '(Delete Penjualan) Pengembalian Barang Loss Pada Penjualan ' . $req->code;
+                    }
+                    // return $desc;
+                    Stock::where('item_id', $checkDataDeleted[$i]->item_id)
+                        ->where('branch_id', $branch->branch_id)
+                        ->update([
+                            'stock' => $checkStockDeleted[$i][0]->stock + $checkDataDeleted[$i]->qty,
+                        ]);
+                    StockMutation::create([
+                        'item_id' => $checkDataDeleted[$i]->item_id,
+                        'unit_id' => $checkStockDeleted[$i][0]->unit_id,
+                        'branch_id' => $checkStockDeleted[$i][0]->branch_id,
+                        'qty' => $checkDataDeleted[$i]->qty,
+                        'code' => $req->code,
+                        'type' => 'In',
+                        'description' => $desc[$i],
+                    ]);
+                }
+            }
+            // return $branch;
+            // return $checkDataDeleted;
+            // return $checkStockDeleted;
+            DB::table('sales')->where('id', $id)->delete();
+            DB::table('sale_details')->where('sale_id', $id)->delete();
+            DB::table('journal_details')->where('journal_id', $idJournal->id)->delete();
+            DB::table('journals')->where('ref', $sale->code)->delete();
+            DB::commit();
+
+            return Response::json(['status' => 'success', 'message' => 'Data Tersimpan']);
+        } catch (\Throwable $th) {
+            DB::rollback();
+
+            return $th;
+            return Response::json(['status' => 'error', 'message' => $th]);
+        }
     }
 
     public function printSale($id)

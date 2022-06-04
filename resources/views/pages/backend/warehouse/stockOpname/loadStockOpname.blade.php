@@ -1,5 +1,5 @@
 @foreach($stockCategory as $key => $el)
-    <h5>Kategori : {{$el->name}}</h5>
+    <h5>Kategori : {{$el->name}}</h5><br>
     <table class="table table-striped" width="100%">
         <thead>
             <tr>

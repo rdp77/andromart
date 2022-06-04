@@ -39,9 +39,20 @@
     </div>
 </div>
 <div class="card">
+    <div class="card-header" style="background-color: #ffffdc; color:black">
+        @php
+            $totalActiva = 0;
+        @endphp
+        @foreach ($activa as $activa)
+            @php
+                $totalActiva += $activa->stock*$activa->hargabeli;
+            @endphp
+        @endforeach
+        <h3>Total Aktifa Lancar : Rp. {{ number_format($totalActiva, 0, ".", ",") }}</h3>
+    </div>
     <div class="card-body" id="data-load">
         @foreach($stockCategory as $key => $el)
-        <h5>Kategori : {{$el->name}}</h5>
+        <h5>Kategori : {{$el->name}}</h5><br>
         <table class="table table-striped" width="100%">
             <thead>
                 <tr>

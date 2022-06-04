@@ -72,15 +72,6 @@ class PaymentController extends Controller
         return view('pages.backend.transaction.payment.indexPayment');
     }
 
-    // public function code($type)
-    // {
-    //     $month = Carbon::now()->format('m');
-    //     $year = Carbon::now()->format('y');
-    //     $index = DB::table('payments')->max('id')+1;
-
-    //     $index = str_pad($index, 3, '0', STR_PAD_LEFT);
-    //     return $code = $type.$year . $month . $index;
-    // }
     public function code($type)
     {
         $getEmployee = Employee::with('branch')
@@ -93,6 +84,7 @@ class PaymentController extends Controller
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
         return $code = $type . $getEmployee->Branch->code . $year . $month . $index;
     }
+
     public function codeJournals($type)
     {
         $getEmployee = Employee::with('branch')
@@ -105,6 +97,7 @@ class PaymentController extends Controller
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
         return $code = $type . $getEmployee->Branch->code . $year . $month . $index;
     }
+    
     public function create()
     {
         $checkBranch = Employee::with('branch')

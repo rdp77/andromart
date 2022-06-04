@@ -15,7 +15,7 @@ var table = $("#table").DataTable({
     },
     dom: '<"html5buttons">lBrtip',
     columns: [
-        { data: "code" },
+        { data: "dataCode" },
         { data: "dataDateOperator" },
         { data: "dataCustomer" },
         { data: "dataItem" },
@@ -79,7 +79,7 @@ $.ajaxSetup({
 function del(id) {
     swal({
         title: "Apakah Anda Yakin?",
-        text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus data pengguna Anda.",
+        text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus data penjualan Anda.",
         icon: "warning",
         buttons: true,
         dangerMode: true,
@@ -89,7 +89,7 @@ function del(id) {
                 url: "/transaction/sale/sale/" + id,
                 type: "DELETE",
                 success: function () {
-                    swal("Data pengguna berhasil dihapus", {
+                    swal("Data penjualan berhasil dihapus", {
                         icon: "success",
                     });
                     location.reload();
@@ -97,7 +97,7 @@ function del(id) {
                 },
             });
         } else {
-            swal("Data pengguna Anda tidak jadi dihapus!");
+            swal("Data penjualan Anda tidak jadi dihapus!");
         }
     });
 }

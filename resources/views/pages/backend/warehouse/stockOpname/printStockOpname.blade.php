@@ -376,6 +376,19 @@
                 <td> : &nbsp; </td>
                 <td> {{ date('D, d M Y') }} </td>
             </tr>
+            @php
+                $totalActiva = 0;
+            @endphp
+            @foreach ($activa as $activa)
+                @php
+                    $totalActiva += $activa->stock*$activa->hargabeli;
+                @endphp
+            @endforeach
+            <tr>
+                <td style="font-weight: bold;color: #A9A9A9">Total Aktifa Lancar</td>
+                <td> : &nbsp; </td>
+                <td> Rp. {{ number_format($totalActiva, 0, ".", ",") }} </td>
+            </tr>
         </table>
         <br>
         <hr>
