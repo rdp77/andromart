@@ -234,8 +234,9 @@
                                                                     @php
                                                                         if (!str_contains($dataBeban[$i]['namaAkun'], 'Fee Back Office') && !str_contains($dataBeban[$i]['namaAkun'], 'Sharing Profit') && !str_contains($dataBeban[$i]['namaAkun'], 'Mutasi') && !str_contains($dataBeban[$i]['namaAkun'], 'Transfer') && !str_contains($dataBeban[$i]['namaAkun'], 'Biaya HPP')) {
                                                                             echo 'Rp.' . number_format($dataBeban[$i]['total'], 0, ',', ',');
-                                                                        }
                                                                         $totalDataBeban += $dataBeban[$i]['total'];
+
+                                                                        }
                                                                         
                                                                     @endphp
                                                             </tr>
