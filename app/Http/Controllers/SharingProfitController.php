@@ -178,12 +178,12 @@ class SharingProfitController extends Controller
                 ->where('main_id', 7)
                 ->where('main_detail_id', 14)
                 ->first();
-            $accountKas            = AccountData::where('active', 'Y')
-                ->where('main_id', $req->accountMain)
-                ->where('main_detail_id',$req->accountData)
-                ->first();
+            // $accountKas            = AccountData::where('active', 'Y')
+            //     ->where('main_id', $req->accountMain)
+            //     ->where('main_detail_id',$req->accountData)
+            //     ->first();
             $accountCode = [
-                $accountKas->id,
+                $req->accountData,
             ];
             $totalBayar = [
                 str_replace(",", '', $req->totalValue),
