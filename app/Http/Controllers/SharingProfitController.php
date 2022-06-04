@@ -173,7 +173,7 @@ class SharingProfitController extends Controller
                 // 'updated_at'=>date('Y-m-d h:i:s'),
             ]);
 
-            $accountSharingProfit  = AccountData::where('branch_id', $getEmployee->branch_id)
+            $accountSharingProfit  = AccountData::where('branch_id', Auth::user()->branch_id)
                 ->where('active', 'Y')
                 ->where('main_id', 7)
                 ->where('main_detail_id', 14)
