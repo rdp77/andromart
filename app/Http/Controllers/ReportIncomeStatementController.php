@@ -169,9 +169,91 @@ class ReportIncomeStatementController extends Controller
                 }
             }
         }
+
+        $accountDataBiaya = AccountData::where('main_id',6)->get();
+        $jurnal = Journal::with('JournalDetail', 'JournalDetail.AccountData')
+            // ->where('date', '<=', date('Y-m-t', strtotime($req->dateS)))
+            ->where('date', '>=', date('Y-m-01', strtotime($dateParams)))
+            ->where('date', '<=', date('Y-m-t', strtotime($dateParams)))
+            // ->where('date', '>=', date('Y-m-01', strtotime($req->dateS)))
+            ->get();
+
+        $dataBiaya = [];
+        for ($i=0; $i <count($accountDataBiaya) ; $i++) { 
+            if (
+                
+                $accountDataBiaya[$i]->opening_date <= date('Y-m-t', strtotime($req->dateS)) 
+                // && $accountDataBiaya[$i]->opening_date >= date('Y-m-01', strtotime($req->dateS))
+            ) {
+                $dataBiaya[$i]['total'] = $accountDataBiaya[$i]->opening_balance;
+            }else{
+                $dataBiaya[$i]['total'] = 0;
+            }
+            $dataBiaya[$i]['akun'] = $accountDataBiaya[$i]->main_detail_id;
+            $dataBiaya[$i]['namaAkun'] = $accountDataBiaya[$i]->name;
+            $dataBiaya[$i]['jurnal'] = [];
+            $dataBiaya[$i]['dk'] = [];
+            for ($j=0; $j <count($jurnal) ; $j++) {
+                for ($k=0; $k <count($jurnal[$j]->JournalDetail) ; $k++) { 
+                    if ($accountDataBiaya[$i]->main_detail_id == $jurnal[$j]->JournalDetail[$k]->AccountData->main_detail_id && $accountDataBiaya[$i]->branch_id == $jurnal[$j]->JournalDetail[$k]->AccountData->branch_id) {
+                        // $dataBiaya[$i]['jurnal'][$j]['jurnalDetail'][$k] = $jurnal[$j];
+                        array_push($dataBiaya[$i]['jurnal'],$jurnal[$j]->total);
+                        // array_push($dataBiaya[$i]['dk'],[$jurnal[$j]->JournalDetail[$k]->debet_kredit,$jurnal[$j]->code]);
+                        array_push($dataBiaya[$i]['dk'],$jurnal[$j]->JournalDetail[$k]->debet_kredit);
+                        if ($jurnal[$j]->JournalDetail[$k]->debet_kredit == 'D') {
+                            $dataBiaya[$i]['total'] += $jurnal[$j]->total;
+                        }else{
+                            $dataBiaya[$i]['total'] -= $jurnal[$j]->total;
+                        }
+                    }
+                } 
+            }
+        }
+
+        $accountDataBiaya = AccountData::where('main_id',7)->get();
+        $jurnal = Journal::with('JournalDetail', 'JournalDetail.AccountData')
+            // ->where('date', '<=', date('Y-m-t', strtotime($req->dateS)))
+            ->where('date', '>=', date('Y-m-01', strtotime($dateParams)))
+            ->where('date', '<=', date('Y-m-t', strtotime($dateParams)))
+            // ->where('date', '>=', date('Y-m-01', strtotime($req->dateS)))
+            ->get();
+
+        $dataBeban = [];
+        for ($i=0; $i <count($accountDataBiaya) ; $i++) { 
+            if (
+                
+                $accountDataBiaya[$i]->opening_date <= date('Y-m-t', strtotime($req->dateS)) 
+                // && $accountDataBiaya[$i]->opening_date >= date('Y-m-01', strtotime($req->dateS))
+            ) {
+                $dataBeban[$i]['total'] = $accountDataBiaya[$i]->opening_balance;
+            }else{
+                $dataBeban[$i]['total'] = 0;
+            }
+            $dataBeban[$i]['akun'] = $accountDataBiaya[$i]->main_detail_id;
+            $dataBeban[$i]['namaAkun'] = $accountDataBiaya[$i]->name;
+            $dataBeban[$i]['jurnal'] = [];
+            $dataBeban[$i]['dk'] = [];
+            for ($j=0; $j <count($jurnal) ; $j++) {
+                for ($k=0; $k <count($jurnal[$j]->JournalDetail) ; $k++) { 
+                    if ($accountDataBiaya[$i]->main_detail_id == $jurnal[$j]->JournalDetail[$k]->AccountData->main_detail_id && $accountDataBiaya[$i]->branch_id == $jurnal[$j]->JournalDetail[$k]->AccountData->branch_id) {
+                        // $dataBeban[$i]['jurnal'][$j]['jurnalDetail'][$k] = $jurnal[$j];
+                        array_push($dataBeban[$i]['jurnal'],$jurnal[$j]->total);
+                        // array_push($dataBeban[$i]['dk'],[$jurnal[$j]->JournalDetail[$k]->debet_kredit,$jurnal[$j]->code]);
+                        array_push($dataBeban[$i]['dk'],$jurnal[$j]->JournalDetail[$k]->debet_kredit);
+                        if ($jurnal[$j]->JournalDetail[$k]->debet_kredit == 'D') {
+                            $dataBeban[$i]['total'] += $jurnal[$j]->total;
+                        }else{
+                            $dataBeban[$i]['total'] -= $jurnal[$j]->total;
+                        }
+                    }
+                } 
+            }
+        }
+        // return $data;
+
         $PendapatanKotor = $PendapatanBersih + $Diskon;
-        $data = [];
-        return view('pages.backend.report.reportIncomeStatement', compact('data', 'PendapatanKotor', 'PendapatanBersih', 'Diskon', 'HPP', 'listrik', 'atk', 'gaji', 'air', 'sharingProfit', 'sewaRuko', 'hosting', 'thr', 'meeting', 'internet', 'biayaSosial', 'wisata', 'qurban', 'iuranBulanan', 'bebanSewa', 'operasional','totalService','totalPenjualan','DiskonPenjualan','DiskonService'));
+        // $data = [];
+        return view('pages.backend.report.reportIncomeStatement', compact('data', 'PendapatanKotor', 'PendapatanBersih', 'Diskon', 'HPP', 'listrik', 'atk', 'gaji', 'air', 'sharingProfit', 'sewaRuko', 'hosting', 'thr', 'meeting', 'internet', 'biayaSosial', 'wisata', 'qurban', 'iuranBulanan', 'bebanSewa', 'operasional','totalService','totalPenjualan','DiskonPenjualan','DiskonService','dataBiaya','dataBeban'));
     }
     public function printReportIncomeStatement(Request $req)
     {

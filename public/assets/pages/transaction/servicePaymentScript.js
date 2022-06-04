@@ -416,7 +416,7 @@ function paymentMethodChange() {
             }
         } else if (value == "Debit" || value == "Transfer") {
             if (
-                $(this).data("maindetailname") == "Kas Bank" &&
+                contains($(this).data("maindetailname"), "Kas Bank") &&
                 branch == $(this).data("branch")
             ) {
                 dataItems +=

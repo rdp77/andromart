@@ -146,8 +146,7 @@
                                                 </th>
                                             </tr> --}}
                                             <tr>
-                                                <th colspan="3" style="color:black">Beban
-                                                    Operasional</th>
+                                                <th colspan="3" style="color:black">Beban</th>
                                             </tr>
                                             <tr>
                                                 <td>Sharing Profit</td>
@@ -159,40 +158,41 @@
                                             <tr>
                                                 <td>Beban Umum Lain
                                                     <table>
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;">
-                                                                Operasional</td>
-
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;">
-                                                                Listrik</td>
-                                                        </tr>
+                                                        @for ($i = 0; $i < count($dataBeban); $i++)
+                                                            <tr>
+                                                                <td
+                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                    @php
+                                                                        echo $dataBeban[$i]['namaAkun'];
+                                                                    @endphp
+                                                                </td>
+                                                            </tr>
+                                                        @endfor
                                                     </table>
                                                     Total Beban Umum Lain
                                                 </td>
                                                 <td style="text-align: right">
-                                                    <b><br></b>
+                                                    
                                                     
                                                     <table style="width: 100%;text-align:left">
+                                                        <b><br></b>
+                                                        @php
+                                                            $totalDataBeban = 0;
+                                                        @endphp
+                                                        @for ($i = 0; $i < count($dataBeban); $i++)
                                                         <tr>
                                                             <td
-                                                                style="border:0px solid black !important;padding-left:40px;">
+                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
                                                                 Rp.
-                                                                {{ number_format($operasional, 0, '.', ',') }}</td>
+                                                                {{ number_format($dataBeban[$i]['total'], 0, ',', ',') }}
+                                                                @php
+                                                                    $totalDataBeban += $dataBeban[$i]['total'];
+                                                                @endphp
                                                         </tr>
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;">
-                                                                Rp.
-                                                                {{ number_format($listrik, 0, '.', ',') }}</td>
-
-                                                        </tr>
+                                                        @endfor
                                                     </table>
                                                     <b>Rp.
-                                                        {{ number_format($operasional + $listrik, 0, '.', ',') }}</b>
+                                                        {{ number_format($totalDataBeban, 0, '.', ',') }}</b>
                                                 </td>
                                             </tr>
                                             <tr>
@@ -205,8 +205,7 @@
                                                 <td style="text-align: right;background-color: #ffffdc"></td>
                                             </tr>
                                             <tr>
-                                                <th colspan="3" style="color:black">Beban
-                                                    Administrasi Umum</th>
+                                                <th colspan="3" style="color:black">Biaya Umum</th>
                                             </tr>
 
                                             <tr>
@@ -221,104 +220,39 @@
                                                 <td>
                                                     <table>
                                                         Beban Umum Lain
-                                                        <tr>
-                                                            <td
+                                                        @for ($i = 0; $i < count($dataBiaya); $i++)
+                                                            <tr>
+                                                                <td
                                                                 style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                ATK</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Air (PDAM)</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Meeting / Konsumsi</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Internet</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Qurban</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Wisata</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Sosial Internal</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Iuran Bulanan</td>
-                                                        </tr>
+                                                                    @php
+                                                                        echo $dataBiaya[$i]['namaAkun'];
+                                                                    @endphp
+                                                                </td>
+                                                            </tr>
+                                                        @endfor
                                                     </table>
                                                     Total Beban Umum Lain
                                                 </td>
                                                 <td style="text-align: right">
                                                     <table style="width: 100%;text-align:left">
                                                         <b><br></b>
-
+                                                        @php
+                                                            $totalDataBiaya = 0;
+                                                        @endphp
+                                                        @for ($i = 0; $i < count($dataBiaya); $i++)
                                                         <tr>
                                                             <td
                                                                 style="border:0px solid black !important;padding-left:40px;padding-top:0px">
                                                                 Rp.
-                                                                {{ number_format($atk, 0, '.', ',') }}</td>
+                                                                {{ number_format($dataBiaya[$i]['total'], 0, ',', ',') }}
+                                                                @php
+                                                                    $totalDataBiaya += $dataBiaya[$i]['total'];
+                                                                @endphp
                                                         </tr>
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Rp.
-                                                                {{ number_format($air, 0, '.', ',') }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Rp.
-                                                                {{ number_format($meeting, 0, '.', ',') }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Rp.
-                                                                {{ number_format($internet, 0, '.', ',') }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Rp.
-                                                                {{ number_format($qurban, 0, '.', ',') }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Rp.
-                                                                {{ number_format($wisata, 0, '.', ',') }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Rp.
-                                                                {{ number_format($biayaSosial, 0, '.', ',') }}</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td
-                                                                style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Rp.
-                                                                {{ number_format($iuranBulanan, 0, '.', ',') }}</td>
-                                                        </tr>
+                                                        @endfor
                                                     </table>
                                                     <b>Rp.
-                                                        {{ number_format($atk + $air + $meeting + $internet + $qurban + $wisata + $biayaSosial + $iuranBulanan, 0, '.', ',') }}</b>
+                                                        {{ number_format($totalDataBiaya, 0, '.', ',') }}</b>
                                                 </td>
                                                 <td></td>
 
