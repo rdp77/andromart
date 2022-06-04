@@ -317,3 +317,33 @@ function saveSharingProfit() {
         }
     });
 }
+function paymentMethodChange() {
+    
+    var value = $(".accountMain").find(':selected').data('name');
+    var dataItems = [];
+    $(".accountData").empty();
+    var testStr;
+    $.each($(".accountDataHidden"), function () {
+        testStr = $(this).data("maindetailname");
+    // console.log(testStr);
+            if (
+                testStr.includes(value)
+            ) {
+                dataItems +=
+                    '<option value="' +
+                    this.value +
+                    '">' +
+                    $(this).data("code") +
+                    " - " +
+                    $(this).data("name") +
+                    "</option>";
+            }
+    });
+    // console.log(value);
+    // console.log(dataItems);
+    $(".accountData").append('<option value="">- Select -</option>');
+    // if (value == 'Cash') {
+    $(".accountData").append(dataItems);
+    // }
+    // alert($('.PaymentMethod').val());
+}

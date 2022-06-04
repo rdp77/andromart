@@ -11,6 +11,7 @@ use App\Models\ServiceDetail;
 use App\Models\SaleDetail;
 
 use App\Models\AccountData;
+use App\Models\AccountMainDetail;
 use App\Models\Journal;
 use App\Models\JournalDetail;
 use App\Models\ServiceStatusMutation;
@@ -43,8 +44,10 @@ class SharingProfitController extends Controller
     public function index(Request $req)
     {
         $data = Service::where('technician_id', Auth::user()->id)->get();
+        $accountMain = AccountMainDetail::where('main_id',1)->get();
+        $accountData = AccountData::get();
         $employee = Employee::get();
-        return view('pages.backend.finance.sharing_profit.sharingProfit', compact('data', 'employee'));
+        return view('pages.backend.finance.sharing_profit.sharingProfit', compact('data', 'employee','accountData','accountMain'));
     }
     public function sharingProfitLoadDataService(Request $req)
     {
@@ -115,7 +118,7 @@ class SharingProfitController extends Controller
     }
     public function store(Request $req)
     {
-        return $req->all();
+        // return $req->all();  
         DB::beginTransaction();
         try {
             $checkTotalBelumBayar = 0;
@@ -176,8 +179,8 @@ class SharingProfitController extends Controller
                 ->where('main_detail_id', 14)
                 ->first();
             $accountKas            = AccountData::where('active', 'Y')
-                ->where('main_id', 1)
-                ->where('main_detail_id', 1)
+                ->where('main_id', $req->accountMain)
+                ->where('main_detail_id',$req->accountData)
                 ->first();
             $accountCode = [
                 $accountKas->id,

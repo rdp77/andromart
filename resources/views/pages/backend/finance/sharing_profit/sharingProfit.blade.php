@@ -37,6 +37,32 @@
                         <label for="endDate">{{ __('Tanggal Akhir') }}<code>*</code></label>
                         <input id="endDate" type="text" class="form-control datepicker" name="endDate">
                     </div>
+
+                    <div class="form-group col-12 col-md-12 col-lg-12">
+                        <label for="endDate">{{ __('Kas') }}<code>*</code></label>
+                        <select name="accountMain" class="select2 accountMain" id="" onchange="paymentMethodChange()">
+                            <option value="">- Select -</option>
+                            @foreach ($accountMain as $el)
+                                <option value="{{$el->main_id}}" data-name="{{$el->name}}">{{$el->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-12 col-md-12 col-lg-12">
+                        <label for="endDate">{{ __('Kas Data') }}<code>*</code></label>
+                        <select name="accountData" class="accountData select2" id="">
+                            <option value="">- Select -</option>
+                        </select>
+                        {{-- <input id="endDate" type="text" class="form-control datepicker" name="endDate"> --}}
+                    </div>
+                    @foreach ($accountData as $el)
+                    <input class="accountDataHidden" type="hidden"
+                    data-mainName="{{$el->AccountMain->name}}"
+                    data-mainDetailName="{{$el->AccountMainDetail->name}}"
+                    data-branch="{{$el->branch_id}}"
+                    data-name="{{$el->name}}"
+                    data-code="{{$el->code}}"
+                    value="{{$el->id}}">
+                @endforeach
                     <div class="form-group col-12 col-md-12 col-lg-12">
                         <button class="btn btn-primary" type="button" onclick="checkEmploye()"><i class="fas fa-eye"></i> Cari</button>
                     </div>
