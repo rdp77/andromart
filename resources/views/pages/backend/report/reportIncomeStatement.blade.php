@@ -139,7 +139,7 @@
                                                 </td>
                                             </tr>
                                             @php
-                                                $labaBersih = $PendapatanBersih - $HPP;
+                                                $labarKotor = $totalPenjualan+$totalService-$Diskon-$HPP;
                                             @endphp
                                             {{-- <tr>
                                                 <th colspan="3" style="color:black;text-align:center">Beban Usaha
@@ -163,7 +163,15 @@
                                                                 <td
                                                                 style="border:0px solid black !important;padding-left:40px;padding-top:0px">
                                                                     @php
+                                                                    if (!str_contains($dataBeban[$i]['namaAkun'], 'Fee Back Office') &&
+                                                                        !str_contains($dataBeban[$i]['namaAkun'], 'Sharing Profit') &&
+                                                                        !str_contains($dataBeban[$i]['namaAkun'], 'Mutasi') &&
+                                                                        !str_contains($dataBeban[$i]['namaAkun'], 'Transfer') &&
+                                                                        !str_contains($dataBeban[$i]['namaAkun'], 'Biaya HPP')
+                                                                        ) {
                                                                         echo $dataBeban[$i]['namaAkun'];
+                                                                        # code...
+                                                                    }
                                                                     @endphp
                                                                 </td>
                                                             </tr>
@@ -172,8 +180,6 @@
                                                     Total Beban Umum Lain
                                                 </td>
                                                 <td style="text-align: right">
-                                                    
-                                                    
                                                     <table style="width: 100%;text-align:left">
                                                         <b><br></b>
                                                         @php
@@ -183,8 +189,18 @@
                                                         <tr>
                                                             <td
                                                                 style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                                                Rp.
-                                                                {{ number_format($dataBeban[$i]['total'], 0, ',', ',') }}
+                                                                @php
+                                                                    if (!str_contains($dataBeban[$i]['namaAkun'], 'Fee Back Office') &&
+                                                                        !str_contains($dataBeban[$i]['namaAkun'], 'Sharing Profit') &&
+                                                                        !str_contains($dataBeban[$i]['namaAkun'], 'Mutasi') &&
+                                                                        !str_contains($dataBeban[$i]['namaAkun'], 'Transfer') &&
+                                                                        !str_contains($dataBeban[$i]['namaAkun'], 'Biaya HPP')
+
+                                                                        ) {
+                                                                            echo 'Rp.'. number_format($dataBeban[$i]['total'], 0, ',', ',');
+                                                                    }
+                                                                    
+                                                                @endphp
                                                                 @php
                                                                     $totalDataBeban += $dataBeban[$i]['total'];
                                                                 @endphp
@@ -200,7 +216,7 @@
                                                     Operasional
                                                 </th>
                                                 <td style="text-align: right;background-color: #ffffdc;color:black"><b>Rp.
-                                                        {{ number_format($operasional + $listrik + $sharingProfit, 0, '.', ',') }}</b>
+                                                        {{ number_format($totalDataBeban + $sharingProfit, 0, '.', ',') }}</b>
                                                 </td>
                                                 <td style="text-align: right;background-color: #ffffdc"></td>
                                             </tr>
@@ -219,7 +235,7 @@
                                             <tr>
                                                 <td>
                                                     <table>
-                                                        Beban Umum Lain
+                                                        Biaya Umum Lain
                                                         @for ($i = 0; $i < count($dataBiaya); $i++)
                                                             <tr>
                                                                 <td
@@ -231,7 +247,7 @@
                                                             </tr>
                                                         @endfor
                                                     </table>
-                                                    Total Beban Umum Lain
+                                                    Total Biaya Umum Lain
                                                 </td>
                                                 <td style="text-align: right">
                                                     <table style="width: 100%;text-align:left">
@@ -269,42 +285,16 @@
                                                     Administrasi
                                                 </th>
                                                 <td style="text-align: right;background-color: #ffffdc;color:black"><b>Rp.
-                                                        {{                                                         number_format($atk + $air + $meeting + $internet + $qurban + $wisata + $biayaSosial + $iuranBulanan + +$gaji + $bebanSewa, 0, '.', ',') }}</b>
+                                                        {{                                                         number_format($totalDataBiaya, 0, '.', ',') }}</b>
                                                 </td>
                                                 <td style="text-align: right;background-color: #ffffdc"></td>
                                             </tr>
-                                            @php
-                                                $totalBebanUmumLain = $atk + $air + $meeting + $internet + $qurban + $wisata + $biayaSosial + $iuranBulanan;
-                                                $totalBebanOperasional = $operasional + $listrik + $sharingProfit;
-                                                $totalBebanUsaha = $totalBebanUmumLain + $gaji + $bebanSewa + $totalBebanOperasional;
-                                            @endphp
-                                            {{-- <tr>
-                                                <th colspan="1" style="background-color: #ffffdc;color:black">Total Beban
-                                                    Usaha
-                                                </th>
-                                                <td style="text-align: right;background-color: #ffffdc;color:black"><b>Rp.
-                                                        {{ number_format($totalBebanUmumLain + $gaji + $bebanSewa + $totalBebanOperasional, 0, '.', ',') }}</b>
-                                                </td>
-                                                <td style="text-align: right;background-color: #ffffdc"></td>
-                                            </tr> --}}
-
                                             <tr>
                                                 <th colspan="2" style="background-color: yellow;color:black">Laba Bersih
-                                                    {{-- <br>
-                                                    <h1>{{ $labaBersih }}</h1>
-                                                    <br>
-                                                    <h1>{{ $totalBebanUmumLain }}</h1>
-                                                    <br>
-                                                    <h1>{{ $gaji }}</h1>
-                                                    <br>
-                                                    <h1>{{ $bebanSewa }}</h1>
-                                                    <br>
-                                                    <h1>{{ $totalBebanOperasional }}</h1>
-                                                    <br>
-                                                    <h1>{{ $totalBebanUmumLain + $gaji + $bebanSewa + $totalBebanOperasional }}</h1> --}}
+                                                  
                                                 </th>
                                                 <td style="text-align: right;background-color: yellow;color:black"><b>Rp.
-                                                        {{ number_format($labaBersih - $totalBebanUsaha, 0, '.', ',') }}</b>
+                                                        {{ number_format($labarKotor - $totalDataBeban - $sharingProfit - $bebanSewa - $totalDataBiaya - $gaji, 0, '.', ',') }}</b>
                                                 </td>
                                             </tr>
                                         </thead>
