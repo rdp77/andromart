@@ -172,8 +172,12 @@ class SharingProfitController extends Controller
                 'created_at' => date('Y-m-d h:i:s'),
                 // 'updated_at'=>date('Y-m-d h:i:s'),
             ]);
-
-            $accountSharingProfit  = AccountData::where('branch_id', Auth::user()->branch_id)
+            // return Auth::user()->employee->branch;
+            $cariCabang = AccountData::where('id', $req->accountData)->first();
+            //     ->where('main_id', $req->accountMain)
+            //     ->where('main_detail_id',$req->accountData)
+            //     ->first();
+            $accountSharingProfit  = AccountData::where('branch_id', $cariCabang->branch_id)
                 ->where('active', 'Y')
                 ->where('main_id', 7)
                 ->where('main_detail_id', 14)
