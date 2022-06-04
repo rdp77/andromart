@@ -115,7 +115,7 @@ class SharingProfitController extends Controller
     }
     public function store(Request $req)
     {
-        // return $req->all();
+        return $req->all();
         DB::beginTransaction();
         try {
             $checkTotalBelumBayar = 0;
