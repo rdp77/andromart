@@ -676,6 +676,7 @@ function paymentMethodChange() {
     var branch = $(".branchId").val();
     var value = $(".PaymentMethod").val();
     var dataItems = [];
+    var testStr;
     $(".account").empty();
     $.each($(".accountDataHidden"), function () {
         testStr = $(this).data("maindetailname");
