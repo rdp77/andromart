@@ -69,7 +69,7 @@
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <div class="form-group ml-4">
+                                        <div class="form-group ml-1">
                                             <button class="btn btn-primary tombol" onclick="searchData()" type="button"
                                                 style="margin-top: 32px"><i class="fas fa-search"></i> Cari</button>
                                             <button class="btn btn-primary tombol ml-3" onclick="cetakData()" type="button"
@@ -104,7 +104,7 @@
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <div class="form-group ml-4">
+                                        <div class="form-group ml-1">
                                             <button class="btn btn-primary tombol" onclick="searchData()" type="button"
                                                 style="margin-top: 32px"><i class="fas fa-search"></i> Cari</button>
                                             <button class="btn btn-primary tombol ml-3" onclick="cetakData()" type="button"
@@ -125,7 +125,7 @@
                                         </div>
                                     </div>
                                     <div class="col">
-                                        <div class="form-group ml-4">
+                                        <div class="form-group ml-1">
                                             <button class="btn btn-primary tombol" onclick="searchData()" type="button"
                                                 style="margin-top: 32px"><i class="fas fa-search"></i> Cari</button>
                                             <button class="btn btn-primary tombol ml-3" onclick="cetakData()" type="button"
