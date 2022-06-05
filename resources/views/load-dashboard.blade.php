@@ -11,7 +11,10 @@
                 <div class="card-body dataServiceTotal">
                     {{ $dataServiceHandphone + $dataServiceLaptop }}
                 </div>
-                <div class="card-footer">
+                <div class="card-footer" style="margin-bottom: 12px">
+                    <br>
+                    <br>
+                    <br>
                     <figure class="highcharts-figure">
                         <div id="containerServiceMasuk" style="width:100%"></div>
                         <p class="highcharts-description">
@@ -32,6 +35,7 @@
                             </th>
                         </tr>
                     </table> --}}
+                    <br>
                 </div>
             </div>
         </div>
@@ -97,26 +101,10 @@
                     <h style="font-size: 15px">Total Keseluruhan Pendapatan Kas.</h>
                     <br>
                     Rp. {{ number_format($totalKeseluruhanPendapatan, 0, ',', '.') }}
+                    <br>
+                    <br>
                 </div>
-                <div class="card-footer">
-                    <table class="table">
-                        {{-- <tr>
-                        <th>Cash</th>
-                        <th class="text-right"><b class="dropPendapatanCash">Rp.
-                                {{ number_format($totalCash, 0, ',', '.') }}</b></th>
-                    </tr>
-                    <tr>
-                        <th>Debet</th>
-                        <th class="text-right"><b class="dropPendapatanDebit">Rp.
-                                {{ number_format($totalDebit, 0, ',', '.') }}</b></th>
-                    </tr>
-                    <tr>
-                        <th>Transfer</th>
-                        <th class="text-right"><b class="dropPendapatanTransfer">Rp.
-                                {{ number_format($totalTransfer, 0, ',', '.') }}</b></th>
-                    </tr> --}}
-                    </table>
-                </div>
+
             </div>
         </div>
     </div>
@@ -380,8 +368,9 @@
         series: [
             @foreach ($karyawan as $i => $el)
                 {
-                name:"{{ $el->name }}",
-                data:[{{ $sharingProfit1Service[$i] +$sharingProfit2Service[$i] +$sharingProfitSaleSales[$i] +$sharingProfitSaleBuyer[$i] }}]
+                    name: "{{ $el->name }}",
+                    data: [
+                        {{ $sharingProfit1Service[$i] + $sharingProfit2Service[$i] + $sharingProfitSaleSales[$i] + $sharingProfitSaleBuyer[$i] }}]
                 },
             @endforeach
         ]

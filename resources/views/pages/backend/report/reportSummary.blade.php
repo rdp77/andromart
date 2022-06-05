@@ -62,7 +62,7 @@
                         <div class="row" id="areaToStyle">
                             <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                                 <div class="card card-statistic-1">
-                                    <div class="card-icon bg-warning">
+                                    <div class="card-icon bg-danger">
                                         <i class="fas fa-dollar-sign fa-2xl"></i>
                                     </div>
                                     <div class="card-wrap">
@@ -86,6 +86,21 @@
                                         </div>
                                         <div class="card-body">
                                             {{ number_format($totalPengeluaran, 0, '.', ',') }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="card card-statistic-1">
+                                    <div class="card-icon bg-danger">
+                                        <i class="fas fa-dollar-sign fa-2xl"></i>
+                                    </div>
+                                    <div class="card-wrap">
+                                        <div class="card-header">
+                                            <h4>Total Pembelian + Pengeluaran</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            {{ number_format($totalPengeluaran+$totalPembelian, 0, '.', ',') }}
                                         </div>
                                     </div>
                                 </div>
@@ -120,10 +135,24 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                 <div class="card card-statistic-1">
                                     <div class="card-icon bg-success">
+                                        <i class="fas fa-dollar-sign fa-2xl"></i>
+                                    </div>
+                                    <div class="card-wrap">
+                                        <div class="card-header">
+                                            <h4>Penjualan + Pembayaran Service</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            {{ number_format(($totalPenjualan - $totalDiskonPenjualan)+($totalService - $totalDiskonService), 0, '.', ',') }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                <div class="card card-statistic-1">
+                                    <div class="card-icon bg-primary">
                                         <i class="fas fa-dollar-sign fa-2xl"></i>
                                     </div>
                                     <div class="card-wrap">
@@ -147,6 +176,21 @@
                                         </div>
                                         <div class="card-body">
                                             {{ number_format($totalService - $totalDiskonService - $totalHPPService, 0, '.', ',') }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                <div class="card card-statistic-1">
+                                    <div class="card-icon bg-primary">
+                                        <i class="fas fa-dollar-sign fa-2xl"></i>
+                                    </div>
+                                    <div class="card-wrap">
+                                        <div class="card-header">
+                                            <h4>Pendapatan Bersih Penjualan + Pendapatan Bersih Service</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            {{ number_format(($totalPenjualan - $totalDiskonPenjualan - $totalHPPPenjualan)+($totalService - $totalDiskonService - $totalHPPService), 0, '.', ',') }}
                                         </div>
                                     </div>
                                 </div>

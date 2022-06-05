@@ -330,7 +330,7 @@ function save() {
             });
 
         } else {
-            swal("Data Dana Kredit PDL Berhasil Dihapus!");
+            swal("Data Tidak Jadi Dihapus!");
         }
     });
 
