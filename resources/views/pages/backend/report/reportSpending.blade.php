@@ -102,7 +102,6 @@
 @section('script')
 
     <script>
-      
         $.ajaxSetup({
             headers: {
                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -135,115 +134,100 @@
                             $(".dropHere").empty();
                         } else {
                             var totalPengeluaran = 0;
-                            var totalPendapatan = 0;
                             $.each(data.result, function(index, value) {
-                                    $.each(
-                                        value.journal_detail,
-                                        function(index1, value1) {
-                                            if (
+                                $.each(
+                                    value.journal_detail,
+                                    function(index1, value1) {
+
+                                        console.log(parseInt(
+                                            value.journal_detail[0]
+                                            .total
+                                        ).toLocaleString("en-US"));
+
+                                        if (data.cabang == null) {
+                                            jurnalDetailTransaksi[index] =
+                                                "<b>" +
                                                 value.journal_detail[0]
-                                                .account_data.main_id != 6 
-                                            ) {} else {
-                                                if (data.cabang == null) {
-                                                    jurnalDetailTransaksi[index] =
-                                                        "<b>" +
+                                                .account_data.code + "</b><br>" +
+                                                value.journal_detail[0]
+                                                .account_data.name;
+                                                jurnalDetailK[index] =
+                                                    " Rp. " +
+                                                    parseInt(
                                                         value.journal_detail[0]
-                                                        .account_data.code +"</b><br>" +
-                                                        value.journal_detail[0]
-                                                        .account_data.name;
-                                                    if (value.code.includes("DD")) {
-                                                        jurnalDetailD[index] = " Rp. 0";
-                                                    } else {
-                                                        jurnalDetailK[index] =
-                                                            " Rp. " +
-                                                            parseInt(
-                                                                value.journal_detail[0]
-                                                                .total
-                                                            ).toLocaleString("en-US");
-                                                    }
-                                                } else {
-                                                    if (
-                                                        data.cabang ==
-                                                        value.journal_detail[0]
-                                                        .account_data.branch_id
-                                                    ) {
-                                                        jurnalDetailTransaksi[index] =
-                                                            "<b>" +
-                                                            value.journal_detail[0]
-                                                            .account_data.code +
-                                                            "</b><br>" +
-                                                            value.journal_detail[0]
-                                                            .account_data.name;
-                                                        if (value.code.includes("DD")) {
-                                                            jurnalDetailD[index] =
-                                                                " Rp. 0";
-                                                        } else {
-                                                            jurnalDetailK[index] =
-                                                                " Rp. " +
-                                                                parseInt(
-                                                                    value
-                                                                    .journal_detail[0]
-                                                                    .total
-                                                                ).toLocaleString(
-                                                                    "en-US"
-                                                                );
-                                                        }
-                                                    }
-                                                }
+                                                        .total
+                                                    ).toLocaleString("en-US");
+                                        } else {
+                                            if (
+                                                data.cabang ==
+                                                value.journal_detail[0]
+                                                .account_data.branch_id
+                                            ) {
+                                                jurnalDetailTransaksi[index] =
+                                                    "<b>" +
+                                                    value.journal_detail[0]
+                                                    .account_data.code +
+                                                    "</b><br>" +
+                                                    value.journal_detail[0]
+                                                    .account_data.name;
+                                                    jurnalDetailK[index] =
+                                                        " Rp. " +
+                                                        parseInt(
+                                                            value
+                                                            .journal_detail[0]
+                                                            .total
+                                                        ).toLocaleString(
+                                                            "en-US"
+                                                        );
                                             }
                                         }
-                                    );
-                                    if (jurnalDetailK[index] == undefined) {
-                                        var jurnalDetailKReal = "";
-                                    } else {
-                                        var jurnalDetailKReal = jurnalDetailK[index];
                                     }
-                                    if (jurnalDetailD[index] == undefined) {
-                                        var jurnalDetailDReal = "";
-                                    } else {
-                                        var jurnalDetailDReal = "";
-                                    }
-                                    if (jurnalDetailTransaksi[index] != undefined) {
-                                        if (value.code.includes("KK")) {
-                                            totalPengeluaran += value.total;
+                                );
+                                if (jurnalDetailK[index] == undefined) {
+                                    var jurnalDetailKReal = "";
+                                } else {
+                                    var jurnalDetailKReal = jurnalDetailK[index];
+                                }
+                               
+                                if (jurnalDetailTransaksi[index] != undefined) {
+                                    
+                                        totalPengeluaran += value.total;
 
-                                            $(".dropHere").append(
-                                                "<tr>" +
-                                                "<td><b>" +
-                                                value.code +
-                                                "</b><br>" +
-                                                value.type +
-                                                "</td>" +
-                                                "<td><b>" +
-                                                moment(value.date).format(
-                                                    "DD MMMM YYYY"
-                                                ) +
-                                                "</b></td>" +
-                                                "<td><b>" +
-                                                value.ref +
-                                                "</b><br>" +
-                                                value.description +
-                                                "</td>" +
-                                                "<td>" +
-                                                jurnalDetailTransaksi[index] +
-                                                "</td>" +
-                                                "<td><b>" +
-                                                jurnalDetailKReal +
-                                                "</b></td>" +
-                                                "</tr>"
-                                            );
-                                        } else {
-                                            totalPendapatan += 0;
-                                        }
-                                    }
-                                
+                                        $(".dropHere").append(
+                                            "<tr>" +
+                                            "<td><b>" +
+                                            value.code +
+                                            "</b><br>" +
+                                            value.type +
+                                            "</td>" +
+                                            "<td><b>" +
+                                            moment(value.date).format(
+                                                "DD MMMM YYYY"
+                                            ) +
+                                            "</b></td>" +
+                                            "<td><b>" +
+                                            value.ref +
+                                            "</b><br>" +
+                                            value.description +
+                                            "</td>" +
+                                            "<td>" +
+                                            jurnalDetailTransaksi[index] +
+                                            "</td>" +
+                                            "<td><b>" +
+                                            jurnalDetailKReal +
+                                            "</b></td>" +
+                                            "</tr>"
+                                        );
+                                    
+                                }
+
                             });
 
                             $(".dropPengeluaran").text(
                                 "Rp. " +
                                 parseInt(totalPengeluaran).toLocaleString("en-US")
                             );
-                   
+
                         }
                     }
                 },

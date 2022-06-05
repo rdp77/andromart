@@ -62,9 +62,10 @@ class ReportSpendingController extends Controller
         $data = Journal::with('JournalDetail', 'JournalDetail.AccountData')
             ->where('date', '>=', $this->DashboardController->changeMonthIdToEn($req->dateS))
             ->where('date', '<=', $this->DashboardController->changeMonthIdToEn($req->dateE))
-            // ->where(function ($query) {
-                // return $query->where('this_too', 'LIKE', '%fake%');
-            // })
+            ->where(function ($query) {
+                        $query->where('code', 'LIKE', '%KK%');
+                 return $query->where('description', 'NOT LIKE', '%HPP%');
+            })
             ->get();
 
         if (count($data) == 0) {
