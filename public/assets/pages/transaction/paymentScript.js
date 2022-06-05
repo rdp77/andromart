@@ -257,7 +257,7 @@ function branchChange() {
 
     var params = $(".branch").find(":selected").val();
     $.each($(".accountData"), function () {
-        if (params == $(this).data("branch")) {
+        // if (params == $(this).data("branch")) {
             var selected = "";
             if ($(this).data("selected") == "selected") {
                 var selected = "selected";
@@ -271,7 +271,7 @@ function branchChange() {
                 '">' +
                 $(this).data("name") +
                 "</option>";
-        }
+        // }
     });
     $(".cost").append('<option value="">- Select -</option>');
     $(".cost").append(dataItems);
