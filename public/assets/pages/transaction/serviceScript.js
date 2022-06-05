@@ -864,7 +864,30 @@ function updateStatusService() {
                                     str = str.substr(1);
                                     // console.log(str);
 
-                                    window.open("https://wa.me/62"+str+"?text=Barang%20yang%20anda%20service%20telah%20SELESAI%0A");
+                                    // window.open("https://wa.me/62"+str+"?text=Barang%20yang%20anda%20service%20telah%20SELESAI%0A");
+                                    window.open("https://api.whatsapp.com/send?phone=62"+str+"&text=Hallo%2C%20Sobat%20Andromart%0D%0A%0D%0AMenginformasikan%20Untuk%20Unit%20Servicenya%20Telah%0D%0Akami%20lakukan%20Pengecekan%20Fungsi%20dengan%20Status%20SELESAI%0D%0ASudah%20bisa%20diambil%20di%20Counter%20kami%0D%0A%0D%0AUntuk%20Garansi%20Terhitung%20Hari%20ini%20ya%20kak%2C%20Jangan%20Lupa%20Membawa%20Nota%20Service.%0D%0AFREE%20antar%20Unit%20untuk%20AREA%20SIDOARJO%20KOTA%0D%0ATerimakasih%20%3B%29");
+                                    
+                                }
+                            });
+                        }
+
+                        if (status == 'Proses') {
+                            swal({
+                                title: "Apakah Anda Ingin Mengkonfirmasi WA Customer ?",
+                                text: "Aksi ini membuat anda akan berpindah halaman.",
+                                icon: "warning",
+                                buttons: true,
+                                dangerMode: true,
+                            }).then((red) => {
+                                if (red) {
+                                    let str = data.data.customer_phone;
+ 
+                                    str = str.substr(1);
+                                    // console.log(str);
+
+                                    // window.open("https://wa.me/62"+str+"?text=Barang%20yang%20anda%20service%20telah%20SELESAI%0A");
+                                    window.open("https://api.whatsapp.com/send?phone=62"+str+"&text=Hallo%2C%20Sobat%20Andromart%0D%0AMenginformasikan%20Untuk%20Unit%20Servicenya%20Sedang%20kami%20Proses%0D%0AMohon%20ditunggu%20Perkembangan%20Selanjutnya%20ya%20kak%0D%0ATerimakasih%20%3B%29");
+                                    
                                 }
                             });
                         }

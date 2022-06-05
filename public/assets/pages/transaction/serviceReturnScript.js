@@ -259,7 +259,9 @@ function choseService() {
 }
 
 function save() {
- 
+    var status = $('.type').find(':selected').val();
+    var phone = $('.serviceId').find(':selected').data('phone');
+    console.log(phone);
     swal({
         title: "Apakah Anda Yakin?",
         text: "Aksi ini tidak dapat dikembalikan, dan akan menyimpan data Anda.",
@@ -294,6 +296,26 @@ function save() {
                         swal(data.message, {
                             icon: "success",
                         });
+                        if (status == 'Cancel') {
+                            swal({
+                                title: "Apakah Anda Ingin Mengkonfirmasi WA Customer ?",
+                                text: "Aksi ini membuat anda akan berpindah halaman.",
+                                icon: "warning",
+                                buttons: true,
+                                dangerMode: true,
+                            }).then((red) => {
+                                if (red) {
+                                    let str = phone;
+ 
+                                    str = str.substr(1);
+                                    // console.log(str);
+
+                                    // window.open("https://wa.me/62"+str+"?text=Barang%20yang%20anda%20service%20telah%20SELESAI%0A");
+                                    window.open("https://api.whatsapp.com/send?phone=62"+str+"&text=Hallo%2C%20Sobat%20Andromart%0D%0AKami%20informasikan%20ke%20Teknisi%20kami%20untuk%20merakit%20unitnya%20kembali%0D%0ATidak%20dikenakan%20biaya%20kak%2C%20Bisa%20diambil%20di%20Counter%20kami%20Paling%20lama%201%20Hari%20Kerja%20sejak%20Konfirmasi%20Cancel%0D%0ATerimakasih%20%3B%29");
+                                    
+                                }
+                            });
+                        }
                         location.reload;
                     }else{
                         console.log(data);

@@ -32,6 +32,7 @@
                                 @foreach ($data as $element)
                                     <option value="{{$element->id}}"
                                     data-technician="{{$element->Employee1->name}}"
+                                    data-phone="{{$element->customer_phone}}"
                                     data-customerName="{{$element->customer_name}}"
                                     data-customerAdress="{{$element->customer_address}}"
                                     data-customerPhone="{{$element->customer_phone}}"
@@ -175,7 +176,7 @@
         </div>
         <div class="card-footer text-right">
             <button class="btn btn-primary mr-1" type="button" onclick="save()"><i class="far fa-save"></i>
-                {{ __('Simpan Pelunasan Data') }}</button>
+                {{ __('Simpan Return') }}</button>
         </div>
     </div>
 </form>
