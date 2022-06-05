@@ -52,6 +52,10 @@
                                     </table>
                                 </div>
                             </div>
+                            <div class="dropTotal">
+
+                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -64,8 +68,8 @@
                     <div class="col-12">
                         <h2 class="section-title">Laporan Kas Saat ini <b>{{ date('d F Y') }}</b> </h2>
                         <div class="card">
+                            
                             <div class="card-body">
-                                <br>
                                 <div class="row">
                                     <table class="table table-striped">
                                         <thead>
@@ -75,12 +79,16 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+                                            @php
+                                                $total = 0;
+                                            @endphp
                                             @for ($i = 0; $i < count($data); $i++)
                                                 <tr>
                                                     <th>
                                                         @php
                                                             // var_dump($data[$i]);
                                                             echo $data[$i]['namaAkun'];
+                                                            $total += $data[$i]['total'];
                                                             // var_dump($data[$i]['akun']);
                                                         @endphp
                                                     </th>
@@ -96,6 +104,9 @@
                                     </table>
                                 </div>
                             </div>
+                        </div>
+                        <div class="card-header" style="background-color: #ffffdc; color:black">
+                            <h3>Total Kas : Rp. {{ number_format($total, 0, ',', ',') }}</h3>
                         </div>
                     </div>
                 </div>
