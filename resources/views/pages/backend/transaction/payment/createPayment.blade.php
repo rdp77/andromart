@@ -102,9 +102,9 @@
                                 <select class="select2 validation" data-name="Transfer Harus Di isi" name="cash_tranfer_id">
                                     <option value="">- Select -</option>
                                     @foreach ($cash_transfer as $el)
-                                        {{-- @if ($el->main_id == 1) --}}
+                                        @if ($el->main_id == 1)
                                             <option value="{{$el->id}}">{{$el->code}} - {{$el->name}}</option>
-                                        {{-- @endif --}}
+                                        @endif
                                     @endforeach 
                                 </select>
                             </div>
