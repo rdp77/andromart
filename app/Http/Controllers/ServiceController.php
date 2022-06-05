@@ -947,7 +947,7 @@ class ServiceController extends Controller
                 $checkStockDeleted = [];
                 for ($i = 0; $i < count($checkDataDeleted); $i++) {
                     $checkStockDeleted[$i] = Stock::where('item_id', $checkDataDeleted[$i]->item_id)
-                        ->where('branch_id', $getEmployee->branch_id)
+                        ->where('branch_id', $checkData->branch_id)
                         ->where('id', '!=', 1)
                         ->get();
 
@@ -958,7 +958,7 @@ class ServiceController extends Controller
                     }
                     // return $desc;
                     Stock::where('item_id', $checkDataDeleted[$i]->item_id)
-                        ->where('branch_id', $getEmployee->branch_id)
+                        ->where('branch_id', $checkData->branch_id)
                         ->update([
                             'stock' => $checkStockDeleted[$i][0]->stock + $checkDataDeleted[$i]->qty,
                         ]);
@@ -996,7 +996,7 @@ class ServiceController extends Controller
                     ]);
                     if ($req->typeDetail[$i] != 'Jasa') {
                         $checkStock[$i] = Stock::where('item_id', $req->itemsDetail[$i])
-                            ->where('branch_id', $getEmployee->branch_id)
+                            ->where('branch_id', $checkData->branch_id)
                             ->where('id', '!=', 1)
                             ->get();
                         if ($checkStock[$i][0]->stock < $req->qtyDetail[$i]) {
@@ -1011,7 +1011,7 @@ class ServiceController extends Controller
                             $desc[$i] = '(Update Service) Pengeluaran Barang Loss Pada Service ' . $req->code;
                         }
                         Stock::where('item_id', $req->itemsDetail[$i])
-                            ->where('branch_id', $getEmployee->branch_id)
+                            ->where('branch_id', $checkData->branch_id)
                             ->update([
                                 'stock' => $checkStock[$i][0]->stock - $req->qtyDetail[$i],
                             ]);
@@ -1041,12 +1041,12 @@ class ServiceController extends Controller
                         // return$checkDataOld[$i];
                         if ($req->typeDetailOld[$i] != 'Jasa') {
                             $checkStockExisting[$i] = Stock::where('item_id', $req->itemsDetailOld[$i])
-                                ->where('branch_id', $getEmployee->branch_id)
+                                ->where('branch_id', $checkData->branch_id)
                                 ->where('id', '!=', 1)
                                 ->get();
 
                             $checkStockExistingOlder[$i] = Stock::where('item_id', $checkDataOld[$i]->item_id)
-                                ->where('branch_id', $getEmployee->branch_id)
+                                ->where('branch_id', $checkData->branch_id)
                                 ->where('id', '!=', 1)
                                 ->get();
                             // if($checkStockExisting[$i][0]->stock < ($req->qtyDetailOld[$i])){
@@ -1129,7 +1129,7 @@ class ServiceController extends Controller
                                     ]);
 
                                     Stock::where('item_id', $checkDataOld[$i]->item_id)
-                                        ->where('branch_id', $getEmployee->branch_id)
+                                        ->where('branch_id', $checkData->branch_id)
                                         ->update([
                                             'stock' => $checkStockExisting[$i][0]->stock + $checkDataOld[$i]->qty - $req->qtyDetailOld[$i],
                                         ]);
@@ -1154,7 +1154,7 @@ class ServiceController extends Controller
 
                                 if ($checkStockExistingOlder[$i][0]->item_id == $checkDataOld[$i]->item_id) {
                                     Stock::where('item_id', $checkDataOld[$i]->item_id)
-                                        ->where('branch_id', $getEmployee->branch_id)
+                                        ->where('branch_id', $checkData->branch_id)
                                         ->update([
                                             'stock' => $checkStockExistingOlder[$i][0]->stock + $checkDataOld[$i]->qty,
                                         ]);
@@ -1182,7 +1182,7 @@ class ServiceController extends Controller
                                     $descPengeluaran[$i] = '(Update Service) Pengeluaran Barang Loss Pada Service ' . $req->code;
                                 }
                                 Stock::where('item_id', $req->itemsDetailOld[$i])
-                                    ->where('branch_id', $getEmployee->branch_id)
+                                    ->where('branch_id', $checkData->branch_id)
                                     ->update([
                                         'stock' => $checkStockExisting[$i][0]->stock - $req->qtyDetailOld[$i],
                                     ]);
@@ -1421,7 +1421,7 @@ class ServiceController extends Controller
             for ($i = 0; $i < count($checkDataDeleted); $i++) {
                 if ($checkDataDeleted[$i]->item_id != 1) {
                     $checkStockDeleted[$i] = Stock::where('item_id', $checkDataDeleted[$i]->item_id)
-                        ->where('branch_id', $getEmployee->branch_id)
+                        ->where('branch_id', $checkDataDeleted->branch_id)
                         ->where('id', '!=', 1)
                         ->get();
 
@@ -1432,7 +1432,7 @@ class ServiceController extends Controller
                     }
                     // return $desc;
                     Stock::where('item_id', $checkDataDeleted[$i]->item_id)
-                        ->where('branch_id', $getEmployee->branch_id)
+                        ->where('branch_id', $checkDataDeleted->branch_id)
                         ->update([
                             'stock' => $checkStockDeleted[$i][0]->stock + $checkDataDeleted[$i]->qty,
                         ]);
