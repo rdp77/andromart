@@ -142,8 +142,8 @@ class TransactionIncomeController extends Controller
             $req->description,
         ];
         $DK = [
-            'D',
             'K',
+            'D',
         ];
 
         for ($i=0; $i <count($accountCode) ; $i++) {
