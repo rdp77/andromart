@@ -45,9 +45,9 @@
                             </select>
                         </div> --}}
                                     <div class="form-group col-12 col-md-4 col-lg-4">
-                                        <label for="startDate">{{ __('cabang') }}<code>*</code></label>
-                                        <select class="form-control cabang" name="cabang">
-                                            <option value="">- select -</option>
+                                        <label for="startDate">{{ __('Cabang') }}<code>*</code></label>
+                                        <select class="select2 cabang" name="cabang">
+                                            <option value="">- Select -</option>
                                             @foreach ($branch as $el)
                                                 <option value="{{ $el->id }}">{{ $el->name }}</option>
                                             @endforeach
@@ -66,34 +66,36 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-12">
-                    <h2 class="section-title">Total Pengeluaran</h2>
-                    <div class="table-responsive">
-                        <table class="table table-striped " id="areaToPrint">
-                            <thead>
-                                <tr>
-                                    <th>Nama</th>
-                                    <th>Tanggal</th>
-                                    <th>Transaksi</th>
-                                    <th>Akun</th>
-                                    {{-- <th>Debet</th> --}}
-                                    <th>Kredit</th>
-                                    {{-- <th>total</th> --}}
-                                </tr>
-                            </thead>
-                            <tbody class="dropHere" style="border: none !important">
-                            </tbody>
-                            <tfoot>
-                                <tr>
-                                    <th colspan="6">
-                                        <h5>Pengeluaran : <b class="dropPengeluaran">Rp. 0</b></h5>
-                                    </th>
-                                    {{-- <th colspan="3"><h5>Pendapatan : <b class="dropPendapatan">Rp. 0</b></h5></th> --}}
-                                </tr>
-                            </tfoot>
-                        </table>
-                        {{-- <div class="dropHereTotalVal"></div> --}}
-
+                {{-- <h2 class="section-title">Total Pengeluaran</h2> --}}
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-striped " id="areaToPrint">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center">Nama</th>
+                                        <th class="text-center">Tanggal</th>
+                                        <th class="text-center">Transaksi</th>
+                                        <th class="text-center">Akun</th>
+                                        {{-- <th class="text-center">Debet</th> --}}
+                                        <th class="text-center">Kredit</th>
+                                        {{-- <th class="text-center">total</th> --}}
+                                    </tr>
+                                </thead>
+                                <tbody class="dropHere" style="border: none !important">
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="6">
+                                            <h5>Pengeluaran : <b class="dropPengeluaran">Rp. 0</b></h5>
+                                        </th>
+                                        {{-- <th colspan="3"><h5>Pendapatan : <b class="dropPendapatan">Rp. 0</b></h5></th> --}}
+                                    </tr>
+                                </tfoot>
+                            </table>
+                            {{-- <div class="dropHereTotalVal"></div> --}}
+    
+                        </div>
                     </div>
                 </div>
         </section>

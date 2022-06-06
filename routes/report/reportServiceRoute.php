@@ -41,6 +41,10 @@ Route::group(['prefix' => 'report'], function () {
             [ReportServiceController::class, 'branchLoad']
         )->name('report-service.branchLoad');
         Route::post(
+            'refresh-report-service-status',
+            [ReportServiceController::class, 'statusLoad']
+        )->name('report-service.statusLoad');
+        Route::post(
             'refresh-employee-report-service',
             [ReportServiceController::class, 'dataEmployeeLoad']
         )->name('report-employee-service.dataLoad');
@@ -62,6 +66,10 @@ Route::group(['prefix' => 'report'], function () {
             'print-report-service-branch',
             [ReportServiceController::class, 'printBranch']
         )->name('print-report-service.branch');
+        Route::get(
+            'print-report-service-status',
+            [ReportServiceController::class, 'printStatus']
+        )->name('print-report-service.status');
     });
 
 });

@@ -33,8 +33,9 @@ class ReportServiceController extends Controller
             $branch = Branch::where('id', Auth::user()->employee->branch_id)->get();
         }
         $technician = Employee::where('branch_id', $branchUser)->get();
+        $technician2 = Employee::where('branch_id', $branchUser)->get();
 
-        return view('pages.backend.report.reportService',compact('type', 'technician', 'branch'));
+        return view('pages.backend.report.reportService',compact('type', 'technician', 'branch', 'technician2'));
     }
 
     public function dataLoad(Request $req)
@@ -124,6 +125,30 @@ class ReportServiceController extends Controller
         ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
         ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('branch_id', $req->branch_id)
+        ->where('payment_status', 'Lunas')->get();
+
+        $sumKotor = $bayar->sum('total_price');
+        $sumBersih = $bayar->sum('sharing_profit_store');
+        $tr = count($data);
+
+        return view('pages.backend.report.reportServiceLoad', compact('data', 'tr', 'sumKotor', 'sumBersih'));
+    }
+
+    public function statusLoad(Request $req)
+    {
+        $startDate = $req->startDate5;
+        $endDate = $req->endDate5;
+        $data = Service::with(['Type', 'Brand'])
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('technician_id', $req->technician2)
+        ->where('work_status', $req->status)
+        ->orderBy('id', 'desc')->get();
+
+        $bayar = Service::with(['Type', 'Brand'])
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('technician_id', $req->technician2)
         ->where('payment_status', 'Lunas')->get();
 
         $sumKotor = $bayar->sum('total_price');
@@ -226,7 +251,7 @@ class ReportServiceController extends Controller
 
     public function printBranch (Request $req)
     {
-        $branch = Branch::where('id', $req->branch_id)->first();
+        $teknisi = Branch::where('id', $req->branch_id)->first();
         $title = 'Laporan Service per Cabang';
         $subtitle = 'Cabang';
         $periode = $req->startDate4. ' - ' .$req->endDate4;
@@ -244,6 +269,36 @@ class ReportServiceController extends Controller
         ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
         ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
         ->where('branch_id', $req->branch_id)
+        ->where('payment_status', 'Lunas')->get();
+
+        $sumKotor = $bayar->sum('total_price');
+        $sumBersih = $bayar->sum('sharing_profit_store');
+        $tr = count($data);
+
+        return view('pages.backend.report.printReportService', compact('data', 'tr', 'sumKotor', 'sumBersih', 'title', 'subtitle', 'val', 'periode'));
+    }
+
+    public function printStatus (Request $req)
+    {
+        $teknisi = Employee::where('id', $req->technician2)->first();
+        $title = 'Laporan Service per Status';
+        $subtitle = 'Status';
+        $periode = $req->startDate5. ' - ' .$req->endDate5;
+        $val = $req->status. ' oleh '. $teknisi->name;
+        $branchUser = Auth::user()->employee->branch_id;
+        $startDate = $req->startDate5;
+        $endDate = $req->endDate5;
+        $data = Service::with(['Type', 'Brand'])
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('technician_id', $req->technician2)
+        ->where('work_status', $req->status)
+        ->orderBy('id', 'desc')->get();
+
+        $bayar = Service::with(['Type', 'Brand'])
+        ->where('date','>=',$this->DashboardController->changeMonthIdToEn($startDate))
+        ->where('date','<=',$this->DashboardController->changeMonthIdToEn($endDate))
+        ->where('technician_id', $req->technician2)
         ->where('payment_status', 'Lunas')->get();
 
         $sumKotor = $bayar->sum('total_price');

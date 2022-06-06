@@ -4,7 +4,7 @@
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
 <div class="breadcrumb-item active">{{ __('Service') }}</div>
-<div class="breadcrumb-item active">{{ __('Show Service') }}</div>
+<div class="breadcrumb-item active">{{ __('Detail Service') }}</div>
 @endsection
 
 @section('content')

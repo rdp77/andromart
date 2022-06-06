@@ -13,7 +13,7 @@
     <tbody class="dropHere" style="border: none !important">
         <tr role="row" class="odd">
             <td>{{ \Carbon\Carbon::parse($value->created_at)->locale('id')->isoFormat('LL') }}</td>
-            <th>{{ $value->code }}</th>
+            <th><a href="{{ route('service.show', $value->id) }}">{{ $value->code }}</a></th>
             <td>
                 <strong>{{ $value->customer_name}}</strong> &nbsp; ||  
                 {{ $value->customer_phone}}<br>

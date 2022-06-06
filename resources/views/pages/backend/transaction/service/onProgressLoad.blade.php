@@ -22,7 +22,7 @@
                 <table>
                     <tr>
                         <td>Kode</td>
-                        <th>{{ $service->code }}</th>
+                        <th><a href="{{ route('service.show', $service->id) }}">{{ $service->code }}</a></th>
                     </tr>
                     <tr>
                         <td>Tanggal</td>

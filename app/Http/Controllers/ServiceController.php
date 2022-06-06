@@ -89,7 +89,9 @@ class ServiceController extends Controller
                     $htmlAdd = '<table>';
                     $htmlAdd .= '<tr>';
                     $htmlAdd .= '<td>Kode</td>';
-                    $htmlAdd .= '<th>' . $row->code . '</th>';
+                    $htmlAdd .= '<th>';
+                    $htmlAdd .= '<a href="' . route('service.show', $row->id) . '">' . $row->code . '</a>';
+                    $htmlAdd .= '</th>';
                     $htmlAdd .= '</tr>';
                     $htmlAdd .= '<tr>';
                     $htmlAdd .= '<td>Tgl Dibuat</td>';

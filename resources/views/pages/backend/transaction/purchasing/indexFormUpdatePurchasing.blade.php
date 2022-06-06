@@ -14,7 +14,7 @@
     <div class="section-body">
       <div class="row">
         <div class="col-5">
-          <h2 class="section-title">form </h2>
+          <h2 class="section-title">Form </h2>
           <div class="card">
                 <div class="card-body">
                     <div class="form-group col-12 col-md-12 col-lg-12">

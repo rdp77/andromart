@@ -76,6 +76,7 @@ class StockOpnameController extends Controller
 
     public function printStockOpname(Request $req)
     {
+        $branchUser = Auth::user()->employee->branch_id;
         if ($req->category < '1') {
             $activa = Stock::with('item')
             ->leftJoin('items', 'items.id', 'stocks.item_id')
@@ -91,7 +92,6 @@ class StockOpnameController extends Controller
             ->get();
             $category = Category::with('brand', 'brand.item', 'brand.item.stocks')->where('id', $req->category)->get();            
         }
-        $branchUser = Auth::user()->employee->branch_id;
         $item = Stock::with('item', 'item.brand', 'item.brand.category')
         ->leftJoin('units', 'units.id', 'stocks.unit_id')
         ->leftJoin('items', 'items.id', 'stocks.item_id')
