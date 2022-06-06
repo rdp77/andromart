@@ -118,10 +118,10 @@ class TransactionIncomeController extends Controller
         $idJournal = DB::table('journals')->max('id')+1;
         Journal::create([
             'id' =>$idJournal,
-            'code'=>$this->codeJournals('KK',$idJournal),
+            'code'=>$this->codeJournals('DD',$idJournal),
             'year'=>date('Y'),
             'date'=>date('Y-m-d'),
-            'type'=>'Biaya',
+            'type'=>'Pendapatan',
             'total'=>str_replace(",", '',$req->price),
             'ref'=>$req->code,
             'description'=>$req->description,
