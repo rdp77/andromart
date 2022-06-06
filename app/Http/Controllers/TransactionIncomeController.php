@@ -120,7 +120,7 @@ class TransactionIncomeController extends Controller
             'id' =>$idJournal,
             'code'=>$this->codeJournals('DD',$idJournal),
             'year'=>date('Y'),
-            'date'=>date('Y-m-d'),
+            'date'=>$date,
             'type'=>'Pendapatan',
             'total'=>str_replace(",", '',$req->price),
             'ref'=>$req->code,
