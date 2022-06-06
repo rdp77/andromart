@@ -36,6 +36,7 @@ class StockOpnameController extends Controller
         $stockCategory = Category::with('brand', 'brand.item', 'brand.item.stocks')->get();
         $activa = Stock::with('item')
         ->leftJoin('items', 'items.id', 'stocks.item_id')
+        ->where('branch_id', $branchUser)
         ->select('items.buy as hargabeli', 'stocks.stock as stock')
         ->get();
 
@@ -78,12 +79,14 @@ class StockOpnameController extends Controller
         if ($req->category < '1') {
             $activa = Stock::with('item')
             ->leftJoin('items', 'items.id', 'stocks.item_id')
+            ->where('branch_id', $branchUser)
             ->select('items.buy as hargabeli', 'stocks.stock as stock')
             ->get();
             $category = Category::with('brand', 'brand.item', 'brand.item.stocks')->get();
         } else {
             $activa = Stock::with('item')
             ->leftJoin('items', 'items.id', 'stocks.item_id')
+            ->where('branch_id', $branchUser)
             ->select('items.buy as hargabeli', 'stocks.stock as stock')
             ->get();
             $category = Category::with('brand', 'brand.item', 'brand.item.stocks')->where('id', $req->category)->get();            
@@ -102,30 +105,5 @@ class StockOpnameController extends Controller
         $itung = count($item);
         
         return view('pages.backend.warehouse.stockOpname.printStockOpname', compact('activa', 'item', 'category', 'itung'));
-    }
-
-    public function printDataLoad(Request $req)
-    {
-        
-    }
-
-    public function show($id)
-    {
-        //
-    }
-
-    public function edit($id)
-    {
-        //
-    }
-
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    public function destroy($id)
-    {
-        //
     }
 }

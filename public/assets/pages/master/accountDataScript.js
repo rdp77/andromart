@@ -87,13 +87,23 @@ function del(id) {
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url: "/master/customer/customer/" + id,
+                url: "/master/account-data/account-data/" + id,
                 type: "DELETE",
-                success: function () {
-                    swal("Data master berhasil dihapus", {
-                        icon: "success",
-                    });
-                    table.draw();
+                success: function (data) {
+                    if (data.status == 'success') {
+                        swal(data.message, {
+                            icon: "success",
+                        });
+                        table.draw();
+                    }else if (data.status == 'restricted') {
+                        swal(data.message, {
+                            icon: "warning",
+                        });
+                    }else {
+                        swal(data.message, {
+                            icon: "error"
+                        });
+                    }
                 },
             });
         } else {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\Stock;
 use App\Models\Unit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -140,16 +141,17 @@ class UnitController extends Controller
     public function destroy(Request $req, $id)
     {
         $checkRoles = $this->DashboardController->cekHakAkses(27,'delete');
-        $item = Item::where('unit_id', $id)->get();
-        $checkItem = count($item);
-
+        
         if($checkRoles == 'akses ditolak'){
             return Response::json(['status' => 'restricted', 'message' => 'Kamu Tidak Boleh Mengakses Fitur Ini :)']);
         }
 
-        if ($checkItem > 0) {
+        $stock = Stock::where('unit_id', '=', $id)->get();
+        $checkStock = count($stock);
+
+        if ($checkStock > 0) {
             return Response::json(['status' => 'error', 'message' => 'Data terrelasi dengan Item, data tidak bisa dihapus !']);
-        } else {
+        }else {
             $this->DashboardController->createLog(
                 $req->header('user-agent'),
                 $req->ip(),

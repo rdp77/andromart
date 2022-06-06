@@ -4,12 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class AccountData extends Model
 {
     use HasFactory;
-    use SoftDeletes;
     protected $table = 'account_data';
     protected $fillable = [
         'id',
@@ -26,8 +24,8 @@ class AccountData extends Model
         'opening_date',
         'created_at',
         'updated_at',
-        // 'created_by',
-        // 'updated_by',
+        'created_by',
+        'updated_by',
     ];
 
     public function AccountMain()
@@ -45,6 +43,10 @@ class AccountData extends Model
     public function Sale()
     {
         return $this->hasMany(Sale::class, 'account', 'id');
+    }
+    public function JournalDetail()
+    {
+        return $this->hasMany(JournalDetail::class, 'account_id', 'id');
     }
 
 }

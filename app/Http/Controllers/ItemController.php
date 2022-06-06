@@ -135,15 +135,6 @@ class ItemController extends Controller
 
     public function store(Request $req)
     {
-        // Validator::make($req->all(), [
-        //     // 'name' => ['required', 'string', 'max:255'],
-        //     // 'brand_id' => ['required', 'integer'],
-        //     // 'supplier_id' => ['required', 'integer'],
-        //     // 'unit_id' => ['required', 'integer'],
-        //     'buy' => ['required', 'string', 'max:255'],
-        //     'sell' => ['required', 'string', 'max:255'],
-        // ])->validate();
-
         $id = DB::table('items')->max('id') + 1;
         $image = $req->image;
         $image = str_replace('data:image/jpeg;base64,', '', $image);
@@ -226,14 +217,6 @@ class ItemController extends Controller
 
     public function update($id, Request $req)
     {
-        // Validator::make($req->all(), [
-        //     'name' => ['required', 'string', 'max:255'],
-        //     'brand_id' => ['required', 'integer'],
-        //     'supplier_id' => ['required', 'integer'],
-        //     'buy' => ['required', 'string', 'max:255'],
-        //     'sell' => ['required', 'string', 'max:255'],
-        //     'condition' => ['required', 'string', 'max:10'],
-        // ])->validate();
         $checkData = Item::where('id', $id)->first();
         $image = $req->image;
         $image = str_replace('data:image/jpeg;base64,', '', $image);
@@ -264,7 +247,6 @@ class ItemController extends Controller
         Stock::where('item_id', $id)
             ->update([
                 'unit_id' => $req->unit_id,
-                // 'min_stock' => $req->unit_id,
             ]);
 
         $item = Item::find($id);
@@ -315,7 +297,7 @@ class ItemController extends Controller
 
                 Item::destroy($id);
                 Stock::destroy($stock);
-                // Stock::where('item_id', '=', $id)->delete();
+
                 return Response::json([
                     'status' => 'success',
                     'message' => 'Data master berhasil dihapus !'
