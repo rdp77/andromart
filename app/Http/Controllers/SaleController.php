@@ -1064,9 +1064,9 @@ class SaleController extends Controller
                         ->get();
 
                     if ($checkDataDeleted[$i]->type == 'SparePart') {
-                        $desc[$i] = '(Delete Penjualan) Pengembalian Barang Pada Penjualan ' . $req->code;
+                        $desc[$i] = '(Delete Penjualan) Pengembalian Barang Pada Penjualan ' . $sale->code;
                     } else {
-                        $desc[$i] = '(Delete Penjualan) Pengembalian Barang Loss Pada Penjualan ' . $req->code;
+                        $desc[$i] = '(Delete Penjualan) Pengembalian Barang Loss Pada Penjualan ' . $sale->code;
                     }
                     // return $desc;
                     Stock::where('item_id', $checkDataDeleted[$i]->item_id)
@@ -1079,7 +1079,7 @@ class SaleController extends Controller
                         'unit_id' => $checkStockDeleted[$i][0]->unit_id,
                         'branch_id' => $checkStockDeleted[$i][0]->branch_id,
                         'qty' => $checkDataDeleted[$i]->qty,
-                        'code' => $req->code,
+                        'code' => $sale->code,
                         'type' => 'In',
                         'description' => $desc[$i],
                     ]);

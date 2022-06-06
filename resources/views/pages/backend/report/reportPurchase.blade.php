@@ -159,30 +159,32 @@
             </div>
         </div>
       </div>
-      <div class="col-12">
-          <div class="table-responsive" id="data-load">
-            <table class="table table-striped table-bordered">
-                <thead>
-                    <tr>
-                        <th class="text-center" width="13%">Tanggal</th>
-                        <th class="text-center">Faktur</th>
-                        <th class="text-center">Barang</th>
-                        <th class="text-center">Supplier</th>
-                        <th class="text-center">Pembayaran</th>
-                        <th class="text-center">Operator</th>
-                        <th class="text-center">Jumlah</th>
-                    </tr>
-                </thead>
-                <tbody class="dropHere" style="border: none !important">
-                </tbody>
-                <tfoot>
-                    <tr style="color: #6777ef">
-                        <th colspan="4" class="text-left"><h5>Jumlah Transaksi : 0</h5></th>
-                        <th colspan="3" class="text-right"><h5>Total Pengeluaran : Rp. 0</h5></th>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
+      <div class="card">
+          <div class="card-body">
+              <div class="table-responsive" id="data-load">
+                <table class="table table-striped table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="text-center" width="13%">Tanggal</th>
+                            <th class="text-center">Faktur</th>
+                            <th class="text-center">Barang</th>
+                            <th class="text-center">Supplier</th>
+                            <th class="text-center">Pembayaran</th>
+                            <th class="text-center">Operator</th>
+                            <th class="text-center">Jumlah</th>
+                        </tr>
+                    </thead>
+                    <tbody class="dropHere" style="border: none !important">
+                    </tbody>
+                    <tfoot>
+                        <tr style="color: #6777ef">
+                            <th colspan="4" class="text-left"><h5>Jumlah Transaksi : 0</h5></th>
+                            <th colspan="3" class="text-right"><h5>Total Pengeluaran : Rp. 0</h5></th>
+                        </tr>
+                    </tfoot>
+                </table>
+              </div>
+          </div>
       </div>
   </section>
 </form>

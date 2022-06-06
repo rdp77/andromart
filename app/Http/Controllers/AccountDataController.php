@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\AccountData;
-use App\Models\Branch;
 use App\Models\Area;
+use App\Models\AccountData;
 use App\Models\AccountMain;
 use App\Models\AccountMainDetail;
+use App\Models\Branch;
+use App\Models\JournalDetail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -43,7 +44,7 @@ class AccountDataController extends Controller
                         </button>';
                     $actionBtn .= '<div class="dropdown-menu">
                             <a class="dropdown-item" href="' . route('account-data.edit', $row->id) . '">Edit</a>';
-                    // $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
+                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
@@ -218,14 +219,32 @@ class AccountDataController extends Controller
 
     public function destroy(Request $req, $id)
     {
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Menghapus master area ' . Area::find($id)->name
-        );
+        $checkRoles = $this->DashboardController->cekHakAkses(20,'delete');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
 
-        Area::destroy($id);
+        $transaction = JournalDetail::where('account_id', '=', $id)->get();
+        $checkTransaction = count($transaction);
+     
+        if ($checkTransaction > 0) {
+            return Response::json([
+                'status' => 'error',
+                'message' => 'Data yang sudah di transaksikan tidak bisa dihapus !'
+            ]);
+        } else {
+            $this->DashboardController->createLog(
+                $req->header('user-agent'),
+                $req->ip(),
+                'Menghapus master akun data ' . AccountData::find($id)->name
+            );
 
-        return Response::json(['status' => 'success']);
+            AccountData::destroy($id);
+
+            return Response::json([
+                'status' => 'success',
+                'message' => 'Data master berhasil dihapus !'
+            ]);
+        }        
     }
 }

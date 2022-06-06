@@ -15,7 +15,7 @@
     <div class="section-body">
       <div class="row">
         <div class="col-5">
-          <h2 class="section-title">form </h2>
+          <h2 class="section-title">Form </h2>
           <div class="card">
                 <div class="card-body">
                     <div class="form-group col-12 col-md-12 col-lg-12">
@@ -70,31 +70,35 @@
             </div>
         </div>
       <div class="col-7">
-          <h2 class="section-title">Total Service</h2>
-          <div class="table-responsive">
-            <table class="table table-striped">
-                <thead>
-                    <tr>
-                        <th>Kode</th>
-                        <th>Tanggal</th>
-                        <th>Customer</th>
-                        <th>total</th>
-                        <th>Dibayarkan ?</th>
-                    </tr>
-                </thead>
-                <tbody class="dropHere" style="border: none !important">
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="2">total</td>
-                        <td class="dropHereTotal">0</td>
-                    </tr>
-                </tfoot>
-            </table>
-            <div class="dropHereTotalVal"></div>
-            <button type="button" class="btn btn-primary" onclick="saveSharingProfit()"><i class="fas fa-save"></i> Simpan</button>
-
-        </div>
+          <h2 class="section-title">Total Sharing Profit</h2>
+          <div class="card">
+              <div class="card-body">
+                  <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Kode</th>
+                                <th class="text-center">Tanggal</th>
+                                <th class="text-center">Customer</th>
+                                <th class="text-center">Total</th>
+                                <th class="text-center">Dibayarkan ?</th>
+                            </tr>
+                        </thead>
+                        <tbody class="dropHere" style="border: none !important">
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="3">Total </th>
+                                <th class="dropHereTotal">0</th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <div class="dropHereTotalVal"></div>
+                    <button type="button" class="btn btn-primary" onclick="saveSharingProfit()"><i class="fas fa-save"></i> Simpan</button>
+        
+                </div>
+              </div>
+          </div>
       </div>
     </div>
   </section>

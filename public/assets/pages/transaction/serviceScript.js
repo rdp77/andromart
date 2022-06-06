@@ -92,7 +92,7 @@ function del(id) {
                 type: "DELETE",
                 success: function (data) {
                     if(data.status == 'success'){
-                        swal("Data pengguna berhasil dihapus", {
+                        swal(data.message, {
                             icon: "success",
                         });
                         table.draw();
@@ -101,7 +101,7 @@ function del(id) {
                             icon: "warning",
                         });
                     }else{
-                        swal('DATA EROR HUBUNGI DEVELOPER', {
+                        swal(data.message, {
                             icon: "error",
                         });
                     }

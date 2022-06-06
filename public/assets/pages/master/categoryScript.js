@@ -91,13 +91,13 @@ function del(id) {
                         swal(data.message, {
                             icon: "success",
                         });
-                        location.reload();
+                        table.draw();
                     }else if(data.status == 'restricted'){
                         swal(data.message, {
                             icon: "warning",
                         });
                     }else{
-                        swal('DATA EROR HUBUNGI DEVELOPER', {
+                        swal(data.message, {
                             icon: "error",
                         });
                     }

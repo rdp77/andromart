@@ -18,8 +18,6 @@ class JournalDetail extends Model
         'debet_kredit',
         'created_at',
         'updated_at',
-        // 'created_by',
-        // 'updated_by',
     ];
     public function Journal()
     {

@@ -101,7 +101,7 @@ function del(id) {
                             icon: "warning",
                         });
                     }else{
-                        swal('DATA EROR HUBUNGI DEVELOPER', {
+                        swal(data.message, {
                             icon: "error",
                         });
                     }
