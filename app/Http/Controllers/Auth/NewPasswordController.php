@@ -75,8 +75,8 @@ class NewPasswordController extends Controller
     public function changePassword(Request $req)
     {
         $this->validate($req, [
-            'oldPassword' => ['required', 'string', 'min:8'],
-            'password' => ['required', 'string', 'min:8'],
+            'oldPassword' => ['required', 'string'],
+            'password' => ['required', 'string'],
             // 'username' => ['required', 'string'],
         ]);
 
