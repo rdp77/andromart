@@ -1,5 +1,5 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title') . __('Laporan Periodic'))
+@section('title', __('pages.title') . __(' | Laporan Periodic'))
 @section('titleContent', __('Laporan Periodic'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')

@@ -1,5 +1,5 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__('Ubah Penerimaan'))
+@section('title', __('pages.title').__(' | Ubah Penerimaan'))
 @section('titleContent', __('Ubah Penerimaan'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
@@ -29,7 +29,7 @@
                                 name="date">
                         </div>
                     </div>
-                        @php 
+                        @php
                             if($model->employee_id == null) {
                                 $pembeli = "Tanpa Pembeli";
                             } else {
@@ -190,9 +190,9 @@
                             <img src="{{ asset('assetstransaction/'.$row->image) }}" style="width: 200px; height: 10; object-fit: contain;" />
                         </a>
                     @else
-                    
+
                     @endif
-                    
+
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -205,8 +205,8 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php 
-                                    $i = 0; 
+                                @php
+                                    $i = 0;
                                     $historyDetail = $row->history_detail;
                                 @endphp
                                 @foreach($historyDetail as $rows)

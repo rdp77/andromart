@@ -1,5 +1,5 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__('Tambah Service Return '))
+@section('title', __('pages.title').__(' | Tambah Service Return '))
 @section('titleContent', __('Tambah Service Return '))
 @section('breadcrumb', __('Transaksi'))
 @section('morebreadcrumb')

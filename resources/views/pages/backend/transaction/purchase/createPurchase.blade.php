@@ -1,5 +1,5 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__('Tambah Pembelian'))
+@section('title', __('pages.title').__(' | Tambah Pembelian'))
 @section('titleContent', __('Tambah Pembelian'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
@@ -134,7 +134,7 @@
                                 <span class="selectgroup-button">Persentase (%)</span>
                             </label>
                             <label class="selectgroup-item">
-                                <input type="radio" name="typeDiscount" value="value" onchange="changeDiscount('value')" 
+                                <input type="radio" name="typeDiscount" value="value" onchange="changeDiscount('value')"
                                     class="selectgroup-input">
                                 <span class="selectgroup-button">Harga (RP)</span>
                             </label>

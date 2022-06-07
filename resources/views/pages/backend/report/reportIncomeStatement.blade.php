@@ -1,5 +1,5 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title') . __('Laporan Laba Rugi'))
+@section('title', __('pages.title') . __(' | Laporan Laba Rugi'))
 @section('titleContent', __('Laporan Laba Rugi'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
@@ -195,12 +195,12 @@
                                             </tr>
                                             {{-- <tr>
                                                 <td style="padding-left: 50px">Total Service</td>
-                                                <td></td> 
+                                                <td></td>
                                                 <td style="text-align: right"><b>Rp.
                                                     {{ number_format($totalService, 0, '.', ',') }}</b></td>
                                             <tr>
                                                 <td style="padding-left: 50px">Total Penjualan</td>
-                                                <td></td> 
+                                                <td></td>
                                                 <td style="text-align: right"><b>Rp.
                                                     {{ number_format($totalPenjualan, 0, '.', ',') }}</b></td>
                                             <tr> --}}
@@ -273,7 +273,7 @@
                                                                             echo 'Rp.' . number_format($dataBeban[$i]['total'], 0, ',', ',');
                                                                             $totalDataBeban += $dataBeban[$i]['total'];
                                                                         }
-                                                                        
+
                                                                     @endphp
                                                             </tr>
                                                         @endfor

@@ -87,11 +87,21 @@ function del(id) {
             $.ajax({
                 url: "/master/account-main-detail/account-main-detail/" + id,
                 type: "DELETE",
-                success: function () {
-                    swal("Data master berhasil dihapus", {
-                        icon: "success",
-                    });
-                    table.draw();
+                success: function (data) {
+                    if (data.status == 'success') {
+                        swal(data.message, {
+                            icon: "success",
+                        });
+                        table.draw();
+                    } else if (data.status == 'error') {
+                        swal(data.message, {
+                            icon: "warning"
+                        });
+                    } else {
+                        swal(data.message, {
+                            icon: "error"
+                        });
+                    }
                 },
             });
         } else {

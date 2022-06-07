@@ -1,5 +1,5 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title') . __('Laporan Kas Bulanan'))
+@section('title', __('pages.title') . __(' | Laporan Kas Bulanan'))
 @section('titleContent', __('Laporan Kas Bulanan'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
@@ -55,7 +55,7 @@
                             <div class="dropTotal">
 
                             </div>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -68,7 +68,7 @@
                     <div class="col-12">
                         <h2 class="section-title">Laporan Kas Saat ini <b>{{ date('d F Y') }}</b> </h2>
                         <div class="card">
-                            
+
                             <div class="card-body">
                                 <div class="row">
                                     <table class="table table-striped">

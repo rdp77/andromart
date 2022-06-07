@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AccountData;
 use App\Models\AccountMain;
 use App\Models\AccountMainDetail;
 use Illuminate\Http\Request;
@@ -39,7 +40,7 @@ class AccountMainDetailController extends Controller
                         </button>';
                     $actionBtn .= '<div class="dropdown-menu">
                             <a class="dropdown-item" href="' . route('account-main-detail.edit', $row->id) . '">Edit</a>';
-                    // $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
+                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
@@ -139,14 +140,32 @@ class AccountMainDetailController extends Controller
 
     public function destroy(Request $req, $id)
     {
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Menghapus master akun detail' . AccountMainDetail::find($id)->name
-        );
+        $checkRoles = $this->DashboardController->cekHakAkses(19,'delete');
+        if($checkRoles == 'akses ditolak'){
+            return view('forbidden');
+        }
 
-        AccountMainDetail::destroy($id);
+        $Data = AccountData::where('main_detail_id', '=', $id)->get();
+        $checkData = count($Data);
 
-        return Response::json(['status' => 'success']);
+        if ($checkData > 0) {
+            return Response::json([
+                'status' => 'error',
+                'message' => 'Data terrelasi dengan Akun Data, data tidak bisa dihapus !'
+            ]);
+        } else {
+            $this->DashboardController->createLog(
+                $req->header('user-agent'),
+                $req->ip(),
+                'Menghapus master akun detail' . AccountMainDetail::find($id)->name
+            );
+
+            AccountMainDetail::destroy($id);
+
+            return Response::json([
+                'status' => 'success',
+                'message' => 'Data master berhasil dihapus !',
+            ]);
+        }
     }
 }
