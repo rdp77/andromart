@@ -3,16 +3,16 @@
     <head>
         <!-- Basic -->
         <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">   
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-        <title>@yield('title')</title>  
+        <title>@yield('title')</title>
 
         <meta name="keywords" content="HTML5 Template" />
         <meta name="description" content="Porto - Responsive HTML5 Template">
         <meta name="author" content="okler.net">
 
         <!-- Favicon -->
-        <link rel="shortcut icon" href="img/favicon.ico" type="image/x-icon" />
+        <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assetsfrontend/img/logo_nonbg.png') }}">
         <link rel="apple-touch-icon" href="img/apple-touch-icon.png">
 
         <!-- Mobile Metas -->
@@ -40,12 +40,12 @@
         <link rel="stylesheet" href="{{ asset('assetsfrontend/vendor/rs-plugin/css/settings.css') }}">
         <link rel="stylesheet" href="{{ asset('assetsfrontend/vendor/rs-plugin/css/layers.css') }}">
         <link rel="stylesheet" href="{{ asset('assetsfrontend/vendor/rs-plugin/css/navigation.css') }}">
-        
+
         <!-- Demo CSS -->
         <link rel="stylesheet" href="{{ asset('assetsfrontend/css/demos/demo-digital-agency.css') }}">
 
         <!-- Skin CSS -->
-        <link rel="stylesheet" href="{{ asset('assetsfrontend/css/skins/skin-digital-agency.css') }}"> 
+        <link rel="stylesheet" href="{{ asset('assetsfrontend/css/skins/skin-digital-agency.css') }}">
 
         <!-- Theme Custom CSS -->
         <link rel="stylesheet" href="{{ asset('assetsfrontend/css/custom.css') }}">
@@ -78,20 +78,20 @@
         <script src="{{ asset('assetsfrontend/vendor/magnific-popup/jquery.magnific-popup.min.js') }}"></script>
         <script src="{{ asset('assetsfrontend/vendor/vide/jquery.vide.min.js') }}"></script>
         <script src="{{ asset('assetsfrontend/vendor/vivus/vivus.min.js') }}"></script>
-        
+
         <!-- Theme Base, Components and Settings -->
         <script src="{{ asset('assetsfrontend/js/theme.js') }}"></script>
 
         <!-- Current Page Vendor and Views -->
         <script src="{{ asset('assetsfrontend/js/views/view.contact.js') }}"></script>
-        
+
         <!-- Current Page Vendor and Views -->
         <script src="{{ asset('assetsfrontend/vendor/rs-plugin/js/jquery.themepunch.tools.min.js') }}"></script>
         <script src="{{ asset('assetsfrontend/vendor/rs-plugin/js/jquery.themepunch.revolution.min.js') }}"></script>
 
         <!-- Theme Custom -->
         <script src="{{ asset('assetsfrontend/js/custom.js') }}"></script>
-        
+
         <!-- Theme Initialization Files -->
         <script src="{{ asset('assetsfrontend/js/theme.init.js') }}"></script>
         @stack('custom-scripts')
