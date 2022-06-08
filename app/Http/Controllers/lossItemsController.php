@@ -14,6 +14,8 @@ use App\Models\LossItemsDetail;
 use App\Models\ServiceDetail;
 use App\Models\ServiceStatusMutation;
 use Illuminate\Http\Request;
+use App\Models\AccountData;
+use App\Models\AccountMainDetail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -47,7 +49,9 @@ class LossItemsController extends Controller
     {
         $data = Service::where('technician_id', Auth::user()->id)->get();
         $employee = Employee::get();
-        return view('pages.backend.finance.loss_items.lossItems', compact('data', 'employee'));
+        $accountMain = AccountMainDetail::where('main_id',1)->get();
+        $accountData = AccountData::get();
+        return view('pages.backend.finance.loss_items.lossItems', compact('data', 'employee','accountMain','accountData'));
     }
     public function lossItemsLoadDataService(Request $req)
     {

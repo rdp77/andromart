@@ -38,6 +38,31 @@
                         <input id="endDate" type="text" class="form-control datepicker" name="endDate">
                     </div>
                     <div class="form-group col-12 col-md-12 col-lg-12">
+                        <label for="endDate">{{ __('Kas') }}<code>*</code></label>
+                        <select name="accountMain" class="select2 accountMain" id="" onchange="paymentMethodChange()">
+                            <option value="">- Select -</option>
+                            @foreach ($accountMain as $el)
+                                <option value="{{$el->main_id}}" data-name="{{$el->name}}">{{$el->name}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="form-group col-12 col-md-12 col-lg-12">
+                        <label for="endDate">{{ __('Kas Data') }}<code>*</code></label>
+                        <select name="accountData" class="accountData select2" id="">
+                            <option value="">- Select -</option>
+                        </select>
+                        {{-- <input id="endDate" type="text" class="form-control datepicker" name="endDate"> --}}
+                    </div>
+                    @foreach ($accountData as $el)
+                    <input class="accountDataHidden" type="hidden"
+                    data-mainName="{{$el->AccountMain->name}}"
+                    data-mainDetailName="{{$el->AccountMainDetail->name}}"
+                    data-branch="{{$el->branch_id}}"
+                    data-name="{{$el->name}}"
+                    data-code="{{$el->code}}"
+                    value="{{$el->id}}">
+                @endforeach
+                    <div class="form-group col-12 col-md-12 col-lg-12">
                         <button class="btn btn-primary" type="button" onclick="checkEmploye()"><i class="fas fa-eye"></i> Cari</button>
                     </div>
                 </div>
@@ -52,7 +77,7 @@
                         <th>Tanggal</th>
                         <th>Customer</th>
                         <th>total</th>
-                        {{-- <th>Dibayarkan ?</th> --}}
+                        <th>Dibayarkan ?</th>
                     </tr>
                 </thead>
                 <tbody class="dropHere" style="border: none !important">
@@ -112,17 +137,25 @@ function checkEmploye() {
                     var totalAkhir = 0;
                     $.each(data.result, function(index,value){
                         if (value.technician_id == technicianId) {
-                            var totalProfit = value.sharing_profit_technician_1;
+                            var totalLoss = value.total_loss_technician_1+value.total_loss_technician_2;
                         }else{
-                            var totalProfit = value.sharing_profit_technician_2;
+                            var totalLoss = value.total_loss_technician_1+value.total_loss_technician_2;
                         }
 
-                        totalAkhir+=totalProfit;
+                        if (value.loss_items_detail.length == 0) {
+                            var pay = '<div class="badge badge-danger">Belum Bayar</div>';                            
+                            var payDetail = 'Belum Bayar';
+                        }else{
+                            var pay = '<div class="badge badge-success">Sudah Dibayarkan</div>';                            
+                            var payDetail = 'Sudah Dibayarkan';
+                        }
+
+                        totalAkhir+=totalLoss;
                         $('.dropHere').append(
                             '<tr>'+
                                 '<td style="display:none">'+
                                     '<input type="text" class="form-control" name="idDetail[]" value="'+value.id+'">'+
-                                    '<input type="text" class="form-control" name="totalDetail[]" value="'+totalProfit+'">'+
+                                    '<input type="text" class="form-control" name="totalDetail[]" value="'+totalLoss+'">'+
                                 '</td>'+
                                 '<td>'+
                                     moment(value.date).format('DD MMMM YYYY')+
@@ -131,11 +164,11 @@ function checkEmploye() {
                                     value.customer_name+
                                 '</td>'+
                                 '<td>'+
-                                    parseInt(totalProfit).toLocaleString('en-US')+
+                                    parseInt(totalLoss).toLocaleString('en-US')+
                                 '</td>'+
-                                // '<td>'+
-                                //     pay+
-                                // '</td>'+
+                                '<td>'+
+                                    pay+
+                                '</td>'+
                             '</tr>'
                         );
                     });
@@ -177,6 +210,36 @@ function saveSharingProfit() {
             swal("Data Dana Kredit PDL Berhasil Dihapus!");
         }
     });
+}
+function paymentMethodChange() {
+    
+    var value = $(".accountMain").find(':selected').data('name');
+    var dataItems = [];
+    $(".accountData").empty();
+    var testStr;
+    $.each($(".accountDataHidden"), function () {
+        testStr = $(this).data("maindetailname");
+    // console.log(testStr);
+            if (
+                testStr.includes(value)
+            ) {
+                dataItems +=
+                    '<option value="' +
+                    this.value +
+                    '">' +
+                    $(this).data("code") +
+                    " - " +
+                    $(this).data("name") +
+                    "</option>";
+            }
+    });
+    // console.log(value);
+    // console.log(dataItems);
+    $(".accountData").append('<option value="">- Select -</option>');
+    // if (value == 'Cash') {
+    $(".accountData").append(dataItems);
+    // }
+    // alert($('.PaymentMethod').val());
 }
 
 </script>
