@@ -11,6 +11,7 @@ class LossItems extends Model
     protected $table = 'loss_items';
     protected $fillable = [
         'id',
+        'code',
         'date',
         'date_start',
         'date_end',

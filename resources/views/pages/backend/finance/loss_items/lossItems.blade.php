@@ -136,11 +136,20 @@ function checkEmploye() {
                     }
                     var totalAkhir = 0;
                     $.each(data.result, function(index,value){
+                        var totalLoss2 = 0;
+                        var totalLoss = 0;
                         if (value.technician_id == technicianId) {
-                            var totalLoss = value.total_loss_technician_1+value.total_loss_technician_2;
+                             totalLoss = value.total_loss_technician_1;
                         }else{
-                            var totalLoss = value.total_loss_technician_1+value.total_loss_technician_2;
+                             totalLoss = value.total_loss_technician_1;
                         }
+                        if (value.technician_replacement_id == technicianId) {
+                             totalLoss2 = value.total_loss_technician_2;
+                        }else{
+                             totalLoss2 = value.total_loss_technician_2;
+                        }
+                        var totalLossTech = totalLoss+totalLoss2;
+                        var totalLossALL = totalLossTech+value.total_loss_store;
 
                         if (value.loss_items_detail.length == 0) {
                             var pay = '<div class="badge badge-danger">Belum Bayar</div>';                            
@@ -150,12 +159,13 @@ function checkEmploye() {
                             var payDetail = 'Sudah Dibayarkan';
                         }
 
-                        totalAkhir+=totalLoss;
+                        totalAkhir+=totalLossTech;
                         $('.dropHere').append(
                             '<tr>'+
                                 '<td style="display:none">'+
                                     '<input type="text" class="form-control" name="idDetail[]" value="'+value.id+'">'+
-                                    '<input type="text" class="form-control" name="totalDetail[]" value="'+totalLoss+'">'+
+                                    '<input type="text" class="form-control" name="totalDetail[]" value="'+totalLossTech+'">'+
+                                    '<input type="text" class="form-control" name="totalAll[]" value="'+totalLossALL+'">'+
                                 '</td>'+
                                 '<td>'+
                                     moment(value.date).format('DD MMMM YYYY')+
@@ -164,7 +174,7 @@ function checkEmploye() {
                                     value.customer_name+
                                 '</td>'+
                                 '<td>'+
-                                    parseInt(totalLoss).toLocaleString('en-US')+
+                                    parseInt(totalLossTech).toLocaleString('en-US')+
                                 '</td>'+
                                 '<td>'+
                                     pay+

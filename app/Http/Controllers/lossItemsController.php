@@ -16,6 +16,8 @@ use App\Models\ServiceStatusMutation;
 use Illuminate\Http\Request;
 use App\Models\AccountData;
 use App\Models\AccountMainDetail;
+use App\Models\Journal;
+use App\Models\JournalDetail;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -88,36 +90,177 @@ class LossItemsController extends Controller
     public function store(Request $req)
     {
         // return $req->all();
-        $checkData = LossItems::where('date_start', $this->DashboardController->changeMonthIdToEn($req->startDate))
-            ->where('date_end', $this->DashboardController->changeMonthIdToEn($req->endDate))
-            ->where('employe_id', $req->technicianId)
-            ->get();
-        if (count($checkData) != 0) {
-            return Response::json(['status' => 'fail', 'message' => 'Data Sudah Ada']);
-        }
-        $index = DB::table('sharing_profit')->max('id') + 1;
-        LossItems::create([
-            'id' => $index,
-            'date' => date('Y-m-d'),
-            'date_start' => $this->DashboardController->changeMonthIdToEn($req->startDate),
-            'date_end' => $this->DashboardController->changeMonthIdToEn($req->endDate),
-            'employe_id' => $req->technicianId,
-            'total' => $req->totalValue,
-            'created_by' => Auth::user()->name,
-            'created_at' => date('Y-m-d h:i:s'),
-        ]);
+        // return array_sum($req->totalAll);
 
-        for ($i = 0; $i < count($req->idDetail); $i++) {
-            LossItemsDetail::create([
-                'id' => $i + 1,
-                'sharing_profit_id' => $index,
-                'service_id' => $req->idDetail[$i],
-                'total' => $req->totalDetail[$i],
+        DB::beginTransaction();
+        try {
+            $totalLoss = array_sum($req->totalAll);
+            $checkData = LossItems::where('date_start', $this->DashboardController->changeMonthIdToEn($req->startDate))
+                ->where('date_end', $this->DashboardController->changeMonthIdToEn($req->endDate))
+                ->where('employe_id', $req->technicianId)
+                ->get();
+            if (count($checkData) != 0) {
+                return Response::json(['status' => 'fail', 'message' => 'Data Sudah Ada']);
+            }
+            $index = DB::table('loss_items')->max('id') + 1;
+            $kode =  $this->codeJournals('LOS', $index);
+
+            LossItems::create([
+                'id' => $index,
+                'code' => $kode,
+                'date' => date('Y-m-d'),
+                'date_start' => $this->DashboardController->changeMonthIdToEn($req->startDate),
+                'date_end' => $this->DashboardController->changeMonthIdToEn($req->endDate),
+                'employe_id' => $req->technicianId,
+                'total' => $req->totalValue,
                 'created_by' => Auth::user()->name,
                 'created_at' => date('Y-m-d h:i:s'),
             ]);
+            for ($i = 0; $i < count($req->idDetail); $i++) {
+                LossItemsDetail::create([
+                    'id' => $i + 1,
+                    'loss_items_id' => $index,
+                    'service_id' => $req->idDetail[$i],
+                    'total' => $req->totalDetail[$i],
+                    'created_by' => Auth::user()->name,
+                    'created_at' => date('Y-m-d h:i:s'),
+                ]);
+            }
+            // jurnal karyawan megembalikan uang loss
+            $idJournal = DB::table('journals')->max('id') + 1;
+            Journal::create([
+                'id' => $idJournal,
+                'code' => $this->codeJournals('DD', $idJournal),
+                'year' => date('Y'),
+                'date' => date('Y-m-d'),
+                'type' => 'Pendapatan',
+                'total' => str_replace(",", '', $req->totalValue),
+                'ref' => $kode,
+                'description' => 'Pembayaran Barang Loss',
+                'created_at' => date('Y-m-d h:i:s'),
+                // 'updated_at'=>date('Y-m-d h:i:s'),
+            ]);
+            
+            $cariCabang = AccountData::where('id', $req->accountData)->first();
+            $accountLossTeknisi  = AccountData::where('branch_id', $cariCabang->branch_id)
+                ->where('active', 'Y')
+                ->where('main_id', 10)
+                ->where('main_detail_id', 41)
+                ->first();
+
+            $accountCode = [
+                $req->accountData,
+            ];
+            $totalBayar = [
+                str_replace(",", '', $req->totalValue),
+            ];
+            $description = [
+                'Pembayaran Teknisi Barang LOSS',
+            ];
+            $DK = [
+                'D',
+            ];
+
+            for ($i = 0; $i < count($req->idDetail); $i++) {
+                array_push($accountCode, $accountLossTeknisi->id);
+                array_push($totalBayar, $req->totalDetail[$i]);
+                array_push($description, 'Pembayaran Teknisi Barang LOSS Detail');
+                array_push($DK, 'K');
+            }
+// return $accountCode;
+            for ($i = 0; $i < count($accountCode); $i++) {
+                $idDetail = DB::table('journal_details')->max('id') + 1;
+                JournalDetail::create([
+                    'id' => $idDetail,
+                    'journal_id' => $idJournal,
+                    'account_id' => $accountCode[$i],
+                    'total' => $totalBayar[$i],
+                    'description' => $description[$i],
+                    'debet_kredit' => $DK[$i],
+                    'created_at' => date('Y-m-d h:i:s'),
+                    'updated_at' => date('Y-m-d h:i:s'),
+                ]);
+            }
+
+
+
+
+
+            // jurnal toko mengeluarkan uang loss
+            $idJournalToko = DB::table('journals')->max('id') + 1;
+            Journal::create([
+                'id' => $idJournalToko,
+                'code' => $this->codeJournals('KK', $idJournalToko),
+                'year' => date('Y'),
+                'date' => date('Y-m-d'),
+                'type' => 'Biaya',
+                'total' => str_replace(",", '', $totalLoss),
+                'ref' => $kode,
+                'description' => 'Pengeluaran Toko Barang Loss',
+                'created_at' => date('Y-m-d h:i:s'),
+                // 'updated_at'=>date('Y-m-d h:i:s'),
+            ]);
+
+            $cariCabangToko = AccountData::where('id', $req->accountData)->first();
+            $accountLossToko  = AccountData::where('branch_id', $cariCabangToko->branch_id)
+                ->where('active', 'Y')
+                ->where('main_id', 6)
+                ->where('main_detail_id', 42)
+                ->first();
+
+            $accountCodeToko = [
+                $req->accountData,
+            ];
+            $totalBayarToko = [
+                str_replace(",", '', $totalLoss),
+            ];
+            $descriptionToko = [
+                'Pengeluaran Toko Barang LOSS',
+            ];
+            $DKToko = [
+                'K',
+            ];
+
+            for ($i = 0; $i < count($req->idDetail); $i++) {
+                array_push($accountCodeToko, $accountLossToko->id);
+                array_push($totalBayarToko, $req->totalAll[$i]);
+                array_push($descriptionToko, 'Pengeluaran Toko Barang LOSS Detail');
+                array_push($DKToko, 'D');
+            }
+            // return $DKToko;
+
+            for ($i = 0; $i < count($accountCodeToko); $i++) {
+                $idDetailToko = DB::table('journal_details')->max('id') + 1;
+                JournalDetail::create([
+                    'id' => $idDetailToko,
+                    'journal_id' => $idJournalToko,
+                    'account_id' => $accountCodeToko[$i],
+                    'total' => $totalBayarToko[$i],
+                    'description' => $descriptionToko[$i],
+                    'debet_kredit' => $DKToko[$i],
+                    'created_at' => date('Y-m-d h:i:s'),
+                    'updated_at' => date('Y-m-d h:i:s'),
+                ]);
+            }
+
+            DB::commit();
+            // return 's';
+            return Response::json(['status' => 'success', 'message' => 'Data Tersimpan']);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return $th;
         }
-        return Response::json(['status' => 'success', 'message' => 'Data Tersimpan']);
+        // return Response::json(['status' => 'success', 'message' => 'Data Tersimpan']);
+    }
+    public function codeJournals($type)
+    {
+        $getEmployee =  Employee::with('branch')->where('user_id', Auth::user()->id)->first();
+        $month = Carbon::now()->format('m');
+        $year = Carbon::now()->format('y');
+        $index = DB::table('journals')->max('id') + 1;
+
+        $index = str_pad($index, 3, '0', STR_PAD_LEFT);
+        return $code = $type . $getEmployee->Branch->code . $year . $month . $index;
     }
     public function destroy(Request $req, $id)
     {
