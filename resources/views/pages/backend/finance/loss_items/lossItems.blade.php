@@ -41,7 +41,7 @@
                         <label for="endDate">{{ __('Kas') }}<code>*</code></label>
                         <select name="accountMain" class="select2 accountMain" id="" onchange="paymentMethodChange()">
                             <option value="">- Select -</option>
-                            @foreach ($accountMains as $el)
+                            @foreach ($accountMain as $el)
                                 <option value="{{$el->main_id}}" data-name="{{$el->name}}">{{$el->name}}</option>
                             @endforeach
                         </select>

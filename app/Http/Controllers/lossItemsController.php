@@ -51,9 +51,9 @@ class LossItemsController extends Controller
     {
         $data = Service::where('technician_id', Auth::user()->id)->get();
         $employee = Employee::get();
-        $accountMains = AccountMainDetail::where('main_id',1)->get();
+        $accountMain = AccountMainDetail::where('main_id',1)->get();
         $accountData = AccountData::get();
-        return view('pages.backend.finance.loss_items.lossItems', compact('data', 'employee','accountMains','accountData'));
+        return view('pages.backend.finance.loss_items.lossItems', compact('data', 'employee','accountMain','accountData'));
     }
     public function lossItemsLoadDataService(Request $req)
     {
