@@ -49,7 +49,7 @@
                     <div class="form-group col-12 col-md-12 col-lg-12">
                         <label for="endDate">{{ __('Kas Data') }}<code>*</code></label>
                         <select name="accountData" class="accountData select2" id="">
-                            <option value="">- Select  -</option>
+                            <option value="">- Select -</option>
                         </select>
                         {{-- <input id="endDate" type="text" class="form-control datepicker" name="endDate"> --}}
                     </div>
