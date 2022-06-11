@@ -187,7 +187,7 @@
                                     </div>
                                     <div class="card-wrap">
                                         <div class="card-header">
-                                            <h4>Pendapatan Bersih Penjualan + Pendapatan Bersih Service</h4>
+                                            <h4>Bersih Penjualan + Bersih Service</h4>
                                         </div>
                                         <div class="card-body">
                                             {{ number_format(($totalPenjualan - $totalDiskonPenjualan - $totalHPPPenjualan)+($totalService - $totalDiskonService - $totalHPPService), 0, '.', ',') }}

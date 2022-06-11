@@ -387,7 +387,16 @@ class ServiceController extends Controller
         // $index = DB::table('service')->max('id') + 1;
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
 
-        return $code = $type . $getEmployee->Branch->code . $year . $month . $index;
+        $code = $type . $getEmployee->Branch->code . $year . $month . $index;
+        
+        $checkCode = Service::where('code', $code)
+            ->count();
+
+        if ($checkCode == 0 ) {
+            return $code;
+        }else{
+            $code = $type . $getEmployee->Branch->code . $year . $month . ($index+1);
+        }
     }
     public function create()
     {

@@ -49,7 +49,7 @@ class LossItemsController extends Controller
 
     public function index(Request $req)
     {
-        $var = 'as';
+        // $var = 'as';
         $data = Service::where('technician_id', Auth::user()->id)->get();
         $employee = Employee::get();
         $accountMain = AccountMainDetail::where('main_id',1)->get();
