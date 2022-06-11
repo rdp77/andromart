@@ -395,7 +395,7 @@ class ServiceController extends Controller
         if ($checkCode == 0 ) {
             return $code;
         }else{
-            $code = $type . $getEmployee->Branch->code . $year . $month . ($index+1);
+            return $code = $type . $getEmployee->Branch->code . $year . $month . ($index+1);
         }
     }
     public function create()
