@@ -103,7 +103,7 @@ class LossItemsController extends Controller
             if (count($checkData) != 0) {
                 return Response::json(['status' => 'fail', 'message' => 'Data Sudah Ada']);
             }
-            $index = DB::table('loss_items')->max('id') + 1;
+            return $index = DB::table('loss_items')->max('id') + 1;
             $kodeLoss =  $this->code('LOS', $index);
             $kode =  $this->codeJournals('LOS', $index);
 
