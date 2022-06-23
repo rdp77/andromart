@@ -119,7 +119,7 @@ class LossItemsController extends Controller
             ]);
             for ($i = 0; $i < count($req->idDetail); $i++) {
                 LossItemsDetail::create([
-                    'id' => $i + 1,
+                    // 'id' => $i + 1,
                     'loss_items_id' => $index,
                     'service_id' => $req->idDetail[$i],
                     'total' => $req->totalDetail[$i],
