@@ -82,7 +82,7 @@ class LossItemsController extends Controller
     {
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
-        $index = DB::table('service')->max('id') + 1;
+        $index = DB::table('loss_items')->max('id') + 1;
 
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
         return $code = $type . $year . $month . $index;
@@ -104,11 +104,12 @@ class LossItemsController extends Controller
                 return Response::json(['status' => 'fail', 'message' => 'Data Sudah Ada']);
             }
             $index = DB::table('loss_items')->max('id') + 1;
+            $kodeLoss =  $this->code('LOS', $index);
             $kode =  $this->codeJournals('LOS', $index);
 
             LossItems::create([
                 'id' => $index,
-                'code' => $kode,
+                'code' => $kodeLoss,
                 'date' => date('Y-m-d'),
                 'date_start' => $this->DashboardController->changeMonthIdToEn($req->startDate),
                 'date_end' => $this->DashboardController->changeMonthIdToEn($req->endDate),
@@ -136,7 +137,7 @@ class LossItemsController extends Controller
                 'date' => date('Y-m-d'),
                 'type' => 'Pendapatan',
                 'total' => str_replace(",", '', $req->totalValue),
-                'ref' => $kode,
+                'ref' => $kodeLoss,
                 'description' => 'Pembayaran Barang Loss',
                 'created_at' => date('Y-m-d h:i:s'),
                 // 'updated_at'=>date('Y-m-d h:i:s'),
@@ -196,7 +197,7 @@ class LossItemsController extends Controller
                 'date' => date('Y-m-d'),
                 'type' => 'Biaya',
                 'total' => str_replace(",", '', $totalLoss),
-                'ref' => $kode,
+                'ref' => $kodeLoss,
                 'description' => 'Pengeluaran Toko Barang Loss',
                 'created_at' => date('Y-m-d h:i:s'),
                 // 'updated_at'=>date('Y-m-d h:i:s'),
