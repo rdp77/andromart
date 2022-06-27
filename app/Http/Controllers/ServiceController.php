@@ -403,7 +403,7 @@ class ServiceController extends Controller
                 return $code;
             }else{
                 $index2 = count($co) + 1;
-                $index2 = str_pad($index2, 5, '', STR_PAD_LEFT);
+                $index2 = str_pad($index2, 5, '0', STR_PAD_LEFT);
                 return $code = $type . $getEmployee->Branch->code . $year . $month . $index2;
             }
         }
