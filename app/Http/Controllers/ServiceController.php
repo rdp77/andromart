@@ -400,11 +400,10 @@ class ServiceController extends Controller
             $checkCode2 = Service::where('code', $code)
             ->count();
             if ($checkCode2 == 0) {
-                // $index = $index+1;
+                return $code;
+            }else{
                 $index = str_pad(($index+1), 2, '0', STR_PAD_LEFT);
                 $code = $type . $getEmployee->Branch->code . $year . $month . $index;
-            }else{
-                return $code;
             }
         }
     }
