@@ -81,12 +81,12 @@
                                                                                                     <a class="accordion-toggle"
                                                                                                         data-toggle="collapse"
                                                                                                         data-parent="#accordion3"
-                                                                                                        href="#{{ str_replace(' ', '', $data[$i]['main_detail'][$j]['detail']) }}{{ $data[$i]['main_detail'][$j]['branch'][$k]['nama'] }}">
+                                                                                                        href="#{{ str_replace(' ', '', $data[$i]['main_detail'][$j]['detail']) }}{{ preg_replace('/[^A-Za-z0-9]/', "",$data[$i]['main_detail'][$j]['branch'][$k]['nama']) }}">
                                                                                                         Cabang
                                                                                                         {{ $data[$i]['main_detail'][$j]['branch'][$k]['nama'] }}
                                                                                                     </a>
                                                                                                 </div>
-                                                                                                <div id="{{ str_replace(' ', '', $data[$i]['main_detail'][$j]['detail']) }}{{ $data[$i]['main_detail'][$j]['branch'][$k]['nama'] }}"
+                                                                                                <div id="{{ str_replace(' ', '', $data[$i]['main_detail'][$j]['detail']) }}{{ preg_replace('/[^A-Za-z0-9]/', "",$data[$i]['main_detail'][$j]['branch'][$k]['nama']) }}"
                                                                                                     class="accordion-body collapse in"
                                                                                                     style="padding:0px">
                                                                                                     <div

@@ -188,18 +188,19 @@ class ReportIncomeStatementController extends Controller
                 for ($k = 0; $k < count($jurnal[$j]->JournalDetail); $k++) {
                     if ($accountDataBiaya[$i]->main_detail_id == $jurnal[$j]->JournalDetail[$k]->AccountData->main_detail_id && $accountDataBiaya[$i]->branch_id == $jurnal[$j]->JournalDetail[$k]->AccountData->branch_id) {
                         // $dataBiaya[$i]['jurnal'][$j]['jurnalDetail'][$k] = $jurnal[$j];
-                        array_push($dataBiaya[$i]['jurnal'], $jurnal[$j]->total);
+                        array_push($dataBiaya[$i]['jurnal'], $jurnal[$j]->JournalDetail[$k]->total);
                         // array_push($dataBiaya[$i]['dk'],[$jurnal[$j]->JournalDetail[$k]->debet_kredit,$jurnal[$j]->code]);
-                        array_push($dataBiaya[$i]['dk'], $jurnal[$j]->JournalDetail[$k]->debet_kredit);
+                        array_push($dataBiaya[$i]['dk'], [$jurnal[$j]->JournalDetail[$k]->debet_kredit,$jurnal[$j]->JournalDetail[$k]->AccountData->main_detail_id]);
                         if ($jurnal[$j]->JournalDetail[$k]->debet_kredit == 'D') {
-                            $dataBiaya[$i]['total'] += $jurnal[$j]->total;
+                            $dataBiaya[$i]['total'] +=$jurnal[$j]->JournalDetail[$k]->total;
                         } else {
-                            $dataBiaya[$i]['total'] -= $jurnal[$j]->total;
+                            $dataBiaya[$i]['total'] -=$jurnal[$j]->JournalDetail[$k]->total;
                         }
                     }
                 }
             }
         }
+        return $dataBiaya;
 
         $accountDataBeban = AccountData::where('main_id', 7)->where(function ($q) use ($req) {
                 if ($req->branch == '') {

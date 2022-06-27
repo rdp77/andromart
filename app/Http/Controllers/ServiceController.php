@@ -395,7 +395,15 @@ class ServiceController extends Controller
         if ($checkCode == 0 ) {
             return $code;
         }else{
-            return $code = $type . $getEmployee->Branch->code . $year . $month . ($index+1);
+            $checkCode2 = Service::where('code', $codeCheck)
+            ->count();
+            if ($checkCode2 == 0) {
+                // $index = $index+1;
+                $index = str_pad(($index+1), 2, '0', STR_PAD_LEFT);
+                $code = $type . $getEmployee->Branch->code . $year . $month . $index;
+            }else{
+                $code = $type . $getEmployee->Branch->code . $year . $month . ($index+1);
+            }
         }
     }
     public function create()
