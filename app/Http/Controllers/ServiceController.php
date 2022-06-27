@@ -402,9 +402,9 @@ class ServiceController extends Controller
             if ($checkCode2 == 0) {
                 return $code;
             }else{
-                $index = count($co) + 1;
-                $index = str_pad($index, 2, '0', STR_PAD_LEFT);
-                return $code = $type . $getEmployee->Branch->code . $year . $month . $index;
+                $index2 = count($co) + 1;
+                $index2 = str_pad($index2, 5, '', STR_PAD_LEFT);
+                return $code = $type . $getEmployee->Branch->code . $year . $month . $index2;
             }
         }
     }
