@@ -200,7 +200,7 @@ class ReportIncomeStatementController extends Controller
                 }
             }
         }
-        return $dataBiaya;
+        // return $dataBiaya;
 
         $accountDataBeban = AccountData::where('main_id', 7)->where(function ($q) use ($req) {
                 if ($req->branch == '') {
