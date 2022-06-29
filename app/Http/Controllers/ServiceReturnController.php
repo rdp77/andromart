@@ -107,30 +107,31 @@ class ServiceReturnController extends Controller
                         }elseif($row->Service->payment_status == null){
                             $paymentStatus = '<div class="badge badge-danger">Belum Bayar</div>';
                         }
+                        $htmlAdd = '<table>';
+                        $htmlAdd .=   '<tr>';
+                        $htmlAdd .=      '<td>Kode Service</td>';
+                        $htmlAdd .=      '<th>'.$row->Service->code.'</th>';
+                        $htmlAdd .=      '<td>Tgl Service</td>';
+                        $htmlAdd .=      '<th>'.Carbon::parse($row->Service->date)->locale('id')->isoFormat('LL').'</th>';
+                        $htmlAdd .=   '</tr>';
+                        $htmlAdd .=   '<tr>';
+                        $htmlAdd .=      '<td>status bayar</td>';
+                        $htmlAdd .=      '<th>'.$paymentStatus.'</th>';
+                        $htmlAdd .=      '<td>status kerja</td>';
+                        $htmlAdd .=      '<th>'.$workStatus.'</th>';
+                        $htmlAdd .=   '</tr>';
+                        $htmlAdd .=   '<tr>';
+                        $htmlAdd .=      '<td>Total</td>';
+                        $htmlAdd .=      '<th>'.number_format($row->Service->total_price,0,".",",").'</th>';
+                        $htmlAdd .=   '</tr>';
+                        $htmlAdd .= '<table>';
+
+                        return $htmlAdd;
                     }else{
-                        $paymentStatus = '<div class="badge badge-danger">Data Tidak Ditemukan</div>';
+                        return '<div class="badge badge-danger">DATA ERROR/RUSAK , KARENA DATA SERVICE TELAH TERHAPUS SENGAJA ATAUPUN TIDAK DISENGAJA.</div>';
                     }
 
-                    $htmlAdd = '<table>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Kode Service</td>';
-                    $htmlAdd .=      '<th>'.$row->Service->code.'</th>';
-                    $htmlAdd .=      '<td>Tgl Service</td>';
-                    $htmlAdd .=      '<th>'.Carbon::parse($row->Service->date)->locale('id')->isoFormat('LL').'</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>status bayar</td>';
-                    $htmlAdd .=      '<th>'.$paymentStatus.'</th>';
-                    $htmlAdd .=      '<td>status kerja</td>';
-                    $htmlAdd .=      '<th>'.$workStatus.'</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>Total</td>';
-                    $htmlAdd .=      '<th>'.number_format($row->Service->total_price,0,".",",").'</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .= '<table>';
-
-                    return $htmlAdd;
+                    
 
                 })
 
