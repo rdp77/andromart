@@ -234,9 +234,9 @@ class ReportIncomeStatementController extends Controller
                         array_push($dataBeban[$i]['dk'], $jurnal[$j]->JournalDetail[$k]->debet_kredit);
                         array_push($dataBeban[$i]['code'], [$jurnal[$j]->ref, $jurnal[$j]->code, $jurnal[$j]->JournalDetail[$k]->total]);
                         if ($jurnal[$j]->JournalDetail[$k]->debet_kredit == 'D') {
-                            $dataBeban[$i]['total'] -= 0;
-                        } else {
                             $dataBeban[$i]['total'] += $jurnal[$j]->JournalDetail[$k]->total;
+                        } else {
+                            $dataBeban[$i]['total'] -= 0;
                         }
                     }
                 }
