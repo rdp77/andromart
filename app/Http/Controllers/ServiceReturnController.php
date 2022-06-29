@@ -98,12 +98,17 @@ class ServiceReturnController extends Controller
                         $workStatus = '';
                     }
 
-                    if($row->Service->payment_status == 'Lunas'){
-                        $paymentStatus = '<div class="badge badge-success">Lunas</div>';
-                    }elseif($row->Service->payment_status == 'DownPayment'){
-                        $paymentStatus = '<div class="badge badge-warning">Bayar DP</div>';
-                    }elseif($row->Service->payment_status == null){
-                        $paymentStatus = '<div class="badge badge-danger">Belum Bayar</div>';
+                    
+                    if (isset($row->Service)) {
+                        if($row->Service->payment_status == 'Lunas'){
+                            $paymentStatus = '<div class="badge badge-success">Lunas</div>';
+                        }elseif($row->Service->payment_status == 'DownPayment'){
+                            $paymentStatus = '<div class="badge badge-warning">Bayar DP</div>';
+                        }elseif($row->Service->payment_status == null){
+                            $paymentStatus = '<div class="badge badge-danger">Belum Bayar</div>';
+                        }
+                    }else{
+                        $paymentStatus = '<div class="badge badge-danger">Data Tidak Ditemukan</div>';
                     }
 
                     $htmlAdd = '<table>';
