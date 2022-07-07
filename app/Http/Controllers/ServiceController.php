@@ -212,6 +212,7 @@ class ServiceController extends Controller
                     return $htmlAdd;
                 })
                 ->addColumn('currentStatus', function ($row) {
+                    $workStatus = '<div class="badge badge-success">Status Tidak Diketahui</div>';
                     if ($row->work_status == 'Proses') {
                         $workStatus = '<div class="badge badge-warning">Proses Pengerjaan</div>';
                     } elseif ($row->work_status == 'Mutasi') {
@@ -227,9 +228,9 @@ class ServiceController extends Controller
                     } elseif ($row->work_status == 'Return') {
                         $workStatus = '<div class="badge badge-success">Sudah Diambil</div>';
                     }
-                    if (isset($workStatus)) {
-                        $workStatus = '<div class="badge badge-success">Status Tidak Diketahui</div>';
-                    }
+                    // if (isset($workStatus)) {
+                        // $workStatus = '<div class="badge badge-success">Status Tidak Diketahui</div>';
+                    // }
 
                     if ($row->payment_status == 'Lunas') {
                         $paymentStatus = '<div class="badge badge-success">Lunas</div>';
