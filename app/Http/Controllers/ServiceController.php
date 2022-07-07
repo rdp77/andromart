@@ -239,9 +239,7 @@ class ServiceController extends Controller
                     } elseif ($row->payment_status == null) {
                         $paymentStatus = '<div class="badge badge-danger">Belum Bayar</div>';
                     }
-                    if (condition) {
-                        # code...
-                    }
+                  
                     $htmlAdd = '<table>';
                     $htmlAdd .= '<tr>';
                     $htmlAdd .= '<td>Status Pekerjaan</td>';
