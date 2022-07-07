@@ -227,6 +227,9 @@ class ServiceController extends Controller
                     } elseif ($row->work_status == 'Return') {
                         $workStatus = '<div class="badge badge-success">Sudah Diambil</div>';
                     }
+                    if (isset($workStatus)) {
+                        $workStatus = '<div class="badge badge-success">Status Tidak Diketahui</div>';
+                    }
 
                     if ($row->payment_status == 'Lunas') {
                         $paymentStatus = '<div class="badge badge-success">Lunas</div>';
@@ -234,6 +237,9 @@ class ServiceController extends Controller
                         $paymentStatus = '<div class="badge badge-warning">Bayar DP</div>';
                     } elseif ($row->payment_status == null) {
                         $paymentStatus = '<div class="badge badge-danger">Belum Bayar</div>';
+                    }
+                    if (condition) {
+                        # code...
                     }
                     $htmlAdd = '<table>';
                     $htmlAdd .= '<tr>';
