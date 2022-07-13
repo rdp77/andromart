@@ -452,6 +452,8 @@ function jurnal(params) {
             if (data.status == "success") {
                 $(".dropHereJournals").empty();
                 $(".dropHereJournalsHpp").empty();
+                $(".dropHereJournalsBalikDownPayment").empty();
+                
                 // alert('sd');
                 $.each(data.jurnal[0].journal_detail, function (index, value) {
                     if (value.debet_kredit == "K") {
@@ -491,6 +493,32 @@ function jurnal(params) {
                                 "</td><td>0</td>";
                         }
                         $(".dropHereJournalsHpp").append(
+                            "<tr>" +
+                                "<td>" +
+                                value.account_data.code +
+                                "</td>" +
+                                "<td>" +
+                                value.account_data.name +
+                                "</td>" +
+                                dk +
+                                "</tr>"
+                        );
+                    });
+                }
+                if (typeof data.jurnal[2] != 'undefined') {
+                    $.each(data.jurnal[2].journal_detail, function (index, value) {
+                        if (value.debet_kredit == "K") {
+                            var dk =
+                                "<td>0</td><td>" +
+                                parseInt(value.total).toLocaleString("en-US") +
+                                "</td>";
+                        } else {
+                            var dk =
+                                "<td>" +
+                                parseInt(value.total).toLocaleString("en-US") +
+                                "</td><td>0</td>";
+                        }
+                        $(".dropHereJournalsBalikDownPayment").append(
                             "<tr>" +
                                 "<td>" +
                                 value.account_data.code +

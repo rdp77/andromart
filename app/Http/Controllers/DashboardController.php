@@ -38,6 +38,10 @@ class DashboardController extends Controller
 
     public function index()
     {
+        
+        $sol3 = $this->solution3(1200000,12,1);
+        // return $this->solution2(7,215.3);
+        // return $this->solution1(-1,2,6);
         $topSales = DB::table('sale_details')
             ->leftJoin('items', 'items.id', '=', 'sale_details.item_id')
             ->select(
@@ -104,6 +108,8 @@ class DashboardController extends Controller
         }
         // return [$totalServiceProgress,$totalServiceDone,$totalServiceCancel];
         return view('dashboard', [
+            'sol3'=>$sol3,
+            'tempo'=>12,
             'log' => $log,
             'users' => $users,
             'logCount' => $logCount,
@@ -124,6 +130,106 @@ class DashboardController extends Controller
             'totalServiceCancel' => $totalServiceCancel,
             'topSales' => $topSales,
         ]);
+    }
+
+    // public function bounce($t)
+    // {
+    //     $tinggi = $t;
+    //     $hasil = [$tinggi];
+    //     while ($tinggi >= 0.5) {
+    //         $tinggi = $tinggi / 2;
+    //         array_push($hasil, $tinggi);
+    //     }
+
+    //     return $hasil;
+    // }
+    public function solution($jamMasuk, $jamKeluar)
+    {
+        $jamMasuk1 = 11;
+        $jamKeluar1 = 13;
+
+        $jamMasuk2 = 9;
+        $jamKeluar2 = 10;
+
+        $jamMasuk3 = 11;
+        $jamKeluar3 = 20;
+
+        $jamMasuk4 = 7;
+        $jamKeluar4 = 22;
+
+        $b1Jam = 350000;
+        $b2Jam = 500000;
+
+        $add1 = 75000;
+        $add2 = 100000;
+        $total = 0;
+        $checkSelisih = $jamKeluar-$jamMasuk;
+        if ($checkSelisih == 1) {
+            $total =  $b1Jam;
+        }elseif ($checkSelisih == 2) {
+            $total =  $b2Jam;
+        }elseif ($checkSelisih > 2 && $checkSelisih <= 8) {
+            $totalTambahan = $checkSelisih*2-2;
+            
+            for ($i=0; $i <$totalTambahan; $i++) { 
+                $total += 75000;
+            }
+        }elseif ($checkSelisih > 8) {
+            $totalTambahan = $checkSelisih*2-2;
+            
+            for ($i=0; $i <$totalTambahan; $i++) { 
+                $total += 100000;
+            }
+        }
+        return $total;
+    }
+
+    public function solution1($nilai1,$nilai2,$deret)
+    {
+        // $x = 0;
+ 
+        // while($x <= $deret) {
+        // echo "The number is: $x <br>";
+        //     // $x+=$nilai2;
+        //     $x-=$nilai1;
+        // }
+        $nilai1 = $nilai1;
+        $nilai2 = $nilai2;
+        $last = 0;
+        $hasil = [];
+        for ($i = 0; $i < $deret; $i++) {
+            if ($i == 0) {
+                $hasil[$i] = $nilai1;
+            } elseif ($i == 1) {
+                $hasil[$i] = $nilai2;
+            } else {
+                $nilaiBaru = ($hasil[$i - 1] + $hasil[$i - 2]);
+                $hasil[$i] = $nilaiBaru;
+            }
+        }
+
+        return $hasil;
+    }
+    public function solution2($n,$nilai)
+    {
+        $check = is_int($nilai);
+        // return $check;
+        if ($check == 1) {
+            $hasil =  str_pad($nilai*100, $n, '0', STR_PAD_LEFT);
+        }else{
+            $hasil =  str_pad($nilai*100, $n, '0', STR_PAD_LEFT);
+        }
+        return $hasil;
+    }
+
+    public function solution3($pokok,$tenor,$bunga)
+    {
+
+        $pinjamanPerbulan = $pokok/$tenor;
+        $bungaPerbulan = $bunga/100*$pinjamanPerbulan;
+        $cicilanBulan = $pinjamanPerbulan+$bungaPerbulan;
+
+        return [$pinjamanPerbulan,$bungaPerbulan,$cicilanBulan,$cicilanBulan*$tenor];
     }
 
     public function filterDataDashboard(Request $req)

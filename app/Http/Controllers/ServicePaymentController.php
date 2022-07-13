@@ -48,7 +48,9 @@ class ServicePaymentController extends Controller
             return view('forbidden');
         }
         if ($req->ajax()) {
-            $data = ServicePayment::with(['Service', 'ServiceDetail', 'user'])->orderBy('id', 'DESC')->get();
+            $data = ServicePayment::with(['Service', 'ServiceDetail', 'user'])
+                ->orderBy('id', 'DESC')
+                ->get();
 
             return Datatables::of($data)
                 ->addIndexColumn()
@@ -199,6 +201,9 @@ class ServicePaymentController extends Controller
             $id = DB::table('service_payment')->max('id') + 1;
             $getEmployee = Employee::where('user_id', Auth::user()->id)->first();
             $kode = $this->code('BYR', $id);
+
+            $dataService = Service::where('id', $req->serviceId)->first();
+            // return $dataService->total_downpayment;
             ServicePayment::create([
                 'id' => $id,
                 'code' => $kode,
@@ -271,7 +276,6 @@ class ServicePaymentController extends Controller
                     ]);
                 }
             } else {
-                // DB::rollback();
                 $checkService = ServicePayment::where('id', '!=', $id)
                     ->where('service_id', $req->serviceId)
                     ->where('type', 'DownPayment')
@@ -309,6 +313,8 @@ class ServicePaymentController extends Controller
                 $accountPembayaran = AccountData::where('id', $req->account)->first();
 
                 if (str_replace(',', '', $req->totalDiscountValue) == 0) {
+                    // DB::rollback();
+                    // return 'disini';
                     $accountCode = [$accountPembayaran->id, $accountService->id, $accountJasa->id];
                     $totalBayar = [str_replace(',', '', $req->totalPayment), str_replace(',', '', $req->totalSparePart), str_replace(',', '', $req->totalService)];
                     $description = ['Kas Pelunasan Service ' . $kode, 'Pendapatan SparePart Pelunasan Service ' . $kode, 'Pendapatan Jasa Service Pelunasan Service ' . $kode];
@@ -320,12 +326,16 @@ class ServicePaymentController extends Controller
                     $DK = ['D', 'D', 'K', 'K'];
                 }
 
-                if ($checkService != null) {
-                    array_unshift($accountCode, $accountDimuka->id);
-                    array_unshift($totalBayar, str_replace(',', '', $checkService->total));
-                    array_unshift($description, $req->description);
-                    array_unshift($DK, 'D');
-                }
+                // if ($checkService != null) {
+                //     array_unshift($accountCode, $accountDimuka->id);
+                //     array_unshift($totalBayar, str_replace(',', '', $checkService->total));
+                //     array_unshift($description, $req->description);
+                //     array_unshift($DK, 'D');
+                // }
+
+                // DB::rollback();
+                // return $checkService;
+                // return [$accountCode, $totalBayar, $description, $DK];
 
                 for ($i = 0; $i < count($accountCode); $i++) {
                     if ($totalBayar[$i] != 0) {
@@ -347,52 +357,99 @@ class ServicePaymentController extends Controller
 
                 //Jurnal HPP
                 // if (isset($req->totalHpp)) {
-                    $idJournalHpp = DB::table('journals')->max('id') + 1;
+                $idJournalHpp = DB::table('journals')->max('id') + 1;
+                Journal::create([
+                    'id' => $idJournalHpp,
+                    'code' => $this->code('KK', $idJournalHpp),
+                    'year' => date('Y'),
+                    'date' => $dateConvert,
+                    'type' => 'Biaya',
+                    'total' => str_replace(',', '', $req->totalHpp),
+                    'ref' => $kode,
+                    'description' => 'HPP ' . $kode,
+                    'created_at' => date('Y-m-d h:i:s'),
+                ]);
+
+                $accountPersediaan = AccountData::where('branch_id', $getEmployee->branch_id)
+                    ->where('active', 'Y')
+                    ->where('main_id', 3)
+                    ->where('main_detail_id', 11)
+                    ->first();
+
+                $accountBiayaHpp = AccountData::where('branch_id', $getEmployee->branch_id)
+                    ->where('active', 'Y')
+                    ->where('main_id', 7)
+                    ->where('main_detail_id', 29)
+                    ->first();
+                // JURNAL HPP
+                $accountCodeHpp = [$accountBiayaHpp->id, $accountPersediaan->id];
+                // return $accountCodeHpp;
+                $totalHpp = [str_replace(',', '', $req->totalHpp), str_replace(',', '', $req->totalHpp)];
+
+                $descriptionHpp = ['Pengeluaran Harga Pokok Penjualan ' . $kode, 'Biaya Harga Pokok Penjualan' . $kode];
+                $DKHpp = ['D', 'K'];
+                for ($i = 0; $i < count($totalHpp); $i++) {
+                    if ($totalHpp[$i] != 0) {
+                        $idDetailhpp = DB::table('journal_details')->max('id') + 1;
+                        JournalDetail::create([
+                            'id' => $idDetailhpp,
+                            'journal_id' => $idJournalHpp,
+                            'account_id' => $accountCodeHpp[$i],
+                            'total' => $totalHpp[$i],
+                            'description' => $descriptionHpp[$i],
+                            'debet_kredit' => $DKHpp[$i],
+                            'created_at' => date('Y-m-d h:i:s'),
+                            'updated_at' => date('Y-m-d h:i:s'),
+                        ]);
+                    }
+                }
+
+                // jurnal balik
+                if ($checkService != null) {
+                    $idJournalBalik = DB::table('journals')->max('id') + 1;
                     Journal::create([
-                        'id' => $idJournalHpp,
-                        'code' => $this->code('KK', $idJournalHpp),
+                        'id' => $idJournalBalik,
+                        'code' => $this->code('KK', $idJournalBalik),
                         'year' => date('Y'),
                         'date' => $dateConvert,
-                        'type' => 'Biaya',
-                        'total' => str_replace(',', '', $req->totalHpp),
+                        'type' => 'Jurnal Balik Down Payment ',
+                        'total' => $req->checkDpData,
                         'ref' => $kode,
-                        'description' => 'HPP ' . $kode,
+                        'description' => 'Jurnal Balik Down Payment  ' . $kode,
                         'created_at' => date('Y-m-d h:i:s'),
+                        // 'updated_at'=>date('Y-m-d h:i:s'),
                     ]);
 
-                    $accountPersediaan = AccountData::where('branch_id', $getEmployee->branch_id)
+                    $accountData = AccountData::where('branch_id', $getEmployee->branch_id)
                         ->where('active', 'Y')
-                        ->where('main_id', 3)
-                        ->where('main_detail_id', 11)
+                        ->where('main_id', 4)
+                        ->where('main_detail_id', 4)
                         ->first();
-
-                    $accountBiayaHpp = AccountData::where('branch_id', $getEmployee->branch_id)
-                        ->where('active', 'Y')
-                        ->where('main_id', 7)
-                        ->where('main_detail_id', 29)
-                        ->first();
-                    // JURNAL HPP
-                    $accountCodeHpp = [$accountBiayaHpp->id, $accountPersediaan->id];
-                    // return $accountCodeHpp;
-                    $totalHpp = [str_replace(',', '', $req->totalHpp), str_replace(',', '', $req->totalHpp)];
-                    
-                    $descriptionHpp = ['Pengeluaran Harga Pokok Penjualan ' . $kode, 'Biaya Harga Pokok Penjualan' . $kode];
-                    $DKHpp = ['D', 'K'];
-                    for ($i = 0; $i < count($totalHpp); $i++) {
-                        if ($totalHpp[$i] != 0) {
-                            $idDetailhpp = DB::table('journal_details')->max('id') + 1;
-                            JournalDetail::create([
-                                'id' => $idDetailhpp,
-                                'journal_id' => $idJournalHpp,
-                                'account_id' => $accountCodeHpp[$i],
-                                'total' => $totalHpp[$i],
-                                'description' => $descriptionHpp[$i],
-                                'debet_kredit' => $DKHpp[$i],
-                                'created_at' => date('Y-m-d h:i:s'),
-                                'updated_at' => date('Y-m-d h:i:s'),
-                            ]);
-                        }
+                    if ($accountData == null) {
+                        DB::rollback();
+                        return Response::json(['status' => 'error', 'message' => 'Akun Pembayaran Dimuka Kosong']);
                     }
+
+                    $accountPembayaran = AccountData::where('id', $req->account)->first();
+                    $accountCode = [$accountPembayaran->id, $accountData->id];
+                    $totalBayar = [$req->checkDpData, $req->checkDpData];
+                    $description = ['Jurnal Balik Down Payment Service ' . $kode, 'Jurnal Balik  Down Payment Service ' . $kode];
+                    $DK = ['K', 'D'];
+
+                    for ($i = 0; $i < count($accountCode); $i++) {
+                        $idDetail = DB::table('journal_details')->max('id') + 1;
+                        JournalDetail::create([
+                            'id' => $idDetail,
+                            'journal_id' => $idJournalBalik,
+                            'account_id' => $accountCode[$i],
+                            'total' => $totalBayar[$i],
+                            'description' => $description[$i],
+                            'debet_kredit' => $DK[$i],
+                            'created_at' => date('Y-m-d h:i:s'),
+                            'updated_at' => date('Y-m-d h:i:s'),
+                        ]);
+                    }
+                }
                 // }
             }
 
@@ -513,17 +570,16 @@ class ServicePaymentController extends Controller
                         ->where('id', $checkJournals[0]->id)
                         ->delete();
 
-
                     DB::table('journal_details')
                         ->where('journal_id', $checkJournals[0]->id)
                         ->delete();
-                        if (isset($checkJournals[1])) {
+                    if (isset($checkJournals[1])) {
                         DB::table('journals')
-                        ->where('id', $checkJournals[1]->id)
-                        ->delete();
+                            ->where('id', $checkJournals[1]->id)
+                            ->delete();
                         DB::table('journal_details')
-                        ->where('journal_id', $checkJournals[1]->id)
-                        ->delete();
+                            ->where('journal_id', $checkJournals[1]->id)
+                            ->delete();
                     }
                 } else {
                     DB::table('journals')
