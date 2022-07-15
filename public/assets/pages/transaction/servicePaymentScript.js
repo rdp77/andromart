@@ -541,9 +541,7 @@ function jurnal(params) {
 function changeTypePay() {
     var type = $(".type").find(":selected").val();
     if (type == "Lunas") {
-        $(".totalPayment").val(
-            parseInt($(".totalPriceHidden").val()).toLocaleString("en-US")
-        );
+        $(".totalPayment").val(parseInt($(".totalPriceHidden").val()-$(".checkDpData").val()).toLocaleString("en-US"));
         $(".totalPrice").val(0);
     } else if (type == "DownPayment") {
         $(".totalPayment").val(0);

@@ -311,21 +311,50 @@ class ServicePaymentController extends Controller
                     ->first();
 
                 $accountPembayaran = AccountData::where('id', $req->account)->first();
+                $accountCode = [];
+                $totalBayar = [];
+                $description = [];
+                $DK = [];
+                // DB::rollback();
 
+
+                if ($checkService != null) {
+                    $accountDP = AccountData::where('branch_id', $getEmployee->branch_id)
+                        ->where('active', 'Y')
+                        ->where('main_id', 4)
+                        ->where('main_detail_id', 4)
+                        ->first();
+
+                    array_push($accountCode,$accountDP->id);
+                    array_push($totalBayar,$req->checkDpData);
+                    array_push($description,'Down Payment Service ' . $kode);
+                    array_push($DK,'D');
+                    
+                }
                 if (str_replace(',', '', $req->totalDiscountValue) == 0) {
                     // DB::rollback();
                     // return 'disini';
-                    $accountCode = [$accountPembayaran->id, $accountService->id, $accountJasa->id];
-                    $totalBayar = [str_replace(',', '', $req->totalPayment), str_replace(',', '', $req->totalSparePart), str_replace(',', '', $req->totalService)];
-                    $description = ['Kas Pelunasan Service ' . $kode, 'Pendapatan SparePart Pelunasan Service ' . $kode, 'Pendapatan Jasa Service Pelunasan Service ' . $kode];
-                    $DK = ['D', 'K', 'K'];
+                    // $accountCode = [$accountPembayaran->id, $accountService->id, $accountJasa->id];
+                    // $totalBayar = [str_replace(',', '', $req->totalPayment), str_replace(',', '', $req->totalSparePart), str_replace(',', '', $req->totalService)];
+                    // $description = ['Kas Pelunasan Service ' . $kode, 'Pendapatan SparePart Pelunasan Service ' . $kode, 'Pendapatan Jasa Service Pelunasan Service ' . $kode];
+                    // $DK = ['D', 'K', 'K'];
+                    array_push($accountCode,$accountPembayaran->id, $accountService->id, $accountJasa->id);
+                    array_push($totalBayar,str_replace(',', '', $req->totalPayment), str_replace(',', '', $req->totalSparePart), str_replace(',', '', $req->totalService));
+                    array_push($description,'Kas Pelunasan Service ' . $kode, 'Pendapatan SparePart Pelunasan Service ' . $kode, 'Pendapatan Jasa Service Pelunasan Service ' . $kode);
+                    array_push($DK,'D', 'K', 'K');
+                 
                 } else {
-                    $accountCode = [$accountPembayaran->id, $accountDiskon->id, $accountService->id, $accountJasa->id];
-                    $totalBayar = [str_replace(',', '', $req->totalPayment), str_replace(',', '', $req->totalDiscountValue), str_replace(',', '', $req->totalSparePart), str_replace(',', '', $req->totalService)];
-                    $description = ['Kas Pelunasan Service ' . $req->totalPayment . ' ' . $kode, 'Diskon Pelunasan Service ' . $kode, 'Pendapatan SparePart Pelunasan Service ' . $kode, 'Pendapatan Jasa Service Pelunasan Service ' . $kode];
-                    $DK = ['D', 'D', 'K', 'K'];
-                }
+                    // $accountCode = [$accountPembayaran->id, $accountDiskon->id, $accountService->id, $accountJasa->id];
+                    // $totalBayar = [str_replace(',', '', $req->totalPayment), str_replace(',', '', $req->totalDiscountValue), str_replace(',', '', $req->totalSparePart), str_replace(',', '', $req->totalService)];
+                    // $description = ['Kas Pelunasan Service ' . $req->totalPayment . ' ' . $kode, 'Diskon Pelunasan Service ' . $kode, 'Pendapatan SparePart Pelunasan Service ' . $kode, 'Pendapatan Jasa Service Pelunasan Service ' . $kode];
+                    // $DK = ['D', 'D', 'K', 'K'];
 
+                    array_push($accountCode,$accountPembayaran->id, $accountDiskon->id, $accountService->id, $accountJasa->id);
+                    array_push($totalBayar,str_replace(',', '', $req->totalPayment), str_replace(',', '', $req->totalDiscountValue), str_replace(',', '', $req->totalSparePart), str_replace(',', '', $req->totalService));
+                    array_push($description,'Kas Pelunasan Service ' . $req->totalPayment . ' ' . $kode, 'Diskon Pelunasan Service ' . $kode, 'Pendapatan SparePart Pelunasan Service ' . $kode, 'Pendapatan Jasa Service Pelunasan Service ' . $kode);
+                    array_push($DK,'D', 'D', 'K', 'K');
+                }
+                
                 // if ($checkService != null) {
                 //     array_unshift($accountCode, $accountDimuka->id);
                 //     array_unshift($totalBayar, str_replace(',', '', $checkService->total));
@@ -404,52 +433,7 @@ class ServicePaymentController extends Controller
                     }
                 }
 
-                // jurnal balik
-                if ($checkService != null) {
-                    $idJournalBalik = DB::table('journals')->max('id') + 1;
-                    Journal::create([
-                        'id' => $idJournalBalik,
-                        'code' => $this->code('KK', $idJournalBalik),
-                        'year' => date('Y'),
-                        'date' => $dateConvert,
-                        'type' => 'Jurnal Balik Down Payment ',
-                        'total' => $req->checkDpData,
-                        'ref' => $kode,
-                        'description' => 'Jurnal Balik Down Payment  ' . $kode,
-                        'created_at' => date('Y-m-d h:i:s'),
-                        // 'updated_at'=>date('Y-m-d h:i:s'),
-                    ]);
-
-                    $accountData = AccountData::where('branch_id', $getEmployee->branch_id)
-                        ->where('active', 'Y')
-                        ->where('main_id', 4)
-                        ->where('main_detail_id', 4)
-                        ->first();
-                    if ($accountData == null) {
-                        DB::rollback();
-                        return Response::json(['status' => 'error', 'message' => 'Akun Pembayaran Dimuka Kosong']);
-                    }
-
-                    $accountPembayaran = AccountData::where('id', $req->account)->first();
-                    $accountCode = [$accountPembayaran->id, $accountData->id];
-                    $totalBayar = [$req->checkDpData, $req->checkDpData];
-                    $description = ['Jurnal Balik Down Payment Service ' . $kode, 'Jurnal Balik  Down Payment Service ' . $kode];
-                    $DK = ['K', 'D'];
-
-                    for ($i = 0; $i < count($accountCode); $i++) {
-                        $idDetail = DB::table('journal_details')->max('id') + 1;
-                        JournalDetail::create([
-                            'id' => $idDetail,
-                            'journal_id' => $idJournalBalik,
-                            'account_id' => $accountCode[$i],
-                            'total' => $totalBayar[$i],
-                            'description' => $description[$i],
-                            'debet_kredit' => $DK[$i],
-                            'created_at' => date('Y-m-d h:i:s'),
-                            'updated_at' => date('Y-m-d h:i:s'),
-                        ]);
-                    }
-                }
+              
                 // }
             }
 
