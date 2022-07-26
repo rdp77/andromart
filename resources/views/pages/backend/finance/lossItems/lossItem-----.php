@@ -217,7 +217,7 @@ function saveSharingProfit() {
                 }
             });
         } else {
-            swal("Dibatalkan!");
+            swal("Data Dana Kredit PDL Berhasil Dihapus!");
         }
     });
 }

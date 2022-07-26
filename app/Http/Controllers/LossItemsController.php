@@ -49,12 +49,59 @@ class LossItemsController extends Controller
 
     public function index(Request $req)
     {
+        $checkRoles = $this->DashboardController->cekHakAkses(4, 'view');
+        if ($checkRoles == 'akses ditolak') {
+            return view('forbidden');
+        }
+        if ($req->ajax()) {
+            $data = LossItems::with(['Technician'])
+                ->orderBy('id', 'DESC')
+                ->get();
+
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<div class="btn-group">';
+                    $actionBtn .= '<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                            data-toggle="dropdown">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>';
+                    $actionBtn .= '<div class="dropdown-menu">';
+                    // $actionBtn .= '<a class="dropdown-item" href="' . route('service-payment.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
+                    $actionBtn .= '<a class="dropdown-item" href="' . route('loss-items.show', $row->id) . '"><i class="far fa-eye"></i> Lihat</a>';
+                    // $actionBtn .= '<a class="dropdown-item" href="' . route('service.printServicePayment', $row->id) . '"><i class="fas fa-print"></i> Print</a>';
+                    $actionBtn .= '<a onclick="jurnal(' . "'" . $row->code . "'" . ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
+                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
+                    $actionBtn .= '</div></div>';
+
+                    return $actionBtn;
+                })
+                ->addColumn('dateFormat', function ($row) {
+                    return Carbon::parse($row->date)
+                        ->locale('id')
+                        ->isoFormat('LL');
+                })
+                ->addColumn('dateRange', function ($row) {
+                    return Carbon::parse($row->date_start)
+                        ->locale('id')
+                        ->isoFormat('LL'). ' S/D  '.Carbon::parse($row->date_end)
+                        ->locale('id')
+                        ->isoFormat('LL');
+                })
+                ->addColumn('totalValue', function ($row) {
+                    return number_format($row->total, 0, '.', ',');
+                })
+                ->rawColumns(['action', 'dateRange', 'dateFormat','totalValue'])
+                ->make(true);
+        }
+
+        return view('pages.backend.finance.lossItems.indexLossItems');
         // $var = 'as';
-        $data = Service::where('technician_id', Auth::user()->id)->get();
-        $employee = Employee::get();
-        $accountMain = AccountMainDetail::where('main_id',1)->get();
-        $accountData = AccountData::get();
-        return view('pages.backend.finance.loss_items.lossItems', compact('data', 'employee','accountMain','accountData'));
+        // $data = Service::where('technician_id', Auth::user()->id)->get();
+        // $employee = Employee::get();
+        // $accountMain = AccountMainDetail::where('main_id',1)->get();
+        // $accountData = AccountData::get();
+        // return view('pages.backend.finance.loss_items.lossItems', compact('data', 'employee','accountMain','accountData'));
     }
     public function lossItemsLoadDataService(Request $req)
     {
@@ -90,7 +137,7 @@ class LossItemsController extends Controller
 
     public function store(Request $req)
     {
-        // return $req->all();
+        return $req->all();
         // return array_sum($req->totalAll);
 
         DB::beginTransaction();
@@ -322,5 +369,19 @@ class LossItemsController extends Controller
         } catch (\Throwable $th) {
             return Response::json(['status' => 'error', 'message' => $th]);
         }
+    }
+    
+    public function show($id)
+    {
+        $data = LossItems::with('LossItemsDetail','LossItemsDetail.Service')->where('id', $id)->first();
+        // return $data;
+        return view('pages.backend.finance.lossItems.showLossItems', ['data' => $data]);
+    }
+    public function lossItemsCheckJournals(Request $req)
+    {
+        $data = Journal::with('JournalDetail.AccountData')
+            ->where('ref', $req->id)
+            ->get();
+        return Response::json(['status' => 'success', 'jurnal' => $data]);
     }
 }

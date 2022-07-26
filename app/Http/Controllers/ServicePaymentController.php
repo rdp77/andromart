@@ -317,6 +317,10 @@ class ServicePaymentController extends Controller
                 $DK = [];
                 // DB::rollback();
 
+                array_push($accountCode,$accountPembayaran->id);
+                array_push($totalBayar,str_replace(',', '', $req->totalPayment));
+                array_push($description,'Kas Pelunasan Service ' . $kode);
+                array_push($DK,'D');
 
                 if ($checkService != null) {
                     $accountDP = AccountData::where('branch_id', $getEmployee->branch_id)
@@ -338,10 +342,10 @@ class ServicePaymentController extends Controller
                     // $totalBayar = [str_replace(',', '', $req->totalPayment), str_replace(',', '', $req->totalSparePart), str_replace(',', '', $req->totalService)];
                     // $description = ['Kas Pelunasan Service ' . $kode, 'Pendapatan SparePart Pelunasan Service ' . $kode, 'Pendapatan Jasa Service Pelunasan Service ' . $kode];
                     // $DK = ['D', 'K', 'K'];
-                    array_push($accountCode,$accountPembayaran->id, $accountService->id, $accountJasa->id);
-                    array_push($totalBayar,str_replace(',', '', $req->totalPayment), str_replace(',', '', $req->totalSparePart), str_replace(',', '', $req->totalService));
-                    array_push($description,'Kas Pelunasan Service ' . $kode, 'Pendapatan SparePart Pelunasan Service ' . $kode, 'Pendapatan Jasa Service Pelunasan Service ' . $kode);
-                    array_push($DK,'D', 'K', 'K');
+                    array_push($accountCode, $accountService->id, $accountJasa->id);
+                    array_push($totalBayar,str_replace(',', '', $req->totalSparePart), str_replace(',', '', $req->totalService));
+                    array_push($description,'Pendapatan SparePart Pelunasan Service ' . $kode, 'Pendapatan Jasa Service Pelunasan Service ' . $kode);
+                    array_push($DK, 'K', 'K');
                  
                 } else {
                     // $accountCode = [$accountPembayaran->id, $accountDiskon->id, $accountService->id, $accountJasa->id];
@@ -349,10 +353,10 @@ class ServicePaymentController extends Controller
                     // $description = ['Kas Pelunasan Service ' . $req->totalPayment . ' ' . $kode, 'Diskon Pelunasan Service ' . $kode, 'Pendapatan SparePart Pelunasan Service ' . $kode, 'Pendapatan Jasa Service Pelunasan Service ' . $kode];
                     // $DK = ['D', 'D', 'K', 'K'];
 
-                    array_push($accountCode,$accountPembayaran->id, $accountDiskon->id, $accountService->id, $accountJasa->id);
-                    array_push($totalBayar,str_replace(',', '', $req->totalPayment), str_replace(',', '', $req->totalDiscountValue), str_replace(',', '', $req->totalSparePart), str_replace(',', '', $req->totalService));
-                    array_push($description,'Kas Pelunasan Service ' . $req->totalPayment . ' ' . $kode, 'Diskon Pelunasan Service ' . $kode, 'Pendapatan SparePart Pelunasan Service ' . $kode, 'Pendapatan Jasa Service Pelunasan Service ' . $kode);
-                    array_push($DK,'D', 'D', 'K', 'K');
+                    array_push($accountCode, $accountDiskon->id, $accountService->id, $accountJasa->id);
+                    array_push($totalBayar, str_replace(',', '', $req->totalDiscountValue), str_replace(',', '', $req->totalSparePart), str_replace(',', '', $req->totalService));
+                    array_push($description, 'Diskon Pelunasan Service ' . $kode, 'Pendapatan SparePart Pelunasan Service ' . $kode, 'Pendapatan Jasa Service Pelunasan Service ' . $kode);
+                    array_push($DK, 'D', 'K', 'K');
                 }
                 
                 // if ($checkService != null) {

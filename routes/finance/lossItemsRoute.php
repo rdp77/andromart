@@ -17,10 +17,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'finance'], function () {
     Route::group(['prefix' => 'loss-items'], function () {
-        Route::resource('loss-items', LossItemsController::class)
-            ->except([
-                'show',
-            ]);
+        Route::resource('loss-items', LossItemsController::class);
 
         // Route::get(
         //     'sharing-profit-form-update-status',
@@ -31,6 +28,11 @@ Route::group(['prefix' => 'finance'], function () {
             'loss-items-load-data-service',
             [LossItemsController::class, 'lossItemsLoadDataService']
         )->name('loss-items.lossItemsLoadDataService');
+
+        Route::post(
+            'check-journals',
+            [LossItemsController::class, 'lossItemsCheckJournals']
+        )->name('loss-items.lossItemsCheckJournals');
 
         // Route::post(
         //     'sharing-profit-form-update-status-save-data',

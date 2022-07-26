@@ -17,10 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'finance'], function () {
     Route::group(['prefix' => 'sharing-profit'], function () {
-        Route::resource('sharing-profit', SharingProfitController::class)
-            ->except([
-                'show',
-            ]);
+        Route::resource('sharing-profit', SharingProfitController::class);
+            // ->except([
+            //     'show',
+            // ]);
 
         // Route::get(
         //     'sharing-profit-form-update-status',
@@ -31,6 +31,11 @@ Route::group(['prefix' => 'finance'], function () {
             'sharing-profit-load-data-service',
             [SharingProfitController::class, 'sharingProfitLoadDataService']
         )->name('sharing-profit.sharingProfitLoadDataService');
+
+        Route::post(
+            'check-journals',
+            [SharingProfitController::class, 'sharingProfitCheckJournals']
+        )->name('sharing-profit.sharingProfitCheckJournals');
 
         // Route::post(
         //     'sharing-profit-form-update-status-save-data',

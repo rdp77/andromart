@@ -25,4 +25,13 @@ class SharingProfit extends Model
         'updated_by',
         'deleted_by',
     ];
+
+    public function Technician()
+    {
+        return $this->belongsTo('App\Models\Employee', 'employe_id', 'id');
+    }
+    public function SharingProfitDetail()
+    {
+        return $this->hasMany('App\Models\SharingProfitDetail', 'sharing_profit_id', 'id');
+    }
 }

@@ -474,13 +474,14 @@ $(document.body).on("change",".itemsDetail",function(){
         var totalItemHpp = itemHpp * itemQty;
         $('.stock_' + index).val($(this).find(':selected').data('stock'));
         $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
-        $('.totalPriceHpp_'+index).val(totalItemHpp);
         if(typeDetail == 'SparePart'){
             $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
             $('.priceDetailLoss_'+index).val(0);
+            $('.totalPriceHpp_'+index).val(totalItemHpp);
         }else{
             $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
             $('.priceDetailSparePart_'+index).val(0);
+            $('.totalPriceHpp_'+index).val(0);
         }
     }
     var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
@@ -540,19 +541,21 @@ $(document.body).on("keyup",".qtyDetail",function(){
     var totalItemPrice = itemPrice*itemQty;
     var totalItemHpp = itemHpp*itemQty;
     $('.totalPriceDetail_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
-    $('.totalPriceHpp_'+index).val(parseInt(totalItemHpp).toLocaleString('en-US'));
     if(typeDetail == 'SparePart'){
         $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailLoss_'+index).val(0);
+        $('.totalPriceHpp_'+index).val(parseInt(totalItemHpp).toLocaleString('en-US'));
     }else{
         $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailSparePart_'+index).val(0);
+        $('.totalPriceHpp_'+index).val(0);
     }
     var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
     var totalPriceHpp = 0;
     $('.totalPriceHpp').each(function(){
         totalPriceHpp += parseInt(this.value.replace(/,/g, ""))
     });
+    console.log(typeDetail);
     $('#totalHppAtas').val(parseInt(totalPriceHpp).toLocaleString('en-US'));
     sum();
     sumTotal();
@@ -640,17 +643,22 @@ $(document.body).on("change",".typeDetail",function(){
     if(isNaN(parseInt($('.qtyDetail_'+index).val()))){
         var itemQty =  0; }else{
         var itemQty = $('.qtyDetail_'+index).val().replace(/,/g, ''),asANumber = +itemQty;}
+    if(isNaN(parseInt($('.priceHpp_'+index).val()))){
+        var itemHpp =  0; }else{
+        var itemHpp = $('.priceHpp_'+index).val().replace(/,/g, ''),asANumber = +itemHpp;}
     var totalItemPrice = itemPrice*itemQty;
+    var totalItemHpp = itemHpp*itemQty;
     if(value == 'SparePart'){
         $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailLoss_' + index).val(0);
-
+        $('.totalPriceHpp_'+index).val(totalItemHpp);
     }else{
         $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailSparePart_'+index).val(0);
+        $('.totalPriceHpp_'+index).val(0);
     }
     var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
-
+    // mengecek HPP jika loss
     sum();
     sumTotal();
     if (checkVerificationDiscount == 'percent') {

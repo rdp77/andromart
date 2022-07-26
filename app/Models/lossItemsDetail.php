@@ -24,4 +24,8 @@ class LossItemsDetail extends Model
     {
         return $this->belongsTo('App\Models\LossItems', 'loss_items_id', 'id');
     }
+    public function Service()
+    {
+        return $this->belongsTo('App\Models\Service', 'service_id', 'id');
+    }
 }

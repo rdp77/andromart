@@ -185,12 +185,49 @@
                                                 </td>
                                             </tr>
                                             <tr>
+                                                <td>Pendapatan Lain-Lain
+                                                    <table>
+                                                        @for ($i = 0; $i < count($dataPendapatanLainLain); $i++)
+                                                            <tr>
+                                                                <td
+                                                                    style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                    @php
+                                                                        echo $dataPendapatanLainLain[$i]['namaAkun'];
+                                                                    @endphp
+                                                                </td>
+                                                            </tr>
+                                                        @endfor
+                                                    </table>
+                                                    Total Pendapatan Lain-Lain
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <table style="width: 100%;text-align:left">
+                                                        <b><br></b>
+                                                        @php
+                                                            $totalPendapatanLainLain = 0;
+                                                        @endphp
+                                                        @for ($i = 0; $i < count($dataPendapatanLainLain); $i++)
+                                                            <tr>
+                                                                <td
+                                                                    style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                    {{ number_format($dataPendapatanLainLain[$i]['total'], 0, ',', ',') }}
+                                                                    @php
+                                                                        $totalPendapatanLainLain += $dataPendapatanLainLain[$i]['total'];
+                                                                    @endphp
+                                                            </tr>
+                                                        @endfor
+                                                    </table>
+                                                    <b>Rp.
+                                                        {{ number_format($totalPendapatanLainLain, 0, '.', ',') }}</b>
+                                                </td>
+                                            </tr>
+                                            <tr>
                                                 <td>Pendapatan Kotor</td>
                                                 <td></td>
                                                 <td style="text-align: right"><b>Rp.
 
 
-                                                        {{ number_format($totalPenjualan + $totalService - $DiskonPenjualan - $DiskonService, 0, '.', ',') }}</b>
+                                                        {{ number_format($totalPenjualan + $totalPendapatanLainLain + $totalService - $DiskonPenjualan - $DiskonService, 0, '.', ',') }}</b>
                                                 </td>
                                             </tr>
                                             {{-- <tr>
@@ -219,11 +256,11 @@
                                                 </th>
                                                 <td style="text-align: right;background-color: #ffffdc"></td>
                                                 <td style="text-align: right;background-color: #ffffdc;color:black"><b>Rp.
-                                                        {{ number_format($totalPenjualan + $totalService - $DiskonPenjualan - $DiskonService - $HPP, 0, '.', ',') }}</b>
+                                                        {{ number_format($totalPenjualan + $totalPendapatanLainLain+ $totalService - $DiskonPenjualan - $DiskonService - $HPP, 0, '.', ',') }}</b>
                                                 </td>
                                             </tr>
                                             @php
-                                                $labarKotor = $totalPenjualan + $totalService - $DiskonPenjualan - $DiskonService - $HPP;
+                                                $labaKotor = $totalPendapatanLainLain + $totalPenjualan + $totalService - $DiskonPenjualan - $DiskonService - $HPP;
                                             @endphp
                                             {{-- <tr>
                                                 <th colspan="3" style="color:black;text-align:center">Beban Usaha
@@ -359,7 +396,7 @@
 
                                                 </th>
                                                 <td style="text-align: right;background-color: yellow;color:black"><b>Rp.
-                                                        {{ number_format($labarKotor - $totalDataBeban - $sharingProfit - $totalDataBiaya - $gaji, 0, '.', ',') }}</b>
+                                                        {{ number_format($labaKotor - $totalDataBeban - $sharingProfit - $totalDataBiaya - $gaji, 0, '.', ',') }}</b>
                                                 </td>
                                             </tr>
                                         </thead>

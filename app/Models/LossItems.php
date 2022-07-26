@@ -25,4 +25,13 @@ class LossItems extends Model
         'updated_by',
         'deleted_by',
     ];
+
+    public function Technician()
+    {
+        return $this->belongsTo('App\Models\Employee', 'employe_id', 'id');
+    }
+    public function LossItemsDetail()
+    {
+        return $this->hasMany('App\Models\lossItemsDetail', 'loss_items_id', 'id');
+    }
 }

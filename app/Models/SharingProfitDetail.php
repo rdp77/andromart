@@ -25,4 +25,12 @@ class SharingProfitDetail extends Model
     {
         return $this->belongsTo('App\Models\SharingProfit', 'sharing_profit_id', 'id');
     }
+    public function Service()
+    {
+        return $this->belongsTo('App\Models\Service', 'ref', 'code');
+    }
+    public function Sale()
+    {
+        return $this->belongsTo('App\Models\Sale', 'ref', 'code');
+    }
 }

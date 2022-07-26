@@ -52,10 +52,6 @@ class ReportIncomeSpendingController extends Controller
         $branch = Branch::get();
         return view('pages.backend.finance.report.reportIncomeSpending', compact('data', 'branch'));
     }
-    public function FunctionName(Type $var = null)
-    {
-        # code...
-    }
     public function searchReportIncomeSpending(Request $req)
     {
         // return $req->all();

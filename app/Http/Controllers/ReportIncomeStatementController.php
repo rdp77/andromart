@@ -200,7 +200,40 @@ class ReportIncomeStatementController extends Controller
                 }
             }
         }
-        // return $dataBiaya;
+        $accountDataPendapatanLainLain = AccountData::where('main_id', 10)
+            ->where(function ($q) use ($req) {
+                if ($req->branch == '') {
+                    # code...
+                } else {
+                    $q->where('branch_id', $req->branch);
+                }
+            })
+            ->get();
+
+        $dataPendapatanLainLain = [];
+        for ($i = 0; $i < count($accountDataPendapatanLainLain); $i++) {
+            $dataPendapatanLainLain[$i]['total'] = 0;
+            $dataPendapatanLainLain[$i]['akun'] = $accountDataPendapatanLainLain[$i]->main_detail_id;
+            $dataPendapatanLainLain[$i]['namaAkun'] = $accountDataPendapatanLainLain[$i]->name;
+            $dataPendapatanLainLain[$i]['jurnal'] = [];
+            $dataPendapatanLainLain[$i]['dk'] = [];
+            for ($j = 0; $j < count($jurnal); $j++) {
+                for ($k = 0; $k < count($jurnal[$j]->JournalDetail); $k++) {
+                    if ($accountDataPendapatanLainLain[$i]->main_detail_id == $jurnal[$j]->JournalDetail[$k]->AccountData->main_detail_id && $accountDataPendapatanLainLain[$i]->branch_id == $jurnal[$j]->JournalDetail[$k]->AccountData->branch_id) {
+                        // $dataPendapatanLainLain[$i]['jurnal'][$j]['jurnalDetail'][$k] = $jurnal[$j];
+                        array_push($dataPendapatanLainLain[$i]['jurnal'], $jurnal[$j]->JournalDetail[$k]->total);
+                        // array_push($dataPendapatanLainLain[$i]['dk'],[$jurnal[$j]->JournalDetail[$k]->debet_kredit,$jurnal[$j]->code]);
+                        array_push($dataPendapatanLainLain[$i]['dk'], [$jurnal[$j]->JournalDetail[$k]->debet_kredit,$jurnal[$j]->JournalDetail[$k]->AccountData->main_detail_id]);
+                        if ($jurnal[$j]->JournalDetail[$k]->debet_kredit == 'D') {
+                            $dataPendapatanLainLain[$i]['total'] -=$jurnal[$j]->JournalDetail[$k]->total;
+                        } else {
+                            $dataPendapatanLainLain[$i]['total'] +=$jurnal[$j]->JournalDetail[$k]->total;
+                        }
+                    }
+                }
+            }
+        }
+        // return $dataPendapatanLainLain;
 
         $accountDataBeban = AccountData::where('main_id', 7)->where(function ($q) use ($req) {
                 if ($req->branch == '') {
@@ -209,13 +242,13 @@ class ReportIncomeStatementController extends Controller
                     $q->where('branch_id', $req->branch);
                 }
             })->get();
-        $jurnal = Journal::with('JournalDetail', 'JournalDetail.AccountData')
-            // ->where('date', '<=', date('Y-m-t', strtotime($req->dateS)))
-            ->where('date', '>=', $date1)
-            ->where('date', '<=', $date2)
+        // $jurnal = Journal::with('JournalDetail', 'JournalDetail.AccountData')
+        //     // ->where('date', '<=', date('Y-m-t', strtotime($req->dateS)))
+        //     ->where('date', '>=', $date1)
+        //     ->where('date', '<=', $date2)
            
-            // ->where('date', '>=', date('Y-m-01', strtotime($req->dateS)))
-            ->get();
+        //     // ->where('date', '>=', date('Y-m-01', strtotime($req->dateS)))
+        //     ->get();
 
         $dataBeban = [];
         for ($i = 0; $i < count($accountDataBeban); $i++) {
@@ -245,7 +278,7 @@ class ReportIncomeStatementController extends Controller
         // return $dataBeban;
 
         // $data = [];
-        return view('pages.backend.report.reportIncomeStatement', compact('HPP', 'gaji', 'sharingProfit', 'totalService', 'totalPenjualan', 'DiskonPenjualan', 'DiskonService', 'dataBiaya', 'dataBeban', 'branch'));
+        return view('pages.backend.report.reportIncomeStatement', compact('HPP', 'gaji', 'sharingProfit', 'totalService', 'totalPenjualan', 'DiskonPenjualan', 'DiskonService', 'dataBiaya', 'dataBeban', 'branch','dataPendapatanLainLain'));
     }
     public function printReportIncomeStatement(Request $req)
     {

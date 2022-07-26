@@ -372,10 +372,7 @@
                         <input id="totalPrice" type="text" value="0" class="form-control cleaveNumeral"
                             name="totalPrice" onchange="sumTotal()" style="text-align: right">
                     </div>
-
-
                 </div>
-
             </div>
             <div class="card">
                 <div class="card-header">

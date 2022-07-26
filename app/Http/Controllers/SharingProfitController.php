@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Carbon\carbon;
 // use DB;
+use Yajra\DataTables\DataTables;
 
 class SharingProfitController extends Controller
 {
@@ -41,13 +42,71 @@ class SharingProfitController extends Controller
      * @return \Illuminate\Contracts\Support\Renderable
      */
 
+    // public function index(Request $req)
+    // {
+    //     $data = Service::where('technician_id', Auth::user()->id)->get();
+    //     $accountMain = AccountMainDetail::where('main_id',1)->get();
+    //     $accountData = AccountData::get();
+    //     $employee = Employee::get();
+    //     return view('pages.backend.finance.sharing_profit.sharingProfit', compact('data', 'employee','accountData','accountMain'));
+    // }
     public function index(Request $req)
+    {
+        $checkRoles = $this->DashboardController->cekHakAkses(4, 'view');
+        if ($checkRoles == 'akses ditolak') {
+            return view('forbidden');
+        }
+        if ($req->ajax()) {
+            $data = SharingProfit::with(['Technician'])
+                ->orderBy('id', 'DESC')
+                ->get();
+
+            return Datatables::of($data)
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $actionBtn = '<div class="btn-group">';
+                    $actionBtn .= '<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
+                            data-toggle="dropdown">
+                            <span class="sr-only">Toggle Dropdown</span>
+                        </button>';
+                    $actionBtn .= '<div class="dropdown-menu">';
+                    // $actionBtn .= '<a class="dropdown-item" href="' . route('service-payment.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
+                    $actionBtn .= '<a class="dropdown-item" href="' . route('sharing-profit.show', $row->id) . '"><i class="far fa-eye"></i> Lihat</a>';
+                    // $actionBtn .= '<a class="dropdown-item" href="' . route('service.printServicePayment', $row->id) . '"><i class="fas fa-print"></i> Print</a>';
+                    $actionBtn .= '<a onclick="jurnal(' . "'" . $row->code . "'" . ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
+                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
+                    $actionBtn .= '</div></div>';
+
+                    return $actionBtn;
+                })
+                ->addColumn('dateFormat', function ($row) {
+                    return Carbon::parse($row->date)
+                        ->locale('id')
+                        ->isoFormat('LL');
+                })
+                ->addColumn('dateRange', function ($row) {
+                    return Carbon::parse($row->date_start)
+                        ->locale('id')
+                        ->isoFormat('LL'). ' S/D  '.Carbon::parse($row->date_end)
+                        ->locale('id')
+                        ->isoFormat('LL');
+                })
+                ->addColumn('totalValue', function ($row) {
+                    return number_format($row->total, 0, '.', ',');
+                })
+                ->rawColumns(['action', 'dateRange', 'dateFormat','totalValue'])
+                ->make(true);
+        }
+
+        return view('pages.backend.finance.sharingProfit.indexSharingProfit');
+    }
+    public function create()
     {
         $data = Service::where('technician_id', Auth::user()->id)->get();
         $accountMain = AccountMainDetail::where('main_id',1)->get();
         $accountData = AccountData::get();
         $employee = Employee::get();
-        return view('pages.backend.finance.sharing_profit.sharingProfit', compact('data', 'employee','accountData','accountMain'));
+        return view('pages.backend.finance.sharingProfit.createSharingProfit', compact('data', 'employee','accountData','accountMain'));
     }
     public function sharingProfitLoadDataService(Request $req)
     {
@@ -128,20 +187,6 @@ class SharingProfitController extends Controller
                 }
             }
             
-            // if ($checkTotalBelumBayar == 0) {
-            //     DB::rollback();
-            //     return Response::json(['status' => 'fail', 'message' => 'Semua Telah dibayar']);
-            // }
-
-            // return $req->all();
-            // $checkData = SharingProfit::where('date_start', $this->DashboardController->changeMonthIdToEn($req->startDate))
-            //     ->where('date_end', $this->DashboardController->changeMonthIdToEn($req->endDate))
-            //     ->where('employe_id', $req->technicianId)
-            //     ->get();
-            // if (count($checkData) != 0) {
-            //     DB::rollback();
-            //     return Response::json(['status' => 'fail', 'message' => 'Data Sudah Ada']);
-            // }
             $getEmployee =  Employee::with('branch')->where('user_id', $req->technicianId)->first();
 
             $index = DB::table('sharing_profit')->max('id') + 1;
@@ -170,22 +215,17 @@ class SharingProfitController extends Controller
                 'ref' => $kode,
                 'description' => 'Pembagian Sharing Profit',
                 'created_at' => date('Y-m-d h:i:s'),
-                // 'updated_at'=>date('Y-m-d h:i:s'),
+
             ]);
-            // return Auth::user()->employee->branch;
+
             $cariCabang = AccountData::where('id', $req->accountData)->first();
-            //     ->where('main_id', $req->accountMain)
-            //     ->where('main_detail_id',$req->accountData)
-            //     ->first();
+ 
             $accountSharingProfit  = AccountData::where('branch_id', $cariCabang->branch_id)
                 ->where('active', 'Y')
                 ->where('main_id', 7)
                 ->where('main_detail_id', 14)
                 ->first();
-            // $accountKas            = AccountData::where('active', 'Y')
-            //     ->where('main_id', $req->accountMain)
-            //     ->where('main_detail_id',$req->accountData)
-            //     ->first();
+
             $accountCode = [
                 $req->accountData,
             ];
@@ -241,104 +281,58 @@ class SharingProfitController extends Controller
         }
     }
 
-    public function edit($id)
+
+    public function show($id)
     {
-        $Service = Service::find($id);
-        $member = User::get();
-        return view('pages.backend.transaction.service.editService', ['Service' => $Service, 'member' => $member]);
+        $data = SharingProfit::with('SharingProfitDetail','SharingProfitDetail.Service','SharingProfitDetail.Sale')->where('id', $id)->first();
+        // return $data;
+        return view('pages.backend.finance.sharingProfit.showSharingProfit', ['data' => $data]);
     }
-    public function printService($id)
-    {
-        $Service = Service::find($id);
-        $member = User::get();
-        return view('pages.backend.transaction.service.printService', ['Service' => $Service, 'member' => $member]);
-    }
-
-    // public function update($id, Request $req)
-    // {
-
-    //     Service::where('id', $id)
-    //         ->update([
-    //         'sales_id'   => $req->salesId,
-    //         'liquid_date'=> date('Y-m-d',strtotime($req->liquidDate)),
-    //         'total'      => str_replace(",", '',$req->total),
-    //         'updated_by' => Auth::user()->name,
-    //         'updated_at' => date('Y-m-d h:i:s'),
-    //     ]);
-
-    //     $Service = Service::find($id);
-    //     $this->DashboardController->createLog(
-    //         $req->header('user-agent'),
-    //         $req->ip(),
-    //         'Mengubah Service ' . Service::find($id)->name
-    //     );
-
-    //     $Service->save();
-
-    //     return Redirect::route('service.index')
-    //         ->with([
-    //             'status' => 'Berhasil merubah Dana Kredit',
-    //             'type' => 'success'
-    //         ]);
-    // }
 
     public function destroy(Request $req, $id)
     {
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Menghapus Data Kredit'
-        );
-        ServiceDetail::where('service_id', $id)->destroy($id);
+      
+        DB::beginTransaction();
+        try {
+            $this->DashboardController->createLog($req->header('user-agent'), $req->ip(), 'Menghapus Data Sharing Profit');
+            $checkSharingProfit = DB::table('sharing_profit')
+                ->where('id', $id)
+                ->first();
+            $checkJournals = DB::table('journals')
+                ->where('ref', $checkSharingProfit->code)
+                ->get();
+           
+            DB::table('journals')
+                ->where('id', $checkJournals[0]->id)
+                ->delete();
+
+            DB::table('journal_details')
+                ->where('journal_id', $checkJournals[0]->id)
+                ->delete();
+
+            DB::table('sharing_profit')
+                ->where('id', $id)
+                ->delete();
+
+            DB::table('sharing_profit_detail')
+                ->where('sharing_profit_id', $id)
+                ->delete();
+            
+
+            DB::commit();
+            return Response::json(['status' => 'success', 'message' => 'Data Terhapus']);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            // return$th;
+            return Response::json(['status' => 'error', 'message' => $th->getMessage()]);
+        }
         return Response::json(['status' => 'success']);
     }
-    public function serviceFormUpdateStatus()
+    public function sharingProfitCheckJournals(Request $req)
     {
-        $data = Service::where('technician_id', Auth::user()->id)->get();
-        $employee = Employee::get();
-        return view('pages.backend.transaction.service.indexFormUpdateService', compact('data', 'employee'));
-    }
-    public function serviceFormUpdateStatusLoadData(Request $req)
-    {
-        $data = Service::with(['ServiceDetail', 'ServiceDetail.Items', 'ServiceStatusMutation', 'ServiceStatusMutation.Technician'])->where('id', $req->id)->first();
-
-        if ($data == null) {
-            $message = 'empty';
-        } else {
-            $message = 'exist';
-        }
-
-        return Response::json(['status' => 'success', 'result' => $data, 'message' => $message]);
-    }
-
-    public function serviceFormUpdateStatusSaveData(Request $req)
-    {
-        try {
-            // return $req->all();
-            $index = ServiceStatusMutation::where('service_id', $req->id)->count() + 1;
-            if ($req->status == 'Mutasi') {
-                $technician_replacement_id = $req->technicianId;
-            } else {
-                $technician_replacement_id = null;
-            }
-
-
-            Service::where('id', $req->id)->update([
-                'work_status' => $req->status,
-                'technician_replacement_id' => $technician_replacement_id,
-            ]);
-            ServiceStatusMutation::create([
-                'service_id' => $req->id,
-                'technician_id' => Auth::user()->id,
-                'index' => $index,
-                'status' => $req->status,
-                'description' => $req->description,
-                'created_by' => Auth::user()->name,
-                'created_at' => date('Y-m-d h:i:s'),
-            ]);
-            return Response::json(['status' => 'success', 'message' => 'Sukses Menyimpan Data']);
-        } catch (\Throwable $th) {
-            return Response::json(['status' => 'error', 'message' => $th]);
-        }
+        $data = Journal::with('JournalDetail.AccountData')
+            ->where('ref', $req->id)
+            ->get();
+        return Response::json(['status' => 'success', 'jurnal' => $data]);
     }
 }
