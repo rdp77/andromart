@@ -225,8 +225,6 @@
                                                 <td>Pendapatan Kotor</td>
                                                 <td></td>
                                                 <td style="text-align: right"><b>Rp.
-
-
                                                         {{ number_format($totalPenjualan + $totalPendapatanLainLain + $totalService - $DiskonPenjualan - $DiskonService, 0, '.', ',') }}</b>
                                                 </td>
                                             </tr>

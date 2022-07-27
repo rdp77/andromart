@@ -42,7 +42,9 @@ function checkData() {
                                         value.journal_detail[0]
                                                     .account_data.main_detail_id == 29 ||
                                         value.journal_detail[0]
-                                                    .account_data.main_detail_id == 12
+                                                    .account_data.main_detail_id == 12 ||
+                                        value.journal_detail[0]
+                                                    .account_data.main_detail_id == 28
                                     ) {
                                     } else {
                                         if (data.cabang == null) {
@@ -149,7 +151,9 @@ function checkData() {
                                         value.journal_detail[0]
                                                     .account_data.main_detail_id == 29 ||
                                         value.journal_detail[0]
-                                                    .account_data.main_detail_id == 12
+                                                    .account_data.main_detail_id == 12 ||
+                                        value.journal_detail[0]
+                                                    .account_data.main_detail_id == 28
                                     ) {
                                     } else {
                                         if (data.cabang == null) {
@@ -260,7 +264,9 @@ function checkData() {
                                         value.journal_detail[0]
                                                     .account_data.main_detail_id == 29 ||
                                         value.journal_detail[0]
-                                                    .account_data.main_detail_id == 12
+                                                    .account_data.main_detail_id == 12 ||
+                                        value.journal_detail[0]
+                                                    .account_data.main_detail_id == 28
                                     ) {
                                     } else {
                                         if (data.cabang == null) {
