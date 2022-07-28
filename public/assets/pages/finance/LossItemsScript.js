@@ -146,3 +146,28 @@ function jurnal(params) {
         },
     });
 }
+
+function del(id) {
+    swal({
+        title: "Apakah Anda Yakin?",
+        text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus data Anda.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                url: "/finance/loss-items/loss-items/" + id,
+                type: "DELETE",
+                success: function () {
+                    swal("Data berhasil dihapus", {
+                        icon: "success",
+                    });
+                    table.draw();
+                },
+            });
+        } else {
+            swal("Data tidak jadi dihapus!");
+        }
+    });
+}

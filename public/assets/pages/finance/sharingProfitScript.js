@@ -98,7 +98,7 @@ function del(id) {
                 },
             });
         } else {
-            swal("Data pengguna Anda tidak jadi dihapus!");
+            swal("Data tidak jadi dihapus!");
         }
     });
 }
@@ -382,19 +382,25 @@ function checkEmploye() {
                             totalLoss2 = 0;
                         }
                         var totalLossTech = totalLoss + totalLoss2;
-                        var totalLossALL =
-                            totalLossTech + value.total_loss_store;
-                        var totalLossStore = value.total_loss_store;
+                        if(value.technician_replacement_id == null){
+                            var totalLossStore = value.total_loss_store;
+                            var totalLossALL = totalLossTech + value.total_loss_store;
+                            console.log('teknisi 2 kosong');
+                        }else{
+                            var totalLossStore = parseInt(value.total_loss_store) / 2;
+                            var totalLossALL = parseInt(value.total_loss_store / 2)+totalLossTech;
+                            console.log('teknisi 2 tidak kosong');
+                        }
 
                         if (value.loss_items_detail.length == 0) {
                             var pay =
                                 '<div class="badge badge-danger">Belum Bayar</div>';
-                            var payDetail = "Belum Bayar";
+                            var payDetailLoss = "Belum Bayar";
                             totalAkhir += totalLossTech;
                         } else {
                             var pay =
                                 '<div class="badge badge-success">Sudah Dibayarkan</div>';
-                            var payDetail = "Sudah Dibayarkan";
+                            var payDetailLoss = "Sudah Dibayarkan";
                             totalAkhir += 0;
                         }
 
@@ -412,6 +418,9 @@ function checkEmploye() {
                                 '">' +
                                 '<input type="text" class="form-control" name="totalLossStore[]" value="' +
                                 totalLossStore +
+                                '">' +
+                                '<input type="text" class="form-control" name="payDetailLoss[]" value="' +
+                                payDetailLoss +
                                 '">' +
                                 "</td>" +
                                 "<td>" +
@@ -466,24 +475,24 @@ function saveSharingProfit() {
         dangerMode: true,
     }).then((willSave) => {
         if (willSave) {
-            // $.ajax({
-            //     url: "/finance/sharing-profit/sharing-profit",
-            //     data: $(".form-data").serialize(),
-            //     type: "POST",
-            //     success: function (data) {
-            //         if (data.status == "success") {
-            //             swal("Data Telah Tersimpan", {
-            //                 icon: "success",
-            //             });
-            //             location.reload();
-            //         } else {
-            //             swal(data.message, {
-            //                 icon: "warning",
-            //             });
-            //         }
-            //     },
-            //     error: function (data) {},
-            // });
+            $.ajax({
+                url: "/finance/sharing-profit/sharing-profit",
+                data: $(".form-data").serialize(),
+                type: "POST",
+                success: function (data) {
+                    if (data.status == "success") {
+                        swal("Data Telah Tersimpan", {
+                            icon: "success",
+                        });
+                        location.reload();
+                    } else {
+                        swal(data.message, {
+                            icon: "warning",
+                        });
+                    }
+                },
+                error: function (data) {},
+            });
 
             $.ajax({
                 url: "/finance/loss-items/loss-items",
@@ -494,7 +503,7 @@ function saveSharingProfit() {
                         swal("Data Telah Tersimpan", {
                             icon: "success",
                         });
-                        // location.reload();
+                        location.reload();
                     }
                 },
                 error: function (data) {},

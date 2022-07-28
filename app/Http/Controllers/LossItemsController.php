@@ -84,14 +84,16 @@ class LossItemsController extends Controller
                 ->addColumn('dateRange', function ($row) {
                     return Carbon::parse($row->date_start)
                         ->locale('id')
-                        ->isoFormat('LL'). ' S/D  '.Carbon::parse($row->date_end)
-                        ->locale('id')
-                        ->isoFormat('LL');
+                        ->isoFormat('LL') .
+                        ' S/D  ' .
+                        Carbon::parse($row->date_end)
+                            ->locale('id')
+                            ->isoFormat('LL');
                 })
                 ->addColumn('totalValue', function ($row) {
                     return number_format($row->total, 0, '.', ',');
                 })
-                ->rawColumns(['action', 'dateRange', 'dateFormat','totalValue'])
+                ->rawColumns(['action', 'dateRange', 'dateFormat', 'totalValue'])
                 ->make(true);
         }
 
@@ -112,8 +114,7 @@ class LossItemsController extends Controller
             // ->where('work_status', 'Diambil')
             ->where('total_loss', '!=', 0)
             ->where(function ($query) use ($req) {
-                $query->where('technician_id', $req->id)
-                    ->orWhere('technician_replacement_id', $req->id);
+                $query->where('technician_id', $req->id)->orWhere('technician_replacement_id', $req->id);
             })
             ->get();
 
@@ -137,12 +138,12 @@ class LossItemsController extends Controller
 
     public function store(Request $req)
     {
-        return $req->all();
+        // return $req->all();
         // return array_sum($req->totalAll);
 
         DB::beginTransaction();
         try {
-            $totalLoss = array_sum($req->totalAll);
+            $totalLoss = array_sum($req->totalAllLoss);
             $checkData = LossItems::where('date_start', $this->DashboardController->changeMonthIdToEn($req->startDate))
                 ->where('date_end', $this->DashboardController->changeMonthIdToEn($req->endDate))
                 ->where('employe_id', $req->technicianId)
@@ -151,8 +152,8 @@ class LossItemsController extends Controller
                 return Response::json(['status' => 'fail', 'message' => 'Data Sudah Ada']);
             }
             $index = DB::table('loss_items')->max('id') + 1;
-            $kodeLoss =  $this->code('LOS', $index);
-            $kode =  $this->codeJournals('LOS', $index);
+            $kodeLoss = $this->code('LOS', $index);
+            $kode = $this->codeJournals('LOS', $index);
 
             LossItems::create([
                 'id' => $index,
@@ -161,19 +162,21 @@ class LossItemsController extends Controller
                 'date_start' => $this->DashboardController->changeMonthIdToEn($req->startDate),
                 'date_end' => $this->DashboardController->changeMonthIdToEn($req->endDate),
                 'employe_id' => $req->technicianId,
-                'total' => $req->totalValue,
+                'total' => $req->totalValueLoss,
                 'created_by' => Auth::user()->name,
                 'created_at' => date('Y-m-d h:i:s'),
             ]);
-            for ($i = 0; $i < count($req->idDetail); $i++) {
-                LossItemsDetail::create([
-                    // 'id' => $i + 1,
-                    'loss_items_id' => $index,
-                    'service_id' => $req->idDetail[$i],
-                    'total' => $req->totalDetail[$i],
-                    'created_by' => Auth::user()->name,
-                    'created_at' => date('Y-m-d h:i:s'),
-                ]);
+            for ($i = 0; $i < count($req->idDetailLoss); $i++) {
+                if ($req->payDetailLoss[$i] == 'Belum Bayar') {
+                    LossItemsDetail::create([
+                        // 'id' => $i + 1,
+                        'loss_items_id' => $index,
+                        'service_id' => $req->idDetailLoss[$i],
+                        'total' => $req->totalDetailLoss[$i],
+                        'created_by' => Auth::user()->name,
+                        'created_at' => date('Y-m-d h:i:s'),
+                    ]);
+                }
             }
             // jurnal karyawan megembalikan uang loss
             $idJournal = DB::table('journals')->max('id') + 1;
@@ -183,40 +186,34 @@ class LossItemsController extends Controller
                 'year' => date('Y'),
                 'date' => date('Y-m-d'),
                 'type' => 'Pendapatan',
-                'total' => str_replace(",", '', $req->totalValue),
+                'total' => str_replace(',', '', $req->totalValueLoss),
                 'ref' => $kodeLoss,
                 'description' => 'Pembayaran Barang Loss',
                 'created_at' => date('Y-m-d h:i:s'),
                 // 'updated_at'=>date('Y-m-d h:i:s'),
             ]);
-            
+
             $cariCabang = AccountData::where('id', $req->accountData)->first();
-            $accountLossTeknisi  = AccountData::where('branch_id', $cariCabang->branch_id)
+            $accountLossTeknisi = AccountData::where('branch_id', $cariCabang->branch_id)
                 ->where('active', 'Y')
                 ->where('main_id', 10)
                 ->where('main_detail_id', 41)
                 ->first();
 
-            $accountCode = [
-                $req->accountData,
-            ];
-            $totalBayar = [
-                str_replace(",", '', $req->totalValue),
-            ];
-            $description = [
-                'Pembayaran Teknisi Barang LOSS',
-            ];
-            $DK = [
-                'D',
-            ];
+            $accountCode = [$req->accountData];
+            $totalBayar = [str_replace(',', '', $req->totalValueLoss)];
+            $description = ['Pembayaran Teknisi Barang LOSS'];
+            $DK = ['D'];
 
-            for ($i = 0; $i < count($req->idDetail); $i++) {
-                array_push($accountCode, $accountLossTeknisi->id);
-                array_push($totalBayar, $req->totalDetail[$i]);
-                array_push($description, 'Pembayaran Teknisi Barang LOSS Detail');
-                array_push($DK, 'K');
+            for ($i = 0; $i < count($req->idDetailLoss); $i++) {
+                if ($req->payDetailLoss[$i] == 'Belum Bayar') {
+                    array_push($accountCode, $accountLossTeknisi->id);
+                    array_push($totalBayar, $req->totalDetailLoss[$i]);
+                    array_push($description, 'Pembayaran Teknisi Barang LOSS Detail');
+                    array_push($DK, 'K');
+                }
             }
-// return $accountCode;
+            // return $accountCode;
             for ($i = 0; $i < count($accountCode); $i++) {
                 $idDetail = DB::table('journal_details')->max('id') + 1;
                 JournalDetail::create([
@@ -231,10 +228,6 @@ class LossItemsController extends Controller
                 ]);
             }
 
-
-
-
-
             // jurnal toko mengeluarkan uang loss
             $idJournalToko = DB::table('journals')->max('id') + 1;
             Journal::create([
@@ -243,7 +236,7 @@ class LossItemsController extends Controller
                 'year' => date('Y'),
                 'date' => date('Y-m-d'),
                 'type' => 'Biaya',
-                'total' => str_replace(",", '', $totalLoss),
+                'total' => str_replace(',', '', $totalLoss),
                 'ref' => $kodeLoss,
                 'description' => 'Pengeluaran Toko Barang Loss',
                 'created_at' => date('Y-m-d h:i:s'),
@@ -251,30 +244,24 @@ class LossItemsController extends Controller
             ]);
 
             $cariCabangToko = AccountData::where('id', $req->accountData)->first();
-            $accountLossToko  = AccountData::where('branch_id', $cariCabangToko->branch_id)
+            $accountLossToko = AccountData::where('branch_id', $cariCabangToko->branch_id)
                 ->where('active', 'Y')
                 ->where('main_id', 6)
                 ->where('main_detail_id', 42)
                 ->first();
 
-            $accountCodeToko = [
-                $req->accountData,
-            ];
-            $totalBayarToko = [
-                str_replace(",", '', $totalLoss),
-            ];
-            $descriptionToko = [
-                'Pengeluaran Toko Barang LOSS',
-            ];
-            $DKToko = [
-                'K',
-            ];
+            $accountCodeToko = [$req->accountData];
+            $totalBayarToko = [str_replace(',', '', $totalLoss)];
+            $descriptionToko = ['Pengeluaran Toko Barang LOSS'];
+            $DKToko = ['K'];
 
-            for ($i = 0; $i < count($req->idDetail); $i++) {
-                array_push($accountCodeToko, $accountLossToko->id);
-                array_push($totalBayarToko, $req->totalAll[$i]);
-                array_push($descriptionToko, 'Pengeluaran Toko Barang LOSS Detail');
-                array_push($DKToko, 'D');
+            for ($i = 0; $i < count($req->idDetailLoss); $i++) {
+                if ($req->payDetailLoss[$i] == 'Belum Bayar') {
+                    array_push($accountCodeToko, $accountLossToko->id);
+                    array_push($totalBayarToko, $req->totalAllLoss[$i]);
+                    array_push($descriptionToko, 'Pengeluaran Toko Barang LOSS Detail');
+                    array_push($DKToko, 'D');
+                }
             }
             // return $DKToko;
 
@@ -292,6 +279,7 @@ class LossItemsController extends Controller
                 ]);
             }
 
+
             DB::commit();
             // return 's';
             return Response::json(['status' => 'success', 'message' => 'Data Tersimpan']);
@@ -303,7 +291,9 @@ class LossItemsController extends Controller
     }
     public function codeJournals($type)
     {
-        $getEmployee =  Employee::with('branch')->where('user_id', Auth::user()->id)->first();
+        $getEmployee = Employee::with('branch')
+            ->where('user_id', Auth::user()->id)
+            ->first();
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
         $index = DB::table('journals')->max('id') + 1;
@@ -313,67 +303,47 @@ class LossItemsController extends Controller
     }
     public function destroy(Request $req, $id)
     {
-        $this->DashboardController->createLog(
-            $req->header('user-agent'),
-            $req->ip(),
-            'Menghapus Data Kredit'
-        );
-        ServiceDetail::where('service_id', $id)->destroy($id);
+        DB::beginTransaction();
+        try {
+            $this->DashboardController->createLog($req->header('user-agent'), $req->ip(), 'Menghapus Data Loss Items');
+            $checkLossItems = DB::table('loss_items')
+                ->where('id', $id)
+                ->first();
+            $checkJournals = DB::table('journals')
+                ->where('ref', $checkLossItems->code)
+                ->get();
+            // return $checkJournals;
+            DB::table('journals')
+                ->whereIn('id', [$checkJournals[0]->id,$checkJournals[1]->id])
+                ->delete();
+
+            DB::table('journal_details')
+                ->whereIn('journal_id', [$checkJournals[0]->id,$checkJournals[1]->id])
+                ->delete();
+
+            DB::table('loss_items')
+                ->where('id', $id)
+                ->delete();
+
+            DB::table('loss_items_detail')
+                ->where('loss_items_id', $id)
+                ->delete();
+
+            DB::commit();
+            return Response::json(['status' => 'success', 'message' => 'Data Terhapus']);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            // return$th;
+            return Response::json(['status' => 'error', 'message' => $th->getMessage()]);
+        }
         return Response::json(['status' => 'success']);
     }
-    public function serviceFormUpdateStatus()
-    {
-        $data     = Service::where('technician_id', Auth::user()->id)->get();
-        $employee = Employee::get();
-        return view('pages.backend.transaction.service.indexFormUpdateService', compact('data', 'employee'));
-    }
-    public function serviceFormUpdateStatusLoadData(Request $req)
-    {
-        $data = Service::with(['ServiceDetail', 'ServiceDetail.Items', 'ServiceStatusMutation', 'ServiceStatusMutation.Technician'])->where('id', $req->id)->first();
 
-        if ($data == null) {
-            $message = 'empty';
-        } else {
-            $message = 'exist';
-        }
-
-        return Response::json(['status' => 'success', 'result' => $data, 'message' => $message]);
-    }
-
-    public function serviceFormUpdateStatusSaveData(Request $req)
-    {
-        try {
-            // return $req->all();
-            $index = ServiceStatusMutation::where('service_id', $req->id)->count() + 1;
-            if ($req->status == 'Mutasi') {
-                $technician_replacement_id = $req->technicianId;
-            } else {
-                $technician_replacement_id = null;
-            }
-
-
-            Service::where('id', $req->id)->update([
-                'work_status' => $req->status,
-                'technician_replacement_id' => $technician_replacement_id,
-            ]);
-            ServiceStatusMutation::create([
-                'service_id' => $req->id,
-                'technician_id' => Auth::user()->id,
-                'index' => $index,
-                'status' => $req->status,
-                'description' => $req->description,
-                'created_by' => Auth::user()->name,
-                'created_at' => date('Y-m-d h:i:s'),
-            ]);
-            return Response::json(['status' => 'success', 'message' => 'Sukses Menyimpan Data']);
-        } catch (\Throwable $th) {
-            return Response::json(['status' => 'error', 'message' => $th]);
-        }
-    }
-    
     public function show($id)
     {
-        $data = LossItems::with('LossItemsDetail','LossItemsDetail.Service')->where('id', $id)->first();
+        $data = LossItems::with('LossItemsDetail', 'LossItemsDetail.Service')
+            ->where('id', $id)
+            ->first();
         // return $data;
         return view('pages.backend.finance.lossItems.showLossItems', ['data' => $data]);
     }

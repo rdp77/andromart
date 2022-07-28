@@ -165,6 +165,8 @@ class SharingProfitController extends Controller
         return $code = $type . $year . $month . $index;
     }
 
+    
+
     public function codeJournals($type)
     {
         $getEmployee =  Employee::with('branch')->where('user_id', Auth::user()->id)->first();
@@ -258,7 +260,6 @@ class SharingProfitController extends Controller
             }
             // return [$DK, $description,$totalBayar,$accountCode];
 
-
             for ($i = 0; $i < count($accountCode); $i++) {
                 $idDetail = DB::table('journal_details')->max('id') + 1;
                 JournalDetail::create([
@@ -272,6 +273,45 @@ class SharingProfitController extends Controller
                     'updated_at' => date('Y-m-d h:i:s'),
                 ]);
             }
+
+            // jurnal Pengurangan sharing profit
+            // $accountSharingProfitPengurangan  = AccountData::where('branch_id', $cariCabang->branch_id)
+            //     ->where('active', 'Y')
+            //     ->where('main_id', 10)
+            //     ->where('main_detail_id', 46)
+            //     ->first();
+
+            // $accountCode = [
+            //     $req->accountSharingProfitPengurangan,
+            //     $req->accountData,
+            // ];
+            // $totalBayar = [
+            //     str_replace(",", '', $req->total),
+            //     str_replace(",", '', $req->total),
+            // ];
+            // $description = [
+            //     'Pemasukan dari Pengurangan sharing profit telat,dll',
+            //     'Pemasukan dari Pengurangan sharing profit telat,dll',
+            // ];
+            // $DK = [
+            //     'D',
+            //     'K',
+            // ];
+
+            // $indexSpending = DB::table('sharing_profit_spending')->max('id') + 1;
+            // $kodeSpending = $this->code('SHPEND', $indexSpending);
+            // SharingProfitSpending::create([
+            //     'id' => $indexSpending,
+            //     'code' => $kodeSpending,
+            //     'date' => date('Y-m-d'),
+            //     'date' => date('Y-m-d'),
+            //     'date' => date('Y-m-d'),
+            //     'employe_id' => $req->technicianId,
+            //     'total' => $req->totalValue,
+            //     'created_by' => Auth::user()->name,
+            //     'created_at' => date('Y-m-d h:i:s'),
+            // ]);
+
 
             DB::commit();
             return Response::json(['status' => 'success', 'message' => 'Data Tersimpan']);
