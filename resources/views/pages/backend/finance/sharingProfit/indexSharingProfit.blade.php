@@ -58,6 +58,19 @@
                         </tbody>
                     </table>
 
+                    <h6>Jurnal Pengurangan Sharing Profit</h6>
+                    <table class="table table-stripped table-bordered">
+                        <tr>
+                            <th>Kode</th>
+                            <th>Nama</th>
+                            <th>D</th>
+                            <th>K</th>
+                        </tr>
+                        <tbody class="dropHereJournalsPengurangan">
+
+                        </tbody>
+                    </table>
+
                  
                 {{-- </div> --}}
             </div>

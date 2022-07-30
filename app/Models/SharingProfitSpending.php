@@ -12,8 +12,8 @@ class SharingProfitSpending extends Model
     protected $fillable = [
         'id',
         'code',
-        'sharing_profit_id',
-        'loss_id',
+        'ref',
+        // 'loss_id',
         'date',
         'subtraction_total',
         'total',

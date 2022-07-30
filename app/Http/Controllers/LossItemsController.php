@@ -285,7 +285,8 @@ class LossItemsController extends Controller
             return Response::json(['status' => 'success', 'message' => 'Data Tersimpan']);
         } catch (\Throwable $th) {
             DB::rollback();
-            return $th;
+            // return $th;
+            return Response::json(['status' => 'error', 'message' => $th->getMessage()]);
         }
         // return Response::json(['status' => 'success', 'message' => 'Data Tersimpan']);
     }

@@ -7,9 +7,9 @@ use App\Models\Employee;
 use App\Models\Service;
 use App\Models\SharingProfit;
 use App\Models\SharingProfitDetail;
+use App\Models\SharingProfitSpending;
 use App\Models\ServiceDetail;
 use App\Models\SaleDetail;
-
 use App\Models\AccountData;
 use App\Models\AccountMainDetail;
 use App\Models\Journal;
@@ -274,50 +274,84 @@ class SharingProfitController extends Controller
                 ]);
             }
 
-            // jurnal Pengurangan sharing profit
-            // $accountSharingProfitPengurangan  = AccountData::where('branch_id', $cariCabang->branch_id)
-            //     ->where('active', 'Y')
-            //     ->where('main_id', 10)
-            //     ->where('main_detail_id', 46)
-            //     ->first();
+        
 
-            // $accountCode = [
-            //     $req->accountSharingProfitPengurangan,
-            //     $req->accountData,
-            // ];
-            // $totalBayar = [
-            //     str_replace(",", '', $req->total),
-            //     str_replace(",", '', $req->total),
-            // ];
-            // $description = [
-            //     'Pemasukan dari Pengurangan sharing profit telat,dll',
-            //     'Pemasukan dari Pengurangan sharing profit telat,dll',
-            // ];
-            // $DK = [
-            //     'D',
-            //     'K',
-            // ];
+            if (str_replace(",", '', $req->total) != 0) {
+                $indexSpending = DB::table('sharing_profit_spending')->max('id') + 1;
+                $kodeSpending = $this->code('SHPEND', $indexSpending);
+                SharingProfitSpending::create([
+                    'id' => $indexSpending,
+                    'code' => $kodeSpending,
+                    'ref'=> $kode,
+                    // 'loss_id',
+                    'date' => date('Y-m-d'),
+                    'subtraction_total'=> str_replace(",", '', $req->totalSubtraction),
+                    'total' => str_replace(",", '', $req->total),
+                    'employe_id' => $req->technicianId,
+                    'description'=>'Pemasukan dari Pengurangan sharing profit telat,dll',
+                    'created_by' => Auth::user()->name,
+                    'created_at' => date('Y-m-d h:i:s'),
+                ]);
 
-            // $indexSpending = DB::table('sharing_profit_spending')->max('id') + 1;
-            // $kodeSpending = $this->code('SHPEND', $indexSpending);
-            // SharingProfitSpending::create([
-            //     'id' => $indexSpending,
-            //     'code' => $kodeSpending,
-            //     'date' => date('Y-m-d'),
-            //     'date' => date('Y-m-d'),
-            //     'date' => date('Y-m-d'),
-            //     'employe_id' => $req->technicianId,
-            //     'total' => $req->totalValue,
-            //     'created_by' => Auth::user()->name,
-            //     'created_at' => date('Y-m-d h:i:s'),
-            // ]);
+                // journal sharing profit spending
+                $idJournalSpending = DB::table('journals')->max('id') + 1;
+                Journal::create([
+                    'id' => $idJournalSpending,
+                    'code' => $this->codeJournals('KK', $idJournalSpending),
+                    'year' => date('Y'),
+                    'date' => date('Y-m-d'),
+                    'type' => 'Pendapatan',
+                    'total' => str_replace(",", '', $req->totalSubtraction),
+                    'ref' => $kode,
+                    'description' => 'Pengurangan sharing profit / Pemasukan potong sharing profit',
+                    'created_at' => date('Y-m-d h:i:s'),
+                ]);
+
+                // jurnal Pengurangan sharing profit
+                $accountSharingProfitPengurangan  = AccountData::where('branch_id', $cariCabang->branch_id)
+                    ->where('active', 'Y')
+                    ->where('main_id', 10)
+                    ->where('main_detail_id', 46)
+                    ->first();
+
+                $accountCodeSharingProfitPengurangan = [
+                    $accountSharingProfitPengurangan->id,
+                    $req->accountData,
+                ];
+                $totalBayarSharingProfitPengurangan = [
+                    str_replace(",", '', $req->totalSubtraction),
+                    str_replace(",", '', $req->totalSubtraction),
+                ];
+                $descriptionSharingProfitPengurangan = [
+                    'Pemasukan dari Pengurangan sharing profit telat,dll',
+                    'Pemasukan dari Pengurangan sharing profit telat,dll',
+                ];
+                $DKSharingProfitPengurangan = [
+                    'D',
+                    'K',
+                ];
+                for ($i = 0; $i < count($accountCodeSharingProfitPengurangan); $i++) {
+                    $idDetail = DB::table('journal_details')->max('id') + 1;
+                    JournalDetail::create([
+                        'id' => $idDetail,
+                        'journal_id' => $idJournalSpending,
+                        'account_id' => $accountCodeSharingProfitPengurangan[$i],
+                        'total' => $totalBayarSharingProfitPengurangan[$i],
+                        'description' => $descriptionSharingProfitPengurangan[$i],
+                        'debet_kredit' => $DKSharingProfitPengurangan[$i],
+                        'created_at' => date('Y-m-d h:i:s'),
+                        'updated_at' => date('Y-m-d h:i:s'),
+                    ]);
+                }
+            }
 
 
             DB::commit();
             return Response::json(['status' => 'success', 'message' => 'Data Tersimpan']);
         } catch (\Throwable $th) {
             DB::rollback();
-            return $th;
+            // return $th;
+            return Response::json(['status' => 'error', 'message' => $th->getMessage()]);
         }
     }
 
@@ -341,23 +375,27 @@ class SharingProfitController extends Controller
             $checkJournals = DB::table('journals')
                 ->where('ref', $checkSharingProfit->code)
                 ->get();
+            // return [$checkSharingProfit,$checkJournals];
+            for ($i=0; $i < count($checkJournals); $i++) { 
+                DB::table('journals')
+                    ->where('id', $checkJournals[$i]->id)
+                    ->delete();
+
+                DB::table('journal_details')
+                    ->where('journal_id', $checkJournals[$i]->id)
+                    ->delete();
+            }
            
-            DB::table('journals')
-                ->where('id', $checkJournals[0]->id)
-                ->delete();
 
-            DB::table('journal_details')
-                ->where('journal_id', $checkJournals[0]->id)
+            DB::table('sharing_profit_spending')
+                ->where('ref', $checkSharingProfit->code)
                 ->delete();
-
-            DB::table('sharing_profit')
-                ->where('id', $id)
-                ->delete();
-
             DB::table('sharing_profit_detail')
                 ->where('sharing_profit_id', $id)
                 ->delete();
-            
+            DB::table('sharing_profit')
+                ->where('id', $id)
+                ->delete();
 
             DB::commit();
             return Response::json(['status' => 'success', 'message' => 'Data Terhapus']);

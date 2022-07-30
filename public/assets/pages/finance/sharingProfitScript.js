@@ -475,16 +475,30 @@ function saveSharingProfit() {
         dangerMode: true,
     }).then((willSave) => {
         if (willSave) {
+            // var checkLoad = 0;
             $.ajax({
                 url: "/finance/sharing-profit/sharing-profit",
                 data: $(".form-data").serialize(),
                 type: "POST",
                 success: function (data) {
                     if (data.status == "success") {
-                        swal("Data Telah Tersimpan", {
-                            icon: "success",
+                        // swal("Data Telah Tersimpan", {
+                        //     icon: "success",
+                        // });
+                        $.ajax({
+                            url: "/finance/loss-items/loss-items",
+                            data: $(".form-data").serialize(),
+                            type: "POST",
+                            success: function (data) {
+                                if (data.status == "success") {
+                                    swal("Data Telah Tersimpan", {
+                                        icon: "success",
+                                    });
+                                    // location.reload();
+                                }
+                            },
+                            error: function (data) {},
                         });
-                        location.reload();
                     } else {
                         swal(data.message, {
                             icon: "warning",
@@ -494,20 +508,15 @@ function saveSharingProfit() {
                 error: function (data) {},
             });
 
-            $.ajax({
-                url: "/finance/loss-items/loss-items",
-                data: $(".form-data").serialize(),
-                type: "POST",
-                success: function (data) {
-                    if (data.status == "success") {
-                        swal("Data Telah Tersimpan", {
-                            icon: "success",
-                        });
-                        location.reload();
-                    }
-                },
-                error: function (data) {},
-            });
+            
+            // console.log(checkLoad);
+            // if (checkLoad == 2) {
+            // }else{
+            //     swal("Data Tidak Bisa Disimpan", {
+            //         icon: "error",
+            //     });
+            // }
+
         } else {
             swal("Dibatalkan !");
         }
@@ -622,7 +631,7 @@ function jurnal(params) {
                                     ) +
                                     "</td><td>0</td>";
                             }
-                            $(".dropHereJournalsHpp").append(
+                            $(".dropHereJournalsPengurangan").append(
                                 "<tr>" +
                                     "<td>" +
                                     value.account_data.code +
@@ -636,39 +645,7 @@ function jurnal(params) {
                         }
                     );
                 }
-                if (typeof data.jurnal[2] != "undefined") {
-                    $.each(
-                        data.jurnal[2].journal_detail,
-                        function (index, value) {
-                            if (value.debet_kredit == "K") {
-                                var dk =
-                                    "<td>0</td><td>" +
-                                    parseInt(value.total).toLocaleString(
-                                        "en-US"
-                                    ) +
-                                    "</td>";
-                            } else {
-                                var dk =
-                                    "<td>" +
-                                    parseInt(value.total).toLocaleString(
-                                        "en-US"
-                                    ) +
-                                    "</td><td>0</td>";
-                            }
-                            $(".dropHereJournalsBalikDownPayment").append(
-                                "<tr>" +
-                                    "<td>" +
-                                    value.account_data.code +
-                                    "</td>" +
-                                    "<td>" +
-                                    value.account_data.name +
-                                    "</td>" +
-                                    dk +
-                                    "</tr>"
-                            );
-                        }
-                    );
-                }
+               
             }
             $(".exampleModal").modal("show");
         },
