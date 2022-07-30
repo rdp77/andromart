@@ -362,28 +362,107 @@
             </caption>
         </table>
         <br>
-        <table class="table table-bordered table-sm" style="color: black;border:1px solid black">
+        <table class="table table-bordered table-sm" style="color: black">
             <thead>
                 <tr>
                     <th colspan="3" style="color:black">Pendapatan
                     </th>
                 </tr>
+
+                <tr>
+                    <td>Service
+                        <table>
+                            <tr>
+                                <td
+                                    style="border:0px solid black !important;padding-left:40px;">
+                                    Diskon Service</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="text-align: right"><br> <b>Rp.
+                            {{ number_format($DiskonService, 0, '.', ',') }}</b>
+                    <td style="text-align: right">
+                        <b>Rp.
+                            {{ number_format($totalService, 0, '.', ',') }}</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Penjualan
+                        <table>
+                            <tr>
+                                <td
+                                    style="border:0px solid black !important;padding-left:40px;">
+                                    Diskon Penjualan</td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td style="text-align: right"><br> <b>Rp.
+                            {{ number_format($DiskonPenjualan, 0, '.', ',') }}</b>
+                    </td>
+                    <td style="text-align: right">
+                        <b>Rp.
+                            {{ number_format($totalPenjualan, 0, '.', ',') }}</b>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Pendapatan Lain-Lain
+                        <table>
+                            @for ($i = 0; $i < count($dataPendapatanLainLain); $i++)
+                                <tr>
+                                    <td
+                                        style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                        @php
+                                            echo $dataPendapatanLainLain[$i]['namaAkun'];
+                                        @endphp
+                                    </td>
+                                </tr>
+                            @endfor
+                        </table>
+                        Total Pendapatan Lain-Lain
+                    </td>
+                    <td style="text-align: right">
+                        <table style="width: 100%;text-align:left">
+                            <b><br></b>
+                            @php
+                                $totalPendapatanLainLain = 0;
+                            @endphp
+                            @for ($i = 0; $i < count($dataPendapatanLainLain); $i++)
+                                <tr>
+                                    <td
+                                        style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                        {{ number_format($dataPendapatanLainLain[$i]['total'], 0, ',', ',') }}
+                                        @php
+                                            $totalPendapatanLainLain += $dataPendapatanLainLain[$i]['total'];
+                                        @endphp
+                                </tr>
+                            @endfor
+                        </table>
+                        <b>Rp.
+                            {{ number_format($totalPendapatanLainLain, 0, '.', ',') }}</b>
+                    </td>
+                </tr>
                 <tr>
                     <td>Pendapatan Kotor</td>
                     <td></td>
                     <td style="text-align: right"><b>Rp.
-                            {{ number_format($PendapatanKotor, 0, '.', ',') }}</b></td>
+                            {{ number_format($totalPenjualan + $totalPendapatanLainLain + $totalService - $DiskonPenjualan - $DiskonService, 0, '.', ',') }}</b>
+                    </td>
                 </tr>
+                {{-- <tr>
+                    <td style="padding-left: 50px">Total Service</td>
+                    <td></td>
+                    <td style="text-align: right"><b>Rp.
+                        {{ number_format($totalService, 0, '.', ',') }}</b></td>
                 <tr>
-                    <td style="padding-left: 50px">Diskon</td>
+                    <td style="padding-left: 50px">Total Penjualan</td>
+                    <td></td>
+                    <td style="text-align: right"><b>Rp.
+                        {{ number_format($totalPenjualan, 0, '.', ',') }}</b></td>
+                <tr> --}}
+                {{-- <td style="padding-left: 50px">Diskon</td>
                     <td style="text-align: right"><b>Rp.
                             {{ number_format($Diskon, 0, '.', ',') }}</b></td>
-                    <td></td>
-                <tr>
-                    <td style="padding-left: 50px">Pendapatan Bersih</td>
-                    <td style="text-align: right"><b>Rp.
-                            {{ number_format($PendapatanBersih, 0, '.', ',') }}</b></td>
-                    <td></td>
+                    <td></td> --}}
                 <tr>
                     <td style="padding-left: 50px">HPP</td>
                     <td style="text-align: right"><b>Rp.
@@ -395,19 +474,18 @@
                     </th>
                     <td style="text-align: right;background-color: #ffffdc"></td>
                     <td style="text-align: right;background-color: #ffffdc;color:black"><b>Rp.
-                            {{ number_format($PendapatanBersih - $HPP, 0, '.', ',') }}</b>
+                            {{ number_format($totalPenjualan + $totalPendapatanLainLain+ $totalService - $DiskonPenjualan - $DiskonService - $HPP, 0, '.', ',') }}</b>
                     </td>
                 </tr>
                 @php
-                    $labaBersih = $PendapatanBersih - $HPP;
+                    $labaKotor = $totalPendapatanLainLain + $totalPenjualan + $totalService - $DiskonPenjualan - $DiskonService - $HPP;
                 @endphp
                 {{-- <tr>
                     <th colspan="3" style="color:black;text-align:center">Beban Usaha
                     </th>
                 </tr> --}}
                 <tr>
-                    <th colspan="3" style="color:black">Beban
-                        Operasional</th>
+                    <th colspan="3" style="color:black">Beban</th>
                 </tr>
                 <tr>
                     <td>Sharing Profit</td>
@@ -419,40 +497,44 @@
                 <tr>
                     <td>Beban Umum Lain
                         <table>
-                            <tr>
-                                <td
-                                    style="border:0px solid black !important;padding-left:40px;">
-                                    Operasional</td>
-
-                            </tr>
-                            <tr>
-                                <td
-                                    style="border:0px solid black !important;padding-left:40px;">
-                                    Listrik</td>
-                            </tr>
+                            @for ($i = 0; $i < count($dataBeban); $i++)
+                                <tr>
+                                    <td
+                                        style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                        @php
+                                            if (!str_contains($dataBeban[$i]['namaAkun'], 'Fee Back Office') && !str_contains($dataBeban[$i]['namaAkun'], 'Sharing Profit') && !str_contains($dataBeban[$i]['namaAkun'], 'Mutasi') && !str_contains($dataBeban[$i]['namaAkun'], 'Transfer') && !str_contains($dataBeban[$i]['namaAkun'], 'Biaya HPP')) {
+                                                echo $dataBeban[$i]['namaAkun'];
+                                                # code...
+                                            }
+                                        @endphp
+                                    </td>
+                                </tr>
+                            @endfor
                         </table>
                         Total Beban Umum Lain
                     </td>
                     <td style="text-align: right">
-                        <b><br></b>
-
                         <table style="width: 100%;text-align:left">
-                            <tr>
-                                <td
-                                    style="border:0px solid black !important;padding-left:40px;">
-                                    Rp.
-                                    {{ number_format($operasional, 0, '.', ',') }}</td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style="border:0px solid black !important;padding-left:40px;">
-                                    Rp.
-                                    {{ number_format($listrik, 0, '.', ',') }}</td>
+                            <b><br></b>
+                            @php
+                                $totalDataBeban = 0;
+                            @endphp
+                            @for ($i = 0; $i < count($dataBeban); $i++)
+                                <tr>
+                                    <td
+                                        style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                        @php
+                                            if (!str_contains($dataBeban[$i]['namaAkun'], 'Fee Back Office') && !str_contains($dataBeban[$i]['namaAkun'], 'Sharing Profit') && !str_contains($dataBeban[$i]['namaAkun'], 'Mutasi') && !str_contains($dataBeban[$i]['namaAkun'], 'Transfer') && !str_contains($dataBeban[$i]['namaAkun'], 'Biaya HPP')) {
+                                                echo 'Rp.' . number_format($dataBeban[$i]['total'], 0, ',', ',');
+                                                $totalDataBeban += $dataBeban[$i]['total'];
+                                            }
 
-                            </tr>
+                                        @endphp
+                                </tr>
+                            @endfor
                         </table>
                         <b>Rp.
-                            {{ number_format($operasional + $listrik, 0, '.', ',') }}</b>
+                            {{ number_format($totalDataBeban, 0, '.', ',') }}</b>
                     </td>
                 </tr>
                 <tr>
@@ -460,13 +542,12 @@
                         Operasional
                     </th>
                     <td style="text-align: right;background-color: #ffffdc;color:black"><b>Rp.
-                            {{ number_format($operasional + $listrik + $sharingProfit, 0, '.', ',') }}</b>
+                            {{ number_format($totalDataBeban + $sharingProfit, 0, '.', ',') }}</b>
                     </td>
                     <td style="text-align: right;background-color: #ffffdc"></td>
                 </tr>
                 <tr>
-                    <th colspan="3" style="color:black">Beban
-                        Administrasi Umum</th>
+                    <th colspan="3" style="color:black">Biaya Umum</th>
                 </tr>
 
                 <tr>
@@ -480,157 +561,60 @@
                 <tr>
                     <td>
                         <table>
-                            Beban Umum Lain
-                            <tr>
-                                <td
-                                    style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                    ATK</td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                    Air (PDAM)</td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                    Meeting / Konsumsi</td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                    Internet</td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                    Qurban</td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                    Wisata</td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                    Sosial Internal</td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                    Iuran Bulanan</td>
-                            </tr>
+                            Biaya Umum Lain
+                            @for ($i = 0; $i < count($dataBiaya); $i++)
+                                <tr>
+                                    <td
+                                        style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                        @php
+                                            echo $dataBiaya[$i]['namaAkun'];
+                                        @endphp
+                                    </td>
+                                </tr>
+                            @endfor
                         </table>
-                        Total Beban Umum Lain
+                        Total Biaya Umum Lain
                     </td>
                     <td style="text-align: right">
                         <table style="width: 100%;text-align:left">
                             <b><br></b>
-
-                            <tr>
-                                <td
-                                    style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                    Rp.
-                                    {{ number_format($atk, 0, '.', ',') }}</td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                    Rp.
-                                    {{ number_format($air, 0, '.', ',') }}</td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                    Rp.
-                                    {{ number_format($meeting, 0, '.', ',') }}</td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                    Rp.
-                                    {{ number_format($internet, 0, '.', ',') }}</td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                    Rp.
-                                    {{ number_format($qurban, 0, '.', ',') }}</td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                    Rp.
-                                    {{ number_format($wisata, 0, '.', ',') }}</td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                    Rp.
-                                    {{ number_format($biayaSosial, 0, '.', ',') }}</td>
-                            </tr>
-                            <tr>
-                                <td
-                                    style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                    Rp.
-                                    {{ number_format($iuranBulanan, 0, '.', ',') }}</td>
-                            </tr>
+                            @php
+                                $totalDataBiaya = 0;
+                            @endphp
+                            @for ($i = 0; $i < count($dataBiaya); $i++)
+                                <tr>
+                                    <td
+                                        style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                        Rp.
+                                        {{ number_format($dataBiaya[$i]['total'], 0, ',', ',') }}
+                                        @php
+                                            $totalDataBiaya += $dataBiaya[$i]['total'];
+                                        @endphp
+                                </tr>
+                            @endfor
                         </table>
                         <b>Rp.
-                            {{ number_format($atk + $air + $meeting + $internet + $qurban + $wisata + $biayaSosial + $iuranBulanan, 0, '.', ',') }}</b>
+                            {{ number_format($totalDataBiaya, 0, '.', ',') }}</b>
                     </td>
                     <td></td>
 
                 </tr>
-                <tr>
-                    <td>Beban Sewa</td>
-                    <td style="text-align: right"><b>Rp.
-                            {{ number_format($bebanSewa, 0, '.', ',') }}</b>
-                    </td>
-                    <td></td>
-                </tr>
+
                 <tr>
                     <th colspan="1" style="background-color: #ffffdc;color:black">Total Beban
                         Administrasi
                     </th>
                     <td style="text-align: right;background-color: #ffffdc;color:black"><b>Rp.
-                            {{                                                         number_format($atk + $air + $meeting + $internet + $qurban + $wisata + $biayaSosial + $iuranBulanan + +$gaji + $bebanSewa, 0, '.', ',') }}</b>
+                            {{ number_format($totalDataBiaya, 0, '.', ',') }}</b>
                     </td>
                     <td style="text-align: right;background-color: #ffffdc"></td>
                 </tr>
-                @php
-                    $totalBebanUmumLain = $atk + $air + $meeting + $internet + $qurban + $wisata + $biayaSosial + $iuranBulanan;
-                    $totalBebanOperasional = $operasional + $listrik + $sharingProfit;
-                    $totalBebanUsaha = $totalBebanUmumLain + $gaji + $bebanSewa + $totalBebanOperasional;
-                @endphp
-                {{-- <tr>
-                    <th colspan="1" style="background-color: #ffffdc;color:black">Total Beban
-                        Usaha
-                    </th>
-                    <td style="text-align: right;background-color: #ffffdc;color:black"><b>Rp.
-                            {{ number_format($totalBebanUmumLain + $gaji + $bebanSewa + $totalBebanOperasional, 0, '.', ',') }}</b>
-                    </td>
-                    <td style="text-align: right;background-color: #ffffdc"></td>
-                </tr> --}}
-
                 <tr>
                     <th colspan="2" style="background-color: yellow;color:black">Laba Bersih
-                        {{-- <br>
-                        <h1>{{ $labaBersih }}</h1>
-                        <br>
-                        <h1>{{ $totalBebanUmumLain }}</h1>
-                        <br>
-                        <h1>{{ $gaji }}</h1>
-                        <br>
-                        <h1>{{ $bebanSewa }}</h1>
-                        <br>
-                        <h1>{{ $totalBebanOperasional }}</h1>
-                        <br>
-                        <h1>{{ $totalBebanUmumLain + $gaji + $bebanSewa + $totalBebanOperasional }}</h1> --}}
+
                     </th>
                     <td style="text-align: right;background-color: yellow;color:black"><b>Rp.
-                            {{ number_format($labaBersih - $totalBebanUsaha, 0, '.', ',') }}</b>
+                            {{ number_format($labaKotor - $totalDataBeban - $sharingProfit - $totalDataBiaya - $gaji, 0, '.', ',') }}</b>
                     </td>
                 </tr>
             </thead>

@@ -327,8 +327,8 @@ class SharingProfitController extends Controller
                     'Pemasukan dari Pengurangan sharing profit telat,dll',
                 ];
                 $DKSharingProfitPengurangan = [
-                    'D',
                     'K',
+                    'D',
                 ];
                 for ($i = 0; $i < count($accountCodeSharingProfitPengurangan); $i++) {
                     $idDetail = DB::table('journal_details')->max('id') + 1;
