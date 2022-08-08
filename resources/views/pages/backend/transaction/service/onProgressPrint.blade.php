@@ -497,6 +497,41 @@
                 </tr>
             </tbody>
             @endforeach
+
+            @foreach ($service2 as $key => $value)
+            <tbody class="dropHere" style="border: none !important">
+                <tr role="row" class="odd">
+                    <td class="text-center">{{ \Carbon\Carbon::parse($value->date)->locale('id')->isoFormat('LL') }}</td>
+                    <td class="text-center">{{ $value->code }}</td>
+                    <td>
+                        Penerima &emsp;: {{ $value->created_by }}<br>
+                        Teknisi 1 &emsp; : {{ $value->Employee1->name }}
+                        @if ($value->technician_replacement_id != null)
+                           <br>Teknisi 2 &emsp; : {{ $value->Employee2->name }}
+                        @endif
+                    </td>
+                    <td>
+                        {{ $value->customer_name}}<br>
+                        {{ $value->customer_phone}}
+                    </td>
+                    <td>
+                        {{ $value->Brand->Category->code }} {{ $value->Brand->name }} {{ $value->Type->name }}<br>
+                        IMEI : <b>{{ $value->no_imei }}</b>
+                    </td>
+                    <td>{{ $value->complaint }}</td>
+                    <td>
+                        {{ $value->work_status }}<br>
+                        @if ($value->payment_status == 'Lunas')
+                            Lunas
+                        @elseif ($value->payment_status == 'Bayar DP')
+                            Bayar DP
+                        @elseif ($value->payment_status == null)
+                            Belum Bayar
+                        @endif
+                    </td>
+                </tr>
+            </tbody>
+            @endforeach
         </table>
         <table class="table table-bordered table-sm" style="color: black;border:1px solid black">
             <thead>
@@ -505,10 +540,10 @@
                         <h4>Menunggu Servis : {{ $tmanifest }}</h4>
                     </th>
                     <th>
-                        <h4>Proses Servis : {{ $tprogress }}</h4>
+                        <h4>Proses Servis : {{ $tprogress + $tprogress2 }}</h4>
                     </th>
                     <th>
-                        <h4>Total Transaksi : {{ $tr }}</h4>
+                        <h4>Total Transaksi : {{ $tr + $tr2 }}</h4>
                     </th>
                 </tr>
             </thead>

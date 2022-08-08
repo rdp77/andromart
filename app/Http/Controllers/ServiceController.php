@@ -239,7 +239,7 @@ class ServiceController extends Controller
                     } elseif ($row->payment_status == null) {
                         $paymentStatus = '<div class="badge badge-danger">Belum Bayar</div>';
                     }
-                  
+
                     $htmlAdd = '<table>';
                     $htmlAdd .= '<tr>';
                     $htmlAdd .= '<td>Status Pekerjaan</td>';
@@ -273,7 +273,7 @@ class ServiceController extends Controller
             ->whereIn('work_status', ['Proses', 'Manifest','Mutasi'])
             ->orderBy('id', 'desc')
             ->get();
-        $progress = Service::where('work_status', 'Proses')
+        $progress = Service::whereIn('work_status', ['Proses', 'Mutasi'])
             ->where('branch_id', $branchUser)
             ->get();
         $manifest = Service::where('work_status', 'Manifest')
@@ -298,32 +298,32 @@ class ServiceController extends Controller
                 $service2 =[];
                 $progress2 =[];
             $progress = Service::where('branch_id', $branchUser)
-                ->where('work_status',['Proses','Mutasi'])->get();
+                ->whereIn('work_status', ['Proses', 'Mutasi'])->get();
             $manifest = Service::where('branch_id', $branchUser)
                 ->where('work_status', 'Manifest')->get();
         } else {
             $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
                 ->whereIn('work_status', ['Proses', 'Manifest'])
+                ->where('technician_replacement_id', null)
                 ->where('technician_id', $req->technician_id)
-                // ->orWhere('technician_replacement_id', $req->technician_id)
                 ->orderBy('id', 'desc')
                 ->get();
 
             $service2 = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
-                ->whereIn('work_status', ['Mutasi'])
-                // ->where('technician_id', $req->technician_id)
+                ->whereIn('work_status', ['Proses', 'Mutasi'])
                 ->where('technician_replacement_id', $req->technician_id)
                 ->orderBy('id', 'desc')
                 ->get();
 
             $progress = Service::where('work_status', ['Proses'])
+                ->where('technician_replacement_id', null)
                 ->where('technician_id', $req->technician_id)
-                // ->orWhere('technician_replacement_id', $req->technician_id)
                 ->get();
-            $progress2 = Service::where('work_status', ['Mutasi'])
-                // ->where('technician_id', $req->technician_id)
+
+            $progress2 = Service::whereIn('work_status', ['Proses', 'Mutasi'])
                 ->where('technician_replacement_id', $req->technician_id)
                 ->get();
+
             $manifest = Service::where('work_status', 'Manifest')
                 ->where('technician_id', $req->technician_id)
                 ->get();
@@ -347,10 +347,12 @@ class ServiceController extends Controller
             $sub = ' ';
             $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
                 ->where('branch_id', $branchUser)
-                ->whereIn('work_status', ['Proses', 'Manifest'])
+                ->whereIn('work_status', ['Proses', 'Manifest', 'Mutasi'])
                 ->orderBy('id', 'desc')
                 ->get();
-            $progress = Service::where('branch_id', $branchUser)->where('work_status', 'Proses')->get();
+            $service2 =[];
+            $progress2 =[];
+            $progress = Service::where('branch_id', $branchUser)->whereIn('work_status', ['Proses', 'Mutasi'])->get();
             $manifest = Service::where('branch_id', $branchUser)->where('work_status', 'Manifest')->get();
         } else {
             $technic = Employee::where('id', $req->technician_id)->first();
@@ -358,24 +360,40 @@ class ServiceController extends Controller
             $sub = 'Teknisi';
             $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
                 ->whereIn('work_status', ['Proses', 'Manifest'])
+                ->where('technician_replacement_id', null)
                 ->where('technician_id', $req->technician_id)
                 ->orderBy('id', 'desc')
                 ->get();
-            $progress = Service::where('work_status', 'Proses')
+
+            $service2 = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
+                ->whereIn('work_status', ['Proses', 'Mutasi'])
+                ->where('technician_replacement_id', $req->technician_id)
+                ->orderBy('id', 'desc')
+                ->get();
+
+            $progress = Service::where('work_status', ['Proses'])
+                ->where('technician_replacement_id', null)
                 ->where('technician_id', $req->technician_id)
                 ->get();
+
+            $progress2 = Service::whereIn('work_status', ['Proses', 'Mutasi'])
+                ->where('technician_replacement_id', $req->technician_id)
+                ->get();
+
             $manifest = Service::where('work_status', 'Manifest')
                 ->where('technician_id', $req->technician_id)
                 ->get();
         }
         $tr = count($service);
+        $tr2 = count($service2);
         $tprogress = count($progress);
+        $tprogress2 = count($progress2);
         $tmanifest = count($manifest);
 
         $subtitle = $sub;
         $val = $technician;
 
-        return view('pages.backend.transaction.service.onProgressPrint', compact('service', 'tr', 'tprogress', 'tmanifest','title', 'subtitle', 'val'));
+        return view('pages.backend.transaction.service.onProgressPrint', compact('service', 'service2', 'tr', 'tr2', 'tprogress', 'tprogress2', 'tmanifest','title', 'subtitle', 'val'));
     }
 
     public function code($type)
@@ -393,7 +411,7 @@ class ServiceController extends Controller
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
 
         $code = $type . $getEmployee->Branch->code . $year . $month . $index;
-        
+
         $checkCode = Service::where('code', $code)
             ->count();
 

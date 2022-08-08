@@ -115,6 +115,8 @@
                                     <div class="badge badge-primary">Manifest</div><br><br>
                                 @elseif ($service->work_status == 'Proses')
                                     <div class="badge badge-warning">Proses</div><br><br>
+                                @elseif ($service->work_status == 'Mutasi')
+                                    <div class="badge badge-warning">Mutasi</div><br><br>
                                 @endif
                                 @if ($service->payment_status == 'Lunas')
                                     <div class="badge badge-success">Lunas</div>
