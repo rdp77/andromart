@@ -145,7 +145,7 @@
                                     value.journal_detail[0]
                                     .account_data.main_detail_id == 28 ||
                                     value.type == 'Transfer Masuk') {
-
+                                    }else{
                                     $.each(
                                         value.journal_detail,
                                         function(index1, value1) {
