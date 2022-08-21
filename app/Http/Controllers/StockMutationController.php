@@ -42,27 +42,16 @@ class StockMutationController extends Controller
         }
 
         if ($req->ajax()) {
-            $data = StockMutation::with('branch')->get();
+            $data = StockMutation::with('branch')->orderBy('id','ASC')->get();
             return Datatables::of($data)
                 ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-                    $actionBtn = '<div class="btn-group">';
-                    $actionBtn .= '<button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split"
-                            data-toggle="dropdown">
-                            <span class="sr-only">Toggle Dropdown</span>
-                        </button>';
-                    $actionBtn .= '<div class="dropdown-menu">
-                            <a class="dropdown-item" href="' . route('sale.edit', $row->id) . '" >Edit</a>';
-                    $actionBtn .= '<a class="dropdown-item" href="' . route('sale.printSale', $row->id) . '" target="output"><i class="fas fa-print"></i> Cetak</a>';
-                    // $actionBtn .= '<a onclick="" class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
-                    // $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
-                    $actionBtn .= '</div></div>';
-                    return $actionBtn;
-                })
                 ->addColumn('invoice', function ($row) {
                     $htmlAdd = '<table>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<th>' . $row->code . '</th>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
+                    $htmlAdd .=      '<th>' . $row->created_at . '</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .= '<table>';
 
@@ -72,6 +61,8 @@ class StockMutationController extends Controller
                     $htmlAdd = '<table>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>' . $row->branch->area->name . '</td>';
+                    $htmlAdd .=   '</tr>';
+                    $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<th>' . $row->branch->name . '</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .= '<table>';
@@ -79,12 +70,18 @@ class StockMutationController extends Controller
                     return $htmlAdd;
                 })
                 ->addColumn('dataItem', function ($row) {
-                    $htmlAdd = '<table>';
-                    $htmlAdd .=   '<tr>';
-                    $htmlAdd .=      '<td>' . $row->item->brand->name . '</td>';
-                    $htmlAdd .=      '<th>' . $row->item->name . '</th>';
-                    $htmlAdd .=   '</tr>';
-                    $htmlAdd .= '<table>';
+                    if (isset($row->item->brand->name)) {
+                        $htmlAdd = '<table>';
+                        $htmlAdd .=   '<tr>';
+                        $htmlAdd .=      '<td>' . $row->item->brand->name . '</td>';
+                        $htmlAdd .=   '</tr>';
+                        $htmlAdd .=   '<tr>';
+                        $htmlAdd .=      '<th>' . $row->item->name . '</th>';
+                        $htmlAdd .=   '</tr>';
+                        $htmlAdd .= '<table>';
+                    }else{
+                        $htmlAdd = 'Data Error / Data Item Telah Dihapus';
+                    }
 
                     return $htmlAdd;
                 })
@@ -96,8 +93,7 @@ class StockMutationController extends Controller
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .=   '<tr>';
                     $htmlAdd .=      '<td>Qty</td>';
-                    $htmlAdd .=      '<th>' . $row->qty . '</th>';
-                    $htmlAdd .=      '<th>' . $row->unit->code . '</th>';
+                    $htmlAdd .=      '<th>' . $row->qty .' '. $row->unit->code . '</th>';
                     $htmlAdd .=   '</tr>';
                     $htmlAdd .= '<table>';
 

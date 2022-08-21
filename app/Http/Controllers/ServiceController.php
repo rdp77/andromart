@@ -482,6 +482,31 @@ class ServiceController extends Controller
             }
             $codeNota = $this->code('SRV');
             $id = DB::table('service')->max('id') + 1;
+            
+            // mengecek apakah total menjadi 100%
+            if ($req->presentaseTechnician1+$req->presentaseTechnician2+$req->presentaseStore < 100 && $req->presentaseTechnician1+$req->presentaseTechnician2+$req->presentaseStore != 0) {
+                return Response::json([
+                        'status' => 'fail',
+                        'message' => 'Total sharing Profit harus bernilai 100',
+                    ]);
+            }
+
+            // mengecek sharing profit manual
+            if ($req->presentaseTechnician1 != 0 && $req->presentaseTechnician2 != 0 && $req->presentaseStore != 0) {
+                $sharingProfitStore = $req->presentaseStore;
+                $sharingProfitTechnician = $req->presentaseTechnician1+$req->presentaseTechnician2;
+                // presentase yang disimpan di database
+                $presentaseSharingProfitTechnician1 = $req->presentaseTechnician1;
+                $presentaseSharingProfitTechnician2 = $req->presentaseTechnician2;
+
+            }else{
+                $sharingProfitStore = $sharingProfitStore;
+                $sharingProfitTechnician =  $sharingProfitTechnician;
+                // presentase yang disimpan di database
+                $presentaseSharingProfitTechnician1 = $sharingProfitTechnician;
+                $presentaseSharingProfitTechnician2 = 0;
+            }
+
             $sharing_profit_store = ((str_replace(',', '', $req->totalService) - str_replace(',', '', $req->totalDiscountValue)) / 100) * $sharingProfitStore + str_replace(',', '', $req->totalSparePart);
             $sharing_profit_technician_1 = ((str_replace(',', '', $req->totalService) - str_replace(',', '', $req->totalDiscountValue)) / 100) * $sharingProfitTechnician;
 
@@ -543,6 +568,9 @@ class ServiceController extends Controller
                 'sharing_profit_store' => str_replace(',', '', $sharing_profit_store),
                 'sharing_profit_technician_1' => str_replace(',', '', $sharing_profit_technician_1),
                 'sharing_profit_technician_2' => str_replace(',', '', 0),
+                'presentase_sharing_profit_store'=>$sharingProfitStore,
+                'presentase_sharing_profit_technician_1'=>$presentaseSharingProfitTechnician1,
+                'presentase_sharing_profit_technician_2'=>$presentaseSharingProfitTechnician2,
                 'created_at' => date('Y-m-d h:i:s'),
                 'created_by' => Auth::user()->name,
             ]);
@@ -890,6 +918,8 @@ class ServiceController extends Controller
                 }
             }
 
+      
+
             if (str_replace(',', '', $req->totalLoss) == 0) {
                 $total_loss_store = 0;
                 $total_loss_technician_1 = 0;
@@ -905,6 +935,37 @@ class ServiceController extends Controller
                 }
             }
 
+
+            // mengecek sharing profit jika kurang dari 100
+            if ($req->presentaseTechnician1+$req->presentaseTechnician2+$req->presentaseStore < 100 && $req->presentaseTechnician1+$req->presentaseTechnician2+$req->presentaseStore != 0) {
+                return Response::json([
+                    'status' => 'fail',
+                    'message' => 'Total sharing Profit harus bernilai 100',
+                ]);
+            }
+            
+            // mengecek sharing profit manual
+            if ($req->presentaseTechnician1 != 0 && $req->presentaseTechnician2 != 0 && $req->presentaseStore != 0) {
+                $sharingProfitStore = $req->presentaseStore;
+                $sharingProfitTechnician = $req->presentaseTechnician1+$req->presentaseTechnician2;
+                // presentase yang disimpan di database
+                $presentaseSharingProfitTechnician1 = $req->presentaseTechnician1;
+                $presentaseSharingProfitTechnician2 = $req->presentaseTechnician2;
+                
+                $sharingProfitTechnician1 = $req->presentaseTechnician1;
+                $sharingProfitTechnician2 = $req->presentaseTechnician2;
+            }else{
+                $sharingProfitStore = $sharingProfitStore;
+                $sharingProfitTechnician =  $sharingProfitTechnician;
+                // presentase yang disimpan di database
+                $presentaseSharingProfitTechnician1 = $sharingProfitTechnician;
+                $presentaseSharingProfitTechnician2 = 0;
+
+                $sharingProfitTechnician1 = $sharingProfitTechnician1;
+                $sharingProfitTechnician2 = $sharingProfitTechnician2;
+            }
+
+
             $sharing_profit_store = ((str_replace(',', '', $req->totalService) - str_replace(',', '', $req->totalDiscountValue)) / 100) * $sharingProfitStore + str_replace(',', '', $req->totalSparePart);
 
             if ($checkData->technician_replacement_id != null) {
@@ -914,6 +975,7 @@ class ServiceController extends Controller
                 $sharing_profit_technician_1 = ($sharingProfitTechnician / 100) * (str_replace(',', '', $req->totalService) - str_replace(',', '', $req->totalDiscountValue));
                 $sharing_profit_technician_2 = 0;
             }
+           
 
             $estimateDate = $this->DashboardController->changeMonthIdToEn($req->estimateDate);
 
@@ -963,10 +1025,14 @@ class ServiceController extends Controller
                 'sharing_profit_store' => str_replace(',', '', $sharing_profit_store),
                 'sharing_profit_technician_1' => $sharing_profit_technician_1,
                 'sharing_profit_technician_2' => $sharing_profit_technician_2,
+                'presentase_sharing_profit_store'=>$sharingProfitStore,
+                'presentase_sharing_profit_technician_1'=>$presentaseSharingProfitTechnician1,
+                'presentase_sharing_profit_technician_2'=>$presentaseSharingProfitTechnician2,
                 'updated_at' => date('Y-m-d h:i:s'),
                 'updated_by' => Auth::user()->name,
             ]);
 
+           
             // check data yang dihapus dan mengembalikan stock terlebih dahulu
             if ($req->deletedExistingData != null) {
                 $checkDataDeleted = ServiceDetail::whereIn('id', $req->deletedExistingData)->get();
@@ -1002,25 +1068,25 @@ class ServiceController extends Controller
                     ->whereIn('id', $req->deletedExistingData)
                     ->delete();
             }
-
+        
             // menyimpan data baru dan memperbaru stock
             if ($req->itemsDetail != null) {
                 $checkStock = [];
                 for ($i = 0; $i < count($req->itemsDetail); $i++) {
-                    ServiceDetail::create([
-                        'service_id' => $id,
-                        'item_id' => $req->itemsDetail[$i],
-                        'price' => str_replace(',', '', $req->priceDetail[$i]),
-                        'hpp' => str_replace(',', '', $req->priceHpp[$i]),
-                        'qty' => $req->qtyDetail[$i],
-                        'total_price' => str_replace(',', '', $req->totalPriceDetail[$i]),
-                        'total_hpp' => str_replace(',', '', $req->totalPriceHpp[$i]),
-                        'description' => str_replace(',', '', $req->descriptionDetail[$i]),
-                        'type' => $req->typeDetail[$i],
-                        'created_by' => Auth::user()->name,
-                        'created_at' => date('Y-m-d h:i:s'),
-                    ]);
                     if ($req->typeDetail[$i] != 'Jasa') {
+                        ServiceDetail::create([
+                            'service_id' => $id,
+                            'item_id' => $req->itemsDetail[$i],
+                            'price' => str_replace(',', '', $req->priceDetail[$i]),
+                            'hpp' => str_replace(',', '', $req->priceHpp[$i]),
+                            'qty' => $req->qtyDetail[$i],
+                            'total_price' => str_replace(',', '', $req->totalPriceDetail[$i]),
+                            'total_hpp' => str_replace(',', '', $req->totalPriceHpp[$i]),
+                            'description' => str_replace(',', '', $req->descriptionDetail[$i]),
+                            'type' => $req->typeDetail[$i],
+                            'created_by' => Auth::user()->name,
+                            'created_at' => date('Y-m-d h:i:s'),
+                        ]);
                         $checkStock[$i] = Stock::where('item_id', $req->itemsDetail[$i])
                             ->where('branch_id', $checkData->branch_id)
                             ->where('id', '!=', 1)
@@ -1053,14 +1119,19 @@ class ServiceController extends Controller
                     }
                 }
             }
-
+         
+//             DB::rollback();
+//             return [$req->idDetailOld,
+// $req->priceDetailOld,
+// $req->priceHppOld,
+// $req->totalPriceHppOld];
             // mengecek data existing
             if ($req->itemsDetailOld != null) {
                 // return $req->all();
                 // mengecek data existing
                 $checkDataOld = ServiceDetail::whereIn('id', $req->idDetailOld)->get();
                 $checkStockExisting = [];
-
+                 
                 for ($i = 0; $i < count($checkDataOld); $i++) {
                     // memfilter type kecuali jasa
                     if ($checkDataOld[$i]->item_id != 1) {
@@ -1110,7 +1181,7 @@ class ServiceController extends Controller
                                         // 'service_id'=>$id,
                                         // 'item_id'=>$req->itemsDetailOld[$i],
                                         'price' => str_replace(',', '', $req->priceDetailOld[$i]),
-                                        'hpp' => str_replace(',', '', $req->priceDetailOld[$i]),
+                                        'hpp' => str_replace(',', '', $req->priceHppOld[$i]),
                                         'total_hpp' => str_replace(',', '', $req->totalPriceHppOld[$i]),
                                         // 'qty'=>$req->qtyDetailOld[$i],
                                         'total_price' => str_replace(',', '', $req->totalPriceDetailOld[$i]),
@@ -1251,7 +1322,13 @@ class ServiceController extends Controller
                     'updated_at' => date('Y-m-d h:i:s'),
                 ]);
             }
-
+            
+//             DB::rollback();
+//             return [$req->idDetailOld,
+// $req->priceDetailOld,
+// $req->priceHppOld,
+// $req->totalPriceHppOld];
+//             return 'as';
             DB::table('service_condition')
                 ->where('service_id', $id)
                 ->delete();
@@ -1527,6 +1604,9 @@ class ServiceController extends Controller
         // return $req->all();
         try {
             $checkData = Service::where('id', $req->serviceId)->first();
+            if ($checkData->technician_id == $req->technicianId) {
+                return Response::json(['status' => 'error', 'message' => 'Teknisi Mutasi Tidak boleh sama dengan teknisi awal']);
+            }
             $image = $req->image;
             $image = str_replace('data:image/jpeg;base64,', '', $image);
             $image = base64_decode($image);
@@ -1567,6 +1647,27 @@ class ServiceController extends Controller
                     $lossTechnician2 = $settingPresentase[$i]->total;
                 }
             }
+
+            if ($checkData->presentase_sharing_profit_technician_1 != 40 && $checkData->presentase_sharing_profit_technician_2 != 0 && $checkData->presentase_sharing_profit_store != 60) {
+                $sharingProfitStore = $checkData->presentaseStore;
+                $sharingProfitTechnician = $checkData->presentase_sharing_profit_technician_1;
+                // presentase yang disimpan di database
+                $presentaseSharingProfitTechnician1 = $checkData->presentase_sharing_profit_technician_1;
+                $presentaseSharingProfitTechnician2 = $checkData->presentase_sharing_profit_technician_2;
+                
+                $sharingProfitTechnician1 = $checkData->presentase_sharing_profit_technician_1;
+                $sharingProfitTechnician2 = $checkData->presentase_sharing_profit_technician_2;
+            }else{
+                $sharingProfitStore = $sharingProfitStore;
+                $sharingProfitTechnician =  $sharingProfitTechnician;
+                // presentase yang disimpan di database
+                $presentaseSharingProfitTechnician1 = $sharingProfitTechnician;
+                $presentaseSharingProfitTechnician2 = $sharingProfitTechnician2;
+
+                $sharingProfitTechnician1 = $sharingProfitTechnician1;
+                $sharingProfitTechnician2 = $sharingProfitTechnician2;
+            }
+            // return [$sharingProfitTechnician1,$sharingProfitTechnician2];
             if ($req->status == 'Mutasi') {
                 $technician_replacement_id = $req->technicianId;
                 if ($checkData->total_loss_store == 0) {
@@ -1576,8 +1677,9 @@ class ServiceController extends Controller
                     $total_loss_technician_1 = ($lossTechnician1 / 100) * $checkData->total_loss;
                     $total_loss_technician_2 = ($lossTechnician2 / 100) * $checkData->total_loss;
                 }
-                $sharing_profit_technician_1 = ($sharingProfitTechnician1 / 100) * $checkData->total_price;
-                $sharing_profit_technician_2 = ($sharingProfitTechnician2 / 100) * $checkData->total_price;
+                $sharing_profit_technician_1 = ($sharingProfitTechnician1 / 100) * $checkData->total_service;
+                $sharing_profit_technician_2 = ($sharingProfitTechnician2 / 100) * $checkData->total_service;
+                $sharing_profit_store = ($sharingProfitTechnician2 / 100) * $checkData->total_service;
             } else {
                 if ($checkData->technician_replacement_id != null) {
                     $technician_replacement_id = $checkData->technician_replacement_id;
@@ -1593,6 +1695,10 @@ class ServiceController extends Controller
                     $sharing_profit_technician_2 = 0;
                 }
             }
+
+            // return Response::json(['status' => 'error', 'message' => [$checkData,$sharingProfitTechnician1,$sharing_profit_technician_1,$checkData->presentaseTechnician1,$sharing_profit_technician_2,$sharingProfitTechnician2,$checkData->presentaseTechnician2,$sharingProfitStore]]);
+
+            // return [$sharing_profit_technician_1,$sharing_profit_technician_2];
             Service::where('id', $req->serviceId)->update([
                 'work_status' => $req->status,
                 'technician_replacement_id' => $technician_replacement_id,
@@ -1600,6 +1706,8 @@ class ServiceController extends Controller
                 'total_loss_technician_2' => $total_loss_technician_2,
                 'sharing_profit_technician_1' => $sharing_profit_technician_1,
                 'sharing_profit_technician_2' => $sharing_profit_technician_2,
+                'presentase_sharing_profit_technician_1'=>$presentaseSharingProfitTechnician1,
+                'presentase_sharing_profit_technician_2'=>$presentaseSharingProfitTechnician2,
             ]);
             ServiceStatusMutation::create([
                 'service_id' => $req->serviceId,
@@ -1613,8 +1721,8 @@ class ServiceController extends Controller
             ]);
             return Response::json(['status' => 'success', 'message' => 'Sukses Menyimpan Data','data'=>$checkData]);
         } catch (\Throwable $th) {
-            return $th;
-            return Response::json(['status' => 'error', 'message' => $th]);
+            // return $th;
+            return Response::json(['status' => 'error', 'message' => $th->getMessage()]);
         }
     }
 

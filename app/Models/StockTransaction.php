@@ -20,11 +20,13 @@ class StockTransaction extends Model
         'item_id',
         'unit_id',
         'branch_id',
+        'branch_destination_id',
         'qty',
         'type',
         'reason',
         'date',
         'code',
+        'total',
         'description',
         'created_at',
         'updated_at',
@@ -41,5 +43,17 @@ class StockTransaction extends Model
     public function stock()
     {
         return $this->belongsTo('App\Models\Stock');
+    }
+    public function Branch()
+    {
+        return $this->belongsTo('App\Models\Branch', 'branch_id', 'id');
+    }
+    public function BranchOrigin()
+    {
+        return $this->belongsTo('App\Models\Branch', 'branch_id', 'id');
+    }
+    public function BranchDestination()
+    {
+        return $this->belongsTo('App\Models\Branch', 'branch_destination_id', 'id');
     }
 }

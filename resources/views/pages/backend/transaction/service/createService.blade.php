@@ -292,6 +292,30 @@
                     </div>
                 </div>
             </div>
+            <div class="card">
+                <div class="card-header">
+                    <h4>Sharing Profit</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group col-12 col-md-4 col-lg-4">
+                            <label for="presentaseTechnician1">{{ __('Presentase Teknisi 1') }}<code>*</code></label>
+                            <input id="presentaseTechnician1" type="text" value="0" class="form-control cleaveNumeral"
+                                name="presentaseTechnician1" style="text-align: right">
+                        </div>
+                        <div class="form-group col-12 col-md-4 col-lg-4">
+                            <lab,el for="presentaseTechnician2">{{ __('Presentase Teknisi 2') }}<code>*</code></label>
+                            <input id="presentaseTechnician2" type="text" value="0" class="form-control cleaveNumeral"
+                            name="presentaseTechnician2" style="text-align: right">
+                        </div>
+                        <div class="form-group col-12 col-md-4 col-lg-4">
+                            <lab,el for="presentaseStore">{{ __('Presentase Toko') }}<code>*</code></label>
+                            <input id="presentaseStore" type="text" value="0" class="form-control cleaveNumeral"
+                            name="presentaseStore" style="text-align: right">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-lg-4">
             <div class="card">

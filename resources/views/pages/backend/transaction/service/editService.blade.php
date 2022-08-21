@@ -337,6 +337,30 @@
                     </div>
                 </div>
             </div>
+            <div class="card">
+                <div class="card-header">
+                    <h4>Sharing Profit</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="form-group col-12 col-md-4 col-lg-4">
+                            <label for="presentaseTechnician1">{{ __('Presentase Teknisi 1') }}<code>*</code></label>
+                            <input id="presentaseTechnician1" value="{{$service->presentase_sharing_profit_technician_1}}" type="text" value="0" class="form-control cleaveNumeral"
+                                name="presentaseTechnician1" style="text-align: right">
+                        </div>
+                        <div class="form-group col-12 col-md-4 col-lg-4">
+                            <label for="presentaseTechnician2">{{ __('Presentase Teknisi 2') }}<code>*</code></label>
+                            <input id="presentaseTechnician2" value="{{$service->presentase_sharing_profit_technician_2}}" type="text" value="0" class="form-control cleaveNumeral"
+                            name="presentaseTechnician2" style="text-align: right">
+                        </div>
+                        <div class="form-group col-12 col-md-4 col-lg-4">
+                            <label for="presentaseStore">{{ __('Presentase Toko') }}<code>*</code></label>
+                            <input id="presentaseStore" value="{{$service->presentase_sharing_profit_store}}" type="text" value="0" class="form-control cleaveNumeral"
+                            name="presentaseStore" style="text-align: right">
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="col-lg-4">
             <div class="card">
@@ -808,6 +832,8 @@
                             <td>
                                 <input readonly type="text" class="form-control totalPriceServiceDetail cleaveNumeral"
                                     name="totalPriceDetailOld[]" style="text-align: right" value="{{$service->ServiceDetail[0]->total_price}}">
+                                <input type="hidden" class="form-control priceHpp" name="priceHppOld[]" value="0">
+                                <input readonly type="hidden" class="form-control totalPriceHpp" name="totalPriceHppOld[]" value="0" style="text-align: right">
                             </td>
                             <td>
                                 <input type="text" class="form-control" name="descriptionDetailOld[]" value="{{$service->ServiceDetail[0]->description}}">

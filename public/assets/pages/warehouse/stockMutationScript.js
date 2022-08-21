@@ -15,6 +15,7 @@ var table = $("#table").DataTable({
     },
     dom: '<"html5buttons">lBrtip',
     columns: [
+        { data: "DT_RowIndex" },
         { data: "invoice" },
         { data: "dataBranch" },
         { data: "dataItem" },

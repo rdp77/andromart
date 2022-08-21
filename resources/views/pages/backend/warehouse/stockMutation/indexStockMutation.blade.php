@@ -20,6 +20,7 @@
         <table class="table-striped table" id="table" width="100%">
             <thead>
                 <tr>
+                    <th>{{ __('No') }}</th>
                     <th>{{ __('Kode Invoice') }}</th>
                     <th>{{ __('Cabang') }}</th>
                     <th>{{ __('Item') }}</th>

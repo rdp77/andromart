@@ -14,11 +14,12 @@ var table = $("#table").DataTable({
         url: "/warehouse/stock-transaction/stockTransaction",
         type: "GET",
     },
+    order: [[1, "desc"]],
     dom: '<"html5buttons">lBrtip',
     columns: [
         { data: "code" },
         { data: "date" },
-        { data: "item.stock[0].branch.name" },
+        { data: "branchCheck" },
         { data: "item.name" },
         { data: "qty" },
         { data: "item.stock[0].unit.name" },
@@ -102,29 +103,49 @@ $.ajaxSetup({
 function del(id) {
     swal({
         title: "Apakah Anda Yakin?",
-        text: "Aksi ini tidak dapat dikembalikan, dan akan menghapus data dana kredit Anda.",
+        text: "Aksi ini tidak dapat dikembalikan Anda.",
         icon: "warning",
         buttons: true,
         dangerMode: true,
     }).then((willDelete) => {
         if (willDelete) {
             $.ajax({
-                url: "/transaction/credit-funds/creditFunds/" + id,
+                url: "/warehouse/stock-transaction/stockTransaction/" + id,
                 type: "DELETE",
-                success: function () {
-                    swal("Data pengguna berhasil dihapus", {
-                        icon: "success",
-                    });
-                    table.draw();
+                success: function (data) {
+                    if(data.status == 'success'){
+                        swal(data.message, {
+                            icon: "success",
+                        });
+                        table.draw();
+                    }else{
+                        swal(data.message, {
+                            icon: "error",
+                        });
+                    }
+                    
                 },
             });
         } else {
-            swal("Data pengguna Anda tidak jadi dihapus!");
+            swal("Data tidak jadi dihapus!");
         }
     });
 }
 function save(argument) {
-
+    if ($('.stockSaatIni').val() == 0 && $('.checkType').find(':selected').val() != 'In') {
+        iziToast.warning({
+            type: 'warning',
+            title: 'Stock 0 tidak dapat di keluarkan / Mutasi'
+        });
+        return '';
+    }
+    if ($('.stockSaatIni').val() < $('.qty').val()) {
+        iziToast.warning({
+            type: 'warning',
+            title: 'Qty tidak boleh lebih dari Stock Saat Ini'
+        });
+        return '';
+    }
     swal({
         title: "Apakah Anda Yakin?",
         text: "Aksi ini tidak dapat dikembalikan, dan akan menyimpan data Anda.",
@@ -154,7 +175,7 @@ function save(argument) {
                 type: 'POST',
                 success: function(data) {
                     if(data.status == 'success'){
-                        swal("Data "+argument+" Berhasil Disimpan", {
+                        swal("Data Berhasil Disimpan", {
                             icon: "success",
                         });
                         location.reload();
@@ -171,37 +192,6 @@ function save(argument) {
 
         } else {
             swal("Dibatalkan!");
-        }
-    });
-
-}
-
-function updateData(argument) {
-    swal({
-        title: "Apakah Anda Yakin?",
-        text: "Aksi ini tidak dapat dikembalikan, dan akan mengupdate data Anda.",
-        icon: "warning",
-        buttons: true,
-        dangerMode: true,
-    }).then((willSave) => {
-        if (willSave) {
-            $.ajax({
-                url: "/transaction/credit-funds/creditFunds/"+argument,
-                data: $(".form-data").serialize(),
-                type: 'post',
-                success: function(data) {
-                    swal("Data Dana Kredit PDL Berhasil Disimpan", {
-                        icon: "success",
-                    });
-                    location.reload();
-                },
-                error: function(data) {
-                    // edit(id);
-                }
-            });
-
-        } else {
-            swal("Data Dana Kredit PDL Berhasil Dihapus!");
         }
     });
 
@@ -239,20 +229,123 @@ $(document.body).on("change",".brand",function(){
 
 $(document.body).on("change",".type",function(){
     if (this.value == 'In') {
+        $('.hiddenReason').css('display','block');
+        $('.hiddenBranch').css('display','none');
         $('.reason').empty();
         $('.reason').append('<option value="">- Select -</option>');
         $('.reason').append('<option value="Penambahan">Penambahan Stock</option>');
     }else if(this.value == 'Out'){
+        $('.hiddenReason').css('display','block');
+        $('.hiddenBranch').css('display','none');
         $('.reason').empty();
         $('.reason').append('<option value="">- Select -</option>');
         $('.reason').append('<option value="Rusak">Barang Rusak</option>');
         $('.reason').append('<option value="Hilang">Barang Hilang</option>');
         $('.reason').append('<option value="Salah Input">Salah Input</option>');
+    }else if(this.value == 'Mutation'){
+        $('.hiddenReason').css('display','none');
+        $('.hiddenBranch').css('display','flex');
+        $('.reason').empty();
     }else{
+        $('.hiddenReason').css('display','none');
+        $('.hiddenBranch').css('display','none');
         $('.reason').empty();
         $('.reason').append('<option value="">- Select -</option>');
     }
 });
 
+function checkStock() {
+    var item = $('.item').val();
+    $.ajax({
+        url: "/warehouse/stock-transaction/check-stock",
+        type: "get",
+        data: {id:item},
+        success: function (data) {
+            if(data.data == null){
+                $('.stockSaatIni').val('Data Stock Tidak Ditemukan');
+                $('.price').val('0');
+                sum();
+            }else{
+                $('.stockSaatIni').val(data.data.stock);
+                $('.price').val(parseInt(data.data.item.buy).toLocaleString("en-US"));
+                sum();
+            }
+        },
+    });
+}
+function sum() {
+    var price = $('.price').val();
+    var qty = $('.qty').val();
+    var parsePrice = parseInt(price.replace(/,/g, ""));
+    $('.total').val(parseInt(parsePrice*qty).toLocaleString("en-US"));
+}
+function jurnal(params) {
+    // $('.dropHereJournals').
+    $.ajax({
+        url: "/warehouse/stock-transaction/check-journals",
+        data: { id: params },
+        type: "POST",
+        success: function (data) {
+            if (data.status == "success") {
+                $(".dropHereJournals").empty();
+                $(".dropHereJournalsHpp").empty();
+                $(".dropHereJournalsBalikDownPayment").empty();
+                
+                // alert('sd');
+                $.each(data.jurnal[0].journal_detail, function (index, value) {
+                    if (value.debet_kredit == "K") {
+                        var dk =
+                            "<td>0</td><td>" +
+                            parseInt(value.total).toLocaleString("en-US") +
+                            "</td>";
+                    } else {
+                        var dk =
+                            "<td>" +
+                            parseInt(value.total).toLocaleString("en-US") +
+                            "</td><td>0</td>";
+                    }
+                    $(".dropHereJournals").append(
+                        "<tr>" +
+                            "<td>" +
+                            value.account_data.code +
+                            "</td>" +
+                            "<td>" +
+                            value.account_data.name +
+                            "</td>" +
+                            dk +
+                            "</tr>"
+                    );
+                });
+                if (typeof data.jurnal[1] != 'undefined') {
+                    $.each(data.jurnal[1].journal_detail, function (index, value) {
+                        if (value.debet_kredit == "K") {
+                            var dk =
+                                "<td>0</td><td>" +
+                                parseInt(value.total).toLocaleString("en-US") +
+                                "</td>";
+                        } else {
+                            var dk =
+                                "<td>" +
+                                parseInt(value.total).toLocaleString("en-US") +
+                                "</td><td>0</td>";
+                        }
+                        $(".dropHereJournalsHpp").append(
+                            "<tr>" +
+                                "<td>" +
+                                value.account_data.code +
+                                "</td>" +
+                                "<td>" +
+                                value.account_data.name +
+                                "</td>" +
+                                dk +
+                                "</tr>"
+                        );
+                    });
+                }
+         
 
-
+            }
+            $(".exampleModal").modal("show");
+        },
+    });
+}

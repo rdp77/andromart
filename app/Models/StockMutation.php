@@ -9,7 +9,7 @@ class StockMutation extends Model
 {
     use HasFactory;
     protected $table = 'stocks_mutation';
-    public $timestamps = false;
+    public $timestamps = true;
     public $incrementing = true;
     protected $fillable = [
         'item_id',
@@ -29,7 +29,7 @@ class StockMutation extends Model
 
     public function item()
     {
-        return $this->belongsTo('App\Models\Item')->withTrashed();
+        return $this->belongsTo('App\Models\Item');
     }
 
     public function unit()

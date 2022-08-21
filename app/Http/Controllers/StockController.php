@@ -30,8 +30,15 @@ class StockController extends Controller
         }
 
         if ($req->ajax()) {
+            $authCheck = Auth::user()->role_id;
             $branchUser = Auth::user()->employee->branch_id;
-            $data = Stock::with('item', 'unit', 'branch')->where('branch_id', $branchUser)->where('id', '!=', 1)->get();
+            $data = Stock::with('item', 'unit', 'branch')
+            ->where(function ($query) use ($branchUser,$authCheck) {
+                if ($authCheck != 1) {
+                    $query ->where('branch_id', $branchUser);
+                }
+            })
+            ->where('id', '!=', 1)->get();
             return Datatables::of($data)
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {

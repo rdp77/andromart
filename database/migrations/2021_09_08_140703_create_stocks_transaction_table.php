@@ -20,6 +20,7 @@ class CreateStocksTransactionTable extends Migration
             $table->integer('branch_id');
             $table->date('date');
             $table->double('qty')->nullable();
+            $table->double('total')->nullable();
             $table->string('code');
             $table->string('reason');
             $table->string('type');

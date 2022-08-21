@@ -71,19 +71,6 @@
 
                         </tbody>
                     </table>
-
-                    <h6>Jurnal Balik DownPayment</h6>
-                    <table class="table table-stripped table-bordered">
-                        <tr>
-                            <th>Kode</th>
-                            <th>Nama</th>
-                            <th>D</th>
-                            <th>K</th>
-                        </tr>
-                        <tbody class="dropHereJournalsBalikDownPayment">
-
-                        </tbody>
-                    </table>
                 {{-- </div> --}}
             </div>
             <div class="modal-footer bg-whitesmoke br">

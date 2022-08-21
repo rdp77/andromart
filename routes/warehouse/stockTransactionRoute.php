@@ -16,9 +16,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'warehouse'], function () {
     Route::group(['prefix' => 'stock-transaction'], function () {
-        Route::resource('stockTransaction', StockTransactionController::class)
-            ->except([
-                'show',
-            ]);
+        Route::resource('stockTransaction', StockTransactionController::class);
+        Route::get('check-stock', [StockTransactionController::class, 'checkStock'])->name('stockTrasaction.checkStock');
+        Route::post('check-journals', [StockTransactionController::class, 'checkJournals'])->name('stockTrasaction.checkJournals');
     });
 });

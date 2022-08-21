@@ -89,6 +89,7 @@ require __DIR__ . '/report/reportPurchaseRoute.php';
 require __DIR__ . '/report/reportCashBalanceRoute.php';
 require __DIR__ . '/report/reportPeriodicRoute.php';
 require __DIR__ . '/report/reportIncomeStatementRoute.php';
+require __DIR__ . '/report/reportNeracaRoute.php';
 
 require __DIR__ . '/warehouse/stockRoute.php';
 require __DIR__ . '/warehouse/stockTransactionRoute.php';
@@ -102,3 +103,5 @@ require __DIR__ . '/content/productRoute.php';
 
 require __DIR__ . '/office/regulationRoute.php';
 require __DIR__ . '/office/notesRoute.php';
+
+// require __DIR__ . '/office/selarasJurnalRoute.php';

@@ -1,10 +1,10 @@
 @extends('layouts.backend.default')
-@section('title', __('pages.title').__(' | Tambah Stock Transaksi'))
-@section('titleContent', __('Tambah Stock Transaksi'))
+@section('title', __('pages.title').__(' | Lihat Stock Transaksi'))
+@section('titleContent', __('Lihat Stock Transaksi'))
 @section('breadcrumb', __('Data'))
 @section('morebreadcrumb')
 <div class="breadcrumb-item active">{{ __('Service') }}</div>
-<div class="breadcrumb-item active">{{ __('Tambah Stock Transaksi') }}</div>
+<div class="breadcrumb-item active">{{ __('Lihat Stock Transaksi') }}</div>
 @endsection
 
 @section('content')
@@ -16,31 +16,33 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="form-group col-12 col-md-4 col-lg-4">
+                        {{-- <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="type">{{ __('Kategori') }}<code>*</code></label>
                             <select class="select2 type validation" name="type" onchange="category()" data-name="Kategori">
                                 <option value="">- Select -</option>
-                                @foreach ($category as $element)
-                                    <option value="{{$element->id}}">{{$element->name}}</option>
+                                 @foreach ($category as $element)
+                                    <option @if ($data->type == $element->id) selected @endif value="{{$element->id}}">{{$element->name}}</option>
                                 @endforeach
-                                {{-- <option value="Handphone">Handphone</option>
-                                <option value="Laptop">Laptop</option> --}}
                             </select>
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="brand">{{ __('Merk') }}<code>*</code></label>
                             <select class="select2 brand validation" name="brand" data-name="Merk">
                                 <option value="">- Select -</option>
-                                {{-- @foreach ($brand as $element)
-                                <option value="{{$element->id}}">{{$element->name}}</option>
-                                @endforeach --}}
+                                @foreach ($brand as $element)
+                                    @if ($element->category_id == $data->type)
+                                        <option @if ($data->brand == $element->id) selected @endif value="{{$element->id}}">{{$element->name}}</option>
+                                    @endif
+                                @endforeach
                             </select>
-                            {{-- <input id="brand" type="text" class="form-control" name="brand"> --}}
-                        </div>
-                        <div class="form-group col-12 col-md-4 col-lg-4">
+                        </div> --}}
+                        <div class="form-group col-12 col-md-12 col-lg-12">
                             <label for="itemId">{{ __('Nama Item') }}<code>*</code></label>
-                            <select class="select2 item validation" onchange="checkStock()" name="item" data-name="Item">
+                            <select class="select2 item validation" onchange="checkStock()" disabled name="item" data-name="Item">
                                 <option value="">- Select -</option>
+                                  @foreach ($item as $element)
+                                    <option @if ($data->item_id == $element->id) selected @endif value="{{$element->id}}">{{$element->name}}</option>
+                                  @endforeach
                                 {{-- @foreach ($type as $element)
                                 <option value="{{$element->id}}">{{$element->name}}</option>
                                 @endforeach --}}
@@ -48,20 +50,7 @@
                             {{-- <input id="series" type="text" class="form-control" name="series"> --}}
                         </div>
 
-                        @foreach ($brand as $el)
-                            <input class="brandData" type="hidden"
-                            data-category="{{$el->category_id}}"
-                            data-name="{{$el->name}}"
-                            value="{{$el->id}}">
-                        @endforeach
-
-                        @foreach ($item as $el)
-                            <input class="itemData" type="hidden"
-                            data-brand="{{$el->brand_id}}"
-                            data-name="{{$el->name}}"
-                            data-supplier="{{$el->supplier->name}}"
-                            value="{{$el->id}}">
-                        @endforeach
+                     
 
                     </div>
                     {{-- <div class="row">
@@ -70,53 +59,52 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="type">{{ __('Tipe') }}<code>*</code></label>
-                            <select class="select2 type checkType validation" name="type" data-name="Tipe">
-                                <option value="">- Select -</option>
-                                <option value="In">In (Masuk)</option>
-                                <option value="Out">Out (Keluar)</option>
-                                <option value="Mutation">Mutation (Pindah Cabang) </option>
+                            <select class="select2 type validation" disabled name="type" data-name="Tipe">
+                                <option value="In" @if ($data->type == 'In') selected @endif>In (Masuk)</option>
+                                <option value="Out" @if ($data->type == 'Out') selected @endif>Out (Keluar)</option>
+                                <option value="Mutation" @if ($data->type == 'Mutation') selected @endif>Mutation (Pindah Cabang) </option>
                             </select>
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="date">{{ __('Tanggal') }}<code>*</code></label>
-                            <input id="date" type="text" class="form-control datepicker"
+                            <input id="date" type="text" class="form-control" disabled value="{{date('d F Y',strtotime($data->date))}}"
                                 name="date">
                         </div>
                         <div class="form-group col-12 col-md-2 col-lg-2">
                             <label>{{ __('Stock') }}<code>*</code></label>
-                            <input type="text" class="form-control stockSaatIni" readonly>
+                            <input type="text" class="form-control stockSaatIni" readonly value="-">
                         </div>
                         <div class="form-group col-12 col-md-2 col-lg-2">
                             <label for="qty">{{ __('Qty') }}<code>*</code></label>
-                            <input id="qty" type="text" class="form-control qty validation"
-                                name="qty" data-name="Qty" value="0" onkeyup="sum()">
+                            <input id="qty" type="text" class="form-control"
+                                 value="{{$data->qty}}" disabled>
                         </div>
                     </div>
-                    <div class="row hiddenReason" style="display: none">
+                    <div class="row hiddenReason">
                         <div class="form-group col-12 col-md-12 col-lg-12">
                             <label for="reason">{{ __('Alasan') }}<code>*</code></label>
-                            <select class="select2 reason" name="reason">
-                                <option value="">- Select -</option>
+                            <select class="select2 reason" disabled name="reason">
+                                <option value="" selected>{{$data->reason}}</option>
                             </select>
                         </div>
                     </div>
-                    <div class="row hiddenBranch" style="display: none">
+                    <div class="row hiddenBranch" @if ($data->type != 'Mutation') style="display:none" @endif>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="origin">{{ __('Cabang Asal') }}<code>*</code></label>
-                            <select class="form-control origin" name="origin" readonly style="pointer-events: none;">
+                            <select class="form-control origin" disabled name="origin" readonly style="pointer-events: none;">
                                 <option value="">- Select -</option>
                                 @foreach ($branch as $element)
                                     <option value="{{$element->id}}"
-                                    @if (Auth::user()->employee->branch_id == $element->id) selected @endif>{{$element->name}}</option>
+                                    @if ($data->branch_id == $element->id) selected @endif>{{$element->name}}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="destination">{{ __('Cabang Tujuan') }}<code>*</code></label>
-                            <select class="select2 destination" name="destination">
+                            <select class="select2 destination" disabled name="destination">
                                 <option value="">- Select -</option>
                                 @foreach ($branch as $element)
-                                    <option value="{{$element->id}}">{{$element->name}}</option>
+                                    <option @if ($data->branch_destination_id == $element->id) selected @endif value="{{$element->id}}">{{$element->name}}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -125,26 +113,23 @@
                     <div class="row">
                         <div class="form-group col-12 col-md-6 col-lg-8">
                             <label for="type">{{ __('Keterangan') }}<code>*</code></label>
-                            <textarea name="description" class="form-control validation" id="description" data-name="Keterangan"></textarea>
+                            <textarea name="description" disabled class="form-control validation"id="description" data-name="Keterangan">{{$data->description}}</textarea>
                         </div>
                        
                         <div class="form-group col-12 col-md-6 col-lg-2">
                             <label for="price">{{ __('Harga') }}<code>*</code></label>
-                            <input id="price" type="text" readonly class="form-control price"
-                                name="price" data-name="price">
+                            <input id="price" type="text" readonly class="form-control price validation"
+                                name="price" data-name="price" value="-">
                         </div>
                         <div class="form-group col-12 col-md-6 col-lg-2">
                             <label for="total">{{ __('Total') }}<code>*</code></label>
-                            <input id="total" type="text" readonly class="form-control total"
-                                name="total" data-name="total">
+                            <input id="total" type="text" readonly class="form-control total validation"
+                                name="total" data-name="total" value="{{$data->total}}">
                         </div>
                         
                     </div>
                 </div>
-                <div class="card-footer text-right">
-                    <button class="btn btn-primary mr-1" type="button" onclick="save()"><i class="far fa-save"></i>
-                        {{ __('Simpan Data') }}</button>
-                </div>
+              
             </div>
 
 
