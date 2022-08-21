@@ -2,7 +2,7 @@
         <thead>
             <tr>
                 <th colspan="2"><h5 style="color: #6777ef;">Menunggu Servis : {{ $tmanifest }}</h5></th>
-                <th colspan="2"><h5 style="color: #6777ef;">Proses Servis : {{ $tprogress+$tprogress2 }}</h5></th>
+                <th colspan="2"><h5 style="color: #6777ef;">Proses Servis : {{ $tprogress + $tprogress2 }}</h5></th>
                 <th colspan="2"><h5 style="color: #6777ef;">Total Transaksi : {{ $tr+$tr2 }}</h5></th>
             </tr>
         </thead>
@@ -76,6 +76,8 @@
                     <div class="badge badge-primary">Manifest</div><br><br>
                 @elseif ($service->work_status == 'Proses')
                     <div class="badge badge-warning">Proses</div><br><br>
+                @elseif ($service->work_status == 'Mutasi')
+                    <div class="badge badge-warning">Mutasi</div><br><br>
                 @endif
                 @if ($service->payment_status == 'Lunas')
                     <div class="badge badge-success">Lunas</div>
@@ -93,7 +95,7 @@
                 <table>
                     <tr>
                         <td>Kode</td>
-                        <th>{{ $service2->code }}</th>
+                        <th><a href="{{ route('service.show', $service2->id) }}">{{ $service2->code }}</a></th>
                     </tr>
                     <tr>
                         <td>Tanggal</td>
@@ -147,6 +149,8 @@
                     <div class="badge badge-primary">Manifest</div><br><br>
                 @elseif ($service2->work_status == 'Proses')
                     <div class="badge badge-warning">Proses</div><br><br>
+                @elseif ($service2->work_status == 'Mutasi')
+                    <div class="badge badge-warning">Mutasi</div><br><br>
                 @endif
                 @if ($service2->payment_status == 'Lunas')
                     <div class="badge badge-success">Lunas</div>
