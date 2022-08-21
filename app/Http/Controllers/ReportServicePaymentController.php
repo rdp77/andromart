@@ -149,7 +149,7 @@ class ReportServicePaymentController extends Controller
 
     public function printBranch(Request $req)
     {
-        $title = 'Laporan Pemabayaran Service per Cabang';
+        $title = 'Laporan Pembayaran Service per Cabang';
         $subtitle = ' ';
         $periode = $req->startDate2. ' - ' .$req->endDate2;
         $val = ' ';
