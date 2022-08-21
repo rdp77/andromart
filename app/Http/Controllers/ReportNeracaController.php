@@ -69,11 +69,11 @@ class ReportNeracaController extends Controller
         $accountDataPersediaan = AccountData::where('main_id', 3)
             ->groupBy('main_detail_id')
             ->get();
-        return $this->dataPersediaan($jurnal);
+        // return $this->dataPersediaan($jurnal);
         $dataPersediaan = $this->dataPersediaan($jurnal)[0];
         $dataPersediaanTotal = $this->dataPersediaan($jurnal)[1];
         // return $dataKas;
-        return [$dataPersediaan, $dataPersediaanTotal];
+        // return [$dataPersediaan, $dataPersediaanTotal];
 
         return view('pages.backend.report.reportNeraca', compact('dataKas', 'dataKasTotal', 'accountDataKas', 'accountDataPersediaan', 'dataPersediaan', 'dataPersediaanTotal'));
     }
