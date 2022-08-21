@@ -28,7 +28,8 @@
                                 <div class="row">
                                     <div class="form-group col-12 col-md-4 col-lg-4">
                                         <label for="startDate">{{ __('Tanggal Awal') }}<code>*</code></label>
-                                        <input id="startDate" type="text" class="form-control datepicker" name="startDate">
+                                        <input id="startDate" type="text" class="form-control datepicker"
+                                            name="startDate">
                                     </div>
                                     <div class="form-group col-12 col-md-4 col-lg-4">
                                         <label for="endDate">{{ __('Tanggal Akhir') }}<code>*</code></label>
@@ -94,7 +95,7 @@
                                 </tfoot>
                             </table>
                             {{-- <div class="dropHereTotalVal"></div> --}}
-    
+
                         </div>
                     </div>
                 </div>
@@ -137,93 +138,103 @@
                         } else {
                             var totalPengeluaran = 0;
                             $.each(data.result, function(index, value) {
-                                $.each(
-                                    value.journal_detail,
-                                    function(index1, value1) {
+                                    if (value.journal_detail[0]
+                                        .account_data.main_detail_id == 29 ||
+                                        value.journal_detail[0]
+                                        .account_data.main_detail_id == 12 ||
+                                        value.journal_detail[0]
+                                        .account_data.main_detail_id == 28 ||
+                                        value.type == 'Transfer Masuk') {
 
-                                        console.log(parseInt(
-                                            value.journal_detail[0]
-                                            .total
-                                        ).toLocaleString("en-US"));
+                                        $.each(
+                                            value.journal_detail,
+                                            function(index1, value1) {
 
-                                        if (data.cabang == null) {
-                                            jurnalDetailTransaksi[index] =
-                                                "<b>" +
-                                                value.journal_detail[0]
-                                                .account_data.code + "</b><br>" +
-                                                value.journal_detail[0]
-                                                .account_data.name;
-                                                jurnalDetailK[index] =
-                                                    " Rp. " +
-                                                    parseInt(
+                                                console.log(parseInt(
+                                                    value.journal_detail[0]
+                                                    .total
+                                                ).toLocaleString("en-US"));
+
+                                                if (data.cabang == null) {
+                                                    jurnalDetailTransaksi[index] =
+                                                        "<b>" +
                                                         value.journal_detail[0]
-                                                        .total
-                                                    ).toLocaleString("en-US");
-                                        } else {
-                                            if (
-                                                data.cabang ==
-                                                value.journal_detail[0]
-                                                .account_data.branch_id
-                                            ) {
-                                                jurnalDetailTransaksi[index] =
-                                                    "<b>" +
-                                                    value.journal_detail[0]
-                                                    .account_data.code +
-                                                    "</b><br>" +
-                                                    value.journal_detail[0]
-                                                    .account_data.name;
+                                                        .account_data.code + "</b><br>" +
+                                                        value.journal_detail[0]
+                                                        .account_data.name;
                                                     jurnalDetailK[index] =
                                                         " Rp. " +
                                                         parseInt(
-                                                            value
-                                                            .journal_detail[0]
+                                                            value.journal_detail[0]
                                                             .total
-                                                        ).toLocaleString(
-                                                            "en-US"
-                                                        );
+                                                        ).toLocaleString("en-US");
+                                                } else {
+                                                    if (
+                                                        data.cabang ==
+                                                        value.journal_detail[0]
+                                                        .account_data.branch_id
+                                                    ) {
+                                                        jurnalDetailTransaksi[index] =
+                                                            "<b>" +
+                                                            value.journal_detail[0]
+                                                            .account_data.code +
+                                                            "</b><br>" +
+                                                            value.journal_detail[0]
+                                                            .account_data.name;
+                                                        jurnalDetailK[index] =
+                                                            " Rp. " +
+                                                            parseInt(
+                                                                value
+                                                                .journal_detail[0]
+                                                                .total
+                                                            ).toLocaleString(
+                                                                "en-US"
+                                                            );
+                                                    }
+                                                }
                                             }
-                                        }
-                                    }
-                                );
-                                if (jurnalDetailK[index] == undefined) {
-                                    var jurnalDetailKReal = "";
-                                } else {
-                                    var jurnalDetailKReal = jurnalDetailK[index];
-                                }
-                               
-                                if (jurnalDetailTransaksi[index] != undefined) {
-                                    
-                                        totalPengeluaran += value.total;
-
-                                        $(".dropHere").append(
-                                            "<tr>" +
-                                            "<td><b>" +
-                                            value.code +
-                                            "</b><br>" +
-                                            value.type +
-                                            "</td>" +
-                                            "<td><b>" +
-                                            moment(value.date).format(
-                                                "DD MMMM YYYY"
-                                            ) +
-                                            "</b></td>" +
-                                            "<td><b>" +
-                                            value.ref +
-                                            "</b><br>" +
-                                            value.description +
-                                            "</td>" +
-                                            "<td>" +
-                                            jurnalDetailTransaksi[index] +
-                                            "</td>" +
-                                            "<td><b>" +
-                                            jurnalDetailKReal +
-                                            "</b></td>" +
-                                            "</tr>"
                                         );
-                                    
-                                }
+                                        if (jurnalDetailK[index] == undefined) {
+                                            var jurnalDetailKReal = "";
+                                        } else {
+                                            var jurnalDetailKReal = jurnalDetailK[index];
+                                        }
 
-                            });
+                                        if (jurnalDetailTransaksi[index] != undefined) {
+
+                                            totalPengeluaran += value.total;
+
+                                            $(".dropHere").append(
+                                                "<tr>" +
+                                                "<td><b>" +
+                                                value.code +
+                                                "</b><br>" +
+                                                value.type +
+                                                "</td>" +
+                                                "<td><b>" +
+                                                moment(value.date).format(
+                                                    "DD MMMM YYYY"
+                                                ) +
+                                                "</b></td>" +
+                                                "<td><b>" +
+                                                value.ref +
+                                                "</b><br>" +
+                                                value.description +
+                                                "</td>" +
+                                                "<td>" +
+                                                jurnalDetailTransaksi[index] +
+                                                "</td>" +
+                                                "<td><b>" +
+                                                jurnalDetailKReal +
+                                                "</b></td>" +
+                                                "</tr>"
+                                            );
+
+                                        }
+
+                                    });
+                            }
+
 
                             $(".dropPengeluaran").text(
                                 "Rp. " +

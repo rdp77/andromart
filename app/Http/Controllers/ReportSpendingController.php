@@ -64,8 +64,8 @@ class ReportSpendingController extends Controller
             ->where('date', '<=', $this->DashboardController->changeMonthIdToEn($req->dateE))
             ->where(function ($query) {
                         $query->where('code', 'LIKE', '%KK%');
-                        $query->where('description', 'NOT LIKE', '%Transfer Keluar%');
-                        $query->where('description', 'NOT LIKE', '%Transfer Masuk%');
+                        // $query->where('description', 'NOT LIKE', '%Transfer Keluar%');
+                        // $query->where('description', 'NOT LIKE', '%Transfer Masuk%');
                  return $query->where('description', 'NOT LIKE', '%HPP%');
             })
             ->get();
