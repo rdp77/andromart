@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\ServicePaymentController;
+use App\Http\Controllers\ServiceItemsController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -76,6 +77,10 @@ Route::group(['prefix' => 'transaction'], function () {
             'print-service-payment/{id}',
             [ServicePaymentController::class, 'printServicePayment']
         )->name('service.printServicePayment');
+
+        // route service item / barang dagangan
+        Route::resource('service-items', ServiceItemsController::class);
+
 
     });
 });

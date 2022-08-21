@@ -260,7 +260,7 @@ function category() {
     $('.series').append('<option value="">- Select -</option>');
 
     $("#brandService").select2({
-        allowClear: true,
+        // allowClear: true,
         escapeMarkup: function (markup) {
             return markup;
         },

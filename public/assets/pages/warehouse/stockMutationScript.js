@@ -22,8 +22,10 @@ var table = $("#table").DataTable({
         { data: "dataQty" },
         { data: "updated_by" },
         { data: "description" },
+        
         // { data: "action", orderable: false, searchable: true },
     ],
+    order: [[0, 'desc']],
     buttons: [
         {
             extend: "print",
