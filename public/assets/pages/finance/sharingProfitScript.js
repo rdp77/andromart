@@ -173,26 +173,27 @@ function checkEmploye() {
                             totalAkhir += totalProfit;
                         
                         } else {
-                            if (value.sharing_profit_detail[0].sharing_profit.employe_id == technicianId) {
-                                if (value.sharing_profit_detail.length == 2) {
+                            
+                            if (value.sharing_profit_detail.length == 1) {
+                                if(value.sharing_profit_detail[0].sharing_profit.employe_id == technicianId){
                                     var pay =
                                     '<div class="badge badge-success">Sudah Dibayarkan</div>';
                                     var payDetail = "Sudah Dibayarkan";
                                     totalAkhir += 0;
-                                } else {
+                                }else{
                                     var pay =
                                     '<div class="badge badge-danger">Belum Bayar</div>';
                                     var payDetail = "Belum Bayar";
                                     totalAkhir += totalProfit;
                                 }
-                            } else {
+                            }else if(value.sharing_profit_detail.length == 2){
                                 var pay =
-                                '<div class="badge badge-danger">Belum Bayar</div>';
-                                var payDetail = "Belum Bayar";
-                                totalAkhir += totalProfit;
+                                '<div class="badge badge-success">Sudah Dibayarkan</div>';
+                                var payDetail = "Sudah Dibayarkan";
+                                totalAkhir += 0;
                             }
-                            console.log(value.sharing_profit_detail[0].sharing_profit.employe_id+' - - - '+value.technician_id);
-                         
+
+                            // console.log(value.sharing_profit_detail[0].sharing_profit.employe_id+' - - - '+value.technician_id);
                         }
                         // totalAkhir += totalProfit;
                         $(".dropHere").append(
