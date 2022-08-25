@@ -176,6 +176,7 @@ function checkEmploye() {
                                 '<div class="badge badge-danger">Belum Bayar</div>';
                                 var payDetail = "Belum Bayar";
                                 totalAkhir += totalProfit;
+                                console.log('cari belom bayar');
                             } else {
                                 var pay =
                                 '<div class="badge badge-success">Sudah Dibayarkan</div>';
@@ -393,11 +394,11 @@ function checkEmploye() {
                         if(value.technician_replacement_id == null){
                             var totalLossStore = value.total_loss_store;
                             var totalLossALL = totalLossTech + value.total_loss_store;
-                            console.log('teknisi 2 kosong');
+                            // console.log('teknisi 2 kosong');
                         }else{
                             var totalLossStore = parseInt(value.total_loss_store) / 2;
                             var totalLossALL = parseInt(value.total_loss_store / 2)+totalLossTech;
-                            console.log('teknisi 2 tidak kosong');
+                            // console.log('teknisi 2 tidak kosong');
                         }
 
                         if (value.loss_items_detail.length == 0) {
