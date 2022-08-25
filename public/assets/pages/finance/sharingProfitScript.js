@@ -166,22 +166,30 @@ function checkEmploye() {
                             var totalProfit = value.sharing_profit_technician_2;
                         }
                         if (value.sharing_profit_detail.length == 0) {
+                        
                             var pay =
                                 '<div class="badge badge-danger">Belum Bayar</div>';
                             var payDetail = "Belum Bayar";
                             totalAkhir += totalProfit;
+                        
                         } else {
-                            if (value.sharing_profit_detail[0].sharing_profit.employe_id == value.technician_id) {
-                                var pay =
-                                '<div class="badge badge-success">Sudah Dibayarkan</div>';
-                                var payDetail = "Sudah Dibayarkan";
-                                totalAkhir += 0;
+                            if (value.sharing_profit_detail[0].sharing_profit.employe_id == technicianId) {
+                                if (value.sharing_profit_detail.length == 2) {
+                                    var pay =
+                                    '<div class="badge badge-success">Sudah Dibayarkan</div>';
+                                    var payDetail = "Sudah Dibayarkan";
+                                    totalAkhir += 0;
+                                } else {
+                                    var pay =
+                                    '<div class="badge badge-danger">Belum Bayar</div>';
+                                    var payDetail = "Belum Bayar";
+                                    totalAkhir += totalProfit;
+                                }
                             } else {
                                 var pay =
                                 '<div class="badge badge-danger">Belum Bayar</div>';
                                 var payDetail = "Belum Bayar";
                                 totalAkhir += totalProfit;
-                                console.log('cari belom bayar');
                             }
                             console.log(value.sharing_profit_detail[0].sharing_profit.employe_id+' - - - '+value.technician_id);
                          
