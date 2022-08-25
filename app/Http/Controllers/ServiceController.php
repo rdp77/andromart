@@ -58,6 +58,7 @@ class ServiceController extends Controller
 
         if ($req->ajax()) {
             $data = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
+                ->whereNull('group_service')
                 ->orderBy('id', 'DESC')
                 // ->where('technician_id',Auth::user()->id)
                 ->get();
@@ -405,6 +406,7 @@ class ServiceController extends Controller
         $year = Carbon::now()->format('y');
         $co = Service::where('branch_id', Auth::user()->employee->branch_id)
             ->whereMonth('date', now())
+            ->whereNull('group_service')
             ->get();
         $index = count($co) + 1;
         // $index = DB::table('service')->max('id') + 1;

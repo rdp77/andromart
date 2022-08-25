@@ -85,10 +85,27 @@
                             </select>
                             {{-- <input id="series" type="text" class="form-control" name="series"> --}}
                         </div>
+                        <div class="form-group col-12 col-md-12 col-lg-12">
+                            <label for="items">{{ __('Barang') }}<code>*</code></label>
+                            <select class="items form-control validation" data-name="Tipe" id="itemsService" name="items">
+                                <option value="">- Select -</option>
+                                {{-- @foreach ($type as $element)
+                                <option value="{{$element->id}}">{{$element->name}}</option>
+                                @endforeach --}}
+                            </select>
+                            {{-- <input id="series" type="text" class="form-control" name="series"> --}}
+                        </div>
 
                         @foreach ($brand as $el)
                             <input class="brandData" type="hidden"
                             data-category="{{$el->category_id}}"
+                            data-name="{{$el->name}}"
+                            value="{{$el->id}}">
+                        @endforeach
+
+                        @foreach ($type as $el)
+                            <input class="seriesData" type="hidden"
+                            data-brand="{{$el->brand_id}}"
                             data-name="{{$el->name}}"
                             value="{{$el->id}}">
                         @endforeach
@@ -122,22 +139,16 @@
                         </div>
                     </div>
 
-                    <h6 style="color: #6777ef">Data Customer</h6>
+                    <h6 style="color: #6777ef">Data Pembeli</h6>
                     <br>
                     <div class="row">
-                        <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="customerName">{{ __('Nama') }}<code>*</code></label>
-                            <input id="customerName" type="text" class="form-control validation" data-name="Nama Customer" name="customerName">
-                        </div>
-                        <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="series">{{ __('Member') }}<code>*</code></label>
+                      
+                        <div class="form-group col-12 col-md-12 col-lg-12">
+                            <label for="series">{{ __('Crew') }}<code>*</code></label>
                             <select class="select2 customerId" name="customerId" onchange="customerChange()">
                                 <option value="">- Select -</option>
-                                @foreach ($customer as $element)
+                                @foreach ($employee as $element)
                                 <option value="{{$element->id}}"
-                                    data-name="{{$element->name}}"
-                                    data-address="{{$element->address}}"
-                                    data-phone="{{$element->contact}}"
                                     >{{$element->name}}</option>
                                 @endforeach
                                 {{-- <option value="Deny">Deny</option>
@@ -146,17 +157,6 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="form-group col-12 col-md-5 col-lg-5">
-                            <label for="customerPhone">{{ __('No Tlp') }}<code>*</code></label>
-                            <input id="customerPhone" type="text" class="form-control validation" data-name="Tlp Customer" name="customerPhone">
-                        </div>
-                        <div class="form-group col-12 col-md-7 col-lg-7">
-                            <label for="customerAdress">{{ __('Alamat') }}<code>*</code></label>
-                            <input id="customerAdress" type="text" class="form-control validation" data-name="alamat Customer" name="customerAdress">
-                        </div>
-                    </div>
-
                 </div>
             </div>
             <div class="card">
@@ -775,7 +775,7 @@
 @section('script')
 
 
-<script src="{{ asset('assets/pages/transaction/serviceScript.js') }}"></script>
+<script src="{{ asset('assets/pages/transaction/serviceItemsScript.js') }}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
 <style>
     .modal-backdrop{

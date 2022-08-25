@@ -81,6 +81,10 @@ Route::group(['prefix' => 'transaction'], function () {
         // route service item / barang dagangan
         Route::resource('service-items', ServiceItemsController::class);
 
+        Route::post(
+            'service-items/check-price-service-items',
+            [ServicePaymentController::class, 'checkPriceServiceItems']
+        )->name('service-items.checkPriceServiceItems');
 
     });
 });

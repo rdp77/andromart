@@ -58,6 +58,7 @@ class ServiceItemsController extends Controller
 
         if ($req->ajax()) {
             $data = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
+                ->whereNotNull('group_service')
                 ->orderBy('id', 'DESC')
                 // ->where('technician_id',Auth::user()->id)
                 ->get();
@@ -275,6 +276,7 @@ class ServiceItemsController extends Controller
         $year = Carbon::now()->format('y');
         $co = Service::where('branch_id', Auth::user()->employee->branch_id)
             ->whereMonth('date', now())
+            ->whereNotNull('group_service')
             ->get();
         $index = count($co) + 1;
         // $index = DB::table('service')->max('id') + 1;
@@ -307,7 +309,7 @@ class ServiceItemsController extends Controller
         if ($checkRoles == 'akses ditolak') {
             return view('forbidden');
         }
-        $code = $this->code('SRV');
+        $code = $this->code('SRVU');
         $employee = Employee::orderBy('name', 'ASC')->get();
         $item = Item::with('stock', 'supplier')
             ->where('name', '!=', 'Jasa Service')
@@ -360,6 +362,7 @@ class ServiceItemsController extends Controller
                     $MaxHandle = $settingPresentase[$i]->total;
                 }
             }
+
             if ($req->technicianId != 1) {
                 if ($tech1 + $tech2 >= $MaxHandle) {
                     return Response::json([
@@ -368,7 +371,8 @@ class ServiceItemsController extends Controller
                     ]);
                 }
             }
-            $codeNota = $this->code('SRV');
+        
+            $codeNota = $this->code('SRVU');
             $id = DB::table('service')->max('id') + 1;
             
             // mengecek apakah total menjadi 100%
@@ -448,6 +452,7 @@ class ServiceItemsController extends Controller
                 'total_hpp' => str_replace(',', '', $req->totalHppAtas),
                 'total_price' => str_replace(',', '', $req->totalPrice),
                 'work_status' => 'Manifest',
+                'group_service' => 'Upgrade',
                 'equipment' => $req->equipment,
                 'description' => $req->description,
                 'warranty_id' => $req->warranty,
@@ -684,6 +689,7 @@ class ServiceItemsController extends Controller
                     'description' => $dataEquipmentDesc[$i],
                 ]);
             }
+            
             DB::commit();
             return Response::json(['status' => 'success', 'message' => 'Data Tersimpan', 'id' => $id]);
         } catch (\Throwable $th) {
@@ -1465,163 +1471,13 @@ class ServiceItemsController extends Controller
             return Response::json(['status' => 'error', 'message' => $th]);
         }
     }
-    public function serviceFormUpdateStatus()
-    {
-        // where('technician_id',Auth::user()->id)->
-        $data = Service::get();
-        $employee = Employee::get();
-        return view('pages.backend.transaction.service.indexFormUpdateService', compact('data', 'employee'));
-    }
-    public function serviceFormUpdateStatusLoadData(Request $req)
-    {
-        $data = Service::with(['ServiceDetail', 'ServiceDetail.Items', 'ServiceStatusMutation', 'ServiceStatusMutation.Technician'])
-            ->where('id', $req->id)
-            ->first();
 
-        if ($data == null) {
-            $message = 'empty';
-        } else {
-            $message = 'exist';
-        }
+    public function FunctionName(Type $var = null)
+    {
 
-        return Response::json(['status' => 'success', 'result' => $data, 'message' => $message, 'url' => url('/')]);
     }
 
-    public function serviceFormUpdateStatusSaveData(Request $req)
-    {
-        // return $req->all();
-        try {
-            $checkData = Service::where('id', $req->serviceId)->first();
-            if ($checkData->technician_id == $req->technicianId) {
-                return Response::json(['status' => 'error', 'message' => 'Teknisi Mutasi Tidak boleh sama dengan teknisi awal']);
-            }
-            $image = $req->image;
-            $image = str_replace('data:image/jpeg;base64,', '', $image);
-            $image = base64_decode($image);
-            $index = ServiceStatusMutation::where('service_id', $req->serviceId)->count() + 1;
-            if ($image != null) {
-                $fileSave = 'public/Service_Update_Status_' . $req->status . '_' . $index . '_' . $checkData->code . '.' . 'png';
-                $fileName = 'Service_Update_Status_' . $req->status . '_' . $index . '_' . $checkData->code . '.' . 'png';
-                Storage::put($fileSave, $image);
-            }
-            // return 'asd';
-            // return $checkData;
-            $settingPresentase = SettingPresentase::get();
+  
 
-            // return $req->all();
-            for ($i = 0; $i < count($settingPresentase); $i++) {
-                if ($settingPresentase[$i]->name == 'Presentase Sharing Profit Toko') {
-                    $sharingProfitStore = $settingPresentase[$i]->total;
-                }
-                if ($settingPresentase[$i]->name == 'Presentase Sharing Profit Teknisi') {
-                    $sharingProfitTechnician = $settingPresentase[$i]->total;
-                }
-                if ($settingPresentase[$i]->name == 'Presentase Sharing Profit Teknisi 1') {
-                    $sharingProfitTechnician1 = $settingPresentase[$i]->total;
-                }
-                if ($settingPresentase[$i]->name == 'Presentase Sharing Profit Teknisi 2') {
-                    $sharingProfitTechnician2 = $settingPresentase[$i]->total;
-                }
-                if ($settingPresentase[$i]->name == 'Presentase Loss Toko') {
-                    $lossStore = $settingPresentase[$i]->total;
-                }
-                if ($settingPresentase[$i]->name == 'Presentase Loss Teknisi') {
-                    $lossTechnician = $settingPresentase[$i]->total;
-                }
-                if ($settingPresentase[$i]->name == 'Presentase Loss Teknisi 1') {
-                    $lossTechnician1 = $settingPresentase[$i]->total;
-                }
-                if ($settingPresentase[$i]->name == 'Presentase Loss Teknisi 2') {
-                    $lossTechnician2 = $settingPresentase[$i]->total;
-                }
-            }
-
-            if ($checkData->presentase_sharing_profit_technician_1 != 40 && $checkData->presentase_sharing_profit_technician_2 != 0 && $checkData->presentase_sharing_profit_store != 60) {
-                $sharingProfitStore = $checkData->presentaseStore;
-                $sharingProfitTechnician = $checkData->presentase_sharing_profit_technician_1;
-                // presentase yang disimpan di database
-                $presentaseSharingProfitTechnician1 = $checkData->presentase_sharing_profit_technician_1;
-                $presentaseSharingProfitTechnician2 = $checkData->presentase_sharing_profit_technician_2;
-                
-                $sharingProfitTechnician1 = $checkData->presentase_sharing_profit_technician_1;
-                $sharingProfitTechnician2 = $checkData->presentase_sharing_profit_technician_2;
-            }else{
-                $sharingProfitStore = $sharingProfitStore;
-                $sharingProfitTechnician =  $sharingProfitTechnician;
-                // presentase yang disimpan di database
-                $presentaseSharingProfitTechnician1 = $sharingProfitTechnician;
-                $presentaseSharingProfitTechnician2 = $sharingProfitTechnician2;
-
-                $sharingProfitTechnician1 = $sharingProfitTechnician1;
-                $sharingProfitTechnician2 = $sharingProfitTechnician2;
-            }
-            // return [$sharingProfitTechnician1,$sharingProfitTechnician2];
-            if ($req->status == 'Mutasi') {
-                $technician_replacement_id = $req->technicianId;
-                if ($checkData->total_loss_store == 0) {
-                    $total_loss_technician_1 = 0;
-                    $total_loss_technician_2 = 0;
-                } else {
-                    $total_loss_technician_1 = ($lossTechnician1 / 100) * $checkData->total_loss;
-                    $total_loss_technician_2 = ($lossTechnician2 / 100) * $checkData->total_loss;
-                }
-                $sharing_profit_technician_1 = ($sharingProfitTechnician1 / 100) * $checkData->total_service;
-                $sharing_profit_technician_2 = ($sharingProfitTechnician2 / 100) * $checkData->total_service;
-                $sharing_profit_store = ($sharingProfitTechnician2 / 100) * $checkData->total_service;
-            } else {
-                if ($checkData->technician_replacement_id != null) {
-                    $technician_replacement_id = $checkData->technician_replacement_id;
-                    $total_loss_technician_1 = $checkData->total_loss_technician_1;
-                    $total_loss_technician_2 = $checkData->total_loss_technician_2;
-                    $sharing_profit_technician_1 = $checkData->sharing_profit_technician_1;
-                    $sharing_profit_technician_2 = $checkData->sharing_profit_technician_2;
-                } else {
-                    $technician_replacement_id = null;
-                    $total_loss_technician_1 = $checkData->total_loss_technician_1;
-                    $total_loss_technician_2 = 0;
-                    $sharing_profit_technician_1 = $checkData->sharing_profit_technician_1;
-                    $sharing_profit_technician_2 = 0;
-                }
-            }
-
-            // return Response::json(['status' => 'error', 'message' => [$checkData,$sharingProfitTechnician1,$sharing_profit_technician_1,$checkData->presentaseTechnician1,$sharing_profit_technician_2,$sharingProfitTechnician2,$checkData->presentaseTechnician2,$sharingProfitStore]]);
-
-            // return [$sharing_profit_technician_1,$sharing_profit_technician_2];
-            Service::where('id', $req->serviceId)->update([
-                'work_status' => $req->status,
-                'technician_replacement_id' => $technician_replacement_id,
-                'total_loss_technician_1' => $total_loss_technician_1,
-                'total_loss_technician_2' => $total_loss_technician_2,
-                'sharing_profit_technician_1' => $sharing_profit_technician_1,
-                'sharing_profit_technician_2' => $sharing_profit_technician_2,
-                'presentase_sharing_profit_technician_1'=>$presentaseSharingProfitTechnician1,
-                'presentase_sharing_profit_technician_2'=>$presentaseSharingProfitTechnician2,
-            ]);
-            ServiceStatusMutation::create([
-                'service_id' => $req->serviceId,
-                'technician_id' => Auth::user()->id,
-                'index' => $index,
-                'image' => $fileName,
-                'status' => $req->status,
-                'description' => $req->description,
-                'created_by' => Auth::user()->name,
-                'created_at' => date('Y-m-d h:i:s'),
-            ]);
-            return Response::json(['status' => 'success', 'message' => 'Sukses Menyimpan Data','data'=>$checkData]);
-        } catch (\Throwable $th) {
-            // return $th;
-            return Response::json(['status' => 'error', 'message' => $th->getMessage()]);
-        }
-    }
-
-    public function trafficCount()
-    {
-        DB::table('traffic')->insert([
-            'date' => date('Y-m-d'),
-            'total' => 1,
-            'created_at' => date('Y-m-d h:i:s'),
-            'updated_at' => date('Y-m-d h:i:s'),
-        ]);
-        return Response::json(['status' => 'success', 'message' => 'Sukses Menyimpan Data']);
-    }
+    
 }
