@@ -176,7 +176,9 @@ function checkEmploye() {
                                 '<div class="badge badge-danger">Belum Bayar</div>';
                                 var payDetail = "Belum Bayar";
                                 totalAkhir += totalProfit;
+
                                 console.log('cari belom bayar');
+                            
                             } else {
                                 var pay =
                                 '<div class="badge badge-success">Sudah Dibayarkan</div>';
