@@ -171,10 +171,18 @@ function checkEmploye() {
                             var payDetail = "Belum Bayar";
                             totalAkhir += totalProfit;
                         } else {
-                            var pay =
+                            if (value.sharing_profit_detail[0].sharing_profit.employe_id != value.technician_id) {
+                                var pay =
+                                '<div class="badge badge-danger">Belum Bayar</div>';
+                                var payDetail = "Belum Bayar";
+                                totalAkhir += totalProfit;
+                            } else {
+                                var pay =
                                 '<div class="badge badge-success">Sudah Dibayarkan</div>';
-                            var payDetail = "Sudah Dibayarkan";
-                            totalAkhir += 0;
+                                var payDetail = "Sudah Dibayarkan";
+                                totalAkhir += 0;
+                            }
+                         
                         }
                         // totalAkhir += totalProfit;
                         $(".dropHere").append(
