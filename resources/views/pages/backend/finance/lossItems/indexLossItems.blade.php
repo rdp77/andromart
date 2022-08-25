@@ -92,5 +92,5 @@
 </div>
 @endsection
 @section('script')
-<script src="{{ asset('assets/pages/finance/lossItemsScript.js') }}"></script>
+<script src="{{ asset('assets/pages/finance/LossItemsScript.js') }}"></script>
 @endsection
