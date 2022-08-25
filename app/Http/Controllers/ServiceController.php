@@ -1666,7 +1666,9 @@ class ServiceController extends Controller
                 }
             }
 
-            if ($checkData->presentase_sharing_profit_technician_1 != 40 && $checkData->presentase_sharing_profit_technician_2 != 0 && $checkData->presentase_sharing_profit_store != 60) {
+            if (
+                $checkData->presentase_sharing_profit_technician_1 != null &&  $checkData->presentaseStore != null && $checkData->presentase_sharing_profit_technician_2 != null
+                ) {
                 $sharingProfitStore = $checkData->presentaseStore;
                 $sharingProfitTechnician = $checkData->presentase_sharing_profit_technician_1;
                 // presentase yang disimpan di database
@@ -1679,13 +1681,15 @@ class ServiceController extends Controller
                 $sharingProfitStore = $sharingProfitStore;
                 $sharingProfitTechnician =  $sharingProfitTechnician;
                 // presentase yang disimpan di database
-                $presentaseSharingProfitTechnician1 = $sharingProfitTechnician;
+                $presentaseSharingProfitTechnician1 = $sharingProfitTechnician1;
                 $presentaseSharingProfitTechnician2 = $sharingProfitTechnician2;
 
                 $sharingProfitTechnician1 = $sharingProfitTechnician1;
                 $sharingProfitTechnician2 = $sharingProfitTechnician2;
             }
-            // return [$sharingProfitTechnician1,$sharingProfitTechnician2];
+
+            // return [$sharingProfitStore,$presentaseSharingProfitTechnician1,$presentaseSharingProfitTechnician2];
+
             if ($req->status == 'Mutasi') {
                 $technician_replacement_id = $req->technicianId;
                 if ($checkData->total_loss_store == 0) {
