@@ -570,12 +570,12 @@ function hitung() {
     // console.log(str);
     // console.log(res);
     // console.log(SharingProfit.replace(",", ""));
-    console.log(SharingProfit);
-    console.log(Loss);
-    console.log(totalSubtraction);
-    console.log(parseInt(SharingProfit.replace(/,/g, "")));
-    console.log(parseInt(Loss.replace(/,/g, "")));
-    console.log(parseInt(totalSubtraction.replace(/,/g, "")));
+    // console.log(SharingProfit);
+    // console.log(Loss);
+    // console.log(totalSubtraction);
+    // console.log(parseInt(SharingProfit.replace(/,/g, "")));
+    // console.log(parseInt(Loss.replace(/,/g, "")));
+    // console.log(parseInt(totalSubtraction.replace(/,/g, "")));
     // console.log(parseInt(SharingProfit.replace(/,/g, "")-Loss.replace(/,/g, "")));
     // console.log(parseInt(SharingProfit.replace(/,/g, "")-Loss.replace(/,/g, "")-totalSubtraction.replace(/,/g, "")));
     var total = parseInt(
