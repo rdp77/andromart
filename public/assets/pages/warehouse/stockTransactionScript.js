@@ -139,7 +139,7 @@ function save(argument) {
         });
         return '';
     }
-    if ($('.stockSaatIni').val() < $('.qty').val()) {
+    if ($('.stockSaatIni').val() < $('.qty').val() && $('.checkType').find(':selected').val() != 'In') {
         iziToast.warning({
             type: 'warning',
             title: 'Qty tidak boleh lebih dari Stock Saat Ini'

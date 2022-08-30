@@ -60,7 +60,7 @@ class ReportNeracaController extends Controller
 
         // mendapatkan data kas
         $accountDataKas = AccountData::where('main_id', 1)
-            ->groupBy('main_detail_id')
+            // ->groupBy('main_detail_id')
             ->get();
         $dataKas = $this->dataKas($jurnal)[0];
         $dataKasTotal = $this->dataKas($jurnal)[1];
@@ -77,6 +77,8 @@ class ReportNeracaController extends Controller
 
         return view('pages.backend.report.reportNeraca', compact('dataKas', 'dataKasTotal', 'accountDataKas', 'accountDataPersediaan', 'dataPersediaan', 'dataPersediaanTotal'));
     }
+
+    // mencari data kas secara
     public function dataKas($jurnal)
     {
         $accountData = AccountData::where('main_id', 1)->get();
@@ -90,6 +92,8 @@ class ReportNeracaController extends Controller
                 $dataKas[$i]['total'] = 0;
             }
             $dataKas[$i]['akun'] = $accountData[$i]->main_detail_id;
+            $dataKas[$i]['akun_id'] = $accountData[$i]->id;
+            $dataKas[$i]['akun_nama'] = $accountData[$i]->name;
             for ($j = 0; $j < count($jurnal); $j++) {
                 for ($k = 0; $k < count($jurnal[$j]->JournalDetail); $k++) {
                     if ($accountData[$i]->main_detail_id == $jurnal[$j]->JournalDetail[$k]->AccountData->main_detail_id && $accountData[$i]->branch_id == $jurnal[$j]->JournalDetail[$k]->AccountData->branch_id) {
@@ -169,6 +173,7 @@ class ReportNeracaController extends Controller
                         ->where('main_id', 3)
                         ->where('main_detail_id', 11)
                         ->first();
+                        
                     array_push($dataRusak,[$transaction[$i]->id,$transaction[$i]->code,$transaction[$i]->qty*$transaction[$i]->item->buy,[$accountPersediaan->name,$accountPersediaan->id]]);
                
                 }elseif ($transaction[$i]->reason == 'Rusak') {
