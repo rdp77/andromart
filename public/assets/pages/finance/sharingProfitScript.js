@@ -141,6 +141,7 @@ function checkEmploye() {
     var dateE = $("#endDate").val();
     $(".dropHereTotal").text(0);
     $(".dropHereTotalVal").val(0);
+    $('.totalSharingProfit').val(0);
     $(".dropHere").empty();
     $.ajax({
         url: "/finance/sharing-profit/sharing-profit-load-data-service",
@@ -370,6 +371,7 @@ function checkEmploye() {
     $(".dropHereLossTotal").text(0);
     $(".dropHereLossTotalVal").val(0);
     $(".dropHereLoss").empty();
+    $('.totalLoss').val(0);
     $.ajax({
         url: "/finance/loss-items/loss-items-load-data-service",
         data: { id: technicianId, dateS: dateS, dateE: dateE },
