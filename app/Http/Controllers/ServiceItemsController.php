@@ -326,6 +326,7 @@ class ServiceItemsController extends Controller
 
     public function store(Request $req)
     {
+        // return $req->all();
         DB::beginTransaction();
         try {
             $tech1 = Service::where('technician_id', $req->technicianId)
@@ -372,7 +373,7 @@ class ServiceItemsController extends Controller
                 }
             }
         
-            $codeNota = $this->code('SRVU');
+            $codeNota = $this->code('SRVI');
             $id = DB::table('service')->max('id') + 1;
             
             // mengecek apakah total menjadi 100%
@@ -411,8 +412,8 @@ class ServiceItemsController extends Controller
             $image = str_replace('data:image/jpeg;base64,', '', $image);
             $image = base64_decode($image);
             if ($image != null) {
-                $fileSave = 'public/Service_' . $this->code('SRV') . '.' . 'png';
-                $fileName = 'Service_' . $this->code('SRV') . '.' . 'png';
+                $fileSave = 'public/Service_' . $this->code('SRVI') . '.' . 'png';
+                $fileName = 'Service_' . $this->code('SRVI') . '.' . 'png';
                 Storage::put($fileSave, $image);
             } else {
                 $fileName = null;

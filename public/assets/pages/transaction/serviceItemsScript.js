@@ -138,7 +138,7 @@ function save() {
                 return false;
             }
             $.ajax({
-                url: "/transaction/service/service",
+                url: "/transaction/service/service-items",
                 data: $(".form-data").serialize(),
                 type: 'POST',
                 // contentType: false,
@@ -273,20 +273,49 @@ function category() {
     });
 }
 
+// $(document.body).on("change",".brand",function(){
+//     var dataItems = [];
+//     $('.series').empty();
+//     var params = $('.brand').find(':selected').val();
+//     $.each($('.seriesData'), function(){
+//         if (params == $(this).data('brand')) {
+//             dataItems += '<option value="'+this.value+'">'+$(this).data('name')+'</option>';
+//         }
+//     });
+//     // alert('asd');
+//     $('.series').append('<option value="">- Select -</option>');
+//     $('.series').append(dataItems);
+
+//     $("#seriesService").select2({
+//         allowClear: true,
+//         escapeMarkup: function (markup) {
+//             return markup;
+//         },
+//         placeholder: "- Select -",
+//         language: {
+//             noResults: function () {
+//                 return "<a href='/master/type/type/create' target='_blank'>Tambah Seri</a>";
+//             },
+//         },
+//     });
+// });
+
 $(document.body).on("change",".brand",function(){
     var dataItems = [];
-    $('.series').empty();
+    $('.items').empty();
     var params = $('.brand').find(':selected').val();
-    $.each($('.seriesData'), function(){
+    // console.log(params);
+    $.each($('.itemsData'), function(){
+        // console.log($(this).data('brand'));
         if (params == $(this).data('brand')) {
-            dataItems += '<option value="'+this.value+'" data-buy="'+$(this).data('buy')+'">'+$(this).data('name')+$(this).data('buy')+'</option>';
+            dataItems += '<option value="'+this.value+'" data-buy="'+$(this).data('buy')+'">'+$(this).data('name')+' - '+$(this).data('buy')+'</option>';
         }
     });
     // alert('asd');
-    $('.series').append('<option value="">- Select -</option>');
-    $('.series').append(dataItems);
+    $('.items').append('<option value="">- Select -</option>');
+    $('.items').append(dataItems);
 
-    $("#seriesService").select2({
+    $("#itemsService").select2({
         allowClear: true,
         escapeMarkup: function (markup) {
             return markup;
@@ -299,6 +328,14 @@ $(document.body).on("change",".brand",function(){
         },
     });
 
+});
+
+$(document.body).on("change",".items",function(){
+    
+    var buy = $('.items').find(':selected').data('buy');
+    console.log(buy);
+    $('#totalPriceBuy').val(parseInt(buy).toLocaleString('en-US'));
+    sumTotalSell();
 });
 
 
@@ -760,6 +797,39 @@ function sumTotal() {
     }
 }
 
+
+function sumTotalSell(){
+    var checkVerificationPrice =  $('input[name="verificationPrice"]:checked').val();
+
+    if(isNaN(parseInt($('#totalSparePart').val()))){
+        var totalSparePart =  0;
+    }else{
+        var totalSparePart = $('#totalSparePart').val().replace(/,/g, ''),asANumber = +totalSparePart;}
+
+    if(isNaN(parseInt($('#totalService').val()))){
+        var totalService =  0;
+    }else{
+        var totalService = $('#totalService').val().replace(/,/g, ''),asANumber = +totalService;}
+
+    if(isNaN(parseInt($('#totalDiscountValue').val()))){
+        var totalDiscountValue =  0;
+    }else{
+        var totalDiscountValue = $('#totalDiscountValue').val().replace(/,/g, ''),asANumber = +totalDiscountValue;}
+
+    if(checkVerificationPrice == 'Y'){
+        var sumTotal = 0;
+    }else{
+        var sumTotal = parseInt(totalService)+parseInt(totalSparePart)-parseInt(totalDiscountValue);}
+
+    var totalValue = parseInt(totalService)+parseInt(totalSparePart);
+
+    if (totalDiscountValue <= totalValue) {
+        $('#totalPrice').val(parseInt(sumTotal).toLocaleString('en-US'));
+    }else{
+        $('#totalPrice').val(totalValue);
+        $('#totalDiscountValue').val(0);
+    }
+}
 
 
 // fungsi update status

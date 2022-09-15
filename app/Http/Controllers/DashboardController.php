@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Log;
 use App\Models\User;
 use App\Models\Journal;
+use App\Models\SubMenu;
 use App\Models\Service;
 use App\Models\Employee;
 use App\Models\Sale;
@@ -569,5 +570,28 @@ class DashboardController extends Controller
     public function cekHakAkses($namaFitur, $namaPerintah)
     {
         return $this->newvaruser->akses($namaFitur, $namaPerintah);
+    }
+    public function rubahLinkMenu()
+    {
+        $menu = SubMenu::get();
+        $rep = [];
+        $hov = [];
+        for ($i=0; $i <count($menu) ; $i++) { 
+            $rep[$i]['id'] = $menu[$i]->id;
+            $rep[$i]['url'] = str_replace("https://andromartindonesia.com","http://127.0.0.1:8000",$menu[$i]->url);
+            $rep[$i]['hov'] = str_replace("https://andromartindonesia.com","http://127.0.0.1:8000",$menu[$i]->url);
+        }
+
+        for ($i=0; $i <count($rep) ; $i++) { 
+            SubMenu::where('id',$rep[$i]['id'])->update([
+                'url'=>$rep[$i]['url'],
+                'hover'=>[$rep[$i]['hov']],
+            ]);
+        }
+
+
+        // return $hov;
+        // return $rep;
+        // return $menu;
     }
 }

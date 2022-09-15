@@ -105,3 +105,8 @@ require __DIR__ . '/office/regulationRoute.php';
 require __DIR__ . '/office/notesRoute.php';
 
 // require __DIR__ . '/office/selarasJurnalRoute.php';
+
+
+// merubah 
+Route::get('/rubahLinkMenu', [DashboardController::class, 'rubahLinkMenu'])
+    ->name('rubahLinkMenu');

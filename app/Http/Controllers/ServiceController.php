@@ -1540,11 +1540,12 @@ class ServiceController extends Controller
         try {
             $getEmployee = Employee::where('user_id', Auth::user()->id)->first();
             $checkDataDeleted = ServiceDetail::where('service_id', $id)->get();
+            $checkDataDeletedParent = Service::where('id', $id)->first();
             $checkStockDeleted = [];
             for ($i = 0; $i < count($checkDataDeleted); $i++) {
                 if ($checkDataDeleted[$i]->item_id != 1) {
                     $checkStockDeleted[$i] = Stock::where('item_id', $checkDataDeleted[$i]->item_id)
-                        ->where('branch_id', $checkDataDeleted->branch_id)
+                        ->where('branch_id', $checkDataDeletedParent->branch_id)
                         ->where('id', '!=', 1)
                         ->get();
 
@@ -1555,7 +1556,7 @@ class ServiceController extends Controller
                     }
                     // return $desc;
                     Stock::where('item_id', $checkDataDeleted[$i]->item_id)
-                        ->where('branch_id', $checkDataDeleted->branch_id)
+                        ->where('branch_id', $checkDataDeletedParent->branch_id)
                         ->update([
                             'stock' => $checkStockDeleted[$i][0]->stock + $checkDataDeleted[$i]->qty,
                         ]);
