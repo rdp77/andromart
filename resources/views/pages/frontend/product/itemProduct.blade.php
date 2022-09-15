@@ -17,11 +17,11 @@
 						</a>
 						<a href="{{ Route('frontendProductShowDetail', $row->id) }}">
 							<span class="product-thumb-info-image">
-								<img alt="" class="img-fluid" src="{{ asset('photo_product/1.jpg') }}">
+								<img alt="" class="img-fluid" src="{{ asset('photo_product/'.$row->image) }}" style="height: 200px; object-fit: cover;">
 							</span>
 						</a>
 						<span class="product-thumb-info-content product-thumb-info-content pl-0 bg-color-light">
-							<a href="shop-product-sidebar-left.html">
+							<a href="{{ Route('frontendProductShowDetail', $row->id) }}">
 								<h4 class="text-4 text-primary">{{ $row->name }}</h4>
 								<span class="price">
 									@if($row->discount != 0)

@@ -18,7 +18,7 @@
             <div class="row">
                 <div class="col-lg-6">
 
-                    <img alt="" class="img-fluid" src="{{ asset('photo_product/1.jpg') }}">
+                    <img alt="" class="img-fluid" src="{{ asset('photo_product/'.$itemProduct->image) }}">
 
                 </div>
                 <div class="col-lg-6">

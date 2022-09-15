@@ -57,6 +57,7 @@ class FrontendController extends Controller
         $itemProductCount = $queryProduct[1];
         $itemProductRound = intval(ceil($itemProductCount / 12));
         $contents = $this->globalContent;
+        // dd($itemProduct);
         return view('pages.frontend.product.indexItemProduct', compact('contents', 'carouselProduct', 'itemProduct', 'itemProductCount', 'itemProductRound', 'id', 'sort'));
     }
     public function productShowDetail($id)
@@ -248,7 +249,7 @@ class FrontendController extends Controller
             'model' => $model,
         ]);
     }
-    public function inputs(Request $request)
+    public function inputs(Request $req)
     {
         if($file = $req->file('image')){
             $dir = 'photo_frontend';
