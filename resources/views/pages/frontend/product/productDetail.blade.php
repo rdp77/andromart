@@ -58,7 +58,7 @@
                      <br /><br /><br />
                     <div>
                         <h6>Temukan kami di: </h6>
-                        <a href="https://api.whatsapp.com/send/?phone=6289662425357&text&app_absent=0">
+                        <a href="https://api.whatsapp.com/send/?phone=6285156462356&text&app_absent=0">
                             <img class="imageShop" src="https://assets.stickpng.com/images/5ae21cc526c97415d3213554.png">
                         </a>
                         @if($itemProduct->tokopedia != null)
