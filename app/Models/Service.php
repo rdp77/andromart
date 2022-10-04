@@ -71,6 +71,11 @@ class Service extends Model
         'updated_by',
         'created_at' ,
         'updated_at' ,
+        // service items
+        'group_service' ,
+        'total_price_buy' ,
+        'total_price_sell' ,
+
     ];
 
     public function ServiceDetail()
@@ -128,5 +133,13 @@ class Service extends Model
     public function user()
     {
         return $this->hasOne('App\Models\User');
+    }
+    public function Buyer()
+    {
+        return $this->belongsTo('App\Models\User', 'customer_id', 'id');
+    }
+    public function Items()
+    {
+        return $this->belongsTo('App\Models\Item', 'type', 'id');
     }
 }

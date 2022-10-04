@@ -65,12 +65,14 @@ class ReportCashBalanceController extends Controller
             $data[$i]['akun'] = $accountData[$i]->main_detail_id;
             $data[$i]['namaAkun'] = $accountData[$i]->name;
             $data[$i]['jurnal'] = [];
+            $data[$i]['kode'] = [];
             $data[$i]['dk'] = [];
             for ($j=0; $j <count($jurnal) ; $j++) {
                 for ($k=0; $k <count($jurnal[$j]->JournalDetail) ; $k++) { 
                     if ($accountData[$i]->main_detail_id == $jurnal[$j]->JournalDetail[$k]->AccountData->main_detail_id && $accountData[$i]->branch_id == $jurnal[$j]->JournalDetail[$k]->AccountData->branch_id) {
                         // $data[$i]['jurnal'][$j]['jurnalDetail'][$k] = $jurnal[$j];
                         array_push($data[$i]['jurnal'],$jurnal[$j]->total);
+                        array_push($data[$i]['kode'],$jurnal[$j]->code);
                         // array_push($data[$i]['dk'],[$jurnal[$j]->JournalDetail[$k]->debet_kredit,$jurnal[$j]->code]);
                         array_push($data[$i]['dk'],$jurnal[$j]->JournalDetail[$k]->debet_kredit);
                         if ($jurnal[$j]->JournalDetail[$k]->debet_kredit == 'D') {

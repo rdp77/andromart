@@ -46,7 +46,8 @@ function checkData() {
                                         value.journal_detail[0]
                                                     .account_data.main_detail_id == 28 ||
                                                     value.type == 'Transfer Masuk'     ||
-                                                    value.ref.includes('SMT') 
+                                                    value.ref.includes('SMT')          ||
+                                        value.ref.includes('PCS') 
  
                                     ) {
                                     } else {
@@ -158,7 +159,8 @@ function checkData() {
                                         value.journal_detail[0]
                                                     .account_data.main_detail_id == 28 ||
                                                     value.type == 'Transfer Masuk'||
-                                                    value.ref.includes('SMT')     
+                                                    value.ref.includes('SMT')     ||
+                                                    value.ref.includes('PCS') 
    
                                     ) {
                                     } else {
@@ -274,7 +276,8 @@ function checkData() {
                                         value.journal_detail[0]
                                                     .account_data.main_detail_id == 28 ||
                                         value.type == 'Transfer Masuk'||
-                                        value.ref.includes('SMT') 
+                                        value.ref.includes('SMT') ||
+                                        value.ref.includes('PCS') 
                                     ) {
                                     } else {
                                         if (data.cabang == null) {

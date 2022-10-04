@@ -80,11 +80,28 @@ Route::group(['prefix' => 'transaction'], function () {
 
         // route service item / barang dagangan
         Route::resource('service-items', ServiceItemsController::class);
+        
+        Route::post(
+            'service-items/check-journals',
+            [ServiceItemsController::class, 'checkJournals']
+        )->name('service-items.checkJournals');
+
+        Route::post(
+            'service-items/check-stock',
+            [ServiceItemsController::class, 'checkStock']
+        )->name('service-items.checkStock');
+
+        Route::get(
+            'service-items/{id}',
+            [ServiceItemsController::class, 'printService']
+        )->name('service-items.printService');
 
         Route::post(
             'service-items/check-price-service-items',
             [ServicePaymentController::class, 'checkPriceServiceItems']
         )->name('service-items.checkPriceServiceItems');
+
+
 
     });
 });

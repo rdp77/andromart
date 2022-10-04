@@ -18,27 +18,19 @@
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="form-group col-12 col-md-4 col-lg-4">
+                        <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="code">{{ __('Kode Faktur') }}<code>*</code></label>
                             <input id="code" type="text" class="form-control" readonly="" value="{{ $service->code }}" name="code">
                         </div>
-                        <div class="form-group col-12 col-md-4 col-lg-4">
+                        <div class="form-group col-12 col-md-6 col-lg-6">
                             <label for="date">{{ __('Tanggal') }}<code>*</code></label>
                             <input id="date" type="text" class="form-control datepicker" readonly=""
-                            value="{{ $service->date }}" name="date">
+                            value="{{ \Carbon\Carbon::parse($service->date)->locale('id')->isoFormat('LL') }}" name="date">
                         </div>
-                        <div class="form-group col-12 col-md-4 col-lg-4">
-                            <label for="warranty">{{ __('Garansi') }}<code>*</code></label>
-                            <select class="select2" name="warranty">
-                                <option value="">- Select -</option>
-                                @foreach ($warranty as $element)
-                                    <option @if ($service->warranty_id == $element->id) selected @endif value="{{$element->id}}">{{$element->periode}} {{$element->name}}</option>
-                                @endforeach
-                            </select>
-                        </div>
+                       
                     </div>
                     <div class="row">
-                        <div class="form-group col-12 col-md-6 col-lg-6">
+                        <div class="form-group col-12 col-md-12 col-lg-12">
                             <div class="d-block">
                                 <label for="technicianId"
                                     class="control-label">{{ __('Teknisi') }}<code>*</code></label>
@@ -50,18 +42,9 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="estimateDate">{{ __('Estimasi') }}<code>*</code></label>
-                            <input id="estimateDate" type="text" value="{{ $service->estimate_date }}" class="form-control datepicker" name="estimateDate">
-                        </div>
+                     
                     </div>
-                    <div class="row">
-                        <div class="form-group col-12 col-md-12 col-lg-12">
-                            <label for="estimateDay">{{ __('Analisa') }}<code>*</code></label>
-                            <input id="estimateDay" type="text" value="{{$service->estimate_day}}" class="form-control" name="estimateDay">
-                        </div>
-                    </div>
-
+                  
                     <h6 style="color: #6777ef">Data Barang</h6>
                     <br>
                     <div class="row">
@@ -89,12 +72,13 @@
                             {{-- <input id="brand" type="text" class="form-control" name="brand"> --}}
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
-                            <label for="series">{{ __('Seri') }}<code>*</code></label>
-                            <select class="select2 series" name="series">
+                            <label for="items">{{ __('Barang') }}<code>*</code></label>
+                            <select class="select2 items form-control validation" data-name="Items" id="itemsService"
+                            name="items">
                                 <option value="">- Select -</option>
-                                @foreach ($type as $element)
+                                @foreach ($item as $element)
                                     @if ($element->brand_id == $service->brand)
-                                        <option @if ($service->series == $element->id) selected @endif value="{{$element->id}}">{{$element->name}}</option>
+                                        <option @if ($service->series == $element->id) selected @endif value="{{$element->id}}">{{$element->name}} - {{number_format($element->buy,0,',','.')}}</option>
                                     @endif
                                 @endforeach
                             </select>
@@ -136,23 +120,17 @@
                         </div>
                     </div>
 
-                    <h6 style="color: #6777ef">Data Customer</h6>
+                    <h6 style="color: #6777ef">Data Pembeli</h6>
                     <br>
                     <div class="row">
-                        <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="customerName">{{ __('Nama') }}<code>*</code></label>
-                            <input id="customerName" value="{{$service->customer_name}}" type="text" class="form-control validation" data-name="Nama Customer" name="customerName">
-                        </div>
-                        <div class="form-group col-12 col-md-6 col-lg-6">
+                      
+                        <div class="form-group col-12 col-md-12 col-lg-12">
                             <label for="series">{{ __('Member') }}<code>*</code></label>
                             <select class="select2 customerId" name="customerId" onchange="customerChange()">
                                 <option value="">- Select -</option>
-                                @foreach ($customer as $element)
-                                <option @if ($service->customer_id == $element->id) selected @endif value="{{$element->id}}"
-                                    data-name="{{$element->name}}"
-                                    data-address="{{$element->address}}"
-                                    data-phone="{{$element->contact}}"
-                                    >{{$element->name}}</option>
+                                @foreach ($employee as $element)
+                                    <option value="{{ $element->id }}" @if ($element->id == $service->customer_id) selected
+                                    @endif>{{ $element->name }}</option>
                                 @endforeach
                                 {{-- <option value="Deny">Deny</option>
                                 <option value="Rizal">Rizal</option>
@@ -160,16 +138,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="form-group col-12 col-md-5 col-lg-5">
-                            <label for="customerPhone">{{ __('No Tlp') }}<code>*</code></label>
-                            <input id="customerPhone" value="{{$service->customer_phone}}" type="text" class="form-control validation" data-name="Tlp Customer" name="customerPhone">
-                        </div>
-                        <div class="form-group col-12 col-md-7 col-lg-7">
-                            <label for="customerAdress">{{ __('Alamat') }}<code>*</code></label>
-                            <input id="customerAdress" value="{{$service->customer_address}}" type="text" class="form-control validation" data-name="alamat Customer" name="customerAdress">
-                        </div>
-                    </div>
+                  
 
                 </div>
             </div>
@@ -370,19 +339,9 @@
                 </div>
                 <div class="card-body">
                     <div class="form-group">
-                        <label class="form-label">Harga Perlu Dikonfirmasi Terlebih Dahulu</label>
-                        <div class="selectgroup w-100">
-                            <label class="selectgroup-item">
-                                <input type="radio" name="verificationPrice" value="Y" @if ($service->verification_price == 'Y') checked @endif onchange="sumTotal()"
-                                    class="selectgroup-input">
-                                <span class="selectgroup-button">Ya</span>
-                            </label>
-                            <label class="selectgroup-item">
-                                <input type="radio" name="verificationPrice" value="N" @if ($service->verification_price == 'N') checked @endif onchange="sumTotal()"
-                                    class="selectgroup-input">
-                                <span class="selectgroup-button">Tidak</span>
-                            </label>
-                        </div>
+                        <label for="totalPriceBuy">{{ __('Harga Beli') }}<code>*</code></label>
+                        <input readonly id="totalPriceBuy" onchange="sumTotal()" type="text" value="{{$service->total_price_buy}}"
+                            class="form-control cleaveNumeral" name="totalPriceBuy" style="text-align: right">
                     </div>
                     <div class="form-group">
                         <label for="totalService">{{ __('Jasa') }}<code>*</code></label>
@@ -392,6 +351,39 @@
                         <label for="totalSparePart">{{ __('Spare Part') }}<code>*</code></label>
                         <input readonly id="totalSparePart" onchange="sumTotal()" type="text" value="{{$service->total_part}}" class="form-control cleaveNumeral" name="totalSparePart" style="text-align: right">
                     </div>
+                    <div class="form-group" style="display: none">
+                        <label for="totalDownPayment">{{ __('Down Payment (DP)') }}<code>*</code></label>
+                        <input id="totalDownPayment" type="text" value="0" class="form-control cleaveNumeral"
+                            name="totalDownPayment" style="text-align: right">
+                    </div>
+                 
+                    <div class="form-group">
+                        <label for="totalPrice">{{ __('Total Harga Service') }}<code>*</code></label>
+                        <input readonly id="totalPrice" type="text" value="{{$service->total_price}}"
+                            class="form-control cleaveNumeral" name="totalPrice" onchange="sumTotal()"
+                            style="text-align: right">
+                    </div>
+                    
+                </div>
+
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h4>Total Harga Jual</h4>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="totalPriceSell">{{ __('Total Harga Jual') }}<code>*</code></label>
+                        <input id="totalPriceSell" type="text" value="{{$service->total_price_sell}}" class="form-control cleaveNumeral"
+                            name="totalPriceSell" style="text-align: right">
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header">
+                    <h4>Loss & HPP</h4>
+                </div>
+                <div class="card-body">
                     <div class="form-group">
                         <label for="totalLoss">{{ __('Total Loss') }}<code>*</code></label>
                         <input readonly id="totalLoss" onchange="sumTotal()" type="text" value="{{$service->total_loss}}"
@@ -402,58 +394,9 @@
                         <input id="totalHppAtas" type="text" readonly value="{{$service->total_hpp}}" class="form-control cleaveNumeral"
                             name="totalHppAtas" style="text-align: right">
                     </div>
-                    <div class="form-group" style="display: none">
-                        <label for="totalDownPayment">{{ __('Down Payment (DP)') }}<code>*</code></label>
-                        <input id="totalDownPayment" type="text" value="0" class="form-control cleaveNumeral"
-                            name="totalDownPayment" style="text-align: right">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Satuan Diskon Yang Dipakai</label>
-                        <div class="selectgroup w-100">
-                            <label class="selectgroup-item">
-                                <input type="radio" name="typeDiscount" value="percent" @if ($service->discount_type == 'percent') checked @endif onchange="changeDiscount('percent'),sumTotal()" checked
-                                    class="selectgroup-input">
-                                <span class="selectgroup-button">Persentase (%)</span>
-                            </label>
-                            <label class="selectgroup-item">
-                                <input type="radio" name="typeDiscount" value="value" @if ($service->discount_type == 'value') checked @endif onchange="changeDiscount('value'),sumTotal()"
-                                    class="selectgroup-input">
-                                <span class="selectgroup-button">Harga (RP)</span>
-                            </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="totalDiscountPercent">{{ __('Diskon %') }}<code>*</code></label>
-                            <input id="totalDiscountPercent"
-                            @if ($service->discount_type == 'value')
-                                style="pointer-events:none"
-                                style="background-color:#e9ecef"
-                            @endif
-                            style="text-align: right"
-                            type="text" value="{{$service->discount_percent}}" class="form-control cleaveNumeral"
-                            name="totalDiscountPercent" onkeyup="sumTotal(),sumDiscont()">
-                        </div>
-                        <div class="form-group col-12 col-md-6 col-lg-6">
-                            <label for="totalDiscountValue">{{ __('Diskon') }}<code>*</code></label>
-                            <input id="totalDiscountValue"
-                            @if ($service->discount_type == 'percent')
-                                style="pointer-events:none"
-                                style="background-color:#e9ecef"
-                            @endif
-                            style="text-align: right"
-                            type="text" value="{{$service->discount_price}}" class="form-control cleaveNumeral"
-                            name="totalDiscountValue" onkeyup="sumTotal(),sumDiscontValue()">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="totalPrice">{{ __('Total Harga') }}<code>*</code></label>
-                        <input id="totalPrice" type="text" value="{{$service->total_price}}" class="form-control cleaveNumeral"
-                            name="totalPrice" onchange="sumTotal()" style="text-align: right">
-                    </div>
                 </div>
-
             </div>
+            
             <div class="card">
                 <div class="card-header">
                     <h4>Kondisi Serah Terima Unit</h4>

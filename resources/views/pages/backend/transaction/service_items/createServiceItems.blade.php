@@ -810,8 +810,6 @@
 
 
 @section('script')
-
-
     <script src="{{ asset('assets/pages/transaction/serviceItemsScript.js') }}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/webcamjs/1.0.25/webcam.min.js"></script>
     <style>
@@ -820,6 +818,9 @@
         }
     </style>
     <script language="JavaScript">
+        // mengecek stock barang
+   
+
         $(document).ready(function() {
             Webcam.set({
                 width: 700,

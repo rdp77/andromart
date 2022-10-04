@@ -18,7 +18,7 @@ var table = $("#table").DataTable({
     columns: [
         // { data: "code" },
         { data: "Informasi" },
-        { data: "dataCustomer" },
+        { data: "dataBuyer" },
         { data: "dataItem" },
         { data: "finance" },
         { data: "currentStatus" },
@@ -273,33 +273,6 @@ function category() {
     });
 }
 
-// $(document.body).on("change",".brand",function(){
-//     var dataItems = [];
-//     $('.series').empty();
-//     var params = $('.brand').find(':selected').val();
-//     $.each($('.seriesData'), function(){
-//         if (params == $(this).data('brand')) {
-//             dataItems += '<option value="'+this.value+'">'+$(this).data('name')+'</option>';
-//         }
-//     });
-//     // alert('asd');
-//     $('.series').append('<option value="">- Select -</option>');
-//     $('.series').append(dataItems);
-
-//     $("#seriesService").select2({
-//         allowClear: true,
-//         escapeMarkup: function (markup) {
-//             return markup;
-//         },
-//         placeholder: "- Select -",
-//         language: {
-//             noResults: function () {
-//                 return "<a href='/master/type/type/create' target='_blank'>Tambah Seri</a>";
-//             },
-//         },
-//     });
-// });
-
 $(document.body).on("change",".brand",function(){
     var dataItems = [];
     $('.items').empty();
@@ -308,7 +281,7 @@ $(document.body).on("change",".brand",function(){
     $.each($('.itemsData'), function(){
         // console.log($(this).data('brand'));
         if (params == $(this).data('brand')) {
-            dataItems += '<option value="'+this.value+'" data-buy="'+$(this).data('buy')+'">'+$(this).data('name')+' - '+$(this).data('buy')+'</option>';
+            dataItems += '<option value="'+this.value+'" data-buy="'+$(this).data('buy')+'">'+$(this).data('name')+' - '+parseInt($(this).data('buy')).toLocaleString('en-US')+'</option>';
         }
     });
     // alert('asd');
@@ -332,11 +305,32 @@ $(document.body).on("change",".brand",function(){
 
 $(document.body).on("change",".items",function(){
     
+    var id = $('.items').find(':selected').val();
     var buy = $('.items').find(':selected').data('buy');
     console.log(buy);
     $('#totalPriceBuy').val(parseInt(buy).toLocaleString('en-US'));
     sumTotalSell();
+
+    $.ajax({
+        url: "/transaction/service/service-items/check-stock",
+        data: { id: id },
+        type: "POST",
+        success: function (data) {
+            if(data.status == 'success'){
+                iziToast.success({
+                    type: 'success',
+                    title: 'Stock Ada'
+                });
+            }else{
+                iziToast.warning({
+                    type: 'warning',
+                    title: 'Stock Item/Barang Kosong'
+                });
+            }
+        }
+    });
 });
+
 
 
 function addItem() {
@@ -854,4 +848,47 @@ function checkPriceServiceItems() {
     });
 }
 
+
+function jurnal(params) {
+    // $('.dropHereJournals').
+    $.ajax({
+        url: "/transaction/service/service-items/check-journals",
+        data: { id: params },
+        type: "POST",
+        success: function (data) {
+            if (data.status == "success") {
+                $(".dropHereJournals").empty();
+
+                $.each(data.jurnal[0].journal_detail, function (index, value) {
+                    if (value.debet_kredit == "K") {
+                        var dk =
+                            "<td>0</td><td>" +
+                            parseInt(value.total).toLocaleString("en-US") +
+                            "</td>";
+                    } else {
+                        var dk =
+                            "<td>" +
+                            parseInt(value.total).toLocaleString("en-US") +
+                            "</td><td>0</td>";
+                    }
+                    $(".dropHereJournals").append(
+                        "<tr>" +
+                            "<td>" +
+                            value.account_data.code +
+                            "</td>" +
+                            "<td>" +
+                            value.account_data.name +
+                            "</td>" +
+                            dk +
+                            "</tr>"
+                    );
+                });
+            }
+            $(".exampleModal").modal("show");
+        },
+    });
+}
+
+
+// mengecek stock barang
 

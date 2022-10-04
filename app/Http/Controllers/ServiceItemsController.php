@@ -14,6 +14,9 @@ use App\Models\Employee;
 use App\Models\Service;
 use App\Models\ServiceEquipment;
 use App\Models\ServiceCondition;
+use App\Models\Journal;
+use App\Models\AccountData;
+use App\Models\JournalDetail;
 use App\Models\Warranty;
 use App\Models\SettingPresentase;
 use App\Models\ServiceDetail;
@@ -57,7 +60,7 @@ class ServiceItemsController extends Controller
         // return new User::akses();
 
         if ($req->ajax()) {
-            $data = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
+            $data = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand','Items','Buyer'])
                 ->whereNotNull('group_service')
                 ->orderBy('id', 'DESC')
                 // ->where('technician_id',Auth::user()->id)
@@ -76,13 +79,11 @@ class ServiceItemsController extends Controller
                             data-toggle="dropdown">
                             <span class="sr-only">Toggle Dropdown</span>
                         </button><div class="dropdown-menu">';
-                    if ($row->payment_status == null) {
-                        $actionBtn .= '<a class="dropdown-item" href="' . route('service.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
-                        $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
-                    } elseif ($row->payment_status == 'DownPayment') {
-                        $actionBtn .= '<a class="dropdown-item" href="' . route('service.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
-                    }
-                    $actionBtn .= '<a class="dropdown-item" href="' . route('service.printService', $row->id) . '"><i class="fas fa-print"></i> Cetak</a>';
+                    $actionBtn .= '<a class="dropdown-item" href="' . route('service-items.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
+                    $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
+                    $actionBtn .= '<a onclick="jurnal('."'$row->code'".')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-file"></i> Jurnal</a>';
+                  
+                    $actionBtn .= '<a class="dropdown-item" href="' . route('service-items.printService', $row->id) . '"><i class="fas fa-print"></i> Cetak</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
@@ -130,16 +131,10 @@ class ServiceItemsController extends Controller
 
                     return $htmlAdd;
                 })
-                ->addColumn('dataCustomer', function ($row) {
+                ->addColumn('dataBuyer', function ($row) {
                     $htmlAdd = '<table>';
                     $htmlAdd .= '<tr>';
-                    $htmlAdd .= '<th>' . $row->customer_name . '</th>';
-                    $htmlAdd .= '</tr>';
-                    // $htmlAdd .=   '<tr>';
-                    // $htmlAdd .=      '<th>'.$row->customer_address.'</th>';
-                    // $htmlAdd .=   '</tr>';
-                    $htmlAdd .= '<tr>';
-                    $htmlAdd .= '<th>' . $row->customer_phone . '</th>';
+                    $htmlAdd .= '<th>' . $row->Buyer->name . '</th>';
                     $htmlAdd .= '</tr>';
                     $htmlAdd .= '<table>';
 
@@ -150,14 +145,20 @@ class ServiceItemsController extends Controller
                     $htmlAdd .= '<tr>';
                     $htmlAdd .= '<td>Merk</td>';
                     $htmlAdd .= '<th>' . $row->Brand->name . '</th>';
+                    $htmlAdd .= '<td>Harga Beli</td>';
+                    $htmlAdd .= '<th>' . number_format($row->total_price_buy, 0, '.', ',') . '</th>';
                     $htmlAdd .= '</tr>';
                     $htmlAdd .= '<tr>';
-                    $htmlAdd .= '<td>Seri</td>';
-                    $htmlAdd .= '<th>' . $row->Type->name . '</th>';
+                    $htmlAdd .= '<td>Items</td>';
+                    $htmlAdd .= '<th>' . $row->Items->name . '</th>';
+                    $htmlAdd .= '<td>Total Service/Jasa</td>';
+                    $htmlAdd .= '<th>' . number_format($row->total_price, 0, '.', ',') . '</th>';
                     $htmlAdd .= '</tr>';
                     $htmlAdd .= '<tr>';
                     $htmlAdd .= '<td>Kategori</td>';
                     $htmlAdd .= '<th>' . $row->Brand->Category->name . '</th>';
+                    $htmlAdd .= '<td>Harga Jual</td>';
+                    $htmlAdd .= '<th>' . number_format($row->total_price_sell, 0, '.', ',') . '</th>';
                     $htmlAdd .= '</tr>';
                     $htmlAdd .= '<tr>';
                     $htmlAdd .= '<td>IMEI</td>';
@@ -233,14 +234,7 @@ class ServiceItemsController extends Controller
                         // $workStatus = '<div class="badge badge-success">Status Tidak Diketahui</div>';
                     // }
 
-                    if ($row->payment_status == 'Lunas') {
-                        $paymentStatus = '<div class="badge badge-success">Lunas</div>';
-                    } elseif ($row->payment_status == 'DownPayment') {
-                        $paymentStatus = '<div class="badge badge-warning">Bayar DP</div>';
-                    } elseif ($row->payment_status == null) {
-                        $paymentStatus = '<div class="badge badge-danger">Belum Bayar</div>';
-                    }
-
+                
                     $htmlAdd = '<table>';
                     $htmlAdd .= '<tr>';
                     $htmlAdd .= '<td>Status Pekerjaan</td>';
@@ -249,24 +243,16 @@ class ServiceItemsController extends Controller
                     $htmlAdd .= '<th>' . $workStatus . '</th>';
                     $htmlAdd .= '</tr>';
                     $htmlAdd .= '<tr>';
-                    $htmlAdd .= '<td>Status Pembayaran</td>';
-                    $htmlAdd .= '</tr>';
-                    $htmlAdd .= '<tr>';
-                    $htmlAdd .= '<th>' . $paymentStatus . '</th>';
-                    $htmlAdd .= '</tr>';
                     $htmlAdd .= '<table>';
 
                     return $htmlAdd;
                 })
 
-                ->rawColumns(['action', 'dataItem', 'dataCustomer', 'finance', 'Informasi', 'currentStatus'])
+                ->rawColumns(['action', 'dataItem', 'dataBuyer', 'finance', 'Informasi', 'currentStatus'])
                 ->make(true);
         }
         return view('pages.backend.transaction.service_items.indexServiceItems');
     }
-
-
-
     public function code($type)
     {
         $getEmployee = Employee::with('branch')
@@ -326,9 +312,11 @@ class ServiceItemsController extends Controller
 
     public function store(Request $req)
     {
+
         // return $req->all();
         DB::beginTransaction();
         try {
+            // return Items::where('id',$req->items)->get();
             $tech1 = Service::where('technician_id', $req->technicianId)
                 ->where('work_status', '!=', 'Selesai')
                 ->where('work_status', '!=', 'Cancel')
@@ -373,7 +361,7 @@ class ServiceItemsController extends Controller
                 }
             }
         
-            $codeNota = $this->code('SRVI');
+            $codeNota = $this->code('SRVU');
             $id = DB::table('service')->max('id') + 1;
             
             // mengecek apakah total menjadi 100%
@@ -400,20 +388,20 @@ class ServiceItemsController extends Controller
                 $presentaseSharingProfitTechnician2 = 0;
             }
 
-            $sharing_profit_store = ((str_replace(',', '', $req->totalService) - str_replace(',', '', $req->totalDiscountValue)) / 100) * $sharingProfitStore + str_replace(',', '', $req->totalSparePart);
-            $sharing_profit_technician_1 = ((str_replace(',', '', $req->totalService) - str_replace(',', '', $req->totalDiscountValue)) / 100) * $sharingProfitTechnician;
+            $sharing_profit_store = ((str_replace(',', '', $req->totalService)) / 100) * $sharingProfitStore + str_replace(',', '', $req->totalSparePart);
+            $sharing_profit_technician_1 = ((str_replace(',', '', $req->totalService)) / 100) * $sharingProfitTechnician;
 
             $total_loss_technician_1 = (str_replace(',', '', $req->totalLoss) / 100) * $lossTechnician;
             $total_loss_store = (str_replace(',', '', $req->totalLoss) / 100) * $lossStore;
 
-            $estimateDate = $this->DashboardController->changeMonthIdToEn($req->estimateDate);
+            $estimateDate = $this->DashboardController->changeMonthIdToEn($req->date);
 
             $image = $req->image;
             $image = str_replace('data:image/jpeg;base64,', '', $image);
             $image = base64_decode($image);
             if ($image != null) {
-                $fileSave = 'public/Service_' . $this->code('SRVI') . '.' . 'png';
-                $fileName = 'Service_' . $this->code('SRVI') . '.' . 'png';
+                $fileSave = 'public/Service_' . $this->code('SRVU') . '.' . 'png';
+                $fileName = 'Service_' . $this->code('SRVU') . '.' . 'png';
                 Storage::put($fileSave, $image);
             } else {
                 $fileName = null;
@@ -425,14 +413,14 @@ class ServiceItemsController extends Controller
                 'user_id' => Auth::user()->id,
                 'branch_id' => $getEmployee->branch_id,
                 'customer_id' => $req->customerId,
-                'customer_name' => $req->customerName,
-                'customer_address' => $req->customerAdress,
-                'customer_phone' => $req->customerPhone,
-                'date' => date('Y-m-d'),
-                'estimate_date' => $estimateDate,
-                'estimate_day' => $req->estimateDay,
+                // 'customer_name' => $req->customerName,
+                // 'customer_address' => $req->customerAdress,
+                // 'customer_phone' => $req->customerPhone,
+                'date' => $estimateDate,
+                // 'estimate_date' => $estimateDate,
+                // 'estimate_day' => $req->estimateDay,
                 'brand' => $req->brand,
-                'series' => $req->series,
+                'series' => $req->items,
                 'type' => $req->type,
                 'no_imei' => $req->noImei,
                 'complaint' => $req->complaint,
@@ -446,18 +434,20 @@ class ServiceItemsController extends Controller
                 'total_loss_technician_2' => 0,
                 'total_loss_store' => $total_loss_store,
                 'image' => $fileName,
-                'discount_type' => $req->typeDiscount,
-                'discount_price' => str_replace(',', '', $req->totalDiscountValue),
-                'discount_service' => str_replace(',', '', $req->totalService) - str_replace(',', '', $req->totalDiscountValue),
-                'discount_percent' => str_replace(',', '', $req->totalDiscountPercent),
+                'discount_type' => '-',
+                'discount_price' => 0,
+                'discount_service' => 0,
+                'discount_percent' => 0,
                 'total_hpp' => str_replace(',', '', $req->totalHppAtas),
                 'total_price' => str_replace(',', '', $req->totalPrice),
+                'total_price_buy' => str_replace(',', '', $req->totalPriceBuy),
+                'total_price_sell' => str_replace(',', '', $req->totalPriceSell),
                 'work_status' => 'Manifest',
                 'group_service' => 'Upgrade',
-                'equipment' => $req->equipment,
-                'description' => $req->description,
-                'warranty_id' => $req->warranty,
-                'verification_price' => $req->verificationPrice,
+                // 'equipment' => $req->equipment,
+                'description' => '-',
+                // 'warranty_id' => $req->warranty,
+                // 'verification_price' => $req->verificationPrice,
                 'technician_id' => $req->technicianId,
                 'sharing_profit_store' => str_replace(',', '', $sharing_profit_store),
                 'sharing_profit_technician_1' => str_replace(',', '', $sharing_profit_technician_1),
@@ -690,6 +680,56 @@ class ServiceItemsController extends Controller
                     'description' => $dataEquipmentDesc[$i],
                 ]);
             }
+
+            // fungsi update harga barang
+            $upgrade = Item::with('Stock')->where('id',$req->items)->update([
+                'sell'=> str_replace(',', '', $req->totalPriceSell),
+            ]);
+            $desc = 'Biaya Barang Upgrade atas sparepart yang dikeluarkan pada transaksi '.$codeNota;
+            $idJournal = DB::table('journals')->max('id') + 1;
+            Journal::create([
+                'id' => $idJournal,
+                'code' => $this->codeJournals('KK', $idJournal),
+                'year' => date('Y'),
+                'date' => date('Y-m-d'),
+                'type' => 'Biaya',
+                'total' => str_replace(',', '', $req->totalSparePart),
+                'ref' => $codeNota,
+                'description' => $desc,
+                'created_at' => date('Y-m-d h:i:s'),
+            ]);
+
+            $accountPersediaan = AccountData::where('branch_id', $getEmployee->branch_id)
+                ->where('active', 'Y')
+                ->where('main_id', 3)
+                ->where('main_detail_id', 11)
+                ->first();
+
+            $accountBiayaHilang = AccountData::where('branch_id', $getEmployee->branch_id)
+                ->where('active', 'Y')
+                ->where('main_id', 6)
+                ->where('main_detail_id', 49)
+                ->first();
+            
+            $accountCode = [$accountPersediaan->id,$accountBiayaHilang->id];
+            $totalBayar = [str_replace(',', '', $req->totalSparePart),str_replace(',', '', $req->totalSparePart)];
+            $description = [$desc,$desc];
+            $DK = ['D','K'];
+
+            for ($i = 0; $i < count($accountCode); $i++) {
+                $idDetail = DB::table('journal_details')->max('id') + 1;
+                JournalDetail::create([
+                    'id' => $idDetail,
+                    'journal_id' => $idJournal,
+                    'account_id' => $accountCode[$i],
+                    'total' => $totalBayar[$i],
+                    'description' => $description[$i],
+                    'debet_kredit' => $DK[$i],
+                    'created_at' => date('Y-m-d h:i:s'),
+                    'updated_at' => date('Y-m-d h:i:s'),
+                ]);
+            }
+
             
             DB::commit();
             return Response::json(['status' => 'success', 'message' => 'Data Tersimpan', 'id' => $id]);
@@ -719,7 +759,7 @@ class ServiceItemsController extends Controller
             ->get();
         $customer = Customer::orderBy('name', 'ASC')->get();
 
-        return view('pages.backend.transaction.service.editService', compact('employee', 'item', 'brand', 'type', 'warranty', 'service', 'category', 'customer'));
+        return view('pages.backend.transaction.service_items.editServiceItems', compact('employee', 'item', 'brand', 'type', 'warranty', 'service', 'category', 'customer'));
     }
     public function show($id)
     {
@@ -886,40 +926,50 @@ class ServiceItemsController extends Controller
             }
 
             Service::where('id', $id)->update([
+                'id' => $id,
+                'code' => $codeNota,
                 'user_id' => Auth::user()->id,
+                'branch_id' => $getEmployee->branch_id,
                 'customer_id' => $req->customerId,
-                'customer_name' => $req->customerName,
-                'customer_address' => $req->customerAdress,
-                'customer_phone' => $req->customerPhone,
-                'date' => date('Y-m-d'),
-                'estimate_date' => $estimateDate,
+                // 'customer_name' => $req->customerName,
+                // 'customer_address' => $req->customerAdress,
+                // 'customer_phone' => $req->customerPhone,
+                'date' => $estimateDate,
+                // 'estimate_date' => $estimateDate,
+                // 'estimate_day' => $req->estimateDay,
                 'brand' => $req->brand,
-                'series' => $req->series,
+                'series' => $req->items,
                 'type' => $req->type,
                 'no_imei' => $req->noImei,
                 'complaint' => $req->complaint,
                 'clock' => date('h:i'),
                 'total_service' => str_replace(',', '', $req->totalService),
                 'total_part' => str_replace(',', '', $req->totalSparePart),
-                'discount_service' => str_replace(',', '', $req->totalService) - str_replace(',', '', $req->totalDiscountValue),
-                'total_hpp' => str_replace(',', '', $req->totalHppAtas),
+                'total_payment' => 0,
+                'total_downpayment' => 0,
                 'total_loss' => str_replace(',', '', $req->totalLoss),
                 'total_loss_technician_1' => $total_loss_technician_1,
-                'total_loss_technician_2' => $total_loss_technician_2,
+                'total_loss_technician_2' => 0,
                 'total_loss_store' => $total_loss_store,
                 'image' => $fileName,
-                'discount_type' => $req->typeDiscount,
-                'discount_price' => str_replace(',', '', $req->totalDiscountValue),
-                'discount_percent' => str_replace(',', '', $req->totalDiscountPercent),
+                'discount_type' => '-',
+                'discount_price' => 0,
+                'discount_service' => 0,
+                'discount_percent' => 0,
+                'total_hpp' => str_replace(',', '', $req->totalHppAtas),
                 'total_price' => str_replace(',', '', $req->totalPrice),
-                'equipment' => $req->equipment,
-                'description' => $req->description,
-                'warranty_id' => $req->warranty,
-                'verification_price' => $req->verificationPrice,
+                'total_price_buy' => str_replace(',', '', $req->totalPriceBuy),
+                'total_price_sell' => str_replace(',', '', $req->totalPriceSell),
+                'work_status' => 'Manifest',
+                'group_service' => 'Upgrade',
+                // 'equipment' => $req->equipment,
+                'description' => '-',
+                // 'warranty_id' => $req->warranty,
+                // 'verification_price' => $req->verificationPrice,
                 'technician_id' => $req->technicianId,
                 'sharing_profit_store' => str_replace(',', '', $sharing_profit_store),
-                'sharing_profit_technician_1' => $sharing_profit_technician_1,
-                'sharing_profit_technician_2' => $sharing_profit_technician_2,
+                'sharing_profit_technician_1' => str_replace(',', '', $sharing_profit_technician_1),
+                'sharing_profit_technician_2' => str_replace(',', '', 0),
                 'presentase_sharing_profit_store'=>$sharingProfitStore,
                 'presentase_sharing_profit_technician_1'=>$presentaseSharingProfitTechnician1,
                 'presentase_sharing_profit_technician_2'=>$presentaseSharingProfitTechnician2,
@@ -1015,11 +1065,11 @@ class ServiceItemsController extends Controller
                 }
             }
          
-//             DB::rollback();
-//             return [$req->idDetailOld,
-// $req->priceDetailOld,
-// $req->priceHppOld,
-// $req->totalPriceHppOld];
+            // DB::rollback();
+            // return [$req->idDetailOld,
+            // $req->priceDetailOld,
+            // $req->priceHppOld,
+            // $req->totalPriceHppOld];
             // mengecek data existing
             if ($req->itemsDetailOld != null) {
                 // return $req->all();
@@ -1414,6 +1464,8 @@ class ServiceItemsController extends Controller
         DB::beginTransaction();
         try {
             $getEmployee = Employee::where('user_id', Auth::user()->id)->first();
+            
+            $checkData = Service::where('id', $id)->first();
             $checkDataDeleted = ServiceDetail::where('service_id', $id)->get();
             $checkStockDeleted = [];
             for ($i = 0; $i < count($checkDataDeleted); $i++) {
@@ -1428,6 +1480,12 @@ class ServiceItemsController extends Controller
                     } else {
                         $desc[$i] = '(Delete Service) Pengembalian Barang Loss Pada Service ' . $req->code;
                     }
+                    Stock::where('item_id', $checkDataDeleted[$i]->item_id)
+                        ->where('branch_id', $checkDataDeleted->branch_id)
+                        ->update([
+                            'stock' => $checkStockDeleted[$i][0]->stock + $checkDataDeleted[$i]->qty,
+                        ]);
+
                     // return $desc;
                     Stock::where('item_id', $checkDataDeleted[$i]->item_id)
                         ->where('branch_id', $checkDataDeleted->branch_id)
@@ -1445,6 +1503,10 @@ class ServiceItemsController extends Controller
                     ]);
                 }
             }
+
+            $upgrade = Item::with('Stock')->where('id',$checkData->type)->update([
+                'sell'=> str_replace('.', '', $checkData->total_price_buy),
+            ]);
 
             DB::table('service')
                 ->where('id', $id)
@@ -1472,12 +1534,51 @@ class ServiceItemsController extends Controller
             return Response::json(['status' => 'error', 'message' => $th]);
         }
     }
-
-    public function FunctionName(Type $var = null)
+    public function codeJournals($type, $id)
     {
-
+        $getEmployee = Employee::with('branch')
+            ->where('user_id', Auth::user()->id)
+            ->first();
+        $month = Carbon::now()->format('m');
+        $year = Carbon::now()->format('y');
+        $index = str_pad($id, 3, '0', STR_PAD_LEFT);
+        return $code = $type . $getEmployee->Branch->code . $year . $month . $index;
     }
+    public function checkJournals(Request $req)
+    {
+        $data = Journal::with('JournalDetail.AccountData')
+            ->where('ref', $req->id)
+            ->get();
+        return Response::json(['status' => 'success', 'jurnal' => $data]);
+    }
+    public function checkStock(Request $req)
+    {
+        $getEmployee = Employee::with('branch')
+                        ->where('user_id', Auth::user()->id)
+                        ->first();
 
+        $checkStock = Stock::where('item_id', $req->id)
+                        ->where('branch_id', $getEmployee->branch_id)
+                        // ->where('id', '!=', 1)
+                        ->get();
+        if (count($checkStock) == 0) {
+            return Response::json([ 
+                'status' => 'fail',
+                'message' => 'Stock Item Ada yang 0. Harap Cek Kembali',
+            ]);
+        }
+        if ($checkStock[0]->stock <= 0) {
+            return Response::json([
+                'status' => 'fail',
+                'message' => 'Stock Item Ada yang 0. Harap Cek Kembali',
+            ]);
+        }else{
+            return Response::json([
+                'status' => 'success',
+                'message' => 'Stock Item/Barang Tersedia'
+            ]);
+        }
+    }
   
 
     

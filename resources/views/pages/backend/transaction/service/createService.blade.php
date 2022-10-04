@@ -83,7 +83,7 @@
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="brand">{{ __('Merk') }}<code>*</code></label>
-                            <select class="brand form-control validation" data-name="Merk" id="brandService" name="brand">
+                            <select class="brand form-control select2 validation" data-name="Merk" id="brandService" name="brand">
                                 <option value="">- Select -</option>
                                 {{-- @foreach ($brand as $element)
                                 <option value="{{$element->id}}">{{$element->name}}</option>
@@ -93,7 +93,7 @@
                         </div>
                         <div class="form-group col-12 col-md-4 col-lg-4">
                             <label for="series">{{ __('Tipe') }}<code>*</code></label>
-                            <select class="series form-control validation" data-name="Tipe" id="seriesService" name="series">
+                            <select class="series form-control select2 validation" data-name="Tipe" id="seriesService" name="series">
                                 <option value="">- Select -</option>
                                 {{-- @foreach ($type as $element)
                                 <option value="{{$element->id}}">{{$element->name}}</option>
