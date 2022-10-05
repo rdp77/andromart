@@ -47,7 +47,9 @@ function checkData() {
                                                     .account_data.main_detail_id == 28 ||
                                                     value.type == 'Transfer Masuk'     ||
                                                     value.ref.includes('SMT')          ||
-                                        value.ref.includes('PCS') 
+                                        value.ref.includes('PCS') ||
+                                        value.ref.includes('SIN') ||
+                                        value.ref.includes('SOT') 
  
                                     ) {
                                     } else {
@@ -160,7 +162,9 @@ function checkData() {
                                                     .account_data.main_detail_id == 28 ||
                                                     value.type == 'Transfer Masuk'||
                                                     value.ref.includes('SMT')     ||
-                                                    value.ref.includes('PCS') 
+                                                    value.ref.includes('PCS') ||
+                                                    value.ref.includes('SIN') ||
+                                                    value.ref.includes('SOT') 
    
                                     ) {
                                     } else {
@@ -277,7 +281,9 @@ function checkData() {
                                                     .account_data.main_detail_id == 28 ||
                                         value.type == 'Transfer Masuk'||
                                         value.ref.includes('SMT') ||
-                                        value.ref.includes('PCS') 
+                                        value.ref.includes('PCS') ||
+                                        value.ref.includes('SIN') ||
+                                        value.ref.includes('SOT') 
                                     ) {
                                     } else {
                                         if (data.cabang == null) {
