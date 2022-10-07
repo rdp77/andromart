@@ -210,11 +210,12 @@ class DashboardController extends Controller
             }
         })->count();
 
+        // return $this->changeMonthIdToEn($req->startDate). ' 00:00:00';
         $dataServiceHandphone = Service::where('type', '11')->where(function ($query) use ($req) {
             if ($req->type == 'Tanggal') {
                 $query
-                    ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate))
-                    ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate));
+                    ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate). ' 00:00:00')
+                    ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate). ' 00:00:00');
             } else if ($req->type == 'Bulan') {
                 $query
                     ->where('created_at', '>=', date('Y-m-01', strtotime($req->month)))
@@ -233,8 +234,8 @@ class DashboardController extends Controller
         $dataServiceLaptop = Service::where('type', '10')->where(function ($query) use ($req) {
             if ($req->type == 'Tanggal') {
                 $query
-                    ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate))
-                    ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate));
+                    ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate). ' 00:00:00')
+                    ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate). ' 00:00:00');
             } else if ($req->type == 'Bulan') {
                 $query
                     ->where('created_at', '>=', date('Y-m-01', strtotime($req->month)))
@@ -256,8 +257,8 @@ class DashboardController extends Controller
                 ->where(function ($query) use ($req) {
                     if ($req->type == 'Tanggal') {
                         $query
-                            ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate))
-                            ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate));
+                            ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate). ' 00:00:00')
+                            ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate). ' 00:00:00');
                     } else if ($req->type == 'Bulan') {
                         $query
                             ->where('created_at', '>=', date('Y-m-01', strtotime($req->month)))
@@ -280,8 +281,8 @@ class DashboardController extends Controller
                 ->where(function ($query) use ($req) {
                     if ($req->type == 'Tanggal') {
                         $query
-                            ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate))
-                            ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate));
+                            ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate). ' 00:00:00')
+                            ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate). ' 00:00:00');
                     } else if ($req->type == 'Bulan') {
                         $query
                             ->where('created_at', '>=', date('Y-m-01', strtotime($req->month)))
@@ -304,8 +305,8 @@ class DashboardController extends Controller
                 ->where(function ($query) use ($req) {
                     if ($req->type == 'Tanggal') {
                         $query
-                            ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate))
-                            ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate));
+                            ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate). ' 00:00:00')
+                            ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate). ' 00:00:00');
                     } else if ($req->type == 'Bulan') {
                         $query
                             ->where('created_at', '>=', date('Y-m-01', strtotime($req->month)))
@@ -321,8 +322,8 @@ class DashboardController extends Controller
                 ->where(function ($query) use ($req) {
                     if ($req->type == 'Tanggal') {
                         $query
-                            ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate))
-                            ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate));
+                            ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate). ' 00:00:00')
+                            ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate). ' 00:00:00');
                     } else if ($req->type == 'Bulan') {
                         $query
                             ->where('created_at', '>=', date('Y-m-01', strtotime($req->month)))
@@ -337,8 +338,8 @@ class DashboardController extends Controller
             $checkServiceStatus[$i] = Service::where(function ($query) use ($req) {
                 if ($req->type == 'Tanggal') {
                     $query
-                        ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate))
-                        ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate));
+                        ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate). ' 00:00:00')
+                        ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate). ' 00:00:00');
                 } else if ($req->type == 'Bulan') {
                     $query
                         ->where('created_at', '>=', date('Y-m-01', strtotime($req->month)))
