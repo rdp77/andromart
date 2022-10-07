@@ -28,7 +28,7 @@
                                         @foreach ($data as $element)
                                             <option value="{{ $element->id }}">[{{ $element->code }}]
                                                 @if ($element->group_service == 'Upgrade')
-                                                    {{ $element->Brand->name }} <span><strong>( {{ $element->work_status }} / Upgrade) </span></strong></option>
+                                                    {{ $element->Brand->name }} <span><strong>( {{ $element->work_status }} / Upgrade ) </span></strong></option>
                                                 @else
                                                 {{ $element->customer_name }} - {{ $element->Brand->name }}
 

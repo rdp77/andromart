@@ -30,7 +30,8 @@
                             <select class="select2 serviceId validation" data-name="Service Harus Di isi" name="serviceId" onchange="choseService()">
                                 <option value="">- Select -</option>
                                 @foreach ($data as $element)
-                                    <option value="{{$element->id}}"
+                                @if ($element->group_service == null)
+                                <option value="{{$element->id}}"
                                     data-technician="{{$element->Employee1->name}}"
                                     data-customerName="{{$element->customer_name}}"
                                     data-customerAdress="{{$element->customer_address}}"
@@ -41,6 +42,7 @@
 
                                     [{{$element->code}}] {{$element->customer_name}} - {{$element->Brand->name}} {{$element->Type->name}} <span><strong>( {{$element->work_status}} )
                                     </span></strong></option>
+                                @endif
                                 @endforeach
                             </select>
                         </div>
