@@ -192,8 +192,8 @@ class DashboardController extends Controller
         $dataServiceTotal = Service::where(function ($query) use ($req) {
             if ($req->type == 'Tanggal') {
                 $query
-                    ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate))
-                    ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate));
+                    ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate). ' 00:00:00')
+                    ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate). ' 23:59:59');
             } else if ($req->type == 'Bulan') {
                 $query
                     ->where('created_at', '>=', date('Y-m-01', strtotime($req->month)))
@@ -437,87 +437,87 @@ class DashboardController extends Controller
             }
         }
 
-        $totalKeseluruhanPendapatanService = 0;
-        $totalKeseluruhanPendapatanSale = 0;
-        $totalCash = 0;
-        $totalDebit = 0;
-        $totalTransfer = 0;
-        foreach ($dataPendapatan as $i => $el) {
-            if ($el->type == 'Pembayaran Service') {
+        // $totalKeseluruhanPendapatanService = 0;
+        // $totalKeseluruhanPendapatanSale = 0;
+        // $totalCash = 0;
+        // $totalDebit = 0;
+        // $totalTransfer = 0;
+        // foreach ($dataPendapatan as $i => $el) {
+        //     if ($el->type == 'Pembayaran Service') {
 
-                if ($req->branch != '') {
-                    if ($el->ServicePayment->Service->branch_id == $req->branch) {
-                        $totalKeseluruhanPendapatanService += $el->total;
-                    }
-                }else{
-                    $totalKeseluruhanPendapatanService += $el->total;
-                }
+        //         if ($req->branch != '') {
+        //             if ($el->ServicePayment->Service->branch_id == $req->branch) {
+        //                 $totalKeseluruhanPendapatanService += $el->total;
+        //             }
+        //         }else{
+        //             $totalKeseluruhanPendapatanService += $el->total;
+        //         }
 
-                if ($el->ServicePayment->payment_method == 'Cash') {
-                    if ($req->branch != '') {
-                        if ($el->ServicePayment->Service->branch_id == $req->branch) {
-                            $totalCash += $el->total;
-                        }
-                    }else{
-                        $totalCash += $el->total;
-                    }
-                } elseif ($el->ServicePayment->payment_method == 'Debit') {
-                    if ($req->branch != '') {
-                        if ($el->ServicePayment->Service->branch_id == $req->branch) {
-                            $totalDebit += $el->total;
-                        }
-                    }else{
-                        $totalDebit += $el->total;
-                    }
-                } elseif ($el->ServicePayment->payment_method == 'Transfer') {
-                    if ($req->branch != '') {
-                        if ($el->ServicePayment->Service->branch_id == $req->branch) {
-                            $totalTransfer += $el->total;
-                        }
-                    }else{
-                        $totalTransfer += $el->total;
-                    }
-                }
-            } elseif ($el->type == 'Penjualan') {
-                if ($req->branch != '') {
-                    if ($el->sale->branch_id == $req->branch) {
-                        $totalKeseluruhanPendapatanSale += $el->total;
-                    }
-                }else{
-                    $totalKeseluruhanPendapatanSale += $el->total;
-                }
+        //         if ($el->ServicePayment->payment_method == 'Cash') {
+        //             if ($req->branch != '') {
+        //                 if ($el->ServicePayment->Service->branch_id == $req->branch) {
+        //                     $totalCash += $el->total;
+        //                 }
+        //             }else{
+        //                 $totalCash += $el->total;
+        //             }
+        //         } elseif ($el->ServicePayment->payment_method == 'Debit') {
+        //             if ($req->branch != '') {
+        //                 if ($el->ServicePayment->Service->branch_id == $req->branch) {
+        //                     $totalDebit += $el->total;
+        //                 }
+        //             }else{
+        //                 $totalDebit += $el->total;
+        //             }
+        //         } elseif ($el->ServicePayment->payment_method == 'Transfer') {
+        //             if ($req->branch != '') {
+        //                 if ($el->ServicePayment->Service->branch_id == $req->branch) {
+        //                     $totalTransfer += $el->total;
+        //                 }
+        //             }else{
+        //                 $totalTransfer += $el->total;
+        //             }
+        //         }
+        //     } elseif ($el->type == 'Penjualan') {
+        //         if ($req->branch != '') {
+        //             if ($el->sale->branch_id == $req->branch) {
+        //                 $totalKeseluruhanPendapatanSale += $el->total;
+        //             }
+        //         }else{
+        //             $totalKeseluruhanPendapatanSale += $el->total;
+        //         }
 
-                if ($el->sale->payment_method == 'Cash') {
-                    if ($req->branch != '') {
-                        if ($el->sale->branch_id == $req->branch) {
-                            $totalCash += $el->total;
-                        }
-                    }else{
-                        $totalCash += $el->total;
-                    }
+        //         if ($el->sale->payment_method == 'Cash') {
+        //             if ($req->branch != '') {
+        //                 if ($el->sale->branch_id == $req->branch) {
+        //                     $totalCash += $el->total;
+        //                 }
+        //             }else{
+        //                 $totalCash += $el->total;
+        //             }
                     
-                } elseif ($el->sale->payment_method == 'Debit') {
-                    if ($req->branch != '') {
-                        if ($el->sale->branch_id == $req->branch) {
-                            $totalDebit += $el->total;
-                        }
-                    }else{
-                        $totalDebit += $el->total;
-                    }
+        //         } elseif ($el->sale->payment_method == 'Debit') {
+        //             if ($req->branch != '') {
+        //                 if ($el->sale->branch_id == $req->branch) {
+        //                     $totalDebit += $el->total;
+        //                 }
+        //             }else{
+        //                 $totalDebit += $el->total;
+        //             }
                    
-                } elseif ($el->sale->payment_method == 'Transfer') {
-                    if ($req->branch != '') {
-                        if ($el->sale->branch_id == $req->branch) {
-                            $totalTransfer += $el->total;
-                        }
-                    }else{
-                        $totalTransfer += $el->total;
-                    }
+        //         } elseif ($el->sale->payment_method == 'Transfer') {
+        //             if ($req->branch != '') {
+        //                 if ($el->sale->branch_id == $req->branch) {
+        //                     $totalTransfer += $el->total;
+        //                 }
+        //             }else{
+        //                 $totalTransfer += $el->total;
+        //             }
                                 
-                }
+        //         }
                     
-            }
-        }
+        //     }
+        // }
         // return $totalKeseluruhanPendapatanService;
         // return 'as';
         // return [$totalKeseluruhanPendapatanService,$totalKeseluruhanPendapatanSale,($totalKeseluruhanPendapatanService+$totalKeseluruhanPendapatanSale)];
