@@ -26,7 +26,7 @@
                     <b>{{ $value->Brand->name }} {{ $value->Type->name }}</b><br>
                     IMEI : <b>{{ $value->no_imei}}</b>
                 @else
-                    <b>{{ $value->Brand->name }} {{ $value->Type->name }} ( UPGRADE BARANG DAGANG )</b><br>
+                    <b>{{ $value->Brand->name }} {{ $value->Items->name }} ( UPGRADE BARANG DAGANG )</b><br>
                     IMEI : <b>{{ $value->no_imei}} </b>
                 @endif
             <td>
