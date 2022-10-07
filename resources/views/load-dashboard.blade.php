@@ -59,48 +59,94 @@
                         </p>
                     </figure>
                     @php
-                        $totalKeseluruhanPendapatan = 0;
+                        $totalKeseluruhanPendapatanService = 0;
+                        $totalKeseluruhanPendapatanSale = 0;
                         $totalCash = 0;
                         $totalDebit = 0;
                         $totalTransfer = 0;
                     @endphp
                     @foreach ($dataPendapatan as $i => $el)
                         @php
-                            $totalKeseluruhanPendapatan += $el->total;
+                          foreach ($dataPendapatan as $i => $el) {
+                                if ($el->type == 'Pembayaran Service') {
+                                    if ($branchId != '') {
+                                        if ($el->ServicePayment->Service->branch_id == $branchId) {
+                                            $totalKeseluruhanPendapatanService += $el->total;
+                                        }
+                                    }else{
+                                        $totalKeseluruhanPendapatanService += $el->total;
+                                    }
+
+                                    if ($el->ServicePayment->payment_method == 'Cash') {
+                                        if ($branchId != '') {
+                                            if ($el->ServicePayment->Service->branch_id == $branchId) {
+                                                $totalCash += $el->total;
+                                            }
+                                        }else{
+                                            $totalCash += $el->total;
+                                        }
+                                    } elseif ($el->ServicePayment->payment_method == 'Debit') {
+                                        if ($branchId != '') {
+                                            if ($el->ServicePayment->Service->branch_id == $branchId) {
+                                                $totalDebit += $el->total;
+                                            }
+                                        }else{
+                                            $totalDebit += $el->total;
+                                        }
+                                    } elseif ($el->ServicePayment->payment_method == 'Transfer') {
+                                        if ($branchId != '') {
+                                            if ($el->ServicePayment->Service->branch_id == $branchId) {
+                                                $totalTransfer += $el->total;
+                                            }
+                                        }else{
+                                            $totalTransfer += $el->total;
+                                        }
+                                    }
+                                } elseif ($el->type == 'Penjualan') {
+                                    if ($branchId != '') {
+                                        if ($el->sale->branch_id == $branchId) {
+                                            $totalKeseluruhanPendapatanSale += $el->total;
+                                        }
+                                    }else{
+                                        $totalKeseluruhanPendapatanSale += $el->total;
+                                    }
+
+                                    if ($el->sale->payment_method == 'Cash') {
+                                        if ($branchId != '') {
+                                            if ($el->sale->branch_id == $branchId) {
+                                                $totalCash += $el->total;
+                                            }
+                                        }else{
+                                            $totalCash += $el->total;
+                                        }
+                                        
+                                    } elseif ($el->sale->payment_method == 'Debit') {
+                                        if ($branchId != '') {
+                                            if ($el->sale->branch_id == $branchId) {
+                                                $totalDebit += $el->total;
+                                            }
+                                        }else{
+                                            $totalDebit += $el->total;
+                                        }
+                                    
+                                    } elseif ($el->sale->payment_method == 'Transfer') {
+                                        if ($branchId != '') {
+                                            if ($el->sale->branch_id == $branchId) {
+                                                $totalTransfer += $el->total;
+                                            }
+                                        }else{
+                                            $totalTransfer += $el->total;
+                                        }
+                                                    
+                                    }
+                                        
+                                }
+                            }
                         @endphp
-                        @if ($el->type == 'Pembayaran Service')
-                            @if ($el->ServicePayment->payment_method == 'Cash')
-                                @php
-                                    $totalCash += $el->total;
-                                @endphp
-                            @elseif ($el->ServicePayment->payment_method == 'Debit')
-                                @php
-                                    $totalDebit += $el->total;
-                                @endphp
-                            @elseif ($el->ServicePayment->payment_method == 'Transfer')
-                                @php
-                                    $totalTransfer += $el->total;
-                                @endphp
-                            @endif
-                        @elseif($el->type == 'Penjualan')
-                            @if ($el->sale->payment_method == 'Cash')
-                                @php
-                                    $totalCash += $el->total;
-                                @endphp
-                            @elseif ($el->sale->payment_method == 'Debit')
-                                @php
-                                    $totalDebit += $el->total;
-                                @endphp
-                            @elseif ($el->sale->payment_method == 'Transfer')
-                                @php
-                                    $totalTransfer += $el->total;
-                                @endphp
-                            @endif
-                        @endif
                     @endforeach
                     <h style="font-size: 15px">Total Keseluruhan Pendapatan Kas.</h>
                     <br>
-                    Rp. {{ number_format($totalKeseluruhanPendapatan, 0, ',', '.') }}
+                    Rp. {{ number_format($totalKeseluruhanPendapatanSale+$totalKeseluruhanPendapatanService, 0, ',', '.') }}
                     <br>
                     <br>
                 </div>

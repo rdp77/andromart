@@ -16,21 +16,33 @@
             <div class="card card-statistic-2">
                 <div class="row">
 
-                    <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="col-lg-2 col-md-2 col-sm-3">
                         <div class="card-wrap">
                             <div class="card-header">
-
-                                
-                                
-
                                 {{-- <h4>Filter dengan :</h4> --}}
-                                <label>{{ __('Filter dengan :') }}</label>
+                                <label>{{ __('Tanggal :') }}</label>
                                 <select style="margin-top: 10px" onchange="checkFilter()" name="filter"
                                     class="select2 filter form-control" id="">
                                     <option value="">- Select -</option>
                                     <option value="Tanggal">Tanggal</option>
                                     <option value="Bulan">Bulan</option>
                                     <option value="Tahun">Tahun</option>
+                                </select>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-3">
+                        <div class="card-wrap">
+                            <div class="card-header">
+                                {{-- <h4>Filter dengan :</h4> --}}
+                                <label>{{ __('Cabang :') }}</label>
+                                <select style="margin-top: 10px" name="branch"
+                                    class="select2 branch form-control" id="">
+                                    <option value="">- Select -</option>
+                                    @foreach ($branch as $el)
+                                        <option value="{{$el->id}}">{{$el->name}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <br>
@@ -166,7 +178,9 @@
                             @endphp
                             @foreach ($dataPendapatan as $i => $el)
                                 @php
+                                  
                                     $totalKeseluruhanPendapatan += $el->total;
+                                 
                                 @endphp
                                 @if ($el->type == 'Pembayaran Service')
                                     @if ($el->ServicePayment->payment_method == 'Cash')
@@ -392,10 +406,12 @@
             var dtpickermnth = $('.dtpickermnth').val();
             var dtpickeryr = $('.dtpickeryr').val();
             var filter = $('.filter').val();
+            var branch = $('.branch').val();
             $.ajax({
                 url: "/dashboard/filter-data-dashboard",
                 type: 'GET',
                 data: {
+                    'branch': branch,
                     'type': filter,
                     'year': dtpickeryr,
                     'month': dtpickermnth,

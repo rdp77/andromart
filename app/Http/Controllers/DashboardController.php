@@ -8,6 +8,7 @@ use App\Models\Journal;
 use App\Models\SubMenu;
 use App\Models\Service;
 use App\Models\Employee;
+use App\Models\Branch;
 use App\Models\Sale;
 use App\Models\SaleDetail;
 use Illuminate\Http\Request;
@@ -44,6 +45,7 @@ class DashboardController extends Controller
         // $sol3 = $this->solution3(1200000,12,1);
         // return $this->solution2(7,215.3);
         // return $this->solution1(-1,2,6);
+        $branch = Branch::get();
         $topSales = DB::table('sale_details')
             ->leftJoin('items', 'items.id', '=', 'sale_details.item_id')
             ->select(
@@ -131,6 +133,7 @@ class DashboardController extends Controller
             'totalServiceDone' => $totalServiceDone,
             'totalServiceCancel' => $totalServiceCancel,
             'topSales' => $topSales,
+            'branch' => $branch,
         ]);
     }
 
@@ -163,6 +166,8 @@ class DashboardController extends Controller
                         ->where('sale_details.created_at', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
                         ->where('sale_details.created_at', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
                 }
+                
+                
             })
             ->groupBy('items.id', 'sale_details.item_id', 'items.name', 'items.brand_id',)
             ->orderBy('total', 'desc')
@@ -198,6 +203,11 @@ class DashboardController extends Controller
                     ->where('date', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
                     ->where('date', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
             }
+
+            if ($req->branch != '') {
+                $query
+                    ->where('branch_id',$req->branch);
+            }
         })->count();
         $dataServiceHandphone = Service::where('type', '11')->where(function ($query) use ($req) {
             if ($req->type == 'Tanggal') {
@@ -213,6 +223,10 @@ class DashboardController extends Controller
                     ->where('date', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
                     ->where('date', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
             }
+            if ($req->branch != '') {
+                $query
+                    ->where('branch_id',$req->branch);
+            }
         })->count();
         $dataServiceLaptop = Service::where('type', '10')->where(function ($query) use ($req) {
             if ($req->type == 'Tanggal') {
@@ -227,6 +241,10 @@ class DashboardController extends Controller
                 $query
                     ->where('date', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
                     ->where('date', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
+            }
+            if ($req->branch != '') {
+                $query
+                    ->where('branch_id',$req->branch);
             }
         })->count();
 
@@ -247,10 +265,15 @@ class DashboardController extends Controller
                             ->where('date', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
                             ->where('date', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
                     }
+                    if ($req->branch != '') {
+                        $query
+                            ->where('branch_id',$req->branch);
+                    }
                 })
                 ->where('payment_status', 'Lunas')
                 ->where('technician_id', $chekSales[$i]->id)
                 ->sum('sharing_profit_technician_1');
+
             $sharingProfit2Service[$i] = Service::where('work_status', 'Diambil')
                 ->where(function ($query) use ($req) {
                     if ($req->type == 'Tanggal') {
@@ -265,6 +288,11 @@ class DashboardController extends Controller
                         $query
                             ->where('date', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
                             ->where('date', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
+                    }
+
+                    if ($req->branch != '') {
+                        $query
+                            ->where('branch_id',$req->branch);
                     }
                 })
                 ->where('payment_status', 'Lunas')
@@ -318,6 +346,10 @@ class DashboardController extends Controller
                         ->where('created_at', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
                         ->where('created_at', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
                 }
+                if ($req->branch != '') {
+                        $query
+                            ->where('branch_id',$req->branch);
+                    }
             })
                 ->where('technician_id', $chekSales[$i]->id)
                 ->get();
@@ -329,7 +361,7 @@ class DashboardController extends Controller
         $karyawan = $chekSales;
         $checkServiceStatus = $checkServiceStatus;
         // return $chekSales;
-        $dataPendapatan = Journal::with('ServicePayment', 'Sale')
+        $dataPendapatan = Journal::with('ServicePayment.Service', 'Sale')
             // ->where('journals.date', date('Y-m-d'))
             ->where(function ($query) use ($req) {
                 if ($req->type == 'Tanggal') {
@@ -345,12 +377,24 @@ class DashboardController extends Controller
                         ->where('journals.date', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
                         ->where('journals.date', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
                 }
+                
             })
             ->where(function ($query) {
                 $query->where('journals.type', 'Pembayaran Service')
                     ->orWhere('journals.type', 'Penjualan');
             })
+            // ->where(function ($query) use ($req) {
+            //     if ($req->branch != '') {
+            //         $query
+            //             ->where('service_payment.service.branch_id',$req->branch);
+            //     }
+            //     if ($req->branch != '') {
+            //         $query
+            //             ->where('Sale.branch_id',$req->branch);
+            //     }
+            // })
             ->get();
+            
         $log = Log::limit(7)->get();
         $users = User::count();
         $logCount = Log::where('u_id', Auth::user()->id)->count();
@@ -390,30 +434,90 @@ class DashboardController extends Controller
             }
         }
 
-        $totalKeseluruhanPendapatan = 0;
+        $totalKeseluruhanPendapatanService = 0;
+        $totalKeseluruhanPendapatanSale = 0;
         $totalCash = 0;
         $totalDebit = 0;
         $totalTransfer = 0;
         foreach ($dataPendapatan as $i => $el) {
-            $totalKeseluruhanPendapatan += $el->total;
             if ($el->type == 'Pembayaran Service') {
+
+                if ($req->branch != '') {
+                    if ($el->ServicePayment->Service->branch_id == $req->branch) {
+                        $totalKeseluruhanPendapatanService += $el->total;
+                    }
+                }else{
+                    $totalKeseluruhanPendapatanService += $el->total;
+                }
+
                 if ($el->ServicePayment->payment_method == 'Cash') {
-                    $totalCash += $el->total;
+                    if ($req->branch != '') {
+                        if ($el->ServicePayment->Service->branch_id == $req->branch) {
+                            $totalCash += $el->total;
+                        }
+                    }else{
+                        $totalCash += $el->total;
+                    }
                 } elseif ($el->ServicePayment->payment_method == 'Debit') {
-                    $totalDebit += $el->total;
+                    if ($req->branch != '') {
+                        if ($el->ServicePayment->Service->branch_id == $req->branch) {
+                            $totalDebit += $el->total;
+                        }
+                    }else{
+                        $totalDebit += $el->total;
+                    }
                 } elseif ($el->ServicePayment->payment_method == 'Transfer') {
-                    $totalTransfer += $el->total;
+                    if ($req->branch != '') {
+                        if ($el->ServicePayment->Service->branch_id == $req->branch) {
+                            $totalTransfer += $el->total;
+                        }
+                    }else{
+                        $totalTransfer += $el->total;
+                    }
                 }
             } elseif ($el->type == 'Penjualan') {
-                if ($el->sale->payment_method == 'Cash') {
-                    $totalCash += $el->total;
-                } elseif ($el->sale->payment_method == 'Debit') {
-                    $totalDebit += $el->total;
-                } elseif ($el->sale->payment_method == 'Transfer') {
-                    $totalTransfer += $el->total;
+                if ($req->branch != '') {
+                    if ($el->sale->branch_id == $req->branch) {
+                        $totalKeseluruhanPendapatanSale += $el->total;
+                    }
+                }else{
+                    $totalKeseluruhanPendapatanSale += $el->total;
                 }
+
+                if ($el->sale->payment_method == 'Cash') {
+                    if ($req->branch != '') {
+                        if ($el->sale->branch_id == $req->branch) {
+                            $totalCash += $el->total;
+                        }
+                    }else{
+                        $totalCash += $el->total;
+                    }
+                    
+                } elseif ($el->sale->payment_method == 'Debit') {
+                    if ($req->branch != '') {
+                        if ($el->sale->branch_id == $req->branch) {
+                            $totalDebit += $el->total;
+                        }
+                    }else{
+                        $totalDebit += $el->total;
+                    }
+                   
+                } elseif ($el->sale->payment_method == 'Transfer') {
+                    if ($req->branch != '') {
+                        if ($el->sale->branch_id == $req->branch) {
+                            $totalTransfer += $el->total;
+                        }
+                    }else{
+                        $totalTransfer += $el->total;
+                    }
+                                
+                }
+                    
             }
         }
+        // return $totalKeseluruhanPendapatanService;
+        // return 'as';
+        // return [$totalKeseluruhanPendapatanService,$totalKeseluruhanPendapatanSale,($totalKeseluruhanPendapatanService+$totalKeseluruhanPendapatanSale)];
         // return Response::json([
         //     'status' => 'success',
         //     'totalKeseluruhanPendapatan' => 'Rp. '.number_format($totalKeseluruhanPendapatan, 0, ',', '.'),
@@ -436,6 +540,7 @@ class DashboardController extends Controller
         //     'totalSharingProfitSplit' => $totalSharingProfitSplit,
         //     'totalSharingProfit' => 'Rp. '.number_format($totalSharingProfit, 0, ',', '.'),
         // ]);
+        $branchId = $req->branch;
         return view('load-dashboard', [
             // 'log' => $log,
             // 'users' => $users,
@@ -456,6 +561,8 @@ class DashboardController extends Controller
             'totalServiceDone' => $totalServiceDone,
             'totalServiceCancel' => $totalServiceCancel,
             'topSales' => $topSales,
+            'branchId' => $branchId,
+            
         ]);
     }
 
