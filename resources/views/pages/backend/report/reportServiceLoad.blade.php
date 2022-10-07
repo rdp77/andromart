@@ -15,14 +15,22 @@
             <td>{{ \Carbon\Carbon::parse($value->created_at)->locale('id')->isoFormat('LL') }}</td>
             <th><a href="{{ route('service.show', $value->id) }}">{{ $value->code }}</a></th>
             <td>
-                <strong>{{ $value->customer_name}}</strong> &nbsp; ||  
-                {{ $value->customer_phone}}<br>
-                {{ $value->customer_address}}
+                
+                    <strong>{{ $value->customer_name}}</strong> &nbsp; ||  
+                    {{ $value->customer_phone}}<br>
+                    {{ $value->customer_address}}
+               
             </td>
             <td>
+                @if ($service->group_service == null)
                 <b>{{ $value->Brand->name }} {{ $value->Type->name }}</b><br>
-                    IMEI : <b>{{ $value->no_imei}}</b>
+                IMEI : <b>{{ $value->no_imei}}</b>
+                @else
+                    <b>{{ $value->Brand->name }} {{ $value->Type->name }} ( UPGRADE BARANG DAGANG )</b><br>
+                    IMEI : <b>{{ $value->no_imei}} </b>
             </td>
+                @endif
+             
             <td>
                 Pekerjaan : <b>{{ $value->work_status }}</b><br>
                 Pembayaran :
