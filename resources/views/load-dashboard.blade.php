@@ -67,7 +67,6 @@
                     @endphp
                     @foreach ($dataPendapatan as $i => $el)
                         @php
-                          foreach ($dataPendapatan as $i => $el) {
                                 if ($el->type == 'Pembayaran Service') {
                                     if ($branchId != '') {
                                         if ($el->ServicePayment->Service->branch_id == $branchId) {
@@ -141,7 +140,6 @@
                                     }
                                         
                                 }
-                            }
                         @endphp
                     @endforeach
                     <h style="font-size: 15px">Total Keseluruhan Pendapatan Kas.</h>
