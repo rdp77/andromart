@@ -108,7 +108,7 @@
                                         @if ($service->group_service == null)
                                             <th>{{ $service->Brand->Category->code }} {{ $service->Brand->name }} <br>{{ $service->Type->name }}</th>
                                         @else
-                                            <th>{{ $service->Brand->Category->code }} {{ $service->Brand->name }} <br></th>
+                                            <th>{{ $service->Brand->Category->code }} {{ $service->Brand->name }} <br> ( UPGRADE BARANG DAGANG )</th>
                                         @endif
 
                                     </tr>
