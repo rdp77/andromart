@@ -192,16 +192,16 @@ class DashboardController extends Controller
         $dataServiceTotal = Service::where(function ($query) use ($req) {
             if ($req->type == 'Tanggal') {
                 $query
-                    ->where('date', '>=', $this->changeMonthIdToEn($req->startDate))
-                    ->where('date', '<=', $this->changeMonthIdToEn($req->endDate));
+                    ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate))
+                    ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate));
             } else if ($req->type == 'Bulan') {
                 $query
-                    ->where('date', '>=', date('Y-m-01', strtotime($req->month)))
-                    ->where('date', '<=', date('Y-m-t', strtotime($req->month)));
+                    ->where('created_at', '>=', date('Y-m-01', strtotime($req->month)))
+                    ->where('created_at', '<=', date('Y-m-t', strtotime($req->month)));
             } else if ($req->type == 'Tahun') {
                 $query
-                    ->where('date', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
-                    ->where('date', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
+                    ->where('created_at', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
+                    ->where('created_at', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
             }
 
             if ($req->branch != '') {
@@ -209,38 +209,40 @@ class DashboardController extends Controller
                     ->where('branch_id',$req->branch);
             }
         })->count();
+
         $dataServiceHandphone = Service::where('type', '11')->where(function ($query) use ($req) {
             if ($req->type == 'Tanggal') {
                 $query
-                    ->where('date', '>=', $this->changeMonthIdToEn($req->startDate))
-                    ->where('date', '<=', $this->changeMonthIdToEn($req->endDate));
+                    ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate))
+                    ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate));
             } else if ($req->type == 'Bulan') {
                 $query
-                    ->where('date', '>=', date('Y-m-01', strtotime($req->month)))
-                    ->where('date', '<=', date('Y-m-t', strtotime($req->month)));
+                    ->where('created_at', '>=', date('Y-m-01', strtotime($req->month)))
+                    ->where('created_at', '<=', date('Y-m-t', strtotime($req->month)));
             } else if ($req->type == 'Tahun') {
                 $query
-                    ->where('date', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
-                    ->where('date', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
+                    ->where('created_at', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
+                    ->where('created_at', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
             }
             if ($req->branch != '') {
                 $query
                     ->where('branch_id',$req->branch);
             }
         })->count();
+        
         $dataServiceLaptop = Service::where('type', '10')->where(function ($query) use ($req) {
             if ($req->type == 'Tanggal') {
                 $query
-                    ->where('date', '>=', $this->changeMonthIdToEn($req->startDate))
-                    ->where('date', '<=', $this->changeMonthIdToEn($req->endDate));
+                    ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate))
+                    ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate));
             } else if ($req->type == 'Bulan') {
                 $query
-                    ->where('date', '>=', date('Y-m-01', strtotime($req->month)))
-                    ->where('date', '<=', date('Y-m-t', strtotime($req->month)));
+                    ->where('created_at', '>=', date('Y-m-01', strtotime($req->month)))
+                    ->where('created_at', '<=', date('Y-m-t', strtotime($req->month)));
             } else if ($req->type == 'Tahun') {
                 $query
-                    ->where('date', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
-                    ->where('date', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
+                    ->where('created_at', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
+                    ->where('created_at', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
             }
             if ($req->branch != '') {
                 $query
@@ -254,16 +256,16 @@ class DashboardController extends Controller
                 ->where(function ($query) use ($req) {
                     if ($req->type == 'Tanggal') {
                         $query
-                            ->where('date', '>=', $this->changeMonthIdToEn($req->startDate))
-                            ->where('date', '<=', $this->changeMonthIdToEn($req->endDate));
+                            ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate))
+                            ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate));
                     } else if ($req->type == 'Bulan') {
                         $query
-                            ->where('date', '>=', date('Y-m-01', strtotime($req->month)))
-                            ->where('date', '<=', date('Y-m-t', strtotime($req->month)));
+                            ->where('created_at', '>=', date('Y-m-01', strtotime($req->month)))
+                            ->where('created_at', '<=', date('Y-m-t', strtotime($req->month)));
                     } else if ($req->type == 'Tahun') {
                         $query
-                            ->where('date', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
-                            ->where('date', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
+                            ->where('created_at', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
+                            ->where('created_at', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
                     }
                     if ($req->branch != '') {
                         $query
@@ -278,16 +280,16 @@ class DashboardController extends Controller
                 ->where(function ($query) use ($req) {
                     if ($req->type == 'Tanggal') {
                         $query
-                            ->where('date', '>=', $this->changeMonthIdToEn($req->startDate))
-                            ->where('date', '<=', $this->changeMonthIdToEn($req->endDate));
+                            ->where('created_at', '>=', $this->changeMonthIdToEn($req->startDate))
+                            ->where('created_at', '<=', $this->changeMonthIdToEn($req->endDate));
                     } else if ($req->type == 'Bulan') {
                         $query
-                            ->where('date', '>=', date('Y-m-01', strtotime($req->month)))
-                            ->where('date', '<=', date('Y-m-t', strtotime($req->month)));
+                            ->where('created_at', '>=', date('Y-m-01', strtotime($req->month)))
+                            ->where('created_at', '<=', date('Y-m-t', strtotime($req->month)));
                     } else if ($req->type == 'Tahun') {
                         $query
-                            ->where('date', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
-                            ->where('date', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
+                            ->where('created_at', '>=', date('Y-m-d 00:i:s', strtotime('first day of january ' . $req->year)))
+                            ->where('created_at', '<=', date('Y-m-t 00:i:s', strtotime('first day of december ' . $req->year)));
                     }
 
                     if ($req->branch != '') {
