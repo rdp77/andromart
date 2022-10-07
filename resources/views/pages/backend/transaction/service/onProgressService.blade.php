@@ -88,6 +88,9 @@
                                 </table>
                             </td>
                             <td>
+                                @if ($service->group_service == null)
+                                @else
+                                
                                 <table>
                                     <tr>
                                         <th>{{ $service->customer_name }}</th>
@@ -96,11 +99,19 @@
                                         <th>{{ $service->customer_phone }}</th>
                                     </tr>
                                 </table>
+                                @endif
                             </td>
                             <td>
+                                
                                 <table>
                                     <tr>
-                                        <th>{{ $service->Brand->Category->code }} {{ $service->Brand->name }} <br>{{ $service->Type->name }}</th>
+                                        @if ($service->group_service == null)
+                                            <th>{{ $service->Brand->Category->code }} {{ $service->Brand->name }} <br></th>
+
+                                        @else
+                                            <th>{{ $service->Brand->Category->code }} {{ $service->Brand->name }} <br>{{ $service->Type->name }}</th>
+                                         @endif
+
                                     </tr>
                                     <tr>
                                         <td>IMEI : <b>{{ $service->no_imei }}</b></td>
