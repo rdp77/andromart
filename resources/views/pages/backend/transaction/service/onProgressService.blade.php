@@ -106,11 +106,10 @@
                                 <table>
                                     <tr>
                                         @if ($service->group_service == null)
-                                            <th>{{ $service->Brand->Category->code }} {{ $service->Brand->name }} <br></th>
-
-                                        @else
                                             <th>{{ $service->Brand->Category->code }} {{ $service->Brand->name }} <br>{{ $service->Type->name }}</th>
-                                         @endif
+                                        @else
+                                            <th>{{ $service->Brand->Category->code }} {{ $service->Brand->name }} <br></th>
+                                        @endif
 
                                     </tr>
                                     <tr>
