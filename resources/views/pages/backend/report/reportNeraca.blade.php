@@ -122,17 +122,10 @@
                                                                 <b>{{ number_format($dataPersediaanTotal, 0, ',', ',') }}</b>
                                                             </td>
                                                         </tr>
-                                                        @for ($i = 0; $i < count($accountDataPersediaan); $i++)
+                                                        @for ($i = 0; $i < count($dataPersediaan); $i++)
                                                             @php
-                                                                $totalPerPersediaan = 0;
+                                                                // $dataPersediaan = 0;
                                                             @endphp
-                                                            @for ($j = 0; $j < count($dataPersediaan); $j++)
-                                                                {{-- @if ($dataPersediaan[$i]['main_detail_id'] == $dataPersediaan[$j]['akun']) --}}
-                                                                {{-- @php --}}
-                                                                {{-- $totalPerPersediaan += $dataPersediaan[$j]['total']; --}}
-                                                                {{-- @endphp --}}
-                                                                {{-- @endif --}}
-                                                            @endfor
                                                             <tr>
                                                                 <td style="padding-left:40px;">
                                                                     {{-- {{ $dataPersediaanTotal[$i]['name'] }} --}}
@@ -140,7 +133,7 @@
                                                                 <td style="padding-left:40px;">
                                                                     Rp.</td>
                                                                 <td style="padding-left:10px;text-align:right">
-                                                                    {{-- {{ number_format($dataPersediaanTotal, 0, ',', ',') }} --}}
+                                                                    {{ number_format($dataPersediaan[$i]['total'], 0, ',', ',') }}
                                                                 </td>
                                                             </tr>
                                                         @endfor
