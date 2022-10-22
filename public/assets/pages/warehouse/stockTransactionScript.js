@@ -132,6 +132,10 @@ function del(id) {
     });
 }
 function save(argument) {
+    // parseInt($(".btn").data('votevalue'), 10);
+    console.log(parseInt($('.stockSaatIni').val()));
+    console.log(parseInt($('.qty').val()));
+
     console.log($('.stockSaatIni').val());
     console.log($('.qty').val());
     console.log($('.checkType').find(':selected').val());
