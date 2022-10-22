@@ -132,6 +132,9 @@ function del(id) {
     });
 }
 function save(argument) {
+    console.log($('.stockSaatIni').val());
+    console.log(('.qty').val());
+    console.log($('.checkType').find(':selected').val());
     if ($('.stockSaatIni').val() == 0 && $('.checkType').find(':selected').val() != 'In') {
         iziToast.warning({
             type: 'warning',

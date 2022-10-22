@@ -42,7 +42,7 @@
                                     <br>
                                     <table style="color: black;border-collapse:collapse;width:100%">
                                         <thead>
-
+                                            
                                             <tr>
                                                 <th width="49%" style="color:black;border-top: 1px solid black">Aktiva
                                                     Lancar
@@ -152,7 +152,19 @@
 
                                                 </td>
                                             </tr>
-                                        </thead>
+                                        <tr>
+                                            <td>
+                                                <br>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th width="49%" style="color:black">Aktiva
+                                                Tetap
+                                            </th>
+                                            
+                                        </tr>
+                                    </thead>
+
                                     </table>
                                 </div>
                             </div>
