@@ -242,13 +242,6 @@ class ReportIncomeStatementController extends Controller
                     $q->where('branch_id', $req->branch);
                 }
             })->get();
-        // $jurnal = Journal::with('JournalDetail', 'JournalDetail.AccountData')
-        //     // ->where('date', '<=', date('Y-m-t', strtotime($req->dateS)))
-        //     ->where('date', '>=', $date1)
-        //     ->where('date', '<=', $date2)
-           
-        //     // ->where('date', '>=', date('Y-m-01', strtotime($req->dateS)))
-        //     ->get();
 
         $dataBeban = [];
         for ($i = 0; $i < count($accountDataBeban); $i++) {
@@ -266,10 +259,10 @@ class ReportIncomeStatementController extends Controller
                         // array_push($dataBeban[$i]['dk'],[$jurnal[$j]->JournalDetail[$k]->debet_kredit,$jurnal[$j]->code]);
                         array_push($dataBeban[$i]['dk'], $jurnal[$j]->JournalDetail[$k]->debet_kredit);
                         array_push($dataBeban[$i]['code'], [$jurnal[$j]->ref, $jurnal[$j]->code, $jurnal[$j]->JournalDetail[$k]->total]);
-                        if ($jurnal[$j]->JournalDetail[$k]->debet_kredit == 'D') {
+                        if ($jurnal[$j]->JournalDetail[$k]->debet_kredit == 'K') {
                             $dataBeban[$i]['total'] += $jurnal[$j]->JournalDetail[$k]->total;
                         } else {
-                            $dataBeban[$i]['total'] -= 0;
+                            $dataBeban[$i]['total'] -= $jurnal[$j]->JournalDetail[$k]->total;
                         }
                     }
                 }
@@ -277,8 +270,43 @@ class ReportIncomeStatementController extends Controller
         }
         // return $dataBeban;
 
+        $accountDataPenyusutan = AccountData::where('main_id', 11)
+                ->where(function ($q) use ($req){
+                    if ($req->branch == '') {
+                    } else {
+                        $q->where('branch_id', $req->branch);
+                    }
+                })->get();
+
+        $dataPenyusutan = [];
+        for ($i = 0; $i < count($accountDataPenyusutan); $i++) {
+            $dataPenyusutan[$i]['total'] = 0;
+            $dataPenyusutan[$i]['akun'] = $accountDataPenyusutan[$i]->main_detail_id;
+            $dataPenyusutan[$i]['namaAkun'] = $accountDataPenyusutan[$i]->name;
+            $dataPenyusutan[$i]['jurnal'] = [];
+            $dataPenyusutan[$i]['dk'] = [];
+            $dataPenyusutan[$i]['code'] = [];
+            for ($j = 0; $j < count($jurnal); $j++) {
+                for ($k = 0; $k < count($jurnal[$j]->JournalDetail); $k++) {
+                    if ($accountDataPenyusutan[$i]->main_detail_id == $jurnal[$j]->JournalDetail[$k]->AccountData->main_detail_id && $accountDataPenyusutan[$i]->branch_id == $jurnal[$j]->JournalDetail[$k]->AccountData->branch_id) {
+                        // $dataPenyusutan[$i]['jurnal'][$j]['jurnalDetail'][$k] = $jurnal[$j];
+                        array_push($dataPenyusutan[$i]['jurnal'], $jurnal[$j]->JournalDetail[$k]->total);
+                        // array_push($dataPenyusutan[$i]['dk'],[$jurnal[$j]->JournalDetail[$k]->debet_kredit,$jurnal[$j]->code]);
+                        array_push($dataPenyusutan[$i]['dk'], $jurnal[$j]->JournalDetail[$k]->debet_kredit);
+                        array_push($dataPenyusutan[$i]['code'], [$jurnal[$j]->ref, $jurnal[$j]->code, $jurnal[$j]->JournalDetail[$k]->total]);
+                        if ($jurnal[$j]->JournalDetail[$k]->debet_kredit == 'D') {
+                            $dataPenyusutan[$i]['total'] -= $jurnal[$j]->JournalDetail[$k]->total;
+                        } else {
+                            $dataPenyusutan[$i]['total'] += $jurnal[$j]->JournalDetail[$k]->total;
+                        }
+                    }
+                }
+            }
+        }
+        // return $dataPenyusutan;
+
         // $data = [];
-        return view('pages.backend.report.reportIncomeStatement', compact('HPP', 'gaji', 'sharingProfit', 'totalService', 'totalPenjualan', 'DiskonPenjualan', 'DiskonService', 'dataBiaya', 'dataBeban', 'branch','dataPendapatanLainLain'));
+        return view('pages.backend.report.reportIncomeStatement', compact('HPP', 'gaji', 'sharingProfit', 'totalService', 'totalPenjualan', 'DiskonPenjualan', 'DiskonService', 'dataBiaya', 'dataBeban', 'branch','dataPendapatanLainLain','dataPenyusutan'));
     }
     public function printReportIncomeStatement(Request $req)
     {

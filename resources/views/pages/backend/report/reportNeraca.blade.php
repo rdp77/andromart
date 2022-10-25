@@ -31,7 +31,7 @@
                                                 <br>
                                                 Neraca
                                                 <br>
-                                                Per {{ date('d F Y') }}
+                                                Per {{ date('t F Y') }}
                                             </th>
                                         </tr>
                                     </table>
@@ -42,13 +42,13 @@
                                     <br>
                                     <table style="color: black;border-collapse:collapse;width:100%">
                                         <thead>
-                                            
+
                                             <tr>
                                                 <th width="49%" style="color:black;border-top: 1px solid black">Aktiva
                                                     Lancar
                                                 </th>
                                                 <th style="border-left: 1px solid black;border-top: 1px solid black"
-                                                    rowspan="10">
+                                                    rowspan="100">
 
                                                 </th>
                                                 <th width="49%" style="color:black;border-top: 1px solid black">Utang
@@ -74,21 +74,11 @@
                                                             <td></td>
                                                         </tr>
                                                         @for ($i = 0; $i < count($accountDataKas); $i++)
-                                                            {{-- @if ($accountDataKas[$i]['main_detail_id'] == $dataKas[$j]['akun'])
-                                                                <tr>
-                                                                    <td style="padding-left:40px;">
-                                                                        {{ $accountDataKas[$i]['main_detail_id'] }}
-                                                                        {{ $dataKas[$j]['akun'] }}
-                                                                    </td>
-                                                                </tr>
-                                                            @endif --}}
                                                             @php
                                                                 $namaPerkas;
                                                                 $totalPerkas = 0;
                                                             @endphp
                                                             @for ($j = 0; $j < count($dataKas); $j++)
-                                                                
-
                                                                 @if ($accountDataKas[$i]['id'] == $dataKas[$j]['akun_id'])
                                                                     @php
                                                                         $totalPerkas += $dataKas[$j]['total'];
@@ -108,6 +98,39 @@
                                                             </tr>
                                                         @endfor
                                                     </table>
+                                                    <th style="color:black">
+                                                        EKUITAS
+                                                        <table>
+                                                        <tr>
+                                                            <td style="padding-left:30px;">
+                                                                <table>
+                                                                    <tr>
+                                                                        <td style="padding-left:10px;">
+                                                                            <b>MODAL</b>
+                                                                        </td>
+                                                                        <td style="padding-left:290px;">
+                                                                            <b>Rp.</b>
+                                                                        </td>
+                                                                        <td style="padding-left:18px;text-align:right">
+                                                                            <b>{{ number_format($dataAssetTotal, 0, ',', ',') }}</b>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td style="padding-left:10px;">
+                                                                            <b>Laba Berjalan</b>
+                                                                        </td>
+                                                                        <td style="padding-left:290px;">
+                                                                            <b>Rp.</b>
+                                                                        </td>
+                                                                        <td style="padding-left:18px;text-align:right">
+                                                                            <b>{{ number_format($dataAssetTotal, 0, ',', ',') }}</b>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                        </table>
+                                                    </th>
 
                                                 </td>
                                             </tr>
@@ -116,6 +139,7 @@
                                                     <br>
                                                 </td>
                                             </tr>
+                                            
                                             <tr>
                                                 <td style="padding-left:30px;">
                                                     <table>
@@ -151,20 +175,135 @@
                                                     </table>
 
                                                 </td>
+                                              
                                             </tr>
-                                        <tr>
-                                            <td>
-                                                <br>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th width="49%" style="color:black">Aktiva
-                                                Tetap
-                                            </th>
-                                            
-                                        </tr>
-                                    </thead>
+                                            <tr>
+                                                <td>
+                                                    <br>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th width="49%" style="color:black">Aktiva
+                                                    Tetap
+                                                </th>
+                                               
+                                            </tr>
+                                            <tr>
+                                                <td style="padding-left:30px;">
+                                                    <table>
+                                                        <tr>
+                                                            <td style="padding-left:10px;">
+                                                                <b>Asset</b>
+                                                            </td>
+                                                            <td style="padding-left:138px;">
+                                                                <b>Rp.</b>
+                                                            </td>
+                                                            <td style="padding-left:18px;text-align:right">
+                                                                <b>{{ number_format($dataAssetTotal, 0, ',', ',') }}</b>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                        </tr>
+                                                        @for ($i = 0; $i < count($dataAsset); $i++)
+                                                            @php
+                                                                // $dataAsset = 0;
+                                                            @endphp
+                                                            <tr>
+                                                                <td style="padding-left:50px;">
+                                                                    {{ $dataAsset[$i]['akun_nama'] }}
+                                                                </td>
+                                                                <td style="padding-left:138px;">
+                                                                    Rp.</td>
+                                                                <td style="padding-left:18px;text-align:right">
+                                                                    {{ number_format($dataAsset[$i]['total'], 0, ',', ',') }}
+                                                                </td>
+                                                            </tr>
+                                                        @endfor
+                                                    </table>
 
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <th><br></th>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding-left:30px;">
+                                                    <table>
+                                                        <tr>
+                                                            <td style="padding-left:10px;">
+                                                                <b>Penyusutan</b>
+                                                            </td>
+                                                            <td style="padding-left:38px;">
+                                                                <b>Rp.</b>
+                                                            </td>
+                                                            <td style="padding-left:18px;text-align:right">
+                                                                <b>
+                                                                    @if ($dataPenyusutanTotal < 0)
+                                                                        ({{ number_format($dataPenyusutanTotal - $dataPenyusutanTotal - $dataPenyusutanTotal, 0, ',', ',') }})
+                                                                    @else
+                                                                        ({{ number_format($dataPenyusutanTotal, 0, ',', ',') }})
+                                                                    @endif
+                                                                </b>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td></td>
+                                                        </tr>
+                                                        @for ($i = 0; $i < count($dataPenyusutan); $i++)
+                                                            @php
+                                                                // $dataPenyusutan = 0;
+                                                            @endphp
+                                                            <tr>
+                                                                <td style="padding-left:50px;">
+                                                                    {{ $dataPenyusutan[$i]['akun_nama'] }}
+                                                                </td>
+                                                                <td style="padding-left:38px;">
+                                                                    Rp.</td>
+                                                                <td style="padding-left:18px;text-align:right">
+                                                                    @if ($dataPenyusutan[$i]['total'] < 0)
+                                                                        ({{ number_format($dataPenyusutan[$i]['total'] - $dataPenyusutan[$i]['total'] - $dataPenyusutan[$i]['total'], 0, ',', ',') }})
+                                                                    @else
+                                                                        ({{ number_format($dataPenyusutan[$i]['total'], 0, ',', ',') }})
+                                                                    @endif
+                                                                </td>
+                                                            </tr>
+                                                        @endfor
+                                                    </table>
+
+                                                </td>
+                                            </tr>
+                                            </tr>
+                                        </thead>
+                                    
+                                    </table>
+                                    <table  style="width:100%">
+                                        <thead>
+                                            <tr style="color:black;border-top: 1px solid black">
+                                                <th style="width:50%">
+                                                    <table>
+                                                        <tr>
+                                                            <th>TOTAL</th>
+                                                            <th style="padding-left:348px;">Rp.
+                                                                {{ number_format($dataPersediaanTotal + $dataKasTotal - $dataPenyusutanTotal + $dataAssetTotal, 0, ',', ',') }}
+                                                            </th>
+                                                        </tr>
+                                                    </table>
+
+
+                                                </th>
+                                                <th style="width:50%">
+                                                    <table>
+                                                        <tr>
+                                                            <th>TOTAL</th>
+                                                            <th style="padding-left:348px;">Rp.
+                                                                
+                                                            </th>
+                                                        </tr>
+                                                    </table>
+                                                </th>
+                                            </tr>
+                                        </thead>
                                     </table>
                                 </div>
                             </div>

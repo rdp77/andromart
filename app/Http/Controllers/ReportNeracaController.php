@@ -54,7 +54,7 @@ class ReportNeracaController extends Controller
 
         $jurnal = Journal::with('JournalDetail', 'JournalDetail.AccountData')
             // ->where('date', '>=', date('Y-m-01'))
-            ->where('date', '<=', date('Y-m-d'))
+            ->where('date', '<=', date('Y-m-t'))
             ->get();
         // ->take('')
 
@@ -72,10 +72,16 @@ class ReportNeracaController extends Controller
         // return $this->dataPersediaan($jurnal);
         $dataPersediaan = $this->dataPersediaan($jurnal)[0];
         $dataPersediaanTotal = $this->dataPersediaan($jurnal)[1];
+
+        $dataPenyusutan = $this->dataPenyusutan($jurnal)[0];
+        $dataPenyusutanTotal = $this->dataPenyusutan($jurnal)[1];
+
+        $dataAsset = $this->dataAsset($jurnal)[0];
+        $dataAssetTotal = $this->dataAsset($jurnal)[1];
         // return $dataKas;
         // return [$dataPersediaan, $dataPersediaanTotal];
 
-        return view('pages.backend.report.reportNeraca', compact('dataKas', 'dataKasTotal', 'accountDataKas', 'accountDataPersediaan', 'dataPersediaan', 'dataPersediaanTotal'));
+        return view('pages.backend.report.reportNeraca', compact('dataKas', 'dataKasTotal', 'accountDataKas', 'accountDataPersediaan', 'dataPersediaan','dataPenyusutan','dataPenyusutanTotal', 'dataPersediaanTotal','dataAsset','dataAssetTotal'));
     }
 
     // mencari data kas secara
@@ -144,82 +150,88 @@ class ReportNeracaController extends Controller
         }
         return [$dataKas, $total];
     }
-    public function jurnalTransaksiStock()
+    public function dataPenyusutan($jurnal)
     {
-        // return 'asdd';
-        $transaction = StockTransaction::with('item')->get();
+        $accountDataPenyusutan = AccountData::where('main_id', 12)
+                ->where(function ($q) {
+                    // if ($req->branch == '') {
+                    // } else {
+                    //     $q->where('branch_id', $req->branch);
+                    // }
+                })->get();
 
-        // $accountPersediaan = AccountData::where('branch_id', $getEmployee->branch_id)
-        //     ->where('active', 'Y')
-        //     ->where('main_id', 3)
-        //     ->where('main_detail_id', 11)
-        //     ->first();
-
-        // $accountBiayaBarang = AccountData::where('branch_id', $getEmployee->branch_id)
-        //     ->where('active', 'Y')
-        //     ->where('main_id', 7)
-        //     ->where('main_detail_id', 29)
-        //     ->first();
-
-        $dataRusak = [];
-        for ($i=0; $i <count($transaction) ; $i++) { 
-            if ($transaction[$i]->type == 'In') {
-                
-            }elseif ($transaction[$i]->type == 'Out') {
-                if ($transaction[$i]->reason == 'Rusak') {
-
-                    $accountPersediaan = AccountData::where('branch_id', $transaction[$i]->branch_id)
-                        ->where('active', 'Y')
-                        ->where('main_id', 3)
-                        ->where('main_detail_id', 11)
-                        ->first();
-                        
-                    array_push($dataRusak,[$transaction[$i]->id,$transaction[$i]->code,$transaction[$i]->qty*$transaction[$i]->item->buy,[$accountPersediaan->name,$accountPersediaan->id]]);
-               
-                }elseif ($transaction[$i]->reason == 'Rusak') {
-                
+        $dataPenyusutan = [];
+        $total = 0;
+        for ($i = 0; $i < count($accountDataPenyusutan); $i++) {
+            
+            $dataPenyusutan[$i]['total'] = 0;
+            // $dataPenyusutan[$i]['akun'] = $accountDataPenyusutan[$i]->main_detail_id;
+            // $dataPenyusutan[$i]['namaAkun'] = $accountDataPenyusutan[$i]->name;
+            $dataPenyusutan[$i]['jurnal'] = [];
+            $dataPenyusutan[$i]['dk'] = [];
+            $dataPenyusutan[$i]['code'] = [];
+            $dataPenyusutan[$i]['akun'] = $accountDataPenyusutan[$i]->main_detail_id;
+            $dataPenyusutan[$i]['akun_nama'] = $accountDataPenyusutan[$i]->name;
+            for ($j = 0; $j < count($jurnal); $j++) {
+                for ($k = 0; $k < count($jurnal[$j]->JournalDetail); $k++) {
+                    if ($accountDataPenyusutan[$i]->main_detail_id == $jurnal[$j]->JournalDetail[$k]->AccountData->main_detail_id && $accountDataPenyusutan[$i]->branch_id == $jurnal[$j]->JournalDetail[$k]->AccountData->branch_id) {
+                        // $dataPenyusutan[$i]['jurnal'][$j]['jurnalDetail'][$k] = $jurnal[$j];
+                        array_push($dataPenyusutan[$i]['jurnal'], $jurnal[$j]->JournalDetail[$k]->total);
+                        // array_push($dataPenyusutan[$i]['dk'],[$jurnal[$j]->JournalDetail[$k]->debet_kredit,$jurnal[$j]->code]);
+                        array_push($dataPenyusutan[$i]['dk'], $jurnal[$j]->JournalDetail[$k]->debet_kredit);
+                        array_push($dataPenyusutan[$i]['code'], [$jurnal[$j]->ref, $jurnal[$j]->code, $jurnal[$j]->JournalDetail[$k]->total]);
+                        if ($jurnal[$j]->JournalDetail[$k]->debet_kredit == 'K') {
+                            $dataPenyusutan[$i]['total'] += $jurnal[$j]->JournalDetail[$k]->total;
+                        } else {
+                            $dataPenyusutan[$i]['total'] -= $jurnal[$j]->JournalDetail[$k]->total;
+                        }
+                    }
                 }
             }
+            $total += $dataPenyusutan[$i]['total'];
         }
+        return [$dataPenyusutan, $total];
+    }
+    public function dataAsset($jurnal)
+    {
+        $accountDataAsset = AccountData::where('main_id', 13)
+                ->where(function ($q) {
+                    // if ($req->branch == '') {
+                    // } else {
+                    //     $q->where('branch_id', $req->branch);
+                    // }
+                })->get();
 
-        return $dataRusak;
-
-        $idJournalHpp = DB::table('journals')->max('id') + 1;
-        Journal::create([
-            'id' => $idJournalHpp,
-            'code' => $this->code('KK', $idJournalHpp),
-            'year' => date('Y'),
-            'date' => $dateConvert,
-            'type' => 'Biaya',
-            'total' => str_replace(',', '', $req->totalHpp),
-            'ref' => $kode,
-            'description' => 'HPP ' . $kode,
-            'created_at' => date('Y-m-d h:i:s'),
-        ]);
-
-      
-        // JURNAL HPP
-        $accountCodeHpp = [$accountBiayaHpp->id, $accountPersediaan->id];
-        // return $accountCodeHpp;
-        $totalHpp = [str_replace(',', '', $req->totalHpp), str_replace(',', '', $req->totalHpp)];
-
-        $descriptionHpp = ['Pengeluaran Harga Pokok Penjualan ' . $kode, 'Biaya Harga Pokok Penjualan' . $kode];
-        $DKHpp = ['D', 'K'];
-        for ($i = 0; $i < count($totalHpp); $i++) {
-            if ($totalHpp[$i] != 0) {
-                $idDetailhpp = DB::table('journal_details')->max('id') + 1;
-                JournalDetail::create([
-                    'id' => $idDetailhpp,
-                    'journal_id' => $idJournalHpp,
-                    'account_id' => $accountCodeHpp[$i],
-                    'total' => $totalHpp[$i],
-                    'description' => $descriptionHpp[$i],
-                    'debet_kredit' => $DKHpp[$i],
-                    'created_at' => date('Y-m-d h:i:s'),
-                    'updated_at' => date('Y-m-d h:i:s'),
-                ]);
+        $dataAsset = [];
+        $total = 0;
+        for ($i = 0; $i < count($accountDataAsset); $i++) {
+            
+            $dataAsset[$i]['total'] = 0;
+            // $dataAsset[$i]['akun'] = $accountDataAsset[$i]->main_detail_id;
+            // $dataAsset[$i]['namaAkun'] = $accountDataAsset[$i]->name;
+            $dataAsset[$i]['jurnal'] = [];
+            $dataAsset[$i]['dk'] = [];
+            $dataAsset[$i]['code'] = [];
+            $dataAsset[$i]['akun'] = $accountDataAsset[$i]->main_detail_id;
+            $dataAsset[$i]['akun_nama'] = $accountDataAsset[$i]->name;
+            for ($j = 0; $j < count($jurnal); $j++) {
+                for ($k = 0; $k < count($jurnal[$j]->JournalDetail); $k++) {
+                    if ($accountDataAsset[$i]->main_detail_id == $jurnal[$j]->JournalDetail[$k]->AccountData->main_detail_id && $accountDataAsset[$i]->branch_id == $jurnal[$j]->JournalDetail[$k]->AccountData->branch_id) {
+                        // $dataAsset[$i]['jurnal'][$j]['jurnalDetail'][$k] = $jurnal[$j];
+                        array_push($dataAsset[$i]['jurnal'], $jurnal[$j]->JournalDetail[$k]->total);
+                        // array_push($dataAsset[$i]['dk'],[$jurnal[$j]->JournalDetail[$k]->debet_kredit,$jurnal[$j]->code]);
+                        array_push($dataAsset[$i]['dk'], $jurnal[$j]->JournalDetail[$k]->debet_kredit);
+                        array_push($dataAsset[$i]['code'], [$jurnal[$j]->ref, $jurnal[$j]->code, $jurnal[$j]->JournalDetail[$k]->total]);
+                        if ($jurnal[$j]->JournalDetail[$k]->debet_kredit == 'D') {
+                            $dataAsset[$i]['total'] += $jurnal[$j]->JournalDetail[$k]->total;
+                        } else {
+                            $dataAsset[$i]['total'] -= $jurnal[$j]->JournalDetail[$k]->total;
+                        }
+                    }
+                }
             }
+            $total += $dataAsset[$i]['total'];
         }
-        return $data;
+        return [$dataAsset, $total];
     }
 }

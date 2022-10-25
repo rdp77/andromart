@@ -228,21 +228,7 @@
                                                         {{ number_format($totalPenjualan + $totalPendapatanLainLain + $totalService - $DiskonPenjualan - $DiskonService, 0, '.', ',') }}</b>
                                                 </td>
                                             </tr>
-                                            {{-- <tr>
-                                                <td style="padding-left: 50px">Total Service</td>
-                                                <td></td>
-                                                <td style="text-align: right"><b>Rp.
-                                                    {{ number_format($totalService, 0, '.', ',') }}</b></td>
-                                            <tr>
-                                                <td style="padding-left: 50px">Total Penjualan</td>
-                                                <td></td>
-                                                <td style="text-align: right"><b>Rp.
-                                                    {{ number_format($totalPenjualan, 0, '.', ',') }}</b></td>
-                                            <tr> --}}
-                                            {{-- <td style="padding-left: 50px">Diskon</td>
-                                                <td style="text-align: right"><b>Rp.
-                                                        {{ number_format($Diskon, 0, '.', ',') }}</b></td>
-                                                <td></td> --}}
+                              
                                             <tr>
                                                 <td style="padding-left: 50px">HPP</td>
                                                 <td style="text-align: right"><b>Rp.
@@ -260,10 +246,7 @@
                                             @php
                                                 $labaKotor = $totalPendapatanLainLain + $totalPenjualan + $totalService - $DiskonPenjualan - $DiskonService - $HPP;
                                             @endphp
-                                            {{-- <tr>
-                                                <th colspan="3" style="color:black;text-align:center">Beban Usaha
-                                                </th>
-                                            </tr> --}}
+                                       
                                             <tr>
                                                 <th colspan="3" style="color:black">Beban</th>
                                             </tr>
@@ -273,6 +256,45 @@
                                                         {{ number_format($sharingProfit, 0, '.', ',') }}</b>
                                                 </td>
                                                 <td></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Beban Penyusutan
+                                                    <table>
+                                                        @for ($i = 0; $i < count($dataPenyusutan); $i++)
+                                                            <tr>
+                                                                <td
+                                                                    style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                    @php
+                                                                   
+                                                                       echo $dataPenyusutan[$i]['namaAkun'];
+                                                                     
+                                                                    @endphp
+                                                                </td>
+                                                            </tr>
+                                                        @endfor
+                                                    </table>
+                                                    Total Beban Penyusutan
+                                                </td>
+                                                <td style="text-align: right">
+                                                    <table style="width: 100%;text-align:left">
+                                                        <b><br></b>
+                                                        @php
+                                                            $totalDataPenyusutan = 0;
+                                                        @endphp
+                                                        @for ($i = 0; $i < count($dataPenyusutan); $i++)
+                                                            <tr>
+                                                                <td
+                                                                    style="border:0px solid black !important;padding-left:40px;padding-top:0px">
+                                                                    @php
+                                                                        echo 'Rp.' . number_format($dataPenyusutan[$i]['total']-$dataPenyusutan[$i]['total']-$dataPenyusutan[$i]['total'], 0, ',', ',');
+                                                                        $totalDataPenyusutan -= $dataPenyusutan[$i]['total'];
+                                                                    @endphp
+                                                            </tr>
+                                                        @endfor
+                                                    </table>
+                                                    <b>Rp.
+                                                        {{ number_format($totalDataPenyusutan, 0, '.', ',') }}</b>
+                                                </td>
                                             </tr>
                                             <tr>
                                                 <td>Beban Umum Lain
@@ -293,6 +315,7 @@
                                                     </table>
                                                     Total Beban Umum Lain
                                                 </td>
+                                                
                                                 <td style="text-align: right">
                                                     <table style="width: 100%;text-align:left">
                                                         <b><br></b>
@@ -322,7 +345,7 @@
                                                     Operasional
                                                 </th>
                                                 <td style="text-align: right;background-color: #ffffdc;color:black"><b>Rp.
-                                                        {{ number_format($totalDataBeban + $sharingProfit, 0, '.', ',') }}</b>
+                                                        {{ number_format($totalDataBeban + $sharingProfit + $totalDataPenyusutan, 0, '.', ',') }}</b>
                                                 </td>
                                                 <td style="text-align: right;background-color: #ffffdc"></td>
                                             </tr>
@@ -394,7 +417,8 @@
 
                                                 </th>
                                                 <td style="text-align: right;background-color: yellow;color:black"><b>Rp.
-                                                        {{ number_format($labaKotor - $totalDataBeban - $sharingProfit - $totalDataBiaya - $gaji, 0, '.', ',') }}</b>
+                                                        
+                                                        {{ number_format($labaKotor - $totalDataBeban - $sharingProfit - $totalDataBiaya - $gaji - $totalDataPenyusutan, 0, '.', ',') }}</b>
                                                 </td>
                                             </tr>
                                         </thead>

@@ -67,18 +67,22 @@ require __DIR__ . '/master/warrantyRoute.php';
 require __DIR__ . '/master/menuRoute.php';
 require __DIR__ . '/master/accountRoute.php';
 require __DIR__ . '/master/iconRoute.php';
+require __DIR__ . '/master/assetRoute.php';
+require __DIR__ . '/master/activaGroupRoute.php';
 
 require __DIR__ . '/transaction/serviceRoute.php';
 require __DIR__ . '/transaction/serviceReturnRoute.php';
-require __DIR__ . '/finance/sharingProfitRoute.php';
-require __DIR__ . '/finance/lossItemsRoute.php';
-require __DIR__ . '/finance/ReportRoute.php';
 require __DIR__ . '/transaction/saleRoute.php';
 require __DIR__ . '/transaction/transactionIncomeRoute.php';
 require __DIR__ . '/transaction/paymentRoute.php';
 require __DIR__ . '/transaction/purchasingRoute.php';
 
 require __DIR__ . '/finance/sharingProfitRoute.php';
+require __DIR__ . '/finance/lossItemsRoute.php';
+require __DIR__ . '/finance/ReportRoute.php';
+require __DIR__ . '/finance/sharingProfitRoute.php';
+require __DIR__ . '/finance/activaRoute.php';
+require __DIR__ . '/finance/assetAdditionRoute.php';
 
 require __DIR__ . '/report/reportServiceRoute.php';
 require __DIR__ . '/report/reportSaleRoute.php';
