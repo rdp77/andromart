@@ -17,7 +17,7 @@
                         <h4>Tabel Akumulasi penyusutan</h4>
                     </div>
                     @php
-                        $totalAc = $data->total_acquisition
+                        $totalAc = $data->total_early_depreciation
                     @endphp
                     <div class="card-body">
                         <div class="row">
