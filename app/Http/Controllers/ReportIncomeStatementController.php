@@ -76,8 +76,8 @@ class ReportIncomeStatementController extends Controller
             $date1 = date('m-01');
             $date2 = date('m-t');
 
-            $date1 = $req->typeTahun . '-' . $q1month1;
-            $date2 = $req->typeTahun . '-' . $q1month2;
+            $date1 = $req->typeTahun . '-' . '01'. '-' .'01';
+            $date2 = $req->typeTahun . '-' . '12'. '-' .'31';
         } else {
             $date1 = date('Y-m-01', strtotime(date('Y-m-d')));
             $date2 = date('Y-m-t', strtotime(date('Y-m-d')));
@@ -93,7 +93,7 @@ class ReportIncomeStatementController extends Controller
             ->where('date', '>=', $date1)
             ->where('date', '<=', $date2)
             ->get();
-
+            
         $jurnalSebelumnya = Journal::with('JournalDetail', 'JournalDetail.AccountData')->get();
 
         $branch = Branch::get();
@@ -259,7 +259,7 @@ class ReportIncomeStatementController extends Controller
                         // array_push($dataBeban[$i]['dk'],[$jurnal[$j]->JournalDetail[$k]->debet_kredit,$jurnal[$j]->code]);
                         array_push($dataBeban[$i]['dk'], $jurnal[$j]->JournalDetail[$k]->debet_kredit);
                         array_push($dataBeban[$i]['code'], [$jurnal[$j]->ref, $jurnal[$j]->code, $jurnal[$j]->JournalDetail[$k]->total]);
-                        if ($jurnal[$j]->JournalDetail[$k]->debet_kredit == 'K') {
+                        if ($jurnal[$j]->JournalDetail[$k]->debet_kredit == 'D') {
                             $dataBeban[$i]['total'] += $jurnal[$j]->JournalDetail[$k]->total;
                         } else {
                             $dataBeban[$i]['total'] -= $jurnal[$j]->JournalDetail[$k]->total;

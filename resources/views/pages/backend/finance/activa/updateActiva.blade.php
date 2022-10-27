@@ -37,6 +37,21 @@
                         </div>
                     </div>
                     <div class="row">
+                        <div class="form-group col-md-12">
+                            <label for="email"
+                                class="control-label">{{ __('Penanggung Jawab') }}</label><code>*</code>
+                            <select name="responsible" id="responsible"
+                            class="form-control select2" required>
+                                <option> - Select - </option>
+                                @foreach ($Employee as $el)
+                                    <option value="{{$el->id}}" @if ($data->responsible == $el->id)
+                                        selected
+                                    @endif>{{$el->name}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
                         <div class="form-group col-md-6">
                             <label for="email"
                                 class="control-label">{{ __('Lokasi Barang') }}</label><code>*</code>

@@ -16,6 +16,9 @@
         
         <a href="{{ route('activa.depreciation') }}" class="btn btn-icon icon-left btn-success ml-3">
             <i class="fas fa-angle-double-down"></i>{{ __(' Lakukan Penyusutan') }}</a>
+        
+        <a href="{{ route('activa.excel-view') }}" class="btn btn-icon icon-left btn-warning ml-3">
+            <i class="fas fa-file-excel"></i>{{ __(' Lihat Penyusutan') }}</a>
     </div>
     <div class="card-body">
         <table class="table-striped table" id="table" width="100%">

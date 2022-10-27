@@ -85,6 +85,12 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div class="form-group col-md-12">
+                                <label for="email" class="control-label">{{ __('Penanggung Jawab') }}</label><code>*</code>
+                                <h5>{{ $data->UserResponsible->name }}</h5>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="email" class="control-label">{{ __('Cabang') }}</label><code>*</code>
                                 <h5>{{ $data->branch->name }}</h5>

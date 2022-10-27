@@ -28,6 +28,11 @@ Route::group(['prefix' => 'finance'], function () {
             [ActivaController::class, 'depreciation']
         )->name('activa.depreciation');
 
+        Route::get(
+            'activa/excel-view',
+            [ActivaController::class, 'excelView']
+        )->name('activa.excel-view');
+
         Route::post(
             'activa/store-depreciation',
             [ActivaController::class, 'storeDepreciation']

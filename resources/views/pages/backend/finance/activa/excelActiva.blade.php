@@ -423,260 +423,105 @@
     </div>
     <div id="isi" class="col-md-10 col-md-offset-1"
         style="background: white; padding: 10px 15px; margin-top: 80px;">
-        <table style="width: 100%">
+        {{-- <table style="width: 100%"> --}}
             <caption>
-                <h3><b>Laporan Laba Rugi </b></h3>
+                <h3  class="text-center"><b>Laporan Penyusutan </b></h3>
+                <h4  class="text-center"><b>Periode : {{ date('F Y') }}</b></h4>
             </caption>
-        </table>
+        {{-- </table> --}}
         <br>
-        <table class="table table-bordered table-sm" style="color: black">
+        <table class="table table-bordered table-sm" style="color: black;font-size:9px">
             <thead>
-                <tr>
-                    <th colspan="3" style="color:black">Pendapatan
+                <tr >
+                    <th  class="text-center">
+                        {{ __('NO') }}
                     </th>
-                </tr>
-
-                <tr>
-                    <td>Service
-                        <table>
-                            <tr>
-                                <td style="border:0px solid black !important;padding-left:40px;">
-                                    Diskon Service</td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td style="text-align: right"><br> <b>Rp.
-                            {{ number_format($DiskonService, 0, '.', ',') }}</b>
-                    <td style="text-align: right">
-                        <b>Rp.
-                            {{ number_format($totalService, 0, '.', ',') }}</b>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Penjualan
-                        <table>
-                            <tr>
-                                <td style="border:0px solid black !important;padding-left:40px;">
-                                    Diskon Penjualan</td>
-                            </tr>
-                        </table>
-                    </td>
-                    <td style="text-align: right"><br> <b>Rp.
-                            {{ number_format($DiskonPenjualan, 0, '.', ',') }}</b>
-                    </td>
-                    <td style="text-align: right">
-                        <b>Rp.
-                            {{ number_format($totalPenjualan, 0, '.', ',') }}</b>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Pendapatan Lain-Lain
-                        <table>
-                            @for ($i = 0; $i < count($dataPendapatanLainLain); $i++)
-                                <tr>
-                                    <td style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                        @php
-                                            echo $dataPendapatanLainLain[$i]['namaAkun'];
-                                        @endphp
-                                    </td>
-                                </tr>
-                            @endfor
-                        </table>
-                        Total Pendapatan Lain-Lain
-                    </td>
-                    <td style="text-align: right">
-                        <table style="width: 100%;text-align:left">
-                            <b><br></b>
-                            @php
-                                $totalPendapatanLainLain = 0;
-                            @endphp
-                            @for ($i = 0; $i < count($dataPendapatanLainLain); $i++)
-                                <tr>
-                                    <td style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                        {{ number_format($dataPendapatanLainLain[$i]['total'], 0, ',', ',') }}
-                                        @php
-                                            $totalPendapatanLainLain += $dataPendapatanLainLain[$i]['total'];
-                                        @endphp
-                                </tr>
-                            @endfor
-                        </table>
-                        <b>Rp.
-                            {{ number_format($totalPendapatanLainLain, 0, '.', ',') }}</b>
-                    </td>
-                </tr>
-                <tr>
-                    <td>Pendapatan Kotor</td>
-                    <td></td>
-                    <td style="text-align: right"><b>Rp.
-                            {{ number_format($totalPenjualan + $totalPendapatanLainLain + $totalService - $DiskonPenjualan - $DiskonService, 0, '.', ',') }}</b>
-                    </td>
-                </tr>
-                {{-- <tr>
-                    <td style="padding-left: 50px">Total Service</td>
-                    <td></td>
-                    <td style="text-align: right"><b>Rp.
-                        {{ number_format($totalService, 0, '.', ',') }}</b></td>
-                <tr>
-                    <td style="padding-left: 50px">Total Penjualan</td>
-                    <td></td>
-                    <td style="text-align: right"><b>Rp.
-                        {{ number_format($totalPenjualan, 0, '.', ',') }}</b></td>
-                <tr> --}}
-                {{-- <td style="padding-left: 50px">Diskon</td>
-                    <td style="text-align: right"><b>Rp.
-                            {{ number_format($Diskon, 0, '.', ',') }}</b></td>
-                    <td></td> --}}
-                <tr>
-                    <td style="padding-left: 50px">HPP</td>
-                    <td style="text-align: right"><b>Rp.
-                            {{ number_format($HPP, 0, '.', ',') }}</b>
-                    </td>
-                    <td></td>
-                <tr>
-                    <th colspan="1" style="background-color: #ffffdc;color:black">Laba Kotor
+                    <th  class="text-center">
+                        {{ __('Kode') }}
                     </th>
-                    <td style="text-align: right;background-color: #ffffdc"></td>
-                    <td style="text-align: right;background-color: #ffffdc;color:black"><b>Rp.
-                            {{ number_format($totalPenjualan + $totalPendapatanLainLain + $totalService - $DiskonPenjualan - $DiskonService - $HPP, 0, '.', ',') }}</b>
-                    </td>
-                </tr>
-                @php
-                    $labaKotor = $totalPendapatanLainLain + $totalPenjualan + $totalService - $DiskonPenjualan - $DiskonService - $HPP;
-                @endphp
-                {{-- <tr>
-                    <th colspan="3" style="color:black;text-align:center">Beban Usaha
+                    <th  class="text-center">
+                        {{ __('Nama/Barang') }}
                     </th>
-                </tr> --}}
-                <tr>
-                    <th colspan="3" style="color:black">Beban</th>
-                </tr>
-                <tr>
-                    <td>Sharing Profit</td>
-                    <td style="text-align: right"><b>Rp.
-                            {{ number_format($sharingProfit, 0, '.', ',') }}</b>
-                    </td>
-                    <td></td>
-                </tr>
-                <tr>
-                    <td>Beban Umum Lain
-                        <table>
-                            @for ($i = 0; $i < count($dataBeban); $i++)
-                                <tr>
-                                    <td style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                        @php
-                                            if (!str_contains($dataBeban[$i]['namaAkun'], 'Fee Back Office') && !str_contains($dataBeban[$i]['namaAkun'], 'Sharing Profit') && !str_contains($dataBeban[$i]['namaAkun'], 'Mutasi') && !str_contains($dataBeban[$i]['namaAkun'], 'Transfer') && !str_contains($dataBeban[$i]['namaAkun'], 'Biaya HPP')) {
-                                                echo $dataBeban[$i]['namaAkun'];
-                                                # code...
-                                            }
-                                        @endphp
-                                    </td>
-                                </tr>
-                            @endfor
-                        </table>
-                        Total Beban Umum Lain
-                    </td>
-                    <td style="text-align: right">
-                        <table style="width: 100%;text-align:left">
-                            <b><br></b>
-                            @php
-                                $totalDataBeban = 0;
-                            @endphp
-                            @for ($i = 0; $i < count($dataBeban); $i++)
-                                <tr>
-                                    <td style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                        @php
-                                            if (!str_contains($dataBeban[$i]['namaAkun'], 'Fee Back Office') && !str_contains($dataBeban[$i]['namaAkun'], 'Sharing Profit') && !str_contains($dataBeban[$i]['namaAkun'], 'Mutasi') && !str_contains($dataBeban[$i]['namaAkun'], 'Transfer') && !str_contains($dataBeban[$i]['namaAkun'], 'Biaya HPP')) {
-                                                echo 'Rp.' . number_format($dataBeban[$i]['total'], 0, ',', ',');
-                                                $totalDataBeban += $dataBeban[$i]['total'];
-                                            }
-                                            
-                                        @endphp
-                                </tr>
-                            @endfor
-                        </table>
-                        <b>Rp.
-                            {{ number_format($totalDataBeban, 0, '.', ',') }}</b>
-                    </td>
-                </tr>
-                <tr>
-                    <th colspan="1" style="background-color: #ffffdc;color:black">Total Beban
-                        Operasional
+                    <th  class="text-center">
+                        {{ __('Cabang') }}
                     </th>
-                    <td style="text-align: right;background-color: #ffffdc;color:black"><b>Rp.
-                            {{ number_format($totalDataBeban + $sharingProfit, 0, '.', ',') }}</b>
-                    </td>
-                    <td style="text-align: right;background-color: #ffffdc"></td>
-                </tr>
-                <tr>
-                    <th colspan="3" style="color:black">Biaya Umum</th>
-                </tr>
-
-                <tr>
-                    <td>Gaji Karyawan</td>
-                    <td style="text-align: right"><b>Rp.
-                            {{ number_format($gaji, 0, '.', ',') }}</b>
-                    </td>
-                    <td></td>
-
-                </tr>
-                <tr>
-                    <td>
-                        <table>
-                            Biaya Umum Lain
-                            @for ($i = 0; $i < count($dataBiaya); $i++)
-                                <tr>
-                                    <td style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                        @php
-                                            echo $dataBiaya[$i]['namaAkun'];
-                                        @endphp
-                                    </td>
-                                </tr>
-                            @endfor
-                        </table>
-                        Total Biaya Umum Lain
-                    </td>
-                    <td style="text-align: right">
-                        <table style="width: 100%;text-align:left">
-                            <b><br></b>
-                            @php
-                                $totalDataBiaya = 0;
-                            @endphp
-                            @for ($i = 0; $i < count($dataBiaya); $i++)
-                                <tr>
-                                    <td style="border:0px solid black !important;padding-left:40px;padding-top:0px">
-                                        Rp.
-                                        {{ number_format($dataBiaya[$i]['total'], 0, ',', ',') }}
-                                        @php
-                                            $totalDataBiaya += $dataBiaya[$i]['total'];
-                                        @endphp
-                                </tr>
-                            @endfor
-                        </table>
-                        <b>Rp.
-                            {{ number_format($totalDataBiaya, 0, '.', ',') }}</b>
-                    </td>
-                    <td></td>
-
-                </tr>
-
-                <tr>
-                    <th colspan="1" style="background-color: #ffffdc;color:black">Total Beban
-                        Administrasi
+                    <th  class="text-center">
+                        {{ __('Bulan Selesai') }}
                     </th>
-                    <td style="text-align: right;background-color: #ffffdc;color:black"><b>Rp.
-                            {{ number_format($totalDataBiaya, 0, '.', ',') }}</b>
-                    </td>
-                    <td style="text-align: right;background-color: #ffffdc"></td>
-                </tr>
-                <tr>
-                    <th colspan="2" style="background-color: yellow;color:black">Laba Bersih
-
+                    <th  class="text-center">
+                        {{ __('Golongan') }}
                     </th>
-                    <td style="text-align: right;background-color: yellow;color:black"><b>Rp.
-                            {{ number_format($labaKotor - $totalDataBeban - $sharingProfit - $totalDataBiaya - $gaji, 0, '.', ',') }}</b>
-                    </td>
+                    <th  class="text-center">
+                        {{ __('Jenis Asset') }}
+                    </th>
+                    <th  class="text-center">
+                        {{ __('Status') }}
+                    </th>
+                    <th  class="text-center">
+                        {{ __('Tgl Per.') }}
+                    </th>
+                    <th  class="text-center">
+                        {{ __('Nilai Per.') }}
+                    </th>
+                    <th  class="text-center">
+                        {{ __('Nilai Awal Peny.') }}
+                    </th>
+                    <th  class="text-center">
+                        {{ __('Nilai Peny.') }}
+                    </th>
+                    <th  class="text-center">
+                        {{ __('Akml. Peny.') }}
+                    </th>
+                    <th  class="text-center">
+                        {{ __('Nilai Buku') }}
+                    </th>
                 </tr>
             </thead>
+            <tbody>
+                @php
+                    $totalPerolehan = 0;
+                    $totalAwalPenyusutan = 0;
+                    $totalPenyusutan = 0;
+                    $totalAkumulasiPenyusutan = 0;
+                    $totalNilaiPenyusutan = 0;
+                @endphp
+                @foreach ($data as $index => $el)
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $el->code }}</td>
+                        <td>{{ $el->items_id == null ? $el->items : $el->ItemsRel->items_id  }}</td>
+                        <td>{{ $el->Branch->name }}</td>
+                        <td>{{ $el->date_finished }}</td>
+                        <td>{{ $el->Asset->name }}</td>
+                        <td>{{ $el->activaGroup->name }}</td>
+                        <td>{{ $el->status }}</td>
+                        <td>{{ date('d-m-Y',strtotime($el->date_acquisition)) }}</td>
+                        <th class="text-right">Rp. {{ number_format($el->total_acquisition, 0, '.', ',') }}</th>
+                        <th class="text-right">Rp. {{ number_format($el->total_early_depreciation, 0, '.', ',') }}</th>
+                        <th class="text-right">Rp. {{ number_format($el->total_depreciation, 0, '.', ',') }}</th>
+                        <th class="text-right">Rp. {{ number_format($el->accumulation_depreciation, 0, '.', ',') }}</th>
+                        <th class="text-right">Rp. {{ number_format($el->remaining_depreciation, 0, '.', ',') }}</th>
+                    </tr>
+
+                    @php
+                        $totalPerolehan += $el->total_acquisition;
+                        $totalAwalPenyusutan += $el->total_early_depreciation;
+                        $totalPenyusutan += $el->total_depreciation;
+                        $totalAkumulasiPenyusutan += $el->accumulation_depreciation;
+                        $totalNilaiPenyusutan += $el->remaining_depreciation;
+                    @endphp
+
+                @endforeach
+
+            </tbody>
+            <tfoot>
+                <th colspan="9"> Total</th>
+                <th class="text-right">Rp. {{ number_format($totalPerolehan, 0, '.', ',') }}</th>
+                <th class="text-right">Rp. {{ number_format($totalAwalPenyusutan, 0, '.', ',') }}</th>
+                <th class="text-right">Rp. {{ number_format($totalPenyusutan, 0, '.', ',') }}</th>
+                <th class="text-right">Rp. {{ number_format($totalAkumulasiPenyusutan, 0, '.', ',') }}</th>
+                <th class="text-right">Rp. {{ number_format($totalNilaiPenyusutan, 0, '.', ',') }}</th>
+            </tfoot>
         </table>
 
         <hr>
@@ -685,8 +530,7 @@
         <div class="modal-dialog" style="width: 40%;">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">×</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                     <h4 class="modal-title">Filter Laporan Absensi</h4>
                     <input type="hidden" class="parrent">
                 </div>
@@ -699,16 +543,15 @@
                                     <span class="input-group-addon">
                                         <i class="fa fa-calendar"></i>
                                     </span>
-                                    <input type="text" class="form-control dtpickermnth"
-                                        value="{{ date('F Y') }}" name="dtpickermnth" id="dtpickermnth" />
+                                    <input type="text" class="form-control dtpickermnth" value="{{ date('F Y') }}"
+                                    name="dtpickermnth" id="dtpickermnth" />
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onclick="cari()" class="btn btn-primary btn-sm"
-                        id="proses_buku_besar">Proses</button>
+                    <button type="button" onclick="cari()" class="btn btn-primary btn-sm" id="proses_buku_besar">Proses</button>
                 </div>
             </div>
         </div>
@@ -755,7 +598,7 @@
                 dd.getMinutes() +
                 dd.getSeconds();
 
-            $("#xlsDownload").html("<a href=\"" + blobUrl + "\" download=\"Laporan Labar Rugi\_" + ss +
+            $("#xlsDownload").html("<a href=\"" + blobUrl + "\" download=\"Laporan Penyusutan\_" + ss +
                 "\.xls\" id=\"xlsFile\">Downlaod</a>");
             $("#xlsFile").get(0).click();
 

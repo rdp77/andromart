@@ -60,7 +60,7 @@
                                 </select>
                             </div>
                             @foreach ($cash as $el)
-                                @if ($el->debet_kredit == 'D')
+                                @if ($el->debet_kredit == 'D' || $el->main_id == 9)
                                     <input class="accountData" type="hidden"
                                     data-branch="{{$el->branch_id}}"
                                     data-name="{{$el->code}} - {{$el->name}}"

@@ -11,6 +11,7 @@ use App\Models\ActivaGroup;
 use App\Models\AccountData;
 use App\Models\Journal;
 use App\Models\JournalDetail;
+use App\Models\Employee;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -118,7 +119,8 @@ class ActivaController extends Controller
         $Branch = Branch::get();
         $Asset = Asset::get();
         $ActivaGroup = ActivaGroup::get();
-        return view('pages.backend.finance.activa.createActiva', compact('Branch', 'Asset', 'ActivaGroup', 'Item'));
+        $Employee = Employee::get();
+        return view('pages.backend.finance.activa.createActiva', compact('Branch', 'Asset', 'ActivaGroup', 'Item','Employee'));
     }
 
     public function store(Request $req)
@@ -148,6 +150,7 @@ class ActivaController extends Controller
                     'code' => $code,
                     'name' => $req->name,
                     'location' => $req->location,
+                    'responsible' => $req->responsible,
                     'branch_id' => $req->branch_id,
                     'items_id' => $req->items_id,
                     'items' => $req->items,
@@ -199,7 +202,8 @@ class ActivaController extends Controller
         $Branch = Branch::get();
         $Asset = Asset::get();
         $ActivaGroup = ActivaGroup::get();
-        return view('pages.backend.finance.activa.updateActiva', compact('Branch', 'Asset', 'ActivaGroup', 'Item', 'data'));
+        $Employee = Employee::get();
+        return view('pages.backend.finance.activa.updateActiva', compact('Branch', 'Asset', 'ActivaGroup', 'Item', 'data','Employee'));
     }
 
     public function update(Request $req, $id)
@@ -230,6 +234,7 @@ class ActivaController extends Controller
                     // 'name' => $req->name,
                     'location' => $req->location,
                     'branch_id' => $req->branch_id,
+                    'responsible' => $req->responsible,
                     'items_id' => $req->items_id,
                     'items' => $req->items,
                     'asset_id' => $req->asset_id,
@@ -438,5 +443,10 @@ class ActivaController extends Controller
             ->where('code', $req->id)
             ->first();
         return Response::json(['status' => 'success', 'jurnal' => $data]);
+    }
+    public function excelView()
+    {
+        $data = Activa::with('ItemsRel', 'Branch', 'AccountDepreciation', 'AccountAccumulation', 'Asset', 'ActivaGroup','ActivaDetail')->get();
+        return view('pages.backend.finance.activa.excelActiva',compact('data'));
     }
 }

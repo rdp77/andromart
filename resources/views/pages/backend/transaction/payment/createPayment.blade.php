@@ -78,7 +78,7 @@
                                     value="{{$el->id}}">
                                 @endif
 
-                                @if ($el->debet_kredit == 'D' && $el->main_id == 13)
+                                @if ($el->debet_kredit == 'D' || $el->main_id == 13)
                                     <input class="accountData" type="hidden"
                                     data-branch="{{$el->branch_id}}"
                                     data-name="{{$el->code}} - {{$el->name}}"

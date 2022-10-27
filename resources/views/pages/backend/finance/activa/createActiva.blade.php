@@ -30,6 +30,19 @@
                             </div>
                         </div>
                         <div class="row">
+                            <div class="form-group col-md-12">
+                                <label for="email"
+                                    class="control-label">{{ __('Penanggung Jawab') }}</label><code>*</code>
+                                <select name="responsible" id="responsible"
+                                class="form-control select2" required>
+                                    <option> - Select - </option>
+                                    @foreach ($Employee as $el)
+                                        <option value="{{$el->id}}">{{$el->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="email"
                                     class="control-label">{{ __('Lokasi Barang') }}</label><code>*</code>
@@ -63,16 +76,6 @@
                             </div>
                         </div>
                         <div class="row">
-                            {{-- <div class="form-group col-md-6">
-                                <label for="email"
-                                    class="control-label">{{ __('Barang Baru ?') }}</label><code>*</code>
-                                <select name="with_items" id="with_items"
-                                    class="form-control">
-                                    <option> - Select - </option>
-                                    <option value="Y">YA</option>
-                                    <option value="N">TIDAK</option>
-                                </select>
-                            </div> --}}
                             <div class="form-group col-md-12">
                                 <label for="email"
                                     class="control-label">{{ __('Ambil Dari Master ?') }}</label><code>*</code>

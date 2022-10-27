@@ -14,6 +14,7 @@ class Activa extends Model
         'code',
         'name',
         'location',
+        'responsible',
         'branch_id',
         'items_id',
         'items',
@@ -59,6 +60,10 @@ class Activa extends Model
     public function Asset()
     {
         return $this->belongsTo('App\Models\Asset');
+    }
+    public function UserResponsible()
+    {
+        return $this->belongsTo('App\Models\Employee', 'responsible', 'id');
     }
     public function ActivaDetail()
     {
