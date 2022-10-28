@@ -141,7 +141,7 @@
                                                                 <td style="padding-left:40px;"><b>Saldo Laba</b></td>
                                                                 <td style="padding-left:180px;"><b>Rp.</b></td>
                                                                 <td style="padding-left:10px;text-align:right">
-                                                                    <b>{{ number_format($dataModalTotal, 0, ',', ',') }}</b>
+                                                                    <b>{{ number_format(0, 0, ',', ',') }}</b>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -325,7 +325,7 @@
                                                         <tr>
                                                             <th>TOTAL</th>
                                                             <th style="padding-left:348px;">Rp.
-
+                                                                {{ number_format($dataModalTotal+$labaBerjalan, 0, ',', ',') }}
                                                             </th>
                                                         </tr>
                                                     </table>
