@@ -63,7 +63,7 @@
                                                             <td style="padding-left:10px;">
                                                                 <b>KAS</b>
                                                             </td>
-                                                            <td style="padding-left:50px;">
+                                                            <td>
                                                                 <b>Rp.</b>
                                                             </td>
                                                             <td style="padding-left:10px;text-align:right">
@@ -88,18 +88,17 @@
 
                                                             <tr>
                                                                 <td style="padding-left:50px;">
-                                                                    {{ $accountDataKas[$i]['name'] }}
+                                                                    <input type="text" value="{{ $accountDataKas[$i]['name'] }}" disabled style="border: none;font-size:12px;font-weight:bold;background-color:transparent;width:450px">
                                                                 </td>
-                                                                <td style="padding-left:50px;">
-                                                                    Rp.</td>
-                                                                <td style="padding-left:10px;text-align:right">
+                                                                <td>Rp.</td>
+                                                                <td style="text-align:right">
                                                                     {{ number_format($totalPerkas, 0, ',', ',') }}
                                                                 </td>
                                                             </tr>
                                                         @endfor
                                                     </table>
                                                 <td>
-                                                <br><br><br><br>
+                                                <br><br>
                                                 <b>Ekuitas</b>
                                                     <table>
                                                         <tr>
@@ -127,7 +126,7 @@
                                                                     </td>
                                                                     <td style="padding-left:180px;">
                                                                         Rp.</td>
-                                                                    <td style="padding-left:18px;text-align:right">
+                                                                    <td style="text-align:right">
                                                                         {{ number_format($dataModal[$i]['total'], 0, ',', ',') }}
                                                                     </td>
                                                                 </tr>
@@ -152,7 +151,14 @@
                                                                 <td style="padding-left:40px;"><b>Laba Berjalan</b></td>
                                                                 <td style="padding-left:180px;"><b>Rp.</b></td>
                                                                 <td style="padding-left:10px;text-align:right">
-                                                                    <b>{{ number_format($labaBerjalan, 0, ',', ',') }}</b>
+                                                                    <b>
+                                                                        @if ($labaBerjalan < 0)
+                                                                        ({{ number_format($labaBerjalan-$labaBerjalan-$labaBerjalan, 0, ',', ',') }})
+                                                                        @else
+                                                                        {{ number_format($labaBerjalan, 0, ',', ',') }}
+                                                                        @endif
+                                                                        
+                                                                    </b>
                                                                 </td>
                                                             </tr>
                                                             <tr>
@@ -165,22 +171,16 @@
                                                 </td>
                                             </tr>
                                             <tr>
-                                                <td>
-                                                    <br>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
                                                 <td style="padding-left:30px;">
                                                     <table>
                                                         <tr>
                                                             <td style="padding-left:10px;">
                                                                 <b>Persediaan</b>
                                                             </td>
-                                                            <td style="padding-left:38px;">
+                                                            <td >
                                                                 <b>Rp.</b>
                                                             </td>
-                                                            <td style="padding-left:18px;text-align:right">
+                                                            <td style="text-align:right">
                                                                 <b>{{ number_format($dataPersediaanTotal, 0, ',', ',') }}</b>
                                                             </td>
                                                         </tr>
@@ -193,11 +193,10 @@
                                                             @endphp
                                                             <tr>
                                                                 <td style="padding-left:50px;">
-                                                                    {{ $dataPersediaan[$i]['akun_nama'] }}
+                                                                    <input type="text" value="{{ $dataPersediaan[$i]['akun_nama'] }}" disabled style="border: none;font-size:12px;font-weight:bold;background-color:transparent;width:450px">
                                                                 </td>
-                                                                <td style="padding-left:38px;">
-                                                                    Rp.</td>
-                                                                <td style="padding-left:18px;text-align:right">
+                                                                <td>Rp.</td>
+                                                                <td style="padding-left:10px;text-align:right">
                                                                     {{ number_format($dataPersediaan[$i]['total'], 0, ',', ',') }}
                                                                 </td>
                                                             </tr>
@@ -223,10 +222,10 @@
                                                             <td style="padding-left:10px;">
                                                                 <b>Asset</b>
                                                             </td>
-                                                            <td style="padding-left:138px;">
+                                                            <td >
                                                                 <b>Rp.</b>
                                                             </td>
-                                                            <td style="padding-left:18px;text-align:right">
+                                                            <td style="text-align:right">
                                                                 <b>{{ number_format($dataAssetTotal, 0, ',', ',') }}</b>
                                                             </td>
                                                         </tr>
@@ -239,11 +238,11 @@
                                                             @endphp
                                                             <tr>
                                                                 <td style="padding-left:50px;">
-                                                                    {{ $dataAsset[$i]['akun_nama'] }}
+                                                                    <input type="text" value="{{ $dataAsset[$i]['akun_nama'] }}" disabled style="border: none;font-size:12px;font-weight:bold;background-color:transparent;width:450px">
                                                                 </td>
-                                                                <td style="padding-left:138px;">
+                                                                <td >
                                                                     Rp.</td>
-                                                                <td style="padding-left:18px;text-align:right">
+                                                                <td style="padding-left:10px;text-align:right">
                                                                     {{ number_format($dataAsset[$i]['total'], 0, ',', ',') }}
                                                                 </td>
                                                             </tr>
@@ -262,10 +261,10 @@
                                                             <td style="padding-left:10px;">
                                                                 <b>Penyusutan</b>
                                                             </td>
-                                                            <td style="padding-left:38px;">
+                                                            <td >
                                                                 <b>Rp.</b>
                                                             </td>
-                                                            <td style="padding-left:18px;text-align:right">
+                                                            <td style="text-align:right">
                                                                 <b>
                                                                     @if ($dataPenyusutanTotal < 0)
                                                                         ({{ number_format($dataPenyusutanTotal - $dataPenyusutanTotal - $dataPenyusutanTotal, 0, ',', ',') }})
@@ -284,11 +283,11 @@
                                                             @endphp
                                                             <tr>
                                                                 <td style="padding-left:50px;">
-                                                                    {{ $dataPenyusutan[$i]['akun_nama'] }}
+                                                                    <input type="text" value="{{ $dataPenyusutan[$i]['akun_nama'] }}" disabled style="border: none;font-size:12px;font-weight:bold;background-color:transparent;width:450px">
                                                                 </td>
-                                                                <td style="padding-left:38px;">
+                                                                <td >
                                                                     Rp.</td>
-                                                                <td style="padding-left:18px;text-align:right">
+                                                                <td style="padding-left:10px;text-align:right">
                                                                     @if ($dataPenyusutan[$i]['total'] < 0)
                                                                         ({{ number_format($dataPenyusutan[$i]['total'] - $dataPenyusutan[$i]['total'] - $dataPenyusutan[$i]['total'], 0, ',', ',') }})
                                                                     @else
