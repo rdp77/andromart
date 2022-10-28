@@ -99,7 +99,7 @@
                                                         @endfor
                                                     </table>
                                                 <td>
-                                                    <br><br><br><br><br><br><br><br>
+                                                <br><br><br><br>
                                                 <b>Ekuitas</b>
                                                     <table>
                                                         <tr>
