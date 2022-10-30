@@ -132,7 +132,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="email"
-                                    class="control-label">{{ __('Nilai Penyusutan Awal') }}</label><code>*</code>
+                                    class="control-label">{{ __('Nilai Buku') }}</label><code>*</code>
                                 <input id="total_early_depreciation" type="text" class="form-control cleaveNumeral" name="total_early_depreciation"
                                     >
                             </div>
