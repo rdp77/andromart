@@ -248,6 +248,7 @@ $(document.body).on("change",".type",function(){
         $('.reason').append('<option value="">- Select -</option>');
         $('.reason').append('<option value="Rusak">Barang Rusak</option>');
         $('.reason').append('<option value="Hilang">Barang Hilang</option>');
+        $('.reason').append('<option value="Barang Sekali Pakai">Barang Sekali Pakai</option>');
         $('.reason').append('<option value="Salah Input">Salah Input</option>');
     }else if(this.value == 'Mutation'){
         $('.hiddenReason').css('display','none');

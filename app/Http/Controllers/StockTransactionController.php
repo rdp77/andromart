@@ -298,6 +298,12 @@ class StockTransactionController extends Controller
                 ->where('main_id', 6)
                 ->where('main_detail_id', 47)
                 ->first();
+            
+            $accountBiayaBarangSekaliPakai = AccountData::where('branch_id', $getEmployee->branch_id)
+                ->where('active', 'Y')
+                ->where('main_id', 6)
+                ->where('main_detail_id', 59)
+                ->first();
 
             $accountDestination = AccountData::where('branch_id', $req->destination)
                 ->where('active', 'Y')
@@ -325,6 +331,9 @@ class StockTransactionController extends Controller
                     $acc2 = $accountPersediaan->id;
                 }elseif($req->reason == 'Rusak'){
                     $acc1 = $accountBiayaRusak->id;
+                    $acc2 = $accountPersediaan->id;
+                }elseif($req->reason == 'Barang Sekali Pakai'){
+                    $acc1 = $accountBiayaBarangSekaliPakai->id;
                     $acc2 = $accountPersediaan->id;
                 }
             }
@@ -377,10 +386,6 @@ class StockTransactionController extends Controller
             ->get();
         return Response::json(['status' => 'success', 'jurnal' => $data]);
     }
-
-
-
-
     public function destroy(Request $req, $id)
     {
         $checkRoles = $this->DashboardController->cekHakAkses(36, 'delete');
