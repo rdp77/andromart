@@ -119,6 +119,7 @@ class PaymentController extends Controller
 
     public function store(Request $req)
     {
+     
         // return 'asd';
         // return $req->all();
         // return $this->checkSaldoKas($req->date));
@@ -189,8 +190,10 @@ class PaymentController extends Controller
                 ]);
 
                 $accountPembayaran = AccountData::where('id', $req->cash_tranfer_id)->first();
+                $accountMutasi = AccountData::where('id', $req->cost_id)->first();
+                $accountCabangLawan = AccountData::where('main_detail_id', $accountMutasi->main_detail_id)->where('branch_id',$accountPembayaran->branch_id)->first();
 
-                $accountCode = [$accountPembayaran->id, $req->cost_id];
+                $accountCode = [$accountPembayaran->id, $accountCabangLawan->id];
                 $totalBayar = [str_replace(',', '', $req->price), str_replace(',', '', $req->price)];
                 $description = [$req->description, $req->description];
                 $DK = ['D', 'K'];
@@ -293,7 +296,6 @@ class PaymentController extends Controller
         DB::beginTransaction();
         try {
             $payment = Payment::find($req->id);
-            // return $req->all();
             $checkJurnal = DB::table('journals')
                 ->where('ref', $payment->code)
                 ->get();
@@ -430,7 +432,7 @@ class PaymentController extends Controller
                         'updated_at' => date('Y-m-d h:i:s'),
                     ]);
                 }
-            }
+            } +
 
             $this->DashboardController->createLog($req->header('user-agent'), $req->ip(), 'Membuat transaksi pembayaran baru');
 

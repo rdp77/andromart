@@ -47,5 +47,15 @@ Route::group(['prefix' => 'finance'], function () {
             'activa/check-journals',
             [ActivaController::class, 'activaCheckJournals']
         )->name('activa.activaCheckJournals');
+
+        Route::get(
+            'activa/stop-activa',
+            [ActivaController::class, 'stopActiva']
+        )->name('activa.stop-activa');
+
+        Route::post(
+            'activa/stop-store-activa',
+            [ActivaController::class, 'stopStoreActiva']
+        )->name('activa.stop-store-activa');
     });
 });

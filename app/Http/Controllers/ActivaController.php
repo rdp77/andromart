@@ -55,7 +55,9 @@ class ActivaController extends Controller
                         '">Edit</a><a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hapus</a>';
                     }else{
                         if ($row->status == 'ACTIVE') {
-                            $actionBtn .= '<a onclick="changeStatus(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hentikan Penyusutan</a>';
+                            // $actionBtn .= '<a onclick="changeStatus(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;">Hentikan Penyusutan</a>';
+                            $actionBtn .= '<a class="dropdown-item" href="' .
+                            route('activa.stop-activa', ['id'=>$row->id]) .'">Hentikan Aktiva</a>';
                         }
                     }
                     $actionBtn .= '<a class="dropdown-item" href="' . route('activa.detail', ['id' => $row->id]) . '">Tabel Akumulasi</a>';
@@ -444,9 +446,106 @@ class ActivaController extends Controller
             ->first();
         return Response::json(['status' => 'success', 'jurnal' => $data]);
     }
-    public function excelView()
+    public function excelView(Request $req)
     {
-        $data = Activa::with('ItemsRel', 'Branch', 'AccountDepreciation', 'AccountAccumulation', 'Asset', 'ActivaGroup','ActivaDetail')->get();
-        return view('pages.backend.finance.activa.excelActiva',compact('data'));
+        $branch = Branch::get();
+        $data = Activa::with('ItemsRel', 'Branch', 'AccountDepreciation', 'AccountAccumulation', 'Asset', 'ActivaGroup','ActivaDetail')->where(function ($q) use ($req) {
+                                                if ($req->branch == '') {
+                                                } else {
+                                                    $q->where('branch_id', $req->branch);
+                                                }
+                                            })->get();
+        return view('pages.backend.finance.activa.excelActiva',compact('data','branch'));
+    }
+    public function stopActiva(Request $req)
+    {
+        $checkRoles = $this->DashboardController->cekHakAkses(54, 'edit');
+        if ($checkRoles == 'akses ditolak') {
+            return view('forbidden');
+        }
+
+        $data = Activa::find($req->id);
+        $Item = Item::get();
+        $Branch = Branch::get();
+        $Asset = Asset::get();
+        $ActivaGroup = ActivaGroup::get();
+        $Employee = Employee::get();
+        return view('pages.backend.finance.activa.stopActiva', compact('Branch', 'Asset', 'ActivaGroup', 'Item', 'data','Employee'));
+    }
+    public function stopStoreActiva(Request $req)
+    {
+        DB::beginTransaction();
+        try {
+            $checkData = Activa::where('id', $req->id)->first();
+            
+            if ($req->reason == 'Broken') {
+                $data = [
+                    'status'=>'NON ACTIVE',
+                    'reason'=>$req->reason,
+                ];
+            } elseif($req->reason == 'Mutasi') {
+                $data = [
+                    'status'=>'NON ACTIVE',
+                    'branch_id'=>$req->branch_id,
+                    'reason'=>$req->reason,
+                ];
+            }else{
+                $data = [
+                    'status'=>'NON ACTIVE',
+                    'reason'=>$req->reason,
+                    'sell_price'=>str_replace(',', '', $req->sell_price),
+                ];
+                $idJournal = DB::table('journals')->max('id') + 1;
+                // DB::rollback();
+                $kode = $this->codeJournals('KAC',$idJournal,$req->branch_id[$i]);
+
+                Journal::create([
+                    'id' => $idJournal,
+                    'code' => $kode,
+                    'year' => date('Y'),
+                    'date' => date('Y-m-t'),
+                    'type' => 'Beban Penyusutan',
+                    'total' => str_replace(',', '', $req->total_depreciation),
+                    'ref' => $req->code,
+                    'description' => 'Beban Penyusutan ' . $req->code,
+                    'created_at' => date('Y-m-d h:i:s'),
+                ]);
+
+                $AccountDepreciation = AccountData::where('branch_id', $req->branch_id)
+                    ->where('active', 'Y')
+                    ->where('id', $req->account_depreciation_id)
+                    ->first();
+
+                $accountAccumulation = AccountData::where('branch_id', $req->branch_id)
+                    ->where('active', 'Y')
+                    ->where('id', $req->account_accumulation_id)
+                    ->first();
+
+                $idDetail = DB::table('journal_details')->max('id') + 1;
+                JournalDetail::create([
+                    'id' => $idDetail,
+                    'journal_id' => $idJournal,
+                    'account_id' => $AccountDepreciation->id,
+                    'total' => $req->total_depreciation,
+                    'description' => 'Beban Penyusutan',
+                    'debet_kredit' => 'D',
+                    'created_at' => date('Y-m-d h:i:s'),
+                    'updated_at' => date('Y-m-d h:i:s'),
+                ]);
+            }
+
+            Activa::where('id', $req->id)->update(
+                $data
+            );
+            
+            DB::commit();
+            return Response::json([
+                'status' => 'success',
+                'message' => 'Data master berhasil dihapus !',
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return $th;
+        }
     }
 }

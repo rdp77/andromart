@@ -143,6 +143,23 @@ function changeSelectItems(params) {
     }
 }
 
+function changeReason(params) {
+    var reason = $('#reason').find(':selected').val();
+    // Broken
+    // Sell
+    // Mutasi
+    if (reason == 'Sell') {
+        $('.branch_id').css('display', 'none');
+        $('.sell_price').css('display', 'block');
+    } else if(reason == 'Mutasi') {
+        $('.branch_id').css('display', 'block');
+        $('.sell_price').css('display', 'none');
+    }else{
+        $('.branch_id').css('display', 'none');
+        $('.sell_price').css('display', 'none');
+    }
+}
+
 function appendValue(params) {
     
     $('#estimate_age').val($('#activa_group_id').find(':selected').data('estimate'));
@@ -179,6 +196,41 @@ function changeStatus(params) {
         if (willDelete) {
             $.ajax({
                 url: "/finance/activa/activa/change-status?&id=" + params,
+                type: "get",
+                success: function (data) {
+                    if (data.status == 'success') {
+                        swal(data.message, {
+                            icon: "success",
+                        });
+                        table.draw();
+                    }else if (data.status == 'restricted') {
+                        swal(data.message, {
+                            icon: "warning",
+                        });
+                    }else {
+                        swal(data.message, {
+                            icon: "error"
+                        });
+                    }
+                },
+            });
+        } else {
+            swal("Data Anda tidak jadi dihapus!");
+        }
+    });
+}
+
+function stopStoreActive(params) {
+    swal({
+        title: "Apakah Anda Yakin?",
+        text: "Aksi ini tidak dapat dikembalikan, dan akan menghentikan penyusutan dari saat ini",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willDelete) => {
+        if (willDelete) {
+            $.ajax({
+                url: "/finance/activa/activa/stop-store-activa?&id=" + params,
                 type: "get",
                 success: function (data) {
                     if (data.status == 'success') {

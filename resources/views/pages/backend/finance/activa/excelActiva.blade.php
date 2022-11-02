@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Laporan Laba Rugi</title>
+    <title>Laporan Penyusutan</title>
     <link href="https://panel.jpmandiri.com/assets/vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
@@ -411,7 +411,7 @@
             </div>
             <div class="col-md-5" style="background: none; padding: 10px 15px 5px 15px">
                 <ul>
-                    {{-- <li><i class="fa fa-align-justify" style="cursor: pointer;" onclick="$('#modal_buku_besar').modal('show')" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Tampilkan Setting Buku Besar"></i></li> --}}
+                    <li><i class="fa fa-align-justify" style="cursor: pointer;" onclick="$('#modal_buku_besar').modal('show')" data-toggle="tooltip" data-placement="bottom" title="" data-original-title="Tampilkan Setting Buku Besar"></i></li>
                     <li><i class="fa fa-file-excel" style="cursor: pointer;" id="btnExport" data-toggle="tooltip"
                             data-placement="bottom" title="" onclick="excel()"
                             data-original-title="Export Excel"></i></li>
@@ -531,13 +531,13 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
-                    <h4 class="modal-title">Filter Laporan Absensi</h4>
+                    <h4 class="modal-title">Filter Laporan Aktiva</h4>
                     <input type="hidden" class="parrent">
                 </div>
                 <div class="modal-body" style="padding: 10px;">
                     <div class="row">
                         <form id="filter_form" action="">
-                            <div class="col-sm-12 mb-3">
+                            {{-- <div class="col-sm-12 mb-3">
                                 <label>Tanggal Awal</label>
                                 <div class="input-group date">
                                     <span class="input-group-addon">
@@ -546,12 +546,26 @@
                                     <input type="text" class="form-control dtpickermnth" value="{{ date('F Y') }}"
                                     name="dtpickermnth" id="dtpickermnth" />
                                 </div>
+                            </div> --}}
+                            <div class="col-sm-12 mb-3">
+                                <label>cabang</label>
+                                <div class="input-group date">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                    <select name="branch_id" id="branch_id" class="form-control">
+                                        <option value="">- Select -</option>
+                                        @foreach ($branch as $el)
+                                            <option value="{{$el->id}}">{{$el->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
                             </div>
                         </form>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" onclick="cari()" class="btn btn-primary btn-sm" id="proses_buku_besar">Proses</button>
+                    <button type="button" onclick="cari()" class="btn btn-primary btn-sm" id="proses_buku_besar">cari</button>
                 </div>
             </div>
         </div>
@@ -632,6 +646,10 @@
 
         function cetak(params) {
             window.print();
+        }
+        function cari(params) {
+            var branch = $("#branch_id").val();
+            window.location.href = '{{ route('activa.excel-view') }}?&branch='+branch;
         }
     </script>
 

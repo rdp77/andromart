@@ -22,319 +22,33 @@
                     <div class="col-12">
                         <h2 class="section-title">Neraca <b>{{ date('F Y') }}</b> </h2>
                         <div class="card">
-
                             <div class="card-body">
                                 <div class="row">
-                                    <table style="width:100%">
-                                        <tr>
-                                            <th style="text-align:center">ANDROMART INDONESIA
-                                                <br>
-                                                Neraca
-                                                <br>
-                                                Per {{ date('t F Y') }}
-                                            </th>
-                                        </tr>
-                                    </table>
-                                    <br>
-                                    <br>
-                                    <br>
-                                    <br>
-                                    <br>
-                                    <table style="color: black;border-collapse:collapse;width:100%">
-                                        <thead>
-
-                                            <tr>
-                                                <th width="49%" style="color:black;border-top: 1px solid black">Aktiva
-                                                    Lancar
-                                                </th>
-                                                <th style="border-left: 1px solid black;border-top: 1px solid black"
-                                                    rowspan="100">
-
-                                                </th>
-                                                <th width="49%" style="color:black;border-top: 1px solid black">Utang
-                                                    Lancar
-                                                </th>
-                                            </tr>
-
-                                            <tr>
-                                                <td style="padding-left:30px;">
-                                                    <table>
-                                                        <tr>
-                                                            <td style="padding-left:10px;">
-                                                                <b>KAS</b>
-                                                            </td>
-                                                            <td>
-                                                                <b>Rp.</b>
-                                                            </td>
-                                                            <td style="padding-left:10px;text-align:right">
-                                                                <b>{{ number_format($dataKasTotal, 0, ',', ',') }}</b>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td></td>
-                                                        </tr>
-                                                        @for ($i = 0; $i < count($accountDataKas); $i++)
-                                                            @php
-                                                                $namaPerkas;
-                                                                $totalPerkas = 0;
-                                                            @endphp
-                                                            @for ($j = 0; $j < count($dataKas); $j++)
-                                                                @if ($accountDataKas[$i]['id'] == $dataKas[$j]['akun_id'])
-                                                                    @php
-                                                                        $totalPerkas += $dataKas[$j]['total'];
-                                                                    @endphp
-                                                                @endif
-                                                            @endfor
-
-                                                            <tr>
-                                                                <td style="padding-left:50px;">
-                                                                    <input type="text" value="{{ $accountDataKas[$i]['name'] }}" disabled style="border: none;font-size:12px;font-weight:bold;background-color:transparent;width:450px">
-                                                                </td>
-                                                                <td>Rp.</td>
-                                                                <td style="text-align:right">
-                                                                    {{ number_format($totalPerkas, 0, ',', ',') }}
-                                                                </td>
-                                                            </tr>
-                                                        @endfor
-                                                    </table>
-                                                <td>
-                                                <br><br>
-                                                <b>Ekuitas</b>
-                                                    <table>
-                                                        <tr>
-                                                        </tr>
-                                                    </table>
-                                                    <table>
-                                                        <tbody>
-                                                            {{-- DATA MODAL --}}
-                                                            <tr>
-                                                                <td style="padding-left:40px;"><b>MODAL</b></td>
-                                                                <td style="padding-left:180px;"><b>Rp.</b></td>
-                                                                <td style="padding-left:10px;text-align:right">
-                                                                    <b>{{ number_format($dataModalTotal, 0, ',', ',') }}</b>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td></td>
-                                                            </tr>
-                                                            @for ($i = 0; $i < count($dataModal); $i++)
-                                                                @php
-                                                                @endphp
-                                                                <tr>
-                                                                    <td style="padding-left:80px;">
-                                                                        {{ $dataModal[$i]['akun_nama'] }}
-                                                                    </td>
-                                                                    <td style="padding-left:180px;">
-                                                                        Rp.</td>
-                                                                    <td style="text-align:right">
-                                                                        {{ number_format($dataModal[$i]['total'], 0, ',', ',') }}
-                                                                    </td>
-                                                                </tr>
-                                                            @endfor
-
-                                                            {{-- DATA SALDO LABA --}}
-                                                            <tr>
-                                                                <td><br></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="padding-left:40px;"><b>Saldo Laba</b></td>
-                                                                <td style="padding-left:180px;"><b>Rp.</b></td>
-                                                                <td style="padding-left:10px;text-align:right">
-                                                                    <b>{{ number_format(0, 0, ',', ',') }}</b>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td><br></td>
-                                                            </tr>
-                                                            {{-- DATA LABA TERTAHAN --}}
-                                                            <tr>
-                                                                <td style="padding-left:40px;"><b>Laba Berjalan</b></td>
-                                                                <td style="padding-left:180px;"><b>Rp.</b></td>
-                                                                <td style="padding-left:10px;text-align:right">
-                                                                    <b>
-                                                                        @if ($labaBerjalan < 0)
-                                                                        ({{ number_format($labaBerjalan-$labaBerjalan-$labaBerjalan, 0, ',', ',') }})
-                                                                        @else
-                                                                        {{ number_format($labaBerjalan, 0, ',', ',') }}
-                                                                        @endif
-                                                                        
-                                                                    </b>
-                                                                </td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td></td>
-                                                            </tr>
-
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding-left:30px;">
-                                                    <table>
-                                                        <tr>
-                                                            <td style="padding-left:10px;">
-                                                                <b>Persediaan</b>
-                                                            </td>
-                                                            <td >
-                                                                <b>Rp.</b>
-                                                            </td>
-                                                            <td style="text-align:right">
-                                                                <b>{{ number_format($dataPersediaanTotal, 0, ',', ',') }}</b>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td></td>
-                                                        </tr>
-                                                        @for ($i = 0; $i < count($dataPersediaan); $i++)
-                                                            @php
-                                                                // $dataPersediaan = 0;
-                                                            @endphp
-                                                            <tr>
-                                                                <td style="padding-left:50px;">
-                                                                    <input type="text" value="{{ $dataPersediaan[$i]['akun_nama'] }}" disabled style="border: none;font-size:12px;font-weight:bold;background-color:transparent;width:450px">
-                                                                </td>
-                                                                <td>Rp.</td>
-                                                                <td style="padding-left:10px;text-align:right">
-                                                                    {{ number_format($dataPersediaan[$i]['total'], 0, ',', ',') }}
-                                                                </td>
-                                                            </tr>
-                                                        @endfor
-                                                    </table>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    <br>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th width="49%" style="color:black">Aktiva
-                                                    Tetap
-                                                </th>
-
-                                            </tr>
-                                            <tr>
-                                                <td style="padding-left:30px;">
-                                                    <table>
-                                                        <tr>
-                                                            <td style="padding-left:10px;">
-                                                                <b>Asset</b>
-                                                            </td>
-                                                            <td >
-                                                                <b>Rp.</b>
-                                                            </td>
-                                                            <td style="text-align:right">
-                                                                <b>{{ number_format($dataAssetTotal, 0, ',', ',') }}</b>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td></td>
-                                                        </tr>
-                                                        @for ($i = 0; $i < count($dataAsset); $i++)
-                                                            @php
-                                                                // $dataAsset = 0;
-                                                            @endphp
-                                                            <tr>
-                                                                <td style="padding-left:50px;">
-                                                                    <input type="text" value="{{ $dataAsset[$i]['akun_nama'] }}" disabled style="border: none;font-size:12px;font-weight:bold;background-color:transparent;width:450px">
-                                                                </td>
-                                                                <td >
-                                                                    Rp.</td>
-                                                                <td style="padding-left:10px;text-align:right">
-                                                                    {{ number_format($dataAsset[$i]['total'], 0, ',', ',') }}
-                                                                </td>
-                                                            </tr>
-                                                        @endfor
-                                                    </table>
-
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <th><br></th>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding-left:30px;">
-                                                    <table>
-                                                        <tr>
-                                                            <td style="padding-left:10px;">
-                                                                <b>Penyusutan</b>
-                                                            </td>
-                                                            <td >
-                                                                <b>Rp.</b>
-                                                            </td>
-                                                            <td style="text-align:right">
-                                                                <b>
-                                                                    @if ($dataPenyusutanTotal < 0)
-                                                                        ({{ number_format($dataPenyusutanTotal - $dataPenyusutanTotal - $dataPenyusutanTotal, 0, ',', ',') }})
-                                                                    @else
-                                                                        ({{ number_format($dataPenyusutanTotal, 0, ',', ',') }})
-                                                                    @endif
-                                                                </b>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td></td>
-                                                        </tr>
-                                                        @for ($i = 0; $i < count($dataPenyusutan); $i++)
-                                                            @php
-                                                                // $dataPenyusutan = 0;
-                                                            @endphp
-                                                            <tr>
-                                                                <td style="padding-left:50px;">
-                                                                    <input type="text" value="{{ $dataPenyusutan[$i]['akun_nama'] }}" disabled style="border: none;font-size:12px;font-weight:bold;background-color:transparent;width:450px">
-                                                                </td>
-                                                                <td >
-                                                                    Rp.</td>
-                                                                <td style="padding-left:10px;text-align:right">
-                                                                    @if ($dataPenyusutan[$i]['total'] < 0)
-                                                                        ({{ number_format($dataPenyusutan[$i]['total'] - $dataPenyusutan[$i]['total'] - $dataPenyusutan[$i]['total'], 0, ',', ',') }})
-                                                                    @else
-                                                                        ({{ number_format($dataPenyusutan[$i]['total'], 0, ',', ',') }})
-                                                                    @endif
-                                                                </td>
-                                                            </tr>
-                                                        @endfor
-                                                    </table>
-
-                                                </td>
-                                            </tr>
-                                            </tr>
-                                        </thead>
-
-                                    </table>
-                                    <table style="width:100%">
-                                        <thead>
-                                            <tr style="color:black;border-top: 1px solid black">
-                                                <th style="width:50%">
-                                                    <table>
-                                                        <tr>
-                                                            <th>TOTAL</th>
-                                                            <th style="padding-left:348px;">Rp.
-                                                                {{ number_format($dataPersediaanTotal + $dataKasTotal - $dataPenyusutanTotal + $dataAssetTotal, 0, ',', ',') }}
-                                                            </th>
-                                                        </tr>
-                                                    </table>
-
-
-                                                </th>
-                                                <th style="width:50%">
-                                                    <table>
-                                                        <tr>
-                                                            <th>TOTAL</th>
-                                                            <th style="padding-left:348px;">Rp.
-                                                                {{ number_format($dataModalTotal+$labaBerjalan, 0, ',', ',') }}
-                                                            </th>
-                                                        </tr>
-                                                    </table>
-                                                </th>
-                                            </tr>
-                                        </thead>
-                                    </table>
+                                    <div class="col-sm-5">
+                                        <label>{{ __('Bulan :') }}</label>
+                                        <input type="text" class="form-control dtpickermnth" value="{{ date('F Y') }}"
+                                        name="dtpickermnth" id="dtpickermnth" />
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <label>{{ __('Cabang :') }}</label>
+                                        <select class="form-control" name="branch" id="branch">
+                                            <option value="">- Select -</option>
+                                            @foreach ($Branch as $el1)
+                                                <option value="{{$el1->id}}">{{$el1->name}}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-sm-2">
+                                        <br>
+                                        <button class="btn btn-primary tombol" onclick="searchData()" type="button"
+                                        style="margin-bottom: 6px;margin-top:9px"><i class="fas fa-search"></i> Cari</button>
+                                        <button class="btn btn-primary tombol ml-2" onclick="expandAll()" type="button"
+                                        style="margin-bottom: 6px;margin-top:9px"><i class="fas fa-list"></i> Cetak</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
+                       
                         <div class="card-header" style="background-color: #ffffdc; color:black">
                             {{-- <h3>Total Kas : Rp. {{ number_format($total, 0, ',', ',') }}</h3> --}}
                         </div>
@@ -356,6 +70,12 @@
             startView: "months",
             minViewMode: "months"
         });
+        function searchData(params) {
+            var date = $(".dtpickermnth").val();
+            var branch = $("#branch").val();
+            window.location.href = '{{ route('report-neraca.printReportNeraca') }}?&date='+date+'&branch='+branch;
+        }
     </script>
-    <script src="{{ asset('assets/pages/report/reportCashBalance.js') }}"></script>
+    {{-- <script src="{{ asset('assets/pages/report/reportCashBalance.js') }}"></script> --}}
+    
 @endsection

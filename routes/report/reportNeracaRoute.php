@@ -30,5 +30,10 @@ Route::group(['prefix' => 'report'], function () {
             'print-neraca',
             [ReportNeracaController::class, 'printReportNeraca']
         )->name('report-neraca.printReportNeraca');
+        
+        Route::get(
+            'load-data-neraca',
+            [ReportNeracaController::class, 'loadDataReportNeraca']
+        )->name('report-neraca.loadDataReportNeraca');
     });
 });

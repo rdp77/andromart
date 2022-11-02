@@ -32,6 +32,8 @@ class Activa extends Model
         'description',
         'with_items',
         'status',
+        'reason',
+        'sell_price',
         'created_at',
         'updated_at',
         'created_by',
