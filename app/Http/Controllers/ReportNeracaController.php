@@ -293,8 +293,11 @@ class ReportNeracaController extends Controller
         $dataModal = [];
         $total = 0;
         for ($i = 0; $i < count($accountDataModal); $i++) {
-            
-            $dataModal[$i]['total'] = 0;
+            if ($accountDataModal[$i]->opening_date <= date('Y-m-t')) {
+                $dataModal[$i]['total'] = $accountDataModal[$i]->opening_balance;
+            } else {
+                $dataModal[$i]['total'] = 0;
+            }
             // $dataModal[$i]['akun'] = $accountDataModal[$i]->main_detail_id;
             // $dataModal[$i]['namaAkun'] = $accountDataModal[$i]->name;
             $dataModal[$i]['jurnal'] = [];
@@ -411,7 +414,7 @@ class ReportNeracaController extends Controller
 
     public function dataMutasiTransfer($jurnal,$branch)
     {
-        $accountMutasiTransfer = AccountData::where('main_id', 14)->where('main_detail_id', 56)
+        $accountMutasiTransfer = AccountData::where('main_id', 14)->where('main_detail_id', 60)
                                             ->where(function ($q) use ($branch) {
                                                 if ($branch == '') {
                                                 } else {
