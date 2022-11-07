@@ -913,7 +913,7 @@
                                                 $totalKanan = $dataModalTotal + $labaBerjalan + $dataPendapatanDimukaTotal;
                                             @endphp
                                             <th style="padding-left:452px;">Rp.
-                                                @if (totalKanan < 0) (
+                                                @if ($totalKanan < 0) (
                                                 ( {{ number_format(abs($totalKanan), 0, ',', ',') }} )
                                                 @else
                                                 {{ number_format($totalKanan, 0, ',', ',') }}
