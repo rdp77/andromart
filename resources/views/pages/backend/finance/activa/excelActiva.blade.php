@@ -440,7 +440,10 @@
                         {{ __('Kode') }}
                     </th>
                     <th  class="text-center">
-                        {{ __('Nama/Barang') }}
+                        {{ __('Nama / Barang') }}
+                    </th>
+                    <th  class="text-center">
+                        {{ __('Penanggung Jawab') }}
                     </th>
                     <th  class="text-center">
                         {{ __('Cabang') }}
@@ -490,16 +493,22 @@
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $el->code }}</td>
                         <td>{{ $el->items_id == null ? $el->items : $el->ItemsRel->items_id  }}</td>
+                        <td>{{ isset($el->UserResponsible->name) == 1 ? $el->UserResponsible->name : '-' }}</td>
                         <td>{{ $el->Branch->name }}</td>
                         <td>{{ $el->date_finished }}</td>
                         <td>{{ $el->Asset->name }}</td>
                         <td>{{ $el->activaGroup->name }}</td>
                         <td>{{ $el->status }}</td>
                         <td>{{ date('d-m-Y',strtotime($el->date_acquisition)) }}</td>
+
                         <th class="text-right">Rp. {{ number_format($el->total_acquisition, 0, '.', ',') }}</th>
+
                         <th class="text-right">Rp. {{ number_format($el->total_early_depreciation, 0, '.', ',') }}</th>
+
                         <th class="text-right">Rp. {{ number_format($el->total_depreciation, 0, '.', ',') }}</th>
+
                         <th class="text-right">Rp. {{ number_format($el->accumulation_depreciation, 0, '.', ',') }}</th>
+
                         <th class="text-right">Rp. {{ number_format($el->remaining_depreciation, 0, '.', ',') }}</th>
                     </tr>
 
@@ -515,7 +524,7 @@
 
             </tbody>
             <tfoot>
-                <th colspan="9"> Total</th>
+                <th colspan="10"> Total</th>
                 <th class="text-right">Rp. {{ number_format($totalPerolehan, 0, '.', ',') }}</th>
                 <th class="text-right">Rp. {{ number_format($totalAwalPenyusutan, 0, '.', ',') }}</th>
                 <th class="text-right">Rp. {{ number_format($totalPenyusutan, 0, '.', ',') }}</th>
@@ -556,6 +565,34 @@
                                     <select name="branch_id" id="branch_id" class="form-control">
                                         <option value="">- Select -</option>
                                         @foreach ($branch as $el)
+                                            <option value="{{$el->id}}">{{$el->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 mb-3">
+                                <label>Kategori / Golongan</label>
+                                <div class="input-group date">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                    <select name="asset_id" id="asset_id" class="form-control">
+                                        <option value="">- Select -</option>
+                                        @foreach ($ActivaGroup as $el)
+                                            <option value="{{$el->id}}">{{$el->name}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 mb-3">
+                                <label>Penanggung Jawab</label>
+                                <div class="input-group date">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                    <select name="responsible_id" id="responsible_id" class="form-control">
+                                        <option value="">- Select -</option>
+                                        @foreach ($Employee as $el)
                                             <option value="{{$el->id}}">{{$el->name}}</option>
                                         @endforeach
                                     </select>
@@ -649,7 +686,9 @@
         }
         function cari(params) {
             var branch = $("#branch_id").val();
-            window.location.href = '{{ route('activa.excel-view') }}?&branch='+branch;
+            var asset = $("#asset_id").val();
+            var responsible = $("#responsible_id").val();
+            window.location.href = '{{ route('activa.excel-view') }}?&branch_id='+branch+'&asset_id='+asset+'&responsible_id='+responsible;
         }
     </script>
 

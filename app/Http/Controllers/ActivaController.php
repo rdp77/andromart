@@ -449,13 +449,24 @@ class ActivaController extends Controller
     public function excelView(Request $req)
     {
         $branch = Branch::get();
-        $data = Activa::with('ItemsRel', 'Branch', 'AccountDepreciation', 'AccountAccumulation', 'Asset', 'ActivaGroup','ActivaDetail')->where(function ($q) use ($req) {
-                                                if ($req->branch == '') {
-                                                } else {
-                                                    $q->where('branch_id', $req->branch);
-                                                }
-                                            })->get();
-        return view('pages.backend.finance.activa.excelActiva',compact('data','branch'));
+        $ActivaGroup = Asset::get();
+        $Employee = Employee::get();
+        $data = Activa::with('ItemsRel', 'Branch', 'AccountDepreciation', 'AccountAccumulation', 'Asset', 'ActivaGroup','ActivaDetail','UserResponsible')->where(function ($q) use ($req) {
+            if ($req->branch_id == '') {
+            } else {
+                $q->where('branch_id', $req->branch_id);
+            }
+            if ($req->asset_id == '') {
+            } else {
+                $q->where('asset_id', $req->asset_id);
+            }
+            if ($req->responsible_id == '') {
+            } else {
+                $q->where('responsible', $req->responsible_id);
+            }
+        })
+        ->get();
+        return view('pages.backend.finance.activa.excelActiva',compact('data','branch','ActivaGroup','Employee'));
     }
     public function stopActiva(Request $req)
     {
