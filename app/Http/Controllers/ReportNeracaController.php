@@ -455,7 +455,6 @@ class ReportNeracaController extends Controller
         return [$MutasiTransfer, $total];
     }
 
-
     public function labaBerjalan($jurnal,$branch)
     {
         // return $req->all();

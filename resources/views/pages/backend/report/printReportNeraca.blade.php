@@ -898,7 +898,8 @@
                                     <table style="margin-top: 30px;">
                                         <tr>
                                             <th>TOTAL</th>
-                                            <th style="padding-left:540px;">Rp.
+                                            <th style="padding-left:540px;">
+                                                Rp.
                                                 {{ number_format($dataPersediaanTotal + $dataKasTotal + $dataUangDimukaTotal - $dataPenyusutanTotal + $dataAssetTotal + $dataMutasiTransferTotal, 0, ',', ',') }}
                                             </th>
                                         </tr>
@@ -908,8 +909,17 @@
                                     <table>
                                         <tr>
                                             <th>TOTAL</th>
+                                            @php
+                                                $totalKanan = $dataModalTotal + $labaBerjalan + $dataPendapatanDimukaTotal;
+                                            @endphp
                                             <th style="padding-left:452px;">Rp.
-                                                {{ number_format($dataModalTotal + $labaBerjalan + $dataPendapatanDimukaTotal, 0, ',', ',') }}
+                                                @if (totalKanan < 0) (
+                                                ( {{ number_format(abs($totalKanan), 0, ',', ',') }} )
+                                                @else
+                                                {{ number_format($totalKanan, 0, ',', ',') }}
+                                                @endif
+                                                
+                                                
                                             </th>
                                         </tr>
                                     </table>
