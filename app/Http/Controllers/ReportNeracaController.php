@@ -66,7 +66,7 @@ class ReportNeracaController extends Controller
                                     })->first();
         // return $this->jurnalTransaksiStock();
         $jurnal = Journal::with('JournalDetail', 'JournalDetail.AccountData')
-            // ->where('date', '>=', date('Y-m-01'))
+            ->where('date', '>=', date('Y-05-01'))
             ->where('date', '<=', date('Y-m-t'))
             ->get();
         // ->take('')
@@ -367,7 +367,6 @@ class ReportNeracaController extends Controller
         }
         return [$UangDimuka, $total];
     }
-
 
     public function dataPendapatanDimuka($jurnal,$branch)
     {

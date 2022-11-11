@@ -605,8 +605,7 @@ function jurnal(params) {
         success: function (data) {
             if (data.status == "success") {
                 $(".dropHereJournals").empty();
-                $(".dropHereJournalsHpp").empty();
-                $(".dropHereJournalsBalikDownPayment").empty();
+                $(".dropHereJournalsPengurangan").empty();
 
                 // alert('sd');
                 $.each(data.jurnal[0].journal_detail, function (index, value) {

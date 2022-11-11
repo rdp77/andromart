@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>Laporan Laba Rugi</title>
+    <title>Laporan Neraca</title>
     <link href="https://panel.jpmandiri.com/assets/vendors/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />

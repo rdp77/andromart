@@ -8,6 +8,7 @@ use App\Models\Category;
 use App\Models\Item;
 use App\Models\Stock;
 use App\Models\Unit;
+use App\Models\Service;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -34,11 +35,28 @@ class StockOpnameController extends Controller
         $category = Category::get();
         $branchUser = Auth::user()->employee->branch_id;
         $stockCategory = Category::with('brand', 'brand.item', 'brand.item.stocks')->get();
+
+        $service = Service::where(function ($query) {
+                $query->where('payment_status', 'DownPayment');
+                $query->orWhere('payment_status', null);
+            })
+            ->whereIn('work_status', ['Proses', 'Manifest', 'Mutasi', 'Selesai'])
+            // ->withsum('ServiceDetail')
+            ->withSum(
+                [
+                    'ServiceDetail as ServiceDetailTotal' => function ($query) {
+                        $query->where('type','!=', 'Jasa');
+                    },
+                ],
+                'total_hpp',
+            )
+            ->get();
+
         $activa = Stock::with('item')
-        ->leftJoin('items', 'items.id', 'stocks.item_id')
-        ->where('branch_id', $branchUser)
-        ->select('items.buy as hargabeli', 'stocks.stock as stock')
-        ->get();
+            ->leftJoin('items', 'items.id', 'stocks.item_id')
+            ->where('branch_id', $branchUser)
+            ->select('items.buy as hargabeli', 'stocks.stock as stock')
+            ->get();
 
         $item = Stock::with('item', 'item.brand', 'item.brand.category')
         ->leftJoin('units', 'units.id', 'stocks.unit_id')
@@ -50,7 +68,7 @@ class StockOpnameController extends Controller
         ->select('brands.name as merk', 'items.name as itemName', 'categories.code as category', 'units.code as satuan', 'items.buy as hargabeli', 'stocks.stock as stock')
         ->get();
 
-        return view('pages.backend.warehouse.stockOpname.indexStockOpname', compact('activa', 'stockCategory', 'category','item'));
+        return view('pages.backend.warehouse.stockOpname.indexStockOpname', compact('activa', 'stockCategory', 'category','item','service'));
     }
 
     public function dataLoad(Request $req)

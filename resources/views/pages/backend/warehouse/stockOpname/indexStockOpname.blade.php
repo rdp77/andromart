@@ -42,13 +42,21 @@
     <div class="card-header" style="background-color: #ffffdc; color:black">
         @php
             $totalActiva = 0;
+            $totalServiceNyantol = 0;
         @endphp
         @foreach ($activa as $activa)
             @php
                 $totalActiva += $activa->stock*$activa->hargabeli;
             @endphp
         @endforeach
-        <h3>Total Aktifa Lancar : Rp. {{ number_format($totalActiva, 0, ".", ",") }}</h3>
+        @foreach ($service as $service)
+            @php
+                $totalServiceNyantol += $service->ServiceDetailTotal;
+            @endphp
+        @endforeach
+        
+
+        <h3>Aktifa Lancar : Rp. {{ number_format($totalActiva, 0, ".", ",") }}  | Barang Terpakai Service Rp.  {{ number_format($totalServiceNyantol, 0, ".", ",") }} <br><br>  Total Activa Lancar Rp.  {{ number_format($totalActiva+$totalServiceNyantol, 0, ".", ",") }}</h3>
     </div>
     <div class="card-body" id="data-load">
         @foreach($stockCategory as $key => $el)

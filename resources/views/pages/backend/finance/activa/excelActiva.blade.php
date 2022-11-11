@@ -426,6 +426,13 @@
         {{-- <table style="width: 100%"> --}}
             <caption>
                 <h3  class="text-center"><b>Laporan Penyusutan </b></h3>
+                <h4  class="text-center"><b>
+                    @if (isset($checkBranch->name) == 0)
+                        Seluruh Cabang
+                    @else
+                        Cabang {{$checkBranch->name}}
+                    @endif
+                    </b></h4>
                 <h4  class="text-center"><b>Periode : {{ date('F Y') }}</b></h4>
             </caption>
         {{-- </table> --}}
