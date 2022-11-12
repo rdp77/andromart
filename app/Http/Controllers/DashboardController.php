@@ -704,4 +704,8 @@ class DashboardController extends Controller
         // return $rep;
         // return $menu;
     }
+    public function selarasJurnalLoss(Type $var = null)
+    {
+        # code...
+    }
 }

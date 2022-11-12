@@ -459,6 +459,7 @@ class ActivaController extends Controller
         })->first();
 
         $ActivaGroup = Asset::get();
+        $location = Activa::select('location')->groupBy('location')->get();
         $Employee = Employee::get();
         $data = Activa::with('ItemsRel', 'Branch', 'AccountDepreciation', 'AccountAccumulation', 'Asset', 'ActivaGroup','ActivaDetail','UserResponsible')->where(function ($q) use ($req) {
             if ($req->branch_id == '') {
@@ -473,9 +474,13 @@ class ActivaController extends Controller
             } else {
                 $q->where('responsible', $req->responsible_id);
             }
+            if ($req->location_id == '') {
+            } else {
+                $q->where('location', $req->location_id);
+            }
         })
         ->get();
-        return view('pages.backend.finance.activa.excelActiva',compact('data','branch','ActivaGroup','Employee','checkBranch'));
+        return view('pages.backend.finance.activa.excelActiva',compact('data','branch','ActivaGroup','Employee','checkBranch','location'));
     }
     public function stopActiva(Request $req)
     {

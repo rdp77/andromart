@@ -456,6 +456,9 @@
                         {{ __('Cabang') }}
                     </th>
                     <th  class="text-center">
+                        {{ __('Lokasi') }}
+                    </th>
+                    <th  class="text-center">
                         {{ __('Bulan Selesai') }}
                     </th>
                     <th  class="text-center">
@@ -502,6 +505,7 @@
                         <td>{{ $el->items_id == null ? $el->items : $el->ItemsRel->items_id  }}</td>
                         <td>{{ isset($el->UserResponsible->name) == 1 ? $el->UserResponsible->name : '-' }}</td>
                         <td>{{ $el->Branch->name }}</td>
+                        <td>{{ $el->location }}</td>
                         <td>{{ $el->date_finished }}</td>
                         <td>{{ $el->Asset->name }}</td>
                         <td>{{ $el->activaGroup->name }}</td>
@@ -605,6 +609,20 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-sm-12 mb-3">
+                                <label>Lokasi</label>
+                                <div class="input-group date">
+                                    <span class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </span>
+                                    <select name="location_id" id="location_id" class="form-control">
+                                        <option value="">- Select -</option>
+                                        @foreach ($location as $el)
+                                            <option value="{{$el->location}}">{{$el->location}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>
@@ -695,7 +713,9 @@
             var branch = $("#branch_id").val();
             var asset = $("#asset_id").val();
             var responsible = $("#responsible_id").val();
-            window.location.href = '{{ route('activa.excel-view') }}?&branch_id='+branch+'&asset_id='+asset+'&responsible_id='+responsible;
+            var location = $("#location_id").val();
+            
+            window.location.href = '{{ route('activa.excel-view') }}?&branch_id='+branch+'&asset_id='+asset+'&responsible_id='+responsible+'&location_id='+location;
         }
     </script>
 
