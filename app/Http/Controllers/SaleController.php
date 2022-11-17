@@ -147,15 +147,38 @@ class SaleController extends Controller
 
     public function code($type)
     {
-        $getEmployee =  Employee::with('branch')->where('user_id', Auth::user()->id)->first();
+        $getEmployee = Employee::with('branch')
+            ->where('user_id', Auth::user()->id)
+            ->first();
         $month = Carbon::now()->format('m');
         $year = Carbon::now()->format('y');
-        // $index = DB::table('sales')->max('id') + 1;
-        $co = Sale::where('branch_id', Auth::user()->employee->branch_id)->whereMonth('date', now())->get();
+        $co = Sale::where('branch_id', Auth::user()->employee->branch_id)
+            ->whereMonth('date', now())
+            ->get();
         $index = count($co) + 1;
-
+        // $index = DB::table('Sale')->max('id') + 1;
         $index = str_pad($index, 3, '0', STR_PAD_LEFT);
-        return $code = $type . $getEmployee->Branch->code . $year . $month . $index;
+
+        $code = $type . $getEmployee->Branch->code . $year . $month . $index;
+
+        $checkCode = Sale::where('code', $code)
+            ->count();
+
+        if ($checkCode == 0 ) {
+            return $code;
+        }else{
+            $code = $type . $getEmployee->Branch->code . $year . $month . ($index+1);
+
+            $checkCode2 = Service::where('code', $code)
+            ->count();
+            if ($checkCode2 == 0) {
+                return $code;
+            }else{
+                $index2 = count($co) + 1;
+                $index2 = str_pad($index2, 5, '0', STR_PAD_LEFT);
+                return $code = $type . $getEmployee->Branch->code . $year . $month . $index2;
+            }
+        }
     }
 
     public function codeJournals($type)
