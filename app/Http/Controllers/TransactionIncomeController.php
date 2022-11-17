@@ -58,6 +58,8 @@ class TransactionIncomeController extends Controller
                             <a class="dropdown-item" href="' . route('income.edit', $row->id) . '"><i class="fas fa-pencil-alt"></i> Edit</a>';
                     $actionBtn .= '<a onclick="jurnal(' ."'". $row->code ."'". ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
+                    $actionBtn .= '
+                            <a class="dropdown-item" href="' . route('income.show', $row->id) . '"><i class="fas fa-eye"></i> Lihat</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
@@ -182,27 +184,123 @@ class TransactionIncomeController extends Controller
 
     public function show($id)
     {
+        // return 'asd';
+        // return $id;
+        $income = Income::where('code',$id)->with('cash')->first();
+
+        if (isset($income) == 1) {
+            $income = $income;
+        }else{
+            $income = Income::where('id',$id)->with('cash')->first();
+        }
+
+        $branch = Branch::get();
+        $cash = AccountData::get();
+        $cost = AccountData::get();
+
+        return view('pages.backend.transaction.income.showIncome', compact('income', 'branch', 'cash', 'cost'));
     }
 
     public function edit($id)
     {
-        $branch = Branch::where('id', '!=', Income::find($id)->branch_id)->get();
-        $cost = Cost::where('id', '!=', Income::find($id)->income_id)->get();
-        $cash = Cash::where('id', '!=', Income::find($id)->cash_id)->get();
-        $income = Income::find($id)->with('cash')->first();
+        $income = Income::where('id',$id)->with('cash','income')->first();
+        $branch = Branch::get();
+        $cash = AccountData::get();
+        $cost = AccountData::get();
+
 
         return view('pages.backend.transaction.income.updateIncome', compact('income', 'branch', 'cash', 'cost'));
     }
 
-    public function update(Request $req, $id)
+    public function update(Request $req)
     {
-        Type::where('id', $id)
-            ->update([
-                'income_id' => $req->income_id,
-                'branch_id' => $req->branch_id,
-                'description' => $req->description,
-                'updated_by' => Auth::user()->name,
+        DB::beginTransaction();
+        try {
+        // return $req->all();
+        $date = $this->DashboardController->changeMonthIdToEn($req->date);
+
+        Income::where('id',$req->id)->update([
+            'code' => $req->code,
+            'date' => $date,
+            'income_id' => $req->income_id,
+            'branch_id' => $req->branch_id,
+            'cash_id' => $req->cash_id,
+            'price' => str_replace(",", '', $req->price),
+            'description' => $req->description,
+            'created_by' => Auth::user()->name,
+        ]);
+
+        $income = Income::where('id',$req->id)->first();
+        $checkJurnal = DB::table('journals')->where('ref',$income->code)->first();
+        DB::table('journal_details')->where('journal_id',$checkJurnal->id)->delete();
+        DB::table('journals')->where('id',$checkJurnal->id)->delete();
+        // DB::table('transaction_income')->where('id',$req->id)->delete();
+
+        $idJournal = DB::table('journals')->max('id')+1;
+        Journal::create([
+            'id' =>$idJournal,
+            'code'=>$this->codeJournals('DD',$idJournal),
+            'year'=>date('Y'),
+            'date'=>$date,
+            'type'=>'Pendapatan',
+            'total'=>str_replace(",", '',$req->price),
+            'ref'=>$req->code,
+            'description'=>$req->description,
+            'created_at'=>date('Y-m-d h:i:s'),
+        ]);
+
+        $accountPembayaran  = AccountData::where('id',$req->account)->first();
+        $accountCode = [
+            $req->income_id,
+            $req->cash_id,
+        ];
+        $totalBayar = [
+            str_replace(",", '',$req->price),
+            str_replace(",", '',$req->price),
+        ];
+        $description = [
+            $req->description,
+            $req->description,
+        ];
+        $DK = [
+            'K',
+            'D',
+        ];
+
+        for ($i=0; $i <count($accountCode) ; $i++) {
+            $idDetail = DB::table('journal_details')->max('id')+1;
+            JournalDetail::create([
+                'id'=>$idDetail,
+                'journal_id'=>$idJournal,
+                'account_id'=>$accountCode[$i],
+                'total'=>$totalBayar[$i],
+                'description'=>$description[$i],
+                'debet_kredit'=>$DK[$i],
+                'created_at'=>date('Y-m-d h:i:s'),
+                'updated_at'=>date('Y-m-d h:i:s'),
             ]);
+        }
+
+            $this->DashboardController->createLog(
+                $req->header('user-agent'),
+                $req->ip(),
+                'Membuat transaksi pembayaran baru'
+            );
+
+            DB::commit();
+            return Response::json(['status' => 'success']);
+
+            // return Redirect::route('income.index')
+            // ->with([
+            //     'status' => 'Berhasil Mengubah transaksi pembayaran baru',
+            //     'type' => 'success'
+            // ]);
+        } catch (\Throwable $th) {
+            DB::rollback();
+            return $th;
+            //throw $th;
+        }
+
     }
 
     public function destroy(Request $req, $id)

@@ -340,6 +340,7 @@ function addItem() {
             '<td>'+
                 '<input readonly type="text" class="form-control totalPriceDetail totalPriceDetail_'+(index+1)+'" name="totalPriceDetail[]" value="0" style="text-align: right">'+
                 '<input readonly type="hidden" class="form-control totalPriceHpp totalPriceHpp_'+(index+1)+'" name="totalPriceHpp[]" value="0" style="text-align: right">'+
+                '<input readonly type="hidden" class="form-control totalPriceHppLoss totalPriceHppLoss_'+(index+1)+'" name="totalPriceHppLoss[]" value="0" style="text-align: right">'+
             '</td>'+
             '<td>'+
                 '<input type="text" class="form-control" name="descriptionDetail[]">'+
@@ -478,10 +479,12 @@ $(document.body).on("change",".itemsDetail",function(){
             $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
             $('.priceDetailLoss_'+index).val(0);
             $('.totalPriceHpp_'+index).val(totalItemHpp);
+            $('.totalPriceHppLoss_'+index).val(0);
         }else{
             $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
             $('.priceDetailSparePart_'+index).val(0);
             $('.totalPriceHpp_'+index).val(0);
+            $('.totalPriceHppLoss_'+index).val(totalItemHpp);
         }
     }
     var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
@@ -545,10 +548,12 @@ $(document.body).on("keyup",".qtyDetail",function(){
         $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailLoss_'+index).val(0);
         $('.totalPriceHpp_'+index).val(parseInt(totalItemHpp).toLocaleString('en-US'));
+        $('.totalPriceHppLoss_'+index).val(0);
     }else{
         $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailSparePart_'+index).val(0);
         $('.totalPriceHpp_'+index).val(0);
+        $('.totalPriceHppLoss_'+index).val(totalItemHpp);
     }
     var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
     var totalPriceHpp = 0;
@@ -652,10 +657,12 @@ $(document.body).on("change",".typeDetail",function(){
         $('.priceDetailSparePart_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailLoss_' + index).val(0);
         $('.totalPriceHpp_'+index).val(totalItemHpp);
+        $('.totalPriceHppLoss_'+index).val(0);
     }else{
         $('.priceDetailLoss_'+index).val(parseInt(totalItemPrice).toLocaleString('en-US'));
         $('.priceDetailSparePart_'+index).val(0);
         $('.totalPriceHpp_'+index).val(0);
+        $('.totalPriceHppLoss_'+index).val(totalItemHpp);
     }
     var checkVerificationDiscount =  $('input[name="typeDiscount"]:checked').val();
     // mengecek HPP jika loss
@@ -928,5 +935,48 @@ function updateStatusService() {
         }
     });
 }
+function jurnal(params) {
+    // $('.dropHereJournals').
+    $.ajax({
+        url: "/transaction/service/check-journals-loss",
+        data: { id: params },
+        type: "POST",
+        success: function (data) {
+            if (data.status == "success") {
+                $(".dropHereJournals").empty();
+             
+                
+                // alert('sd');
+                $.each(data.jurnal[0].journal_detail, function (index, value) {
+                    if (value.debet_kredit == "K") {
+                        var dk =
+                            "<td>0</td><td>" +
+                            parseInt(value.total).toLocaleString("en-US") +
+                            "</td>";
+                    } else {
+                        var dk =
+                            "<td>" +
+                            parseInt(value.total).toLocaleString("en-US") +
+                            "</td><td>0</td>";
+                    }
+                    $(".dropHereJournals").append(
+                        "<tr>" +
+                            "<td>" +
+                            value.account_data.code +
+                            "</td>" +
+                            "<td>" +
+                            value.account_data.name +
+                            "</td>" +
+                            dk +
+                            "</tr>"
+                    );
+                });
+     
+            }
+            $(".exampleModal").modal("show");
+        },
+    });
+}
+
 
 

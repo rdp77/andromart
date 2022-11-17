@@ -13,22 +13,26 @@
         <div class="tab-content" id="myTabContent2">
             <div class="tab-pane fade show active" id="category3" role="tabpanel" aria-labelledby="category-tab3">
                 <div class="row">
-                    <div class="form-group col-3 col-md-3 col-lg-3">
+                    <div class="form-group col-6 col-md-6 col-lg-6">
                         <label>{{ __('Kategori') }}<code>*</code></label>
                         <select name="category" id="category" class="select2 form-control">
                             <option value="0">Semua</option>
-                            @foreach ($category as $category)
-                                <option value="{{ $category->id }}">{{ $category->name }}</option>
+                            @foreach ($category as $el)
+                                <option value="{{ $el->id }}">{{ $el->name }}</option>
                             @endforeach
                         </select>
                     </div>
+                    <div class="form-group col-6 col-md-6 col-lg-6">
+                        <label>{{ __('Nama Barang') }}<code>*</code></label>
+                        <input type="text" class="form-control" name="nameItems" id="nameItems">
+                    </div>
                 </div>
                 <div class="row">
-                    <div class="form-group col-6 col-md-3">
+                    <div class="form-group col-3 col-md-3">
                         <button class="btn btn-primary" type="button" onclick="changes('{{ csrf_token() }}','{{ route('stockOpname.dataLoad') }}', '#data-load')">
                             <i class="fas fa-eye"></i> Cari</button>
                     </div>
-                    <div class="form-group col-6 col-md-4">
+                    <div class="form-group col-3 col-md-3">
                         <button class="btn btn-primary" type="button" onclick="printStockOpname()">
                             <i class="fas fa-print"></i> Cetak Laporan
                         </button>
@@ -112,18 +116,22 @@
     var loading = `-- Sedang Memuat Data --`;
     function changes(token, url, target) {
       var category = document.getElementById("category").value;
+      var nameItems = document.getElementById("nameItems").value;
       $(target).html(loading);
       $.post(url, {
           _token: token,
           category,
+          nameItems
       },
       function (data) {
-          console.log(data);
+        //   console.log(data);
           $(target).html(data);
       });
     }
     function printStockOpname() {
         var category = document.getElementById("category").value;
-        window.location.href = '{{ route('stockOpname.print') }}?&category=' + category
+        var nameItems = document.getElementById("nameItems").value;
+        console.log(nameItems);
+        window.location.href = '{{ route('stockOpname.print') }}?&category=' + category+'&nameItems='+nameItems
     }
 </script>

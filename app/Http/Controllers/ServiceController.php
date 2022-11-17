@@ -17,6 +17,9 @@ use App\Models\ServiceCondition;
 use App\Models\Warranty;
 use App\Models\SettingPresentase;
 use App\Models\ServiceDetail;
+use App\Models\Journal;
+use App\Models\AccountData;
+use App\Models\JournalDetail;
 use App\Models\ServiceStatusMutation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -83,6 +86,7 @@ class ServiceController extends Controller
                         $actionBtn .= '<a class="dropdown-item" href="' . route('service.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
                     }
                     $actionBtn .= '<a class="dropdown-item" href="' . route('service.printService', $row->id) . '"><i class="fas fa-print"></i> Cetak</a>';
+                    $actionBtn .= '<a class="dropdown-item" onclick="jurnal(' . "'" . $row->code . "'" . ')"><i class="fas fa-print"></i> Jurnal</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
@@ -458,6 +462,7 @@ class ServiceController extends Controller
     {
         DB::beginTransaction();
         try {
+            // return $req->all();
             $tech1 = Service::where('technician_id', $req->technicianId)
                 ->where('work_status', '!=', 'Selesai')
                 ->where('work_status', '!=', 'Cancel')
@@ -816,6 +821,54 @@ class ServiceController extends Controller
                     'description' => $dataEquipmentDesc[$i],
                 ]);
             }
+
+            $idJournalHpp = DB::table('journals')->max('id') + 1;
+            Journal::create([
+                'id' => $idJournalHpp,
+                'code' => $this->code('KKL', $idJournalHpp),
+                'year' => date('Y'),
+                'date' => date('Y-m-d'),
+                'type' => 'Biaya',
+                'total' => array_sum($req->totalPriceHppLoss),
+                'ref' => $codeNota,
+                'description' => 'HPP Barang Loss ' . $codeNota,
+                'created_at' => date('Y-m-d h:i:s'),
+            ]);
+
+            $accountPersediaan = AccountData::where('branch_id', $getEmployee->branch_id)
+                ->where('active', 'Y')
+                ->where('main_id', 3)
+                ->where('main_detail_id', 11)
+                ->first();
+
+            $accountBiayaHpp = AccountData::where('branch_id', $getEmployee->branch_id)
+                ->where('active', 'Y')
+                ->where('main_id', 7)
+                ->where('main_detail_id', 29)
+                ->first();
+            // JURNAL HPP
+            $accountCodeHpp = [$accountBiayaHpp->id, $accountPersediaan->id];
+            // return $accountCodeHpp;
+            $totalHpp = [array_sum($req->totalPriceHppLoss), array_sum($req->totalPriceHppLoss)];
+
+            $descriptionHpp = ['Pengeluaran Harga Pokok Penjualan ' . $codeNota, 'Biaya Harga Pokok Penjualan' . $codeNota];
+            $DKHpp = ['D', 'K'];
+            for ($i = 0; $i < count($totalHpp); $i++) {
+                if ($totalHpp[$i] != 0) {
+                    $idDetailhpp = DB::table('journal_details')->max('id') + 1;
+                    JournalDetail::create([
+                        'id' => $idDetailhpp,
+                        'journal_id' => $idJournalHpp,
+                        'account_id' => $accountCodeHpp[$i],
+                        'total' => $totalHpp[$i],
+                        'description' => $descriptionHpp[$i],
+                        'debet_kredit' => $DKHpp[$i],
+                        'created_at' => date('Y-m-d h:i:s'),
+                        'updated_at' => date('Y-m-d h:i:s'),
+                    ]);
+                }
+            }
+
             DB::commit();
             return Response::json(['status' => 'success', 'message' => 'Data Tersimpan', 'id' => $id]);
         } catch (\Throwable $th) {
@@ -1760,5 +1813,12 @@ class ServiceController extends Controller
             'updated_at' => date('Y-m-d h:i:s'),
         ]);
         return Response::json(['status' => 'success', 'message' => 'Sukses Menyimpan Data']);
+    }
+    public function checkJournalsLoss(Request $req)
+    {
+        $data = Journal::with('JournalDetail.AccountData')
+            ->where('ref', $req->id)
+            ->get();
+        return Response::json(['status' => 'success', 'jurnal' => $data]);
     }
 }

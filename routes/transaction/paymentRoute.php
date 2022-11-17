@@ -16,10 +16,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'transaction'], function () {
     Route::group(['prefix' => 'payment'], function () {
-        Route::resource('payment', PaymentController::class)
-            ->except([
-                'show',
-            ]);
+        Route::resource('payment', PaymentController::class);
 
         Route::post(
             'check-journals',

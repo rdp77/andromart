@@ -96,7 +96,10 @@
 </form>
 @endsection
 @section('script')
-
+<script>
+    var LinkBYR = "{{url('/')}}";
+    console.log(LinkBYR); 
+</script> 
 <script src="{{ asset('assets/pages/finance/reportIncomeSpending.js') }}"></script>
 
 @endsection

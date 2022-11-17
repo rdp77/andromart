@@ -306,7 +306,7 @@ class ReportIncomeStatementController extends Controller
         // return $dataPenyusutan;
 
         // $data = [];
-        return view('pages.backend.report.reportIncomeStatement', compact('HPP', 'gaji', 'sharingProfit', 'totalService', 'totalPenjualan', 'DiskonPenjualan', 'DiskonService', 'dataBiaya', 'dataBeban', 'branch','dataPendapatanLainLain','dataPenyusutan'));
+        return view('pages.backend.report.reportIncomeStatement', compact('HPP', 'gaji', 'sharingProfit', 'totalService', 'totalPenjualan', 'DiskonPenjualan', 'DiskonService', 'dataBiaya', 'dataBeban', 'branch','dataPendapatanLainLain','dataPenyusutan','date1','date2'));
     }
     public function printReportIncomeStatement(Request $req)
     {
@@ -536,6 +536,6 @@ class ReportIncomeStatementController extends Controller
         // return $dataBeban;
 
         // $data = [];
-        return view('pages.backend.report.reportPrintIncomeStatement', compact('HPP', 'gaji', 'sharingProfit', 'totalService', 'totalPenjualan', 'DiskonPenjualan', 'DiskonService', 'dataBiaya', 'dataBeban', 'branch','dataPendapatanLainLain'));
+        return view('pages.backend.report.reportPrintIncomeStatement', compact('HPP', 'gaji', 'sharingProfit', 'totalService', 'totalPenjualan', 'DiskonPenjualan', 'DiskonService', 'dataBiaya', 'dataBeban', 'branch','dataPendapatanLainLain','date1','date2'));
     }
 }

@@ -63,6 +63,7 @@ class PaymentController extends Controller
                     $actionBtn .= '<a class="dropdown-item" href="' . route('payment.edit', $row->id) . '"><i class="fas fa-pencil-alt"></i> Edit</a>';
                     $actionBtn .= '<a onclick="jurnal(' . "'" . $row->code . "'" . ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
+                    $actionBtn .= '<a href="' . route('payment.show', $row->id) . '" class="dropdown-item" style="cursor:pointer;"><i class="far fa-eye"></i> Lihat</a>';
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
                 })
@@ -265,6 +266,29 @@ class PaymentController extends Controller
 
     public function show($id)
     {
+        
+        $payment = Payment::where('code',$id)->first();
+        if (isset($payment) == 1) {
+            $payment = $payment;
+        }else{
+            $payment = Payment::find($id);
+        }
+
+        $checkBranch = Employee::with('branch')
+            ->where('user_id', Auth::user()->id)
+            ->first();
+        $code = $this->code('SPND');
+        if ($checkBranch->branch_id == 1) {
+            $branch = Branch::get();
+            $cash = AccountData::get();
+            $cash_transfer = AccountData::get();
+        } else {
+            $branch = Branch::where('id', $checkBranch->branch_id)->get();
+            $cash = AccountData::where('branch_id', $checkBranch->branch_id)->get();
+            $cash_transfer = AccountData::get();
+        }
+
+        return view('pages.backend.transaction.payment.showPayment', ['payment' => $payment, 'branch' => $branch, 'cash' => $cash, 'cash_transfer' => $cash_transfer]);
     }
 
     public function edit($id)

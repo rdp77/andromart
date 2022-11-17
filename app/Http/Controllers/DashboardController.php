@@ -571,7 +571,10 @@ class DashboardController extends Controller
 
     public function checkSharingProfit()
     {
-        $chekSales = Employee::with('Service1', 'Service2')->where('id', '!=', 1)->get();
+        $chekSales = Employee::with('Service1', 'Service2')
+        ->where('status','aktif')
+        ->where('id', '!=', 1)->get();
+        
         for ($i = 0; $i < count($chekSales); $i++) {
             $sharingProfit1Service[$i] = Service::where('work_status', 'Diambil')
                 ->where('date', date('Y-m-d'))

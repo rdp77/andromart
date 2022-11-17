@@ -20,12 +20,12 @@
                         <div class="row">
                             <div class="form-group col-md-6">
                                 <label for="code">{{ __('Kode Faktur') }}<code>*</code></label>
-                                <input id="code" type="text" class="form-control" readonly="" value="{{$income->code}}" name="code">
+                                <input id="code" type="text" class="form-control" disabled readonly="" value="{{$income->code}}" name="code">
                                 <input id="id" type="hidden" class="form-control" readonly="" value="{{$income->id}}" name="id">
                             </div>
                             <div class="form-group col-md-6 col-lg-6">
                                 <label for="date">{{ __('Tanggal') }}<code>*</code></label>
-                                <input id="date" type="text" class="form-control datepicker" value="{{ \Carbon\Carbon::parse($income->date)->locale('id')->isoFormat('LL') }}" readonly="" name="date">
+                                <input id="date" type="text" class="form-control datepicker" value="{{ \Carbon\Carbon::parse($income->date)->locale('id')->isoFormat('LL') }}" readonly="" name="date" disabled>
                             </div>
                         </div>
                         <div class="row">
@@ -34,7 +34,7 @@
                                     <label for="branch_id"
                                         class="control-label">{{ __('Cabang') }}<code>*</code></label>
                                 </div>
-                                <select onchange="branchChange()" class="select2 branch @error('branch_id') is-invalid @enderror" name="branch_id" required>
+                                <select onchange="branchChange()" class="select2 branch @error('branch_id') is-invalid @enderror" disabled name="branch_id" required>
                                     <option value="">- Select -</option>
                                     @foreach ($branch as $branch)
                                     <option @if ($branch->id == $income->branch_id)
@@ -53,7 +53,7 @@
                                     <label for="cash_id"
                                         class="control-label">{{ __('Kass') }}<code>*</code></label>
                                 </div>
-                                <select class="select2" name="cash_id" required>
+                                <select class="select2" name="cash_id" disabled required>
                                     <option value="">- Select -</option>
                                     @foreach ($cash as $el)
                                         @if ($el->main_id == 1)
@@ -77,7 +77,7 @@
                                     <label for="income_id"
                                         class="control-label">{{ __('Jenis Pendapatan') }}<code>*</code></label>
                                 </div>
-                                <select class="select2 cost @error('income_id') is-invalid @enderror"  name="income_id" required>
+                                <select class="select2 cost @error('income_id') is-invalid @enderror"  name="income_id" disabled required>
                                     @foreach ($cost as $el)
                                     <option @if ($el->id == $income->income_id)
                                         selected=""
@@ -103,7 +103,7 @@
                                         Rp.
                                         </div>
                                     </div>
-                                    <input id="rupiah" type="text" value="{{$income->price}}"  class="form-control cleaveNumeral @error('price') is-invalid @enderror"
+                                    <input id="rupiah" type="text" disabled value="{{$income->price}}"  class="form-control cleaveNumeral @error('price') is-invalid @enderror"
                                         name="price" value="{{ old('price') }}" required style="text-align: right">
                                     @error('price')
                                     <div class="invalid-feedback">
@@ -114,7 +114,7 @@
                             </div>
                             <div class="form-group col-md-6">
                                 <label for="description">{{ __('Keterangan') }}</label>
-                                <input id="description" value="{{$income->description}}" type="text" class="form-control" name="description">
+                                <input id="description" disabled value="{{$income->description}}" type="text" class="form-control" name="description">
                             </div>
                         </div>
                         <div class="row">
@@ -123,8 +123,6 @@
                     </div>
                     <div class="card-footer text-right">
                         <a class="btn btn-outline" href="javascript:window.history.go(-1);">{{ __('Kembali') }}</a>
-                        <button class="btn btn-primary mr-1" onclick="updateData('{{ $income->id }}')"
-                            type="button">{{ __('Tambah Data Transaksi') }}</button>
                     </div>
                 </form>
             </div>

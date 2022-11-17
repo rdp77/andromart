@@ -61,6 +61,11 @@ Route::group(['prefix' => 'transaction'], function () {
             [ServicePaymentController::class, 'serviceCheckJournals']
         )->name('service.serviceCheckJournals');
 
+        Route::post(
+            'check-journals-loss',
+            [ServiceController::class, 'checkJournalsLoss']
+        )->name('service-items.checkJournalsLoss');
+
         Route::get(
             'service/{id}',
             [ServiceController::class, 'printService']
@@ -85,6 +90,8 @@ Route::group(['prefix' => 'transaction'], function () {
             'service-items/check-journals',
             [ServiceItemsController::class, 'checkJournals']
         )->name('service-items.checkJournals');
+
+     
 
         Route::post(
             'service-items/check-stock',

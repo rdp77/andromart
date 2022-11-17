@@ -358,7 +358,13 @@ class SharingProfitController extends Controller
 
     public function show($id)
     {
-        $data = SharingProfit::with('SharingProfitDetail','SharingProfitDetail.Service','SharingProfitDetail.Sale')->where('id', $id)->first();
+        $data = SharingProfit::with('SharingProfitDetail','SharingProfitDetail.Service','SharingProfitDetail.Sale')->where('code', $id)->first();
+
+        if (isset($data) == 1) {
+            $data = $data;
+        }else{
+            $data = SharingProfit::with('SharingProfitDetail','SharingProfitDetail.Service','SharingProfitDetail.Sale')->where('id', $id)->first();
+        }
         // return $data;
         return view('pages.backend.finance.sharingProfit.showSharingProfit', ['data' => $data]);
     }

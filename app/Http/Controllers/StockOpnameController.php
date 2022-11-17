@@ -86,6 +86,12 @@ class StockOpnameController extends Controller
         ->leftJoin('categories', 'categories.id', 'brands.category_id')
         ->where('branch_id', $branchUser)
         ->where('item_id', '!=', 1)
+        ->where(function ($query) use ($req) {
+            if ($req->nameItems == '') {
+            }else{
+                $query->where('items.name','like','%'.$req->nameItems.'%');
+            }
+        })
         ->select('brands.name as merk', 'items.name as itemName', 'categories.code as category', 'units.code as satuan', 'items.buy as hargabeli', 'stocks.stock as stock')
         ->get();
 

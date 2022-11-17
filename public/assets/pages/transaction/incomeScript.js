@@ -157,3 +157,77 @@ function jurnal(params) {
         },
     });
 }
+function updateData(params) {
+    swal({
+        title: "Apakah Anda Yakin?",
+        text: "Aksi ini tidak dapat dikembalikan, dan akan menyimpan data Anda.",
+        icon: "warning",
+        buttons: true,
+        dangerMode: true,
+    }).then((willSave) => {
+        if (willSave) {
+            var validation = 0;
+            $(".validation").each(function () {
+                if (
+                    $(this).val() == "" ||
+                    $(this).val() == null ||
+                    $(this).val() == 0
+                ) {
+                    validation++;
+                    // alert($(this).data('name'));
+                    if ($(".type_id").val() == "Pengeluaran") {
+                        if ($(this).data("name") != "Transfer Harus Di isi") {
+                            iziToast.warning({
+                                type: "warning",
+                                title: $(this).data("name"),
+                            });
+                        }
+                    } else {
+                        iziToast.warning({
+                            type: "warning",
+                            title: $(this).data("name"),
+                        });
+                    }
+                } else {
+                    validation - 1;
+                }
+            });
+            if (validation != 0) {
+                return false;
+            }
+            console.log(validation);
+            $.ajax({
+                url: "/transaction/income/income/" + params,
+                data: $(".form-data").serialize(),
+                type: "PUT",
+                success: function (data) {
+                    console.log(data.status);
+                    if (data.status == "success") {
+                        iziToast.warning({
+                            type: "Success",
+                            title: 'Ubah Berhasil',
+                        });
+                        // swal(data.message, {
+                        //     icon: "success",
+                        // });
+                        location.reload();
+                        // window.location.href = transaction/payment/payment
+                    } else {
+                        iziToast.warning({
+                            type: "warning",
+                            title: 'EROR',
+                        });
+                        // swal(data.message, {
+                        //     icon: "warning",
+                        // });
+                    }
+                },
+                error: function (data) {
+                    // edit(id);
+                },
+            });
+        } else {
+            swal("diCancel!");
+        }
+    });
+}

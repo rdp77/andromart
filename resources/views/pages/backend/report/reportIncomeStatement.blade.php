@@ -34,7 +34,14 @@
             <div class="section-body">
                 <div class="row">
                     <div class="col-12">
-                        <h2 class="section-title">Periode Bulan <b class="dropMonth">{{ date('F Y') }}</b> </h2>
+                        <h2 class="section-title">Periode Bulan <b class="dropMonth">
+                        @if ($date1 == '' && $date1 == '')
+                        {{ date('F Y') }}
+                        @else                            
+                            {{ date('d F Y',strtotime($date1)) .' s/d '. date('d F Y',strtotime($date2))}}
+                        @endif
+                        
+                        </b> </h2>
                         <div class="card">
                             <div class="card-body">
                                 <div class="row">
@@ -495,6 +502,15 @@
             +'&Quartal=' + Quartal
             +'&typeQuartalTahun=' + typeQuartalTahun
             +'&typeTahun=' + typeTahun;
+            
+            // if (type == 'Bulan') {
+            //     $('.dropMonth').html(typeBulan);
+            // } else if (type == 'Quartal') {
+            //     $('.dropMonth').html(typeQuartalTahun);
+            // }else{
+            //     $('.dropMonth').html(typeTahun);
+            // }
+            
         }
 
         function cetakData() {

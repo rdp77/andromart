@@ -474,7 +474,13 @@ class SaleController extends Controller
 
     public function show($id)
     {
-        $sale = Sale::with(['SaleDetail', 'Customer', 'accountData'])->find($id);
+        $sale = Sale::with(['SaleDetail', 'Customer', 'accountData'])->where('code',$id)->first();
+        if (isset($sale) == 1) {
+            $sale = $sale;
+        } else {
+            $sale = Sale::with(['SaleDetail', 'Customer', 'accountData'])->find($id);
+        }
+        
 
         return view('pages.backend.transaction.sale.showSale', compact('sale'));
     }

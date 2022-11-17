@@ -63,8 +63,10 @@ class ServicePaymentController extends Controller
                     $actionBtn .= '<div class="dropdown-menu">';
                     // $actionBtn .= '<a class="dropdown-item" href="' . route('service-payment.edit', $row->id) . '"><i class="far fa-edit"></i> Edit</a>';
                     $actionBtn .= '<a class="dropdown-item" href="' . route('service.printServicePayment', $row->id) . '"><i class="fas fa-print"></i> Print</a>';
+                    $actionBtn .= '<a class="dropdown-item" href="' . route('service-payment.show', $row->id) . '"><i class="fas fa-eye"></i> Lihat</a>';
                     $actionBtn .= '<a onclick="jurnal(' . "'" . $row->code . "'" . ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
                     $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="far fa-trash-alt"></i> Hapus</a>';
+                    
                     $actionBtn .= '</div></div>';
 
                     return $actionBtn;
@@ -180,9 +182,9 @@ class ServicePaymentController extends Controller
         $items = Item::where('name', '!=', 'Jasa Service')->get();
         $account = AccountData::with('AccountMain', 'AccountMainDetail', 'Branch')->get();
         $data = Service::where(function ($query) {
-            $query->where('payment_status', 'DownPayment');
-            $query->orWhere('payment_status', null);
-        })
+                $query->where('payment_status', 'DownPayment');
+                $query->orWhere('payment_status', null);
+            })
             ->with('Brand', 'Type', 'ServiceDetail')
             ->get();
         return view('pages.backend.transaction.servicePayment.createServicePayment', compact('employee', 'code', 'items', 'data', 'account'));
@@ -419,7 +421,7 @@ class ServicePaymentController extends Controller
                 // return $accountCodeHpp;
                 $totalHpp = [str_replace(',', '', $req->totalHpp), str_replace(',', '', $req->totalHpp)];
 
-                $descriptionHpp = ['Pengeluaran Harga Pokok Penjualan ' . $kode, 'Biaya Harga Pokok Penjualan' . $kode];
+                $descriptionHpp = ['Pengeluaran Harga Pokok Penjualan Barang Loss ' . $kode, 'Biaya Harga Pokok Penjualan Barang Loss' . $kode];
                 $DKHpp = ['D', 'K'];
                 for ($i = 0; $i < count($totalHpp); $i++) {
                     if ($totalHpp[$i] != 0) {
@@ -601,5 +603,22 @@ class ServicePaymentController extends Controller
         // return $Service;
         $member = User::get();
         return view('pages.backend.transaction.servicePayment.printServicePayment', ['service' => $service, 'member' => $member]);
+    }
+    public function show($id)
+    {
+        $account = AccountData::with('AccountMain', 'AccountMainDetail', 'Branch')->get();
+
+        $service = ServicePayment::with('Service', 'Service.ServiceDetail', 'Service.ServiceDetail.Items', 'Service.Employee1', 'Service.Employee2', 'Service.CreatedByUser', 'Service.Type', 'Service.Brand', 'Service.Brand.Category', 'Service.ServiceEquipment', 'Service.ServiceCondition', 'Service.Warrantys')->where('code',$id)->first();
+
+        // return isset($serviceCheck);
+        if (isset($service) == 1) {
+            $service = $service;
+        }else{
+            $service = ServicePayment::with('Service', 'Service.ServiceDetail', 'Service.ServiceDetail.Items', 'Service.Employee1', 'Service.Employee2', 'Service.CreatedByUser', 'Service.Type', 'Service.Brand', 'Service.Brand.Category', 'Service.ServiceEquipment', 'Service.ServiceCondition', 'Service.Warrantys')->find($id);
+        }
+
+       
+        return view('pages.backend.transaction.servicePayment.showServicePayment', ['service' => $service,'account' => $account]);
+
     }
 }

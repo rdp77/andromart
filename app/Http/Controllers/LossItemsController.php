@@ -343,8 +343,16 @@ class LossItemsController extends Controller
     public function show($id)
     {
         $data = LossItems::with('LossItemsDetail', 'LossItemsDetail.Service')
-            ->where('id', $id)
-            ->first();
+                ->where('code', $id)
+                ->first();
+
+        if (isset($data) == 1) {
+            $data = $data;
+        }else{
+            $data = LossItems::with('LossItemsDetail', 'LossItemsDetail.Service')
+                ->where('id', $id)
+                ->first();
+        }
         // return $data;
         return view('pages.backend.finance.lossItems.showLossItems', ['data' => $data]);
     }

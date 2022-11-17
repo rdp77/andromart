@@ -114,3 +114,5 @@ require __DIR__ . '/office/notesRoute.php';
 // merubah 
 Route::get('/rubahLinkMenu', [DashboardController::class, 'rubahLinkMenu'])
     ->name('rubahLinkMenu');
+Route::get('/selarasJurnalLoss', [DashboardController::class, 'selarasJurnalLoss'])
+    ->name('selarasJurnalLoss');

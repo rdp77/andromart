@@ -85,7 +85,10 @@ class PurchaseController extends Controller
                         $actionBtn .= '<div class="dropdown-menu">
                             <a class="dropdown-item" href="' . route('reception.edit', Crypt::encryptString($row->id)) . '"><i class="fas fa-check-circle"></i> Terima</a>';
                         $actionBtn .= '<a onclick="jurnal(' ."'". $row->code ."'". ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-file-alt"></i> Jurnal</a>';
+
                         $actionBtn .= '<a class="dropdown-item" href="' . route('purchase.show', Crypt::encryptString($row->id)) . '"><i class="fas fa-eye"></i> Lihat</a>';
+                        $actionBtn .= '<a class="dropdown-item" href="' . route('purchase.edit', Crypt::encryptString($row->id)) . '"><i class="fas fa-pen"></i> Ubah</a>';
+                        $actionBtn .= '<a onclick="del(' . $row->id . ')" class="dropdown-item" style="cursor:pointer;"><i class="fas fa-trash-alt"></i> Hapus</a>';
                     }
                     $actionBtn .= '</div></div>';
                     return $actionBtn;
@@ -381,7 +384,27 @@ class PurchaseController extends Controller
         if($checkRoles == 'akses ditolak'){
             return view('forbidden');
         }
-        $id = Crypt::decryptString($id);
+        $model = Purchasing::where('code', $id)->first();
+        
+        if (isset($model) == 1) {
+            $model = $model;
+            $models = PurchasingDetail::where('purchasing_id', $model->id)
+            ->join('items', 'purchasing_details.item_id', 'items.id')
+            ->join('branches', 'purchasing_details.branch_id', 'branches.id')
+            ->select('purchasing_details.id as id', 'qty', 'price', 'items.id as item_id', 'items.name as item_name', 'branches.id as branch_id', 'branches.name as branch_name', 'purchasing_details.description as description')
+            ->get();
+            $jumlah = PurchasingDetail::where('purchasing_id', $model->id)->count();
+        }else{
+            $id = Crypt::decryptString($id);
+            $model = Purchasing::where('id', $id)->first();
+            $models = PurchasingDetail::where('purchasing_id', $id)
+            ->join('items', 'purchasing_details.item_id', 'items.id')
+            ->join('branches', 'purchasing_details.branch_id', 'branches.id')
+            ->select('purchasing_details.id as id', 'qty', 'price', 'items.id as item_id', 'items.name as item_name', 'branches.id as branch_id', 'branches.name as branch_name', 'purchasing_details.description as description')
+            ->get();
+            $jumlah = PurchasingDetail::where('purchasing_id', $id)->count();
+        }
+
         $employee = Employee::get();
         $item     = Item::with('stock')->where('items.name','!=','Jasa Service')
         ->join('suppliers', 'items.supplier_id', 'suppliers.id')
@@ -389,13 +412,7 @@ class PurchaseController extends Controller
         ->get();
         $unit     = Unit::get();
         $branch   = Branch::get();
-        $model = Purchasing::where('id', $id)->first();
-        $models = PurchasingDetail::where('purchasing_id', $id)
-        ->join('items', 'purchasing_details.item_id', 'items.id')
-        ->join('branches', 'purchasing_details.branch_id', 'branches.id')
-        ->select('purchasing_details.id as id', 'qty', 'price', 'items.id as item_id', 'items.name as item_name', 'branches.id as branch_id', 'branches.name as branch_name', 'purchasing_details.description as description')
-        ->get();
-        $jumlah = PurchasingDetail::where('purchasing_id', $id)->count();
+      
 
         return view('pages.backend.transaction.purchase.showPurchase',compact('employee','item', 'unit', 'branch', 'model', 'models', 'jumlah'));
     }

@@ -379,8 +379,8 @@ function checkData() {
                                             "DD MMMM YYYY"
                                         ) +
                                         "</b></td>" +
-                                        "<td><b>" +
-                                        value.ref +
+                                        '<td ><b>' +
+                                        '<a style="color:blue;text-decoration: underline" onclick="cecek('+"'"+value.ref+"'"+','+"'"+value.id+"'"+')">'+value.ref+'</a>' +
                                         "</b><br>" +
                                         value.description +
                                         "</td>" +
@@ -442,3 +442,29 @@ function printDiv() {
     newWin.print();
     newWin.close();
 }
+function cecek(params,params2) {
+
+    if (params.includes("BYR")) {
+        window.open(LinkBYR+'/transaction/service/service-payment/'+params);
+    }else if (params.includes("PJT")) {
+        window.open(LinkBYR+'/transaction/sale/sale/'+params);
+    }else if (params.includes("PCS")) {
+        window.open(LinkBYR+'/transaction/purchasing/purchase/'+params);
+    }else if (params.includes("SPND")) {
+        window.open(LinkBYR+'/transaction/payment/payment/'+params);
+    }else if (params.includes("INCM")) {
+        window.open(LinkBYR+'/transaction/payment/payment/'+params);
+    }else if (params.includes("SHP")) {
+        window.open(LinkBYR+'/finance/sharing-profit/sharing-profit/'+params);
+    }else if (params.includes("LOS")) {
+        window.open(LinkBYR+'/finance/loss-items/loss-items/'+params);
+    }
+    
+
+    
+    
+    
+
+}
+
+
