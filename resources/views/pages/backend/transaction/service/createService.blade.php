@@ -779,6 +779,7 @@
                                 <input readonly type="text" class="form-control totalPriceServiceDetail cleaveNumeral"
                                     name="totalPriceDetail[]" style="text-align: right" value="0">
                                 <input readonly type="hidden" class="form-control totalPriceHpp" name="totalPriceHpp[]" value="0" style="text-align: right">
+                                <input readonly type="hidden" class="form-control totalPriceHppLoss" name="totalPriceHppLoss[]" value="0" style="text-align: right">
                             </td>
                             <td>
                                 <input type="text" class="form-control" name="descriptionDetail[]">
