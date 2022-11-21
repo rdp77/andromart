@@ -496,27 +496,13 @@
             var Quartal = $(".Quartal").val();
             var typeQuartalTahun = $(".typeQuartalTahun").val();
             var typeTahun = $(".typeTahun").val();
-            window.location.href = '{{ route('report-income-statement.index') }}?&bulan=' + typeBulan
-            +'&branch=' + branch
-            +'&type=' + type
-            +'&Quartal=' + Quartal
-            +'&typeQuartalTahun=' + typeQuartalTahun
-            +'&typeTahun=' + typeTahun;
-            
-            // if (type == 'Bulan') {
-            //     $('.dropMonth').html(typeBulan);
-            // } else if (type == 'Quartal') {
-            //     $('.dropMonth').html(typeQuartalTahun);
-            // }else{
-            //     $('.dropMonth').html(typeTahun);
-            // }
-            
+            window.location.href = '{{ route('report-income-statement.index') }}?&bulan=' + typeBulan +'&branch=' + branch
+            +'&type=' + type +'&Quartal=' + Quartal+'&typeQuartalTahun=' + typeQuartalTahun+'&typeTahun=' + typeTahun;
         }
 
         function cetakData() {
             var dateS = $(".dtpickermnth").val();
-            window.location.href = '{{ route('report-income-statement.printReportIncomeStatement') }}?&dateS=' + $(
-                ".dtpickermnth").val();
+            window.location.href = '{{ route('report-income-statement.printReportIncomeStatement') }}?&dateS=' + $(".dtpickermnth").val();
         }
 
 
