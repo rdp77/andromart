@@ -59,6 +59,7 @@ class ReportNeracaController extends Controller
     {
         $branch = $req->branch;
         $date = date('Y-m-t',strtotime($req->date));
+        $datesss1 = date('Y-01-01',strtotime($req->date));
         $checkBranch = Branch::where(function ($q) use ($branch) {
                                         if ($branch == '') {
                                         } else {
@@ -113,7 +114,7 @@ class ReportNeracaController extends Controller
         $dataMutasiTransfer = $this->dataMutasiTransfer($jurnal,$branch,$date)[0];
         $dataMutasiTransferTotal = $this->dataMutasiTransfer($jurnal,$branch,$date)[1];
 
-        $labaBerjalan = $this->labaBerjalan($jurnal,$branch,$date);
+        $labaBerjalan = $this->labaBerjalan($jurnal,$branch,$date,$datesss1);
         // return $dataKas;
         // return [$dataPersediaan, $dataPersediaanTotal];
 
@@ -473,15 +474,13 @@ class ReportNeracaController extends Controller
         return [$MutasiTransfer, $total];
     }
 
-    public function labaBerjalan($jurnal,$branch,$date)
+    public function labaBerjalan($jurnal,$branch,$date,$datesss1)
     {
         // return $req->all();
-        $date1 = date('Y-m-01', strtotime(date('Y-m-d')));
-        $date2 = date('Y-m-t', $date);
         $jurnalSebelumnya = Journal::with('JournalDetail', 'JournalDetail.AccountData')->get();
         
         $jurnal = Journal::with('JournalDetail', 'JournalDetail.AccountData')
-            ->where('date', '>=', date('Y-01-01'))
+            ->where('date', '>=', $datesss1)
             ->where('date', '<=', $date)
             ->get();
 
