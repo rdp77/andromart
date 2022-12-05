@@ -58,6 +58,7 @@ class ReportNeracaController extends Controller
     public function printReportNeraca (Request $req)
     {
         $branch = $req->branch;
+        $date = date('Y-m-t',strtotime($req->date));
         $checkBranch = Branch::where(function ($q) use ($branch) {
                                         if ($branch == '') {
                                         } else {
@@ -65,10 +66,13 @@ class ReportNeracaController extends Controller
                                         }
                                     })->first();
         // return $this->jurnalTransaksiStock();
+
         $jurnal = Journal::with('JournalDetail', 'JournalDetail.AccountData')
             // ->where('date', '>=', date('Y-m-01'))
-            ->where('date', '<=', date('Y-m-t'))
+            ->where('date', '<=', $date)
             ->get();
+        return $this->dataPersediaan($jurnal,$branch,$date);
+
         // ->take('')
 
         // mendapatkan data kas
@@ -77,8 +81,8 @@ class ReportNeracaController extends Controller
         //     ->get();
         // return $dataKas = $this->dataKas($jurnal,$branch);
 
-        $dataKas = $this->dataKas($branch)[0];
-        $dataKasTotal = $this->dataKas($branch)[1];
+        $dataKas = $this->dataKas($branch,$date)[0];
+        $dataKasTotal = $this->dataKas($branch,$date)[1];
         // $this->dataKas($jurnal,$branch)[2];
 
 
@@ -87,30 +91,29 @@ class ReportNeracaController extends Controller
         $accountDataPersediaan = AccountData::where('main_id', 3)
             ->groupBy('main_detail_id')
             ->get();
-        // return $this->dataPersediaan($jurnal);
-        $dataPersediaan = $this->dataPersediaan($jurnal,$branch)[0];
-        $dataPersediaanTotal = $this->dataPersediaan($jurnal,$branch)[1];
+        $dataPersediaan = $this->dataPersediaan($jurnal,$branch,$date)[0];
+        $dataPersediaanTotal = $this->dataPersediaan($jurnal,$branch,$date)[1];
 
-        $dataPenyusutan = $this->dataPenyusutan($jurnal,$branch)[0];
-        $dataPenyusutanTotal = $this->dataPenyusutan($jurnal,$branch)[1];
+        $dataPenyusutan = $this->dataPenyusutan($jurnal,$branch,$date)[0];
+        $dataPenyusutanTotal = $this->dataPenyusutan($jurnal,$branch,$date)[1];
 
-        $dataAsset = $this->dataAsset($jurnal,$branch)[0];
-        $dataAssetTotal = $this->dataAsset($jurnal,$branch)[1];
+        $dataAsset = $this->dataAsset($jurnal,$branch,$date)[0];
+        $dataAssetTotal = $this->dataAsset($jurnal,$branch,$date)[1];
 
         // return $this->dataModal($jurnal,$branch);
-        $dataModal = $this->dataModal($jurnal,$branch)[0];
-        $dataModalTotal = $this->dataModal($jurnal,$branch)[1];
+        $dataModal = $this->dataModal($jurnal,$branch,$date)[0];
+        $dataModalTotal = $this->dataModal($jurnal,$branch,$date)[1];
 
-        $dataUangDimuka = $this->dataUangDimuka($jurnal,$branch)[0];
-        $dataUangDimukaTotal = $this->dataUangDimuka($jurnal,$branch)[1];
+        $dataUangDimuka = $this->dataUangDimuka($jurnal,$branch,$date)[0];
+        $dataUangDimukaTotal = $this->dataUangDimuka($jurnal,$branch,$date)[1];
 
-        $dataPendapatanDimuka = $this->dataPendapatanDimuka($jurnal,$branch)[0];
-        $dataPendapatanDimukaTotal = $this->dataPendapatanDimuka($jurnal,$branch)[1];
+        $dataPendapatanDimuka = $this->dataPendapatanDimuka($jurnal,$branch,$date)[0];
+        $dataPendapatanDimukaTotal = $this->dataPendapatanDimuka($jurnal,$branch,$date)[1];
 
-        $dataMutasiTransfer = $this->dataMutasiTransfer($jurnal,$branch)[0];
-        $dataMutasiTransferTotal = $this->dataMutasiTransfer($jurnal,$branch)[1];
+        $dataMutasiTransfer = $this->dataMutasiTransfer($jurnal,$branch,$date)[0];
+        $dataMutasiTransferTotal = $this->dataMutasiTransfer($jurnal,$branch,$date)[1];
 
-        $labaBerjalan = $this->labaBerjalan($jurnal,$branch);
+        $labaBerjalan = $this->labaBerjalan($jurnal,$branch,$date);
         // return $dataKas;
         // return [$dataPersediaan, $dataPersediaanTotal];
 
@@ -118,7 +121,7 @@ class ReportNeracaController extends Controller
     }
 
     // mencari data kas secara
-    public function dataKas($branch)
+    public function dataKas($branch,$date)
     {
         $accountData = AccountData::where('main_id', 1)
                                   ->where(function ($q) use ($branch) {
@@ -131,13 +134,13 @@ class ReportNeracaController extends Controller
                                     $accountData = AccountData::where('main_id',1)->get();
 
         $jurnal = Journal::with('JournalDetail', 'JournalDetail.AccountData')
-            ->where('date', '<=', date('Y-m-d'))
+            ->where('date', '<=', $date)
             ->get();
 
         $dataKas = [];
         $total = 0;
         for ($i = 0; $i < count($accountData); $i++) {
-            if ($accountData[$i]->opening_date <= date('Y-m-d')) {
+            if ($accountData[$i]->opening_date <= $date) {
                 $dataKas[$i]['total'] = $accountData[$i]->opening_balance;
             } else {
                 $dataKas[$i]['total'] = 0;
@@ -162,10 +165,12 @@ class ReportNeracaController extends Controller
     }
 
     
-    public function dataPersediaan($jurnal,$branch)
+    public function dataPersediaan($jurnal,$branch,$date)
     {
+      
         $accountData = AccountData::where('main_id', 3)->where(function ($q) use ($branch) {
                                         if ($branch == '') {
+                                            $q->where('branch_id', 1);
                                         } else {
                                             $q->where('branch_id', $branch);
                                         }
@@ -173,11 +178,14 @@ class ReportNeracaController extends Controller
 
         $dataKas = [];
         $total = 0;
+        $totalcek = 0;
         for ($i = 0; $i < count($accountData); $i++) {
-            if ($accountData[$i]->opening_date <= date('Y-m-d')) {
+            if ($accountData[$i]->opening_date <= $date) {
                 $dataKas[$i]['total'] = $accountData[$i]->opening_balance;
+                $totalcek = $accountData[$i]->opening_balance;
             } else {
                 $dataKas[$i]['total'] = 0;
+                $totalcek = 0;
             }
             $dataKas[$i]['akun'] = $accountData[$i]->main_detail_id;
             $dataKas[$i]['akun_nama'] = $accountData[$i]->name;
@@ -187,22 +195,24 @@ class ReportNeracaController extends Controller
                         // $dataKas[$i][$j]['jurnal_name']  = $jurnal[$j]->JournalDetail[$k]->AccountData->name;
                         // $dataKas[$i][$j]['jurnal_id']    = $jurnal[$j]->JournalDetail[$k]->AccountData->main_detail_id;
                         // $dataKas[$i][$j]['jurnal_id']    = $jurnal[$j]->ref;
-                        // $dataKas[$i][$j]['jurnal_total'] = $jurnal[$j]->total;
+                        
                         // $dataKas[$i][$j]['jurnal_dk']    = $jurnal[$j]->JournalDetail[$k]->debet_kredit;
 
                         if ($jurnal[$j]->JournalDetail[$k]->debet_kredit == 'D') {
                             $dataKas[$i]['total'] += $jurnal[$j]->total;
+                            $dataKas[$i][$j]['jurnal_total'] = [$jurnal[$j]->ref,$jurnal[$j]->total,date('d F Y',strtotime($jurnal[$j]->date)),number_format($totalcek+=$jurnal[$j]->total,0,',','.')];
                         } else {
                             $dataKas[$i]['total'] -= $jurnal[$j]->total;
+                            $dataKas[$i][$j]['jurnal_total'] = [$jurnal[$j]->ref,$jurnal[$j]->total, date('d F Y',strtotime($jurnal[$j]->date)),number_format($totalcek-=$jurnal[$j]->total,0,',','.')];
                         }
                     }
                 }
             }
             $total += $dataKas[$i]['total'];
         }
-        return [$dataKas, $total];
+        return [$total,$dataKas, ];
     }
-    public function dataPenyusutan($jurnal,$branch)
+    public function dataPenyusutan($jurnal,$branch,$date)
     {
     
 
@@ -246,7 +256,7 @@ class ReportNeracaController extends Controller
         }
         return [$dataPenyusutan, $total];
     }
-    public function dataAsset($jurnal,$branch)
+    public function dataAsset($jurnal,$branch,$date)
     {
         $accountDataAsset = AccountData::where('main_id', 13)
         ->where(function ($q) use ($branch) {
@@ -289,7 +299,7 @@ class ReportNeracaController extends Controller
         return [$dataAsset, $total];
     }
 
-    public function dataModal($jurnal,$branch)
+    public function dataModal($jurnal,$branch,$date)
     {
         $accountDataModal = AccountData::where('main_id', 9)
         ->where(function ($q) use ($branch) {
@@ -302,7 +312,7 @@ class ReportNeracaController extends Controller
         $dataModal = [];
         $total = 0;
         for ($i = 0; $i < count($accountDataModal); $i++) {
-            if ($accountDataModal[$i]->opening_date <= date('Y-m-t')) {
+            if ($accountDataModal[$i]->opening_date <= $date) {
                 $dataModal[$i]['total'] = $accountDataModal[$i]->opening_balance;
             } else {
                 $dataModal[$i]['total'] = 0;
@@ -334,7 +344,7 @@ class ReportNeracaController extends Controller
         }
         return [$dataModal, $total];
     }
-    public function dataUangDimuka($jurnal,$branch)
+    public function dataUangDimuka($jurnal,$branch,$date)
     {
         $accountUangDimuka = AccountData::where('main_id', 4)->where('main_detail_id', 12)
         ->where(function ($q) use ($branch) {
@@ -377,7 +387,7 @@ class ReportNeracaController extends Controller
         return [$UangDimuka, $total];
     }
 
-    public function dataPendapatanDimuka($jurnal,$branch)
+    public function dataPendapatanDimuka($jurnal,$branch,$date)
     {
         $accountPendapatanDimuka = AccountData::where('main_id', 4)->where('main_detail_id', 4)
         ->where(function ($q) use ($branch) {
@@ -420,7 +430,7 @@ class ReportNeracaController extends Controller
         return [$PendapatanDimuka, $total];
     }
 
-    public function dataMutasiTransfer($jurnal,$branch)
+    public function dataMutasiTransfer($jurnal,$branch,$date)
     {
         $accountMutasiTransfer = AccountData::where('main_id', 14)->where('main_detail_id', 60)
                                             ->where(function ($q) use ($branch) {
@@ -463,16 +473,16 @@ class ReportNeracaController extends Controller
         return [$MutasiTransfer, $total];
     }
 
-    public function labaBerjalan($jurnal,$branch)
+    public function labaBerjalan($jurnal,$branch,$date)
     {
         // return $req->all();
         $date1 = date('Y-m-01', strtotime(date('Y-m-d')));
-        $date2 = date('Y-m-t', strtotime(date('Y-m-d')));
+        $date2 = date('Y-m-t', $date);
         $jurnalSebelumnya = Journal::with('JournalDetail', 'JournalDetail.AccountData')->get();
         
         $jurnal = Journal::with('JournalDetail', 'JournalDetail.AccountData')
             ->where('date', '>=', date('Y-01-01'))
-            ->where('date', '<=', date('Y-m-t'))
+            ->where('date', '<=', $date)
             ->get();
 
         $HPP = 0;
