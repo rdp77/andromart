@@ -171,7 +171,6 @@ class ReportNeracaController extends Controller
      
         $accountData = AccountData::where('main_id', 3)->where(function ($q) use ($branch) {
                                         if ($branch == '') {
-                                            $q->where('branch_id', 1);
                                         } else {
                                             $q->where('branch_id', $branch);
                                         }
