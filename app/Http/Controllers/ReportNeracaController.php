@@ -71,7 +71,7 @@ class ReportNeracaController extends Controller
             // ->where('date', '>=', date('Y-m-01'))
             ->where('date', '<=', $date)
             ->get();
-        return $this->dataPersediaan($jurnal,$branch,$date);
+        // return $this->dataPersediaan($jurnal,$branch,$date);
 
         // ->take('')
 
@@ -167,7 +167,7 @@ class ReportNeracaController extends Controller
     
     public function dataPersediaan($jurnal,$branch,$date)
     {
-      
+     
         $accountData = AccountData::where('main_id', 3)->where(function ($q) use ($branch) {
                                         if ($branch == '') {
                                             $q->where('branch_id', 1);
@@ -210,7 +210,7 @@ class ReportNeracaController extends Controller
             }
             $total += $dataKas[$i]['total'];
         }
-        return [$total,$dataKas, ];
+        return [$dataKas,$total];
     }
     public function dataPenyusutan($jurnal,$branch,$date)
     {
