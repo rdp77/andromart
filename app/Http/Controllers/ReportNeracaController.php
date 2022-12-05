@@ -75,8 +75,10 @@ class ReportNeracaController extends Controller
         // $accountDataKas = AccountData::where('main_id', 1)
         //     // ->groupBy('main_detail_id')
         //     ->get();
-        $dataKas = $this->dataKas($jurnal,$branch)[0];
-        $dataKasTotal = $this->dataKas($jurnal,$branch)[1];
+        // return $dataKas = $this->dataKas($jurnal,$branch);
+
+        $dataKas = $this->dataKas($branch)[0];
+        $dataKasTotal = $this->dataKas($branch)[1];
         // $this->dataKas($jurnal,$branch)[2];
 
 
@@ -116,7 +118,7 @@ class ReportNeracaController extends Controller
     }
 
     // mencari data kas secara
-    public function dataKas($jurnal,$branch)
+    public function dataKas($branch)
     {
         $accountData = AccountData::where('main_id', 1)
                                   ->where(function ($q) use ($branch) {
@@ -126,6 +128,11 @@ class ReportNeracaController extends Controller
                                         }
                                     })
                                     ->get();
+                                    $accountData = AccountData::where('main_id',1)->get();
+
+        $jurnal = Journal::with('JournalDetail', 'JournalDetail.AccountData')
+            ->where('date', '<=', date('Y-m-d'))
+            ->get();
 
         $dataKas = [];
         $total = 0;
