@@ -66,7 +66,7 @@ class ReportNeracaController extends Controller
                                     })->first();
         // return $this->jurnalTransaksiStock();
         $jurnal = Journal::with('JournalDetail', 'JournalDetail.AccountData')
-            ->where('date', '>=', date('Y-m-01'))
+            // ->where('date', '>=', date('Y-m-01'))
             ->where('date', '<=', date('Y-m-t'))
             ->get();
         // ->take('')
@@ -204,6 +204,8 @@ class ReportNeracaController extends Controller
     }
     public function dataPenyusutan($jurnal,$branch)
     {
+    
+
         $accountDataPenyusutan = AccountData::where('main_id', 12)
         ->where(function ($q) use ($branch) {
                                         if ($branch == '') {
@@ -467,6 +469,11 @@ class ReportNeracaController extends Controller
         $date1 = date('Y-m-01', strtotime(date('Y-m-d')));
         $date2 = date('Y-m-t', strtotime(date('Y-m-d')));
         $jurnalSebelumnya = Journal::with('JournalDetail', 'JournalDetail.AccountData')->get();
+        
+        $jurnal = Journal::with('JournalDetail', 'JournalDetail.AccountData')
+            ->where('date', '>=', date('Y-m-01'))
+            ->where('date', '<=', date('Y-m-t'))
+            ->get();
 
         $HPP = 0;
         $gaji = 0;
