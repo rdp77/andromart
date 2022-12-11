@@ -30,23 +30,23 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // config(['app.locale' => 'id']);
-        // Carbon::setLocale('id');
+        config(['app.locale' => 'id']);
+        Carbon::setLocale('id');
 
-        // if (Schema::hasTable('submenu') and Schema::hasTable('roles_detail')) {
-        //     View::share('menu', Menu::with('SubMenu', 'SubMenu.RoleDetail')->get());
-        // }
-        // view()->composer('*', function ($view) {
-        //     if (Auth::check()) {
+        if (Schema::hasTable('submenu') and Schema::hasTable('roles_detail')) {
+            View::share('menu', Menu::with('SubMenu', 'SubMenu.RoleDetail')->get());
+        }
+        view()->composer('*', function ($view) {
+            if (Auth::check()) {
 
-        //         // $view->with([
-        //         //     'sharingProfit' => $chekSales, 'sharingProfit1' => $sharingProfit1,
-        //         //     'sharingProfit2' => $sharingProfit2,
-        //         // ]);
-        //         // return [$chekSales,$sharingProfit1,$sharingProfit2];
-        //     }
-        // });
-        // config(['app.locale' => 'id']);
-        // Carbon::setLocale('id');
+                // $view->with([
+                //     'sharingProfit' => $chekSales, 'sharingProfit1' => $sharingProfit1,
+                //     'sharingProfit2' => $sharingProfit2,
+                // ]);
+                // return [$chekSales,$sharingProfit1,$sharingProfit2];
+            }
+        });
+        config(['app.locale' => 'id']);
+        Carbon::setLocale('id');
     }
 }
