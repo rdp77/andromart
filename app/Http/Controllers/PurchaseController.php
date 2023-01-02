@@ -404,7 +404,6 @@ class PurchaseController extends Controller
             ->get();
             $jumlah = PurchasingDetail::where('purchasing_id', $id)->count();
         }
-        dd($models);
 
         $employee = Employee::get();
         $item     = Item::with('stock')->where('items.name','!=','Jasa Service')
