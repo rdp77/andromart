@@ -111,20 +111,26 @@ class ReceptionController extends Controller
         ->leftjoin('employees', 'purchasings.employee_id', 'employees.id')
         ->first();
 
-        $models = Purchasing::where('purchasings.id', $id)
-        ->join('purchasing_details', 'purchasings.id', 'purchasing_details.purchasing_id')
+        // $models = Purchasing::where('purchasings.id', $id)
+        // ->join('purchasing_details', 'purchasings.id', 'purchasing_details.purchasing_id')
+        // ->join('items', 'purchasing_details.item_id', 'items.id')
+        // // ->join('stocks', 'items.id', 'stocks.item_id')
+        // ->leftJoin('stocks', function($join)
+        //      {
+        //          $join->on('items.id', 'stocks.item_id');
+        //          $join->on('purchasing_details.branch_id', 'stocks.branch_id');
+        //      })
+        // ->join('units', 'stocks.unit_id', 'units.id')
+        // ->join('branches', 'stocks.branch_id', 'branches.id')
+        // ->where('purchasing_details.qty', '>', 0)
+        // ->select('purchasing_details.id as id', 'qty', 'items.name as itemName', 'branches.name as branchName', 'units.name as unitName', 'items.id as item_id', 'units.id as unit_id', 'branches.id as branch_id')
+        // ->get();
+        $models = PurchasingDetail::where('purchasing_id', $id)
         ->join('items', 'purchasing_details.item_id', 'items.id')
-        // ->join('stocks', 'items.id', 'stocks.item_id')
-        ->leftJoin('stocks', function($join)
-             {
-                 $join->on('items.id', 'stocks.item_id');
-                 $join->on('purchasing_details.branch_id', 'stocks.branch_id');
-             })
-        ->join('units', 'stocks.unit_id', 'units.id')
-        ->join('branches', 'stocks.branch_id', 'branches.id')
-        ->where('purchasing_details.qty', '>', 0)
-        ->select('purchasing_details.id as id', 'qty', 'items.name as itemName', 'branches.name as branchName', 'units.name as unitName', 'items.id as item_id', 'units.id as unit_id', 'branches.id as branch_id')
+        ->join('branches', 'purchasing_details.branch_id', 'branches.id')
+        ->select('purchasing_details.id as id', 'qty', 'items.name as itemName', 'branches.name as branchName', 'items.id as item_id', 'branches.id as branch_id')
         ->get();
+        // dd($models);
         $history = HistoryPurchase::where('purchasing_id', $id)->orderBy('id', 'DESC')->get();
         foreach($history as $row) {
             $historyDetail = HistoryDetailPurchase::where('history_purchase_id', $row->id)
