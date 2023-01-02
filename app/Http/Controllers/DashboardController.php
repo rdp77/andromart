@@ -154,8 +154,10 @@ class DashboardController extends Controller
             $date1 = $this->changeMonthIdToEn($req->startDate);
             $date2 = $this->changeMonthIdToEn($req->endDate);
         } else {
-            $date1 = date('Y-10-20');
-            $date2 = date('Y-10-20');
+            // $date1 = date('Y-10-20');
+            // $date2 = date('Y-10-20');
+            $date1 = date('Y-m-d');
+            $date2 = date('Y-m-d');
         }
         if ($req->branch == '') {
             $branch = '';
@@ -835,8 +837,8 @@ class DashboardController extends Controller
 
     public function dataService($type, $date1, $date2, $branch)
     {
-        $date1 = date('2022-10-01');
-        $date2 = date('2022-10-01');
+        // $date1 = date('2022-10-01');
+        // $date2 = date('2022-10-01');
         
         $belumDiambilSum = Service::select('total_price')->where('work_status','Selesai')->where(function ($query) use ($branch) {
             if ($branch != '') {
