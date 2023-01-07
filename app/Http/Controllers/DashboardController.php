@@ -746,6 +746,7 @@ class DashboardController extends Controller
             $date1 = date('Y-m-d');
             $date2 = date('Y-m-d');
         }
+        // return [$date1,$date2];
  
         $sharingProfit1Service = Service::
             where('payment_date', '>=', $date1)
