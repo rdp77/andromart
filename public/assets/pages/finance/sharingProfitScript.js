@@ -160,6 +160,7 @@ function checkEmploye() {
                         $(".hiddenFormUpdate").css("display", "block");
                     }
                     var totalAkhir = 0;
+                    var totalAll = 0;
                     $.each(data.result, function (index, value) {
                         if (value.technician_id == technicianId) {
                             var totalProfit = value.sharing_profit_technician_1;
@@ -187,11 +188,14 @@ function checkEmploye() {
                                     var payDetail = "Belum Bayar";
                                     totalAkhir += totalProfit;
                                 }
+                                totalAll += totalProfit;
+
                             }else if(value.sharing_profit_detail.length == 2){
                                 var pay =
                                 '<div class="badge badge-success">Sudah Dibayarkan</div>';
                                 var payDetail = "Sudah Dibayarkan";
                                 totalAkhir += 0;
+                                totalAll += totalProfit;
                             }
 
                             // console.log(value.sharing_profit_detail[0].sharing_profit.employe_id+' - - - '+value.technician_id);
@@ -250,6 +254,7 @@ function checkEmploye() {
                                 var payDetail = "Sudah Dibayarkan";
                                 totalAkhir += 0;
                             }
+                            totalAll += value.sharing_profit_sales;
 
                             $(".dropHere").append(
                                 "<tr>" +
@@ -306,6 +311,8 @@ function checkEmploye() {
                                 var payDetail = "Sudah Dibayarkan";
                                 totalAkhir += 0;
                             }
+                            totalAll += value.sharing_profit_buyer;
+
                             $(".dropHere").append(
                                 "<tr>" +
                                     '<td style="display:none">' +
@@ -350,6 +357,7 @@ function checkEmploye() {
                     $(".dropHereTotal").text(
                         parseInt(totalAkhir).toLocaleString("en-US")
                     );
+                    console.log(totalAll);
                     $(".dropHereTotalVal").html(
                         '<input type="hidden" class="form-control" name="totalValue" value="' +
                             totalAkhir +
@@ -389,6 +397,7 @@ function checkEmploye() {
                         $(".hiddenFormUpdate").css("display", "block");
                     }
                     var totalAkhir = 0;
+                    // var totalAll = 0;
                     $.each(data.result, function (index, value) {
                         var totalLoss2 = 0;
                         var totalLoss = 0;

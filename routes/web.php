@@ -44,6 +44,10 @@ Route::get('/log', [DashboardController::class, 'log'])
     ->name('dashboard.log');
 Route::get('/dashboard/filter-data-dashboard', [DashboardController::class, 'filterDataDashboard'])
     ->name('dashboard.filterDataDashboard');
+Route::get('/dashboard/filter-kpi-dashboard', [DashboardController::class, 'filterKpiDashboard'])
+    ->name('dashboard.filterKpiDashboard');
+Route::get('/dashboard/filter-sharing-profit-dashboard', [DashboardController::class, 'checkSharingProfitEmployee'])
+    ->name('dashboard.checkSharingProfitEmployee');
 
 require __DIR__ . '/auth.php';
 

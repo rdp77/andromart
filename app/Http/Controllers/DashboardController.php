@@ -41,97 +41,9 @@ class DashboardController extends Controller
 
     public function index()
     {
-        // return $this->hit(81);
-        // $sol3 = $this->solution3(1200000,12,1);
-        // return $this->solution2(7,215.3);
-        // return $this->solution1(-1,2,6);
         $branch = Branch::get();
-        $topSales = DB::table('sale_details')
-            ->leftJoin('items', 'items.id', '=', 'sale_details.item_id')
-            ->select('items.id', 'items.name', 'items.brand_id', 'sale_details.item_id', DB::raw('SUM(sale_details.qty) as total'))
-            ->groupBy('items.id', 'sale_details.item_id', 'items.name', 'items.brand_id')
-            ->orderBy('total', 'desc')
-            ->limit(3)
-            ->get();
-
-        // return $topSales;
-
-        $dataTrafficToday = DB::table('traffic')
-            ->where('date', date('Y-m-d'))
-            ->count();
-        $dataServiceTotal = Service::where('created_at', 'like', '%' . date('Y-m-d') . '%')->count();
-        $dataServiceHandphone = Service::where('type', '11')
-            ->where('created_at', 'like', '%' . date('Y-m-d') . '%')
-            ->count();
-        $dataServiceLaptop = Service::where('type', '10')
-            ->where('created_at', 'like', '%' . date('Y-m-d') . '%')
-            ->count();
-        $checkDataSharingProfit = $this->checkSharingProfit();
-        $sharingProfit1Service = $checkDataSharingProfit[0];
-        $sharingProfit2Service = $checkDataSharingProfit[1];
-        $sharingProfitSaleSales = $checkDataSharingProfit[2];
-        $sharingProfitSaleBuyer = $checkDataSharingProfit[3];
-        $karyawan = $checkDataSharingProfit[4];
-        $checkServiceStatus = $checkDataSharingProfit[5];
-        // return $checkServiceStatus;
-        $dataPendapatan = Journal::with('ServicePayment', 'Sale')
-            ->where('journals.date', date('Y-m-d'))
-            ->where(function ($query) {
-                $query->where('journals.type', 'Pembayaran Service')->orWhere('journals.type', 'Penjualan');
-            })
-            ->get();
-        $log = Log::limit(7)->get();
-        $users = User::count();
-        $logCount = Log::where('u_id', Auth::user()->id)->count();
-
-        $totalSharingProfit = 0;
-        $totalServiceProgress = [];
-        $totalServiceDone = [];
-        $totalServiceCancel = [];
-
-        for ($i = 0; $i < count($karyawan); $i++) {
-            $totalSharingProfit += $sharingProfit1Service[$i] + $sharingProfit2Service[$i] + $sharingProfitSaleSales[$i] + $sharingProfitSaleBuyer[$i];
-
-            $totalServiceProgress[$i] = 0;
-            $totalServiceDone[$i] = 0;
-            $totalServiceCancel[$i] = 0;
-            for ($j = 0; $j < count($checkServiceStatus[$i]); $j++) {
-                if ($checkServiceStatus[$i][$j]->work_status == 'Proses' || $checkServiceStatus[$i][$j]->work_status == 'Mutasi' || $checkServiceStatus[$i][$j]->work_status == 'Manifest') {
-                    $totalServiceProgress[$i] += 1;
-                }
-                if ($checkServiceStatus[$i][$j]->work_status == 'Selesai' || $checkServiceStatus[$i][$j]->work_status == 'Diambil') {
-                    $totalServiceDone[$i] += 1;
-                }
-                if ($checkServiceStatus[$i][$j]->work_status == 'Cancel' || $checkServiceStatus[$i][$j]->work_status == 'Return') {
-                    $totalServiceCancel[$i] += 1;
-                }
-            }
-        }
-
-        // return [$totalServiceProgress,$totalServiceDone,$totalServiceCancel];
         return view('dashboard', [
-            // 'sol3'=>$sol3,
-            // 'tempo'=>12,
-            'log' => $log,
-            'users' => $users,
-            'logCount' => $logCount,
-            'dataPendapatan' => $dataPendapatan,
-            'dataServiceTotal' => $dataServiceTotal,
-            'dataServiceHandphone' => $dataServiceHandphone,
-            'dataServiceLaptop' => $dataServiceLaptop,
-            'dataTrafficToday' => $dataTrafficToday,
-            'karyawan' => $karyawan,
-            'sharingProfit1Service' => $sharingProfit1Service,
-            'sharingProfit2Service' => $sharingProfit2Service,
-            'sharingProfitSaleSales' => $sharingProfitSaleSales,
-            'sharingProfitSaleBuyer' => $sharingProfitSaleBuyer,
-            'totalSharingProfit' => number_format($totalSharingProfit, 0, ',', '.'),
-            // 'checkServiceStatus' => $checkServiceStatus
-            'totalServiceProgress' => $totalServiceProgress,
-            'totalServiceDone' => $totalServiceDone,
-            'totalServiceCancel' => $totalServiceCancel,
-            'topSales' => $topSales,
-            'branch' => $branch,
+          'branch'=>$branch
         ]);
     }
 
@@ -235,7 +147,7 @@ class DashboardController extends Controller
             })
             ->count();
 
-        $dataServiceLaptop = Service::where(function ($query) use ($req, $date1, $date2) {
+        $dataServiceLaptop = Service::where('type', '10')->where(function ($query) use ($req, $date1, $date2) {
             if ($req->type == 'Tanggal') {
                 $query->where('created_at', '>=', $date1 . ' 00:00:00')->where('created_at', '<=', $date2 . ' 23:59:59');
             } elseif ($req->type == 'Bulan') {
@@ -427,7 +339,9 @@ class DashboardController extends Controller
 
     public function filterDataDashboardOwner($type, $date1, $date2, $branch)
     {
-        $service = $this->dataService($type, $date1, $date2, $branch);
+        // $sharingProfit = $this->checkSharingProfitEmployee();
+        $employee = Employee::where('status','aktif')->get();
+        $service = $this->dataService($type, $date1, $date2, $branch,$employee);
         $data = $this->labaRugi($type, $date1, $date2, $branch);
         $persediaan = $this->dataPersediaan($branch, $date2);
         $asset = $this->dataAsset($branch, $date2);
@@ -455,6 +369,7 @@ class DashboardController extends Controller
             'asset' => $asset,
             'kas' => $kas,
             'service' => $service,
+            'employee' => $employee,
         ]);
     }
 
@@ -495,8 +410,17 @@ class DashboardController extends Controller
             // jika tidak memilih cabang
             if ($branch == '') {
                 // income
-                if ($jurnal[$i]->total != 0) {
-                    if ($jurnal[$i]->JournalDetail[0]->accountData->main_detail_id == 29 || $jurnal[$i]->JournalDetail[0]->accountData->main_detail_id == 12 || $jurnal[$i]->JournalDetail[0]->accountData->main_detail_id == 28 || $jurnal[$i]->type == 'Transfer Masuk' || str_contains($jurnal[$i]->ref, 'SMT') || str_contains($jurnal[$i]->ref, 'SIN') || str_contains($jurnal[$i]->ref, 'SOT') || str_contains($jurnal[$i]->ref, 'PCS')) {
+                if (count($jurnal[$i]->JournalDetail) != 0) {
+                    if (
+                        $jurnal[$i]->JournalDetail[0]->accountData->main_detail_id == 29 
+                        || 
+                        $jurnal[$i]->JournalDetail[0]->accountData->main_detail_id == 12 || 
+                        $jurnal[$i]->JournalDetail[0]->accountData->main_detail_id == 28 || 
+                        $jurnal[$i]->type == 'Transfer Masuk' || 
+                        str_contains($jurnal[$i]->ref, 'SMT') || 
+                        str_contains($jurnal[$i]->ref, 'SIN') || 
+                        str_contains($jurnal[$i]->ref, 'SOT') || 
+                        str_contains($jurnal[$i]->ref, 'PCS')) {
                     } else {
                         if (str_contains($jurnal[$i]->code, 'DD')) {
                             $income += $jurnal[$i]->total;
@@ -506,7 +430,7 @@ class DashboardController extends Controller
                 }
 
                 // outcome
-                if ($jurnal[$i]->total != 0) {
+                if (count($jurnal[$i]->JournalDetail) != 0) {
                     if ($jurnal[$i]->JournalDetail[0]->accountData->main_detail_id == 29 || $jurnal[$i]->JournalDetail[0]->accountData->main_detail_id == 12 || $jurnal[$i]->JournalDetail[0]->accountData->main_detail_id == 28 || $jurnal[$i]->type == 'Transfer Masuk' || str_contains($jurnal[$i]->ref, 'SMT') || str_contains($jurnal[$i]->ref, 'SIN') || str_contains($jurnal[$i]->ref, 'SOT') || str_contains($jurnal[$i]->ref, 'SRV') || str_contains($jurnal[$i]->ref, 'PJT') || str_contains($jurnal[$i]->ref, 'PJT')) {
                     } else {
                         if (str_contains($jurnal[$i]->code, 'KK')) {
@@ -804,13 +728,84 @@ class DashboardController extends Controller
         return $total;
     }
 
+    public function checkSharingProfitEmployee(Request $req)
+    {
+        if ($req->type == 'Bulan') {
+            $date1 = date('Y-m-01', strtotime($req->month));
+            $date2 = date('Y-m-t', strtotime($req->month));
+        } elseif ($req->type == 'Tahun') {
+            $date1 = date('m-01');
+            $date2 = date('m-t');
+
+            $date1 = $req->year . '-' . '01' . '-' . '01';
+            $date2 = $req->year . '-' . '12' . '-' . '31';
+        } elseif ($req->type == 'Tanggal') {
+            $date1 = $this->changeMonthIdToEn($req->startDate);
+            $date2 = $this->changeMonthIdToEn($req->endDate);
+        } else {
+            $date1 = date('Y-m-d');
+            $date2 = date('Y-m-d');
+        }
+ 
+        $sharingProfit1Service = Service::
+            where('payment_date', '>=', $date1)
+            ->where('payment_date', '<=', $date2)
+            ->where('work_status', 'Diambil')
+            ->where('payment_status', 'Lunas')
+            ->where('technician_id', $req->employee)
+            ->sum('sharing_profit_technician_1');
+            
+        $sharingProfit2Service = Service::where('payment_date', '>=', $date1)
+            ->where('payment_date', '<=', $date2)
+            ->where('work_status', 'Diambil')
+            ->where('payment_status', 'Lunas')
+            ->where('technician_replacement_id', $req->employee)
+            ->sum('sharing_profit_technician_2');
+
+        $sharingProfitSaleSales = SaleDetail::where('sales_id', $req->employee)
+            ->where('created_at', '>=', $date1 . ' 00:00:00')
+            ->where('created_at', '<=', $date2 . ' 23:59:59')
+            ->sum('sharing_profit_sales');
+        $sharingProfitSaleBuyer = SaleDetail::where('buyer_id', $req->employee)
+            ->where('created_at', '>=', $date1 . ' 00:00:00')
+            ->where('created_at', '<=', $date2 . ' 23:59:59')
+            ->sum('sharing_profit_buyer');
+
+        $loss1 = Service::
+            where('date', '>=', $date1)
+            ->where('date', '<=', $date2)
+            ->where('total_loss', '!=', 0)
+            ->where('technician_id', $req->employee)
+            ->sum('total_loss_technician_1');
+
+        $loss2 = Service::
+            where('date', '>=', $date1)
+            ->where('date', '<=', $date2)
+            ->where('total_loss', '!=', 0)
+            ->where('technician_replacement_id', $req->employee)
+            ->sum('total_loss_technician_2');
+
+   
+        $shareProfitService = $sharingProfit1Service+$sharingProfit2Service;
+        $loss = $loss1+$loss2;
+        return ['sp1'=>number_format($sharingProfit1Service,0,'.',','),
+                'sp2'=>number_format($sharingProfit2Service,0,'.',','), 
+                'sps'=>number_format($sharingProfitSaleSales,0,'.',','), 
+                'spb'=>number_format($sharingProfitSaleBuyer,0,'.',','),
+                'spt'=>number_format($shareProfitService+$sharingProfitSaleSales+$sharingProfitSaleBuyer,0,'.',','),
+                'ls1'=>number_format($loss1,0,'.',','),
+                'ls2'=>number_format($loss2,0,'.',',')];
+    }
+
+
     public function checkSharingProfit()
     {
         $chekSales = Employee::with('Service1', 'Service2')
             ->where('status', 'aktif')
             ->where('id', '!=', 1)
+            // ->where()
             ->get();
-
+ 
         for ($i = 0; $i < count($chekSales); $i++) {
             $sharingProfit1Service[$i] = Service::where('work_status', 'Diambil')
                 ->where('date', date('Y-m-d'))
@@ -835,7 +830,7 @@ class DashboardController extends Controller
         return [$sharingProfit1Service, $sharingProfit2Service, $sharingProfitSaleSales, $sharingProfitSaleBuyer, $chekSales, $checkServiceStatus];
     }
 
-    public function dataService($type, $date1, $date2, $branch)
+    public function dataService($type, $date1, $date2, $branch,$employee)
     {
         // $date1 = date('2022-10-01');
         // $date2 = date('2022-10-01');
@@ -847,7 +842,6 @@ class DashboardController extends Controller
         })->sum('total_price');
 
 
-        $employee = Employee::where('status','aktif')->get();
 
         $serviceProgress = Service::select('code','brand','technician_id','technician_replacement_id')       
             ->with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
@@ -925,6 +919,93 @@ class DashboardController extends Controller
                 'belumDiambilCount'=> $belumDiambilCount,
                 'dataService'=>$dataService,
                ];
+    }
+
+    public function filterKpiDashboard (Request $req)
+    {
+        if ($req->type == 'Bulan') {
+            $date1 = date('Y-m-01', strtotime($req->month));
+            $date2 = date('Y-m-t', strtotime($req->month));
+        } elseif ($req->type == 'Tahun') {
+            $date1 = date('m-01');
+            $date2 = date('m-t');
+
+            $date1 = $req->year . '-' . '01' . '-' . '01';
+            $date2 = $req->year . '-' . '12' . '-' . '31';
+        } elseif ($req->type == 'Tanggal') {
+            $date1 = $this->changeMonthIdToEn($req->startDate);
+            $date2 = $this->changeMonthIdToEn($req->endDate);
+        } else {
+            // $date1 = date('Y-10-20');
+            // $date2 = date('Y-10-20');
+            $date1 = date('Y-m-d');
+            $date2 = date('Y-m-d');
+        }
+
+        $serviceCancel = Service::
+            select('code','brand','technician_id','technician_replacement_id','work_status','created_at')       
+            ->whereIn('work_status', ['Return', 'Cancel'])
+            ->where(function ($query) use ($req,$date1,$date2) {
+                if ($req->type == 'Tanggal') {
+                    $query->where('created_at', '>=', $date1 . ' 00:00:00')->where('created_at', '<=', $date2 . ' 23:59:59');
+                } elseif ($req->type == 'Bulan') {
+                    $query->where('created_at', '>=', $date1 . ' 00:00:00')->where('created_at', '<=', $date2 . ' 23:59:59');
+                } elseif ($req->type == 'Tahun') {
+                    $query->where('created_at', '>=', $date1 . ' 00:00:00')->where('created_at', '<=', $date2 . ' 23:59:59');
+                } else {
+                    $query->where('created_at', '>=', $date1 . ' 00:00:00')->where('created_at', '<=', $date2 . ' 23:59:59');
+                }
+
+                if ($req->branch != '') {
+                    $query->where('branch_id', $req->branch);
+                }
+            })
+            ->where(function ($query) use ($req) {
+                $query->where('technician_id',$req->employee);
+                $query->orWhere('technician_replacement_id',$req->employee);
+            })
+            ->orderBy('id', 'desc')
+            ->get();
+
+        $serviceSolved = Service::
+            select('code','brand','technician_id','technician_replacement_id','work_status','created_at')       
+            ->whereIn('work_status', ['Selesai','Diambil'])
+            ->where(function ($query) use ($req,$date1,$date2) {
+                if ($req->type == 'Tanggal') {
+                    $query->where('created_at', '>=', $date1 . ' 00:00:00')->where('created_at', '<=', $date2 . ' 23:59:59');
+                } elseif ($req->type == 'Bulan') {
+                    $query->where('created_at', '>=', $date1 . ' 00:00:00')->where('created_at', '<=', $date2 . ' 23:59:59');
+                } elseif ($req->type == 'Tahun') {
+                    $query->where('created_at', '>=', $date1 . ' 00:00:00')->where('created_at', '<=', $date2 . ' 23:59:59');
+                } else {
+                    $query->where('created_at', '>=', $date1 . ' 00:00:00')->where('created_at', '<=', $date2 . ' 23:59:59');
+                }
+
+                if ($req->branch != '') {
+                    $query->where('branch_id', $req->branch);
+                }
+            })
+            ->where(function ($query) use ($req) {
+                $query->where('technician_id',$req->employee);
+                $query->orWhere('technician_replacement_id',$req->employee);
+            })
+            ->orderBy('id', 'desc')
+            ->get();
+        $sumCancel = count($serviceCancel);
+        $sumSolved = count($serviceSolved);
+        // return [$sumCancel,$sumSolved];
+        if ($sumCancel == 0) {
+            $percentageCancel = 0;
+        }else{
+            $percentageCancel = ($sumCancel/($sumCancel+$sumSolved))*100;
+        }
+        if ($sumSolved == 0) {
+            $percentageSolved = 0;
+        }else{
+            $percentageSolved =($sumSolved/($sumCancel+$sumSolved))*100;
+        }
+        
+        return [$sumCancel,$sumSolved,$percentageSolved,$percentageCancel];
     }
 
     public function log(Request $req)

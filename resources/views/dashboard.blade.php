@@ -178,6 +178,7 @@
             var dtpickeryr = $('.dtpickeryr').val();
             var filter = $('.filter').val();
             var branch = $('.branch').val();
+            
             $.ajax({
                 url: "/dashboard/filter-data-dashboard",
                 type: 'GET',
