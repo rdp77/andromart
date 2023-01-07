@@ -125,6 +125,12 @@ class ReceptionController extends Controller
         ->where('purchasing_details.qty', '>', 0)
         ->select('purchasing_details.id as id', 'qty', 'items.name as itemName', 'branches.name as branchName', 'units.name as unitName', 'items.id as item_id', 'units.id as unit_id', 'branches.id as branch_id')
         ->get();
+        // $models = PurchasingDetail::where('purchasing_id', $id)
+        // ->join('items', 'purchasing_details.item_id', 'items.id')
+        // ->join('branches', 'purchasing_details.branch_id', 'branches.id')
+        // ->select('purchasing_details.id as id', 'qty', 'items.name as itemName', 'branches.name as branchName', 'items.id as item_id', 'branches.id as branch_id')
+        // ->get();
+        // // dd($models);
         $history = HistoryPurchase::where('purchasing_id', $id)->orderBy('id', 'DESC')->get();
         foreach($history as $row) {
             $historyDetail = HistoryDetailPurchase::where('history_purchase_id', $row->id)
