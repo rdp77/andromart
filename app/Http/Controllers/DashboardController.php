@@ -71,11 +71,13 @@ class DashboardController extends Controller
             $date1 = date('Y-m-d');
             $date2 = date('Y-m-d');
         }
+
         if ($req->branch == '') {
             $branch = '';
         } else {
             $branch = $req->branch;
         }
+        // return [$date1,$date2,$branch];
 
         if (Auth::user()->role_id == 1) {
             return $this->filterDataDashboardOwner($req->type, $date1, $date2, $req->branch);
@@ -339,24 +341,16 @@ class DashboardController extends Controller
 
     public function filterDataDashboardOwner($type, $date1, $date2, $branch)
     {
-        // $sharingProfit = $this->checkSharingProfitEmployee();
+
         $employee = Employee::where('status','aktif')->get();
         $service = $this->dataService($type, $date1, $date2, $branch,$employee);
         $data = $this->labaRugi($type, $date1, $date2, $branch);
         $persediaan = $this->dataPersediaan($branch, $date2);
         $asset = $this->dataAsset($branch, $date2);
         $kas = $this->dataKas($branch, $date1, $date2);
-        // return [ 'pendapatanKotor' => $data['pendapatanKotor'],
-        //     'pendapatanBersih' => $data['pendapatanBersih'],
-        //     'labaBersih' => $data['labaBersih'],
-        //     'income' => $data['income'],
-        //     'outcome' => $data['outcome'],
-        //     'beban' => $data['beban'],
-        //     'biaya' => $data['biaya'],
-        //     'persediaan' => $persediaan,
-        //     'asset' => $asset,
-        //     'kas' => $kas,
-        //     'service' => $service];
+        $branch = Branch::get();
+
+        // return $employee;
         return view('load-dashboard-owner', [
             'pendapatanKotor' => $data['pendapatanKotor'],
             'pendapatanBersih' => $data['pendapatanBersih'],
@@ -370,20 +364,17 @@ class DashboardController extends Controller
             'kas' => $kas,
             'service' => $service,
             'employee' => $employee,
+            'branch' => $branch,
         ]);
     }
 
     public function labaRugi($type, $date1, $date2, $branch)
     {
-        // $date1 = date('Y-m-01');
-        // $date2 = date('Y-m-31');
-
         $jurnal = Journal::with('JournalDetail', 'JournalDetail.AccountData')
             ->where('date', '>=', $date1)
             ->where('date', '<=', $date2)
             ->get();
         // return $jurnal;
-
         // $jurnalSebelumnya = Journal::with('JournalDetail', 'JournalDetail.AccountData')->get();
 
         // return $account;
@@ -396,6 +387,7 @@ class DashboardController extends Controller
         $DiskonPenjualan = 0;
         $DiskonService = 0;
         $pendapatanLainLain = 0;
+        $pendapatanLainLainRaw = [];
         $income = 0;
         $incomeRaw = [];
         $outcome = 0;
@@ -408,6 +400,7 @@ class DashboardController extends Controller
         $data = [];
         for ($i = 0; $i < count($jurnal); $i++) {
             // jika tidak memilih cabang
+            // income & outcome
             if ($branch == '') {
                 // income
                 if (count($jurnal[$i]->JournalDetail) != 0) {
@@ -433,21 +426,58 @@ class DashboardController extends Controller
                 if (count($jurnal[$i]->JournalDetail) != 0) {
                     if ($jurnal[$i]->JournalDetail[0]->accountData->main_detail_id == 29 || $jurnal[$i]->JournalDetail[0]->accountData->main_detail_id == 12 || $jurnal[$i]->JournalDetail[0]->accountData->main_detail_id == 28 || $jurnal[$i]->type == 'Transfer Masuk' || str_contains($jurnal[$i]->ref, 'SMT') || str_contains($jurnal[$i]->ref, 'SIN') || str_contains($jurnal[$i]->ref, 'SOT') || str_contains($jurnal[$i]->ref, 'SRV') || str_contains($jurnal[$i]->ref, 'PJT') || str_contains($jurnal[$i]->ref, 'PJT')) {
                     } else {
-                        if (str_contains($jurnal[$i]->code, 'KK')) {
+                        if (str_contains($jurnal[$i]->code, 'KK' )) {
                             $outcome += $jurnal[$i]->total;
                             array_push($outcomeRaw, [$jurnal[$i]->total, $jurnal[$i]->code, $jurnal[$i]->ref]);
                         }
                     }
                 }
+
             } else {
+
                 // income
-                if ($jurnal[$i]->type == 'Transfer Masuk' || str_contains($jurnal[$i]->ref, 'SMT') || str_contains($jurnal[$i]->ref, 'SIN') || str_contains($jurnal[$i]->ref, 'SOT') || (str_contains($jurnal[$i]->ref, 'PCS') && $jurnal[$i]->JournalDetail[0]->AccountData->branch_id == $branch)) {
-                } else {
-                    if (str_contains($jurnal[$i]->code, 'DD')) {
-                        $income += $jurnal[$i]->JournalDetail[$j]->total;
+                if (count($jurnal[$i]->JournalDetail) != 0) {
+                    if (
+                        $jurnal[$i]->JournalDetail[0]->accountData->main_detail_id == 29 
+                        || 
+                        $jurnal[$i]->JournalDetail[0]->accountData->main_detail_id == 12 || 
+                        $jurnal[$i]->JournalDetail[0]->accountData->main_detail_id == 28 || 
+                        $jurnal[$i]->type == 'Transfer Masuk' || 
+                        str_contains($jurnal[$i]->ref, 'SMT') || 
+                        str_contains($jurnal[$i]->ref, 'SIN') || 
+                        str_contains($jurnal[$i]->ref, 'SOT') || 
+                        str_contains($jurnal[$i]->ref, 'PCS')) {
+                    } else {
+                        if (str_contains($jurnal[$i]->code, 'DD') && 
+                        $jurnal[$i]->JournalDetail[0]->AccountData->branch_id == $branch) {
+                            $income += $jurnal[$i]->total;
+                            array_push($incomeRaw, [$jurnal[$i]->total, $jurnal[$i]->code, $jurnal[$i]->ref, $jurnal[$i]->date]);
+                        }
                     }
                 }
+
+                // outcome
+                if (count($jurnal[$i]->JournalDetail) != 0) {
+                    if ($jurnal[$i]->JournalDetail[0]->accountData->main_detail_id == 29 || $jurnal[$i]->JournalDetail[0]->accountData->main_detail_id == 12 || 
+                    $jurnal[$i]->JournalDetail[0]->accountData->main_detail_id == 28 || 
+                    $jurnal[$i]->type == 'Transfer Masuk' || 
+                    str_contains($jurnal[$i]->ref, 'SMT') || 
+                    str_contains($jurnal[$i]->ref, 'SIN') || 
+                    str_contains($jurnal[$i]->ref, 'SOT') || 
+                    str_contains($jurnal[$i]->ref, 'SRV') || 
+                    str_contains($jurnal[$i]->ref, 'PJT') || 
+                    str_contains($jurnal[$i]->ref, 'PJT')) {
+                    } else {
+                        if (str_contains($jurnal[$i]->code, 'KK') && 
+                        $jurnal[$i]->JournalDetail[0]->AccountData->branch_id == $branch) {
+                            $outcome += $jurnal[$i]->total;
+                            array_push($outcomeRaw, [$jurnal[$i]->total, $jurnal[$i]->code, $jurnal[$i]->ref]);
+                        }
+                    }
+                }
+
             }
+
             for ($j = 0; $j < count($jurnal[$i]->JournalDetail); $j++) {
                 $data[] = $jurnal[$i]->JournalDetail[$j]->total;
                 if ($branch == '') {
@@ -475,8 +505,13 @@ class DashboardController extends Controller
                         $sharingProfit += $jurnal[$i]->JournalDetail[$j]->total;
                     }
 
-                    if (($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 10 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id == 39) || ($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 10 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id == 46) || ($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 10 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id == 41)) {
-                        $pendapatanLainLain += $jurnal[$i]->JournalDetail[$j]->total;
+                    if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 10) {
+                        if ($jurnal[$i]->JournalDetail[$j]->debet_kredit == 'D') {
+                            $pendapatanLainLain -= $jurnal[$i]->JournalDetail[$j]->total;
+                        } else {
+                            $pendapatanLainLain += $jurnal[$i]->JournalDetail[$j]->total;
+                        }
+                        array_push($pendapatanLainLainRaw, [$jurnal[$i]->JournalDetail[$j]->total, $jurnal[$i]->code, $jurnal[$i]->ref, $jurnal[$i]->date, $jurnal[$i]->JournalDetail[$j]->accountData->name]);
                     }
 
                     if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 7) {
@@ -518,33 +553,42 @@ class DashboardController extends Controller
                         $sharingProfit += $jurnal[$i]->JournalDetail[$j]->total;
                     }
 
-                    if (($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 10 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id == 39) || ($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 10 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id == 46) || ($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 10 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id == 41 && $jurnal[$i]->JournalDetail[$j]->AccountData->branch_id == $branch)) {
-                        $pendapatanLainLain += $jurnal[$i]->JournalDetail[$j]->total;
+                    if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 10 && $jurnal[$i]->JournalDetail[$j]->AccountData->branch_id == $branch) {
+                        if ($jurnal[$i]->JournalDetail[$j]->debet_kredit == 'D') {
+                            $pendapatanLainLain -= $jurnal[$i]->JournalDetail[$j]->total;
+                        } else {
+                            $pendapatanLainLain += $jurnal[$i]->JournalDetail[$j]->total;
+                        }
+                        array_push($pendapatanLainLainRaw, [$jurnal[$i]->JournalDetail[$j]->total, $jurnal[$i]->code, $jurnal[$i]->ref, $jurnal[$i]->date, $jurnal[$i]->JournalDetail[$j]->accountData->name,$jurnal[$i]->JournalDetail[$j]->debet_kredit]); 
                     }
                     // beban
-                    if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 7 && ($jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id != 28 || $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id != 29) && $jurnal[$i]->JournalDetail[$j]->AccountData->branch_id == $branch) {
-                        if ($jurnal[$i]->JournalDetail[$j]->accountData->debet_kredit == 'D') {
-                            $beban += $jurnal[$i]->JournalDetail[$j]->total;
-                        } else {
-                            $beban -= $jurnal[$i]->JournalDetail[$j]->total;
+                    if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 7 && $jurnal[$i]->JournalDetail[$j]->AccountData->branch_id == $branch) {
+                        if (str_contains($jurnal[$i]->JournalDetail[$j]->accountData->name, 'Fee Back Office') || str_contains($jurnal[$i]->JournalDetail[$j]->accountData->name, 'Mutasi') || str_contains($jurnal[$i]->JournalDetail[$j]->accountData->name, 'Transfer') || str_contains($jurnal[$i]->JournalDetail[$j]->accountData->name, 'Biaya HPP')) {
+
+                        }else{
+                            if ($jurnal[$i]->JournalDetail[$j]->debet_kredit == 'D') {
+                                $beban += $jurnal[$i]->JournalDetail[$j]->total;
+                            } else {
+                                $beban -= $jurnal[$i]->JournalDetail[$j]->total;
+                            }
+                            array_push($bebanRaw, [$jurnal[$i]->JournalDetail[$j]->total, $jurnal[$i]->code, $jurnal[$i]->ref, $jurnal[$i]->date, $jurnal[$i]->JournalDetail[$j]->accountData->name,$jurnal[$i]->JournalDetail[$j]->debet_kredit,$jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id]); 
                         }
                     }
+                    if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 6 && $jurnal[$i]->JournalDetail[$j]->AccountData->branch_id == $branch) {
+                        $biaya += $jurnal[$i]->JournalDetail[$j]->total;
 
-                    // outcome
-                    if ($jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id == 29 || $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id == 12 || $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id == 28 || $jurnal[$i]->type == 'Transfer Masuk' || str_contains($jurnal[$i]->ref, 'SMT') || str_contains($jurnal[$i]->ref, 'SIN') || str_contains($jurnal[$i]->ref, 'SOT') || str_contains($jurnal[$i]->ref, 'SRV') || (str_contains($jurnal[$i]->ref, 'PJT') && $jurnal[$i]->JournalDetail[$j]->AccountData->branch_id == $branch)) {
-                    } else {
-                        if (str_contains($jurnal[$i]->code, 'KK')) {
-                            $outcome += $jurnal[$i]->JournalDetail[$j]->total;
-                        }
+                        array_push($biayaRaw, [$jurnal[$i]->JournalDetail[$j]->total, $jurnal[$i]->code, $jurnal[$i]->ref, $jurnal[$i]->date, $jurnal[$i]->JournalDetail[$j]->accountData->name]);
                     }
                 }
             }
         }
-        // return [$totalService,$DiskonService,$totalPenjualan,$DiskonPenjualan,$pendapatanLainLain,$HPP];
+       
 
         $pendapatanKotor = $totalService - $DiskonService + $totalPenjualan - $DiskonPenjualan + $pendapatanLainLain;
         $pendapatanBersih = $totalService - $DiskonService + $totalPenjualan - $DiskonPenjualan + $pendapatanLainLain - $HPP;
-        $labaBersih = $totalService - $DiskonService + $totalPenjualan - $DiskonPenjualan + $pendapatanLainLain - $HPP - $beban - $biaya;
+        $labaBersih = $pendapatanBersih - $beban - $biaya - $gaji;
+
+        // return [$totalService,$DiskonService,$totalPenjualan,$DiskonPenjualan,$pendapatanLainLain,$HPP,$pendapatanKotor,$beban,$bebanRaw];
         return [
             'pendapatanKotor' => $pendapatanKotor,
             'pendapatanBersih' => $pendapatanBersih,
@@ -844,7 +888,7 @@ class DashboardController extends Controller
 
 
 
-        $serviceProgress = Service::select('code','brand','technician_id','technician_replacement_id')       
+        $serviceProgress = Service::select('code','brand','technician_id','technician_replacement_id','work_status')       
             ->with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
             ->whereIn('work_status', ['Proses', 'Manifest','Mutasi'])
             ->where(function ($query) use ($branch) {
@@ -861,10 +905,13 @@ class DashboardController extends Controller
             $dataService[$i]['total'] = 0;
 
             for ($j=0; $j <count($serviceProgress) ; $j++) {
-                if ($employee[$i]->id == $serviceProgress[$j]->technician_id) {
-                    $dataService[$i]['service'][] = $serviceProgress[$j]->code;
-                    $dataService[$i]['total'] += 1;
+                if ($serviceProgress[$j]->work_status != 'Mutasi') {
+                    if ($employee[$i]->id == $serviceProgress[$j]->technician_id) {
+                        $dataService[$i]['service'][] = $serviceProgress[$j]->code;
+                        $dataService[$i]['total'] += 1;
+                    }
                 }
+               
                 if ($employee[$i]->id == $serviceProgress[$j]->technician_replacement_id) {
                     $dataService[$i]['service'][] = $serviceProgress[$j]->code;
                     $dataService[$i]['total'] += 1;
@@ -1121,5 +1168,16 @@ class DashboardController extends Controller
     public function selarasJurnalLoss(Type $var = null)
     {
         # code...
+    }
+    public function printDataServiceBelumDiambilDashboard()
+    {
+        $belumDiambilSum = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])->where('work_status','Selesai')->get();
+        $title = 'Laporan Service Belum Diambil';
+        return view('print-data-service',compact('belumDiambilSum','title'));
+    }
+
+    public function filterDataStatistic (Request $req)
+    {
+
     }
 }

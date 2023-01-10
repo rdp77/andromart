@@ -111,6 +111,109 @@
     </div>
     <div class="dropHereHtml">
     </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12">
+            <div class="card card-statistic-2">
+                <div class="row">
+                    <div class="col-lg-2 col-md-2 col-sm-3">
+                        <div class="card-wrap">
+                            <div class="card-header">
+                                {{-- <h4>Filter dengan :</h4> --}}
+                                <label>{{ __('Type :') }}</label>
+                                <select style="margin-top: 10px" name="typeStatistic"
+                                    class="select2 typeStatistic form-control" id="">
+                                    <option value="">- Select -</option>
+                                    <option value="Bulan">Bulan</option>
+                                    <option value="Tahun">Tahun</option>
+                                </select>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-3">
+                        <div class="card-wrap">
+                            <div class="card-header">
+                                {{-- <h4>Filter dengan :</h4> --}}
+                                <label>{{ __('Tanggal :') }}</label>
+                                <select style="margin-top: 10px" onchange="checkFilterStatistic()" name="filterStatistic"
+                                    class="select2 filterStatistic form-control" id="">
+                                    <option value="">- Select -</option>
+                                    <option value="Bulan">Bulan</option>
+                                    <option value="Tahun">Tahun</option>
+                                </select>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="col-lg-2 col-md-2 col-sm-3">
+                        <div class="card-wrap">
+                            <div class="card-header">
+                                {{-- <h4>Filter dengan :</h4> --}}
+                                <label>{{ __('Cabang :') }}</label>
+                                <select style="margin-top: 10px" name="branchStatistic"
+                                    class="select2 branchStatistic form-control" id="">
+                                    <option value="">- Select -</option>
+                                    @foreach ($branch as $el)
+                                        <option value="{{$el->id}}">{{$el->name}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 filterBulanStatistic" style="display: none">
+                        <div class="card-wrap">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="form-group col-6 col-md-6 col-lg-6">
+                                        <label for="dtpickermnth">{{ __('Bulan') }}<code>*</code></label>
+
+                                        <input type="text" class="form-control dtpickermnth1Statistic dtpickermnth" value="{{ date('F Y') }}"
+                                            name="dtpickermnth1Statistic" id="dtpickermnth1" />
+                                    </div>
+                                    <div class="form-group col-6 col-md-6 col-lg-6">
+                                        <label for="dtpickermnth">{{ __('Bulan') }}<code>*</code></label>
+
+                                        <input type="text" class="form-control dtpickermnth2Statistic dtpickermnth" value="{{ date('F Y') }}"
+                                            name="dtpickermnth2Statistic" id="dtpickermnth2" />
+                                    </div>
+
+                                </div>
+                                <button class="btn btn-primary tombol" onclick="searchDataStatistic('Bulan')" type="button"
+                                    style="margin-bottom: 6px"><i class="fas fa-search"></i> Cari</button>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 filterTahunStatistic" style="display: none">
+                        <div class="card-wrap">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="form-group col-6 col-md-6 col-lg-6">
+                                        <label for="dtpickeryr">{{ __('Tahun') }}<code>*</code></label>
+                                        <input type="text" class="form-control dtpickeryr1Statistic dtpickeryr" value="{{ date('Y') }}"
+                                            name="dtpickeryr1Statistic" id="dtpickeryr1" />
+                                    </div>
+                                    <div class="form-group col-6 col-md-6 col-lg-6">
+                                        <label for="dtpickeryr">{{ __('Tahun') }}<code>*</code></label>
+                                        <input type="text" class="form-control dtpickeryr2Statistic dtpickeryr" value="{{ date('Y') }}"
+                                            name="dtpickeryr2Statistic" id="dtpickeryr2" />
+                                    </div>
+
+                                </div>
+                                <button class="btn btn-primary tombol" onclick="searchDataStatistic('Tahun')" type="button"
+                                    style="margin-bottom: 6px"><i class="fas fa-search"></i> Cari</button>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                <div class="dropHereHtmlStatistic">
+
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
  
     {{-- @include('dashboard-content') --}}
 
@@ -169,6 +272,17 @@
             }
         }
 
+        function checkFilterStatistic() {
+            var par = $('.filterStatistic').find(':selected').val();
+            if (par == 'Bulan') {
+                $('.filterTahunStatistic').css('display', 'none');
+                $('.filterBulanStatistic').css('display', 'block');
+            } else if (par == 'Tahun') {
+                $('.filterBulanStatistic').css('display', 'none');
+                $('.filterTahunStatistic').css('display', 'block');
+            }
+        }
+
         window.onload= searchData ();
 
         function searchData(params) {
@@ -192,6 +306,31 @@
                 },
                 success: function(data) {
                     $('.dropHereHtml').html(data);
+                }
+            });
+        }
+
+        function searchDataStatistic(params) {
+            var dtpickermnth1Statistic = $('.dtpickermnth1Statistic').val();
+            var dtpickermnth2Statistic = $('.dtpickermnth2Statistic').val();
+            var dtpickeryr1Statistic = $('.dtpickeryr1Statistic').val();
+            var dtpickeryr2Statistic = $('.dtpickeryr2Statistic').val();
+            var filterStatistic = $('.filterStatistic').val();
+            var branchStatistic = $('.branchStatistic').val();
+            
+            $.ajax({
+                url: "/dashboard/filter-data-statistic",
+                type: 'GET',
+                data: {
+                    'branch': branchStatistic,
+                    'type': filterStatistic,
+                    'year1': dtpickeryr1Statistic,
+                    'year2': dtpickeryr2Statistic,
+                    'month1': dtpickermnth1Statistic,
+                    'month2': dtpickermnth2Statistic,
+                },
+                success: function(data) {
+                    $('.dropHereHtmlStatistic').html(data);
                 }
             });
         }

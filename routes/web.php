@@ -44,6 +44,11 @@ Route::get('/log', [DashboardController::class, 'log'])
     ->name('dashboard.log');
 Route::get('/dashboard/filter-data-dashboard', [DashboardController::class, 'filterDataDashboard'])
     ->name('dashboard.filterDataDashboard');
+Route::get('/dashboard/filter-data-statistic', [DashboardController::class, 'filterDataStatistic '])
+    ->name('dashboard.filterDataStatistic');
+Route::get('/dashboard/print-data-service-belum-diambil-dashboard', 
+            [DashboardController::class, 'printDataServiceBelumDiambilDashboard'])
+            ->name('dashboard.printDataServiceBelumDiambilDashboard');
 Route::get('/dashboard/filter-kpi-dashboard', [DashboardController::class, 'filterKpiDashboard'])
     ->name('dashboard.filterKpiDashboard');
 Route::get('/dashboard/filter-sharing-profit-dashboard', [DashboardController::class, 'checkSharingProfitEmployee'])

@@ -216,7 +216,8 @@
                                 <table class="table table-bordered table-sm table-striped mb-0"
                                     style="text-align: center;font-size:18px;">
                                     <tr>
-                                        <th colspan="2" style="text-align: center">Belum diambil</th>
+                                        <th colspan="2" style="text-align: center">Belum diambil 
+                                         <a href="{{ route('dashboard.printDataServiceBelumDiambilDashboard') }}" rel="noopener noreferrer"> Print Data</a></th>
                                     </tr>
                                     <tr>
                                         <th style="text-align: center"> {{ $service['belumDiambilCount'] }}</th>
@@ -269,7 +270,7 @@
                                 <div class="container">
                                     <div class="progress" style="height: 3rem !important;margin-top:20px">
                                         <div class="progress-bar progress-bar-success solved" role="progressbar"
-                                            style="width:50%">
+                                            style="width:50%;background-color: #47c363!important">
                                             0%
                                         </div>
                                         <div class="progress-bar progress-bar-danger cancel" role="progressbar"
@@ -334,6 +335,10 @@
                 </div>
             </div>
         </div>
+
+
+     
+
     </div>
 </div>
 <script language="JavaScript">
@@ -398,8 +403,8 @@
                 'employee': employee
             },
             success: function(data) {
-                $('.solved').html('Solved [' + data[2].toFixed(2) + ']%');
-                $('.cancel').html('Cancel/Return [' + data[3].toFixed(2) + ']%');
+                $('.solved').html(data[1]+'/[' + data[2].toFixed(2) + '%]');
+                $('.cancel').html(data[0]+'/[' + data[3].toFixed(2) + '%]');
                 console.log(data[2]);
                 console.log(data[3]);
                 $('.solved').css('width', data[2].toFixed(2) + '%');
