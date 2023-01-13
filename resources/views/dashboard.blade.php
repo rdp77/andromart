@@ -123,8 +123,10 @@
                                 <select style="margin-top: 10px" name="typeStatistic"
                                     class="select2 typeStatistic form-control" id="">
                                     <option value="">- Select -</option>
-                                    <option value="Bulan">Bulan</option>
-                                    <option value="Tahun">Tahun</option>
+                                    <option value="Pendapatan Kotor">Pendapatan Kotor</option>
+                                    <option value="Laba Bersih">Laba Bersih</option>
+                                    <option value="Penjualan">Penjualan</option>
+                                    <option value="Service">Service</option>
                                 </select>
                             </div>
                             <br>

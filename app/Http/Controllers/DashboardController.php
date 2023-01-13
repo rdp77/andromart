@@ -12,6 +12,8 @@ use App\Models\Branch;
 use App\Models\Sale;
 use App\Models\SaleDetail;
 use App\Models\AccountData;
+use App\Models\SummaryBalance;
+use App\Models\SummaryJournal;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -1176,8 +1178,72 @@ class DashboardController extends Controller
         return view('print-data-service',compact('belumDiambilSum','title'));
     }
 
+    public function selarasJournals()
+    {
+        $date1 = date('2022-12-01');
+        $date2 = date('2022-12-t');
+
+        $accountData = AccountData::get();
+        $jurnal = Journal::with('JournalDetail','JournalDetail.AccountData')->where(function ($query) use ($date1, $date2) {
+                $query->where('journals.date', '>=', $date1)->where('journals.date', '<=', $date2);
+            })
+            ->get();
+
+        $data = [];
+        for ($i=0; $i <count($accountData) ; $i++) {
+
+            if ($accountData[$i]->opening_date <= $date2) {
+                $data[$i]['total'] = $accountData[$i]->opening_balance;
+                $totalcek = $accountData[$i]->opening_balance;
+            } else {
+                $data[$i]['total'] = 0;
+                $totalcek = 0;
+            }
+            $data[$i]['akun'] = $accountData[$i]->main_detail_id;
+            $data[$i]['akun_nama'] = $accountData[$i]->name;
+            $data[$i]['dk'] = $accountData[$i]->debet_kredit;
+
+            for ($j=0; $j <count($jurnal) ; $j++) { 
+                for ($k=0; $k <count($jurnal[$j]->JournalDetail) ; $k++) { 
+                    if ($accountData[$i]->main_detail_id == $jurnal[$j]->JournalDetail[$k]->AccountData->main_detail_id  && $accountData[$i]->branch_id == $jurnal[$j]->JournalDetail[$k]->AccountData->branch_id)  {
+                        if ($jurnal[$j]->JournalDetail[$k]->debet_kredit == 'D') {
+                            if ($accountData[$i]->debet_kredit == 'K') {
+                                $data[$i]['total'] += $jurnal[$j]->JournalDetail[$k]->total;
+                            }else{
+                                $data[$i]['total'] -= $jurnal[$j]->JournalDetail[$k]->total;
+                            }
+                            // $data[$i]['total'] += $jurnal[$j]->JournalDetail[$k]->total;
+                            // $data[$i][$j]['jurnal_total'] = [$jurnal[$j]->ref,$jurnal[$j]->total,date('d F Y',strtotime($jurnal[$j]->date)),number_format($totalcek+=$jurnal[$j]->total,0,',','.')];
+                        } else {
+                            if ($accountData[$i]->debet_kredit == 'D') {
+                                $data[$i]['total'] += $jurnal[$j]->JournalDetail[$k]->total;
+                            }else{
+                                $data[$i]['total'] -= $jurnal[$j]->JournalDetail[$k]->total;
+                            }
+                            // $data[$i][$j]['jurnal_total'] = [$jurnal[$j]->ref,$jurnal[$j]->total, date('d F Y',strtotime($jurnal[$j]->date)),number_format($totalcek-=$jurnal[$j]->total,0,',','.')];
+                        }
+                    }
+                }
+            }
+        }
+
+        return $data;
+        // $var = SummaryBalance::create([''])
+
+    }
+
     public function filterDataStatistic (Request $req)
     {
+        if ($req->type == 'Bulan') {
+            $date1 = date('Y-m-01', strtotime($req->month1));
+            $date2 = date('Y-m-01', strtotime($req->month2));
+        } elseif ($req->type == 'Tahun') {
+            $date1 = date('m-01');
+            $date2 = date('m-01');
+            $date1 = $req->year1 . '-' . '01' . '-' . '01';
+            $date2 = $req->year2 . '-' . '12' . '-' . '31';
+        }
+
 
     }
 }

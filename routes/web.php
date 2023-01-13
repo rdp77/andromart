@@ -44,8 +44,10 @@ Route::get('/log', [DashboardController::class, 'log'])
     ->name('dashboard.log');
 Route::get('/dashboard/filter-data-dashboard', [DashboardController::class, 'filterDataDashboard'])
     ->name('dashboard.filterDataDashboard');
-Route::get('/dashboard/filter-data-statistic', [DashboardController::class, 'filterDataStatistic '])
+
+Route::get('/dashboard/filter-data-statistic', [DashboardController::class, 'filterDataStatistic'])
     ->name('dashboard.filterDataStatistic');
+
 Route::get('/dashboard/print-data-service-belum-diambil-dashboard', 
             [DashboardController::class, 'printDataServiceBelumDiambilDashboard'])
             ->name('dashboard.printDataServiceBelumDiambilDashboard');
@@ -123,5 +125,9 @@ require __DIR__ . '/office/notesRoute.php';
 // merubah 
 Route::get('/rubahLinkMenu', [DashboardController::class, 'rubahLinkMenu'])
     ->name('rubahLinkMenu');
+
+Route::get('/selarasJournals', [DashboardController::class, 'selarasJournals'])
+    ->name('selarasJournals');
+
 Route::get('/selarasJurnalLoss', [DashboardController::class, 'selarasJurnalLoss'])
     ->name('selarasJurnalLoss');
