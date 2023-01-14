@@ -1199,15 +1199,16 @@ class DashboardController extends Controller
                 $data[$i]['total'] = 0;
                 $totalcek = 0;
             }
-            $data[$i]['akun'] = $accountData[$i]->main_detail_id;
-            $data[$i]['akun_nama'] = $accountData[$i]->name;
+            $data[$i]['akun_main_id'] = $accountData[$i]->main_detail_id;
+            $data[$i]['akun_data_id'] = $accountData[$i]->id;
+            $data[$i]['akun_data_nama'] = $accountData[$i]->name;
             $data[$i]['dk'] = $accountData[$i]->debet_kredit;
 
             for ($j=0; $j <count($jurnal) ; $j++) { 
                 for ($k=0; $k <count($jurnal[$j]->JournalDetail) ; $k++) { 
                     if ($accountData[$i]->main_detail_id == $jurnal[$j]->JournalDetail[$k]->AccountData->main_detail_id  && $accountData[$i]->branch_id == $jurnal[$j]->JournalDetail[$k]->AccountData->branch_id)  {
                         if ($jurnal[$j]->JournalDetail[$k]->debet_kredit == 'D') {
-                            if ($accountData[$i]->debet_kredit == 'K') {
+                            if ($accountData[$i]->debet_kredit == 'D') {
                                 $data[$i]['total'] += $jurnal[$j]->JournalDetail[$k]->total;
                             }else{
                                 $data[$i]['total'] -= $jurnal[$j]->JournalDetail[$k]->total;
@@ -1215,7 +1216,7 @@ class DashboardController extends Controller
                             // $data[$i]['total'] += $jurnal[$j]->JournalDetail[$k]->total;
                             // $data[$i][$j]['jurnal_total'] = [$jurnal[$j]->ref,$jurnal[$j]->total,date('d F Y',strtotime($jurnal[$j]->date)),number_format($totalcek+=$jurnal[$j]->total,0,',','.')];
                         } else {
-                            if ($accountData[$i]->debet_kredit == 'D') {
+                            if ($accountData[$i]->debet_kredit == 'K') {
                                 $data[$i]['total'] += $jurnal[$j]->JournalDetail[$k]->total;
                             }else{
                                 $data[$i]['total'] -= $jurnal[$j]->JournalDetail[$k]->total;
