@@ -171,7 +171,7 @@
                                         <label for="dtpickermnth">{{ __('Bulan') }}<code>*</code></label>
 
                                         <input type="text" class="form-control dtpickermnth1Statistic dtpickermnth"
-                                            value="{{ date('F Y') }}" name="dtpickermnth1Statistic"
+                                            value="{{ 'August ' . date('2022') }}" name="dtpickermnth1Statistic"
                                             id="dtpickermnth1" />
                                     </div>
                                     <div class="form-group col-6 col-md-6 col-lg-6">
@@ -350,6 +350,7 @@
                     var data = data.data;
 
                     var series = [],
+                      
                         len = data.length,
                         i = 0;
 
@@ -358,44 +359,15 @@
                             name: name[i],
                             data: [data[i]]
                         });
+                       
                     }
-                    console.log(series);
-
+                    var title = data.types;
                     Highcharts.chart('dropHereHtmlStatistic', {
                         chart: {
                             type: 'column'
                         },
                         title: {
-                            text: data.types
-                        },
-                        subtitle: {
-                            text: data.types
-                        },
-                        xAxis: {
-                            categories: [
-                                ' ',
-                            ],
-                            crosshair: true
-                        },
-                        yAxis: {
-                            min: 0,
-                            title: {
-                                text: data.types
-                            }
-                        },
-                        tooltip: {
-                            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
-                            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
-                                '<td style="padding:0"><b>{point.y:,.0f}</b></td></tr>',
-                            footerFormat: '</table>',
-                            shared: true,
-                            useHTML: true
-                        },
-                        plotOptions: {
-                            column: {
-                                pointPadding: 0.2,
-                                borderWidth: 0
-                            }
+                            text: title
                         },
                         series: series
                     });
