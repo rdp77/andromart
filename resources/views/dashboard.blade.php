@@ -171,7 +171,7 @@
                                         <label for="dtpickermnth">{{ __('Bulan') }}<code>*</code></label>
 
                                         <input type="text" class="form-control dtpickermnth1Statistic dtpickermnth"
-                                            value="{{ 'August ' . date('2022') }}" name="dtpickermnth1Statistic"
+                                            value="{{ date('F Y') }}" name="dtpickermnth1Statistic"
                                             id="dtpickermnth1" />
                                     </div>
                                     <div class="form-group col-6 col-md-6 col-lg-6">
