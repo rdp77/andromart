@@ -1174,14 +1174,16 @@ class DashboardController extends Controller
         return view('print-data-service',compact('belumDiambilSum','title'));
     }
 
-    public function selarasJournals()
+    public function selarasJournals(Request $req)
     {
-        $date = '2022-01-01';
-        $dater2 = '2022-01-t';
-        $year = '2022';
+        $date = $req->d1;
+        $dater2 =  $req->d2;
+        $year = $req->y;
+
 
         $date1 = date($date);
         $date2 = date($dater2);
+        // return [$date,$dater2,$year,$date1,$date2];
 
         $accountData = AccountData::get();
         $jurnal = Journal::with('JournalDetail','JournalDetail.AccountData')->where(function ($query) use ($date1, $date2) {
