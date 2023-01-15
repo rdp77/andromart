@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\StatisticController;
 use App\Http\Controllers\FrontEnd\FrontendController;
 
 /*
@@ -45,7 +46,7 @@ Route::get('/log', [DashboardController::class, 'log'])
 Route::get('/dashboard/filter-data-dashboard', [DashboardController::class, 'filterDataDashboard'])
     ->name('dashboard.filterDataDashboard');
 
-Route::get('/dashboard/filter-data-statistic', [DashboardController::class, 'filterDataStatistic'])
+Route::get('/dashboard/filter-data-statistic', [StatisticController::class, 'filterDataStatistic'])
     ->name('dashboard.filterDataStatistic');
 
 Route::get('/dashboard/print-data-service-belum-diambil-dashboard', 
@@ -129,5 +130,10 @@ Route::get('/rubahLinkMenu', [DashboardController::class, 'rubahLinkMenu'])
 Route::get('/selarasJournals', [DashboardController::class, 'selarasJournals'])
     ->name('selarasJournals');
 
+
 Route::get('/selarasJurnalLoss', [DashboardController::class, 'selarasJurnalLoss'])
     ->name('selarasJurnalLoss');
+
+
+Route::get('/checkTotalJournals', [StatisticController::class, 'checkTotalJournals'])
+    ->name('checkTotalJournals');

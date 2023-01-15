@@ -71,19 +71,19 @@
                                 </select>
                             </div>
                             @foreach ($cash as $el)
-                                @if ($el->debet_kredit == 'K')
+                                {{-- @if ($el->debet_kredit == 'K') --}}
                                     <input class="accountData" type="hidden"
                                     data-branch="{{$el->branch_id}}"
                                     data-name="{{$el->code}} - {{$el->name}}"
                                     value="{{$el->id}}">
-                                @endif
+                                {{-- @endif --}}
 
-                                @if ($el->debet_kredit == 'D' || $el->main_id == 13)
-                                    <input class="accountData" type="hidden"
+                                {{-- @if ($el->debet_kredit == 'D' || $el->main_id == 13) --}}
+                                    {{-- <input class="accountData" type="hidden"
                                     data-branch="{{$el->branch_id}}"
                                     data-name="{{$el->code}} - {{$el->name}}"
-                                    value="{{$el->id}}">
-                                @endif
+                                    value="{{$el->id}}"> --}}
+                                {{-- @endif --}}
                             @endforeach
                             <div class="form-group col-md-6 col-xs-12">
                                 <div class="d-block">

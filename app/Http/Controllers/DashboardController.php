@@ -351,7 +351,7 @@ class DashboardController extends Controller
         $asset = $this->dataAsset($branch, $date2);
         $kas = $this->dataKas($branch, $date1, $date2);
         $branch = Branch::get();
-
+        // return $data;
         // return $employee;
         return view('load-dashboard-owner', [
             'pendapatanKotor' => $data['pendapatanKotor'],
@@ -499,9 +499,7 @@ class DashboardController extends Controller
                         $HPP += $jurnal[$i]->JournalDetail[$j]->total;
                     }
 
-                    if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 7 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id == 15) {
-                        $gaji += $jurnal[$i]->JournalDetail[$j]->total;
-                    }
+                
 
                     if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 7 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id == 14) {
                         $sharingProfit += $jurnal[$i]->JournalDetail[$j]->total;
@@ -517,7 +515,7 @@ class DashboardController extends Controller
                     }
 
                     if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 7) {
-                        if (str_contains($jurnal[$i]->JournalDetail[$j]->accountData->name, 'Fee Back Office') || str_contains($jurnal[$i]->JournalDetail[$j]->accountData->name, 'Mutasi') || str_contains($jurnal[$i]->JournalDetail[$j]->accountData->name, 'Transfer') || str_contains($jurnal[$i]->JournalDetail[$j]->accountData->name, 'Biaya HPP')) {
+                        if (str_contains($jurnal[$i]->JournalDetail[$j]->accountData->name, 'Mutasi') || str_contains($jurnal[$i]->JournalDetail[$j]->accountData->name, 'Transfer') || str_contains($jurnal[$i]->JournalDetail[$j]->accountData->name, 'Biaya HPP')) {
                         } else {
                             $beban += $jurnal[$i]->JournalDetail[$j]->total;
 
@@ -547,9 +545,6 @@ class DashboardController extends Controller
                         $HPP += $jurnal[$i]->JournalDetail[$j]->total;
                     }
 
-                    if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 7 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id == 15 && $jurnal[$i]->JournalDetail[$j]->AccountData->branch_id == $branch) {
-                        $gaji += $jurnal[$i]->JournalDetail[$j]->total;
-                    }
 
                     if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 7 && $jurnal[$i]->JournalDetail[$j]->accountData->main_detail_id == 14 && $jurnal[$i]->JournalDetail[$j]->AccountData->branch_id == $branch) {
                         $sharingProfit += $jurnal[$i]->JournalDetail[$j]->total;
@@ -565,7 +560,7 @@ class DashboardController extends Controller
                     }
                     // beban
                     if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 7 && $jurnal[$i]->JournalDetail[$j]->AccountData->branch_id == $branch) {
-                        if (str_contains($jurnal[$i]->JournalDetail[$j]->accountData->name, 'Fee Back Office') || str_contains($jurnal[$i]->JournalDetail[$j]->accountData->name, 'Mutasi') || str_contains($jurnal[$i]->JournalDetail[$j]->accountData->name, 'Transfer') || str_contains($jurnal[$i]->JournalDetail[$j]->accountData->name, 'Biaya HPP')) {
+                        if (str_contains($jurnal[$i]->JournalDetail[$j]->accountData->name, 'Mutasi') || str_contains($jurnal[$i]->JournalDetail[$j]->accountData->name, 'Transfer') || str_contains($jurnal[$i]->JournalDetail[$j]->accountData->name, 'Biaya HPP')) {
 
                         }else{
                             if ($jurnal[$i]->JournalDetail[$j]->debet_kredit == 'D') {
@@ -579,7 +574,7 @@ class DashboardController extends Controller
                     if ($jurnal[$i]->JournalDetail[$j]->accountData->main_id == 6 && $jurnal[$i]->JournalDetail[$j]->AccountData->branch_id == $branch) {
                         $biaya += $jurnal[$i]->JournalDetail[$j]->total;
 
-                        array_push($biayaRaw, [$jurnal[$i]->JournalDetail[$j]->total, $jurnal[$i]->code, $jurnal[$i]->ref, $jurnal[$i]->date, $jurnal[$i]->JournalDetail[$j]->accountData->name]);
+                        array_push($biayaRaw, [$biaya,$jurnal[$i]->JournalDetail[$j]->total, $jurnal[$i]->code, $jurnal[$i]->ref, $jurnal[$i]->date, $jurnal[$i]->JournalDetail[$j]->accountData->name]);
                     }
                 }
             }
@@ -588,7 +583,8 @@ class DashboardController extends Controller
 
         $pendapatanKotor = $totalService - $DiskonService + $totalPenjualan - $DiskonPenjualan + $pendapatanLainLain;
         $pendapatanBersih = $totalService - $DiskonService + $totalPenjualan - $DiskonPenjualan + $pendapatanLainLain - $HPP;
-        $labaBersih = $pendapatanBersih - $beban - $biaya - $gaji;
+        $labaBersih = $pendapatanBersih - $beban - $biaya;
+        // return [$biaya,$biayaRaw];
 
         // return [$totalService,$DiskonService,$totalPenjualan,$DiskonPenjualan,$pendapatanLainLain,$HPP,$pendapatanKotor,$beban,$bebanRaw];
         return [
@@ -1180,8 +1176,12 @@ class DashboardController extends Controller
 
     public function selarasJournals()
     {
-        $date1 = date('2022-12-01');
-        $date2 = date('2022-12-t');
+        $date = '2022-11-01';
+        $dater2 = '2022-11-t';
+        $year = '2022';
+
+        $date1 = date($date);
+        $date2 = date($dater2);
 
         $accountData = AccountData::get();
         $jurnal = Journal::with('JournalDetail','JournalDetail.AccountData')->where(function ($query) use ($date1, $date2) {
@@ -1199,8 +1199,10 @@ class DashboardController extends Controller
                 $data[$i]['total'] = 0;
                 $totalcek = 0;
             }
-            $data[$i]['akun_main_id'] = $accountData[$i]->main_detail_id;
+            $data[$i]['akun_main_id'] = $accountData[$i]->main_id;
+            $data[$i]['akun_detail_id'] = $accountData[$i]->main_detail_id;
             $data[$i]['akun_data_id'] = $accountData[$i]->id;
+            $data[$i]['branch'] = $accountData[$i]->branch_id;
             $data[$i]['akun_data_nama'] = $accountData[$i]->name;
             $data[$i]['dk'] = $accountData[$i]->debet_kredit;
 
@@ -1228,23 +1230,30 @@ class DashboardController extends Controller
             }
         }
 
-        return $data;
+        // return $data;
+        // $check = 
+        for ($i=0; $i <count($data) ; $i++) { 
+            SummaryJournal::create([
+                    'account_data'=>$data[$i]['akun_data_id'],
+                    'account_main_id'=>$data[$i]['akun_main_id'],
+                    'account_detail_id'=>$data[$i]['akun_detail_id'],
+                    'date'=>date($date),
+                    'branch_id'=>$data[$i]['branch'],
+                    'year'=>$year,
+                    'total'=>$data[$i]['total'],
+            ]);
+        }
+        return 'done '. $date;
         // $var = SummaryBalance::create([''])
 
     }
 
+
+
     public function filterDataStatistic (Request $req)
     {
-        if ($req->type == 'Bulan') {
-            $date1 = date('Y-m-01', strtotime($req->month1));
-            $date2 = date('Y-m-01', strtotime($req->month2));
-        } elseif ($req->type == 'Tahun') {
-            $date1 = date('m-01');
-            $date2 = date('m-01');
-            $date1 = $req->year1 . '-' . '01' . '-' . '01';
-            $date2 = $req->year2 . '-' . '12' . '-' . '31';
-        }
-
+       
+        // return $data;
 
     }
 }

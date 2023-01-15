@@ -9,7 +9,6 @@
         .ui-datepicker-calendar {
             display: none;
         }
-
     </style>
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12">
@@ -37,11 +36,11 @@
                             <div class="card-header">
                                 {{-- <h4>Filter dengan :</h4> --}}
                                 <label>{{ __('Cabang :') }}</label>
-                                <select style="margin-top: 10px" name="branch"
-                                    class="select2 branch form-control" id="">
+                                <select style="margin-top: 10px" name="branch" class="select2 branch form-control"
+                                    id="">
                                     <option value="">- Select -</option>
                                     @foreach ($branch as $el)
-                                        <option value="{{$el->id}}">{{$el->name}}</option>
+                                        <option value="{{ $el->id }}">{{ $el->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -124,6 +123,7 @@
                                     class="select2 typeStatistic form-control" id="">
                                     <option value="">- Select -</option>
                                     <option value="Pendapatan Kotor">Pendapatan Kotor</option>
+                                    <option value="Pendapatan Bersih">Pendapatan Bersih</option>
                                     <option value="Laba Bersih">Laba Bersih</option>
                                     <option value="Penjualan">Penjualan</option>
                                     <option value="Service">Service</option>
@@ -156,7 +156,7 @@
                                     class="select2 branchStatistic form-control" id="">
                                     <option value="">- Select -</option>
                                     @foreach ($branch as $el)
-                                        <option value="{{$el->id}}">{{$el->name}}</option>
+                                        <option value="{{ $el->id }}">{{ $el->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -170,19 +170,21 @@
                                     <div class="form-group col-6 col-md-6 col-lg-6">
                                         <label for="dtpickermnth">{{ __('Bulan') }}<code>*</code></label>
 
-                                        <input type="text" class="form-control dtpickermnth1Statistic dtpickermnth" value="{{ date('F Y') }}"
-                                            name="dtpickermnth1Statistic" id="dtpickermnth1" />
+                                        <input type="text" class="form-control dtpickermnth1Statistic dtpickermnth"
+                                            value="{{ date('F Y') }}" name="dtpickermnth1Statistic"
+                                            id="dtpickermnth1" />
                                     </div>
                                     <div class="form-group col-6 col-md-6 col-lg-6">
                                         <label for="dtpickermnth">{{ __('Bulan') }}<code>*</code></label>
 
-                                        <input type="text" class="form-control dtpickermnth2Statistic dtpickermnth" value="{{ date('F Y') }}"
-                                            name="dtpickermnth2Statistic" id="dtpickermnth2" />
+                                        <input type="text" class="form-control dtpickermnth2Statistic dtpickermnth"
+                                            value="{{ date('F Y') }}" name="dtpickermnth2Statistic"
+                                            id="dtpickermnth2" />
                                     </div>
 
                                 </div>
-                                <button class="btn btn-primary tombol" onclick="searchDataStatistic('Bulan')" type="button"
-                                    style="margin-bottom: 6px"><i class="fas fa-search"></i> Cari</button>
+                                <button class="btn btn-primary tombol" onclick="searchDataStatistic('Bulan')"
+                                    type="button" style="margin-bottom: 6px"><i class="fas fa-search"></i> Cari</button>
                             </div>
                             <br>
                         </div>
@@ -193,30 +195,36 @@
                                 <div class="row">
                                     <div class="form-group col-6 col-md-6 col-lg-6">
                                         <label for="dtpickeryr">{{ __('Tahun') }}<code>*</code></label>
-                                        <input type="text" class="form-control dtpickeryr1Statistic dtpickeryr" value="{{ date('Y') }}"
-                                            name="dtpickeryr1Statistic" id="dtpickeryr1" />
+                                        <input type="text" class="form-control dtpickeryr1Statistic dtpickeryr"
+                                            value="{{ date('Y') }}" name="dtpickeryr1Statistic" id="dtpickeryr1" />
                                     </div>
                                     <div class="form-group col-6 col-md-6 col-lg-6">
                                         <label for="dtpickeryr">{{ __('Tahun') }}<code>*</code></label>
-                                        <input type="text" class="form-control dtpickeryr2Statistic dtpickeryr" value="{{ date('Y') }}"
-                                            name="dtpickeryr2Statistic" id="dtpickeryr2" />
+                                        <input type="text" class="form-control dtpickeryr2Statistic dtpickeryr"
+                                            value="{{ date('Y') }}" name="dtpickeryr2Statistic" id="dtpickeryr2" />
                                     </div>
 
                                 </div>
-                                <button class="btn btn-primary tombol" onclick="searchDataStatistic('Tahun')" type="button"
-                                    style="margin-bottom: 6px"><i class="fas fa-search"></i> Cari</button>
+                                <button class="btn btn-primary tombol" onclick="searchDataStatistic('Tahun')"
+                                    type="button" style="margin-bottom: 6px"><i class="fas fa-search"></i> Cari</button>
                             </div>
                             <br>
                         </div>
                     </div>
-                <div class="dropHereHtmlStatistic">
+
 
                 </div>
-                </div>
             </div>
+            <br>
+            <figure class="highcharts-figure">
+                <div id="dropHereHtmlStatistic" style="width:100%"></div>
+                <p class="highcharts-description">
+
+                </p>
+            </figure>
         </div>
     </div>
- 
+
     {{-- @include('dashboard-content') --}}
 
 
@@ -229,7 +237,8 @@
     <script src="https://code.highcharts.com/modules/export-data.js"></script>
     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     {{-- <script src="https://code.highcharts.com/highcharts.js"></script> --}}
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/css/datepicker.min.css"
+        rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js"></script>
     <script language="JavaScript">
         function countTrafic() {
@@ -285,7 +294,7 @@
             }
         }
 
-        window.onload= searchData ();
+        window.onload = searchData();
 
         function searchData(params) {
             var startDate = $('.startDate').val();
@@ -294,7 +303,7 @@
             var dtpickeryr = $('.dtpickeryr').val();
             var filter = $('.filter').val();
             var branch = $('.branch').val();
-            
+
             $.ajax({
                 url: "/dashboard/filter-data-dashboard",
                 type: 'GET',
@@ -318,26 +327,82 @@
             var dtpickeryr1Statistic = $('.dtpickeryr1Statistic').val();
             var dtpickeryr2Statistic = $('.dtpickeryr2Statistic').val();
             var filterStatistic = $('.filterStatistic').val();
+            var typeStatistic = $('.typeStatistic').val();
             var branchStatistic = $('.branchStatistic').val();
-            
+
+
             $.ajax({
                 url: "/dashboard/filter-data-statistic",
                 type: 'GET',
                 data: {
                     'branch': branchStatistic,
-                    'type': filterStatistic,
+                    'type': typeStatistic,
+                    'filter': filterStatistic,
                     'year1': dtpickeryr1Statistic,
                     'year2': dtpickeryr2Statistic,
                     'month1': dtpickermnth1Statistic,
                     'month2': dtpickermnth2Statistic,
                 },
                 success: function(data) {
-                    $('.dropHereHtmlStatistic').html(data);
+
+
+                    var name = data.date;
+                    var data = data.data;
+
+                    var series = [],
+                        len = data.length,
+                        i = 0;
+
+                    for (i; i < len; i++) {
+                        series.push({
+                            name: name[i],
+                            data: [data[i]]
+                        });
+                    }
+                    console.log(series);
+
+                    Highcharts.chart('dropHereHtmlStatistic', {
+                        chart: {
+                            type: 'column'
+                        },
+                        title: {
+                            text: data.types
+                        },
+                        subtitle: {
+                            text: data.types
+                        },
+                        xAxis: {
+                            categories: [
+                                ' ',
+                            ],
+                            crosshair: true
+                        },
+                        yAxis: {
+                            min: 0,
+                            title: {
+                                text: data.types
+                            }
+                        },
+                        tooltip: {
+                            headerFormat: '<span style="font-size:10px">{point.key}</span><table>',
+                            pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+                                '<td style="padding:0"><b>{point.y:,.0f}</b></td></tr>',
+                            footerFormat: '</table>',
+                            shared: true,
+                            useHTML: true
+                        },
+                        plotOptions: {
+                            column: {
+                                pointPadding: 0.2,
+                                borderWidth: 0
+                            }
+                        },
+                        series: series
+                    });
+
                 }
             });
         }
-       
-
     </script>
 
 @endsection

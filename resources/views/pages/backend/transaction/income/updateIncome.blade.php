@@ -65,12 +65,12 @@
                                 </select>
                             </div>
                             @foreach ($cash as $el)
-                                @if ($el->debet_kredit == 'D')
+                                {{-- @if ($el->debet_kredit == 'D') --}}
                                     <input class="accountData" type="hidden"
                                     data-branch="{{$el->branch_id}}"
                                     data-name="{{$el->code}} - {{$el->name}}"
                                     value="{{$el->id}}">
-                                @endif
+                                {{-- @endif --}}
                             @endforeach
                             <div class="form-group col-md-4 col-xs-12">
                                 <div class="d-block">

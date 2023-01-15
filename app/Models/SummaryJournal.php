@@ -11,8 +11,11 @@ class SummaryJournal extends Model
     protected $table = 'summary_journals';
     protected $fillable = [
         'id',
-        'account_id',
+        'account_data',
+        'account_main_id',
+        'account_detail_id',
         'date',
+        'branch_id',
         'year',
         'total',
         'created_at',
