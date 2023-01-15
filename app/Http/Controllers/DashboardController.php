@@ -1176,8 +1176,8 @@ class DashboardController extends Controller
 
     public function selarasJournals()
     {
-        $date = '2022-11-01';
-        $dater2 = '2022-11-t';
+        $date = '2022-01-01';
+        $dater2 = '2022-01-t';
         $year = '2022';
 
         $date1 = date($date);
