@@ -10,7 +10,7 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Pendapatan Kotor </h4>
+                                <h4> <a href="{{ route('report-income-statement.index') }}"> Pendapatan Kotor </a>  </h4>
                             </div>
                             <div class="card-body">
                                 Rp. {{ number_format($pendapatanKotor, 0, ',', '.') }}
@@ -25,7 +25,7 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Pendapatan Bersih</h4>
+                                <h4> <a href="{{ route('report-income-statement.index') }}"> Laba Kotor </a></h4>
                             </div>
                             <div class="card-body">
                                 Rp. {{ number_format($pendapatanBersih, 0, ',', '.') }}
@@ -40,7 +40,7 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Laba Bersih</h4>
+                                <h4> <a href="{{ route('report-income-statement.index') }}"> Laba Bersih</a></h4>
                             </div>
                             <div class="card-body">
                                 Rp. {{ number_format($labaBersih, 0, ',', '.') }}
@@ -55,7 +55,7 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Beban & Biaya</h4>
+                                <h4><a href="{{ route('report-income-statement.index') }}"> Beban & Biaya</a></h4>
                             </div>
                             <div class="card-body">
                                 Rp. {{ number_format($beban + $biaya, 0, ',', '.') }}
@@ -71,7 +71,7 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Income </h4>
+                                <h4> <a href="{{ route('report-income-spending.reportIncomeSpending') }}">Income </a> </h4>
                             </div>
                             <div class="card-body">
                                 Rp. {{ number_format($income, 0, ',', '.') }}
@@ -86,7 +86,7 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Outcome</h4>
+                                <h4> <a href="{{ route('report-income-spending.reportIncomeSpending') }}">Outcome</a></h4>
                             </div>
                             <div class="card-body">
                                 Rp. {{ number_format($outcome, 0, ',', '.') }}
@@ -101,7 +101,7 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Asset Tetap</h4>
+                                <h4> <a href="{{ route('report-neraca.index') }}">Asset Tetap</a></h4>
                             </div>
                             <div class="card-body">
                                 Rp. {{ number_format($asset, 0, ',', '.') }}
@@ -116,7 +116,7 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Persediaan</h4>
+                                <h4> <a href="{{ route('report-neraca.index') }}"> Persediaan</a></h4>
                             </div>
                             <div class="card-body">
                                 Rp. {{ number_format($persediaan, 0, ',', '.') }}
@@ -132,7 +132,7 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Kas Kecil </h4>
+                                <h4> <a href="{{ route('report-cash-balance.index') }}"> Kas Kecil</a> </h4>
                             </div>
                             <div class="card-body">
                                 Rp. {{ number_format($kas['Kas Kecil'], 0, ',', '.') }}
@@ -147,7 +147,7 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Kas Bank Jago</h4>
+                                <h4> <a href="{{ route('report-cash-balance.index') }}"> Kas Bank Jago</a></h4>
                             </div>
                             <div class="card-body">
                                 Rp. {{ number_format($kas['Kas Bank Jago'], 0, ',', '.') }}
@@ -162,7 +162,7 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Kas Bank BCA</h4>
+                                <h4> <a href="{{ route('report-cash-balance.index') }}"> Kas Bank BCA</a></h4>
                             </div>
                             <div class="card-body">
                                 Rp. {{ number_format($kas['Kas Bank BCA'], 0, ',', '.') }}
@@ -177,7 +177,7 @@
                         </div>
                         <div class="card-wrap">
                             <div class="card-header">
-                                <h4>Kas Besar</h4>
+                                <h4> <a href="{{ route('report-cash-balance.index') }}"> Kas Besar</a></h4>
                             </div>
                             <div class="card-body">
                                 Rp. {{ number_format($kas['Kas Besar'], 0, ',', '.') }}

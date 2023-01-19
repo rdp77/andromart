@@ -20,6 +20,11 @@ class StatisticController extends Controller
         $this->middleware('auth');
         $this->DashboardController = $DashboardController;
     }
+    function getAge($date1,$date2) {
+        $date1 = date('Ymd', strtotime($date1));
+        $diff = date('Ymd',strtotime($date2)) - $date1;
+        return substr($diff, 0, -4);
+    }
     public function filterDataStatistic(Request $req)
     {
         if ($req->filter == 'Bulan') {
@@ -29,27 +34,41 @@ class StatisticController extends Controller
             $date1 = date('m-01');
             $date2 = date('m-01');
             $date1 = $req->year1 . '-' . '01' . '-' . '01';
-            $date2 = $req->year2 . '-' . '12' . '-' . '31';
+            $date2 = $req->year2 . '-' . '01' . '-' . '31';
         }
-        // return [$date1,$date2];
-
-        $ts1 = strtotime($date1);
-        $ts2 = strtotime($date2);
-
-        $year1 = date('Y', $ts1);
-        $year2 = date('Y', $ts2);
-
-        $month1 = date('m', $ts1);
-        $month2 = date('m', $ts2);
-
-        $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
+        // return [];
+        // $newEndingDate = date("Y", strtotime(date("Y-m-d", strtotime($date1)) . " + 1 year"));
+        // return [$newEndingDate];
+        //  $year1 = date('Y',strtotime($date1));
+        // return date("Y", strtotime("+".'1'." year", $year1));
         // return $diff+1;
         $dataJournals = [];
-        $dateMonth = [];
-        for ($i=0; $i <$diff+1 ; $i++) { 
-            $dataJournals[] = SummaryJournal::where('date','=',date("Y-m-d", strtotime("+".$i." month", $ts1)))->get();
-            $dateMonth[] = date("d F Y", strtotime("+".$i." month", $ts1));
+        $dateFiltering = [];
+        if ($req->filter == 'Bulan') {
+            $ts1 = strtotime($date1);
+            $ts2 = strtotime($date2);
+
+            $year1 = date('Y', $ts1);
+            $year2 = date('Y', $ts2);
+
+            $month1 = date('m', $ts1);
+            $month2 = date('m', $ts2);
+
+            $diff = (($year2 - $year1) * 12) + ($month2 - $month1);
+            $length = $diff+1;
+            for ($i=0; $i <$diff+1 ; $i++) { 
+                $dataJournals[] = SummaryJournal::where('date','=',date("Y-m-d", strtotime("+".$i." month", $ts1)))->get();
+                $dateFiltering[] = date("d F Y", strtotime("+".$i." month", $ts1));
+            }
+        }else{
+            $years = $this->getAge($date1,$date2);
+            $length = $years;
+            for ($i=0; $i <$years+1 ; $i++) { 
+                $dataJournals[] = SummaryJournal::whereYear('date','=',date("Y", strtotime(date("Y-m-d", strtotime($date1)) . "+".$i." year")))->get();
+                $dateFiltering[] = date("Y", strtotime(date("Y-m-d", strtotime($date1)) . "+".$i." year"));
+            }
         }
+        
         // return $dataJournals;
         // return $dateMonth;
 
@@ -184,15 +203,15 @@ class StatisticController extends Controller
         // return [$totalService,$totalPenjualan,$totalPendapatanLainLain];
 
         if ($req->type == 'Service') {
-            return ['data'=>$totalService,'types'=>'Service','date'=>$dateMonth,'length'=>$diff+1];
+            return ['data'=>$totalService,'types'=>'Service','date'=>$dateFiltering,'length'=>$length];
         }elseif ($req->type == 'Penjualan') {
-            return ['data'=>$totalPenjualan,'types'=>'Penjualan','date'=>$dateMonth,'length'=>$diff+1];
+            return ['data'=>$totalPenjualan,'types'=>'Penjualan','date'=>$dateFiltering,'length'=>$length];
         }elseif ($req->type == 'Pendapatan Kotor') {
-            return ['data'=>$totalPendapatanKotor,'types'=>'Pendapatan Kotor','date'=>$dateMonth,'length'=>$diff+1];
+            return ['data'=>$totalPendapatanKotor,'types'=>'Pendapatan Kotor','date'=>$dateFiltering,'length'=>$length];
         }elseif ($req->type == 'Laba Bersih') {
-            return ['data'=>$totalLabaBersih,'types'=>'Laba Bersih','date'=>$dateMonth,'length'=>$diff+1];
+            return ['data'=>$totalLabaBersih,'types'=>'Laba Bersih','date'=>$dateFiltering,'length'=>$length];
         }elseif ($req->type == 'Pendapatan Bersih') {
-            return ['data'=>$totalPendapatanBersih,'types'=>'Pendapatan Bersih','date'=>$dateMonth,'length'=>$diff+1];
+            return ['data'=>$totalPendapatanBersih,'types'=>'Pendapatan Bersih','date'=>$dateFiltering,'length'=>$length];
         }
 
     }
