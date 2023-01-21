@@ -233,7 +233,7 @@
                                 <table class="table table-bordered table-sm table-striped mb-0"
                                     style="text-align: center;font-size:18px;">
                                     <tr>
-                                        <th colspan="2">Progress Service</th>
+                                        <th colspan="2"> <a href="{{ route('service.onProgress') }}"></a> Progress Service </th>
                                     </tr>
                                     <tr>
                                         <th style="text-align: left">Nama</th>
