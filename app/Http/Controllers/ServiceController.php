@@ -272,7 +272,7 @@ class ServiceController extends Controller
     public function onProgress()
     {
         $branchUser = Auth::user()->employee->branch_id;
-        $technician = Employee::where('branch_id', $branchUser)->get();
+        $technician = Employee::where('branch_id', $branchUser)->where('status','aktif')->get();
         $service = Service::with(['Employee1', 'Employee2', 'CreatedByUser', 'Type', 'Brand'])
             ->where('branch_id', $branchUser)
             ->whereIn('work_status', ['Proses', 'Manifest','Mutasi'])
@@ -444,7 +444,7 @@ class ServiceController extends Controller
             return view('forbidden');
         }
         $code = $this->code('SRV');
-        $employee = Employee::orderBy('name', 'ASC')->get();
+        $employee = Employee::orderBy('name', 'ASC')->where('status','aktif')->get();
         $item = Item::with('stock', 'supplier')
             ->where('name', '!=', 'Jasa Service')
             ->orderBy('name', 'ASC')
@@ -886,7 +886,7 @@ class ServiceController extends Controller
         }
         $service = Service::with('ServiceDetail', 'serviceCondition', 'serviceEquipment')->find($id);
         $member = User::orderBy('name', 'ASC')->get();
-        $employee = Employee::orderBy('name', 'ASC')->get();
+        $employee = Employee::orderBy('name', 'ASC')->where('status','aktif')->get();
         $category = Category::orderBy('name', 'ASC')->get();
         $brand = Brand::orderBy('name', 'ASC')->get();
         $type = Type::orderBy('name', 'ASC')->get();
@@ -907,7 +907,7 @@ class ServiceController extends Controller
         }
         $service = Service::with('ServiceDetail', 'serviceCondition', 'serviceEquipment')->find($id);
         $member = User::orderBy('name', 'ASC')->get();
-        $employee = Employee::orderBy('name', 'ASC')->get();
+        $employee = Employee::orderBy('name', 'ASC')->where('status','aktif')->get();
         $category = Category::orderBy('name', 'ASC')->get();
         $brand = Brand::orderBy('name', 'ASC')->get();
         $type = Type::orderBy('name', 'ASC')->get();
@@ -1655,7 +1655,7 @@ class ServiceController extends Controller
     {
         // where('technician_id',Auth::user()->id)->
         $data = Service::get();
-        $employee = Employee::get();
+        $employee = Employee::where('status','aktif')->get();
         return view('pages.backend.transaction.service.indexFormUpdateService', compact('data', 'employee'));
     }
     public function serviceFormUpdateStatusLoadData(Request $req)

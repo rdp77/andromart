@@ -51,6 +51,7 @@ class ReportPeriodicController extends Controller
 
     public function index(Request $req)
     {
+        ini_set('max_execution_time', 1000);
         // return $req->dateS;
         if ($req->dateS == null) {
             $dateParams = date('F Y');
