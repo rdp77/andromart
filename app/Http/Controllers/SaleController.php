@@ -204,8 +204,8 @@ class SaleController extends Controller
         // return $code;
         $account  = AccountData::with('AccountMain', 'AccountMainDetail', 'Branch')->get();
         $userBranch = Auth::user()->employee->branch_id;
-        $sales = Employee::where('id', '!=', '1')->where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
-        $buyer = Employee::where('id', '!=', '1')->where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
+        $sales = Employee::where('id', '!=', '1')->where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->where('status','aktif')->get();
+        $buyer = Employee::where('id', '!=', '1')->where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->where('status','aktif')->get();
         $cash = Cash::get();
         $customer = Customer::where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
         $stock = Stock::where('branch_id', '=', $userBranch)->where('item_id', '!=', 1)->get();
@@ -517,8 +517,8 @@ class SaleController extends Controller
 
         $code = $this->code('PJT');
         $userBranch = Auth::user()->employee->branch_id;
-        $sales = Employee::where('id', '!=', '1')->where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
-        $buyer = Employee::where('id', '!=', '1')->where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();
+        $sales = Employee::where('id', '!=', '1')->where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->where('status','aktif')->get();
+        $buyer = Employee::where('id', '!=', '1')->where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->where('status','aktif')->get();
         $cash = Cash::get();
         $account  = AccountData::with('AccountMain', 'AccountMainDetail', 'Branch')->get();
         $customer = Customer::where('branch_id', '=', $userBranch)->orderBy('name', 'asc')->get();

@@ -127,7 +127,7 @@ class PurchaseController extends Controller
             return view('forbidden');
         }
         $code     = $this->code('PCS');
-        $employee = Employee::get();
+        $employee = Employee::where('status','aktif')->get();
         $branch_id = Auth::user()->employee->branch_id;
         $item     = Item::with('stock')->where('items.name','!=','Jasa Service')
         ->join('stocks', 'items.id', 'stocks.item_id')
@@ -150,7 +150,7 @@ class PurchaseController extends Controller
             return view('forbidden');
         }
         $id = Crypt::decryptString($id);
-        $employee = Employee::get();
+        $employee = Employee::where('status','aktif')->get();
         // $items    = Item::where('name','!=','Jasa Service')->get();
         $item     = Item::with('stock')->where('items.name','!=','Jasa Service')
         ->join('suppliers', 'items.supplier_id', 'suppliers.id')
