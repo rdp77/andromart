@@ -993,13 +993,13 @@ class DashboardController extends Controller
             ->whereIn('work_status', ['Return', 'Cancel'])
             ->where(function ($query) use ($req,$date1,$date2) {
                 if ($req->type == 'Tanggal') {
-                    $query->where('created_at', '>=', $date1 . ' 00:00:00')->where('created_at', '<=', $date2 . ' 23:59:59');
+                    $query->where('updated_at', '>=', $date1 . ' 00:00:00')->where('updated_at', '<=', $date2 . ' 23:59:59');
                 } elseif ($req->type == 'Bulan') {
-                    $query->where('created_at', '>=', $date1 . ' 00:00:00')->where('created_at', '<=', $date2 . ' 23:59:59');
+                    $query->where('updated_at', '>=', $date1 . ' 00:00:00')->where('updated_at', '<=', $date2 . ' 23:59:59');
                 } elseif ($req->type == 'Tahun') {
-                    $query->where('created_at', '>=', $date1 . ' 00:00:00')->where('created_at', '<=', $date2 . ' 23:59:59');
+                    $query->where('updated_at', '>=', $date1 . ' 00:00:00')->where('updated_at', '<=', $date2 . ' 23:59:59');
                 } else {
-                    $query->where('created_at', '>=', $date1 . ' 00:00:00')->where('created_at', '<=', $date2 . ' 23:59:59');
+                    $query->where('updated_at', '>=', $date1 . ' 00:00:00')->where('updated_at', '<=', $date2 . ' 23:59:59');
                 }
 
                 if ($req->branch != '') {
