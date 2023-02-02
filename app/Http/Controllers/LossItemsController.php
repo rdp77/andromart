@@ -143,6 +143,10 @@ class LossItemsController extends Controller
 
         DB::beginTransaction();
         try {
+            if(count($req->totalAllLoss) == 0){
+               return Response::json(['status' => 'success', 'message' => 'Data Tersimpan']);
+            }
+
             $totalLoss = array_sum($req->totalAllLoss);
             $checkData = LossItems::where('date_start', $this->DashboardController->changeMonthIdToEn($req->startDate))
                 ->where('date_end', $this->DashboardController->changeMonthIdToEn($req->endDate))
