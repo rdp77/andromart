@@ -478,7 +478,6 @@ class ServiceController extends Controller
                 ->count();
 
             $getEmployee = Employee::where('user_id', Auth::user()->id)->first();
-            $getEmployeeTech = Employee::where('user_id',$req->technicianId)->first();
             $settingPresentase = SettingPresentase::get();
 
             for ($i = 0; $i < count($settingPresentase); $i++) {
@@ -498,6 +497,8 @@ class ServiceController extends Controller
                     $MaxHandle = $settingPresentase[$i]->total;
                 }
             }
+            $getEmployeeTech = Employee::where('user_id',$req->technicianId)->first();
+
             if ($getEmployeeTech->limit != null || $getEmployeeTech->limit != 0) {
                 if ($req->technicianId != 1) {
                     if ($tech1 + $tech2 >= $getEmployeeTech->limit) {
@@ -992,17 +993,36 @@ class ServiceController extends Controller
                 }
             }
 
-            if ($req->technicianId != 1) {
-                if ($checkData->technician_id != $req->technicianId) {
-                    $totalHandledNow = $tech1 + $tech2;
-                    if ($totalHandledNow >= $MaxHandle) {
-                        return Response::json([
-                            'status' => 'fail',
-                            'message' => 'Teknisi Memiliki ' . $MaxHandle . ' Pekerjaan Belum Selesai',
-                        ]);
+            $getEmployeeTech = Employee::where('user_id',$req->technicianId)->first();
+
+            if ($getEmployeeTech->limit != null || $getEmployeeTech->limit != 0) {
+                if ($req->technicianId != 1) {
+                    if ($checkData->technician_id != $req->technicianId) {
+                        $totalHandledNow = $tech1 + $tech2;
+                        if ($totalHandledNow >= $getEmployeeTech->limit) {
+                            return Response::json([
+                                'status' => 'fail',
+                                'message' => 'Teknisi Memiliki ' . $getEmployeeTech->limit . ' Pekerjaan Belum Selesai',
+                            ]);
+                        }
+                    }
+                }
+              
+            }else{
+                if ($req->technicianId != 1) {
+                    if ($checkData->technician_id != $req->technicianId) {
+                        $totalHandledNow = $tech1 + $tech2;
+                        if ($totalHandledNow >= $MaxHandle) {
+                            return Response::json([
+                                'status' => 'fail',
+                                'message' => 'Teknisi Memiliki ' . $MaxHandle . ' Pekerjaan Belum Selesai',
+                            ]);
+                        }
                     }
                 }
             }
+
+          
 
       
 
