@@ -18,6 +18,7 @@ class Employee extends Model
         'address',
         'level',
         'gender',
+        'limit',
         'birthday',
         'avatar',
         'status',

@@ -46,7 +46,20 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        $check = Auth::validate($this->only('username', 'password'), $this->boolean('remember'));
+        $checkActive = Auth::guard()->getLastAttempted()->employee->status;
+        $checkUser = Auth::guard()->getLastAttempted()->employee;
+        // dd($check);
+        // dd($checkUser);
         // if (!Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
+        if ($checkActive != 'aktif') {
+            RateLimiter::hit($this->throttleKey());
+
+            throw ValidationException::withMessages([
+                // 'email' => __('auth.failed'),
+                'username' => 'Akun telah di non aktifkan',
+            ]);
+        }
         if (!Auth::attempt($this->only('username', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
 

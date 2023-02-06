@@ -131,7 +131,23 @@
                       </div>
                     </div>
                     <div class="row">
-
+                      <div class="form-group col-md-12 col-12">
+                        <label for="limit">{{ __('LIMITASI') }}<code></code></label>
+                        <div class="input-group">
+                          <div class="input-group-prepend">
+                            <div class="input-group-text">
+                              <i class="fas fa-phone"></i>
+                            </div>
+                          </div>
+                          <input id="limit" type="text" class="form-control @error('limit') is-invalid @enderror" name="limit"
+                            value="{{ $employee->limit }}" required>
+                          @error('limit')
+                          <div class="invalid-feedback">
+                            {{ $message }}
+                          </div>
+                          @enderror
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <div class="card-footer text-right">

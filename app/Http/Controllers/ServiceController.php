@@ -478,6 +478,7 @@ class ServiceController extends Controller
                 ->count();
 
             $getEmployee = Employee::where('user_id', Auth::user()->id)->first();
+            $getEmployeeTech = Employee::where('user_id',$req->technicianId)->first();
             $settingPresentase = SettingPresentase::get();
 
             for ($i = 0; $i < count($settingPresentase); $i++) {
@@ -497,14 +498,26 @@ class ServiceController extends Controller
                     $MaxHandle = $settingPresentase[$i]->total;
                 }
             }
-            if ($req->technicianId != 1) {
-                if ($tech1 + $tech2 >= $MaxHandle) {
-                    return Response::json([
-                        'status' => 'fail',
-                        'message' => 'Teknisi Memiliki ' . $MaxHandle . ' Pekerjaan Belum Selesai',
-                    ]);
+            if ($getEmployeeTech->limit != null || $getEmployeeTech->limit != 0) {
+                if ($req->technicianId != 1) {
+                    if ($tech1 + $tech2 >= $getEmployeeTech->limit) {
+                        return Response::json([
+                            'status' => 'fail',
+                            'message' => 'Teknisi Memiliki ' . $getEmployeeTech->limit . ' Pekerjaan Belum Selesai',
+                        ]);
+                    }
+                }
+            }else{
+                if ($req->technicianId != 1) {
+                    if ($tech1 + $tech2 >= $MaxHandle) {
+                        return Response::json([
+                            'status' => 'fail',
+                            'message' => 'Teknisi Memiliki ' . $MaxHandle . ' Pekerjaan Belum Selesai',
+                        ]);
+                    }
                 }
             }
+           
             $codeNota = $this->code('SRV');
             $id = DB::table('service')->max('id') + 1;
             

@@ -1148,8 +1148,8 @@ class DashboardController extends Controller
         $hov = [];
         for ($i = 0; $i < count($menu); $i++) {
             $rep[$i]['id'] = $menu[$i]->id;
-            $rep[$i]['url'] = str_replace('https://andromartindonesia.com', 'http://127.0.0.1:8000', $menu[$i]->url);
-            $rep[$i]['hov'] = str_replace('https://andromartindonesia.com', 'http://127.0.0.1:8000', $menu[$i]->url);
+            $rep[$i]['url'] = str_replace('https://andromartindonesia.com', 'https://andromart.prog', $menu[$i]->url);
+            $rep[$i]['hov'] = str_replace('https://andromartindonesia.com', 'https://andromart.prog', $menu[$i]->url);
         }
 
         for ($i = 0; $i < count($rep); $i++) {
