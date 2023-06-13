@@ -497,7 +497,7 @@ class ServiceController extends Controller
                     $MaxHandle = $settingPresentase[$i]->total;
                 }
             }
-            $getEmployeeTech = Employee::where('user_id',$req->technicianId)->first();
+            $getEmployeeTech = Employee::where('id',$req->technicianId)->first();
 
             if ($getEmployeeTech->limit != null || $getEmployeeTech->limit != 0) {
                 if ($req->technicianId != 1) {
@@ -993,7 +993,7 @@ class ServiceController extends Controller
                 }
             }
 
-            $getEmployeeTech = Employee::where('user_id',$req->technicianId)->first();
+            $getEmployeeTech = Employee::where('id',$req->technicianId)->first();
 
             if ($getEmployeeTech->limit != null || $getEmployeeTech->limit != 0) {
                 if ($req->technicianId != 1) {
